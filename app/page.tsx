@@ -1,101 +1,101 @@
-import Image from "next/image";
+import Image from 'next/image'
+import Link from 'next/link'
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <main className="min-h-screen flex flex-col">
+      {/* header */}
+      <header className="flex items-center justify-between w-full px-6 py-4 bg-black/25 backdrop-blur-sm sticky top-0 z-10">
+        <div className="brainrot-logo">
+          brainrot publishing house
+        </div>
+        <nav className="space-x-6">
+          <a href="#hero" className="hover:text-peachy transition">home</a>
+          <a href="#explore" className="hover:text-peachy transition">explore</a>
+        </nav>
+      </header>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      {/* hero */}
+      <section id="hero" className="hero-gradient">
+        <div className="z-10 max-w-2xl mx-auto px-4">
+          <h1
+            className="text-5xl md:text-6xl font-bold mb-6 glitch-text"
+            data-text="classic lit reimagined"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
+            classic lit reimagined
+          </h1>
+          <p className="text-base md:text-lg mb-8">
+            we gather dusty tomes and spin them into <span className="italic text-peachy">gnarly new vibes</span>
+          </p>
+          <a href="#explore" className="btn btn-primary">
+            start exploring
           </a>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+      </section>
+
+      {/* main content */}
+      <section id="explore" className="px-6 py-16">
+        <h2 className="text-3xl md:text-4xl mb-8 text-lavender font-bold">
+          explore our translations
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* card 1 */}
+          <div className="card">
+            <Image
+              src="/assets/images/achilles-03.png"
+              alt="iliad cover"
+              width={700}
+              height={400}
+              className="w-full h-64 object-cover"
+            />
+            <div className="card-content">
+              <h3 className="text-xl font-bold mb-2">the iliad</h3>
+              <div className="card-footer">
+                <Link href="/the-iliad" className="btn btn-secondary">
+                  read now
+                </Link>
+              </div>
+            </div>
+          </div>
+          {/* card 2 */}
+          <div className="card">
+            <Image
+              src="/assets/images/achilles-01.png"
+              alt="the odyssey cover"
+              width={700}
+              height={400}
+              className="w-full h-64 object-cover"
+            />
+            <div className="card-content">
+              <h3 className="text-xl font-bold mb-2">the odyssey</h3>
+              <div className="card-footer">
+                <button className="btn btn-secondary">notify me</button>
+              </div>
+            </div>
+          </div>
+          {/* card 3 */}
+          <div className="card">
+            <Image
+              src="/assets/images/inferno-01.png"
+              alt="dante's inferno cover"
+              width={700}
+              height={400}
+              className="w-full h-64 object-cover"
+            />
+            <div className="card-content">
+              <h3 className="text-xl font-bold mb-2">dante’s inferno</h3>
+              <div className="card-footer">
+                <button className="btn btn-secondary">notify me</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* footer */}
+      <footer className="border-t border-white/10 py-6 text-center text-sm text-white/70 mt-auto">
+        © brainrot publishing house. all rights reserved.
       </footer>
-    </div>
-  );
+    </main>
+  )
 }

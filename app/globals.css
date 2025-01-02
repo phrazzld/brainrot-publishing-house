@@ -2,20 +2,106 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* global resets & brand base styling */
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: theme("fontFamily.sans");
+  background-color: theme("colors.midnight");
+  color: white;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+h1, h2, h3, h4 {
+  font-family: theme("fontFamily.display");
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+/* glitch text effect (inline) */
+.glitch-text {
+  position: relative;
+  display: inline-block;
 }
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.glitch-text::before {
+  color: theme("colors.peachy");
+  left: 2px;
+  animation: glitch 2s infinite;
+  overflow: hidden;
+  clip: rect(0,900px,0,0);
+}
+.glitch-text::after {
+  color: theme("colors.lavender");
+  left: -2px;
+  animation: glitch 2s infinite;
+  overflow: hidden;
+  clip: rect(0,900px,0,0);
+}
+
+/* buttons */
+.btn {
+  @apply inline-block px-4 py-2 rounded font-semibold transition-all;
+}
+.btn:hover {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 5px 15px rgba(224,175,255,0.3);
+}
+.btn-primary {
+  @apply bg-white text-black;
+}
+.btn-primary:hover {
+  background-color: theme("colors.lavender");
+}
+.btn-secondary {
+  @apply bg-lavender text-black;
+}
+.btn-secondary:hover {
+  background-color: theme("colors.peachy");
+}
+
+/* cardish items */
+.card {
+  @apply bg-cardbg rounded overflow-hidden flex flex-col transition-all;
+}
+.card:hover {
+  background-color: #343447;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  transform: translateY(-2px);
+}
+.card-content {
+  @apply p-4 flex flex-col flex-1;
+}
+.card-footer {
+  margin-top: auto;
+}
+
+/* hero gradient */
+.hero-gradient {
+  @apply h-[90vh] relative flex items-center justify-center text-center overflow-hidden;
+  background: linear-gradient(120deg, #1c1c28, #3c3c50);
+  background-size: 400% 400%;
+  animation: gradientflow 10s ease infinite;
+}
+
+/* brand glitchy logo */
+.brainrot-logo {
+  @apply relative text-xl font-bold uppercase tracking-wider;
+}
+.brainrot-logo::after {
+  content: 'brainrot';
+  position: absolute;
+  top: 0;
+  left: 3px;
+  color: theme("colors.peachy");
+  clip: rect(0,0,0,0);
+  animation: glitch 2s infinite;
+}
+
