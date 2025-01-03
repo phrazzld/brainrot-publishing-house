@@ -1,101 +1,71 @@
-import Image from 'next/image'
-import Link from 'next/link'
+"use client"
+import Link from "next/link"
+import { useEffect, useRef } from "react"
+import gsap from "gsap"
 
-export default function Home() {
+export default function HomePage() {
+  const heroRef = useRef<HTMLDivElement | null>(null)
+
+  // swirl animation
+  useEffect(() => {
+    if (!heroRef.current) return
+    gsap.to(heroRef.current, {
+      backgroundPosition: "200% center",
+      duration: 10,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut",
+    })
+  }, [])
+
   return (
-    <main className="min-h-screen flex flex-col">
-      {/* header */}
-      <header className="flex items-center justify-between w-full px-6 py-4 bg-black/25 backdrop-blur-sm sticky top-0 z-10">
-        <div className="brainrot-logo">
-          brainrot publishing house
-        </div>
-        <nav className="space-x-6">
-          <a href="#hero" className="hover:text-peachy transition">home</a>
-          <a href="#explore" className="hover:text-peachy transition">explore</a>
-        </nav>
-      </header>
+    <main className="relative min-h-screen flex flex-col bg-midnight text-white">
+      {/* hero fills the rest of the screen */}
+      <section
+        ref={heroRef}
+        className="flex-1 flex items-center justify-center text-center px-4 py-32
+                   bg-gradient-to-r from-lavender to-peachy
+                   overflow-hidden"
+        style={{ backgroundSize: "400% 400%" }}
+      >
+        {/* glitch overlay shapes */}
+        <div className="absolute inset-0 pointer-events-none mix-blend-multiply opacity-30 bg-[url('/assets/images/neon_waves.png')] bg-cover" />
 
-      {/* hero */}
-      <section id="hero" className="hero-gradient">
-        <div className="z-10 max-w-2xl mx-auto px-4">
+        <div className="relative z-10 max-w-3xl">
           <h1
-            className="text-5xl md:text-6xl font-bold mb-6 glitch-text"
-            data-text="classic lit reimagined"
+            className="text-6xl md:text-8xl font-display mb-6 glitch-text"
+            data-text="brainrot publishing"
           >
-            classic lit reimagined
+            brainrot publishing
           </h1>
-          <p className="text-base md:text-lg mb-8">
-            we gather dusty tomes and spin them into <span className="italic text-peachy">gnarly new vibes</span>
+          <p className="text-xl md:text-2xl mb-8 font-sans">
+            zoomer translations of classic literature
           </p>
-          <a href="#explore" className="btn btn-primary">
+          <Link href="/explore" className="btn btn-primary text-lg">
             start exploring
-          </a>
+          </Link>
         </div>
       </section>
 
-      {/* main content */}
-      <section id="explore" className="px-6 py-16">
-        <h2 className="text-3xl md:text-4xl mb-8 text-lavender font-bold">
-          explore our translations
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {/* card 1 */}
-          <div className="card">
-            <Image
-              src="/assets/images/achilles-03.png"
-              alt="iliad cover"
-              width={700}
-              height={400}
-              className="w-full h-64 object-cover"
-            />
-            <div className="card-content">
-              <h3 className="text-xl font-bold mb-2">the iliad</h3>
-              <div className="card-footer">
-                <Link href="/the-iliad" className="btn btn-secondary">
-                  read now
-                </Link>
-              </div>
-            </div>
-          </div>
-          {/* card 2 */}
-          <div className="card">
-            <Image
-              src="/assets/images/achilles-01.png"
-              alt="the odyssey cover"
-              width={700}
-              height={400}
-              className="w-full h-64 object-cover"
-            />
-            <div className="card-content">
-              <h3 className="text-xl font-bold mb-2">the odyssey</h3>
-              <div className="card-footer">
-                <button className="btn btn-secondary">notify me</button>
-              </div>
-            </div>
-          </div>
-          {/* card 3 */}
-          <div className="card">
-            <Image
-              src="/assets/images/inferno-01.png"
-              alt="dante's inferno cover"
-              width={700}
-              height={400}
-              className="w-full h-64 object-cover"
-            />
-            <div className="card-content">
-              <h3 className="text-xl font-bold mb-2">dante’s inferno</h3>
-              <div className="card-footer">
-                <button className="btn btn-secondary">notify me</button>
-              </div>
-            </div>
-          </div>
+      {/* marquee pinned to the bottom */}
+      <div className="whitespace-nowrap overflow-x-hidden bg-black text-peachy font-bold">
+        <div className="animate-marquee-slow">
+          <span className="mx-8">the bible</span>
+          <span className="mx-8">the aeneid</span>
+          <span className="mx-8">the republic</span>
+          <span className="mx-8">the prince</span>
+          <span className="mx-8">war and peace</span>
+          <span className="mx-8">the quran</span>
+          <span className="mx-8">don quixote</span>
+          <span className="mx-8">anna karenina</span>
+          <span className="mx-8">king lear</span>
+          <span className="mx-8">romeo and juliet</span>
+          <span className="mx-8">hamlet</span>
+          <span className="mx-8">macbeth</span>
+          <span className="mx-8">a midsummer night’s dream</span>
+          {/* add more if you like */}
         </div>
-      </section>
-
-      {/* footer */}
-      <footer className="border-t border-white/10 py-6 text-center text-sm text-white/70 mt-auto">
-        © brainrot publishing house. all rights reserved.
-      </footer>
+      </div>
     </main>
   )
 }

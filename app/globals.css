@@ -2,24 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
-/* global resets & brand base styling */
+/* single dark aesthetic */
 html, body {
   margin: 0;
   padding: 0;
-  font-family: theme("fontFamily.sans");
-  background-color: theme("colors.midnight");
-  color: white;
-  overflow-x: hidden;
+  background-color: #1c1c28; /* midnight */
+  color: #fff;
+  font-family: 'Open Sans', sans-serif;
   scroll-behavior: smooth;
 }
 
+/* headings */
 h1, h2, h3, h4 {
-  font-family: theme("fontFamily.display");
+  font-family: 'Montserrat', sans-serif;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
-/* glitch text effect (inline) */
+/* glitch text effect */
 .glitch-text {
   position: relative;
   display: inline-block;
@@ -32,76 +32,66 @@ h1, h2, h3, h4 {
   left: 0;
 }
 .glitch-text::before {
-  color: theme("colors.peachy");
-  left: 2px;
+  color: #ffdaab; /* peachy */
+  transform: translateX(2px);
   animation: glitch 2s infinite;
   overflow: hidden;
-  clip: rect(0,900px,0,0);
+  clip: rect(0, 900px, 0, 0);
 }
 .glitch-text::after {
-  color: theme("colors.lavender");
-  left: -2px;
+  color: #e0afff; /* lavender */
+  transform: translateX(-2px);
   animation: glitch 2s infinite;
   overflow: hidden;
-  clip: rect(0,900px,0,0);
+  clip: rect(0, 900px, 0, 0);
+}
+@keyframes glitch {
+  0% { clip: rect(54px,9999px,56px,0); transform: skew(0.3deg);}
+  5% { clip: rect(12px,9999px,29px,0); transform: skew(0.8deg);}
+  10% { clip: rect(30px,9999px,77px,0); transform: skew(0.2deg);}
+  15% { clip: rect(40px,9999px,60px,0); transform: skew(0.3deg);}
+  20% { clip: rect(1px,9999px,85px,0); transform: skew(0.9deg);}
+  100% { clip: rect(54px,9999px,56px,0); transform: skew(0.3deg);}
 }
 
-/* buttons */
-.btn {
-  @apply inline-block px-4 py-2 rounded font-semibold transition-all;
+/* marquee animation in tailwind config -> marquee-slow */
+@layer utilities {
+  .animate-marquee {
+    animation: marquee 15s linear infinite;
+  }
 }
-.btn:hover {
-  transform: translateY(-1px) scale(1.02);
-  box-shadow: 0 5px 15px rgba(224,175,255,0.3);
+
+/* .btn styles */
+.btn {
+  @apply inline-block px-5 py-2 rounded font-semibold transition-all;
+  @apply hover:scale-105 hover:shadow-md;
 }
 .btn-primary {
-  @apply bg-white text-black;
-}
-.btn-primary:hover {
-  background-color: theme("colors.lavender");
-}
-.btn-secondary {
   @apply bg-lavender text-black;
 }
+.btn-primary:hover {
+  @apply scale-110 shadow-lg;
+}
+.btn-secondary {
+  @apply bg-black text-white;
+}
 .btn-secondary:hover {
-  background-color: theme("colors.peachy");
+  @apply scale-110 shadow-lg bg-lavender text-black;
 }
 
-/* cardish items */
+/* card styles */
 .card {
-  @apply bg-cardbg rounded overflow-hidden flex flex-col transition-all;
-}
-.card:hover {
-  background-color: #343447;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-  transform: translateY(-2px);
+  @apply bg-cardbg rounded flex flex-col transition-all;
+  @apply hover:scale-[1.01] hover:shadow-lg;
 }
 .card-content {
-  @apply p-4 flex flex-col flex-1;
+  @apply p-4 flex-1 flex flex-col;
 }
 .card-footer {
   margin-top: auto;
 }
 
-/* hero gradient */
-.hero-gradient {
-  @apply h-[90vh] relative flex items-center justify-center text-center overflow-hidden;
-  background: linear-gradient(120deg, #1c1c28, #3c3c50);
-  background-size: 400% 400%;
-  animation: gradientflow 10s ease infinite;
+/* waveform container */
+#waveform {
+  @apply w-full h-16;
 }
-
-/* brand glitchy logo */
-.brainrot-logo {
-  @apply relative text-xl font-bold uppercase tracking-wider;
-}
-.brainrot-logo::after {
-  content: 'brainrot';
-  position: absolute;
-  top: 0;
-  left: 3px;
-  color: theme("colors.peachy");
-  clip: rect(0,0,0,0);
-  animation: glitch 2s infinite;
-}
-

@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  // no darkMode config needed, we’re going full dark
   content: [
     "./app/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
@@ -7,7 +8,6 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // brand palette
         midnight: "#1c1c28",
         lavender: "#e0afff",
         peachy: "#ffdaab",
@@ -26,18 +26,16 @@ module.exports = {
           "20%": { clip: "rect(1px,9999px,85px,0)", transform: "skew(0.9deg)" },
           "100%": { clip: "rect(54px,9999px,56px,0)", transform: "skew(0.3deg)" },
         },
-        gradientflow: {
-          "0%": { backgroundPosition: "0% 50%" },
-          "50%": { backgroundPosition: "100% 50%" },
-          "100%": { backgroundPosition: "0% 50%" },
+        marquee: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
         },
       },
       animation: {
         glitch: "glitch 2s infinite",
-        gradientflow: "gradientflow 10s ease infinite",
+        "marquee-slow": "marquee 15s linear infinite",
       },
     },
   },
   plugins: [],
 }
-
