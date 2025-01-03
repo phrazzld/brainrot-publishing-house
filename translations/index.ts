@@ -5,7 +5,7 @@ const translations = [
   {
     slug: 'the-iliad',
     title: 'the iliad',
-    shortDescription: 'the first epic of homer, reawakened for the digital age.',
+    shortDescription: 'achilles and hector and helen and troy and all that',
     coverImage: '/assets/images/achilles-03.png',
     status: 'available',
     chapters: [
@@ -135,7 +135,7 @@ const translations = [
   {
     slug: 'the-odyssey',
     title: 'the odyssey',
-    shortDescription: 'the second epic of homer, newly twisted.',
+    shortDescription: 'now it\'s all about odysseus bruh',
     coverImage: '/assets/images/achilles-01.png',
     status: 'coming soon',
     chapters: [
@@ -143,9 +143,19 @@ const translations = [
     ],
   },
   {
-    slug: 'the-divine-comedy',
-    title: 'the divine comedy',
-    shortDescription: 'dante the rizzler is at it again.',
+    slug: 'the-aeneid',
+    title: 'the aeneid',
+    shortDescription: 'virgil coming in hot with this one',
+    coverImage: '/assets/images/aeneid-02.png',
+    status: 'coming soon',
+    chapters: [
+      // ...
+    ],
+  },
+  {
+    slug: 'the-divine-comedy-inferno',
+    title: 'the divine comedy: the inferno',
+    shortDescription: 'dante the rizzler is at it again',
     coverImage: '/assets/images/inferno-01.png',
     status: 'coming soon',
     chapters: [
