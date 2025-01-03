@@ -5,40 +5,48 @@ import gsap from "gsap"
 
 export default function HomePage() {
   const heroRef = useRef<HTMLDivElement | null>(null)
+  const subheadingRef = useRef<HTMLParagraphElement | null>(null)
 
-  // swirl animation
   useEffect(() => {
-    if (!heroRef.current) return
-    gsap.to(heroRef.current, {
-      backgroundPosition: "200% center",
-      duration: 10,
-      repeat: -1,
-      yoyo: true,
-      ease: "sine.inOut",
-    })
+    // swirl animation
+    if (heroRef.current) {
+      gsap.to(heroRef.current, {
+        backgroundPosition: "200% center",
+        duration: 10,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+      })
+    }
+    // fade in subheading
+    if (subheadingRef.current) {
+      gsap.fromTo(
+        subheadingRef.current,
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 1, delay: 0.6, ease: "power2.out" }
+      )
+    }
   }, [])
 
   return (
-    <main className="relative min-h-screen flex flex-col bg-midnight text-white">
-      {/* hero fills the rest of the screen */}
+    <main className="relative min-h-screen flex flex-col">
       <section
         ref={heroRef}
-        className="flex-1 flex items-center justify-center text-center px-4 py-32
-                   bg-gradient-to-r from-lavender to-peachy
-                   overflow-hidden"
-        style={{ backgroundSize: "400% 400%" }}
+        className="flex-1 flex flex-col items-center justify-center text-center px-4 py-32 bg-gradient-to-r from-lavender to-peachy overflow-hidden"
+        style={{ backgroundSize: '400% 400%' }}
       >
-        {/* glitch overlay shapes */}
         <div className="absolute inset-0 pointer-events-none mix-blend-multiply opacity-30 bg-[url('/assets/images/neon_waves.png')] bg-cover" />
-
         <div className="relative z-10 max-w-3xl">
           <h1
-            className="text-6xl md:text-8xl font-display mb-6 glitch-text"
+            className="text-6xl md:text-8xl mb-6 glitch-text"
             data-text="brainrot publishing"
           >
             brainrot publishing
           </h1>
-          <p className="text-xl md:text-2xl mb-8 font-sans">
+          <p
+            ref={subheadingRef}
+            className="text-xl md:text-2xl mb-8 font-light"
+          >
             zoomer translations of classic literature
           </p>
           <Link href="/explore" className="btn btn-primary text-lg">
@@ -63,7 +71,6 @@ export default function HomePage() {
           <span className="mx-8">hamlet</span>
           <span className="mx-8">macbeth</span>
           <span className="mx-8">a midsummer night’s dream</span>
-          {/* add more if you like */}
         </div>
       </div>
     </main>

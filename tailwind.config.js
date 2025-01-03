@@ -1,6 +1,5 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  // no darkMode config needed, we’re going full dark
   content: [
     "./app/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
@@ -14,26 +13,22 @@ module.exports = {
         cardbg: "#2c2c3a",
       },
       fontFamily: {
-        sans: ["Open Sans", "sans-serif"],
-        display: ["Montserrat", "sans-serif"],
+        display: ['var(--font-anton)', 'sans-serif'],
+        body: ['var(--font-inter)', 'sans-serif'],
       },
       keyframes: {
-        glitch: {
-          "0%": { clip: "rect(54px,9999px,56px,0)", transform: "skew(0.3deg)" },
-          "5%": { clip: "rect(12px,9999px,29px,0)", transform: "skew(0.8deg)" },
-          "10%": { clip: "rect(30px,9999px,77px,0)", transform: "skew(0.2deg)" },
-          "15%": { clip: "rect(40px,9999px,60px,0)", transform: "skew(0.3deg)" },
-          "20%": { clip: "rect(1px,9999px,85px,0)", transform: "skew(0.9deg)" },
-          "100%": { clip: "rect(54px,9999px,56px,0)", transform: "skew(0.3deg)" },
+        flicker: {
+          '0%, 19%, 21%, 23%, 25%, 54%, 56%, 100%': { opacity: 1 },
+          '20%, 24%, 55%': { opacity: 0 },
         },
-        marquee: {
-          "0%": { transform: "translateX(0)" },
-          "100%": { transform: "translateX(-50%)" },
+        fadeInUp: {
+          '0%': { opacity: 0, transform: 'translateY(20px)' },
+          '100%': { opacity: 1, transform: 'translateY(0)' },
         },
       },
       animation: {
-        glitch: "glitch 2s infinite",
-        "marquee-slow": "marquee 15s linear infinite",
+        flicker: 'flicker 3s infinite steps(1, start)',
+        fadeInUp: 'fadeInUp 1s ease forwards',
       },
     },
   },

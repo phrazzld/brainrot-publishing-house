@@ -2,24 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-/* single dark aesthetic */
+/* adopt the newly declared families */
 html, body {
-  margin: 0;
-  padding: 0;
-  background-color: #1c1c28; /* midnight */
-  color: #fff;
-  font-family: 'Open Sans', sans-serif;
+  @apply m-0 p-0 bg-midnight text-white font-body;
   scroll-behavior: smooth;
 }
 
-/* headings */
+/* headings get display font */
 h1, h2, h3, h4 {
-  font-family: 'Montserrat', sans-serif;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  @apply font-display tracking-wider uppercase;
 }
 
-/* glitch text effect */
+/* .glitch-text stays as is, or you can spice it up more */
 .glitch-text {
   position: relative;
   display: inline-block;
@@ -52,6 +46,11 @@ h1, h2, h3, h4 {
   15% { clip: rect(40px,9999px,60px,0); transform: skew(0.3deg);}
   20% { clip: rect(1px,9999px,85px,0); transform: skew(0.9deg);}
   100% { clip: rect(54px,9999px,56px,0); transform: skew(0.3deg);}
+}
+
+@keyframes typewriter {
+  0% { width: 0 }
+  100% { width: 100% }
 }
 
 /* marquee animation in tailwind config -> marquee-slow */
@@ -94,4 +93,58 @@ h1, h2, h3, h4 {
 /* waveform container */
 #waveform {
   @apply w-full h-16;
+}
+
+.fade-in-up {
+  @apply animate-fadeInUp;
+}
+
+/* marquee logic remains the same, or you can add random flicker */
+@layer utilities {
+  .animate-marquee-slow {
+    animation: marquee 15s linear infinite;
+  }
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+}
+
+/* button tweaks */
+.btn {
+  @apply inline-block px-5 py-2 rounded font-semibold transition-all relative;
+}
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.2s, box-shadow 0.2s;
+  box-shadow: 0 0 0 0 rgba(224, 175, 255, 0.7);
+}
+.btn:hover::before {
+  opacity: 1;
+  box-shadow: 0 0 8px 2px rgba(224, 175, 255, 0.7);
+}
+.btn:hover {
+  transform: scale(1.05);
+}
+
+.btn-primary {
+  @apply bg-lavender text-black;
+}
+.btn-primary:hover {
+  @apply shadow-lg;
+}
+.btn-secondary {
+  @apply bg-black text-white;
+}
+.btn-secondary:hover {
+  @apply shadow-lg bg-lavender text-black;
+}
+
+/* header glass effect */
+.header-glass {
+  @apply bg-black/30 backdrop-blur-sm sticky top-0 z-50 flex items-center justify-between px-6 py-4;
 }

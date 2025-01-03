@@ -84,7 +84,7 @@ export default function ReadingRoom() {
     if (!line.trim()) return <div key={i} className="my-2">&nbsp;</div>
     const showNum = (i + 1) % 5 === 0
     return (
-      <div key={i} className="relative my-1 pl-12">
+      <div key={i} className="relative my-1 pl-12 font-body text-md">
         {showNum && (
           <span className="absolute left-0 top-0 w-10 text-right text-peachy text-sm select-none">
             {i + 1}
@@ -103,28 +103,28 @@ export default function ReadingRoom() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-midnight text-white">
+    <div className="min-h-screen flex flex-col bg-midnight text-white font-body">
       {/* top nav */}
       <header className="sticky top-0 z-20 px-4 py-3 bg-black/40 backdrop-blur-md flex items-center justify-between">
         <div className="flex flex-col md:flex-row items-start md:items-center gap-1 md:gap-3">
-          <span className="font-bold text-lg md:text-xl">
+          <span className="font-bold text-lg md:text-xl font-display">
             {translation?.title}
           </span>
-          <span className="text-sm text-lavender">
+          <span className="text-sm text-lavender font-body">
             chapter {chapterIndex + 1}
           </span>
         </div>
         <div className="flex items-center gap-3">
           <button
             onClick={goPrevChapter}
-            className="btn btn-secondary text-sm"
+            className="btn btn-secondary text-sm font-body"
             style={{ visibility: chapterIndex === 0 ? "hidden" : "visible" }}
           >
             ← prev
           </button>
           <button
             onClick={goNextChapter}
-            className="btn btn-secondary text-sm"
+            className="btn btn-secondary text-sm font-body"
             style={{
               visibility:
                 !translation || chapterIndex === translation.chapters.length - 1
@@ -142,10 +142,10 @@ export default function ReadingRoom() {
         <div id="waveform" className="flex-1 h-16" />
         {/* controls on the right */}
         <div className="flex items-center gap-3">
-          <button onClick={togglePlayPause} className="btn btn-primary text-sm">
+          <button onClick={togglePlayPause} className="btn btn-primary text-sm font-body">
             {isPlaying ? "pause" : "play"}
           </button>
-          <div className="flex flex-col items-end text-xs">
+          <div className="flex flex-col items-end text-xs font-body">
             <span className="text-peachy">{formatTime(currentTime)}</span>
             <span className="text-white/50">{formatTime(totalTime)}</span>
           </div>
@@ -161,14 +161,14 @@ export default function ReadingRoom() {
       <div className="flex items-center justify-center gap-4 py-3 bg-black/40 backdrop-blur-md">
         <button
           onClick={goPrevChapter}
-          className="btn btn-secondary text-sm"
+          className="btn btn-secondary text-sm font-body"
           style={{ visibility: chapterIndex === 0 ? "hidden" : "visible" }}
         >
           ← prev
         </button>
         <button
           onClick={goNextChapter}
-          className="btn btn-secondary text-sm"
+          className="btn btn-secondary text-sm font-body"
           style={{
             visibility:
               !translation || chapterIndex === translation.chapters.length - 1
