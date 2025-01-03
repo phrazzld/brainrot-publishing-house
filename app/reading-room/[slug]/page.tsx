@@ -38,7 +38,6 @@ export default function ReadingRoom() {
       waveColor: "#666",
       progressColor: "#e0afff",
       cursorColor: "#ffdaab",
-      backgroundColor: "transparent",
       height: 64,
     })
     ws.load(chapterData.audioSrc)
