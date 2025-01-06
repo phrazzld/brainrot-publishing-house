@@ -23,7 +23,7 @@ export default function ExplorePage() {
                 alt={t.title}
                 width={800}
                 height={600}
-                className="w-full h-60 object-cover"
+                className="w-full object-cover"
               />
               <div className="card-content">
                 <h3 className="text-xl font-display mb-2">{t.title}</h3>

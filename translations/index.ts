@@ -5,7 +5,7 @@ const translations = [
   {
     slug: 'the-iliad',
     title: 'the iliad',
-    shortDescription: 'achilles and hector and helen and troy and all that',
+    shortDescription: 'achilles big salty, trojan bros caught in 4k, city going bruh-level meltdown. w drama, 100% based.',
     coverImage: '/assets/images/achilles-03.png',
     status: 'available',
     chapters: [
@@ -134,7 +134,7 @@ const translations = [
   {
     slug: 'the-odyssey',
     title: 'the odyssey',
-    shortDescription: 'now it\'s all about odysseus bruh',
+    shortDescription: 'odysseus ghosting cyclops & sirens, tries not to flop but finna get that home sweet home. big bde of cunning tbh.',
     coverImage: '/assets/images/achilles-01.png',
     status: 'available',
     chapters: [
@@ -263,17 +263,176 @@ const translations = [
   {
     slug: 'the-aeneid',
     title: 'the aeneid',
-    shortDescription: 'virgil coming in hot with this one',
+    shortDescription: 'trojan boi aeneas on a no cap mission to found rome, basically said “secure the bag or crash out.” spoiler: he secures it, bestie.',
     coverImage: '/assets/images/aeneid-02.png',
-    status: 'coming soon',
+    status: 'available',
     chapters: [
+      {
+        title: 'book 1',
+        text: "/assets/the-aeneid/text/book-01.txt",
+        audioSrc: '/assets/the-aeneid/audio/book-01.mp3'
+      },
+      {
+        title: 'book 2',
+        text: "/assets/the-aeneid/text/book-02.txt",
+        audioSrc: '/assets/the-aeneid/audio/book-02.mp3'
+      },
+      {
+        title: 'book 3',
+        text: "/assets/the-aeneid/text/book-03.txt",
+        audioSrc: '/assets/the-aeneid/audio/book-03.mp3'
+      },
+      {
+        title: 'book 4',
+        text: "/assets/the-aeneid/text/book-04.txt",
+        audioSrc: '/assets/the-aeneid/audio/book-04.mp3'
+      },
+      {
+        title: 'book 5',
+        text: "/assets/the-aeneid/text/book-05.txt",
+        audioSrc: '/assets/the-aeneid/audio/book-05.mp3'
+      },
+      {
+        title: 'book 6',
+        text: "/assets/the-aeneid/text/book-06.txt",
+        audioSrc: '/assets/the-aeneid/audio/book-06.mp3'
+      },
+      {
+        title: 'book 7',
+        text: "/assets/the-aeneid/text/book-07.txt",
+        audioSrc: '/assets/the-aeneid/audio/book-07.mp3'
+      },
+      {
+        title: 'book 8',
+        text: "/assets/the-aeneid/text/book-08.txt",
+        audioSrc: '/assets/the-aeneid/audio/book-08.mp3'
+      },
+      {
+        title: 'book 9',
+        text: "/assets/the-aeneid/text/book-09.txt",
+        audioSrc: '/assets/the-aeneid/audio/book-09.mp3'
+      },
+      {
+        title: 'book 10',
+        text: "/assets/the-aeneid/text/book-10.txt",
+        audioSrc: '/assets/the-aeneid/audio/book-10.mp3'
+      },
+      {
+        title: 'book 11',
+        text: "/assets/the-aeneid/text/book-11.txt",
+        audioSrc: '/assets/the-aeneid/audio/book-11.mp3'
+      },
+      {
+        title: 'book 12',
+        text: "/assets/the-aeneid/text/book-12.txt",
+        audioSrc: '/assets/the-aeneid/audio/book-12.mp3'
+      },
     ],
   },
   {
     slug: 'the-divine-comedy-inferno',
     title: 'the divine comedy: the inferno',
-    shortDescription: 'dante the rizzler is at it again',
+    shortDescription: 'dante finna see hell like it’s giving meltdown vibes. devils be sus asf.',
     coverImage: '/assets/images/inferno-01.png',
+    status: 'coming soon',
+    chapters: [
+    ],
+  },
+  {
+    slug: 'the-divine-comedy-purgatorio',
+    title: 'the divine comedy: the purgatorio',
+    shortDescription: 'man’s took a vibe check, climbing that mountain with the homies to get cleansed. era SHIFT.',
+    coverImage: '/assets/images/purgatorio-02.png',
+    status: 'coming soon',
+    chapters: [
+    ],
+  },
+  {
+    slug: 'the-divine-comedy-paradiso',
+    title: 'the divine comedy: the paradiso',
+    shortDescription: 'big glow-up in heaven, man’s ratio unstoppable, angels all like “sheesh.”',
+    coverImage: '/assets/images/paradiso-02.png',
+    status: 'coming soon',
+    chapters: [
+    ],
+  },
+  {
+    slug: 'the-bible-old-testament',
+    title: 'the bible: old testament',
+    shortDescription: 'it’s giving creation myths, floods, epic L’s & W’s, everyone’s on that vibe check from abraham to moses. savage.',
+    coverImage: '/assets/images/old-testament-03.png',
+    status: 'coming soon',
+    chapters: [
+    ],
+  },
+  {
+    slug: 'the-bible-new-testament',
+    title: 'the bible: new testament',
+    shortDescription: 'jesus is the main character, raising the dead, turning water to wine, big rizz energy. the apostles be living rent-free in everyone’s mind.',
+    coverImage: '/assets/images/new-testament-01.png',
+    status: 'coming soon',
+    chapters: [
+    ],
+  },
+  {
+    slug: 'the-republic',
+    title: 'the republic',
+    shortDescription: 'plato be like “ideal society or skill issue?” entire blueprint for big-brain vibes. no cap.',
+    coverImage: '/assets/images/republic-02.png',
+    status: 'coming soon',
+    chapters: [
+    ],
+  },
+  {
+    slug: 'the-quran',
+    title: 'the quran',
+    shortDescription: 'revelation meltdown, the prophet mohammed spitting bars from the top—milk & honey drip, soul-level era. absolutely no flop.',
+    coverImage: '/assets/images/quran-01.png',
+    status: 'coming soon',
+    chapters: [
+    ],
+  },
+  {
+    slug: 'romeo-and-juliet',
+    title: 'romeo and juliet',
+    shortDescription: 'star-crossed bffr, love doping them up, they crash out frfr. big yikes vibes.',
+    coverImage: '/assets/images/romeo-and-juliet-02.png',
+    status: 'coming soon',
+    chapters: [
+    ],
+  },
+  {
+    slug: 'hamlet',
+    title: 'hamlet',
+    shortDescription: '“to be or not to be,” man’s so mid or maybe next-level? ghost dad on the daily, meltdown central. slay or nay?',
+    coverImage: '/assets/images/hamlet-02.png',
+    status: 'coming soon',
+    chapters: [
+    ],
+  },
+  {
+    slug: 'a-midsummer-nights-dream',
+    title: 'a midsummer night’s dream',
+    shortDescription: 'fairy squad messing up couples, donkey transformation, oh so chaotic. it’s literally a bruh moment in the forest.',
+    coverImage: '/assets/images/midsummer-02.png',
+    status: 'coming soon',
+    chapters: [
+    ],
+  },
+  {
+    slug: 'gilgamesh',
+    title: 'gilgamesh',
+    shortDescription: 'og epic, demigod king’s bff dies, so he tries to unalive immortality. ultimate big sad, but he glows up in the end.',
+    coverImage: '/assets/images/gilgamesh-01.png',
+    status: 'coming soon',
+    chapters: [
+    ],
+  },
+  {
+    slug: 'bhagavad-gita',
+    title: 'bhagavad gita',
+    shortDescription: 'krishna spitting that moral code, telling arjuna to stop capping & fight. talk about rizz for your soul, bestie.',
+    coverImage: '/assets/images/gita-01.png',
     status: 'coming soon',
     chapters: [
     ],
