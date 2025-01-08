@@ -35,7 +35,7 @@ export default function HomePage() {
         className="flex-1 flex flex-col items-center justify-center text-center px-4 py-32 bg-gradient-to-r from-lavender to-peachy overflow-hidden"
         style={{ backgroundSize: '400% 400%' }}
       >
-        <div className="absolute inset-0 pointer-events-none mix-blend-multiply opacity-30 bg-[url('/assets/images/neon_waves.png')] bg-cover" />
+        <div className="absolute inset-0 pointer-events-none mix-blend-multiply opacity-30 bg-cover" />
         <div className="relative z-10 max-w-3xl">
           <h1
             className="text-6xl md:text-8xl mb-6 glitch-text"
