@@ -4,8 +4,6 @@ import { useParams, useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import WaveSurfer from "wavesurfer.js"
 
-// let's do a custom share modal rather than navigator.share
-
 export default function ReadingRoom() {
   const searchParams = useSearchParams()
   const { slug } = useParams()
@@ -22,6 +20,10 @@ export default function ReadingRoom() {
   const [shareFeedback, setShareFeedback] = useState("")
   const [includeChapter, setIncludeChapter] = useState(true)
   const [includeTimestamp, setIncludeTimestamp] = useState(true)
+
+  // loading states
+  const [isAudioLoading, setIsAudioLoading] = useState(false)
+  const [isTextLoading, setIsTextLoading] = useState(false)
 
   const translation = translations.find((t) => t.slug === slug)
   const chapterData = translation?.chapters[chapterIndex]
@@ -60,18 +62,23 @@ export default function ReadingRoom() {
   useEffect(() => {
     if (!chapterData) return
 
+    // text loading
+    setIsTextLoading(true)
     fetch(chapterData.text)
       .then((res) => res.text())
       .then((txt) => {
         setRawText(txt.replaceAll("\n\n", "\n"))
       })
       .catch((err) => setRawText(`error loading text: ${err}`))
+      .finally(() => setIsTextLoading(false))
 
+    // waveSurfer
     if (waveSurfer) {
       try {
         waveSurfer.destroy()
       } catch { }
     }
+    setIsAudioLoading(true)
     const ws = WaveSurfer.create({
       container: "#waveform",
       waveColor: "#666",
@@ -86,6 +93,7 @@ export default function ReadingRoom() {
       setIsPlaying(false)
       setTotalTime(ws.getDuration())
       setCurrentTime(0)
+      setIsAudioLoading(false)
     })
     ws.on("audioprocess", () => {
       setCurrentTime(ws.getCurrentTime())
@@ -217,18 +225,23 @@ export default function ReadingRoom() {
         </div>
       </header>
 
-      {/* wave surfer container */}
-      <div className="flex flex-col md:flex-row items-center md:items-stretch justify-between gap-4 px-4 py-3 bg-[#2c2c3a]">
+      {/* wave surfer container & loading overlay */}
+      <div className="relative flex flex-col md:flex-row items-center md:items-stretch justify-between gap-4 px-4 py-3 bg-[#2c2c3a]">
+        {/* show the wave, or a "still loading" message */}
         <div id="waveform" className="flex-1 h-16" />
+        {isAudioLoading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-10">
+            <div className="text-white text-sm font-body animate-pulse">
+              loading up the vibes...
+            </div>
+          </div>
+        )}
         {/* controls on the right */}
         <div className="flex items-center gap-3">
           <button onClick={togglePlayPause} className="btn btn-primary text-sm font-body">
             {isPlaying ? "pause" : "play"}
           </button>
-          <button
-            onClick={openShareModal}
-            className="btn btn-secondary text-sm font-body"
-          >
+          <button onClick={openShareModal} className="btn btn-secondary text-sm font-body">
             share
           </button>
           <div className="flex flex-col items-end text-xs font-body">
@@ -238,9 +251,15 @@ export default function ReadingRoom() {
         </div>
       </div>
 
-      {/* reading content */}
+      {/* reading content or loading placeholder */}
       <main className="flex-1 max-w-3xl w-full mx-auto p-4 leading-relaxed">
-        {lines}
+        {isTextLoading ? (
+          <div className="text-center text-lavender animate-pulse">
+            loading text, hold up...
+          </div>
+        ) : (
+          lines
+        )}
       </main>
 
       {/* bottom nav */}
@@ -271,7 +290,6 @@ export default function ReadingRoom() {
         <div
           className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center px-4"
           onClick={(e) => {
-            // only close if clicked outside modal content
             if (e.target === e.currentTarget) closeShareModal()
           }}
         >
