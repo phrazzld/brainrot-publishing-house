@@ -1,36 +1,45 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# brainrot publishing house
 
-## Getting Started
+this nextjs app is a total vibe: a reading + audio platform that merges sweet waveforms, text highlighting, chapter/timestamp sharing, and a spool of dope expansions on the horizon. behold:
 
-First, run the development server:
+## features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **reading room**: pick your translation, pick your chapter, listen to synced audio. your eyeballs read as your ears feast.
+- **timestamp sharing**: copy a share link that auto-seeks to a precise chapter/time. no more scrubbing or guesswork.
+- **wavesurfer**: we use wavesurfer.js to visualize the audio waveform and handle playback.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## architecture
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **app/reading-room/[slug]**: main reading component. fetches your text, loads audio, manages chapters/timestamps.
+- **hooks & components**: reusable building blocks to handle reading progress, theme toggles, etc.
+- **digitalocean spaces**: you set a `NEXT_PUBLIC_SPACES_BASE_URL` that points to your bucket, then waveforms load audio from that public url.
+- **env**: `.env.local` holds your secrets (stripe key, do spaces credentials, etc.). config them on vercel for deploy.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## stack
 
-## Learn More
+- **nextjs** (app router) for zero-config routing & serverless endpoints.
+- **react** for the core ui.
+- **wavesurfer** for audio waveforms and playback.
+- **digitalocean spaces**: configured with cors, publicly hosted audio.
+- **tailwindcss** for speed-coded styling.
 
-To learn more about Next.js, take a look at the following resources:
+## running locally
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. clone the repo
+2. `npm install`
+3. set up `.env.local`
+4.	npm run dev
+5.	open localhost:3000
+6.	test the reading room: try reading-room/the-iliad?c=1&t=30.
+7.	explore /checkout to place a pseudo preorder (test mode).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## vision
 
-## Deploy on Vercel
+this is just the beginning:
+	-	line-by-line audio sync & highlight
+	-	buy physical copies with stripe or bitcoin
+	-	dynamic user accounts, profiles, reading stats
+    -	more translations
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+if you vibe with this or see a next-level improvement, fork it and submit a pr.
+zero warranties, maximum fun. stay stoked.
