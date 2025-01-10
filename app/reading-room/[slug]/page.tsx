@@ -1,10 +1,13 @@
 "use client"
-import { useParams } from "next/navigation"
+import { useSearchParams, useParams } from "next/navigation"
 import translations from "@/translations"
 import { useEffect, useState } from "react"
 import WaveSurfer from "wavesurfer.js"
 
+// let's do a custom share modal rather than navigator.share
+
 export default function ReadingRoom() {
+  const searchParams = useSearchParams()
   const { slug } = useParams()
 
   const [rawText, setRawText] = useState("")
@@ -14,10 +17,46 @@ export default function ReadingRoom() {
   const [totalTime, setTotalTime] = useState(0)
   const [chapterIndex, setChapterIndex] = useState(0)
 
+  // share modal states
+  const [isShareOpen, setIsShareOpen] = useState(false)
+  const [shareFeedback, setShareFeedback] = useState("")
+  const [includeChapter, setIncludeChapter] = useState(true)
+  const [includeTimestamp, setIncludeTimestamp] = useState(true)
+
   const translation = translations.find((t) => t.slug === slug)
   const chapterData = translation?.chapters[chapterIndex]
 
-  // fetch text file & waveSurfer
+  // pick up chapter param
+  useEffect(() => {
+    const c = searchParams.get("c")
+    if (c) {
+      setChapterIndex(parseInt(c, 10))
+    }
+  }, [searchParams])
+
+  // timestamp param once waveSurfer is ready
+  useEffect(() => {
+    if (!waveSurfer) return
+
+    function handleReady() {
+      if (!waveSurfer) return
+      const t = searchParams.get("t")
+      const duration = waveSurfer.getDuration()
+      if (t && duration && !isNaN(duration) && duration > 0) {
+        const numericT = Number(t)
+        if (numericT > 0) {
+          waveSurfer.seekTo(numericT / duration)
+        }
+      }
+    }
+
+    waveSurfer.on("ready", handleReady)
+    return () => {
+      waveSurfer.un("ready", handleReady)
+    }
+  }, [waveSurfer, searchParams])
+
+  // fetch text & init waveSurfer
   useEffect(() => {
     if (!chapterData) return
 
@@ -66,10 +105,10 @@ export default function ReadingRoom() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chapterData])
 
+  // controls
   function togglePlayPause() {
     if (waveSurfer) waveSurfer.playPause()
   }
-
   function goPrevChapter() {
     if (chapterIndex > 0) setChapterIndex(chapterIndex - 1)
   }
@@ -100,6 +139,46 @@ export default function ReadingRoom() {
     const m = Math.floor(sec / 60)
     const s = Math.floor(sec % 60)
     return `${m}:${s < 10 ? "0" + s : s}`
+  }
+
+  // share modal logic
+  function openShareModal() {
+    setIsShareOpen(true)
+    setShareFeedback("")
+  }
+  function closeShareModal() {
+    setIsShareOpen(false)
+  }
+
+  // generate link based on user prefs
+  function getShareUrl() {
+    if (typeof window === "undefined") return ""
+
+    const baseUrl = window.location.origin
+    let url = `${baseUrl}/reading-room/${slug}`
+
+    const params = new URLSearchParams()
+    if (includeChapter) {
+      params.set("c", chapterIndex.toString())
+    }
+    if (includeTimestamp) {
+      params.set("t", Math.floor(currentTime).toString())
+    }
+    const qs = params.toString()
+    if (qs) url += `?${qs}`
+
+    return url
+  }
+
+  async function copyShareUrl() {
+    const shareUrl = getShareUrl()
+    try {
+      await navigator.clipboard.writeText(shareUrl)
+      setShareFeedback("link is in your clipboard, glhf!")
+    } catch (err) {
+      console.error(err)
+      setShareFeedback("couldn't copy link sry man")
+    }
   }
 
   return (
@@ -145,6 +224,12 @@ export default function ReadingRoom() {
           <button onClick={togglePlayPause} className="btn btn-primary text-sm font-body">
             {isPlaying ? "pause" : "play"}
           </button>
+          <button
+            onClick={openShareModal}
+            className="btn btn-secondary text-sm font-body"
+          >
+            share
+          </button>
           <div className="flex flex-col items-end text-xs font-body">
             <span className="text-peachy">{formatTime(currentTime)}</span>
             <span className="text-white/50">{formatTime(totalTime)}</span>
@@ -179,6 +264,70 @@ export default function ReadingRoom() {
           next →
         </button>
       </div>
+
+      {/* share modal */}
+      {isShareOpen && (
+        <div
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center px-4"
+          onClick={(e) => {
+            // only close if clicked outside modal content
+            if (e.target === e.currentTarget) closeShareModal()
+          }}
+        >
+          <div className="w-full max-w-sm bg-[#2c2c3a] p-4 rounded-md relative">
+            <button
+              className="absolute top-2 right-2 text-lavender text-sm"
+              onClick={closeShareModal}
+            >
+              ✕
+            </button>
+            <h2 className="text-xl mb-3 font-display">share the vibe</h2>
+
+            {/* toggles */}
+            <div className="space-y-2 mb-4">
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={includeChapter}
+                  onChange={() => setIncludeChapter((prev) => !prev)}
+                />
+                <span>include chapter</span>
+              </label>
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={includeTimestamp}
+                  onChange={() => setIncludeTimestamp((prev) => !prev)}
+                />
+                <span>include timestamp</span>
+              </label>
+            </div>
+
+            {/* link display */}
+            <div className="space-y-2">
+              <label className="text-sm">your link</label>
+              <input
+                type="text"
+                className="w-full p-2 rounded bg-[#1f1f29] text-gray-100"
+                readOnly
+                value={getShareUrl()}
+              />
+            </div>
+
+            {/* copy button */}
+            <button
+              onClick={copyShareUrl}
+              className="btn btn-primary mt-3 block w-full"
+            >
+              copy link
+            </button>
+            {/* ephemeral feedback */}
+            {shareFeedback && (
+              <div className="mt-2 text-sm text-peachy">{shareFeedback}</div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
