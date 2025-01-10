@@ -1,6 +1,6 @@
 "use client"
-import { useSearchParams, useParams } from "next/navigation"
 import translations from "@/translations"
+import { useParams, useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import WaveSurfer from "wavesurfer.js"
 
@@ -79,7 +79,8 @@ export default function ReadingRoom() {
       cursorColor: "#ffdaab",
       height: 64,
     })
-    ws.load(chapterData.audioSrc)
+    const fullAudioSrc = `${process.env.NEXT_PUBLIC_SPACES_BASE_URL}${chapterData.audioSrc}`
+    ws.load(fullAudioSrc)
 
     ws.on("ready", () => {
       setIsPlaying(false)
