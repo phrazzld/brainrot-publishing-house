@@ -288,7 +288,7 @@ export default function ReadingRoom() {
       {/* share modal */}
       {isShareOpen && (
         <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center px-4"
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center px-4 z-20"
           onClick={(e) => {
             if (e.target === e.currentTarget) closeShareModal()
           }}
