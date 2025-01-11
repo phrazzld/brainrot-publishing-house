@@ -28,18 +28,18 @@ this nextjs app is a total vibe: a reading + audio platform that merges sweet wa
 1. clone the repo
 2. `npm install`
 3. set up `.env.local`
-4.	npm run dev
-5.	open localhost:3000
-6.	test the reading room: try reading-room/the-iliad?c=1&t=30.
-7.	explore /checkout to place a pseudo preorder (test mode).
+4. npm run dev
+5. open localhost:3000
+6. test the reading room: try reading-room/the-iliad?c=1&t=30.
+7. explore /checkout to place a pseudo preorder (test mode).
 
 ## vision
 
 this is just the beginning:
-	-	line-by-line audio sync & highlight
-	-	buy physical copies with stripe or bitcoin
-	-	dynamic user accounts, profiles, reading stats
-    -	more translations
+- line-by-line audio sync & highlight
+- buy physical copies with stripe or bitcoin
+- dynamic user accounts, profiles, reading stats
+- more translations
 
 if you vibe with this or see a next-level improvement, fork it and submit a pr.
 zero warranties, maximum fun. stay stoked.
