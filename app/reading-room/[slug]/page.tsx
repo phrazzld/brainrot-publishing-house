@@ -1,10 +1,11 @@
 "use client"
 import translations from "@/translations"
-import { useParams, useSearchParams } from "next/navigation"
+import { useParams, useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import WaveSurfer from "wavesurfer.js"
 
 export default function ReadingRoom() {
+  const router = useRouter()
   const searchParams = useSearchParams()
   const { slug } = useParams()
 
@@ -15,7 +16,7 @@ export default function ReadingRoom() {
   const [totalTime, setTotalTime] = useState(0)
   const [chapterIndex, setChapterIndex] = useState(0)
 
-  // share modal states
+  // share modal
   const [isShareOpen, setIsShareOpen] = useState(false)
   const [shareFeedback, setShareFeedback] = useState("")
   const [includeChapter, setIncludeChapter] = useState(true)
@@ -28,37 +29,35 @@ export default function ReadingRoom() {
   const translation = translations.find((t) => t.slug === slug)
   const chapterData = translation?.chapters[chapterIndex]
 
-  // pick up chapter param
+  // pick up "c" param from the url if it exists
   useEffect(() => {
-    const c = searchParams.get("c")
-    if (c) {
-      setChapterIndex(parseInt(c, 10))
+    const cParam = searchParams.get("c")
+    if (cParam) {
+      const cNum = parseInt(cParam, 10)
+      if (!isNaN(cNum)) setChapterIndex(cNum)
     }
   }, [searchParams])
 
-  // timestamp param once waveSurfer is ready
+  // once waveSurfer is ready, parse "t" param to seek
   useEffect(() => {
     if (!waveSurfer) return
-
     function handleReady() {
-      if (!waveSurfer) return
-      const t = searchParams.get("t")
+      const tParam = searchParams.get("t")
       const duration = waveSurfer.getDuration()
-      if (t && duration && !isNaN(duration) && duration > 0) {
-        const numericT = Number(t)
+      if (tParam && duration && !isNaN(duration) && duration > 0) {
+        const numericT = Number(tParam)
         if (numericT > 0) {
           waveSurfer.seekTo(numericT / duration)
         }
       }
     }
-
     waveSurfer.on("ready", handleReady)
     return () => {
       waveSurfer.un("ready", handleReady)
     }
   }, [waveSurfer, searchParams])
 
-  // fetch text & init waveSurfer
+  // fetch text & init waveSurfer when chapter changes
   useEffect(() => {
     if (!chapterData) return
 
@@ -72,7 +71,7 @@ export default function ReadingRoom() {
       .catch((err) => setRawText(`error loading text: ${err}`))
       .finally(() => setIsTextLoading(false))
 
-    // waveSurfer
+    // waveSurfer re-init
     if (waveSurfer) {
       try {
         waveSurfer.destroy()
@@ -99,10 +98,17 @@ export default function ReadingRoom() {
       setCurrentTime(ws.getCurrentTime())
     })
     ws.on("play", () => setIsPlaying(true))
-    ws.on("pause", () => setIsPlaying(false))
+    // on pause, update the url with current timestamp
+    ws.on("pause", () => {
+      setIsPlaying(false)
+      setCurrentTime(ws.getCurrentTime()) // sync state
+      updateUrlWithChapterAndTimestamp(ws.getCurrentTime())
+    })
+    // on finish, we can reset time but also update url t=0 if you like
     ws.on("finish", () => {
       setIsPlaying(false)
       setCurrentTime(0)
+      updateUrlWithChapterAndTimestamp(0)
     })
 
     setWaveSurfer(ws)
@@ -114,17 +120,48 @@ export default function ReadingRoom() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chapterData])
 
-  // controls
+  // whenever chapterIndex changes, update the url with c=...
+  useEffect(() => {
+    if (!translation) return
+    // only run if we've already loaded something
+    // we can also check for existence, or if the component is first mount
+    updateUrlWithChapterAndTimestamp(currentTime)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chapterIndex])
+
+  function updateUrlWithChapterAndTimestamp(ts: number) {
+    // build a new url with the current chapter and maybe the current time
+    // if you only want to update chapter param, omit time. but let's do both
+    const c = chapterIndex
+    const t = Math.floor(ts)
+    let newUrl = `/reading-room/${slug}?c=${c}`
+    if (t > 0) {
+      newUrl += `&t=${t}`
+    }
+    // push or replace so we don’t blow up history?
+    router.replace(newUrl)
+  }
+
+  // playback controls
   function togglePlayPause() {
-    if (waveSurfer) waveSurfer.playPause()
+    waveSurfer?.playPause()
   }
+
   function goPrevChapter() {
-    if (chapterIndex > 0) setChapterIndex(chapterIndex - 1)
+    if (chapterIndex > 0) {
+      setChapterIndex(chapterIndex - 1)
+    }
   }
+
   function goNextChapter() {
     if (translation && chapterIndex < translation.chapters.length - 1) {
       setChapterIndex(chapterIndex + 1)
     }
+  }
+
+  // chapter pill click
+  function handleChapterClick(i: number) {
+    setChapterIndex(i)
   }
 
   // line numbering every 5 lines
@@ -150,7 +187,7 @@ export default function ReadingRoom() {
     return `${m}:${s < 10 ? "0" + s : s}`
   }
 
-  // share modal logic
+  // share modal
   function openShareModal() {
     setIsShareOpen(true)
     setShareFeedback("")
@@ -158,27 +195,16 @@ export default function ReadingRoom() {
   function closeShareModal() {
     setIsShareOpen(false)
   }
-
-  // generate link based on user prefs
   function getShareUrl() {
     if (typeof window === "undefined") return ""
-
     const baseUrl = window.location.origin
-    let url = `${baseUrl}/reading-room/${slug}`
-
-    const params = new URLSearchParams()
-    if (includeChapter) {
-      params.set("c", chapterIndex.toString())
+    let url = `${baseUrl}/reading-room/${slug}?c=${chapterIndex}`
+    const t = Math.floor(currentTime)
+    if (includeTimestamp && t > 0) {
+      url += `&t=${t}`
     }
-    if (includeTimestamp) {
-      params.set("t", Math.floor(currentTime).toString())
-    }
-    const qs = params.toString()
-    if (qs) url += `?${qs}`
-
     return url
   }
-
   async function copyShareUrl() {
     const shareUrl = getShareUrl()
     try {
@@ -190,44 +216,58 @@ export default function ReadingRoom() {
     }
   }
 
+  // bail out if no translation
+  if (!translation) {
+    return (
+      <div className="p-8 text-white">
+        <h1 className="text-xl">no translation found</h1>
+      </div>
+    )
+  }
+
+  // gather chapters
+  const totalChapters = translation.chapters.length
+  const chaptersArray = Array.from({ length: totalChapters }, (_, i) => i)
+
   return (
     <div className="min-h-screen flex flex-col bg-midnight text-white font-body">
       {/* top nav */}
-      <header className="sticky top-0 z-20 px-4 py-3 bg-black/40 backdrop-blur-md flex items-center justify-between">
-        <div className="flex flex-col md:flex-row items-start md:items-center gap-1 md:gap-3">
-          <span className="font-bold text-lg md:text-xl font-display">
-            {translation?.title}
-          </span>
-          <span className="text-sm text-lavender font-body">
-            chapter {chapterIndex + 1}
-          </span>
-        </div>
-        <div className="flex items-center gap-3">
-          <button
-            onClick={goPrevChapter}
-            className="btn btn-secondary text-sm font-body"
-            style={{ visibility: chapterIndex === 0 ? "hidden" : "visible" }}
-          >
-            ← prev
-          </button>
-          <button
-            onClick={goNextChapter}
-            className="btn btn-secondary text-sm font-body"
-            style={{
-              visibility:
-                !translation || chapterIndex === translation.chapters.length - 1
-                  ? "hidden"
-                  : "visible",
-            }}
-          >
-            next →
-          </button>
+      <header className="sticky top-0 z-20 px-4 py-3 bg-black/40 backdrop-blur-md flex flex-col gap-2">
+        {/* top row: title + next/prev */}
+        <div className="w-full flex items-center justify-between">
+          <div className="flex flex-col md:flex-row items-start md:items-center gap-1 md:gap-3">
+            <span className="font-bold text-lg md:text-xl font-display">
+              {translation.title}
+            </span>
+            <span className="text-sm text-lavender font-body">
+              chapter {chapterIndex + 1}
+            </span>
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={goPrevChapter}
+              className="btn btn-secondary text-sm font-body"
+              style={{ visibility: chapterIndex === 0 ? "hidden" : "visible" }}
+            >
+              ← prev
+            </button>
+            <button
+              onClick={goNextChapter}
+              className="btn btn-secondary text-sm font-body"
+              style={{
+                visibility:
+                  chapterIndex === totalChapters - 1 ? "hidden" : "visible",
+              }}
+            >
+              next →
+            </button>
+          </div>
         </div>
       </header>
 
       {/* wave surfer container & loading overlay */}
       <div className="relative flex flex-col md:flex-row items-center md:items-stretch justify-between gap-4 px-4 py-3 bg-[#2c2c3a]">
-        {/* show the wave, or a "still loading" message */}
+        {/* wave */}
         <div id="waveform" className="flex-1 h-16" />
         {isAudioLoading && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-10">
@@ -249,6 +289,25 @@ export default function ReadingRoom() {
             <span className="text-white/50">{formatTime(totalTime)}</span>
           </div>
         </div>
+      </div>
+
+      {/* horizontal chapter pills */}
+      <div className="overflow-x-auto flex gap-2 p-4">
+        {chaptersArray.map((cNum) => {
+          const isActive = cNum === chapterIndex
+          return (
+            <button
+              key={cNum}
+              onClick={() => handleChapterClick(cNum)}
+              className={`px-3 py-1 rounded-full border text-sm font-body ${isActive
+                ? "bg-peachy text-midnight border-peachy"
+                : "bg-black/30 text-white/80 border-white/20 hover:bg-black/50"
+                }`}
+            >
+              {cNum + 1}
+            </button>
+          )
+        })}
       </div>
 
       {/* reading content or loading placeholder */}
