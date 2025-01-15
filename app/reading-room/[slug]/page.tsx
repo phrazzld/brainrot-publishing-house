@@ -41,7 +41,10 @@ export default function ReadingRoom() {
   // once waveSurfer is ready, parse "t" param to seek
   useEffect(() => {
     if (!waveSurfer) return
+
     function handleReady() {
+      if (!waveSurfer) return;
+
       const tParam = searchParams.get("t")
       const duration = waveSurfer.getDuration()
       if (tParam && duration && !isNaN(duration) && duration > 0) {
