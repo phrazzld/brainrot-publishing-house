@@ -8,6 +8,7 @@ const translations = [
     shortDescription: 'achilles big salty, trojan bros caught in 4k, city going bruh-level meltdown. w drama, 100% based.',
     coverImage: '/assets/images/achilles-03.png',
     status: 'available',
+    purchaseUrl: 'https://www.amazon.com/Iliad-Homer-Greece-ebook/dp/B0DTFP8DY7',
     chapters: [
       {
         title: 'book 1',

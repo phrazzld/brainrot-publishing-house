@@ -1,5 +1,7 @@
 "use client"
+
 import translations from "@/translations"
+import Link from "next/link"
 import { useParams, useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import WaveSurfer from "wavesurfer.js"
@@ -247,6 +249,16 @@ export default function ReadingRoom() {
             </span>
           </div>
           <div className="flex items-center gap-3">
+            {!!translation.purchaseUrl && (
+              <Link
+                href={translation.purchaseUrl}
+                className="btn btn-primary ml-4"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                buy now
+              </Link>
+            )}
             <button
               onClick={goPrevChapter}
               className="btn btn-secondary text-sm font-body"

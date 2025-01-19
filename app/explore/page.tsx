@@ -1,7 +1,8 @@
 "use client"
+
 import translations from "@/translations"
-import Link from "next/link"
 import Image from "next/image"
+import Link from "next/link"
 
 export default function ExplorePage() {
   return (
@@ -40,6 +41,16 @@ export default function ExplorePage() {
                     >
                       coming soon
                     </button>
+                  )}
+                  {!!t.purchaseUrl && (
+                    <Link
+                      href={t.purchaseUrl}
+                      className="btn btn-primary ml-4"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      buy now
+                    </Link>
                   )}
                 </div>
               </div>
