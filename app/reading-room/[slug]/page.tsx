@@ -126,11 +126,12 @@ export default function ReadingRoom() {
   }, [chapterData])
 
   // whenever chapterIndex changes, update the url with c=...
+  // and nuke the timestamp
   useEffect(() => {
     if (!translation) return
     // only run if we've already loaded something
     // we can also check for existence, or if the component is first mount
-    updateUrlWithChapterAndTimestamp(currentTime)
+    updateUrlWithChapterAndTimestamp(0)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chapterIndex])
 
