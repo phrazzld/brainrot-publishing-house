@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
     }
 
     // init s3
-    const spacesEndpoint = new AWS.Endpoint(process.env.SPACES_ENDPOINT);
+    const spacesEndpoint = new AWS.Endpoint(process.env.SPACES_ENDPOINT || "");
     const s3 = new AWS.S3({
       endpoint: spacesEndpoint,
       accessKeyId: process.env.SPACES_ACCESS_KEY_ID,
