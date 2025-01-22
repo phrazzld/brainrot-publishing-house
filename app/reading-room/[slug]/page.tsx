@@ -5,6 +5,7 @@ import Link from "next/link"
 import { useParams, useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import WaveSurfer from "wavesurfer.js"
+import DownloadButton from '@/components/DownloadButton'
 
 export default function ReadingRoom() {
   const router = useRouter()
@@ -305,6 +306,11 @@ export default function ReadingRoom() {
             <span className="text-white/50">{formatTime(totalTime)}</span>
           </div>
         </div>
+      </div>
+
+      <div className="p-4 flex gap-4">
+        <DownloadButton slug={!!slug ? slug.toString() : ""} type="chapter" chapter={chapterIndex + 1} />
+        <DownloadButton slug={!!slug ? slug.toString() : ""} type="full" classNames="btn-secondary" />
       </div>
 
       {/* horizontal chapter pills */}
