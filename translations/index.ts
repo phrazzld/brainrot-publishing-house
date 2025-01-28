@@ -340,7 +340,7 @@ const translations = [
       {
         title: 'the declaration of independence',
         text: "/assets/the-declaration-of-independence/text/the-declaration-of-independence.txt",
-        audioSrc: null
+        audioSrc: '/the-declaration-of-independence/audio/the-declaration-of-independence.mp3'
       },
     ],
   },
