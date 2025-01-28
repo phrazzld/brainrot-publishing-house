@@ -331,6 +331,20 @@ const translations = [
     ],
   },
   {
+    slug: 'the-declaration-of-independence',
+    title: 'the declaration of independence',
+    shortDescription: 'king george acting real sus, colonies hit him with the "it\'s not me, it\'s you" vibes. hard-launches freedom era, no cap.',
+    coverImage: '/assets/images/america-02.png',
+    status: 'available',
+    chapters: [
+      {
+        title: 'the declaration of independence',
+        text: "/assets/the-declaration-of-independence/text/the-declaration-of-independence.txt",
+        audioSrc: null
+      },
+    ],
+  },
+  {
     slug: 'the-divine-comedy-inferno',
     title: 'the divine comedy: the inferno',
     shortDescription: 'dante finna see hell like it’s giving meltdown vibes. devils be sus asf.',

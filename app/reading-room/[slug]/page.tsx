@@ -46,8 +46,7 @@ export default function ReadingRoom() {
     if (!waveSurfer) return
 
     function handleReady() {
-      if (!waveSurfer) return;
-
+      if (!waveSurfer) return
       const tParam = searchParams.get("t")
       const duration = waveSurfer.getDuration()
       if (tParam && duration && !isNaN(duration) && duration > 0) {
@@ -57,13 +56,14 @@ export default function ReadingRoom() {
         }
       }
     }
+
     waveSurfer.on("ready", handleReady)
     return () => {
       waveSurfer.un("ready", handleReady)
     }
   }, [waveSurfer, searchParams])
 
-  // fetch text & init waveSurfer when chapter changes
+  // fetch text & possibly init waveSurfer when chapter changes
   useEffect(() => {
     if (!chapterData) return
 
@@ -77,51 +77,65 @@ export default function ReadingRoom() {
       .catch((err) => setRawText(`error loading text: ${err}`))
       .finally(() => setIsTextLoading(false))
 
-    // waveSurfer re-init
-    if (waveSurfer) {
-      try {
-        waveSurfer.destroy()
-      } catch { }
-    }
-    setIsAudioLoading(true)
-    const ws = WaveSurfer.create({
-      container: "#waveform",
-      waveColor: "#666",
-      progressColor: "#e0afff",
-      cursorColor: "#ffdaab",
-      height: 64,
-    })
-    const fullAudioSrc = `${process.env.NEXT_PUBLIC_SPACES_BASE_URL}${chapterData.audioSrc}`
-    ws.load(fullAudioSrc)
+    // only set up WaveSurfer if we have audio
+    if (chapterData.audioSrc) {
+      if (waveSurfer) {
+        try {
+          waveSurfer.destroy()
+        } catch { }
+      }
+      setIsAudioLoading(true)
+      const ws = WaveSurfer.create({
+        container: "#waveform",
+        waveColor: "#666",
+        progressColor: "#e0afff",
+        cursorColor: "#ffdaab",
+        height: 64,
+      })
+      const fullAudioSrc = `${process.env.NEXT_PUBLIC_SPACES_BASE_URL}${chapterData.audioSrc}`
+      ws.load(fullAudioSrc)
 
-    ws.on("ready", () => {
+      ws.on("ready", () => {
+        setIsPlaying(false)
+        setTotalTime(ws.getDuration())
+        setCurrentTime(0)
+        setIsAudioLoading(false)
+      })
+      ws.on("audioprocess", () => {
+        setCurrentTime(ws.getCurrentTime())
+      })
+      ws.on("play", () => setIsPlaying(true))
+      // on pause, update the url with current timestamp
+      ws.on("pause", () => {
+        setIsPlaying(false)
+        setCurrentTime(ws.getCurrentTime()) // sync state
+        updateUrlWithChapterAndTimestamp(ws.getCurrentTime())
+      })
+      // on finish, we can reset time but also update url t=0 if you like
+      ws.on("finish", () => {
+        setIsPlaying(false)
+        setCurrentTime(0)
+        updateUrlWithChapterAndTimestamp(0)
+      })
+
+      setWaveSurfer(ws)
+      return () => {
+        try {
+          ws.destroy()
+        } catch { }
+      }
+    } else {
+      // no audio: if waveSurfer was set, destroy it
+      if (waveSurfer) {
+        try {
+          waveSurfer.destroy()
+        } catch { }
+      }
+      setWaveSurfer(null)
       setIsPlaying(false)
-      setTotalTime(ws.getDuration())
       setCurrentTime(0)
+      setTotalTime(0)
       setIsAudioLoading(false)
-    })
-    ws.on("audioprocess", () => {
-      setCurrentTime(ws.getCurrentTime())
-    })
-    ws.on("play", () => setIsPlaying(true))
-    // on pause, update the url with current timestamp
-    ws.on("pause", () => {
-      setIsPlaying(false)
-      setCurrentTime(ws.getCurrentTime()) // sync state
-      updateUrlWithChapterAndTimestamp(ws.getCurrentTime())
-    })
-    // on finish, we can reset time but also update url t=0 if you like
-    ws.on("finish", () => {
-      setIsPlaying(false)
-      setCurrentTime(0)
-      updateUrlWithChapterAndTimestamp(0)
-    })
-
-    setWaveSurfer(ws)
-    return () => {
-      try {
-        ws.destroy()
-      } catch { }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chapterData])
@@ -130,22 +144,17 @@ export default function ReadingRoom() {
   // and nuke the timestamp
   useEffect(() => {
     if (!translation) return
-    // only run if we've already loaded something
-    // we can also check for existence, or if the component is first mount
     updateUrlWithChapterAndTimestamp(0)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chapterIndex])
 
   function updateUrlWithChapterAndTimestamp(ts: number) {
-    // build a new url with the current chapter and maybe the current time
-    // if you only want to update chapter param, omit time. but let's do both
     const c = chapterIndex
     const t = Math.floor(ts)
     let newUrl = `/reading-room/${slug}?c=${c}`
     if (t > 0) {
       newUrl += `&t=${t}`
     }
-    // push or replace so we don’t blow up history?
     router.replace(newUrl)
   }
 
@@ -282,36 +291,41 @@ export default function ReadingRoom() {
         </div>
       </header>
 
-      {/* wave surfer container & loading overlay */}
-      <div className="relative flex flex-col md:flex-row items-center md:items-stretch justify-between gap-4 px-4 py-3 bg-[#2c2c3a]">
-        {/* wave */}
-        <div id="waveform" className="flex-1 h-16" />
-        {isAudioLoading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-10">
-            <div className="text-white text-sm font-body animate-pulse">
-              loading up the vibes...
+      {/* only show audio player row if there's an audioSrc */}
+      {chapterData?.audioSrc && (
+        <div className="relative flex flex-col md:flex-row items-center md:items-stretch justify-between gap-4 px-4 py-3 bg-[#2c2c3a]">
+          {/* wave */}
+          <div id="waveform" className="flex-1 h-16" />
+          {isAudioLoading && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-10">
+              <div className="text-white text-sm font-body animate-pulse">
+                loading up the vibes...
+              </div>
+            </div>
+          )}
+          {/* controls on the right */}
+          <div className="flex items-center gap-3">
+            <button onClick={togglePlayPause} className="btn btn-primary text-sm font-body">
+              {isPlaying ? "pause" : "play"}
+            </button>
+            <button onClick={openShareModal} className="btn btn-secondary text-sm font-body">
+              share
+            </button>
+            <div className="flex flex-col items-end text-xs font-body">
+              <span className="text-peachy">{formatTime(currentTime)}</span>
+              <span className="text-white/50">{formatTime(totalTime)}</span>
             </div>
           </div>
-        )}
-        {/* controls on the right */}
-        <div className="flex items-center gap-3">
-          <button onClick={togglePlayPause} className="btn btn-primary text-sm font-body">
-            {isPlaying ? "pause" : "play"}
-          </button>
-          <button onClick={openShareModal} className="btn btn-secondary text-sm font-body">
-            share
-          </button>
-          <div className="flex flex-col items-end text-xs font-body">
-            <span className="text-peachy">{formatTime(currentTime)}</span>
-            <span className="text-white/50">{formatTime(totalTime)}</span>
-          </div>
         </div>
-      </div>
+      )}
 
-      <div className="p-4 flex gap-4">
-        <DownloadButton slug={!!slug ? slug.toString() : ""} type="chapter" chapter={chapterIndex + 1} />
-        <DownloadButton slug={!!slug ? slug.toString() : ""} type="full" classNames="btn-secondary" />
-      </div>
+      {/* only show these if there's audio to download */}
+      {chapterData?.audioSrc && (
+        <div className="p-4 flex gap-4">
+          <DownloadButton slug={slug?.toString() || ""} type="chapter" chapter={chapterIndex + 1} />
+          <DownloadButton slug={slug?.toString() || ""} type="full" classNames="btn-secondary" />
+        </div>
+      )}
 
       {/* horizontal chapter pills */}
       <div className="overflow-x-auto flex gap-2 p-4">
@@ -322,8 +336,8 @@ export default function ReadingRoom() {
               key={cNum}
               onClick={() => handleChapterClick(cNum)}
               className={`px-3 py-1 rounded-full border text-sm font-body ${isActive
-                ? "bg-peachy text-midnight border-peachy"
-                : "bg-black/30 text-white/80 border-white/20 hover:bg-black/50"
+                  ? "bg-peachy text-midnight border-peachy"
+                  : "bg-black/30 text-white/80 border-white/20 hover:bg-black/50"
                 }`}
             >
               {cNum + 1}
