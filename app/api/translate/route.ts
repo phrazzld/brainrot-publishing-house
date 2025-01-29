@@ -15,8 +15,8 @@ const PREFERRED_FORMATS = [
 // helper to send an SSE event to the client
 function sseSend(controller: ReadableStreamDefaultController, event: string, data: string) {
   // data must be JSON-escaped or free of CRLF
-  // we can do a simple approach: replace newlines with \n
-  const safeData = data.replace(/\r?\n/g, '\\n')
+  // we do a simple approach: replace CRLF with \n
+  const safeData = data.replace(/\r?\n/g, '\n')
   const payload = `event: ${event}\ndata: ${safeData}\n\n`
   controller.enqueue(new TextEncoder().encode(payload))
 }
@@ -88,13 +88,26 @@ async function fetchBookText(id: number) {
   throw new Error('no plain text/html found; only epub/mobi. cannot parse.')
 }
 
-function chunkText(fullText: string, maxSize = DEFAULT_CHUNK_SIZE) {
-  const paragraphs = fullText.split('\n\n')
+/**
+ * tries to chunk on double newlines first.
+ * if that yields only 1 chunk of large size, try single newline approach.
+ * or forcibly chunk by size in the worst case.
+ */
+function flexibleChunkText(fullText: string, maxSize = DEFAULT_CHUNK_SIZE) {
+  // 1) attempt splitting on double newlines
+  let paragraphs = fullText.split('\n\n')
+  if (paragraphs.length < 2) {
+    // might be a single block => try splitting on single newline
+    paragraphs = fullText.split('\n')
+  }
+
+  // we now have an array of paragraphs (some might be short).
   const chunks: string[] = []
   let current: string[] = []
   let currentSize = 0
 
   for (const para of paragraphs) {
+    // +2 accounts for double newlines we'll re-inject
     const sizeWithBuffer = para.length + 2
     if (currentSize + sizeWithBuffer > maxSize) {
       chunks.push(current.join('\n\n'))
@@ -105,10 +118,10 @@ function chunkText(fullText: string, maxSize = DEFAULT_CHUNK_SIZE) {
       currentSize += sizeWithBuffer
     }
   }
-
   if (current.length) {
     chunks.push(current.join('\n\n'))
   }
+
   return chunks
 }
 
@@ -161,13 +174,14 @@ thinking about all that, he started throwing shade to the immortal squad:
 </example>
 
 <rules for adaptation>
-1. preserve structure: keep epithets, similes, refrains, just reframe them in zoomer dialect.
-2. keep thematic gravity: adapt core themes with modern humor but no oversimplification.
-3. commit to imagery: keep visual/emotional intensity, just modernize the language.
-4. embrace playfulness: infuse humor while keeping the story’s stakes real.
-5. accurate translation: preserve plot as much as possible; do not omit or distort events.
-6. do not use emojis.
-7. respond in all lowercase.
+1. preserve structure: keep epithets, similes, refrains, just reframe them in zoomer dialect
+2. keep thematic gravity: adapt core themes with modern humor but no oversimplification
+3. commit to imagery: keep visual/emotional intensity, just modernize the language
+4. embrace playfulness: infuse humor while keeping the story’s stakes real
+5. accurate translation: preserve plot as much as possible; do not omit or distort events
+6. do not use emojis
+7. respond in all lowercase
+8. maintain book / chapter breaks and headings as they are
 </rules for adaptation>
 `.trim()
 }
@@ -187,8 +201,7 @@ async function translateChunk(
   chunk: string,
   model: string,
   temp: number
-) {
-  // we log that we started
+): Promise<string> {
   const resp = await openai.chat.completions.create({
     model,
     messages: [
@@ -201,23 +214,80 @@ async function translateChunk(
     temperature: temp,
   })
   if (!resp.choices?.length) {
-    return '[error: no choices returned]'
+    throw new Error('[error: no choices returned]')
   }
   return resp.choices[0].message?.content || '[error: no content]'
 }
 
-// we must export runtime so nextjs doesn't try static export
-export const config = {
-  runtime: 'edge', // or "nodejs" if needed
+const MAX_RETRIES = 3
+
+async function translateChunkWithRetries(
+  openai: OpenAI,
+  sseController: ReadableStreamDefaultController,
+  systemPrompt: string,
+  userPrompt: string,
+  chunk: string,
+  model: string,
+  temp: number,
+  chunkIndex: number,
+  chunkCount: number
+): Promise<string> {
+  let attempt = 0
+  while (attempt < MAX_RETRIES) {
+    attempt++
+    try {
+      sseSend(
+        sseController,
+        'log',
+        `attempt ${attempt}/${MAX_RETRIES} on chunk ${chunkIndex}/${chunkCount} with model '${model}' (chunk size=${chunk.length})`
+      )
+      const result = await translateChunk(openai, systemPrompt, userPrompt, chunk, model, temp)
+      return result
+    } catch (err: any) {
+      sseSend(
+        sseController,
+        'log',
+        `error on attempt ${attempt} for chunk ${chunkIndex}/${chunkCount} (model '${model}'): ${String(err)}`
+      )
+      if (attempt < MAX_RETRIES) {
+        sseSend(sseController, 'log', 'retrying in 3s...')
+        await new Promise((r) => setTimeout(r, 3000))
+      } else {
+        throw err
+      }
+    }
+  }
+  throw new Error('all retries failed')
 }
 
-/*
-  We'll implement SSE on GET. The client hits:
-  GET /api/translate?query=...&model=...&password=...
-  - We'll check the password. If invalid, 401.
-  - We'll proceed with each step, logging progress via SSE.
-  - We'll finish by sending a final "DONE" event with the text as data.
-*/
+const OPENAI_MODELS = ['gpt-4o']
+const OPENROUTER_MODELS = [
+  'deepseek/deepseek-r1',
+  'anthropic/claude-3.5-sonnet:beta',
+  'anthropic/claude-3.5-sonnet'
+]
+
+function instantiateOpenAI(model: string): OpenAI {
+  if (OPENAI_MODELS.includes(model)) {
+    if (!process.env.OPENAI_API_KEY) {
+      throw new Error('missing OPENAI_API_KEY')
+    }
+    return new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+  } else if (OPENROUTER_MODELS.includes(model)) {
+    if (!process.env.OPENROUTER_API_KEY) {
+      throw new Error('missing OPENROUTER_API_KEY')
+    }
+    return new OpenAI({
+      baseURL: 'https://openrouter.ai/api/v1',
+      apiKey: process.env.OPENROUTER_API_KEY,
+    })
+  }
+  throw new Error(`unknown model '${model}'`)
+}
+
+export const config = {
+  runtime: 'edge',
+}
 
 export async function GET(request: NextRequest) {
   try {
@@ -226,7 +296,6 @@ export async function GET(request: NextRequest) {
     const model = searchParams.get('model') || ''
     const password = searchParams.get('password') || ''
 
-    // check the password
     if (!process.env.TRANSLATE_PASSWORD) {
       return new NextResponse('no server password set', { status: 500 })
     }
@@ -241,34 +310,12 @@ export async function GET(request: NextRequest) {
       return new NextResponse('missing model param', { status: 400 })
     }
 
-    // figure out which credentials to use
-    let openai: OpenAI
-    if (model === 'gpt-4o' || model === 'o1') {
-      // use official openai endpoint
-      if (!process.env.OPENAI_API_KEY) {
-        return new NextResponse('missing OPENAI_API_KEY', { status: 500 })
-      }
-      openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
-    } else if (model === 'deepseek/deepseek-r1') {
-      // use openrouter
-      if (!process.env.OPENROUTER_API_KEY) {
-        return new NextResponse('missing OPENROUTER_API_KEY', { status: 500 })
-      }
-      openai = new OpenAI({
-        baseURL: 'https://openrouter.ai/api/v1',
-        apiKey: process.env.OPENROUTER_API_KEY,
-      })
-    } else {
-      return new NextResponse(`unknown model '${model}'`, { status: 400 })
-    }
+    const openai = instantiateOpenAI(model)
 
-    // create a ReadableStream for SSE
     const stream = new ReadableStream({
       async start(controller) {
         try {
-          // step 1: log
           sseSend(controller, 'log', `starting gutendex search for: ${query}`)
-
           const results = await gutendexSearch(query)
           sseSend(controller, 'log', `found ${results.length} search results`)
 
@@ -278,15 +325,9 @@ export async function GET(request: NextRequest) {
             return
           }
 
-          // step 2: pick first result
           const best = results[0]
-          sseSend(
-            controller,
-            'log',
-            `using first result: ${best.title} (id=${best.id})`
-          )
+          sseSend(controller, 'log', `using first result: ${best.title} (id=${best.id})`)
 
-          // step 3: fetch text
           const { title, authors, text } = await fetchBookText(best.id)
           sseSend(
             controller,
@@ -294,64 +335,80 @@ export async function GET(request: NextRequest) {
             `downloaded text for '${title}' by ${authors}, length=${text.length}`
           )
 
-          // step 4: chunk
-          const chunkSize = DEFAULT_CHUNK_SIZE
-          sseSend(controller, 'log', `chunking text into size ~${chunkSize}`)
-          const chunks = chunkText(text, chunkSize)
-          sseSend(
-            controller,
-            'log',
-            `split into ${chunks.length} chunk(s). starting translation...`
-          )
+          // send "source" event
+          const sourceFilename = `source_${title.replace(/\W+/g, '_').toLowerCase()}.txt`
+          const sourcePayload = JSON.stringify({
+            filename: sourceFilename,
+            content: text,
+          })
+          sseSend(controller, 'source', sourcePayload)
 
-          // step 5: build prompts
+          sseSend(controller, 'log', `attempting flexible chunking with max size ~${DEFAULT_CHUNK_SIZE}`)
+          let chunks = flexibleChunkText(text, DEFAULT_CHUNK_SIZE)
+          sseSend(controller, 'log', `after flexible chunking, we got ${chunks.length} chunks.`)
+
+          // if for some reason it's still only 1 chunk but it's huge, forcibly chop it up
+          // to smaller segments. e.g. chunk the single chunk into smaller slices:
+          // note: you can skip this if you trust flexibleChunkText is enough.
+          if (chunks.length === 1 && chunks[0].length > DEFAULT_CHUNK_SIZE * 1.5) {
+            sseSend(controller, 'log', 'only 1 chunk found, forcibly subdividing into ~10k chars each.')
+            const forcedSubChunks: string[] = []
+            const single = chunks[0]
+            let start = 0
+            const forcedSize = 10000
+            while (start < single.length) {
+              forcedSubChunks.push(single.slice(start, start + forcedSize))
+              start += forcedSize
+            }
+            chunks = forcedSubChunks
+            sseSend(controller, 'log', `forced chunking yields ${chunks.length} chunk(s).`)
+          }
+
+          sseSend(controller, 'log', `final chunk count: ${chunks.length}`)
+
           const systemPrompt = buildSystemPrompt(authors, title)
           const userPrompt = buildUserPrompt(authors, title)
 
-          // step 6: translation
           const translatedPieces: string[] = []
-          let idx = 0
-          for (const chunk of chunks) {
-            idx++
+          for (let i = 0; i < chunks.length; i++) {
+            const chunkText = chunks[i]
+            const chunkNum = i + 1
             sseSend(
               controller,
               'log',
-              `translating chunk ${idx}/${chunks.length} (size=${chunk.length})...`
+              `translating chunk ${chunkNum}/${chunks.length}, size=${chunkText.length}`
             )
-            const partial = await translateChunk(
+
+            const partial = await translateChunkWithRetries(
               openai,
+              controller,
               systemPrompt,
               userPrompt,
-              chunk,
+              chunkText,
               model,
-              0.6
+              0.6,
+              chunkNum,
+              chunks.length
             )
-            translatedPieces.push(partial)
+
             sseSend(
               controller,
               'log',
-              `finished chunk ${idx} of ${chunks.length}`
+              `finished chunk ${chunkNum} of ${chunks.length}, partial length=${partial.length}`
             )
+
+            translatedPieces.push(partial)
           }
 
           const combined = translatedPieces.join('\n\n')
           const filename = `brainrot_${title.replace(/\W+/g, '_').toLowerCase()}.txt`
+          sseSend(controller, 'log', `translation complete (final length=${combined.length}). sending "done" event.`)
 
-          sseSend(
-            controller,
-            'log',
-            `translation complete. sending final result as event "done"`
-          )
-
-          // step 7: send final text
-          // we’ll send a "done" event with JSON: { filename, content }
-          // the client can then parse + do a forced download
           const finalPayload = JSON.stringify({
             filename,
             content: combined,
           })
           sseSend(controller, 'done', finalPayload)
-
           controller.close()
         } catch (err: any) {
           sseSend(controller, 'error', `caught error: ${String(err)}`)

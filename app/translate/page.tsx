@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState, useEffect } from "react"
 
 export default function TranslatePage() {
   const [query, setQuery] = useState("")
@@ -9,9 +9,6 @@ export default function TranslatePage() {
   const [logs, setLogs] = useState<string[]>([])
   const [error, setError] = useState("")
   const [running, setRunning] = useState(false)
-
-  // we'll keep the event source in a ref or state
-  // so we can close it if needed
   const [evtSource, setEvtSource] = useState<EventSource | null>(null)
 
   function startTranslation() {
@@ -23,7 +20,6 @@ export default function TranslatePage() {
     setError("")
     setRunning(true)
 
-    // build the SSE url
     const url = `/api/translate?query=${encodeURIComponent(query)}&model=${encodeURIComponent(
       model
     )}&password=${encodeURIComponent(password)}`
@@ -32,12 +28,10 @@ export default function TranslatePage() {
     setEvtSource(es)
 
     es.onmessage = (evt) => {
-      // default "message" event, if we didn't specify event type
       console.log("onmessage:", evt.data)
     }
 
     es.addEventListener("log", (event: MessageEvent) => {
-      // append to logs
       setLogs((old) => [...old, `[log] ${event.data}`])
     })
 
@@ -49,12 +43,33 @@ export default function TranslatePage() {
       setRunning(false)
     })
 
+    // automatically download the raw source text on "source" event
+    es.addEventListener("source", (event: MessageEvent) => {
+      try {
+        const payload = JSON.parse(event.data)
+        const { filename, content } = payload
+        const blob = new Blob([content], { type: "text/plain" })
+        const downloadUrl = window.URL.createObjectURL(blob)
+        const link = document.createElement("a")
+        link.href = downloadUrl
+        link.download = filename
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        URL.revokeObjectURL(downloadUrl)
+
+        setLogs((old) => [...old, `[log] downloaded source text -> ${filename}`])
+      } catch (err) {
+        console.error("failed to parse source event", err)
+        setError("couldn't parse raw source text: " + String(err))
+      }
+    })
+
+    // automatically download the final translation on "done" event
     es.addEventListener("done", (event: MessageEvent) => {
-      // final text
       setLogs((old) => [...old, "[log] translation complete! initiating download..."])
       try {
         const { filename, content } = JSON.parse(event.data)
-        // force download
         const blob = new Blob([content], { type: "text/plain" })
         const downloadUrl = window.URL.createObjectURL(blob)
         const link = document.createElement("a")
@@ -74,22 +89,20 @@ export default function TranslatePage() {
     })
   }
 
-  // optional: cleanup if page unmounts
   useEffect(() => {
     return () => {
       if (evtSource) {
         evtSource.close()
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [evtSource])
 
   return (
     <main className="min-h-screen p-4 flex flex-col gap-4">
       <h1 className="text-3xl">translate some public domain text</h1>
 
       <div className="flex flex-col gap-2 max-w-md">
-        <label>password</label>
+        <label>password (for private usage)</label>
         <input
           type="password"
           className="p-2 text-black"
@@ -106,6 +119,7 @@ export default function TranslatePage() {
         >
           <option value="gpt-4o">gpt-4o</option>
           <option value="deepseek/deepseek-r1">deepseek r1</option>
+          <option value="anthropic/claude-3.5-sonnet">claude 3.5 sonnet</option>
         </select>
 
         <label>enter book/author query</label>

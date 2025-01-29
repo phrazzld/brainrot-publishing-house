@@ -345,6 +345,24 @@ const translations = [
     ],
   },
   {
+    slug: 'the-adventures-of-huckleberry-finn',
+    title: 'the adventures of huckleberry finn',
+    shortDescription: 'huck yeets from civil society, links with jim, raft life hits diff. dodging L’s, chasing W’s, river got that main character energy.',
+    coverImage: '/assets/images/huck-finn-02.png',
+    status: 'coming soon',
+    chapters: [
+    ],
+  },
+  {
+    slug: 'meditations',
+    title: 'meditations',
+    shortDescription: 'life be lifin\', but marcus just vibes. control what you can, ignore the clowns, stay based.',
+    coverImage: '/assets/images/meditations-01.png',
+    status: 'coming soon',
+    chapters: [
+    ],
+  },
+  {
     slug: 'the-divine-comedy-inferno',
     title: 'the divine comedy: the inferno',
     shortDescription: 'dante finna see hell like it’s giving meltdown vibes. devils be sus asf.',
