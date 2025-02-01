@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
-import WaveSurfer from "wavesurfer.js";
 import DownloadButton from "@/components/DownloadButton";
 import translations from "@/translations";
+import Link from "next/link";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import WaveSurfer from "wavesurfer.js";
 
 export default function ReadingRoom() {
   const router = useRouter();
@@ -260,7 +260,7 @@ export default function ReadingRoom() {
                   : "bg-black/30 text-white/80 border-white/20 hover:bg-black/50"
                   }`}
               >
-                chapter {cNum + 1}
+                {translation.chapters[cNum].title}
               </button>
             );
           })}
@@ -273,7 +273,7 @@ export default function ReadingRoom() {
         <header className="px-4 py-3 flex items-center justify-between bg-black/40 backdrop-blur-md">
           <div>
             <h1 className="text-2xl font-display">{translation.title}</h1>
-            <p className="text-sm text-lavender">chapter {chapterIndex + 1}</p>
+            <p className="text-sm text-lavender">{translation.chapters[chapterIndex].title}</p>
           </div>
           <div className="flex items-center gap-2">
             {translation.purchaseUrl && (

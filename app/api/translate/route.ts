@@ -141,7 +141,7 @@ translate the given text (e.g. '${title}' by ${author}) into a complete, comedic
 4. **embrace playfulness and meme overload**: every sentence must be reimagined with hyperbolic modern slang and a barrage of internet meme-speak – drawing from viral tiktok lingo, terminally online lingo, and our full glossary of gen z/gen alpha terms – ensuring a translation that is as absurd and hilarious as it is faithful.
 5. **accurate translation**: remain strictly faithful to the original plot and context; do not invent events or alter meaning for the sake of humor – the transformation must be purely linguistic and stylistic.
 6. **meta-awareness**: incorporate self-aware commentary where appropriate, as if the translator is in on the meme culture they’re channeling.
-7. **formatting**: output must be in all lowercase (except for proper names or when emphatic elements are absolutely necessary).
+7. **formatting**: output must be in all lowercase.
 8. **overkill slang**: go really, really over-the-top with the zoomer brainrot slang; every sentence should drip and ooze with gen z, gen alpha, and terminally online meme references.
 </rules for adaptation>
 

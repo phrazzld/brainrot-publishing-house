@@ -1,0 +1,2710 @@
+the tragedy of hamlet, prince of denmark
+
+by william shakespeare
+
+contents
+
+dramatís personae
+
+hamlet, prince of denmark
+claudius, king of denmark, hamlet’s uncle
+the ghost of the late king, hamlet’s father
+gertrude, the queen, hamlet’s mother, now wife of claudius
+polonius, lord chamberlain
+laertes, son to polonius
+ophelia, daughter to polonius
+horatio, friend to hamlet
+fortinbras, prince of norway
+voltemand, courtier
+cornelius, courtier
+rosencrantz, courtier
+guildenstern, courtier
+marcellus, officer
+barnardo, officer
+francisco, a soldier
+osric, courtier
+reynaldo, servant to polonius
+players
+a gentleman, courtier
+a priest
+two clowns, grave-diggers
+a captain
+english ambassadors.
+lords, ladies, officers, soldiers, sailors, messengers, and attendants
+
+SCENE. ELSINORE.
+
+ACT I
+
+SCENE I. ELSINORE. A PLATFORM BEFORE THE CASTLE.
+
+[enter francisco and barnardo, two sentinels.]
+
+BARNARDO. yo, who’s there?
+
+FRANCISCO. nah, fam—answer up. stand tall and show your vibe.
+
+BARNARDO. long live the king, no cap!
+
+FRANCISCO. barnardo, right?
+
+BARNARDO. yeah, it's me.
+
+FRANCISCO. you timed your drop like a total boss.
+
+BARNARDO. it’s 12, my dude—hit the sack, francisco.
+
+FRANCISCO. thanks for the rescue, bro. it's mad cold out here and i’m feeling hella low.
+
+BARNARDO. did you peep a chill vibe on guard?
+
+FRANCISCO. not even a mouse was vibin’, straight up.
+
+BARNARDO. aight, peace out. if you bump into horatio and marcellus—my watch crew—tell 'em to slide over fast.
+
+[ENTER HORATIO AND MARCELLUS.]
+
+FRANCISCO. yo, i think i hear some peeps. hold up—who’s rollin’ up?
+
+HORATIO. we’re just the homies holding it down on this turf.
+
+MARCELLUS. and the die-hard squad of the dane.
+
+FRANCISCO. peace, fam.
+
+MARCELLUS. aight, farewell, real one—who tagged in for your shift?
+
+FRANCISCO. barnardo’s got my back. good night, yo.
+
+[EXIT.]
+
+MARCELLUS. yo, barnardo!
+
+BARNARDO. say, is horatio in the house?
+
+HORATIO. i’m here, reppin’ that same vibe.
+
+BARNARDO. welcome, horatio. what's good, marcellus?
+
+MARCELLUS. yo, did that spooky vibe show up again tonight?
+
+BARNARDO. nah, i saw nada, zero.
+
+MARCELLUS. horatio’s like, “it's just our overactive imaginations,” not tryna believe in that creepy drip even though we peeped it twice. so i begged him to roll with us tonight—so if the ghost reboots itself, he can confirm it and spill the tea.
+
+HORATIO. yo, chill—it ain’t coming back, trust.
+
+BARNARDO. sit down for a sec, and let us blast your ears with the deets of what we peeped these last two nights, even if you're all clapped out.
+
+HORATIO. aight, let's park and hear barnardo break it down.
+
+BARNARDO. last night, that same star way out west from the pole was flexin’ its route to light up that stretch of sky where it’s lit right now—marcellus and i, with the bell droppin’ one—
+
+MARCELLUS. yo, hold up, cut it out—peep it comin’ back!
+
+[ENTER GHOST.]
+
+BARNARDO. it’s rollin’ in the same drip, lookin’ just like our ex-king.
+
+MARCELLUS. yo, horatio, you brainiac—drop some words to it.
+
+BARNARDO. ain’t it giving off king vibes? peep that, horatio.
+
+HORATIO. for real, fam—it’s mad on point. got me shakin’ with fear and wonder.
+
+BARNARDO. it seriously needs to drop some lines.
+
+MARCELLUS. grill it, horatio—ask it straight up.
+
+HORATIO. yo, who even are you, crashin’ our midnight vibe with that fly and fierce look that used to scream the majesty of dead denmark? swear on the heavens, spit some truth.
+
+MARCELLUS. it's kinda triggered, no lie.
+
+BARNARDO. check it—it's slowly ghostin’ outta here.
+
+HORATIO. yo, wait up! TALK, TALK! i’m orderin’ you to speak!
+
+[EXIT GHOST.]
+
+MARCELLUS. it's gone, and ain't droppin’ a word.
+
+BARNARDO. how now, horatio! you’re shakin’ and lookin’ all pale—this ain’t just wild imaginin’, right? what’s your take, bro?
+
+HORATIO. swear on my god—I wouldn’t believe this without a legit flex from my own eyes.
+
+MARCELLUS. it’s totally king vibes, no cap?
+
+HORATIO. like you vibe with yourself—that was exactly the drip of his armor when he battled ambitious norway; he even pulled an epic frown when he clapped those sleddin’ fools on the ice. straight up bizarre.
+
+MARCELLUS. so, twice now, at this dead-ass hour, he strutted past our watch in full martial mode.
+
+HORATIO. i dunno what his exact vibe is, but overall, this signals some wild eruption about to hit our state.
+
+MARCELLUS. aight, park your butt and break it down for me—why is our super strict night watch grindin’ so hard every night over our crib, and why are we droppin’ brass cannons and exotic war gear daily; why are we even hustlin’ legit shipbuilders who don’t even chill on sundays? what’s the tea that this mad rush is turnin’ night into a tag-team with day? someone please spill the deets.
+
+HORATIO. i got the tea: word on the street is our last king—who just showed up as that ghostly drip—was challenged by fortinbras of norway, all hyped on pride and ready to duke it out; our valiant hamlet (the real mvp in our world) clapped that fortinbras. by a sealed deal, law and heraldry on fleek, fortinbras lost all his lands to our conqueror; our king even put up half the loot as a bet—which would’ve gone back to fortinbras if he’d won—but by that same pact, it fell to hamlet. now, young fortinbras—a hot-headed, no-nonsense dude—has been rounding up a crew of lawless misfits in norway, schemin’ to snatch back his dad’s lost lands. and this, i take it, is the main drive behind our current hustle, the reason we’re posted up on watch and rushin’ around the land.
+
+BARNARDO. i bet that’s it, no cap—this ominous vibe showin’ up armed during our watch totally mirrors that old king, who’s both the legend and the bomb question behind all these wars.
+
+HORATIO. honestly, it’s a tiny glitch for the mind’s eye. back in rome—just before julius got wrecked—the graves were ghostin’ with no tenants and dead dudes in sheets were squawkin’ all over the roman streets; stars were like insta-stories with fiery trails and blood dews, disasters under the sun; even that damp star, which neptune uses for his empire, was almost eclipsed to doomsday mode. all those spooky pre-shows of epic events—like the ultimate setup for fate—have been laid out by heaven and earth for our peeps.
+
+[RE-ENTER GHOST.]
+
+but, yo, peep this! look—it’s rollin’ back up! i’ll cross paths with it even if it yeets me. hold up, illusion! if you got any sound or mad voice power, spill that tea. if there’s any good fix to ease your ghostly vibe and bless me, then speak up. if you’re in on your homeland’s fate and can ghost-hack it to dodge doom, then drop some deets! or if you’ve stashed treasure deep in the earth—and they say spirits walk in death for that loot—then spill it. hold up, and speak!
+
+[THE COCK CROWS.]
+
+stop it, marcellus!
+
+MARCELLUS. should i yeet it with my partisan?
+
+HORATIO. do it if it don’t stand its ground.
+
+BARNARDO. it's here, yo!
+
+HORATIO. it's here, no cap!
+
+[EXIT GHOST.]
+
+MARCELLUS. it's dipped, fam! we went too extra, all majestic and overblown, tryin’ to serve violent theatrics—like it's untouchable air—while our lame hits just served as a savage roast.
+
+BARNARDO. it was about to drop the tea when the cock clucked.
+
+HORATIO. then it peeped, like a guilty beast when called out by fear. i heard that cock—the morning trumpet—with its high-key, shrill vibes wake up the day god; and at its shout, whether over sea, fire, earth, or air, that wild spirit bounced back to its crib. for real, our ghost flexed its truth.
+
+MARCELLUS. it straight-up faded when the cock started crowin’. word is that every time our savior’s b-day season pops off, the dawn bird sings all night long; and then, no spirit dares crash the scene—the nights are pure, no planetary chaos, no fairy magic, nor any witch got the power to charm; that time is hella blessed.
+
+HORATIO. i've heard that drill, and kinda buy into it. but check it—the morn, draped in a russet mantle, is strollin’ over the dew on that high east hill. let’s break our watch, and i say we drop what we peeped tonight to young hamlet; on my life, this ghost—though mute to us—will eventually spill the tea to him. y’all down to loop him in? it's our duty.
+
+MARCELLUS. bet, let's do it. i’m tryna know where we can find him easy this morning.
+
+[EXEUNT.]
+
+SCENE II. ELSINORE. A ROOM OF STATE IN THE CASTLE.
+
+[ENTER CLAUDIUS, KING OF DENMARK, GERTRUDE, THE QUEEN, HAMLET, POLONIUS, LAERTES, VOLTEMAND, CORNELIUS, LORDS, AND ATTENDANTS.]
+
+KING. even though our dear hamlet’s late pop is still fresh in our minds—drowning our hearts in grief and wrapping the whole kingdom in one massive mood of sorrow—we’ve managed to balance that raw pain with some wise self-checks, remembering ourselves too.
+
+KING. so, our once-sis, now our queen—our imperial partner in this war-torn state—we went ahead and married her with a mix of bittersweet joy and salt, rockin’ one lit eye and one droppin’ eye, blending funeral vibes with wedding dirges, balancing delight and dole on the same scale. and yo, we didn’t block your top-tier ideas on this deal. massive thanks to all.
+
+KING. next, peep young fortinbras. this dude either thinks we’re weak or believes that with our dear brother’s death our state is gonna fall apart—planning to flex his own gains. he’s been blowin’ up our line demanding the surrender of those lands his dad lost, all legit under the law, to our valiant bro. that’s his hustle. now, on to us and today’s sit-down: we’ve penned a letter to norway—fortinbras’s uncle—who’s so weak and bedridden he barely catches wind of his nephew’s plan to shut his moves down here; since all our troops, drafts, and full forces come from his peeps, we’re dispatchin’ you, good cornelius, and you, voltemand, as our messengers to old norway. we’re givin’ you no extra clout beyond what this mega memo allows. farewell—let your hustle speak to your duty.
+
+CORNELIUS and VOLTEMAND. bet, in all that, we’ll flex our duty.
+
+KING. no doubt, fam—heartily, farewell.
+
+[EXEUNT VOLTEMAND AND CORNELIUS.]
+
+KING. and now, laertes, what’s the 411 with you? you mentioned some sitch—spill it, laertes. you can’t just clown around with the dane and lose your drip. what are you cravin’ that i haven’t already offered? your head is as tied to your heart as denmark’s throne was to your father’s; what do you want, laertes?
+
+LAERTES. yo, my lord, i need your go-ahead to dip back to france—i rolled in here willingly for your coronation vibes; but now that my duty’s done, my heart’s beggin’ to bounce back to france—so grant me your chill consent and pardon, please.
+
+KING. did you get your old man’s blessing? what’s polonius say?
+
+POLONIUS. my lord, he wrung my slow-ass permission with a ton of petitions; and in the end, i hammered in my consent. i beg you, let him bounce.
+
+KING. take your sweet time, laertes—the clock’s yours, so flex your best vibes however you want! but now, my cuz hamlet, and my son—
+
+HAMLET. [aside] more than fam, less than friendly, smh.
+
+KING. why you still rockin’ those gloomy clouds, bro?
+
+HAMLET. nah, my lord, i’m just too extra in the sunlight.
+
+QUEEN. dear hamlet, ditch that dark drip and let your eyes vibe friendly on denmark. don’t keep searchin’ for your noble dad in the dirt forever—everyone who lives gotta dip eventually, passin’ from nature into eternity.
+
+HAMLET. yeah, madam, it’s basic.
+
+QUEEN. if it’s basic, why you actin’ so extra about it, boo?
+
+HAMLET. extra? nah, it straight up is; i ain’t talkin’ 'bout a performed vibe. it’s not just my inky cloak, good mom, or the standard all-black drip, or even my over-the-top sighs, nor the river of tears or that dejected mug i sport—those are just the props and acts a man can play. i got deep feels inside that go way beyond the show—the real stuff behind these trimmings of woe.
+
+KING. it’s sweet and respect-worthy that you honor your pop with this deep mourning; but peep it—your father lost his own dad, and that lost dude lost his, so the survivor had a basic duty to mourn for a bit. yet to stick in nonstop, stubborn grief is just extra and unmanly—it shows a heart not tough enough, a mind too impatient, and a lack of proper schooling in feelz. since the death of fathers is the most common tea anyone gets, why take it so personal? honestly, it’s a diss to heaven, to the dead, to nature, and to plain ol’ reason—from the first corpse till now, everyone’s been like “this gotta be it.” we pray you drop this unyielding woe and think of us as your dad; know that you’re next in line to our throne, and we love you with all the royal feels a dear father can pass on. and about you headin’ back to school in wittenberg—that’s totally not what we want. we beg you to stay here in the warmth and comfort of our gaze, our top courtier, cousin, and son.
+
+QUEEN. don’t let your mom lose her prayers, hamlet. i’m beggin’ you—stay with us; don’t jet off to wittenberg.
+
+HAMLET. i swear, i’ll do my best to obey you, madam.
+
+KING. yo, that’s a loving and dope reply. be yourself here in denmark. madam, come on in; this chill, unforced vibe from hamlet is straight smilin’ on my heart—so much so that every bit of denmark’s cheer today is like a mega cannon blast in the clouds and the king’s call will have the heavens buzzin’ with epic earthly thunder. let’s bounce.
+
+[EXEUNT ALL BUT HAMLET.]
+
+HAMLET. o, that this too too solid flesh would just melt away—thaw and become dew! or that the everlasting hadn’t set up his canon against self-slaughter. o god! o god! why does every single use of this world seem so weary, stale, flat, and totally unprofitable? fie on it! oh fie! it’s like a neglected garden overrun with weeds—just letting all the gross, rank junk take over. i can’t believe it’s come to this! only two months dead—no, even less than two: such an excellent king; that’s like comparing hyperion to a satyr; so mad loving to my mother that he wouldn’t let the winds of heaven rough her up. heaven and earth—must i really remember? she clung to him like her hunger grew by what she fed on; yet within a month—let me not even dwell on it—frailty, thy name is woman! barely a month passed, and before those shoes even got old, as she trailed my poor father’s body like niobe—just drowning in tears—she married. o, this wicked speed, rushin’ straight into those incestuous vibes! it can’t be good. but break, my heart; i gotta keep my trap shut.
+
+[ENTER HORATIO, MARCELLUS, AND BARNARDO.]
+
+HORATIO. big ups to your lordship!
+
+HAMLET. i’m stoked to see y’all doin’ good—horatio, or i might forget my own vibe.
+
+HORATIO. same here, my lord—your forever broke servant, for real.
+
+HAMLET. yo, my good friend, i’ll swap that title with you. so, what brings you from wittenberg, horatio?—and marcellus?
+
+MARCELLUS. my good lord, straight up.
+
+HAMLET. i’m mad glad to see you. good even, sir—but seriously, what’s the word from wittenberg?
+
+HORATIO. just vibin’ as a truant, my lord.
+
+HAMLET. i ain’t gonna let your haters talk you into it, nor use my ears to make you doubt your own rep. i know you’re no truant. so what’s your hustle in elsinore? we’ll school you on the deep sauce before you bounce.
+
+HORATIO. my lord, i came to peep your dad’s funeral.
+
+HAMLET. please don’t roast me, fellow student—I reckon it was to scope out my mom’s wedding.
+
+HORATIO. for sure, my lord—it followed right on.
+
+HAMLET. chill, chill, horatio! those funeral snacks ended up chillin’ at the wedding spread. i wish i’d met my dearest foe in heaven—or even seen that day, horatio. my father—i swear, i think i see my dad.
+
+HORATIO. where, my lord?
+
+HAMLET. in my mind’s eye, horatio.
+
+HORATIO. i peeped him once; he was a solid king, no cap.
+
+HAMLET. he was the real deal—and honestly, i ain’t ever gonna vibe with another like him.
+
+HORATIO. my lord, i kinda saw him last night.
+
+HAMLET. saw? which one?
+
+HORATIO. my lord, your dad—the king.
+
+HAMLET. the king, my father!
+
+HORATIO. hold up your admiration for a bit and tune in, 'til i drop this marvel on you with these gentlemen as witnesses.
+
+HAMLET. for god’s love, spill it.
+
+HORATIO. so, for two nights straight, these dudes—marcellus and barnardo—on guard in the dead, empty middle of night, ran into this figure lookin’ just like your dad, fully kitted out head-to-toe, strollin’ by all solemn and stately; he passed right in front of their freaked-out eyes three times, stayin’ just within his staff’s reach, while they were shook stiff—almost jelly from fear—unable to drop a word. they dished all this in deep secrecy, and i kept watch with them on that third night when the ghost showed up word-for-word, proving it real. i knew your dad; these hands aren’t more alike than that.
+
+HAMLET. but where did this go down?
+
+MARCELLUS. my lord, on the platform where we keep watch.
+
+HAMLET. didn’t you try to drop a line to it?
+
+HORATIO. my lord, i did; but it gave nothin’—although, i swear, it once lifted its head like it wanted to chat. but then the morning cock busted out loud, and it yeeted away in a mad hurry, totally vanished.
+
+HAMLET. that’s mad strange.
+
+HORATIO. for real, my honored lord—it’s true; and we figured it was our duty to loop you in on this.
+
+HAMLET. indeed, indeed, guys—but this is hella unsettling. are y’all holding the watch tonight?
+
+MARCELLUS and BARNARDO. we got you, my lord.
+
+HAMLET. you all armed up, yeah?
+
+BOTH. armed, my lord—head to toe, no doubt.
+
+HAMLET. so y’all didn’t catch a proper look at its face?
+
+HORATIO. oh yes, my lord—it had its face all amped up.
+
+HAMLET. like, did it even serve a frowny vibe?
+
+HORATIO. its look was way more sorrow than anger, my dude.
+
+HAMLET. so, was it ghostly pale or straight-up red?
+
+HORATIO. nah, like, super pale.
+
+HAMLET. and did it lock its eyes on you?
+
+HORATIO. non-stop, like it was on a mission.
+
+HAMLET. i wish i had been there, no cap.
+
+HORATIO. trust, it would’ve blown your mind.
+
+HAMLET. for real, for real—did it stick around long?
+
+HORATIO. if you cruised at a chill pace, you might clock a hundred steps while it was there.
+
+MARCELLUS and BARNARDO. longer, longer!
+
+HORATIO. not when i peeped it, no cap.
+
+HAMLET. his beard was lookin’ mad grizzled, right?
+
+HORATIO. yo, it was exactly like i’ve seen it before – all dark and silvered to perfection.
+
+HAMLET. imma keep an eye out tonight; maybe it’ll roll up again.
+
+HORATIO. bet, for real – it will, no doubt.
+
+HAMLET. if it dares to flex as my noble pops, imma come at it with words even if hell itself be like, “hold up, zip it.” i’m tryna ask y’all, if you’ve been keepin’ this ghost tea on the DL so far, do me a solid and keep it on the down low; and whatever extra wild vibes drop tonight, lock ‘em in your mind but keep your lips sealed. i gotchu for real. so peace out. meet me on the platform between 11 and 12, imma slide through.
+
+ALL. our duty to your honour, no cap.
+
+HAMLET. your love’s as real as mine, peace out.
+
+[EXEUNT HORATIO, MARCELLUS AND BARNARDO.]
+
+my dad’s ghost is out here clappin’ in full armor! things ain’t vibin’ right; i smell some major sus moves. wish the night had already dropped! till then, chill, my soul – these shady moves are gonna pop off even if the whole earth tries to ghost ‘em from everyone’s eyes.
+
+[EXIT.]
+
+SCENE III. A ROOM IN POLONIUS’S HOUSE.
+
+enter laertes and ophelia.
+
+LAERTES. my essentials are all booked up, so imma bounce. and sis, when the winds are boosting and your ride’s got your back, don’t snooze on me – hit me up, aight?
+
+OPHELIA. you doubt that, fam?
+
+LAERTES. as for hamlet, his love vibes are basically just a fad – like a trendy toy in his blood. think of it as a fresh violet in nature’s prime – poppin’ for a hot sec, sweet but not built to last; just a minute’s worth of hype, nothing extra.
+
+OPHELIA. literally nothing more?
+
+LAERTES. exactly – so don’t overthink it. remember, nature’s glow-up isn’t only about flexing muscles; as your body temple levels up, the mind and soul get their upgrade too. maybe he’s into you right now, and nothing’s dirtin’ his vibe; but watch out – when he levels up, his free will ain’t all his own ‘cause he’s locked into his royal lease. he can’t just carve his own path like us normies since his choices affect the whole state. so if he drops an “i love you,” your smarts should only believe it if his moves back it up – basically, it’s as legit as denmark’s main vibe. then, peep the burn on your rep if you let every one of his tunes slide or open up your heart to his unchecked flexes. ophelia, fr fr, be woke and keep your feels on a safe mode – don’t get caught up in that dangerous desire.
+
+OPHELIA. imma lock in these epic life hacks inside my heart. but yo, big bro, don’t be one of those basic, clueless pastors who preach the steep, thorny route to greatness while they themselves are out here trippin’ on the primrose path like total wildcards.
+
+LAERTES. yo, don’t trip – i’ve been hanging too long anyway. oh snap, my dad’s in the building.
+
+[ENTER POLONIUS.]
+
+POLONIUS. a double blessing is, like, double grace; the universe is flexin’ with a bonus leave.
+
+POLONIUS. yo laertes, step on board – no wonder you’re draggin’. the wind’s boostin’ your sail and you’re holdin’ up. take my blessing, bro.
+
+[LAYING HIS HAND ON LAERTES’S HEAD.]
+
+POLONIUS. peep these life hacks in your mental playlist: keep your thoughts on lockdown and don’t let ‘em spill out unfiltered. be cool with your crew but don’t go basic; lock in the real ones tight like your fav crypto, and don’t waste your palm energy on every new wannabe. steer clear of petty beef – but if you get caught up, make sure your opponents know you’re not to be messed with. lend your ear to everyone but save your voice for the ones who matter; take in the feedback but keep your own opinions clapped on mute. flex on your drip if your wallet allows, but keep it classy – rich vibes, not extra clownery, ‘cause your fit speaks more than words, and the elite in france run that game. and yo, don’t borrow or lend – loans can wreck friendships and mess up your money game. above all, stay true to yourself; ‘cause if you’re not 100 with you, you’ll come off fake to everyone else. peace out – my blessing is locked into you.
+
+LAERTES. i’m out, my lord, with mad respect.
+
+POLONIUS. time’s callin’, so bounce – your crew’s got you.
+
+LAERTES. peace out, ophelia – remember every word i dropped.
+
+OPHELIA. got it, locked up in my mental vault – and you’re holdin’ the key too.
+
+LAERTES. later.
+
+[EXIT.]
+
+POLONIUS. so, ophelia, what tea did he spill to you?
+
+OPHELIA. um, basically, some vibes about lord hamlet.
+
+POLONIUS. yo, after thinking on it, word’s been that lord hamlet’s been lowkey spending one-on-one time with you; and you, girl, have been dishin’ it out all generous-like. if that’s true – and imma be real cautious here – i gotta say, you’re not reading your own signals like a true daughter should, or up to your rep’s standards. so, spill it: what’s really goin’ down between you two? be straight with me.
+
+OPHELIA. my lord, he’s been droppin’ mad affection offers on me lately.
+
+POLONIUS. affection? puh-lease! you sound like a rookie girl, unfiltered in a risky sitch. are you really buyin’ his sweet offers, as you call ‘em?
+
+OPHELIA. i honestly don’t know what to think, my lord.
+
+POLONIUS. imma school you – think of yourself as a baby, ‘cause you’re takin’ these offers like they’re the real deal, but they ain’t sterling. love yourself harder; or, to put it plainly, you’ll end up lookin’ like a fool.
+
+OPHELIA. my lord, he’s been hitting me up with love in a pretty legit way.
+
+POLONIUS. yeah, you might call it that – but come on now.
+
+OPHELIA. and he’s been backing his words with practically all the sacred promises, my lord.
+
+POLONIUS. yeah, they're just bait set-ups to catch clueless chicks. i know when the blood’s lit, the soul goes off droppin’ vows like it’s on sale – these flames give off more flash than heat and fizzle out quick. from now on, be less available with your glow; level up your standards higher than just replying to every DM. for lord hamlet, trust his youth – he’s got a wider roam than what you deserve. bottom line, ophelia, don’t swallow his sweet-talk vows – they’re just shady brokers hustlin’ unholy deals, spittin’ sanctimonious lines to scam you. i’m tellin’ you plain: from now on, don’t waste even a sec chattin’ with lord hamlet. got it? now bounce, i charge you.
+
+OPHELIA. imma obey, my lord.
+
+[EXEUNT.]
+
+SCENE IV. THE PLATFORM.
+
+[ENTER HAMLET, HORATIO AND MARCELLUS.]
+
+HAMLET. yo, this air’s straight-up savage – colder than an ex’s heart, no cap.
+
+HORATIO. legit, it’s that nippy, hype air vibe.
+
+HAMLET. what’s the clock sayin’ now?
+
+HORATIO. low-key, it’s before twelve.
+
+MARCELLUS. nah, fam, it’s already hit twelve.
+
+HORATIO. for real? i didn’t even catch that. so it’s droppin’ into that spooky hour when ghosts normally roll, huh?
+
+[A FLORISH OF TRUMPETS, AND ORDNANCE SHOT OFF WITHIN.]
+
+what’s this even mean, my lord?
+
+HAMLET. so, the king’s up tonight, throwin’ down his rager – keepin’ the wassail lit and his swagger on full reel; as he chugs his rhenish, the kettle drum and trumpets are blastin’ the hype of his pledge.
+
+HORATIO. is that the usual flex?
+
+HAMLET. yup, for real; and honestly, even though i’m born and bred local, this rager tradition is more notorious for gettin’ us clapped than for real honor. this heavy party from east to west gets us labeled as total drunks – our rep gets trashed by other nations; they call us clumsy and our slang weak, and it even robs us of the real juice of our achievements. so many dudes, ‘cause of some minor glitch they can’t control since they’re born that way, end up gettin’ roasted by one tiny fault that corrupts their whole vibe.
+
+HORATIO. yo, my lord, it’s comin’!
+
+[ENTER GHOST.]
+
+HAMLET. angels and chill vibes, protect us! whether you’re a healthy spirit or a cursed goblin, bring your heavenly airs or infernal blasts – no matter if you’re here with wicked vibes or chill intentions, you’re lookin’ hella sus, so imma speak to you. i’ll call you hamlet, king, father, royal dane – answer me, don’t leave me in the dark; spill why your canonized bones, all wrapped in death swag, busted outta your tomb; why that sepulchre where we saw you posted in eternal rest just popped open its heavy marble jaws to yeet you out again! what’s it mean that you, dead dude, all suited up in full armor, are cruisin’ under the moon, makin’ the night look ugly and sendin’ our brains into total overload? spill – what’s the move? what should we do?
+
+[GHOST BECKONS HAMLET.]
+
+HORATIO. it’s like, signalfyin’ you should bounce with it – like it’s droppin’ exclusive tea just for you.
+
+MARCELLUS. peep how politely it’s tryna lead you out to a remote zone; but no cap, don’t follow that vibe.
+
+HORATIO. nah, for real.
+
+HAMLET. if it won’t spit any words, then imma just roll after it.
+
+HORATIO. please, my lord, don’t go with it.
+
+HAMLET. why be scared? i ain’t riskin’ my life for a cheap bet; and my immortal soul? it ain’t got the power to harsh my vibe. it’s tryna send me off all friendly-like – so imma follow.
+
+HORATIO. but what if it lures you to the deep end or up to some mega scary cliff, then morphs into a nightmare that robs you of your chill and sends you spiraling into madness? think about it – that spot is a total hype trap for desperate vibes, gettin’ wild ideas from the abyss.
+
+HAMLET. it’s still flashin’ at me – so imma keep trailing it. come on, i’m on board.
+
+MARCELLUS. my lord, you defo shouldn’t bounce with it.
+
+HAMLET. hold up, ease off your hands.
+
+HORATIO. for real, you’re not headin’ out with it.
+
+HAMLET. yo, my fate’s screamin’ at me – makin’ every little vein in my body tough like a nemean lion’s nerve.
+
+[GHOST BECKONS.]
+
+still, i’m bein’ summoned. unhand me, bros!
+
+[BREAKING FREE FROM THEM.]
+
+by the gods, imma yeet anyone who holds me back. i’m like, “bounce, now come on – imma follow you.”
+
+[EXEUNT GHOST AND HAMLET.]
+
+HORATIO. he’s goin’ full-on desperate with that wild imagination.
+
+MARCELLUS. let’s bounce after him; it ain’t cool to let him dip like that.
+
+HORATIO. go on then – what’s the endgame here?
+
+MARCELLUS. yo, something’s seriously rotten in denmark.
+
+HORATIO. may heaven sort it out.
+
+MARCELLUS. nah, for real, let’s follow him.
+
+[EXEUNT.]
+
+SCENE V. A MORE REMOTE PART OF THE CASTLE.
+
+[ENTER GHOST AND HAMLET.]
+
+HAMLET. where you takin’ me, ghost? spill the deets – i’m not movin’ further without an RSVP.
+
+GHOST. listen up, fam.
+
+HAMLET. i gotchu.
+
+GHOST. my time’s almost up – soon, imma dip into some sulfurous, hellish flames and hand over my vibe.
+
+HAMLET. oh man, poor ghost!
+
+GHOST. don’t hit me with the pity – lend me your ears ‘cause i’m ‘bout to drop some heavy tea.
+
+HAMLET. spill it, i’m all ears.
+
+GHOST. once you hear this, you’re gonna be all about revenge.
+
+HAMLET. say what?
+
+GHOST. i am your pops’ spirit, doomed to wander these nights and stuck dakin’ in fire by day until all my toxic past gets burned off. but i’m not allowed to drop the secrets of my afterlife cell – i could spin a tale so savage that one word would freeze your blood, make your eyes pop like stars bouncin’ off their orbits, and have every hair on your head stand up like quills on a stressed-out porcupine.
+
+but this eternal tea ain’t for mortal ears – so listen up, listen up, listen up! if you ever loved your dear old dad—
+
+HAMLET. oh god!
+
+GHOST. get revenge for his gross, un-natural murder.
+
+HAMLET. murder!
+
+GHOST. murder on a next-level foul scale – twisted, strange, and totally un-natural.
+
+HAMLET. hurry up and spill it, so i can get my revenge on warp speed – like meditation-fast or love-thought quick.
+
+GHOST. i see you’re on point; you'd be even dumber than a fat weed chillin’ on lethe wharf if you didn’t catch this. so listen up, hamlet: word is, while i was chillin’ in my orchard during my usual afternoon zen, your uncle jacked my prime time with some cursed hebenon juice from a vial, pourin’ that nasty, leperous distillate straight into my ears. its effect was so toxic that it dissed human blood, rushin’ through every channel like quicksilver, then curdlin’ it like milk getting soured by extra heavy cream droppings. that’s exactly how it hit me; and then, an instant gross blob spread all over me like a lazar mold with vile crust – i was felled, sleepin’, by my brother’s hit: life, crown, and queen all yeeted in one go – cut off in the prime of my sinful bloom, abandoned, disappointed, and unburied; no proper reckoning, just my faults stamped all over my head. oh, it’s hella horrific! if you got any decency, don’t let it slide – don’t turn denmark’s royal bed into a crib for extra luxury and cursed incest. and no matter how you roll next, keep your mind clean and don’t let your soul scheme against your mom; leave her to heaven and to the thorns in her heart that’re there to sting her. peace out ASAP – the glow-worm’s flashing that dawn’s near and its weak fire is already fadin’. adieu, adieu, adieu. remember me.
+
+[EXIT.]
+
+HAMLET. oh all you hosts of heaven and earth – what’s next? should i even link up with hell? oh, fie! hold up, my heart; and you, my sinews, don’t age on me – keep me standin’ strong. remember you? yeah, you poor ghost, as long as memory’s still kickin’ in this scatterbrained globe. remember you? imma wipe away all those trivial old-school vibes, every tired quote and clapped-out cliché that youth once copied – only your commandment’s gonna live deep in my brain, pure and unmixed. by the gods, o, that most toxic woman! o villain, villain, smilin’ cursed villain! my notes prove it – someone can smile and still be a villain! and i’m dead sure that’s how it goes in denmark.
+
+[WRITING.]
+
+so, uncle, there you are. now, listen to my word – it’s “adieu, adieu, remember me.” i swear on it.
+
+HORATIO and MARCELLUS. [WITHIN.] my lord, my lord.
+
+MARCELLUS. [WITHIN.] lord hamlet.
+
+HORATIO. [WITHIN.] may heaven have his back.
+
+HAMLET. so be it!
+
+MARCELLUS. [WITHIN.] yo, ho, ho, my lord!
+
+HAMLET. heyo, ho, ho, boy! come on, bird, come.
+
+[ENTER HORATIO AND MARCELLUS.]
+
+MARCELLUS. how’s it goin’, noble lord?
+
+HORATIO. what’s the deets, my lord?
+
+HAMLET. oh, that’s lit!
+
+HORATIO. chill out, my lord – spill the tea.
+
+HAMLET. nah, you’re gonna let it out.
+
+HORATIO. not me, my lord, swear on it.
+
+MARCELLUS. me neither, my lord.
+
+HAMLET. so, what d’ya think, my dudes? but you’ll keep it on the down low, right?
+
+HORATIO and MARCELLUS. ay, by heaven, my lord.
+
+HAMLET. there’s never a villain in all denmark who isn’t just a straight-up arrant knave.
+
+HORATIO. we don’t need a ghost from the grave to drop that truth, my lord.
+
+HAMLET. right on; so, without further drama, i say we shake hands and bounce: you do your thing, ‘cause everyone’s got their own hustle, and me, i’m headin’ off to pray.
+
+HORATIO. these words are just wild and whirlin’, my lord.
+
+HAMLET. sorry if my words got you heated, but i’m speakin’ from the heart – for real.
+
+HORATIO. no offense taken, my lord.
+
+HAMLET. yeah, by saint patrick, there is some serious tea, horatio – a whole lot of offense. listen up: this vision is legit – an honest ghost, lemme tell you. since you’re all over this and hyped to know what’s up between us, my dear friends – scholars and soldiers alike – i got just one request.
+
+HORATIO. what’s that, my lord? we’re down.
+
+HAMLET. swear you’ll never drop a word about what you saw tonight.
+
+HORATIO and MARCELLUS. my lord, we won’t.
+
+HAMLET. nah, swear it.
+
+HORATIO. in faith, my lord, not i.
+
+MARCELLUS. nor i, my lord, for real.
+
+HAMLET. i swear on my sword.
+
+MARCELLUS. we already swore, my lord.
+
+HAMLET. indeed, on my sword, indeed.
+
+GHOST. [CRIES UNDER THE STAGE.] swear.
+
+HAMLET. ha, ha, boy – you say that? you there, truepenny? come on, you – listen to this dude in the cellar. agree to the oath, bro.
+
+HORATIO. propose the oath, my lord.
+
+HAMLET. swear you’ll never spill what you saw tonight – swear on my sword.
+
+GHOST. [beneath] swear.
+
+HAMLET. hic et ubique? then we’re changin’ the game. come here, gentlemen, and put your hands back on my sword. swear again that you’ll never spill this tea, swear on my sword.
+
+GHOST. [beneath] swear.
+
+HAMLET. well said, old mole! you hustle on this earth so fast – a legit pioneer! now bounce out, good friends.
+
+HORATIO. oh my days, this is insanely weird.
+
+HAMLET. so, as a stranger, welcome the extra vibes. there’s more going down in heaven and earth, horatio, than all the wild theories in your feed. but yo, listen up: no matter how extra i get in the future – even if i decide to act all antic and wild – when you see me, don’t be all extra with those arm hugs or head shakes, or droppin’ half-baked phrases like “well, we know” or “we could if we want” – don’t signal that you know my secrets. so, for real, swear to keep it on the DL. may grace and mercy be with you – swear.
+
+GHOST. [beneath] swear.
+
+HAMLET. rest, rest, troubled spirit. so, my peeps, with all my love i hand myself over to you; and even though i’m just a poor dude, my love and friendship – god willing – won’t be lacking. let’s roll out together, and keep those fingers zipped, i pray. time’s completely off, yo. o cursed fate that i was born to fix all this mess. nah, come on, let’s bounce together.
+
+[EXEUNT.]
+
+ACT II
+
+SCENE I. A ROOM IN POLONIUS’S HOUSE.
+
+[ENTER POLONIUS AND REYNALDO.]
+
+polonius. slide him this cash and these notes, reynaldo.
+reynaldo. bet, my lord.
+polonius. you gon’ handle it mad smartly, good reynaldo—before you pull up on him, scope out his whole vibe and tea.
+reynaldo. my lord, that’s exactly the plan.
+polonius. bet, well said; real fire words. yo, first scope out what danish peeps are posted in paris—like, who they are, how they stunt, where they crash, what squad they rep, and who's frontin’ the bill; and once you spin that full deets round, you’ll peep that they’re lowkey tight with my son—then you can slide in closer than your extra demands. think of it like, “i know his dad and his crew, and kinda him”—catch my drift, reynaldo?
+reynaldo. ay, mad vibes, my lord.
+polonius. you might be like, “i know him in part, but not deep,” but if we talk about him, he’s hella wild—lowkey addicted to this and that; and then you can flex whatever made-up dirt you want on him—just keep it chill enough not to trash his rep; but, bro, stick to the usual wild and free moves that come with youth.
+reynaldo. like gaming, my lord?
+polonius. exactly—could be gaming, be sippin’, fencing, cursing, beefin’, hooking up—feel free to go there.
+reynaldo. my lord, that’d totally put him in major L’s.
+polonius. nah fam, just season it right in your report. you can’t load him up with another scandal that makes him look like he’s trippin’ on impulse—that’s not the vibe. just paint his slip-ups as the natural stains of liberty; a burst of that fiery mind, raw savage energy in his blood—a wild outburst, nothing more.
+reynaldo. but my good lord—
+polonius. why you even tryna do that?
+reynaldo. ay, my lord, i’m tryna peep that.
+polonius. look, here’s the drift—and i’m convinced it’s solid. when you drop these light dirt bits on my son, like it’s just a little smear on his rep, listen—when you chop it up with his squad, if you’ve clocked those so-called shady vibes, be sure he’s linking with you in return; expect him to hit you with a “good sir,” or “friend,” or even “gentleman”—depending on the flavor.
+reynaldo. hella good, my lord.
+polonius. and then, sir, does he do this—he does—what was i sayin’? damn, i was about to drop something. where was i?
+reynaldo. at “closes in the consequence.” like, when he rolls up with “friend or so” and “gentleman.”
+polonius. exactly—he links with you like, “i know the gentleman, i peeped him yesterday or the other day, or then—with such and such; and, like you said, he was gaming, got lit in the ruckus, even clashed over tennis” or maybe even, “i saw him roll into a sketchy spot”—a brothel, or whatever. see that? your fabricated deets are reeling in a real truth carp; and that’s how we, the savvy crew, use our sneaky hacks and biased probes to uncover the real tea. so, based on my previous 411, you’ll school my son. you got me, right?
+reynaldo. my lord, i gotchu.
+polonius. godspeed, fam—peace out.
+reynaldo. aight, my lord.
+polonius. peep his vibe through your own lens.
+reynaldo. i’ll do that, my lord.
+polonius. and let him jam on his own tunes.
+reynaldo. cool, my lord.
+polonius. peace.
+
+[exit reynaldo.]
+
+enter ophelia.
+
+polonius. how now, ophelia, what’s up—why you lookin’ so shook?
+ophelia. alas, my lord, i was hella shook.
+polonius. so, like, what hit you, in god’s name?
+ophelia. my lord, i was chillin’ sewing in my room when lord hamlet rolled up all disheveled—his jacket totally off, no hat on, his socks a hot mess, unkempt and draped down to his ankles, his shirt ghostly pale, his knees clashing like they’re in a remix, and his face straight-up pitiful—as if he just escaped hell to drop some nightmare tea—and then he showed up outta nowhere.
+polonius. he buggin’ out for your love?
+ophelia. my lord, i dunno, but tbh, i'm lowkey scared it’s true.
+polonius. what did he even say?
+ophelia. he grabbed my wrist tight, like no chill; then stretched his whole arm out, and with his other hand over his brow, he started analyzing my face like he was tryna screenshot it. he hung around for a minute—finally, he gave my wrist a little shake, and with three solid nods of his head up and down, he dropped a massive, heart-crushing sigh that looked like it could break his whole vibe and end him. then, he bounced—turning his head over his shoulder like he had no idea how to navigate without his glasses—and even as he headed out, his eyes stayed locked on me till the very end.
+polonius. aight, come roll with me; i’m off to peep the king. this is the ultimate love overload—its wild, self-sabotaging energy that sends folks on desperate, wild missions, just like any epic passion out there messing with our souls. damn—have you dished any savage clapbacks on him lately?
+ophelia. no, my lord; but like you commanded, i ghosted all his texts and totally blocked his access.
+polonius. that’s what got him twisted, for real. i’m lowkey sorry i didn’t drop better insights on him earlier—i thought he was just playin’ around, tryna wreck you. but damn, my jealousy is wild! it’s so our era to flip our opinions up high, just like the young ones who are lowkey clueless. come on, let’s bounce to the king. this tea must spill—if we keep it all bottled up, it might just stack up more sorrow than the love we’re supposed to hail.
+
+[exeunt.]
+
+scene ii. a room in the castle.
+
+enter king, queen, rosencrantz, guildenstern and attendants.
+
+king. yo, welcome, dear rosencrantz and guildenstern. we’ve been lowkey missing you, and our urgent need to use y’all had us sending you on the double. have you peeped any buzz about hamlet’s transformation—i call it that—‘cause his outer vibe and inner self are totally not what they used to be. more than just his daddy’s dip, this change has left him so far from himself i can’t even imagine. i need you both—since you grew up with him and have been so close to his youthful energy—to chill here at our court for a bit, so your hangouts can draw him back to some good vibes and help us scoop out whatever hidden sorrow might be wrecking him, so we can fix it up if we can.
+queen. good gentlemen, he’s been talking mad about you—and honestly, i doubt there are two peeps on this earth he vibes with more. if y’all can flex some mad class and goodwill by hanging with us for a while, boosting our hopes and all that, your visit will be remembered with kingly gratitude.
+rosencrantz. yo, your majesties, with the royal clout you hold over us, you can straight-up boss us around instead of just kindly askin'.
+guildenstern. we’re all in—we drop ourselves at your feet for whatever orders you throw down.
+king. thanks, rosencrantz and noble guildenstern.
+queen. thanks, guildenstern and dear rosencrantz. and i beg you, right now, go see my seriously switched-up son. someone fetch these gentlemen to where hamlet’s posted.
+guildenstern. may the vibes be ever in our favor, so our presence and actions are lit and hella helpful to him.
+queen. ay, amen.
+
+[exeunt rosencrantz, guildenstern and some attendants.]
+
+enter polonius.
+
+polonius. yo, my dude—the ambassadors from norway are back and lookin’ hella joyful, my good lord.
+king. you always come through with the good news.
+polonius. me, my lord? no cap, my liege, i’m on point with my duty, as solid as my soul, both to god and to you, my gracious king. i reckon—unless my brain’s off-track in this wild game of state—that i’ve uncovered the main trigger behind hamlet’s cray vibes.
+king. spill that tea, i’m dying to hear it.
+polonius. first, let the ambassadors in; my news is the main course for this epic feast.
+king. go ahead and welcome them in.
+
+[exit polonius.]
+
+polonius tells me, my sweet queen, that he’s found the root of our son’s wild malfunction.
+queen. i bet it’s nothing but the main tea—his daddy’s death and our mad rushed wedding, no cap.
+king. well, we’ll sift through him.
+
+enter polonius with voltmand and cornelius.
+
+polonius. welcome, my good friends! yo, voltmand, what’s the word from our norway bro?
+voltmand. mad respect and greetings back atcha. originally, norway sent out to shut down his nephew’s troop moves—which they thought was a setup against the polack; but on deeper check, they peeped it was aimed at your highness, and that got them all salty—‘cause his age, weak health, and lack of juice were playing a fake card. so they ended up putting detains on fortinbras; in short, he obeyed, got roasted by norway, and finally swore to his uncle never to flex arms against your majesty again. then, a hyped-up norway handed him three thousand crowns a year, plus the plug to use that same squad he used before against the polack—with a little extra note here,
+[gives a paper]
+hoping you’ll hook him up with safe pass-through your lands for this gig, with all the safety and allowances laid out.
+king. that sounds dope; at a more chill time we’ll peep, answer, and vibe on this business. meantime, thanks for hustlin’ hard. go rest up—tonight, we’re feasting together. major welcome home.
+
+[exeunt voltmand and cornelius.]
+
+polonius. alright, this biz is wrapped. my liege and madam, if i went off on what majesty truly is, what duty means, why day is day and night is night, we’d just be wasting time—no cap. so, since brevity is the soul of wit and all that extra fluff is just extra, i’ll cut to the chase: your noble son is totally mad. i mean, mad as in straight-up cray; ‘cause if you try to define true madness, it’s nothing but pure madness. but let’s move on.
+queen. more deets, less extra fluff.
+polonius. madam, i swear i’m not tryna be artsy about it. he is mad, that’s real—pure, pathetic mad, and it’s a damn shame; but enough of fancy talk, let’s just call him mad. now, what’s left is to figure out what’s triggering this mess—or more like, the root cause of this defect, ‘cause this broken vibe comes from a reason. that’s the deal, and furthermore, i’ve got a daughter—while she’s still mine—who, in total obedience, hit me up with this note. now, listen up and deduce:
+[reads]
+to the celestial, and my soul’s idol, the most beautified ophelia—yeah, that phrase is sus, a straight-up lame line; “beautified” is trash—but you gotta hear it.
+[reads]
+these; in her excellent white bosom, these, etc.
+queen. so, did hamlet drop that on her?
+polonius. dear madam, chill a sec; i gotchu.
+[reads]
+doubt thou the stars are fire, doubt that the sun doth move, doubt truth to be a liar, but never doubt i love.
+oh dear ophelia, i’m struggling with these numbers—I ain’t got the art to count my groans. but know this, i love thee best, o most best; believe it. adieu. evermore thine, dearest lady, as long as this crazy machine runs for hamlet.
+polonius. in obedience, my daughter showed me this; and even more, hamlet’s own solicitings—collected over time, by mood and place—were all fed to my ears.
+king. but how did she take his love vibe?
+polonius. what you think about me?
+king. like, loyal and straight-up honorable.
+polonius. i wish i could prove it. but imagine, if i’d been spillin’ all the hot deets on his winged love—before my daughter clued me in—what would you, or our dear queen, have thought if i’d been all over my heart, or just chillin’ with a silent wink, or peeped that love with lazy eyes? nah, i got busy and told my young miss straight: “lord hamlet is a prince, but he’s outta your star—this vibe is a no-go.” then i laid down the rules: lock yourself out of his drop-ins, admit no messengers, collect no tokens. she took the bait of my advice, and he, repulsed—long story short—slid into sadness, then into fasting, then into hyper-vigilance, then into weakness, then into a lightness; and from that downfall, into the full-blown madness we now mourn.
+king. you think it’s like that?
+queen. it might be, for real.
+polonius. has there ever been a time where i was all, “it is so,” and then it flipped the other way? i gotta know.
+king. not that i recall.
+polonius. take this as gospel, if things are otherwise.
+[points to his head and shoulder]
+if the vibes steer me right, i’ll dig out the truth—even if it’s hidden deep in the center.
+king. how should we test that further?
+polonius. you know, sometimes he goes on these marathon walks—like four hours right here in the lobby.
+queen. for sure, he does that.
+polonius. then, i’ll let my daughter loose to vibe with him. you and i, we’ll hide behind a curtain and scope the meet-up. if he ain’t vibing with her—and isn’t falling off his rocker over it—don’t count me in for state biz; i’ll just stick to the farm and the carts.
+king. bet, we’ll give it a shot.
+
+enter hamlet, reading.
+
+queen. yo, check it—the poor dude’s over here reading all gloomy.
+polonius. bounce, i beg y’all, get outta here; i’m about to scoop him up. oh, let me be.
+
+[exeunt king, queen and attendants.]
+
+how’s my good lord hamlet?
+hamlet. aight, god-a-mercy.
+polonius. yo, you know me, my lord?
+hamlet. i’m straight fine. yo, you’re a fishmonger.
+polonius. nah, my lord, not me.
+hamlet. then i wish you were as honest as you claim to be.
+polonius. honest, my lord?
+hamlet. ay, sir—being honest nowadays is like finding one true gem among ten thousand posers.
+polonius. that's mad real, my lord.
+hamlet. ‘cause if the sun can spawn maggots on a dead dog—like, it’s the ultimate kiss for dead meat—tell me, do you even have a daughter?
+polonius. i do, my lord.
+hamlet. then don’t let her catch rays. conception’s a blessin’, but not in the way your daughter might conceive, my dude—watch it.
+polonius. what you tryna say by that?
+[aside] still on my daughter, smh—dude didn’t even know me at first; he straight-up called me a fishmonger. he’s totally lost, far past the point of no return. and honestly, back in my day, i went through some hardcore love drama—pretty much like this. i’ll chat with him again.—what are you readin’, my lord?
+hamlet. words, words, words.
+polonius. what’s the tea, my lord?
+hamlet. between who?
+polonius. i mean, the stuff you’re readin’, my lord.
+hamlet. it’s all straight-up slander, sir. this sassy scribble says old dudes have grey beards, wrinkles for days, eyes oozin’ thick amber and plum-tree goop, and they’re void of wit with super weak hams. i lowkey believe it hard, but i reckon it ain’t honest to jot it down like that. you, sir, should be as old as me—if you could even trundle backwards like a crab.
+polonius.
+[aside] even though this is cray, there’s some method in his madness.—will you dip out of this airy vibe, my lord?
+hamlet. into my grave?
+polonius. indeed, that’s totally off the air.
+[aside] damn, his comebacks are so loaded sometimes! a burst of wild happiness that only madness can drop—something reason and sanity could never serve up. i’ll dip and cook up a sneaky meet-up between him and my daughter. my honorable lord, i’ll take my leave now.
+hamlet. you can’t, sir—you can’t snatch anything from me i’d part with more willingly, except my life, except my life, except my life.
+polonius. peace out, my lord.
+hamlet. these tedious old fools.
+
+enter rosencrantz and guildenstern.
+
+polonius. go look for lord hamlet—there he is.
+rosencrantz.
+[to polonius] god save ya, sir.
+
+[exit polonius.]
+
+guildenstern. my honored lord!
+rosencrantz. my most dear lord!
+hamlet. yo, my excellent besties! how u doin’, guildenstern? oh, rosencrantz—good dudes, how y’all feelin’?
+rosencrantz. like, we’re just chillin’—indifferent kiddos of this crazy earth.
+guildenstern. we’re good ‘cause we ain’t over-happy; on fortune’s hat, we ain’t even the top button.
+hamlet. nor even the soles of her kicks?
+rosencrantz. nah, my lord.
+hamlet. so you’re hangin’ around her waist, or deep in her favours?
+guildenstern. for real—we’re basically in her intimate circle.
+hamlet. in the secret parts of fortune? oh, most true; she’s a total troll. so, what’s the tea?
+rosencrantz. nothing, my lord, except that the world seems to be gettin’ hella real.
+hamlet. then doomsday’s nearly here. but your news ain’t it. let me get specific—what hits have you, my good friends, taken from fortune that she tossed you into this prison?
+guildenstern. prison, my lord?
+hamlet. denmark’s a prison, no cap.
+rosencrantz. then the whole world’s one big cell.
+hamlet. a pretty dope one—with loads of confining cells, wards, and dungeons, and denmark’s one of the worst.
+rosencrantz. we don’t really vibe with that, my lord.
+hamlet. well then, it’s not a prison to you, ‘cause nothing’s good or bad except what you make of it. to me, it’s a straight-up prison.
+rosencrantz. so your ambition is what traps you—it’s too cramped for your mind.
+hamlet. o god, i could be chillin’ in a nutshell and still call myself king of infinite space—if it weren’t for these whack nightmares.
+guildenstern. truly, dreams are basically ambition; the very vibe of ambition is just the shadow of a dream.
+hamlet. a dream is just a shadow, yo.
+rosencrantz. for real, i see ambition as so light and breezy that it’s like a shadow’s shadow.
+hamlet. then our beggars are merely bodies, and our kings and epic heroes are just beggars’ shadows. shall we hit up the court? ‘cause, by my faith, i just can’t reason right now.
+rosencrantz and guildenstern. we got you, my lord.
+hamlet. nah, that’s not it. i ain’t bundling you with my other peeps; to be straight up honest, i’m drowning in attendants. but, as my true homie, what brings you to elsinore?
+rosencrantz. we came to chill with you, my lord—nothing else.
+hamlet. even though i’m a total beggar and poor in gratitude, i still thank you. but real talk, my thanks are like a cherished halfpenny. weren’t you sent for? or did you just roll in on your own vibe? come on, be straight with me—speak up.
+guildenstern. what should we even say, my lord?
+hamlet. anything, as long as you get to the point. you were summoned, and i can peep a bit of a confession in your eyes—despite all that modesty. i know the good king and queen sent for you.
+rosencrantz. for what though, my lord?
+hamlet. so you can school me. but listen up—by the bond of our squad, our shared youth, and our forever epic love, and honestly, no one could charge you with greater truth than i do—be straight with me: were you summoned or not?
+rosencrantz.
+[to guildenstern] what you say?
+hamlet.
+[aside] damn, i’ve got my eye on you. if you even care, don’t hold back.
+guildenstern. my lord, we were indeed sent for.
+hamlet. i’ll tell you why, so my anticipation stops you from spilling the beans to the king and queen and keep your lips sealed. lately, i—i dunno why—lost all my vibe, skipped all my usual routines; and honestly, it weighs so heavy on my spirit that this once dope earth feels like a barren rock; this epic sky, this majestic roof lit up with golden fire—it just seems to me like a gross, pestilent mash-up of toxic vapors. what a piece of work is man—so noble in his reason, infinite in his skills, in form and hustle; in action he’s like an angel, in perception like a god—the beauty of the world, the ultimate model of animals. and yet, to me, what is man but pure dust? man delights me not; no, and woman either—even though your smiles might say otherwise.
+rosencrantz. my lord, i never even thought about it that way.
+hamlet. then why’d you laugh when i said, “man delights me not”?
+
+ROSENCRANTZ. to think, my lord, if you're not vibin' with humans, then these players are gonna get your full lenten hype. we scooped 'em up on the way, and they're cruisin' in to serve you.
+
+HAMLET. yo, whoever's flexin' as king gets mad props – my whole vibe is tribute, no cap; the daredevil knight is gonna whip out his foil and target like a total boss; the lovey-dovey won't be droppin' sad sighs for free; the funny dude will wrap up his act in chill mode; and the lady’s gonna spill her tea fully, or the blank verse will straight-up pause. which players we talkin' about?
+
+ROSENCRANTZ. nah, it's the same old squad you used to stan – the city's own drama crew.
+
+HAMLET. so, what's the tea on their hustle? they used to be lit on both rep and coin, like double flex all around.
+
+ROSENCRANTZ. i reckon their vibe got shook by some new trend, fr.
+
+HAMLET. so, are they still gettin' mad love like when i was posted in the city? are they still viral, or what?
+
+ROSENCRANTZ. nah, fam, they ain't it anymore.
+
+HAMLET. yo, why's that? did they just catch some rust vibes?
+
+ROSENCRANTZ. nah, their grind is still on fleek; but check it – there's a whole squad of mini influencers, little eyases, yellin' up a storm at every turn and gettin' savage applause. they're the new trend, totally trippin' up the common stages – so much so that even peeps rockin' fancy rapiers are lowkey scared of these goose-quill antics and barely show up.
+
+HAMLET. what, they're actually kids? who’s runnin' this show? how are they gettin' rolled out? will they stick to quality only as long as they can spit a sick verse? and then later, if they turn into straight-up normie players – which is probs what'll go down if their clout ain't next level – are they gonna clap back at their own scribblers for makin' 'em sound off about their own drop?
+
+ROSENCRANTZ. fr, there's mad drama on both sides; and the whole nation ain't even hatin' on throwin' shade at 'em. there was a minute when no one dropped coin on debates unless the poet and the player were ready to throw down in the discussion.
+
+HAMLET. for real? like, is that even a thing?
+
+GUILDENSTERN. omg, there’s been a wild tossin’ around of brains, no cap.
+
+HAMLET. do the homies totally snatch it away, tho?
+
+ROSENCRANTZ. facts, they do, my lord. even hercules and his whole crew got in on that vibe.
+
+HAMLET. that’s not even cray; my uncle’s the king of denmark, and back when my old man was around, folks dissin’ him would drop twenty, forty, fifty, even a hundred ducats just for his mini cameo. damn, there's some extra cosmic tea in this, if philosophy can even spill it.
+
+[FLOURISH OF TRUMPETS WITHIN.]
+
+GUILDENSTERN. yo, the players just landed.
+
+HAMLET. gentlemen, welcome to elsinore. come on, drop those hands. the full welcome drip is all about that fashion and ceremony. lemme suit up in this gear so my shoutout to the players doesn't end up lookin' like low-key entertainment compared to yours. welcome, squad. but heads up – my uncle-father and aunt-mother are totally bamboozled.
+
+GUILDENSTERN. in what, my dear lord?
+
+HAMLET. i'm only cray on the north-north-west vibe. when the wind flips south, i can tell a hawk from a handsaw, no cap.
+
+[ENTER POLONIUS.]
+
+POLONIUS. blessings on you, gentlemen.
+
+HAMLET. hark, guildenstern, and you too – every ear's tuned in. peep that giant baby over there; he's still rockin' his swaddling wraps, fr.
+
+ROSENCRANTZ. lit fact – he’s already made a second drop on them; like, they say an old dude is twice a kid.
+
+HAMLET. i can totally predict he’s here to spill tea on the players. mark it – you’re right, sir, 'cause this went down on a monday morning, for real.
+
+POLONIUS. my lord, i got some fresh tea for you.
+
+HAMLET. my lord, i got tea too. when roscius was straight killin’ it as an actor in rome—
+
+POLONIUS. the actors have rolled in here, my lord.
+
+HAMLET. buzz, buzz.
+
+POLONIUS. on my honor, no cap.
+
+HAMLET. then each actor crashed in on his own, like totally on his ass—
+
+POLONIUS. the absolute goats of acting, whether it's tragedy, comedy, history, a rustic pastoral vibe, a mix of pastoral-comical, historical-pastoral, tragical-historical, or even that wild tragical-comical-historical-pastoral mashup, scene-individable or poem-unlimited. seneca can never be too heavy, and plautus never too light, all in the name of the word and that sweet liberty. these are the only dudes.
+
+HAMLET. oh jephthah, judge of israel, you had mad clout, fr.
+
+POLONIUS. what kinda stash did he have, my lord?
+
+HAMLET. like, one fire daughter, and that was it – and he was hella into her.
+
+[aside.] still on my daughter.
+
+HAMLET. ain't i on point, like, old jephthah style?
+
+POLONIUS. if you wanna call me jephthah, my lord, i got a daughter i’m mad into.
+
+HAMLET. nah, that don’t even compute.
+
+POLONIUS. so, what's the drop then, my lord?
+
+HAMLET. like, basically by the odds, god knows, and then, ya know, it just happened – like it was meant to be. the first row of that pious jam will drop more tea. peep where my cut comes in.
+
+[ENTER FOUR OR FIVE PLAYERS.]
+
+yo, masters, welcome to the squad – welcome, all of you. i'm stoked to see y'all in the flesh. welcome, good friends. oh, my old friend, your face is all remixed since i last peeped you. did you roll through to vibe with me in denmark? what’s up, my young lady and queen! by god, your ladyship is way closer to heaven now than the last time – like, you leveled up a whole chopine in altitude. pray to the gods that your voice, which is like a piece of rare, uncurrent gold, ain't cracked up in the ring. masters, y'all are mad welcome. we're gonna hit this joint like elite french falconers, swooping on any shiny drip we spot. we need a straight-up speech on deck. come on, drop a taste of that quality – give us some passionate fire.
+
+FIRST PLAYER. which speech, my lord?
+
+HAMLET. i remember you droppin' a speech once, but it never even got on stage – or if it did, it was a one-time vibe, 'cause the play, i recall, didn't please the masses at all; it was like gourmet caviar for a select few. but fr, i got that speech in my ear, along with others who totally raved, calling it an epic play – seamlessly chopped into scenes with a mix of modesty and cunning. i recall someone sayin' there weren't any extra salad bits in the lines to spice things up, nor any filler that screamed affectation – it was just an honest method, as wholesome as sweet and way fresher than fine. one speech i lowkey adored was aeneas' tale to dido, especially when he went off about priam's brutal slaughter. if that's still fresh in your brain, start at this line, let me see, let me see: the rugged pyrrhus, like th' hyrcanian beast,— oh, wait, scratch that – it kicks off with pyrrhus: the rugged pyrrhus, whose dark, sable arms, as black as his vibe, made the night look lit when he was chillin' in that ominous ride, now has his whole face lookin' mad dread and black, smeared with grim heraldry. from head to toe, he's all in total red, freakishly stained with the blood of fathers, mothers, daughters, sons – baked and slathered with the scorched, parched streets that throw a tyrannical and cursed glow on their vile murders. roasted in wrath and fire, and mega-sized with clots of gore, with eyes like burning carbuncles, the hellish pyrrhus now hunts old grandsire priam. so, keep it rollin', yo.
+
+POLONIUS. for real, my lord, that was straight fire – mad well-spoken with dope accent and discretion.
+
+FIRST PLAYER. anon, he finds him – strikin' too short at the greeks. his vintage sword, all rebellious to his arm, just drops where it falls, totally defiant of command. mismatched, pyrrhus drives priam in a rage, swingin' wide; but with the swoosh of his deadly sword, the unnerve-struck priam falls. then clueless iilium, almost feelin' the blow, with a blazing crown, stoops down, and with a savage crash snatches pyrrhus' ear. like, his sword, which was droppin' on priam's milky dome, even looked like it stuck in mid-air. so, as a painted tyrant, pyrrhus just stood there, chillin' like a neutral, doin' nada. but, like, as we usually peep when a storm hits – silence in the heavens, the rack holds, bold winds get ghosted, and the orb below is as hush as death – then suddenly, a dreadful thunder smashes the scene; after pyrrhus' brief pause, vengeance lights him up, and never did the cyclops' hammers fall on mars's eternal armor with any less remorse than pyrrhus' bleeding sword now droppin' on priam. out, out, you fickle, trampled fortune! all you gods, in one epic squad, snatch away her power; break all the spokes and bits off her wheel, and bowl that round nave straight down the heavenly hill, all the way to the fiends.
+
+POLONIUS. bruh, that's a whole movie.
+
+HAMLET. bet, it's gonna get trimmed at the barber’s, along with your beard. please, keep droppin' the tea. he's either down for a jig or spinnin' some bawdry tale, or maybe he's napping – so, spill on; head over to hecuba.
+
+FIRST PLAYER. but yo, who, oh who, peeped the mobled queen,—
+
+HAMLET. "the mobled queen"?
+
+POLONIUS. vibes, that's fire! "mobled queen" is lit.
+
+FIRST PLAYER. she’d be runnin’ barefoot up and down, threatenin' the flames with serious bisson rheum – like, a hard clout on that dome where the diadem used to chill, and for a robe, coverin' her skinny, over-the-top loins with a blanket snatched in pure panic—anyone who peeped that, with venom on their tongue, would’ve called out treason on fortune's state. but if even the gods had seen her back then, when she watched pyrrhus clown around by mincing her hubby's limbs with his sword, her instant burst of chaos—unless even mortals stayed stonecold—would’ve straight-up steamed heaven’s fiery eyes and lit up the gods with wild passion.
+
+POLONIUS. yo, check him – still no color change and his eyes are teary. please, that's enough.
+
+HAMLET. aight, it's cool. i'll have you spit the rest of that soon. good my lord, will you make sure the players get mad props? listen, let 'em get proper use, 'cause they're the quick highlights and ticking recaps of our time. after you're gone, it's way better to have a trash epitaph than live with their wack reviews.
+
+POLONIUS. my lord, i'll put 'em to work just as they deserve.
+
+HAMLET. god’s bodikin, man, that's way better. treat every dude based on his own drip, and who escapes the heat? use 'em by your own honor and dignity. the less they earn, the more your generosity shines. bring 'em in.
+
+POLONIUS. come on, sirs.
+
+HAMLET. follow that dude, friends. we got a play droppin' tomorrow.
+
+[EXEUNT POLONIUS WITH ALL THE PLAYERS BUT THE FIRST.]
+
+dost thou hear me, old friend? can you vibe out the murder of gonzago?
+
+FIRST PLAYER. ay, my lord.
+
+HAMLET. we'll drop it tomorrow night. you could, if needed, study a fire speech of like a dozen or sixteen lines, which i’d jot down and slot in, right?
+
+FIRST PLAYER. ay, my lord.
+
+HAMLET. bet. follow that vibe, and yo, don't roast him.
+
+[EXIT FIRST PLAYER.]
+
+[TO ROSENCRANTZ AND GUILDENSTERN] my good friends, i'm bouncin' 'til night – y'all are always welcome in elsinore.
+
+ROSENCRANTZ. good, my lord.
+
+[EXEUNT ROSENCRANTZ AND GUILDENSTERN.]
+
+HAMLET. ay, so, god be with you. now i'm solo. oh, what a rogue and peasant slave i am! can you believe that this player here, in just a wild fiction, in a dream of raw passion, managed to flex his soul so hard to his own vibe that his whole face drained out – tears spilling, look all distracted, voice all broken, and his entire act completely matchin' his inner hype? and all for nada! for hecuba? what’s hecuba to him, or him to hecuba, that he'd be cryin' like that? what would he do if he had the same mad motive and cue for passion i got? he'd flood the stage with tears and blast the crowd’s ears with brutal speech; drive the guilty into madness and shock the free; confuse the clueless and straight-up amaze every eye and ear. yet here i am, a basic, muddy hustler, spittin' like john-a-dreams without any cause, and i got nothin' to show for it. no, not for a king whose own turf and dearest life suffered a cursed defeat. am i a coward? who calls me villain, smacks my dome? snatches my beard and blows it right in my face? tweaks my nose, gives me a lie deep in my throat all the way to my lungs? who does that to me? ha! damn, i should probably clap back – it can only mean i got pigeon liver, and lack that savage bile to turn oppression bitter, else i would've fed all the local kite gangs with this slave's scraps. bloody, bawdy villain! remorseless, treacherous, lecherous, heartless villain! oh vengeance, what an ass i am! it's wild that i, the son of a dearly murdered father, pushed to avenge by both heaven and hell, gotta, like a hooker, unload my heart in words and start cursing like a total scrub, a bottom feeder! fie on it! foh! come on, brain, get with it! i've heard that guilty peeps sittin' through a play can get so deep in the feels from the scene's savage vibe that they end up confessing all their shady deeds. 'cause murder, though silent, speaks through the most miraculous organ. imma have these players drop a scene like the murder of my father right in front of my uncle. i'll watch his every look; i'll test him to the quick. if he even flinches, i know my next move. the spirit i saw might be the devil, and the devil’s got the power to flex as somethin' hella pleasing, and maybe from my own weak, depressed vibe – since that devil juice is strong on peeps like me – he's usin' me to get me cursed. i'll dig up even more solid ground than this. the play’s the move by which i'll snatch the king's conscience.
+
+[EXIT]
+
+ACT iii
+
+SCENE i. a room in the castle.
+
+[ENTER KING, QUEEN, POLONIUS, OPHELIA, ROSENCRANTZ AND GUILDENSTERN.]
+
+KING. and can y'all, by any random twist of fate, get him to spill why he's rockin' this chaotic vibe, turnin' all his chill days into a storm of crazy, dangerous lunacy?
+
+ROSENCRANTZ. he straight-up admits he’s feelin' hella distracted, but when it comes to the cause, he ain't spillin' a thing.
+
+GUILDENSTERN. and we can't even get him to open up; he's keepin' it on some sly mad vibe when we try to grill him about his real feels.
+
+QUEEN. did he vibe with y'all nicely?
+
+ROSENCRANTZ. he acted all like a proper gent, for sure.
+
+GUILDENSTERN. but he was lowkey forcein' that vibe, you know?
+
+ROSENCRANTZ. he was stingy with questions, but when we asked, he was super loose in his replies.
+
+QUEEN. did you try gettin' him on any side hustle or pastime?
+
+ROSENCRANTZ. madam, it so happened that some players we bumped into on the way—we told him about 'em, and he lit up hearin' that. they're around the court, and i think they've already lined up a play for him tonight.
+
+POLONIUS. that's on point; and he even begged me to holla at your majesties to peep the whole matter.
+
+KING. with all my heart; it really makes me happy to hear him so hyped. good gentlemen, push him further and drive his vibe toward these delights.
+
+ROSENCRANTZ. we got you, my lord.
+
+[EXEUNT ROSENCRANTZ AND GUILDENSTERN.]
+
+KING. sweet gertrude, bounce with us too, 'cause we just summoned hamlet here on the low—so he might, like, accidentally confront ophelia. her father and i, legit keepin' watch like secret spies, will ghost our way so that, unseen, we can judge his encounter straight up and figure out from his vibes whether his suffering is all about madd love or not.
+
+QUEEN. i shall obey you. and ophelia, my dear, i hope your fine looks are the spark behind hamlet's wild energy; i trust your virtues will bring him back to his usual legendary self, for both your honors.
+
+OPHELIA. madam, i hope so too.
+
+[EXIT QUEEN.]
+
+POLONIUS. ophelia, slide over here.—if you please, we're gonna hang out.—[to ophelia.] check out this book so that your vibe might pop even in your loneliness.—we often get called out for this; it's proven that with all that devoted face and pious act, we even sugarcoat the devil himself.
+
+KING. [ASIDE.] damn, it's too real! how hard that speech slaps my conscience! a harlot's cheek, all decked out in fancy plaster art, ain't uglier to the thing that supports it than my shady deed is to my super polished words. oh, heavy burden!
+
+POLONIUS. yo, i hear him comin'. let's dip, my lord.
+
+[EXEUNT KING AND POLONIUS.]
+
+[ENTER HAMLET.]
+
+HAMLET. to be, or not to be, that’s the ultimate question: is it more savage in the mind to take the slings and arrows of outrageous fortune, or to step up and throw down against a sea of troubles and, by clappin' back, end 'em? to die—to sleep, no cap; and in that sleep, we end the heartache and a thousand natural shocks that our flesh inherits. it's the ultimate finish everyone wishes for. to die, to sleep. to sleep, maybe dream—yo, that's the rub, 'cause in that death-sleep what dreams might drop, when we finally ghost this mortal coil, forces us to pause. that's the real respect that turns a long life into non-stop calamity. who would wanna bear the whips and scorns of time, the oppressor’s BS, the proud man’s savage burns, the agony of rejected love, the law's lag, the insolence of office, and the spurns that the unworthy heave on the patient, when he himself could just end it all with a bare bodkin? who would bear these extra weights, grunting and sweatin' through a worn-out life, except for the dread of something after death—the undiscovered country from which no traveler returns—that baffles the will and makes us choose to suffer what we’ve got rather than fly to unknown ills? thus, our conscience turns us all into softies, and the pure vibe of resolution gets washed out by overthinking, so that even our boldest moves lose their real action. yo, hold up – the fair ophelia! nymph, in your prayers, remember all my sins, aight?
+
+OPHELIA. good my lord, how's your vibe holdin' up these days?
+
+HAMLET. i humbly thank you; well, well, well.
+
+OPHELIA. my lord, i got some of your remembrances that i've been dying to hand back to you. please, take 'em now.
+
+HAMLET. nah, not me. i never gave you anything.
+
+OPHELIA. my honored lord, you know damn well you did, and with those sweet-ass words that made everything pop – even if their vibe faded, take these back; 'cause to a noble mind, rich gifts lose their shine when the givers are cold. here, my lord.
+
+HAMLET. ha, ha! you for real?
+
+OPHELIA. my lord?
+
+HAMLET. you lookin' legit?
+
+OPHELIA. what exactly are you sayin', my lord?
+
+HAMLET. that if you're honest and fine, then your honesty shouldn't even let your beauty spill any extra tea.
+
+OPHELIA. could beauty, my lord, ever strike a better deal than with straight-up honesty?
+
+HAMLET. ay, no cap; 'cause beauty's power will flip honesty into a bawd way faster than honesty can convert beauty into a copy of itself. that used to be a paradox, but now the time proves it. i did love you once.
+
+OPHELIA. indeed, my lord, you totally had me believe that.
+
+HAMLET. you shouldn't have bought it; 'cause virtue can't boost our ancient stock enough for us to truly relish it. i did not love you.
+
+OPHELIA. i was even more bamboozled.
+
+HAMLET. bounce to a nunnery. why would you be cranking out sinners? i'm kinda honest myself; but i could totally roast me for so many shady things that it's better my mother had never birthed me. i’m hella proud, revenge-hungry, and ambitious, with more offenses at my beck than i have thoughts to even shape 'em or time to act 'em out. what should a loser like me do, crawlin' between earth and heaven? we're all total knaves, straight up – trust none of us. go your way to a nunnery. where’s your father?
+
+OPHELIA. at home, my lord.
+
+HAMLET. lock his doors up so he only acts a fool in his own crib. farewell.
+
+OPHELIA. oh help him, you sweet heavens!
+
+HAMLET. if you get hitched, i'm gonna slap this plague as part of your dowry. be as ice-chaste, as pure as fresh snow – you won't dodge the shade, no cap. get to a nunnery, go: farewell. or if you must marry, then marry a fool; 'cause wise peeps know exactly what monsters you turn 'em into. to a nunnery, go; and fast, too. farewell.
+
+OPHELIA. oh heavenly powers, bring him back, for real!
+
+HAMLET. i've peeped your makeup and self-crafted face too, and god gave you one face while y'all flip it to another. you jig, you wander, you lisp, and even nickname god’s creatures, turning your wild side into pure cluelessness. yo, i'm done with that – it's drivin' me mad. i say, no more marriages. those already hitched – all but one – shall live; the rest, keep 'em as they are. to a nunnery, go.
+
+[EXIT]
+
+OPHELIA. oh dang, what a dope mind got totally yeeted, no cap! the whole vibe of the courtier, soldier, scholar—his eye, his tongue, his sword, the hype and rose of our lit state, the flex of fashion and blueprint of drip, the one every watcher was lowkey stalking—is straight up crashed, completely down! and me, one of the most dejected, heartbroken queens who was forever slurping the honey of his sonic promises, now peep that majestic, sovereign brainpower, like sweet bells jangled outta tune and harsh af, that one-of-a-kind glow of wild youth totally trashed by overclout ecstasy. oof, i’m salty as heck—i saw what i saw, and i still see it.
+
+ENTER KING AND POLONIUS.
+
+KING. love? nah, his feels aren’t vibing that way, and even though his speech was a bit off-form, it wasn’t full-on cray. there’s some deep shade brewing in his soul—his gloomy mood got him all broody—so i’m suspecting that when he finally drops the truth, it’s gonna be hella dangerous. to preempt that mess, i’m like, bet, and i’m shipping him straight to england ASAP for that overdue tribute. maybe the wild seas and flip-flopping lands, with their remix vibes, will yeet that lodged drama outta his heart and reset his whole vibe. what y’all think on that?
+
+POLONIUS. it’s all good, my lord. but i still lowkey believe his sad tea started from some neglected love. hey, ophelia, you don’t gotta spill all the deets about lord hamlet’s drip—we caught the tea already. my dude, do as you please, but if it’s on point, after the play, let his queen mum slide an invite to him for a one-on-one heart-to-heart; and i’ll be peeping in on their conversation, if you’re down. if she ain’t picking up his vibe, then yeet him to england; or lock him down wherever your mad smarts say, aight?
+
+KING. bet, it’s a go. we can’t let our top-tier homies go off grid and mad off.
+
+EXEUNT.
+
+SCENE II. A HALL IN THE CASTLE.
+
+ENTER HAMLET AND CERTAIN PLAYERS.
+
+HAMLET. yo, speak the speech exactly like i dropped it for you—smooth on the tongue. but if u just mumble it like half your crew does, i’d rather have a town-crier spit my lines. and please, don’t go flailing your arms like you’re at a rave—keep it chill; cuz in that savage storm, that whirlwind of passion, you gotta vibe with measured finesse to give it that smooth drip. it straight up offends my soul when some extra, periwig-rockin’ dude shreds a passion into tatters—turning epic feels into total rag status—and splits the ears of all those clueless groundlings who can only manage goofy silent shows and noise. i’d totally have that dude whipped for overdoing it—no cap, he out-cranks even herod. so, please, keep it 100.
+
+FIRST PLAYER. i got you, my lord.
+
+HAMLET. yo, don’t be too tame either; let your own instinct be your guide. match your moves to your words and your words to the action—with the special rule that u don’t go overboard and break nature’s chill. ‘cause anything extra is totally off from the true art of playin’, whose goal—then and now—was and is to hold a mirror up to nature; to show virtue its true drip, roast its own image, and let the vibes of the age press on every form. now, if you overdo it or show up late, even if it makes the clumsy squad snicker, it’ll leave the real ones feeling low—whose harsh judgments outweigh a whole theater of extras. oh man, i’ve seen players drop wild performances—and heard mad praise for them—that, not to drop too much shade, but without the proper accent or walk, they strutted and yelled so hard i thought nature’s own crew hacked humanity and, like, totally fumbled the assignment by imitating it so abysmally.
+
+FIRST PLAYER. i hope we’ve fixed that vibe, my lord.
+
+HAMLET. oh, just scrap the whole rework. and let the clowns stick exactly to their script—don’t go off freestyling, even if some of them crack up and get a bunch of bored peeps laughing, while missing the deep deets of the play. that’s straight-up villainous, showing mad pathetic ambition in the fool who does it. now, squad, go get ready.
+
+EXEUNT PLAYERS.
+
+ENTER POLONIUS, ROSENCRANTZ AND GUILDENSTERN.
+
+how now, my lord? will the king peep this masterpiece?
+
+POLONIUS. and the queen too, and like, right now.
+
+HAMLET. tell the players to hustle up.
+
+[EXIT POLONIUS.]
+
+HAMLET. yo, can you two speed up their flow?
+
+ROSENCRANTZ AND GUILDENSTERN. we will, my lord.
+
+[EXEUNT ROSENCRANTZ AND GUILDENSTERN.]
+
+HAMLET. what ho, horatio!
+
+ENTER HORATIO.
+
+HORATIO. here, my dude, at your service.
+
+HAMLET. horatio, you’re seriously the chillest homie—just like every real one i’ve ever kicked it with.
+
+HORATIO. oh my dear lord.
+
+HAMLET. nah, don’t get it twisted—i’m not just buttering you up; what level-up can i expect from you if you ain’t makin’ bank, just vibin’ on your good spirit to keep you iced? why should the broke get extra sweet words? nah, let that sugar-coated tongue hype absurd flex, and bend those knee joints where being smart follows clout chasing. you feel me? since my soul was the boss of her own playlist and could spot real ones, it locked you in for itself. cuz you’ve been that one—holding it down even in the drama, a dude who takes life’s savage hits with equal thanks. blessed be those who mix that raw blood and brainpower, so they aren’t just a puppet for fortune’s random hits. give me a man who ain’t a slave to his feels, and i’ll stash him in the core of my heart, legit, just like i feel you. damn, that’s extra.
+
+HAMLET. btw, there’s a play tonight in front of the king. one scene is mad similar to the tea i spilled about my dad’s dip. i’m tellin’ you: when you see that scene go live, with every fiber of your soul, keep your eyes peeled on my uncle. if his hidden guilt doesn’t drop in one savage speech, then it’s a damn ghost we saw—and my mind’s as fouled up as vulcan’s workshop. peep him hard; my eyes are locked on his face—and then we’ll squad up to roast his act, no cap.
+
+HORATIO. aight, my lord. if he tries to snatch any deets during the play and bails without anyone clockin’ it, i got you—i’ll catch that baller move.
+
+HAMLET. yo, they’re rolling up to the show. i gotta chill now. squad, snag a spot.
+
+danish march. a whole flair.
+
+ENTER KING, QUEEN, POLONIUS, OPHELIA, ROSENCRANTZ, GUILDENSTERN AND THE REST.
+
+KING. what’s good with our cuz hamlet?
+
+HAMLET. straight fire, for real; like the ultimate chameleon snack—I munch on air, packed with promises: you know, you can’t serve capons like that.
+
+KING. i’m not vibing with that answer, hamlet; those words? not my jam.
+
+HAMLET. nah, neither are mine now. (to polonius) yo, my dude, you acted back in uni, right?
+
+POLONIUS. yeah, my lord, i did that—apparently, i crushed it.
+
+HAMLET. so, what play did you drop?
+
+POLONIUS. i did julius caesar. got snuffed at the capitol—brutus totally offed me.
+
+HAMLET. that was a savage move, straight-up brutal, offing such a prime young dude. squad, are the players locked and loaded?
+
+ROSENCRANTZ. yup, my lord; they’re chillin’, just waiting on your vibe.
+
+QUEEN. come over here, my dear hamlet, park yourself by me.
+
+HAMLET. nah, good mother—check it, i got some metal that’s way more attractive.
+
+POLONIUS. (to the king) yo, check that out!
+
+HAMLET. lady, can i crash in your lap?
+
+[LYING DOWN AT OPHELIA’S FEET.]
+
+OPHELIA. nah, my lord.
+
+HAMLET. i mean, can i rest my head on your lap?
+
+OPHELIA. yeah, my lord.
+
+HAMLET. you think i was droppin’ local, country vibes?
+
+OPHELIA. i’m thinkin’ zilch, my lord.
+
+HAMLET. that's a sick thought—like chillin’ right between the maids’ legs.
+
+OPHELIA. what’s the tea, my lord?
+
+HAMLET. nothing, nada.
+
+OPHELIA. u’re way too jolly, my lord.
+
+HAMLET. who, me?
+
+OPHELIA. yeah, my lord.
+
+HAMLET. oh god, you’re the only hype master around! what’s a man supposed to do but be merry? peep how cheerfully my mother’s vibin’, even though my dad dipped within two hours.
+
+OPHELIA. nah, it’s more like twice two months, my lord.
+
+HAMLET. so long? damn, then let the devil rock black, cuz i’m gonna rock a suit of sable. o heavens! if my pops dipped two months ago and we’re still stanning him, then there’s hope a legend’s memory can last at least half a year. but for real, by her ladyship, he’d need to start building churches; or else he’s doomed to forget himself, like that lame hobby-horse whose tombstone screams, “for, oh, for oh, the hobby-horse is forgot!”
+
+TRUMPETS SOUND. THE DUMB SHOW ENTERS.
+
+ENTER A KING AND A QUEEN, ALL LOVEY-DOVEY; THE QUEEN SNUGGLES HIM AND HE’S ALL ABOUT IT. SHE GETS ON HER KNEES AND GOES OFF PROFESSING HER FEELS. HE PICKS HER UP, LAYS HIS HEAD ON HER NECK, AND DROPS HER ON A BED OF FLOWERS. SEEING HIM ASLEEP, SHE BOUNCES. THEN, OUTTA NOWHERE, A FELLOW ROLLS IN, DOFFS HIS CROWN, PLANTS A KISS ON IT, DRIPS POISON INTO THE KING’S EARS, AND YEETS OUT. THE QUEEN ROLLS BACK, FINDS THE KING DEAD, AND GOES ALL PASSIONATE. THE POISONER RETURNS WITH A FEW MUTE HOMIES, LOOKIN’ SAD AND WRETCHED WITH HER. THE DEAD BODY IS SCOOPED UP. THE POISONER THEN TRIES TO WIN THE QUEEN’S HEART WITH SWAGGY GIFTS. SHE’S LOWKEY HESITANT AT FIRST, BUT EVENTUALLY FINDS HIS VIBE.
+
+EXEUNT.
+
+OPHELIA. what’s the sitch here, my lord?
+
+HAMLET. yo, this is straight-up miching mallecho—it means pure mischief.
+
+OPHELIA. looks like this show’s droppin’ the tea on the play’s whole plot.
+
+ENTER PROLOGUE.
+
+HAMLET. we’re gonna peep it all through this dude: players can’t keep secrets—they spill every deet, no cap.
+
+OPHELIA. will they drop the deets on what this show meant?
+
+HAMLET. yeah, or any show you throw at him. don’t be shy—if you show it, he’ll def break it down for you.
+
+OPHELIA. you’re so nothing, nothing at all—I’ll keep track of the play.
+
+PROLOGUE. for us, and for our epic tragedy, we’re lowkey bowing to your clemency—please lend us your ears, patiently.
+
+HAMLET. is this a prologue, or just a petty ring bling rhyme?
+
+OPHELIA. it’s short and sweet, my lord.
+
+HAMLET. just like a woman’s love.
+
+ENTER A KING AND A QUEEN.
+
+PLAYER KING. yo, count it: phoebus’ whip has rolled 30 full laps around neptune’s salty spa and tellus’ orb, and like 30 dozen borrowed moonbeams have crisscrossed the globe (12 times 30, no cap), ever since love locked our hearts and hymen linked our hands in the dopest, most sacred bonds.
+
+PLAYER QUEEN. so many trips can the sun and moon clock for us before love runs out. but, oof, you’ve been mad off lately—so far from that cheery glow you used to rock—that i’m lowkey sus. yet even though i’m shook, i won’t harsh your vibe, my lord; for a woman’s fear and love roll in equal measure—whether extra or minimal. now, the proof of my love is clear, and as my love scales up, so does my doubt. where love is boss-level, even the tiniest doubt turns into fear; and where little fears get hyped, massive love erupts.
+
+PLAYER KING. yo, i gotta bounce, love—my dope skills are about to kick in, and you’re gonna stay in this fly world, honored, adored, and maybe even the perfect canvas for a hubby—
+
+PLAYER QUEEN. dang, screw the rest. that kinda love is straight-up betrayal in my heart. for a second hubby, i’m totally cursed—no one can even marry a second time unless they off the first, no cap.
+
+HAMLET. [aside] wormwood, wormwood.
+
+PLAYER QUEEN. like, the reasons for a second marriage are all about saving coin, not about love. i’d even off my second hubby if he dares plant one on me in bed.
+
+PLAYER KING. i feel you, but our plans? they’re often yeeted. purpose is just the sidekick to memory—born in wild drama but lacking real clout—like unripe fruit that hangs on the tree, only to drop when it finally ripens. we absolutely gotta forget our self-debts. the wild passions we hype up eventually fizzle out once the feels fade. both the savage hits of grief and joy end up self-destructing. where joy turns up, grief gets extra; grief gets cheers, joy gets bummed on the slimmest chance. this world ain’t forever, and it’s no shocker that our loves flip with our fortunes. that’s the mystery we still gotta solve: does love hustle fortune, or does fortune hustle love? watch how the upper crust gets all their fav flies, while the underdogs turn enemies into pseudo-bffs; and so far, love rides on fortune—‘cause if you’re never in need, you won’t miss a friend, and if you are, even a fake pal turns into an enemy. but to wrap up where i started, our vibes and destinies run so oppositely that our master plans keep gettin’ clapped. our thoughts are truly ours, but their outcomes? not so much. so, think it through—no second hubby vibes; just log off once your first lord is done.
+
+PLAYER QUEEN. neither does the earth serve me grub, nor the sky drop light, and no chill or play breaks come my way day or night—turning my trust and hope into total desperation, like an anchor’s cheer locked in a cell. every vibe that dims joy just wrecks what i could’ve had—destroying it! here and beyond, may constant drama chase me, if ever i’m a widow and still stuck as a wife.
+
+HAMLET. (to ophelia) if she drops it now…
+
+PLAYER KING. it’s sworn deep, for real. sweet, leave me here a bit—i’m so over this dull day, i just wanna catch some z’s.
+
+[SLEEPS.]
+
+PLAYER QUEEN. sleep tight, rock your brain, and may no bad mojo come between us.
+
+[EXIT.]
+
+HAMLET. madam, how you feelin’ about this play?
+
+QUEEN. the lady’s protesting way too much, i think.
+
+HAMLET. oh, but she’s gonna stick to her word.
+
+KING. have you peeped the plot? or is there zero offense in it?
+
+HAMLET. nah, nah—they’re just clownin’ around, droppin’ poison as jokes; no real beef in this wild world.
+
+KING. what do you call this show?
+
+HAMLET. the mousetrap. marry, how? totally tropically. this play is like a mirror of a murder lowkey done in vienna—gonzago’s the duke’s tag, his wife baptista: u’ll catch on soon; it’s a shady piece of work, but so what? your majesty, and we free souls, ain’t even bothered. let the jaded haters cringe—our backs remain unstressed.
+
+ENTER LUCIANUS.
+
+this is lucianus, the king’s nephew.
+
+OPHELIA. you’re a solid hype crew, my lord.
+
+HAMLET. i could deep-dive between you and your boo, if i could peep your puppets dallying.
+
+OPHELIA. you’re hella sharp, my lord.
+
+HAMLET. it’d take a serious groan to shave off my edge.
+
+OPHELIA. still, that’s both a win and a loss.
+
+HAMLET. so you got your husbands all mixed up—now, begin, murderer. pox on it, scrub off your damnable mugs, and start. come on, the croakin’ raven is howlin’ for revenge.
+
+LUCIANUS. dark thoughts, slick hands, meds on point, and time’s vibin’ with us—this is that confederate season, else no one’s even clockin’ it; you’re a rank mix of midnight weeds, cursed by hecate three times over, thrice infected—your natural magic and grim mojo are straight-up hijacking all the good vibes of life, effective immediately.
+
+[POURS THE POISON INTO THE SLEEPER’S EARS.]
+
+HAMLET. he drips poison in the garden for his stash. his name’s gonzago. the tea is out, penned in straight-up choice italian. u’ll peep soon how the killer lands gonzago’s wifey.
+
+OPHELIA. the king’s on the rise.
+
+HAMLET. what, shook by fake flames?
+
+QUEEN. how’s my lord doin’?
+
+POLONIUS. cut out the play already.
+
+KING. gimme some light. scram.
+
+ALL. lights, lights, lights.
+
+[EXEUNT ALL BUT HAMLET AND HORATIO.]
+
+HAMLET. damn, let the wounded deer weep and the bare-horned stag perform; ‘cause some gotta watch while others catch z’s—the world keeps on rollin’. wouldn’t that, sir, along with a whole forest of feathers—and if the rest of my luck flips turk on me, with two provincial roses on my busted kicks, score me a crew call-out in a cry of players, my guy?
+
+HORATIO. half a share, my lord.
+
+HAMLET. a whole one, i promise. cuz u know, oh dear damon, this kingdom was literally dismantled by jove himself, and now it’s ruled by a super extra—pajock.
+
+HORATIO. u could’ve dropped a rhyme there.
+
+HAMLET. oh good horatio, i’ll trust the ghost’s word like it’s worth a thousand pounds. peep that?
+
+HORATIO. solid, my lord.
+
+HAMLET. so, about that poison tea?
+
+HORATIO. i definitely clocked him.
+
+HAMLET. ah ha! yo, bring some tunes. come on, get the recorders. cuz if the king ain’t down with the comedy, then maybe he’s not feelin’ it at all—perdieu! come on, drop some music.
+
+ENTER ROSENCRANTZ AND GUILDENSTERN.
+
+GUILDENSTERN. good my lord, can i snag a word with you?
+
+HAMLET. sir, it’s a whole saga.
+
+GUILDENSTERN. the king, sir—
+
+HAMLET. yeah, sir, what’s up with him?
+
+GUILDENSTERN. he’s in major retreat mode, like totally off his rocker.
+
+HAMLET. with booze, sir?
+
+GUILDENSTERN. nah, my lord; it’s more like he’s catchin’ mad choler.
+
+HAMLET. your brains should flex harder so the doctor gets the memo—if i try to purge him, it might just plunge him even deeper into choler central.
+
+GUILDENSTERN. chill, my lord, wrap your words up and don’t go off on my saga too wild.
+
+HAMLET. i’m chill, sir, as pronounced.
+
+GUILDENSTERN. the queen—your mother, in a major mood swing—sent me over to you.
+
+HAMLET. thanks, fam.
+
+GUILDENSTERN. nah, my lord, this vibe ain’t on point. if u can drop a straight-up answer, i’ll follow your mother’s orders; if not, your pardon and my bounce will seal the deal.
+
+HAMLET. sir, i can’t do that.
+
+GUILDENSTERN. what, my lord?
+
+HAMLET. give you a proper answer—my wit’s kinda busted. but, sir, whatever answer i whip up, you shall command; or as u say, my mother. so, cutting the fluff, my mother, u say—
+
+ROSENCRANTZ. then she says: your moves have totally blown her mind and left her in amazement and mad admiration.
+
+HAMLET. oh, sweet son, someone who can stun his own mom! but is there no follow-up to her mad stanning?
+
+ROSENCRANTZ. she wants to chat with you in her private room before you crash.
+
+HAMLET. we’ll roll with that—even if she’s ten times our mom. anything else for us?
+
+ROSENCRANTZ. my lord, you once did love me.
+
+HAMLET. and i still do—through these pickers and stealers.
+
+ROSENCRANZT. good my lord, what’s rockin’ your mood? you’re basically locking yourself away if you don’t share your feels with your bro.
+
+HAMLET. sir, i’m just not leveling up.
+
+ROSENCRANZT. how’s that even possible when you got the king’s own vibe lined up for your takeover in denmark?
+
+HAMLET. yeah, sir, but as long as the grass grows—the proverb’s kinda musty, i guess.
+
+ENTER PLAYERS WITH RECORDERS.
+
+HAMLET. oh, the recorders—lemme peep one. if y’all are out here tryin’ to snatch my vibe like you wanna force me into extra grind, why u doin’ that?
+
+GUILDENSTERN. oh my lord, if my duty’s too bold, then my love is just too extra uncouth.
+
+HAMLET. i don’t really get that. can u play this pipe?
+
+GUILDENSTERN. my lord, i can’t do it.
+
+HAMLET. i beg ya.
+
+GUILDENSTERN. trust me, i just can’t.
+
+HAMLET. i seriously ask ya.
+
+GUILDENSTERN. i ain’t got that skill, my lord.
+
+HAMLET. it’s as easy as spittin’ tea: use your finger and thumb to control these pipes, blow life into it with your mouth, and it’ll drop the most eloquent beats. peep these stops!
+
+GUILDENSTERN. but i can’t make these stops drop any harmony—I’m just not skilled.
+
+HAMLET. yo, check it out—u make me look hella basic! u wanna jam on me, claim you know my stops, yank out the core of my mystery, and vibe me from my lowest drop to my highest peak; and there’s mad beats, top-tier voice in this little organ, yet u just can’t make it sing. damn, u really think i’m easier to be played than a pipe? call me any instrument you want—but even if u break me, u still can’t play me.
+
+ENTER POLONIUS.
+
+god bless you, sir.
+
+POLONIUS. my lord, the queen wants to speak with you, like, right now.
+
+HAMLET. yo, you peep that cloud over there? it’s lowkey lookin’ like a camel.
+
+POLONIUS. for real, it’s totally camel vibes.
+
+HAMLET. nah, i feel like it’s more of a weasel, honestly.
+
+POLONIUS. nah, it’s definitely weasel-backed.
+
+HAMLET. or maybe a whale, bro.
+
+POLONIUS. mad whale vibes, no cap.
+
+HAMLET. then i’ll slide to my mother eventually—they got me messed up to the max—but i’ll come through, soon.
+
+POLONIUS. i’ll be sayin’ so.
+
+[EXIT.]
+
+HAMLET. “by and by” is just talk, y’all—bounce, my friends.
+
+[EXEUNT ALL BUT HAMLET.]
+
+’tis now the very witching hour, when graveyards are lowkey yawning and even hell be blowing toxic vibes all over this world. i’d legit be down to guzzle some spicy hot blood rn and pull off some savage, bitter moves that’d leave the daylight shook. hold up though—gotta ease off on mom vibes. oh heart, don’t ditch your real self; no cap, don’t let that extra nero energy slide into my core. i wanna be cold and savage, but keep it 100 natural. imma spit straight-up verbal daggers at her, no actual blades, 'cause my tongue and soul are just frontin’. if she even dares to catch these savage bars, hell nah, my soul ain’t signing off on that drama.
+
+[EXIT.]
+
+SCENE III. A ROOM IN THE CASTLE.
+
+ENTER KING, ROSENCRANTZ AND GUILDENSTERN.
+
+KING. i ain’t vibing with him, and it’s totally unsafe if we let his cray moves roam free. so squad up, 'cause i’m dispatching a commission ASAP, and he’s bouncing off to england with y’all. our kingdom can’t handle his hourly lunacy—it’s straight-up dangerous.
+
+GUILDENSTERN. bet, we got this. it’s like a super sacred duty to keep all the peeps who live off your majesty safe, no cap.
+
+ROSENCRANTZ. like, every one-of-a-kind life is locked in with mental armor to dodge petty annoyances, but even more, it’s that squad spirit holding up a ton of lives. when a king drops, it ain’t a solo vibe; it drags everything down like a massive wheel perched on the tippy top of the hype mountain, with like ten thousand tiny add-ons hanging on—and when that wheel crashes, every little extra gets hit with the downfall. the king’s demise ain’t just a lonely sigh; it’s a full squad groan, no cap.
+
+KING. gear up, squad, for a quick mission; we’re about to cuff this cray vibe that’s out here running wild.
+
+ROSENCRANTZ AND GUILDENSTERN. bet, we’ll hustle up.
+
+[EXEUNT ROSENCRANTZ AND GUILDENSTERN.]
+
+ENTER POLONIUS.
+
+POLONIUS. my lord, dude’s sliding over to his mom’s personal closet. i’m ‘bout to sneak behind the arras to catch the tea. i’m betting she’ll roast him big time, and like you said, it’s smart to have more ears than just a mom’s ‘cause nature gives moms that extra vibe. peace out, my dude—i’ll hit you with the deets before you crash.
+
+KING. thanks, my lord.
+
+[EXIT POLONIUS.]
+
+HAMLET. yo, my crime is hella rank and it reeks straight up to heaven—like it’s cursed from the start with that OG brother-murder vibe! damn, even if i wanna pray, my will’s slipping—my mega guilt totally cancels out my bold plans. i’m stuck, like when you try to double-task and end up frozen in between hustles, so i’m just chilling in limbo, neglecting both. what if this jinxed hand’s so saturated with my bro’s blood it’s basically a blood bank? ain’t there enough heavenly rain to scrub it back to fresh snow? what’s mercy even for if not to call out this shady vibe? and prayer? it’s like a two-for-one power move—either stopping you before you fall or giving you a pardon after you crash. so, i’ll just look up. my mess is done. but yo, what kind of prayer can fix my turn? forgive me for my dirty murder? nah, ’cause i’m still holding onto all the loot from that—my crown, my savage ambition, and, obvs, my queen. can you even get forgiven and still keep the drip? in this messed-up world, bad deeds sometimes flex their way out by buying off justice. but up above, no cap—there’s no switching lanes; the deed’s etched in your true self, and we’re forced to show our flaws for all to see. so what now? let’s see what repentance can do—what can’t it do? but then, what’s it even worth if you can’t vibe with repentance? oh, cursed state! oh heart, so dark like total death vibes! oh stuck soul, fighting to break free yet extra locked down! help, angels! get on it: bow down, stubborn knees, and let your heart, wired like steel, soften up like the chill muscles of a newborn. trust—everything will be lit.
+
+[RETIRES AND KNEELS.]
+
+ENTER HAMLET.
+
+HAMLET. yo, now that he’s praying, i could totally take him out, like right this moment. if i do it now, he goes straight to heaven—and that’s my reveng’d move, but that’d be straight-up scammed: a villain offed my dad, and here i, his only son, end up sending that same villain to heaven. fr, that’d be like getting paid instead of getting even. he snatched my dad crudely, loaded with cash and all his crimes out in the open like a flush may—who even checks his audit except heaven? but in our own sagas, it’s too heavy on him. and if i off him once his soul’s all cleaned up, when he’s all set for his exit? nah, not happening. up, sword! hit him when he’s passed out, or totally wasted, or deep in that twisted bed passion—gaming, cursing, or doing any act with zero taste for salvation—then trip him so hard his kicks send his soul straight to hell, making it as damn dark and black as the underworld it’s headed to. mom still stays in play. this lame medicine only prolongs his sick days.
+
+[EXIT.]
+
+THE KING RISES AND ADVANCES.
+
+KING. my words bounce up high, but my thoughts are chilling way down low. words without real feels never make it to heaven.
+
+[EXIT.]
+
+SCENE IV. ANOTHER ROOM IN THE CASTLE.
+
+ENTER QUEEN AND POLONIUS.
+
+POLONIUS. he’ll roll in straight up. yo, set up a chill zone for him at home, and tell him his wild pranks have been way too extra to handle—and that your grace has been the shield between him and all that heat. imma keep it quiet here, so stick close to him.
+
+HAMLET. [WITHIN.] mother, mother, mother.
+
+QUEEN. i got you, don’t sweat it. bounce, i hear him coming.
+
+[POLONIUS GOES BEHIND THE ARRAS.]
+
+ENTER HAMLET.
+
+HAMLET. so, mom, what’s up?
+
+QUEEN. hamlet, you dissed your dad big time.
+
+HAMLET. mom, you know you dissed my dad a ton too.
+
+QUEEN. come on, come on, your answers are totally lazy.
+
+HAMLET. yo, go chat with that savage tongue of yours.
+
+QUEEN. like, what’s up, hamlet?
+
+HAMLET. so, whatchu on about now?
+
+QUEEN. you forget about me or whatevs?
+
+HAMLET. nah, for real, you ain’t forgotten—you’re the queen, your husband’s bro’s wife, and even though it’s messy, you’re still my mom.
+
+QUEEN. okay, then imma summon the word squad who can actually speak up.
+
+HAMLET. come on, sit down—ain’t moving until i hook you up with a mirror so you can peep your true self.
+
+QUEEN. what you gonna do? you ain’t about to off me, right? help, help, yo!
+
+POLONIUS. [BEHIND.] yo, help! help! help!
+
+HAMLET. hold up, a rat? [draws his weapon] dead for a ducat, dead!
+
+[MAKES A PASS THROUGH THE ARRAS.]
+
+POLONIUS. [BEHIND.] oh snap, i’m done for!
+
+[FALLS AND DIES.]
+
+QUEEN. oh no, what did you do?
+
+HAMLET. nah, i dunno—is it the king?
+
+[DRAWS FORTH POLONIUS.]
+
+QUEEN. oh dear, what a wild and bloody move is this!
+
+HAMLET. a straight-up bloody deed. almost as savage, dear mom, as offing a king and then marrying his bro.
+
+QUEEN. like, off a king?
+
+HAMLET. yeah, lady, that was my plan.— [to polonius] you pathetic, reckless, butt-in fool, peace out! i had high hopes for you. grab your fortune, ’cause bein’ too busy is kinda risky—stop flailing your hands. chill out, sit down, and let me mess with your heart, 'cause i will, if it’s soft enough; if bad habits haven’t made it all tough and impenetrable.
+
+QUEEN. what did i even do that makes you run your mouth so harshly against me?
+
+HAMLET. that kind of move that totally dims the glow and blush of true modesty, turning virtue into a hypocrite—like snatching the freshest rose off the glowing forehead of pure love and leavin’ a gnarly burn mark. it makes wedding vows as bogus as shady dice promises. oh, what a move that literally rips the soul out, makin’ sweet religion drop a bad remix of words. even heaven’s face lights up, but this chunky, overdone vibe, sporting a tragic look like it’s been hit with doom, is straight-up sickened by the act.
+
+QUEEN. oh my, what move roars out and thunders like, right in the main thread?
+
+HAMLET. peep this pic, and then peep that—it's like a fake display of two bros. check out the epic flex on that brow, with hyperion curls, jove-level front, and an eye that’s straight-up mars-ready to threaten and boss everyone around, all crowned with a mercury vibe on a hill that’s practically kissing the heavens—a combo so tight that every god stamped his seal to guarantee a real man. that was your hubby. now look at what comes next: here’s your husband, turned into a moldy ear dissing his solid bro. yo, do you even have eyes? would you really ditch that gourmet mountain to chow on this miserable moor? ha! come on—if you got eyes, you know that ain’t love; at your age, your hype blood’s gone tame, waiting for judgement. and what judgement could ever lift you from that peak to this pit? you’re supposed to have some sense, otherwise you wouldn’t even move; but clearly your sense is totally kaput, ’cause even madness wouldn’t slip up that badly—it saved a bit of its prime to flex in contrast. what savage trick did some devil play to hoodwink you so blind? eyes without feelin’, feelin’ without sight, ears missin’ their touch—like smellin’ with only half a sense—ain’t no half-dead vibe that could mope this hard. oh, shame! where’s your blush at? rebellious hell, if you can ever mutiny deep in a matron’s bones, let your hot youth treat virtue like melted wax dissolving in its own fire. don’t even flex shame when that wild passion drops the charge, since even frost can burn hard and reason totally panders to the hype.
+
+QUEEN. oh hamlet, shut it down. you’re turning my eyes into a mirror of my soul, and i’m seeing such dark, stubborn stains that just won’t fade.
+
+HAMLET. nah, it’s like livin’ in a gross, sweaty, messed-up bed, all marinated in corruption, drippin’ with fake sweet lovin’ over a nasty pigsty.
+
+QUEEN. please, don’t speak to me like that anymore; your words stab my ears like daggers—enough, sweet hamlet.
+
+HAMLET. a straight-up murderer and villain; a weak minion not even worth a fraction of the tribute of your old lord. a true vice of kings, a royal swindler who jacked the precious crown right off the shelf and stashed it in his pocket!
+
+QUEEN. end it.
+
+HAMLET. a king made of scraps and patch-ups!—
+
+ENTER GHOST.
+
+GHOST. yo, wrap me up with your wings, heavenly guards, and show off that sleek, gracious vibe of yours!
+
+QUEEN. alas, he’s mad.
+
+HAMLET. yo, aren’t you gonna call out your lagging son, who in a rush of fire lets your crucial orders slide? come on, spit it!
+
+GHOST. don’t forget: this ghost drop is just to sharpen your nearly dulled purpose. but peep it—your mom’s sitting there, all amazed. step between her and that wild inner clash. even in the weakest bods, the craziest moves pop off. go on, talk to her, hamlet.
+
+HAMLET. how’s it going with you, lady?
+
+QUEEN. oh hamlet, how can you be so off—staring into a void and chatting up thin air? your eyes, like hyped-up soldiers in a snooze alarm, get all twitchy as your bed hair jumps like leftover scraps. oh gentle son, amid the heat and flame of your wild mood, sprinkle some cool patience. what exactly are you looking at?
+
+HAMLET. i’m staring at him, fam—check how pale he glares, like his vibe and mission have fused into one so intense he could even get stones to wake up. but don’t look at me, or this pity might flip my icy exterior—then my move would lose its true color; maybe even turn tears into blood.
+
+QUEEN. who exactly are you talking to?
+
+HAMLET. you not seeing anything over there?
+
+QUEEN. not a thing, but that’s all i see.
+
+HAMLET. and you didn’t hear any of that?
+
+QUEEN. nah, just us—nothing else.
+
+HAMLET. yo, peep that over there! check how it slips away—my dad, in his iconic fit from back when he ruled! look, he’s even rolling out the gate now.
+
+[EXIT GHOST.]
+
+QUEEN. this is literally the brainchild of your noggin—this ghostly high is hella cunning.
+
+HAMLET. damn, pure ecstasy! my heartbeat’s vibing in sync with yours like a fresh beat drop—and it ain’t madness what i just dropped. test me, and i’ll remix it perfectly; madness would just bounce away. mom, for love’s sake, don’t smear that fake, buttered-up sermon on your soul—that ain’t your sin, it’s my wild state talkin’. it just masks the raw, festering mess while deep corruption silently digs in. confess to heaven, repent for what’s past, dodge what’s comin’, and don’t spread that nasty compost on the weeds to make ‘em even ranker. forgive me for my pure vibe; in these fat, drama-filled times even virtue has gotta beg, hold back, and hustle just to do good.
+
+QUEEN. oh hamlet, you’ve legit split my heart in two.
+
+HAMLET. yo, just toss out the worst parts and let the pure half roll on. good night—but don’t end up in my uncle’s bed. fake a virtue if you ain’t got one. that toxic custom, which gobbles up all true sense with its evil habits, still drops a fresh outfit of actions that are fair and good. hold back tonight—that’ll ease you into your next clean break, 'cause practice almost rebrands you, either reining in the devil or booting him out with epic force. one more time, good night, and when you’re ready to be blessed, i’ll be over here sendin’ blessings your way. as for that same dude [POINTING TO POLONIUS]—i do repent, but heaven’s playing us, punishing me with this and me with that, so i gotta be their whip and fixer. i’ll settle him and own up to the death i dealt. so again, good night. i must be cruel, only to be kind. that’s how bad starts, and worse still lingers. one more word, good lady.
+
+QUEEN. so, what should i even do?
+
+HAMLET. no, seriously—not what i’m telling you to do. let that chunky king tempt you back to bed, smooch your cheek, call you his little mouse, and then, for a couple of gross kisses or his cursed fingers groping your neck, twist out all your tea. that’d show i ain’t truly mad for real, but just crazy in my craft. it’d be best if you let him know, ’cause who else but a queen—real, classy, wise—would hide such genuine feels in a paddock, a bat, or even some random gib? like, who would? nah—in spite of all sense and secrecy, unhook that basket from the rooftop, let the birds fly, and like that iconic ape fumbling in a basket, you might just end up breaking your own neck.
+
+QUEEN. be assured, if words are made of breath and life, then i got no life left to breathe after hearing what you just said to me.
+
+HAMLET. yo, i gotta bounce to england, you know that?
+
+QUEEN. oh snap, i totally spaced that. it’s all set then.
+
+HAMLET. i got letters all sealed up—and my two school homies, whom i trust like they’re fang’d vipers, carry the mandate. they gotta clear my path and lead me into some knavery. let it roll; it’s the ultimate flex to see the mastermind get hoisted by his own bomb, but i’m gonna dig one yard beneath their digs and blow ‘em straight to the moon. oh, it’s mad sweet when two slick moves collide in one line. this dude is gonna set me on the move. i’mma haul his guts into the neighbor’s room. mother, good night. seriously, that counselor was mad chill, super secret, and heavy—though in life he was just a foolish, chattering prankster. come on, sir, let’s wrap this up. good night, mother.
+
+[EXIT HAMLET DRAGGING OUT POLONIUS.]
+
+ACT IV
+
+SCENE I. A ROOM IN THE CASTLE.
+
+ENTER KING, QUEEN, ROSENCRANTZ AND GUILDENSTERN.
+
+KING. there’s real tea in these heavy sighs—you gotta decode ‘em, ’cause we need the lowdown. where’s your son?
+
+QUEEN. give us this spot for a sec, alright?
+
+[TO ROSENCRANTZ AND GUILDENSTERN, WHO GO OUT.]
+
+QUEEN. oh my lord, what a wild scene i just witnessed tonight!
+
+KING. what’s up, gertrude? how’s hamlet?
+
+QUEEN. he’s as cray as the sea and wind duking it out, legit. in one wild, lawless mood, while sneaking behind the arras to catch some tea, he whipped out his rapier, screamed “a rat, a rat!” and in his brain-fried frenzy offed the unseen old dude.
+
+KING. oh damn, such a heavy deed! it would’ve gone down on us if we were there. his freedom now spells threat to everyone—to you, to us, to literally all. man, how are we gonna answer for this bloody mess? the blame’s gonna stick to us, since our watch was supposed to keep this mad lad in check, but our love for him made us blind, like someone hiding a nasty sickness by letting it feed right off the core of life. so, where did he vanish to?
+
+QUEEN. to pull apart the body he offed—whose very madness, like raw ore among baser metals, ends up showing a weird purity—he’s crying over what he done.
+
+KING. oh gertrude, let’s bounce! as soon as the sun touches the mountains, we’re shipping him off, and this vile deed we must cover up with all our royal finesse—yo, guildenstern!
+
+RE-ENTER ROSENCRANTZ AND GUILDENSTERN.
+
+KING. yo, squad, go grab some extra backup: hamlet, all mad and wild, just offed polonius and dragged him right out of his mom’s closet. go find him, chat him up real nice, and bring that body to the chapel—hustle it, fam.
+
+[EXEUNT ROSENCRANTZ AND GUILDENSTERN.]
+
+KING. come on, gertrude, let’s ring up our wisest peeps and spill the tea on what we plan to do and what went down too early—so any shady gossip, spread as evenly as a cannon’s blank shot across the globe, might overshoot us and hit nothing. oh, let’s bounce! my soul’s loaded with chaos and gloom.
+
+[EXEUNT.]
+
+SCENE II. ANOTHER ROOM IN THE CASTLE.
+
+ENTER HAMLET.
+
+HAMLET. all safe and stowed.
+
+ROSENCRANTZ AND GUILDENSTERN. [WITHIN.] hamlet! lord hamlet!
+
+HAMLET. what’s that noise? who’s calling hamlet? yo, here they come.
+
+ENTER ROSENCRANTZ AND GUILDENSTERN.
+
+ROSENCRANTZ. what’ve you done with the dead body, my lord?
+
+HAMLET. i’ve mixed it back up with dust, 'cause it’s all in the fam.
+
+ROSENCRANTZ. let us know where it’s at so we can scoop it up and haul it to the chapel.
+
+HAMLET. don’t even buy that.
+
+ROSENCRANTZ. believe what, exactly?
+
+HAMLET. that i can guard your secrets without trusting my own. plus, asking a sponge like me—what kind of duplicate can a king’s son even pull off?
+
+ROSENCRANTZ. you taking me for a sponge, my lord?
+
+HAMLET. yeah, dude; i’m that sponge—soakin’ up the king’s vibe, his perks, his power. and these lackeys end up serving the king best: he clutches ‘em like an ape grips its prey, first chatting with ‘em, then swallowing ‘em whole. when he craves what you’ve gathered, it’s just a squeeze, and boom—you’re dry again.
+
+ROSENCRANTZ. i don’t get what you’re saying, my lord.
+
+HAMLET. honestly, that’s good—a sneaky speech wasted on a dumb ear.
+
+ROSENCRANTZ. my lord, you gotta tell us where the body is and come with us to the king.
+
+HAMLET. the body’s with the king, but the king ain’t with the body. the king is just a thing—
+
+GUILDENSTERN. a thing, indeed, my lord!
+
+HAMLET. basically, nothing. get me to him. hush, fox, and the rest—move out.
+
+[EXEUNT.]
+
+SCENE III. ANOTHER ROOM IN THE CASTLE.
+
+ENTER KING, ATTENDED.
+
+KING. i sent out the squad to track him down and recover the body. how wild is it that this dude’s roaming free! but we can’t just drop the heavy law on him—he’s adored by the distracted crowd who judge by looks, not brains; so in cases like these, the punishment gets measured, not the crime. to keep everything smooth, this sudden exile of his gotta look like a calculated pause. wild diseases, grown desperate by desperate fixes, get cured—or don’t at all.
+
+ENTER ROSENCRANTZ.
+
+KING. but where’s he?
+
+ROSENCRANTZ. he’s outside, my lord, on guard—waiting for your command.
+
+KING. bring him in here.
+
+ROSENCRANTZ. yo, guildenstern, bring in my lord.
+
+ENTER HAMLET AND GUILDENSTERN.
+
+KING. now, hamlet, where’s polonius?
+
+HAMLET. he’s at supper.
+
+KING. at supper? where?
+
+HAMLET. not where he eats, but where he’s getting eaten. a squad of savvy worms is feasting on him. your worm is basically your only emperor when it comes to diet—we fatten all other creatures so they fatten us, and we get chubbed up for maggots. your chunky king and your skinny beggar are just two dishes on the same table. that’s the whole wrap.
+
+KING. alas, alas!
+
+HAMLET. a dude can fish with the worm that ate a king, and then chow down on the fish that dined on that worm, yo.
+
+KING: what u mean by dis?
+
+HAMLET: nothin’ but to show u how a king can flex by rollin’ through the guts of a beggar, no cap.
+
+KING: where’s polonius?
+
+HAMLET: he’s chillin’ in heaven, fam. send someone on up there to peep him. if your messenger can’t vibe with him, go on and search for him yourself. but fr, if u still don’t spot him by the end of this month, u better yeet him with a nosed bump as u slide up the stairs into the lobby.
+
+KING: (to some attendants) go hunt him down out there.
+
+HAMLET: he’ll just be posted till u roll up.
+
+[EXEUNT ATTENDANTS.]
+
+KING: hamlet, this move – for your extra safety, which we’re throwin’ at u while we’re mad grievin’ over what u did – means we gotta bounce u outta here with fiery speed. so prep up; the bark’s locked and loaded, the wind’s on deck, the squad’s ready, and everything’s prepped for england.
+
+HAMLET: for england?
+
+KING: ay, hamlet.
+
+HAMLET: bet.
+
+KING: that’s on point if u were down with our plan.
+
+HAMLET: i peep a cherub watchin’ them. but aight, for england! peace out, dear mom.
+
+KING: your lovin’ dad, hamlet.
+
+HAMLET: my mom. dad and mom are like team one – one body, one vibe – so, my mom. come on, for england.
+
+[EXIT.]
+
+KING: trail him on foot. hustle him to board, no delays; i’m gonna yeet him out tonight. peace, cuz everything’s sealed and done – any slack and the whole affair’s at risk. so, make it snappy.
+
+[EXEUNT ROSENCRANTZ AND GUILDENSTERN.]
+
+KING: and england, if u got even a lil’ love for me – as my epic power might have u feel it, seein’ that your scar still looks raw and red from that danish sword and your free awe pays mad tribute – u can’t just ghost our royal plan that, by letters, spells out the instant death of hamlet. do it, england; cuz like a raging fever in my blood, he’s wild, and u gotta fix this mess. until i know it’s done, even if my luck’s off and my joys never got started.
+
+[EXIT.]
+
+SCENE IV. A PLAIN IN DENMARK.
+
+ENTER FORTINBRAS AND FORCES MARCHING.
+
+FORTINBRAS: yo, captain, go holla at the danish king for me. tell him that with his go-ahead, fortinbras is cravin’ to roll out a promised march over his kingdom. u know the meetup spot. if his majesty is down with us, we’ll flex our duty in his eyes; and let him know the vibe.
+
+CAPTAIN: i’m on it, my lord.
+
+FORTINBRAS: slide softly, fam.
+
+[EXEUNT ALL BUT THE CAPTAIN.]
+
+ENTER HAMLET, ROSENCRANTZ, GUILDENSTERN & C.
+
+HAMLET: yo, good sir, whose crew be these?
+
+CAPTAIN: they’re from norway, sir.
+
+HAMLET: so, what’s their mission, sir?
+
+CAPTAIN: they’re out here against a part of poland.
+
+HAMLET: who’s calling the shots on them, sir?
+
+CAPTAIN: it’s the nephew of old norway, fortinbras.
+
+HAMLET: so, is he goin’ after poland proper, or just some fringe, sir?
+
+CAPTAIN: real talk, we’re just tryna snag a tiny patch of land that’s only hyped for its name. payin’ five ducats – like, five – i wouldn’t even farm that shiz; it won’t score a high rate for norway or the pols if sold.
+
+HAMLET: so, obviously, the polack ain’t gonna defend it.
+
+CAPTAIN: yup, it’s already got a squad on lock.
+
+HAMLET: two thousand homies and twenty thou ducats ain’t gonna debate over some straw, fr! this is the bogus flex of mad wealth and peace – breakin’ in on the inside with no legit reason for a man’s death. mad thanks, sir.
+
+CAPTAIN: god be with u, sir.
+
+[EXIT.]
+
+ROSENCRANTZ: will it please you to bounce, my lord?
+
+HAMLET: i’ll catch up with u straight – go ahead a sec.
+
+[EXEUNT ALL BUT HAMLET.]
+
+HAMLET: how every single vibe is callin’ me out and pushin’ my dull revenge game. like, what even is a man if his only grind is to sleep and chow down? basically, an animal, no cap. the dude who made us with all that deep convo – plannin’ ahead and lookin’ back – didn’t hook us up with that epic, godlike brainpower to chill unused. whether it’s straight-up bestial oblivion or some scared overthinkin’ that’s like one part wisdom and three parts pure cowardice, i literally don’t know why i’m still here sayin’ i gotta act when i got the cause, the will, the strength, and the means. heavy examples, like this massive army charged by a soft, tender prince whose spirit, all puffed up with divine ambition, is flexin’ at unseen events and exposin’ the mortal, sketchy truths to everything from fortune to death to danger – even for an eggshell – show me that being great ain’t about making moves without drama; it’s about finding beef in a piece of straw when honor’s on the line. so, where do i stand when i’ve had my father clapped, my mom dissed, and all that fire in my blood and reason just put to sleep, while i watch in shame as twenty thousand dudes get yeeted to their graves for a fame fantasy, fightin’ for some plot that no one can even argue about ‘cause it ain’t even a proper tomb? o, from now on, my thoughts gotta be drenched in blood or be totally worthless.
+
+[EXIT.]
+
+SCENE V. ELSINORE. A ROOM IN THE CASTLE.
+
+ENTER QUEEN, HORATIO AND A GENTLEMAN.
+
+QUEEN: i ain’t gonna talk to her.
+
+GENTLEMAN: she’s mad desperate and extra af – her mood’s straight-up worthy of pity.
+
+QUEEN: so, what is she even gonna have?
+
+GENTLEMAN: she goes off about her dad non-stop; says she hears there’s shady tricks in the world, gets all her heart beatin’ and throws envious shade at random straw, spittin’ stuff that only makes half sense. her speech is basically nothin’, but the way she tosses it around has listeners trying to piece it together, remixin’ her words to fit their own vibes. with her winks, nods, and gestures, it kinda makes u think there’s depth there – though it’s a hot mess. it’d be smart to have a proper heart-to-heart with her ‘cause she might drop some dangerous tea in already jumbled minds.
+
+QUEEN: let her in.
+
+[EXIT GENTLEMAN.]
+
+to my sick soul, as sin’s true essence, every little plaything feels like the intro to a major screw-up. guilt’s so raw and jealous it literally overflows out of fear of bein’ spilled.
+
+[ENTER OPHELIA.]
+
+OPHELIA: where’s denmark’s beauteous majesty?
+
+QUEEN: hey, ophelia, what’s good?
+
+OPHELIA: [sings] how should i know your true love from another one? just peep his cockle hat, his stick, and his sandal shoon.
+
+QUEEN: alas, sweet lady, what’s the tea with this song?
+
+OPHELIA: say u? nah, listen up – [sings] he’s dead and gone, lady, he’s dead and gone; with grass for a crown at his head and a stone chillin’ at his heels.
+
+QUEEN: nah, but ophelia—
+
+OPHELIA: listen up – [sings] his shroud’s white like mountain snow, no cap.
+
+[ENTER KING.]
+
+QUEEN: alas, peep this, my lord!
+
+OPHELIA: [sings] they carried him barefac’d on the bier – hey non nonny, nonny, hey nonny – and on his grave, tears rained hard. farewell, my dove!
+
+KING: how u doin’, pretty lady?
+
+OPHELIA: well, god dild you! they say the owl was a baker’s daughter. lord, we know what we are, but don’t know what we might become – god be at your table!
+
+KING: major flex on her dad.
+
+OPHELIA: please, let’s not chat about that; but if they ask what it means, just hit ‘em with: [sings] tomorrow is saint valentine’s day, all in the early morn, and i’m a maid at your window, ready to be your valentine.
+
+then up he rose, donned his threads, and flung the chamber door open, letting in the maid who, once a maid, never left again.
+
+KING: pretty ophelia!
+
+OPHELIA: straight up, no oath needed – i’m gonna end it. [sings] by gis and by saint charity, alack, and fie for shame! young men will do it if they come around; by cock, they’re totally at fault. she added, before u totally tumbled me, u promised to wed me. so i would've been down, by that sun, if u hadn’t come to my bed.
+
+KING: how long’s she been on this vibe?
+
+OPHELIA: i hope everything works out. we gotta be patient, but i can’t help but cry thinkin’ they’d just lay him in the cold ground. my brother’s gonna hear about it. so, thanks for the solid advice. come, my coach! goodnight, ladies; goodnight, sweet ladies; goodnight, goodnight.
+
+[EXIT.]
+
+KING: follow her close; watch her tight, i’m beggin’ u.
+
+[EXIT HORATIO.]
+
+KING: yo, this is the deep poison of grief – it all starts with her dad’s death. oh gertrude, gertrude, when the sorrows roll in, they ain’t just sneaky little spies – they come in full-on battalions. first, her dad got clapped; next, your son dipped; and that dude even went full savage on himself by offing his own worth. the people are all muddled and thick in their drama over good polonius’ death, and we only half-assed the whole interment. poor ophelia, split from herself and her sharp judgment – without which we’re just like emojis or straight-up beasts. and last, as extra as these get, her brother snuck back from france, feedin’ on his own wonder and floatin’ in his clouds, not needin’ any buzzers to mess up his ear with pestilent updates about his dad’s death – so much so that nothin’ in us sticks to blame over and over. oh my dear gertrude, this whole scene, like a murder remix in a bunch of spots, is givin’ me superfluous death vibes.
+
+[A NOISE WITHIN.]
+
+QUEEN: alas, what noise is dis?
+
+KING: where are my switzers? get ‘em to guard the door.
+
+[ENTER A GENTLEMAN.]
+
+what’s goin’ on?
+
+GENTLEMAN: save yourself, my lord. the ocean, overpeepin’ its list, ain’t gobblin’ the flats with more savage speed than young laertes, who’s out here in riot mode, overrunnin’ your scene. the rabble’s callin’ him lord, and like, since the world feels like it’s just kickin’ off – old vibes ghosted, customs forgotten – the squad of validators and props are screamin’ “choose us! laertes shall be king!” with caps, hands, and tongues all hyped to the skies, shoutin’ “laertes shall be king, laertes king!”
+
+QUEEN: how cheerfully they’re on this bogus trail. oh, dis is messed up, y’all false danish dogs.
+
+[A NOISE WITHIN.]
+
+KING: the doors are busted.
+
+[ENTER LAERTES, ARMED; DANES FOLLOWING.]
+
+LAERTES: where’s this king at? sirs, y’all stand outside.
+
+DANES: nah, let’s come in.
+
+LAERTES: please, let me through.
+
+DANES: we will, we will.
+
+[EXEUNT, LEAVING THE DOOR.]
+
+LAERTES: thanks, keep the door. oh, you vile king, hand over my father.
+
+QUEEN: now, chill, good laertes.
+
+LAERTES: that one drop of chill blood screams that i’m a bastard; it calls my dad a cuckold and brands my mom as a hoe, even on her pure, unsullied brow.
+
+KING: what’s the deal, laertes, that your uprising is lookin’ so massive? – let her go, gertrude. don’t sweat us. a king’s got so much divine backup that treason can only sneak a peek at his will. tell me, laertes, why u are so fired up. – let her go, gertrude. – speak, man.
+
+LAERTES: where’s my father?
+
+KING: dead.
+
+QUEEN: but not his fault.
+
+KING: let him demand his due.
+
+LAERTES: how’d he die? i’m not here to get juggled. to hell with allegiance! vows to the blackest devil! conscience and grace to the deepest pit! i dare damnation. i’m at this point where i give both worlds the slip – let whatever come – but i swear, i’ll be mad thorough in avenging my father.
+
+KING: who can stop you?
+
+LAERTES: just my own will, not everyone. and with my resources, i’ll stretch ‘em so far, even if it’s low-key.
+
+KING: alright laertes, if u wanna be sure about your dear father’s death, is it written in your revenge plan that you’ll, no cap, take out both your homies and foes, winners and losers alike?
+
+LAERTES: only his enemies.
+
+KING: u gonna know who they are then?
+
+LAERTES: i’ll open my arms wide to his so-called good friends; and like a life-givin’ pelican, i’ll serve ’em a feast of my blood.
+
+KING: damn, now you speak like a good kid and a true gentleman. given that i’m totally guiltless of your father’s death and madly grieving it, it should be as obvious to you as day is to your eyes.
+
+DANES: [within] let her in.
+
+LAERTES: what’s that noise?
+
+[RE-ENTER OPHELIA, FANTASTICALLY DRESSED WITH STRAWS AND FLOWERS.]
+
+LAERTES: oh damn, dry up my brain. tears, like seven times salty, burn out all sense and virtue from my eyeballs. by heaven, your madness should be charged by weight until our scales flip the beam. oh rose of may, dear maid, kind sis, sweet ophelia! oh heavens, can a young girl's wits really be as mortal as an old dude's life? nature’s all fine when it comes to love, and when it’s on point, it drops a precious snippet of itself after the one it loves.
+
+OPHELIA: [sings] they carried him barefac’d on the bier, hey non nonny, nonny, hey nonny, and on his grave, tears rained down – farewell, my dove!
+
+LAERTES: if u had your wits and actually went for revenge, it wouldn’t be like this.
+
+OPHELIA: u gotta sing “down a-down, and then call him a-down-a.” oh, how the wheel fits, right? it’s the fake steward who jacked his master’s daughter.
+
+LAERTES: this sh*t is nothing more than matter.
+
+OPHELIA: there’s rosemary for remembrance; pray, love, remember. and there are pansies for thoughts.
+
+LAERTES: that’s a mind-document, all madness, thoughts, and remembrance, fitted together.
+
+OPHELIA: there’s fennel for u, and columbines. there’s rue for you, and here’s some for me. we can call it the herb of grace on sundays. oh, u gotta wear your rue with some flair. here’s a daisy. i’d give u some violets, but they all withered when my father died. they say he made a good end. [sings] for bonny sweet robin is all my joy.
+
+LAERTES: thought, pain, passion – even straight-up hell – she turns all that into favor and beauty.
+
+OPHELIA: [sings] and will he not come again? and will he not come again? nah, nah, he’s dead, go to your deathbed, he’ll never come again. his beard was as white as snow and his hair all flaxen. he’s gone, he’s gone, and we’re done with the moanin’. god have mercy on his soul, and on all christian souls, i pray god – god be with ye.
+
+[EXIT.]
+
+LAERTES: do u see dis, oh god?
+
+KING: laertes, i must vibe with your grief or else u’re denying me my right. step aside and pick your wisest homies; let them listen and decide between you and me. if they find, whether straight up or on the side, that we’re linked, we’ll hand over our kingdom, our crown, our life, and all we call ours to you as satisfaction; but if not, be content and lend us your patience, and we’ll jointly grind with your soul to give you proper contentment.
+
+LAERTES: let it be; his means of death, his vague burial – no trophy, sword, or flashy display on his bones, no noble rite or formal show – should shout out loud, as if from heaven to earth, that i must call it into question.
+
+KING: so you will. and where the offense is, let the big axe fall. please, come with me.
+
+[EXEUNT.]
+
+SCENE VI. ANOTHER ROOM IN THE CASTLE.
+
+ENTER HORATIO AND A SERVANT.
+
+HORATIO: what are these people who wanna speak with me?
+
+SERVANT: sailors, sir. they say they got letters for you.
+
+HORATIO: let ‘em in.
+
+[EXIT SERVANT.]
+
+i don’t even know from which corner of the globe i should be greeted if it isn’t from lord hamlet.
+
+[ENTER SAILORS.]
+
+FIRST SAILOR: god bless you, sir.
+
+HORATIO: let him bless thee too.
+
+FIRST SAILOR: he will, sir, if that pleases him. there’s a letter for you, sir. it’s from the ambassador who was headed to england, if your name be horatio, as i been told.
+
+HORATIO: [reads] "horatio, when u’ve scrolled past dis, hook these dudes up with a way to get to the king – they got letters for him. less than two days into our sea trip, a full-on pirate with mad war vibes chased us. our sails were hella slow, so we had to flex forced valor; in the scrap, i boarded them. as soon as they bounced from our ship, i ended up bein’ their only captive. they treated me like heartless thieves – but they knew what they did; i owe them a solid. let the king peep the letters i sent, and hurry back to me as fast as u’d flee death. i got some words to drop in your ear that’ll leave u speechless; but tbh, they’re too light for the heavy deets. these solid bros will bring u to me. rosencrantz and guildenstern are cruisin’ off to england – got mad tea to spill about them. peace out. he that u know, your own hamlet."
+
+come on, i’ll show u the way for these letters, and do it hella fast so u can direct me to the dude who dropped ‘em off.
+
+[EXEUNT.]
+
+SCENE VII. ANOTHER ROOM IN THE CASTLE.
+
+ENTER KING AND LAERTES.
+
+KING: now your conscience gotta vibe that i’m all good with u, and u need to have me in your squad as a friend, since u’ve heard – with a knowing ear – that the one who offed your noble father went after my life.
+
+LAERTES: it’s clear. but tell me, why didn’t u go off on these wild moves so shockingly criminal and capital in nature, even though u were totally hyped by your safety, your wisdom, and all that jazz?
+
+KING: oh, for two legit reasons – which might seem kinda weak to u, but trust me, they’re strong for me. first, the queen – his mother – is basically livin’ off his looks; and as for me – whether my virtue is a blessing or a curse – she’s so intertwined with my life and soul that, like, as the star only moves in its own lane, i can’t do without her. the other reason, why i couldn’t go public, is ‘cause the general crowd’s got mad love for him – they dip all his faults in affection like the spring that turns wood to stone, flippin’ his chains into grace; so that my arrows – too slim to cut through a loud, wild wind – would’ve just bounced back to my bow instead of hittin’ where i aimed.
+
+LAERTES: and now i lost my noble father, and my sister got pushed into desperate vibes – her worth, if we could rewind the praises, was challengin’ the top for her perfections. but my revenge is gonna drop soon.
+
+KING: don’t sweat it. don’t think we’re so flat and boring that we let our beard get rocked by danger like it’s a joke. u’ll hear more soon. i loved your father, and we love ourselves – and i hope that shows u what to imagine…
+
+[ENTER A MESSENGER.]
+
+KING: how u do, what’s the update?
+
+MESSENGER: letters, my lord, from hamlet. one for your majesty; one for the queen.
+
+KING: from hamlet! who brought ‘em?
+
+MESSENGER: sailors, my lord, i didn’t see ‘em. they were handed to me by claudio, who got them from the one who brought them.
+
+KING: laertes, you’re gonna hear ‘em. y’all, exit.
+
+[EXIT MESSENGER.]
+
+[reads] "high and mighty, u shall know i am set naked on your kingdom. tomorrow shall i beg leave to peep your kingly eyes. when i do, after asking your pardon, i’ll spill the tea on the occasions of my sudden and extra-strange return. hamlet."
+
+KING: what does this even mean? did they all come back, or is it just some abuse with nothing real?
+
+LAERTES: do u know whose hand that is?
+
+KING: it’s hamlet’s own style – “naked!” and in a ps he says “alone.” can u advise me?
+
+LAERTES: i’m totally lost in dis, my lord. but let him come; it fires up the sickness in my heart that i’ll live and tell him straight to his face, “thus, u die.”
+
+KING: if that’s the case, laertes – how else would it be? – will u let me rule u?
+
+LAERTES: yes, my lord; so u won’t overrule me into some lame peace.
+
+KING: mind your own peace. if he’s now returned, rechecking his voyage and decidin’ to bounce, i’ll set him up for an exploit, ripe in my plan, under which he won’t have a choice but to fall; and for his death, no wind will whisper – even his own mama will offload the blame and call it an accident.
+
+LAERTES: my lord, i’m cool with u rule, as long as u set it up so i can be the main tool for it.
+
+KING: that’s perfect. you’ve been talked about a lot since u traveled, and even in hamlet’s ear – for that quality they say makes you shine – your whole package didn’t pull as strong envy from him as did that one, and that, in my view, of the unworthiest attack.
+
+LAERTES: what part is that, my lord?
+
+
+
+KING. yo, check it – youth is that epic flex on your cap, a dope ribbon that’s essential, ‘cause the chill drip of youth beats the crusty, all-dark vibes of old age any day. two months back, this norman dude rolled in – i even clocked him when i was fightin’ the french – and while the french were basically elite in the horseback game, this gallant was straight-up witchcraft level. he leveled up his ride so perfectly it was like he and his horse were one, legit in-sync as if they were on the same livestream. my brain was shook ‘cause no matter how many tricks i tried to fake, i couldn’t even come close to his next-level move.
+
+LAERTES. a norman, was’t?
+
+KING. a norman.
+
+LAERTES. upon my life, lamord.
+
+KING. literally the same dude.
+
+LAERTES. i know him well – he’s the icon, the total flex and shining gem of the whole nation.
+
+KING. yo, he totally spilled the tea on you, dropping a masterclass in defense art and rapier skills – like, he shouted “it’d be lit if anyone could match your game.” he even swore that the enemy squad was straight-up noobs – zero movement, no guard, no eye – when you rolled up. so much so that hamlet got mega salty, only able to be jelly and beg for your instant challenge. now, out of this,—
+
+LAERTES. what out of this, my lord?
+
+KING. laertes, tell me – was your dad your ride-or-die, or are you just a whole walking sad meme, a portrait of sorrow with zero heart?
+
+LAERTES. why you askin’ that?
+
+KING. not that i doubt your love for your pops, but i’m feelin’ that love kicks off with time – and over time, even the hottest flame gets dimmed by little snuffs in the wick. in that fire of love, there’s always some lowkey factor that chokes it out; even the purest goodness can overdo itself and flare out. if we were to do what we really want, we’d do it straight-up – but “would” is always trippin’, with delays and side quests as endless as the number of tongues, hands, and random accidents out there. and then this “should” is like a whiny, extra sigh that actually hurts things instead. but hey, zooming in: hamlet’s back now – so what savage move are you gonna drop to show you’re your father’s true son in action rather than just in words?
+
+LAERTES. imma yeet his throat right in church.
+
+KING. no cap – there’s no sacred spot for murder, revenge knows no limits. so, laertes, if you’re down for this, crash in your chamber, and when hamlet bounces back, he’ll know you’re home. we’ll hype you up so hard that everyone praises your excellence and we double-gloss the clout the french dude gave you, bundling it all together and betting on your head game. since hamlet’s been too chill and generous to be scheming, he won’t be checking the details – so you can just slide, pick a fresh, unbated sword, and in one smooth practice round, serve up epic revenge for your dad.
+
+LAERTES. bet, i’ll do it. i’m even anointin’ my sword for the job. i copped some sick potion from a mountebank – so lethal that a knife-dip in it, once it draws blood, is so deadly no rare healing gel gathered from all the moonlit herbs can save it. it’s just a scratch normally, but i’m gonna dip my tip in that contagion so that even a slight cut sends him straight to the afterlife.
+
+KING. aight, let’s brainstorm this further – weigh up the time and resources that suit our vibe. if this plan flops and our act ends up lookin’ like total trash, then it’s better not to even try. so, here’s the tea: we’re setting up a backup plan that’ll hold if this blow-up works. soft, check this out: we’ll make a solemn wager on your cunning – yes, i’m down for that! when you’re hyped and go in hot, making your moves super savage, and if hamlet ends up callin’ for a drink, i’ll have a chalice prepped on the spot so that after one sip, if he somehow dodges your toxic strike, our plan still lands.
+
+ENTER QUEEN.
+
+HOW NOW, SWEET QUEEN?
+
+QUEEN. yo, one heartache is chasing another like a nonstop meme chain – and your sis, laertes, has straight-up drowned.
+
+LAERTES. drown’d? damn, where did that go down?
+
+QUEEN. over by that willow chillin’ sideways along a brook – its frosty leaves reflecting in that glassy stream. there, she made up some wild garlands of crow-flowers, nettles, daisies, and long purples – names that even extra shepherds can’t handle, though our ice-cold maids just call ‘em dead men’s fingers. on those droopy branches, her little weed crown was clinging on, until a jealous branch snapped, and boom – her weed crown and she both took a dive into the weepy brook. her clothes spread out, and like a mermaid for a hot minute, they lifted her up while she hummed old, faded tunes, as if she wasn’t even feeling her own distress, or like she was totally at home with nature. but it couldn’t last long – her drenched garb eventually dragged the poor babe from her melodic vibe to a muddy death.
+
+LAERTES. damn, so she’s legit drowned?
+
+QUEEN. drown’d, drown’d.
+
+LAERTES. bro, ophelia got way too much water – so imma hold back my tears. but still, it’s just nature doing its thing; let shame talk all it wants. once the tears dry up, the lady will be gone. adieu, my lord – i had this blazing speech ready, but this whole mess just killed its fire.
+
+[EXIT.]
+
+KING. aight, let’s roll after gertrude; i put in mad work to chill his rage, and now i’m sweatin’ that it might spark up again, so let’s bounce.
+
+[EXEUNT.]
+
+act v
+
+scene i. a churchyard.
+
+ENTER TWO CLOWNS WITH SPADES, &C.
+
+FIRST CLOWN. so, she’s gonna get a proper christian burial even though she lowkey was on that self-salvation grind?
+
+SECOND CLOWN. i’m telling you, she is – so we’re setting her grave straight up. the boss dude, the crowner, already sat on her case and declared it proper christian burial.
+
+FIRST CLOWN. like, how’s that even happen unless she drowned herself while tryna defend her own self?
+
+SECOND CLOWN. exactly, that’s the tea.
+
+FIRST CLOWN. it’s gotta be se offendendo – no other way, right? here’s the 411: if i drown myself on purpose, that’s an act, and acts come in three moves – to act, to do, to perform; bottom line, she straight-up drowned herself on purpose.
+
+SECOND CLOWN. nah, hold up, goodman delver—
+
+FIRST CLOWN. give me a sec. here’s the water – all good. here’s the dude – also good. if the dude goes to the water and drowns on his own, then boom, that’s on him. but if the water comes at him and drowns him, then he didn’t kill himself. basically, if you’re not the one actively ending your game, you ain’t shortening your own run.
+
+SECOND CLOWN. but is that even legit law?
+
+FIRST CLOWN. ay, for real, it’s crowner’s quest law.
+
+SECOND CLOWN. real talk – if this weren’t a gentlewoman, she wouldn’t even get a proper christian burial.
+
+FIRST CLOWN. exactly, and it’s extra sus that the high rollers can go off and drown or hang themselves more than their so-called christian crew. come on, my spade – there ain’t no OG gentlemen except for gardeners, ditchers, and grave-makers; they’re the ones keeping adam’s hustle alive.
+
+SECOND CLOWN. was adam even considered a gentleman?
+
+FIRST CLOWN. he was the very first dude to ever rock arms.
+
+SECOND CLOWN. wait, but he had none, right?
+
+FIRST CLOWN. lmao, are you serious? how do you even read scripture? it says adam dug – like, how could he dig with no arms? i’m gonna hit you with another question; if you can’t keep up, just confess, bro—
+
+SECOND CLOWN. go on.
+
+FIRST CLOWN. who out-builds a mason, a shipwright, or a carpenter?
+
+SECOND CLOWN. the gallows-maker, ‘cause that frame lasts longer than a thousand tenants.
+
+FIRST CLOWN. mad props for that wit – the gallows is legit dope. but how exactly is it dope? it works best on those who do bad vibes. and yo, you’re trippin’ sayin’ the gallows is sturdier than the church; honestly, the gallows might just come back to bite you. say it again, come on.
+
+SECOND CLOWN. who builds stronger than a mason, shipwright, or carpenter?
+
+FIRST CLOWN. ay, spit it out, and let’s unyoke this.
+
+SECOND CLOWN. marry, now i can tell.
+
+FIRST CLOWN. say it.
+
+SECOND CLOWN. mass, i cannot tell.
+
+ENTER HAMLET AND HORATIO, AT A DISTANCE.
+
+FIRST CLOWN. yo, stop overthinking it – your dim brain ain’t gonna pick up speed even with beatings; and next time someone asks, just say “grave-maker.” the digs he makes will last ‘til the end of days. now bounce to yaughan and snag me a stiff.
+
+[EXIT SECOND CLOWN.]
+
+[THROWS AND SINGS.]
+
+in my youth when i was mad into love, i legit thought it was hella sweet; back then, everything was on point – time was tight and my needs were high. i truly believed nothing could top that vibe.
+
+HAMLET. does this dude have zero chill about what he’s doin’, that he’s out here singing about grave-making like it’s a banger?
+
+HORATIO. yo, he’s been marinated in that easy lifestyle.
+
+HAMLET. facts – sometimes a life with no major hustle hones the weirdest sense.
+
+FIRST CLOWN. [SINGS.] but age, creepin’ in all sneaky, has clutched me in its grip and shipped me straight into the dirt, as if i’d never even existed.
+
+[THROWS UP A SKULL.]
+
+HAMLET. yo, that skull used to spit bars – it literally had a tongue and could sing! now check it: that rotten mess just gets slammed onto the ground like it’s cain’s jawbone that sparked the first murder! maybe this rough dome was once a politician’s mug – one who lowkey tried to outsmart god, am i right?
+
+HORATIO. could be, my lord.
+
+HAMLET. or maybe it belonged to some courtier who used to be like “good morrow, sweet lord! how’s it goin’, good sir?” maybe this was my lord of such-a-one, who even hyped up his buddy’s ride when he was beggin’ for it – you feel me?
+
+HORATIO. ay, my lord.
+
+HAMLET. no cap, and now my lady worm’s – totally chapless and getting clobbered around the mazard with a sexton’s spade. talk about a wild turnaround – if only we had the clout to peep it properly. did these bones even cost more than just bein’ used as wooden blocks? my brain hurts just thinkin’ on it.
+
+FIRST CLOWN. [SINGS.] a pickaxe and a spade, plus a shrouding-sheet – oh snap, a clay pit built just right for a guest like this.
+
+[THROWS UP ANOTHER SKULL.]
+
+HAMLET. yo, there’s another one. could this be the skull of a lawyer? where are all his witty quips, his briefs, his cases, his tenures, his tricks? why does that rude knave get away with bashin’ him with a dirty shovel and not even get called out for battery? hmm, this dude used to be a major land buyer – with his laws, recognitions, fines, double vouchers, recoveries. so is this the fine of his fines, the recovery of his recoveries – to have his fancy dome all clogged with dirt? will his vouchers still vouch for his deals, double ones too, more than the size of a couple contracts? his whole land deal barely fits in this box – so does that mean the heir ends up with nada, huh?
+
+HORATIO. not a jot more, my lord.
+
+HAMLET. and isn’t parchment made out of sheep-skins?
+
+HORATIO. ay, my lord – and also calf-skins.
+
+HAMLET. they’re literally sheep and calves, all lookin’ for that extra assurance. anyway, i gotta holla at you – whose grave is this, dude?
+
+FIRST CLOWN. mine, sir. [SINGS.] oh, a clay pit built just for a guest like this.
+
+HAMLET. looks like it’s yours, ‘cause you’re literally crashin’ in it.
+
+FIRST CLOWN. nah, you’re just layin’ in it, sir – that ain’t really yours. i don’t even lie in it myself, but it’s still mine.
+
+HAMLET. bro, you are literally in it and claimin’ it as yours. graves are for the dead, not the livin’ – so you’re straight-up lyin’.
+
+FIRST CLOWN. it’s a fast lie, sir – it’ll bounce from me to you in no time.
+
+HAMLET. so, who are you diggin’ it for?
+
+FIRST CLOWN. for no man, sir.
+
+HAMLET. then what about a woman?
+
+FIRST CLOWN. nah, not even a woman.
+
+HAMLET. so, who’s gettin’ buried in here?
+
+FIRST CLOWN. a woman, sir – but rest her soul, she’s dead.
+
+HAMLET. damn, this knave is on another level! we gotta spit straight facts or all this double-talk will mess us up. by the lord, horatio, i’ve clocked these three years – now the age is so curated that even a peasant’s toe comes almost in line with a courtier’s heel, hella irritating. how long you been in the grave-maker game?
+
+FIRST CLOWN. of all the days in a year, i stepped into this gig on the day our last king hamlet clapped fortinbras.
+
+HAMLET. so, how long ago was that?
+
+FIRST CLOWN. can’t you tell? even a basic fool knows – that was the day young hamlet was born, the mad one who got shipped off to england.
+
+HAMLET. ay, for real – why did they send him to england?
+
+FIRST CLOWN. cuz he was off his rocker; they figured he’d get his chill back there – and if not, it’s all good.
+
+HAMLET. why though?
+
+FIRST CLOWN. ‘cause you wouldn’t even notice – down there, everyone’s as mad as he is.
+
+HAMLET. so, how did he even go mad?
+
+FIRST CLOWN. word is, it was super weird.
+
+HAMLET. like, how weirdly weird?
+
+FIRST CLOWN. straight up, he just lost his marbles.
+
+HAMLET. on what grounds?
+
+FIRST CLOWN. dude, here in denmark – i’ve been the sexton since i was a kid, thirty years strong.
+
+HAMLET. so, how long does a man lie in the dirt before he starts rotting?
+
+FIRST CLOWN. real talk, if he ain’t already rotting before he kicks the bucket – these pocky corpses nowadays barely hold together – he’ll last about eight or nine years. a tanner’s corpse? nine years.
+
+HAMLET. why does he last longer than others?
+
+FIRST CLOWN. ‘cause his skin’s so tanned from his trade that it repels water for a long time. plus, your water is a total wrecking ball for a dead body. check this – here’s a skull that’s been chillin’ in the ground for twenty-three years.
+
+HAMLET. whose was that?
+
+FIRST CLOWN. it belonged to some mad, whoreson fellow – who do you think it was?
+
+HAMLET. nah, i got no clue.
+
+FIRST CLOWN. damn, curse that mad rogue! i even had a flagon of rhenish poured on my head once. this skull, sir, was yorick’s skull – the king’s jester.
+
+HAMLET. this?
+
+FIRST CLOWN. even that.
+
+HAMLET. lemme see. [takes the skull.] oh snap, poor yorick. i knew him, horatio – a dude with infinite jokes and insane vibes. he carried me on his back a thousand times; and now, shit, my stomach’s twisted just thinkin’ about it. those lips i used to plant kisses on countless times – where are your epic quips now? your wild antics, your songs, your lit moments that used to turn tables into full-on parties? not one left – totally flatlined. now bounce over to my lady’s chamber and tell her to get her makeup game on, like an inch thick ‘cause this vibe demands it. make her laugh, for real. prithee, horatio, tell me one thing.
+
+HORATIO. what’s that, my lord?
+
+HAMLET. you reckon alexander once rocked this same look on earth?
+
+HORATIO. straight up, my lord.
+
+HAMLET. and even smelled like it? ew, bro!
+
+[THROWS DOWN THE SKULL.]
+
+HORATIO. still, my lord.
+
+HAMLET. so, how far can we repurpose this, horatio? why can’t our imaginations trail alexander’s noble dust until it’s chillin’ in a bung-hole?
+
+HORATIO. that’d be way too extra to really consider.
+
+HAMLET. nah, not even a bit. but think about it – alexander died, got buried, turned to dust; dust is earth; from earth we make loam; so why not use that loam, that recycled vibe, to block a beer-barrel? even imperious caesar, dead and turned to clay, could plug a hole to keep the wind off. oh, that the earth which once had the world shook in awe could fix a wall to kick winter’s mess to the curb. but hold up – aside! here comes the king.
+
+ENTER PRIESTS, &C, IN PROCESSION; THE CORPSE OF OPHELIA, LAERTES AND MOURNERS FOLLOWING; KING, QUEEN, THEIR TRAINS, &C.
+
+the queen, the courtiers. who tf are they following, and why are the rites so messed up? it screams that the corpse they follow lowkey ended it all in a desperate move. it was some serious estate – let’s sit and peep that.
+
+[RETIRING WITH HORATIO.]
+
+LAERTES. what other ceremony is goin’ down?
+
+HAMLET. that’s laertes – one seriously noble dude. peep that.
+
+LAERTES. come on, what other ceremony is on deck?
+
+PRIEST. yo, her send-off has been expanded as far as our papers allow. her death was, like, iffy; and if not for that major command throwin’ down the law, she’d be chillin’ in some unsanctified plot until the final trumpet. for charity, they should’ve tossed shards, flints, and pebbles on her. but nah, she’s gettin’ her virgin rites, her maiden spread, and the full bell-and-burial package.
+
+LAERTES. ain’t there more to do?
+
+PRIEST. nope, nothing more. we’d just be desecratin’ the service if we added more – singin’ a proper requiem and all that chill rest for the departed.
+
+LAERTES. just lay her in the dirt, and let violets spring from her pure, unspoiled flesh. i swear, you clumsy priest, my sister’s gonna be an angel on the low when you’re out there howlin’.
+
+HAMLET. wait, you mean the fair ophelia?
+
+QUEEN. [SCATTERING FLOWERS.] sweets to the sweet. farewell. i was lowkey hopin’ you’d be my hamlet’s wifey; i pictured your bride-bed all decked out, sweet maid, not your grave all strewn with petals.
+
+LAERTES. oh, triple woe – may ten times triple fall on that cursed head whose wicked deed robbed you of your genius. hold the earth off for a bit, ‘til i can scoop her up in my arms again. [LEAPS INTO THE GRAVE.] now, pile that dust on the livin’ and the dead, ‘til you build a flat mountain that towers over old pelion or even the sky-high cap of blue olympus.
+
+HAMLET. [ADVANCING.] yo, who’s this dude whose grief is so on point? whose sorrow talk makes the stars pause like they’re shook? yeah, that’s me – hamlet the dane. [LEAPS INTO THE GRAVE.]
+
+LAERTES. [GRAPPLING WITH HIM.] damn, the devil can snatch your soul, man!
+
+HAMLET. yo, you’re not prayin’ right. take your fingers off my throat; even though i’m not wild and impulsive, i got some serious danger locked inside – so let your savvy mind be warned. get your hand off, now!
+
+KING. pluck them asunder.
+
+QUEEN. hamlet! hamlet!
+
+ALL. gentlemen!
+
+HORATIO. good my lord, chill out.
+
+[THE ATTENDANTS PART THEM, AND THEY COME OUT OF THE GRAVE.]
+
+HAMLET. yo, i’ll throw down on this theme until my eyelids literally can’t wiggle no more.
+
+QUEEN. oh my son, what’s your deal?
+
+HAMLET. i loved ophelia; not even forty thousand bros with all their love could add up to my vibe. so, what you gonna do for her?
+
+KING. oh, he’s totally off his rocker, laertes.
+
+QUEEN. for god’s sake, hold him back!
+
+HAMLET. swounds, show me what you’re gonna do: you gonna cry? gonna scrap? gonna fast? gonna tear yourself apart? gonna drink up eisel? even eat a crocodile? i’m down for it. are you here just to whine? to try and flex by jumpin’ in her grave? get buried quick with her, and i’ll do the same. and if you start yappin’ about mountains, let 'em chuck millions of acres on us, ‘til our ground, singeing his dome against the burn zone, makes ossa look like a wart. nah, and if you just mouth off, i’ll rant just as hard as you.
+
+QUEEN. this is pure madness – the fit will work on him for a while; soon enough, as patient as a dove when her golden couplets drop, his silence will start saggin’.
+
+HAMLET. hear me, sir; why you usin’ me like this? i’ve always had love for you. but it don’t even matter – let hercules do his thing, the cat will mew, and the dog will have his day.
+
+[EXIT.]
+
+KING. i pray thee, good horatio, watch over him.
+
+[EXIT HORATIO.]
+
+[TO LAERTES] chill your patience on our last night’s chat; we’re about to make our move. – good gertrude, keep an eye on your son. this grave is gonna be a livin’ monument. in an hour, we’ll see some quiet – till then, we play it patient.
+
+[EXEUNT.]
+
+SCENE ii. a hall in the castle.
+
+ENTER HAMLET AND HORATIO.
+
+HAMLET. that's a wrap on that, sir. now let me peep the other scene; you remember every deet, right?
+
+HORATIO. i remember it, my lord!
+
+HAMLET. dude, in my heart there was this wild fight that kept me up all night. i felt like i was trapped in a mess worse than a full-on mutiny in a jail cell. i was hella rash – and honestly, i kinda wish that rashness was celebrated, ‘cause sometimes our impulsive moves come through when our deep plots start to fade; and that reminds us there’s some cosmic force shaping our ends, no matter how rough we carve ‘em.
+
+HORATIO. that’s totally on point.
+
+HAMLET. up from my crib, my sea-gown all draped around me, in the dark i was feeling my way like a total noob, yeeting myself through the gloom to peep their deets; my desire was on fleek, so i slid my fingers over their packet and then dipped back to my own zone—forgetting basic etiquette in a major flex to crack open their epic commission; and there i found, horatio, oh legit royal trickery! an exact command loaded with a whole buffet of reasons, boosting denmark’s vibe and england’s too, with so many bugs and goblins in my life feed that while i was on duty, not even a chill moment was spared—no cap, i almost got my head yeeted off.
+
+HORATIO. is it even possible, bro?
+
+HAMLET. here’s the commission, read it when you got a minute; but yo, you down to hear how i rolled?
+
+HORATIO. i’m all ears, fr fr.
+
+HAMLET. so, being circled by a bunch of lowkey villains—or i could’ve dropped a preamble in my brain—the show had already begun; i sat down, whipped up a fresh commission, and kept it lit: i used to hold it like our statists do, grinding hard to scribble that messy learning away, but, sir, now it did me major service. wanna peep the flex of what i wrote?
+
+HORATIO. bet, my lord.
+
+HAMLET. it was a straight-up oath from the king, where england was his ride-or-die, with love between them growing like a dope palm and peace still rocking her golden wheat crown as the chill comma between their vibes, plus a ton of high-key clauses, so that if anyone peeped the deets, the squad carrying it would get suddenly yeeted, with no time for confession.
+
+HORATIO. how’d you seal that down, bro?
+
+HAMLET. yo, it was hella divinely ordered. i had my old pops’ signet in my stash—basically the blueprint for the danish seal—so i folded the writ just like the OG, signed it, stamped it legit, and stashed it safely; the switch-up went totally unnoticed. then the next day our sea-fight went down, and you already know the tea that followed.
+
+HORATIO. so guildenstern and rosencrantz are in the game.
+
+HAMLET. dude, they were totally vibing with this hustle. they’re nowhere near my vibe—their own shady plays just boost down their downfall. it’s hella dangerous when lowlife energy slides between slick moves and savage oppositions.
+
+HORATIO. damn, what a king, huh?
+
+HAMLET. doesn’t it, in your opinion, totally push me to yeet him—this dude who offed my king and dissed my mom, popping in between the royal picks and my major hopes, screwing up his own angle for my rightful life, and with all that wild con—ain’t my conscience screaming “no cap” to cancel him with this arm? and seriously, isn’t it straight-up damned to let this nasty piece of our nature keep spreading evil?
+
+HORATIO. england’s gonna drop the deets on that real soon, no cap.
+
+HAMLET. it’s gonna be quick; the break is all mine—and a man’s life is just a single “one.” but real talk, i’m mad sorry, good horatio, that when i scoped laertes i forgot myself; cuz his vibe mirrors my own cause. imma court his favor, for sure—the raw intensity of his grief totally turned me into a swooning mess.
+
+HORATIO. yo, chill vibes—who’s rolling up here?
+
+ENTER OSRIC.
+
+OSRIC. your lordship is mad welcome back to denmark.
+
+HAMLET. i humbly thank you, sir. you peep this waterfly?
+
+HORATIO. nah, my good lord.
+
+HAMLET. your vibe is even more chill; it’s lowkey a sin to know him. he’s got mad land—even if a beast ruled beasts, his crib would be at the king’s chill spot; it’s a total chough, but, as i say, his stash is hella spacious in its dirt collection.
+
+OSRIC. sweet lord, if your lordship got a minute, i gotta drop some tea from his majesty.
+
+HAMLET. i’m about to soak it up with all my vibes—put your cap to good use; it’s made for your head.
+
+OSRIC. thanks, your lordship, it’s mad hot.
+
+HAMLET. nah, trust me, it’s super cold—the wind’s all northerly, fam.
+
+OSRIC. it’s kinda cold, my lord, for reals.
+
+HAMLET. i reckon it’s extra sultry and hot for my complexion.
+
+OSRIC. for real, my lord; it’s mad sultry—i can’t even cap how—and, my lord, his majesty sent me to let you know he’s laid a huge wager on your head. sir, here’s the 411—
+
+HAMLET. i beg you, keep that in mind—
+[HAMLET MOVES OSRIC TO PUT ON HIS HAT.]
+
+OSRIC. nah, in good faith, for real. sir, fresh on the court is laertes; believe me, he’s an absolute gentleman—loaded with next-level differences, soft society vibes, and major show. straight up, to be real, he’s like the living calendar of the gentry; you’d find in him the entire blueprint of what a gentleman should be.
+
+HAMLET. sir, his drip is clear even to you—though if you tried to tally him up, it’d have your memory doing somersaults, but i ain’t even yawning over it; real talk, i see him as a top-tier soul, dripping with such rare and epic vibes that, honestly, his mirror is just him, nothing extra.
+
+OSRIC. your lordship is spitting straight facts about him.
+
+HAMLET. so, what’s with all the extra hype, sir? why do we bundle this dude in our raw drip?
+
+OSRIC. sir?
+
+HORATIO. can’t you say that in another tongue? you’ll nail it, sir, for real.
+
+HAMLET. what’s the lowkey import of naming this dude?
+
+OSRIC. about laertes?
+
+HORATIO. his wallet’s empty already—his golden talk’s all out.
+
+HAMLET. i mean him, sir.
+
+OSRIC. i know you aren’t clueless,—
+
+HAMLET. i wish you were, sir; but tbh, even if you were, it wouldn’t change much for me. so, sir?
+
+OSRIC. you know full well how dope laertes is,—
+
+HAMLET. i can’t confess that, cuz then i’d be comparing me to him in excellence; but like, to really know a man is to know his own drip.
+
+OSRIC. i mean, sir, about his weapon; and with the cred they’ve piled on him, his meed is unmatched.
+
+HAMLET. so, what weapon is he rocking?
+
+OSRIC. rapier and dagger, my lord.
+
+HAMLET. so that’s a duet of his weapons. but okay.
+
+OSRIC. the king, my lord, has staked six barbary horses on your head—and i reckon he’s countered with six french rapiers and poniards, complete with their accessories like girdles, hangers, and whatnot. plus, three of those carriages are super high-key fancy, ultra responsive on the grip, delicate rides with a ton of free spirit.
+
+HAMLET. so what are you calling the carriages?
+
+HORATIO. i knew you’d get a bonus lesson on that before dropping the deets.
+
+OSRIC. the carriages are the hangers, my lord.
+
+HAMLET. the term would be more german to the deal if we had cannons by our side; i wish it could be hangers until then. anyways—six barbary horses against six french rapiers with their add-ons, and three free-spirited carriages: that’s the french bet against the danish. why is all this loaded up, as you call it?
+
+OSRIC. the king, my lord, has decreed that in a dozen bouts between you and him, you can’t land more than three hits—he’s set the odds at twelve for nine; and it’ll go straight to trial if your lordship gives the answer.
+
+HAMLET. what if i answer “nah”?
+
+OSRIC. i mean, my lord, that’d be a counter move against your own vibe in the bout.
+
+HAMLET. sir, i’m gonna stroll through the hall. if his majesty’s cool with it, it’s basically my time; let the foils be popped, the gentlemen be down, and if the king holds his plan, i’ll secure a win for him if possible; otherwise, i’ll only walk away with shame and a few hits.
+
+OSRIC. should i serve that re-delivery straight up for you?
+
+HAMLET. that’s the move, sir; deploy your flavor however you please.
+
+OSRIC. i do my duty to your lordship, no cap.
+
+HAMLET. yours, yours.
+
+[EXIT OSRIC.]
+
+HAMLET. he handled his own clap-back—no other mouths got a turn.
+
+HORATIO. this lapwing is straight up yeeting away with the shell on its head.
+
+HAMLET. he went along with his dug move before he even fell for it. so, he’s one of many from this trashy age that only caught the current vibe and surface-level flex of meeting up; a sort of bubbly collection riding through all the hyped opinions—and when pushed to the test, their bubbles pop off.
+
+ENTER A LORD.
+
+LORD. my lord, his majesty just dropped a kudos via young osric, letting him know you’re hitting up the hall; he wants to know if you’re down to roll with laertes or if you’ll take longer.
+
+HAMLET. i’m locked in on my goals—they roll with the king’s vibe. if his call is on point, i’m ready. now or whenever, as long as i’m as capable as i am right now.
+
+LORD. the king, queen, and all the crew are rolling in.
+
+HAMLET. in that prime moment.
+
+LORD. the queen wants you to serve some smooth entertainment to laertes before you dive into the play.
+
+HAMLET. she’s schooling me well.
+
+[EXIT LORD.]
+
+HORATIO. my lord, you’re gonna lose this wager, no cap.
+
+HAMLET. i ain’t buying that. since he bounced to france, i’ve been on constant grind. i will beat those odds—though my heart’s feeling hella off, it’s all gravy.
+
+HORATIO. nah, good my lord.
+
+HAMLET. it’s just some straight-up foolery; but it’s like a profit boost that might even trip up a woman.
+
+HORATIO. if your mind’s not cool with something, just trust it. i’ll intercept their trip here and say you’re not down.
+
+HAMLET. not even a bit—we’re straight-up defying omens. there’s some special fate energy in a sparrow’s fall; if it’s meant to drop now, it won’t come later; if it’s not coming, then it’ll be now; and if not now, then it’ll still road-trip in eventually. readiness is everything. since no dude can keep score of what he leaves behind, what’s the harm in leaving early?
+
+ENTER KING, QUEEN, LAERTES, LORDS, OSRIC AND ATTENDANTS WITH FOILS & C.
+
+KING. come, hamlet, come, and snatch this hand from me.
+
+[THE KING PUTS LAERTES’S HAND INTO HAMLET’S.]
+
+HAMLET. yo, pardon me, sir—I did you dirty; but forgive it, ‘cause you’re a stand-up gent. this crowd knows, and word’s out, i’m suffering from some major mental glitch. whatever i did that might’ve jostled your honor and vibe, i hereby confess it was pure madness. did hamlet wrong laertes? nah, never hamlet. if, when off his chill mode, hamlet offends laertes, then that ain’t really hamlet—hamlet denies it. so who did it? his own madness. if that’s the tea, then hamlet’s on the wronged squad; his own crazy is his enemy. sir, right here in front of y’all, let me back off from this planned evil so far in your generous thoughts, as if i just shot my arrow across the crib and hurt my bro.
+
+LAERTES. i’m straight-up satisfied by nature, and this whole sitch should fuel my revenge vibe; but on honor’s terms, i’m keeping it distant until some OG honor masters give me a legit voice and a peace precedent to keep my name clean. but in the meantime, i’m accepting your offered love like true love, and i won’t diss it.
+
+HAMLET. i totally embrace that, and i’m about to throw down in this brother wager—hand over the foils; let’s get to it.
+
+LAERTES. come, give me one.
+
+HAMLET. i’ll be your foil, laertes; in my clueless state, your skills shine like a star in the darkest night, blazing af.
+
+LAERTES. bro, you’re roasting me, sir.
+
+HAMLET. nope, i swear by this hand.
+
+KING. hand over the foils, young osric. cousin hamlet, you catch the wager?
+
+HAMLET. absolutely, my lord. your grace has put the odds on the weaker side.
+
+KING. i ain’t scared. i’ve peeped you both; but since he’s been leveled up, we got odds like that.
+
+LAERTES. this is too heavy, man. lemme see another.
+
+HAMLET. this is lit; these foils, are they all the same length?
+
+OSRIC. ay, my good lord.
+
+KING. set out the wine buckets on that table. if hamlet lands a hit on the first or second bout, or bails on the third exchange, then let all the battlements drop their ordnance fire; the king will toast to hamlet’s better vibes, and we’ll mix up a cup richer than what four straight-up danish kings have rocked. hand me the cups; and let the kettle blare to the trumpet, the trumpet to the cannon dude outside, the cannons to the skies, the skies to the ground—now the king toasts hamlet. come on, let’s kick it off; and you, judges, keep your eyes peeled.
+
+HAMLET. come on, sir.
+
+LAERTES. come on, my lord.
+
+[THEY PLAY.]
+
+HAMLET. one.
+
+LAERTES. no.
+
+HAMLET. judgment.
+
+OSRIC. that’s a hit—a seriously tangible hit.
+
+LAERTES. alright, hit it again.
+
+KING. hold up, pass me a drink. hamlet, this gem is yours; here’s to your health.
+
+[trumpets sound, and cannons blast off inside.]
+
+hand over the cup.
+
+HAMLET. i’m gonna roll in this bout first; set it aside for a bit.
+
+[THEY PLAY.]
+
+HAMLET. come on—hit me again; what do you reckon?
+
+LAERTES. just a light touch, i confess.
+
+KING. our son will win.
+
+QUEEN. he’s kinda extra and outta breath. here, hamlet, take my napkin and wipe your brow—the queen’s toasting to your luck, hamlet.
+
+HAMLET. good madam.
+
+KING. gertrude, don’t drink.
+
+QUEEN. i will, my lord; pardon me, please.
+
+KING. [ASIDE. IT’S THE POISON’D CUP; IT’S TOO LATE.]
+
+HAMLET. i dare not sip it yet, madam—wait a bit.
+
+QUEEN. come on, let me wipe your face.
+
+LAERTES. my lord, i’m gonna hit him now.
+
+KING. i don’t think that’s cool.
+
+LAERTES. [ASIDE. AND YET IT’S LITERALLY AGAINST MY CONSCIENCE.]
+
+HAMLET. come for the third, laertes—don’t stall; i beg you, bring your fiercest game. i’m lowkey worried you’ll clown me.
+
+LAERTES. you say so? come on, let’s do this.
+
+[THEY PLAY.]
+
+OSRIC. nothing happens—either way, it’s a wash.
+
+LAERTES. have at you now.
+
+[LAERTES WOUNDS HAMLET; THEN, DURING THE SCUFFLE, THEY SWAP RAPIERS AND HAMLET WOUNDS LAERTES.]
+
+KING. separate them; they’re mad heated.
+
+HAMLET. nah, come again!
+
+[THE QUEEN FALLS.]
+
+OSRIC. look to the queen, yo!
+
+HORATIO. they’re bleeding on both sides—what’s the haps, my lord?
+
+OSRIC. how’s it going, laertes?
+
+LAERTES. damn, like a woodcock to my own spring, osric—I’m justly undone by my own betrayal.
+
+HAMLET. how’s the queen holding up?
+
+KING. she’s swooning from all that bleeding.
+
+QUEEN. no, no, not the drink, the drink! oh my dear hamlet—the drink, the drink! i’m totally poisoned.
+
+[DIES.]
+
+HAMLET. oh, pure villainy! ho! lock the door—that’s treachery! go on, uncover it.
+
+[LAERTES FALLS.]
+
+LAERTES. it’s all here, hamlet. hamlet, you are slain—no medicine in this world can fix you. you got not even half an hour left; that treacherous weapon in your hand, still raw and envenom’d, is killing you. that foul hustle has backfired on me—here i lie, never gonna rise again. your mom’s been poisoned. i can’t take it anymore—the king, the king’s the one to blame.
+
+HAMLET. the blow’s wicked venomed too! then, venom, go to work.
+[STABS THE KING.]
+
+OSRIC and LORDS. treason! treason!
+
+KING. oh, still defend me, friends—I’m just hurt.
+
+HAMLET. here, you incestuous, murderous, damned dane, drink this potion. is your union here? follow my mom.
+[KING DIES.]
+
+LAERTES. he’s rightfully served—it’s a poison he cooked up himself. share forgiveness with me, noble hamlet; let my death and my father’s not weigh on you, nor yours on me.
+[DIES.]
+
+HAMLET. heaven, set you free from it! i follow you—i am dead, horatio. wretched queen, adieu. you, who look pale and tremble at this chance, as silent spectators to this act—if i had time, as this grim sergeant called death is super strict in his lock, oh, i could spill the tea, but let it be. horatio, i’m dead and you’re still kickin’; please report my tale and my cause accurately to the unsatisfied.
+
+HORATIO. don’t ever believe it—I’m basically more of an antique roman than a dane. here’s still some liquor left.
+
+HAMLET. since you’re a real one, give me the cup. let it go; by heaven, i’ll snag it. oh good horatio, what a wounded legacy—unclear deets will live on past me. if you ever held me in your heart and pulled a moment from felicity—even in this harsh world, breathing pain—then go ahead and tell my story.
+[MARCH AFAR OFF, AND SHOT WITHIN.]
+
+what warlike noise is this, tho?
+
+OSRIC. young fortinbras, coming in with conquest from poland, is sending this warlike volley to england’s ambassadors.
+
+HAMLET. oh, i’m dying, horatio—this potent poison is totally crowning my spirit. i won’t live long enough to hear england’s news, but i’m prophesying that fortinbras will get his election lit. he’s got my dying voice—so pass that on along with whatever went down. the rest is silence.
+[DIES.]
+
+HORATIO. now, a noble heart cracks—good night, sweet prince, and may angel vibes sing you to rest. why is that drum coming here?
+[MARCH WITHIN.]
+
+ENTER FORTINBRAS, THE ENGLISH AMBASSADORS AND OTHERS.
+
+FORTINBRAS. where is this vibe?
+
+HORATIO. what exactly do you wanna peep? if you’re on the hunt for woe or wonder, stop your search.
+
+FORTINBRAS. this quarry is wildin’ out with havoc—oh proud death, what feast is poppin’ in your eternal crib that you could drop so many princes so bloodily in one shot?
+
+FIRST AMBASSADOR. the vibe is dismal; our intel from england is way too late. the ears that should be catching this are all numb, to inform him that his command is fulfilled—that rosencrantz and guildenstern are dead. where should we drop our thanks?
+
+HORATIO. not from his mouth—even if he had the life to thank you, he never ordered their death. but since you lot—from the polack wars and england—have rolled in, order that these bodies get hoisted high on a stage for everyone to peep, and let me drop the story on how these wild deets went down: carnal, bloody, and totally unnatural acts; accidental judgements; random slaughters; deaths served up by slick, forced moves—and in the end, miscalculated schemes falling on the originators. all this, i can truly spill.
+
+FORTINBRAS. let’s bounce to hear it, and summon the noblest to the stage. as for me, i sorrowfully embrace my fate—I hold memory rights in this kingdom that now invite me to claim my vantage.
+
+HORATIO. i’ll have my say on that too, and let him whose voice matters speak even more. but let this be performed pronto, while minds are still wild, so no further mishaps on scheming and errors crop up.
+
+FORTINBRAS. let four captains hoist hamlet like a soldier to the stage, for he likely would’ve proven himself most royally if he’d been showcased; and for his passage, the soldiers’ music and war rites shout his honor. haul up the bodies—a sight like this belongs in the field, but here it looks way off. go, command the soldiers to fire.
+
+[A DEAD MARCH PLAYS.]
+
+[EXEUNT, CARRYING OFF THE BODIES, FOLLOWED BY A BLAST OF ORDNANCE.]

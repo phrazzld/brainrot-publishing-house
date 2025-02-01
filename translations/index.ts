@@ -569,6 +569,49 @@ const translations = [
     ]
   },
   {
+    slug: 'hamlet',
+    title: 'hamlet',
+    shortDescription: 'hamlet mad pressed, dad ghost drops the worst dm of all time, uncle sus af. whole kingdom in shambles cuz bro won\'t touch grass.',
+    coverImage: '/assets/hamlet/images/hamlet-07.png',
+    status: 'available',
+    chapters: [
+      {
+        title: 'act i',
+        text: '/assets/hamlet/text/brainrot/act-i.txt',
+        audioSrc: null
+      },
+      {
+        title: 'act ii',
+        text: '/assets/hamlet/text/brainrot/act-ii.txt',
+        audioSrc: null
+      },
+      {
+        title: 'act iii',
+        text: '/assets/hamlet/text/brainrot/act-iii.txt',
+        audioSrc: null
+      },
+      {
+        title: 'act iv',
+        text: '/assets/hamlet/text/brainrot/act-iv.txt',
+        audioSrc: null
+      },
+      {
+        title: 'act v',
+        text: '/assets/hamlet/text/brainrot/act-v.txt',
+        audioSrc: null
+      },
+    ],
+  },
+  {
+    slug: 'the-republic',
+    title: 'the republic',
+    shortDescription: 'socrates pulls up, asks “what if we made a city that slaps?”—ends up min-maxing justice, dunking on poets, and inventing the philosopher-king meta',
+    coverImage: '/assets/the-republic/images/republic-07.png',
+    status: 'coming soon',
+    chapters: [
+    ],
+  },
+  {
     slug: 'meditations',
     title: 'meditations',
     shortDescription: 'life be lifin\', but marcus just vibes. control what you can, ignore the clowns, stay based.',
@@ -623,15 +666,6 @@ const translations = [
     ],
   },
   {
-    slug: 'the-republic',
-    title: 'the republic',
-    shortDescription: 'plato be like “ideal society or skill issue?” entire blueprint for big-brain vibes. no cap.',
-    coverImage: '/assets/images/republic-02.png',
-    status: 'coming soon',
-    chapters: [
-    ],
-  },
-  {
     slug: 'the-quran',
     title: 'the quran',
     shortDescription: 'revelation meltdown, the prophet mohammed spitting bars from the top—milk & honey drip, soul-level era. absolutely no flop.',
@@ -645,15 +679,6 @@ const translations = [
     title: 'romeo and juliet',
     shortDescription: 'star-crossed bffr, love doping them up, they crash out frfr. big yikes vibes.',
     coverImage: '/assets/images/romeo-and-juliet-02.png',
-    status: 'coming soon',
-    chapters: [
-    ],
-  },
-  {
-    slug: 'hamlet',
-    title: 'hamlet',
-    shortDescription: '“to be or not to be,” man’s so mid or maybe next-level? ghost dad on the daily, meltdown central. slay or nay?',
-    coverImage: '/assets/images/hamlet-02.png',
     status: 'coming soon',
     chapters: [
     ],
