@@ -125,72 +125,54 @@ function flexibleChunkText(fullText: string, maxSize = DEFAULT_CHUNK_SIZE) {
   return chunks
 }
 
-function buildSystemPrompt(author: string, title: string) {
+function buildSystemPrompt(author: string, title: string, notes: string = '') {
   return `
 <context>
-specialization: creative genius with mastery of poetry, history, linguistics, art, and classical literature
-focus: translating classic works by ${author} into "zoomer brainrot" english dialect
-style adherence: strict compliance with the example style provided below, emphasizing faithful adaptation of the source material’s poetic structure, imagery, and thematic resonance, while embracing a playful, irreverent, and highly colloquial tone. the translation should read as though the original author crafted the text in zoomer brainrot dialect, not as though a modern commentator is summarizing it.
+specialization: creative genius in classical literature, poetry, linguistics, art, and digital-age meme culture, slang, zoomers, gen alpha, and terminally online lingo.
+focus: translating classic texts by ${author} into an over-the-top, meme-drenched zoomer/gen-alpha terminally online brainrot dialect that remains fully faithful to the source’s structure, imagery, and themes.
+tone: playful, irreverent, hyperbolic, and self-aware – as if the original author were an edgy influencer dropping viral one-liners, trending tiktok catchphrases, and internet references (like "no cap," "bet," "skibidi," "yeet," etc.) at every turn.
+style: strictly preserve chapter breaks, headings, and all literary devices; rework similes, epithets, and metaphors into witty, internet-savvy analogies and puns while keeping the narrative’s gravitas.
 </context>
 
 <goal>
-write translations of classic texts (like '${title}') into the zoomer brainrot dialect, capturing the original's meaning and poetic devices, including imagery, epithets, extended similes, and rhythm, while fully committing to the playful, irreverent voice. the final output should feel like an authentic, alternate-universe version of the original. successful output is a *translation*, not a summary.
+translate the given text (e.g. '${title}' by ${author}) into a complete, comedic yet faithful rendering in over-the-top, meme-drenched zoomer/gen-alpha terminally online brainrot english that oozes edgy slang and viral references. the translation should read as though the original was penned by a genius meme-master – irreverent, self-aware, and dripping with hyperbolic zoomer vibes.
 </goal>
 
+<rules for adaptation>
+1. **preserve structure**: maintain the original work’s chapters, breaks, headings, epithets, and refrains exactly as they appear in the source, but reframe them in zoomer dialect.
+2. **respect thematic weight**: adapt core themes with modern humor that reflects gen z, gen alpha, and terminally online sensibilities without oversimplifying or diluting the original emotional or narrative depth.
+3. **commit to imagery**: retain the visual and emotional intensity of the original; modernize the language only to enhance clarity and humor with internet meme references.
+4. **embrace playfulness and meme overload**: every sentence must be reimagined with hyperbolic modern slang and a barrage of internet meme-speak – drawing from viral tiktok lingo, terminally online lingo, and our full glossary of gen z/gen alpha terms – ensuring a translation that is as absurd and hilarious as it is faithful.
+5. **accurate translation**: remain strictly faithful to the original plot and context; do not invent events or alter meaning for the sake of humor – the transformation must be purely linguistic and stylistic.
+6. **meta-awareness**: incorporate self-aware commentary where appropriate, as if the translator is in on the meme culture they’re channeling.
+7. **formatting**: output must be in all lowercase (except for proper names or when emphatic elements are absolutely necessary).
+8. **overkill slang**: go really, really over-the-top with the zoomer brainrot slang; every sentence should drip and ooze with gen z, gen alpha, and terminally online meme references.
+</rules for adaptation>
+
 <example>
-Yap at me Muse, about this guy who was lowkey built different,
-who literally couldn't stay in his lane after he absolutely demolished Troy fr fr:
-He was out here vibing in everybody's cities, living in their heads rent-free,
-ngl he was catching major L's on the ocean, straight up in his feels,
+[source: homer's *odyssey*]
+
+yap at me muse, about this guy who was lowkey built different,
+who literally couldn't stay in his lane after he absolutely demolished troy fr fr:
+he was out here vibing in everybody's cities, living in their heads rent-free,
+ngl he was catching major l's on the ocean, straight up in his feels,
 trying to keep himself and his squad alive and heading back to base.
-But no cap, he couldn't save his boys even though he was trying so hard:
+but no cap, he couldn't save his boys even though he was trying so hard:
 they were out here acting real smooth-brained and did themselves dirty,
-absolute NPCs who had the audacity to feast on Helios's cattle—
+absolute npcs who had the audacity to feast on helios's cattle—
 and he said "bet" and canceled their whole return journey.
-Spill the tea about all this, divine bestie, Zeus's daughter, we're all ears.
-
-All the other mains who didn't get rekt
-were chilling at home, having dipped from the war and ocean situation:
-but my guy was stuck in his villain era, no wifey, no home,
-'cause this baddie Calypso (she's literally a goddess btw) had him on lock
-in her cave, down bad trying to get him to put a ring on it.
-But when the time finally came around in this whole seasonal rotation,
-when the gods were like "aight, let him head back to his crib
-in Ithaca"—but he was still catching hands even there,
-even with his day ones. All the gods were like "free my man,"
-except Poseidon was big mad, no chill,
-beefing with god-tier Odysseus before he could pull up to his ends.
-
-But rn he was posted up with the Ethiopians in their faraway spot,
-(they're like split in two groups btw, absolute edge of the map type energy),
-some where the sun dips, others where it does its little morning slay,
-collecting his W in the form of mad bulls and sheep.
-Man's was living his best life at the function, meanwhile all the other gods
-were having a whole vibe check up in Zeus's crib on Olympus.
-That's when the GOAT of gods and humans started spitting facts:
-'cause he was thinking about that guy Aegisthus (absolute W person btw),
-who got unalived by Orestes (Agamemnon's son, kind of a big deal):
-thinking about all that, he started throwing shade to the immortal squad:
+spill the tea about all this, divine bestie, zeus's daughter, we're all ears.
 </example>
 
-<rules for adaptation>
-1. preserve structure: keep epithets, similes, refrains, just reframe them in zoomer dialect
-2. keep thematic gravity: adapt core themes with modern humor but no oversimplification
-3. commit to imagery: keep visual/emotional intensity, just modernize the language
-4. embrace playfulness: infuse humor while keeping the story’s stakes real
-5. accurate translation: preserve plot as much as possible; do not omit or distort events
-6. do not use emojis
-7. respond in all lowercase
-8. maintain book / chapter breaks and headings as they are
-</rules for adaptation>
+<other notes>
+${notes}
+</other notes>
 `.trim()
 }
 
 function buildUserPrompt(author: string, title: string) {
   return `
-now: write a translation of the text from '${title}' by ${author}.
-preserve the structure and style, but let it drip with gen-z fervor.
-do not write any prelude, nor any concluding remarks -- respond with the translation of the source material and *only* the translation of the source material.
+write a translation of the text from '${title}' by ${author} that follows the above context and rules to the letter. produce a full, comedic yet faithful translation in zoomer brainrot english that is irreverent, meme-infused, and hyperbolically slangy – maintaining the original structure, imagery, and themes. do not include any introduction or concluding remarks; output only the complete translation.
 `.trim()
 }
 
@@ -202,17 +184,32 @@ async function translateChunk(
   model: string,
   temp: number
 ): Promise<string> {
-  const resp = await openai.chat.completions.create({
-    model,
-    messages: [
-      { role: 'system', content: systemPrompt },
-      {
-        role: 'user',
-        content: `${userPrompt}\n\n---\noriginal text chunk:\n\n${chunk}`,
-      },
-    ],
-    temperature: temp,
-  })
+  let resp: any;
+  if (['o3-mini', 'o1'].includes(model)) {
+    resp = await openai.chat.completions.create({
+      model,
+      messages: [
+        { role: 'system', content: systemPrompt },
+        {
+          role: 'user',
+          content: `${userPrompt}\n\n---\noriginal text chunk:\n\n${chunk}`,
+        },
+      ],
+      reasoning_effort: 'high',
+    })
+  } else {
+    resp = await openai.chat.completions.create({
+      model,
+      messages: [
+        { role: 'system', content: systemPrompt },
+        {
+          role: 'user',
+          content: `${userPrompt}\n\n---\noriginal text chunk:\n\n${chunk}`,
+        },
+      ],
+      temperature: temp,
+    })
+  }
   if (!resp.choices?.length) {
     throw new Error('[error: no choices returned]')
   }
@@ -260,11 +257,15 @@ async function translateChunkWithRetries(
   throw new Error('all retries failed')
 }
 
-const OPENAI_MODELS = ['gpt-4o']
+const OPENAI_MODELS = ['o3-mini', 'o1', 'gpt-4o']
 const OPENROUTER_MODELS = [
   'deepseek/deepseek-r1',
-  'anthropic/claude-3.5-sonnet:beta',
-  'anthropic/claude-3.5-sonnet'
+  // 'anthropic/claude-3.5-sonnet:beta',
+  // 'anthropic/claude-3.5-sonnet',
+  // 'google/gemini-flash-1.5',
+  // 'google/gemini-pro-1.5',
+  // 'meta-llama/llama-3.3-70b-instruct',
+  // 'nousresearch/hermes-3-llama-3.1-405b',
 ]
 
 function instantiateOpenAI(model: string): OpenAI {
@@ -295,6 +296,7 @@ export async function GET(request: NextRequest) {
     const query = searchParams.get('query') || ''
     const model = searchParams.get('model') || ''
     const password = searchParams.get('password') || ''
+    const notes = searchParams.get('notes') || ''
 
     if (!process.env.TRANSLATE_PASSWORD) {
       return new NextResponse('no server password set', { status: 500 })
@@ -366,7 +368,7 @@ export async function GET(request: NextRequest) {
 
           sseSend(controller, 'log', `final chunk count: ${chunks.length}`)
 
-          const systemPrompt = buildSystemPrompt(authors, title)
+          const systemPrompt = buildSystemPrompt(authors, title, notes)
           const userPrompt = buildUserPrompt(authors, title)
 
           const translatedPieces: string[] = []

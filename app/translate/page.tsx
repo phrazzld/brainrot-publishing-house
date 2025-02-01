@@ -1,11 +1,12 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
 
 export default function TranslatePage() {
   const [query, setQuery] = useState("")
-  const [model, setModel] = useState("gpt-4o")
+  const [model, setModel] = useState("o3-mini")
   const [password, setPassword] = useState("")
+  const [notes, setNotes] = useState("")
   const [logs, setLogs] = useState<string[]>([])
   const [error, setError] = useState("")
   const [running, setRunning] = useState(false)
@@ -20,9 +21,13 @@ export default function TranslatePage() {
     setError("")
     setRunning(true)
 
-    const url = `/api/translate?query=${encodeURIComponent(query)}&model=${encodeURIComponent(
+    let url = `/api/translate?query=${encodeURIComponent(query)}&model=${encodeURIComponent(
       model
     )}&password=${encodeURIComponent(password)}`
+
+    if (notes.length > 0) {
+      url += `&notes=${encodeURIComponent(notes)}`
+    }
 
     const es = new EventSource(url)
     setEvtSource(es)
@@ -117,9 +122,11 @@ export default function TranslatePage() {
           value={model}
           onChange={(e) => setModel(e.target.value)}
         >
-          <option value="gpt-4o">gpt-4o</option>
-          <option value="deepseek/deepseek-r1">deepseek r1</option>
-          <option value="anthropic/claude-3.5-sonnet">claude 3.5 sonnet</option>
+          {MODEL_OPTIONS.map(({ value, label }) => (
+            <option key={value} value={value}>
+              {label}
+            </option>
+          ))}
         </select>
 
         <label>enter book/author query</label>
@@ -128,6 +135,14 @@ export default function TranslatePage() {
           placeholder="e.g. alice in wonderland"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
+        />
+
+        <label>other notes</label>
+        <input
+          className="p-2 text-black"
+          placeholder={"e.g. always start chapters with \"whadup chat, it's ya boi\""}
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
         />
 
         <button
@@ -152,3 +167,10 @@ export default function TranslatePage() {
     </main>
   )
 }
+
+const MODEL_OPTIONS = [
+  { value: "gpt-4o", label: "gpt-4o" },
+  { value: "o3-mini", label: "o3-mini" },
+  { value: "o1", label: "o1" },
+  { value: "deepseek/deepseek-r1", label: "deepseek r1" },
+]
