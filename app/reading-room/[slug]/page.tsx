@@ -1,269 +1,285 @@
-"use client"
+"use client";
 
-import translations from "@/translations"
-import Link from "next/link"
-import { useParams, useRouter, useSearchParams } from "next/navigation"
-import { useEffect, useState } from "react"
-import WaveSurfer from "wavesurfer.js"
-import DownloadButton from '@/components/DownloadButton'
+import { useState, useEffect } from "react";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
+import WaveSurfer from "wavesurfer.js";
+import DownloadButton from "@/components/DownloadButton";
+import translations from "@/translations";
 
 export default function ReadingRoom() {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const { slug } = useParams()
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { slug } = useParams();
 
-  const [rawText, setRawText] = useState("")
-  const [waveSurfer, setWaveSurfer] = useState<WaveSurfer | null>(null)
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [currentTime, setCurrentTime] = useState(0)
-  const [totalTime, setTotalTime] = useState(0)
-  const [chapterIndex, setChapterIndex] = useState(0)
+  const [rawText, setRawText] = useState("");
+  const [waveSurfer, setWaveSurfer] = useState<WaveSurfer | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [totalTime, setTotalTime] = useState(0);
+  const [chapterIndex, setChapterIndex] = useState(0);
 
   // share modal
-  const [isShareOpen, setIsShareOpen] = useState(false)
-  const [shareFeedback, setShareFeedback] = useState("")
-  const [includeChapter, setIncludeChapter] = useState(true)
-  const [includeTimestamp, setIncludeTimestamp] = useState(true)
+  const [isShareOpen, setIsShareOpen] = useState(false);
+  const [shareFeedback, setShareFeedback] = useState("");
+  const [includeChapter, setIncludeChapter] = useState(true);
+  const [includeTimestamp, setIncludeTimestamp] = useState(true);
+
+  // download modal
+  const [isDownloadOpen, setIsDownloadOpen] = useState(false);
 
   // loading states
-  const [isAudioLoading, setIsAudioLoading] = useState(false)
-  const [isTextLoading, setIsTextLoading] = useState(false)
+  const [isAudioLoading, setIsAudioLoading] = useState(false);
+  const [isTextLoading, setIsTextLoading] = useState(false);
 
-  const translation = translations.find((t) => t.slug === slug)
-  const chapterData = translation?.chapters[chapterIndex]
+  const translation = translations.find((t) => t.slug === slug);
+  const chapterData = translation?.chapters[chapterIndex];
 
   // pick up "c" param from the url if it exists
   useEffect(() => {
-    const cParam = searchParams.get("c")
+    const cParam = searchParams.get("c");
     if (cParam) {
-      const cNum = parseInt(cParam, 10)
-      if (!isNaN(cNum)) setChapterIndex(cNum)
+      const cNum = parseInt(cParam, 10);
+      if (!isNaN(cNum)) setChapterIndex(cNum);
     }
-  }, [searchParams])
+  }, [searchParams]);
 
   // once waveSurfer is ready, parse "t" param to seek
   useEffect(() => {
-    if (!waveSurfer) return
+    if (!waveSurfer) return;
 
     function handleReady() {
-      if (!waveSurfer) return
-      const tParam = searchParams.get("t")
-      const duration = waveSurfer.getDuration()
+      if (!waveSurfer) return;
+      const tParam = searchParams.get("t");
+      const duration = waveSurfer.getDuration();
       if (tParam && duration && !isNaN(duration) && duration > 0) {
-        const numericT = Number(tParam)
+        const numericT = Number(tParam);
         if (numericT > 0) {
-          waveSurfer.seekTo(numericT / duration)
+          waveSurfer.seekTo(numericT / duration);
         }
       }
     }
 
-    waveSurfer.on("ready", handleReady)
+    waveSurfer.on("ready", handleReady);
     return () => {
-      waveSurfer.un("ready", handleReady)
-    }
-  }, [waveSurfer, searchParams])
+      waveSurfer.un("ready", handleReady);
+    };
+  }, [waveSurfer, searchParams]);
 
-  // fetch text & possibly init waveSurfer when chapter changes
+  // fetch text & (re)initialize waveSurfer when chapter changes
   useEffect(() => {
-    if (!chapterData) return
+    if (!chapterData) return;
 
-    // text loading
-    setIsTextLoading(true)
+    // load text
+    setIsTextLoading(true);
     fetch(chapterData.text)
       .then((res) => res.text())
       .then((txt) => {
-        setRawText(txt.replaceAll("\n\n", "\n"))
+        // preserve line breaks
+        setRawText(txt);
       })
       .catch((err) => setRawText(`error loading text: ${err}`))
-      .finally(() => setIsTextLoading(false))
+      .finally(() => setIsTextLoading(false));
 
-    // only set up WaveSurfer if we have audio
+    // audio setup
     if (chapterData.audioSrc) {
       if (waveSurfer) {
         try {
-          waveSurfer.destroy()
+          waveSurfer.destroy();
         } catch { }
       }
-      setIsAudioLoading(true)
+      setIsAudioLoading(true);
       const ws = WaveSurfer.create({
         container: "#waveform",
         waveColor: "#666",
         progressColor: "#e0afff",
         cursorColor: "#ffdaab",
-        height: 64,
-      })
-      const fullAudioSrc = `${process.env.NEXT_PUBLIC_SPACES_BASE_URL}${chapterData.audioSrc}`
-      ws.load(fullAudioSrc)
+        height: 48, // taller waveform
+      });
+      const fullAudioSrc = `${process.env.NEXT_PUBLIC_SPACES_BASE_URL}${chapterData.audioSrc}`;
+      ws.load(fullAudioSrc);
 
       ws.on("ready", () => {
-        setIsPlaying(false)
-        setTotalTime(ws.getDuration())
-        setCurrentTime(0)
-        setIsAudioLoading(false)
-      })
+        setIsPlaying(false);
+        setTotalTime(ws.getDuration());
+        setCurrentTime(0);
+        setIsAudioLoading(false);
+      });
       ws.on("audioprocess", () => {
-        setCurrentTime(ws.getCurrentTime())
-      })
-      ws.on("play", () => setIsPlaying(true))
-      // on pause, update the url with current timestamp
+        setCurrentTime(ws.getCurrentTime());
+      });
+      ws.on("play", () => setIsPlaying(true));
       ws.on("pause", () => {
-        setIsPlaying(false)
-        setCurrentTime(ws.getCurrentTime()) // sync state
-        updateUrlWithChapterAndTimestamp(ws.getCurrentTime())
-      })
-      // on finish, we can reset time but also update url t=0 if you like
+        setIsPlaying(false);
+        setCurrentTime(ws.getCurrentTime());
+        updateUrlWithChapterAndTimestamp(ws.getCurrentTime());
+      });
       ws.on("finish", () => {
-        setIsPlaying(false)
-        setCurrentTime(0)
-        updateUrlWithChapterAndTimestamp(0)
-      })
+        setIsPlaying(false);
+        setCurrentTime(0);
+        updateUrlWithChapterAndTimestamp(0);
+      });
 
-      setWaveSurfer(ws)
+      setWaveSurfer(ws);
       return () => {
         try {
-          ws.destroy()
+          ws.destroy();
         } catch { }
-      }
+      };
     } else {
-      // no audio: if waveSurfer was set, destroy it
+      // no audio available
       if (waveSurfer) {
         try {
-          waveSurfer.destroy()
+          waveSurfer.destroy();
         } catch { }
       }
-      setWaveSurfer(null)
-      setIsPlaying(false)
-      setCurrentTime(0)
-      setTotalTime(0)
-      setIsAudioLoading(false)
+      setWaveSurfer(null);
+      setIsPlaying(false);
+      setCurrentTime(0);
+      setTotalTime(0);
+      setIsAudioLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chapterData])
+  }, [chapterData]);
 
-  // whenever chapterIndex changes, update the url with c=...
-  // and nuke the timestamp
+  // update url on chapter change
   useEffect(() => {
-    if (!translation) return
-    updateUrlWithChapterAndTimestamp(0)
+    if (!translation) return;
+    updateUrlWithChapterAndTimestamp(0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chapterIndex])
+  }, [chapterIndex]);
 
   function updateUrlWithChapterAndTimestamp(ts: number) {
-    const c = chapterIndex
-    const t = Math.floor(ts)
-    let newUrl = `/reading-room/${slug}?c=${c}`
+    const c = chapterIndex;
+    const t = Math.floor(ts);
+    let newUrl = `/reading-room/${slug}?c=${c}`;
     if (t > 0) {
-      newUrl += `&t=${t}`
+      newUrl += `&t=${t}`;
     }
-    router.replace(newUrl)
+    router.replace(newUrl);
   }
 
   // playback controls
   function togglePlayPause() {
-    waveSurfer?.playPause()
+    waveSurfer?.playPause();
   }
 
   function goPrevChapter() {
     if (chapterIndex > 0) {
-      setChapterIndex(chapterIndex - 1)
+      setChapterIndex(chapterIndex - 1);
     }
   }
 
   function goNextChapter() {
     if (translation && chapterIndex < translation.chapters.length - 1) {
-      setChapterIndex(chapterIndex + 1)
+      setChapterIndex(chapterIndex + 1);
     }
   }
 
-  // chapter pill click
   function handleChapterClick(i: number) {
-    setChapterIndex(i)
+    setChapterIndex(i);
   }
-
-  // line numbering every 5 lines
-  const lines = rawText.split("\n").map((line, i) => {
-    if (!line.trim()) return <div key={i} className="my-2">&nbsp;</div>
-    const showNum = (i + 1) % 5 === 0
-    return (
-      <div key={i} className="relative my-1 pl-12 font-body text-md">
-        {showNum && (
-          <span className="absolute left-0 top-0 w-10 text-right text-peachy text-sm select-none">
-            {i + 1}
-          </span>
-        )}
-        {line}
-      </div>
-    )
-  })
 
   function formatTime(sec: number) {
-    if (!sec || isNaN(sec)) return "0:00"
-    const m = Math.floor(sec / 60)
-    const s = Math.floor(sec % 60)
-    return `${m}:${s < 10 ? "0" + s : s}`
+    if (!sec || isNaN(sec)) return "0:00";
+    const m = Math.floor(sec / 60);
+    const s = Math.floor(sec % 60);
+    return `${m}:${s < 10 ? "0" + s : s}`;
   }
 
-  // share modal
+  // share modal handlers
   function openShareModal() {
-    setIsShareOpen(true)
-    setShareFeedback("")
+    setIsShareOpen(true);
+    setShareFeedback("");
   }
   function closeShareModal() {
-    setIsShareOpen(false)
+    setIsShareOpen(false);
   }
   function getShareUrl() {
-    if (typeof window === "undefined") return ""
-    const baseUrl = window.location.origin
-    let url = `${baseUrl}/reading-room/${slug}?c=${chapterIndex}`
-    const t = Math.floor(currentTime)
-    if (includeTimestamp && t > 0) {
-      url += `&t=${t}`
+    if (typeof window === "undefined") return "";
+    const baseUrl = window.location.origin;
+    let url = `${baseUrl}/reading-room/${slug}`;
+    if (includeChapter) {
+      url += `?c=${chapterIndex}`;
     }
-    return url
+    const t = Math.floor(currentTime);
+    if (includeTimestamp && t > 0) {
+      url += includeChapter ? `&t=${t}` : `?t=${t}`;
+    }
+    return url;
   }
   async function copyShareUrl() {
-    const shareUrl = getShareUrl()
+    const shareUrl = getShareUrl();
     try {
-      await navigator.clipboard.writeText(shareUrl)
-      setShareFeedback("link is in your clipboard, glhf!")
+      await navigator.clipboard.writeText(shareUrl);
+      setShareFeedback("link is in your clipboard, glhf!");
     } catch (err) {
-      console.error(err)
-      setShareFeedback("couldn't copy link sry man")
+      console.error(err);
+      setShareFeedback("couldn't copy link sry man");
     }
   }
 
-  // bail out if no translation
+  // download modal handlers
+  function openDownloadModal() {
+    setIsDownloadOpen(true);
+  }
+  function closeDownloadModal() {
+    setIsDownloadOpen(false);
+  }
+
   if (!translation) {
     return (
       <div className="p-8 text-white">
         <h1 className="text-xl">no translation found</h1>
       </div>
-    )
+    );
   }
 
-  // gather chapters
-  const totalChapters = translation.chapters.length
-  const chaptersArray = Array.from({ length: totalChapters }, (_, i) => i)
+  const totalChapters = translation.chapters.length;
+  const chaptersArray = Array.from({ length: totalChapters }, (_, i) => i);
+  const lines = rawText.split("\n").map((line, i) => (
+    <div key={i} className="my-1">
+      {line.trim() ? line : <>&nbsp;</>}
+    </div>
+  ));
 
   return (
-    <div className="min-h-screen flex flex-col bg-midnight text-white font-body">
-      {/* top nav */}
-      <header className="sticky top-0 z-20 px-4 py-3 bg-black/40 backdrop-blur-md flex flex-col gap-2">
-        {/* top row: title + next/prev */}
-        <div className="w-full flex items-center justify-between">
-          <div className="flex flex-col md:flex-row items-start md:items-center gap-1 md:gap-3">
-            <span className="font-bold text-lg md:text-xl font-display">
-              {translation.title}
-            </span>
-            <span className="text-sm text-lavender font-body">
-              chapter {chapterIndex + 1}
-            </span>
+    <div className="min-h-screen flex bg-midnight text-white">
+      {/* sticky sidebar - narrower width */}
+      <aside className="w-48 bg-black/30 p-4 sticky top-0 h-screen overflow-y-auto">
+        <h2 className="text-lg font-display mb-4 text-peachy">chapters</h2>
+        <nav className="flex flex-col space-y-2">
+          {chaptersArray.map((cNum) => {
+            const isActive = cNum === chapterIndex;
+            return (
+              <button
+                key={cNum}
+                onClick={() => handleChapterClick(cNum)}
+                className={`px-3 py-2 rounded border text-sm font-body text-left ${isActive
+                  ? "bg-peachy text-midnight border-peachy"
+                  : "bg-black/30 text-white/80 border-white/20 hover:bg-black/50"
+                  }`}
+              >
+                chapter {cNum + 1}
+              </button>
+            );
+          })}
+        </nav>
+      </aside>
+
+      {/* main content */}
+      <div className="flex-1 flex flex-col">
+        {/* top bar: translation info & controls */}
+        <header className="px-4 py-3 flex items-center justify-between bg-black/40 backdrop-blur-md">
+          <div>
+            <h1 className="text-2xl font-display">{translation.title}</h1>
+            <p className="text-sm text-lavender">chapter {chapterIndex + 1}</p>
           </div>
-          <div className="flex items-center gap-3">
-            {!!translation.purchaseUrl && (
+          <div className="flex items-center gap-2">
+            {translation.purchaseUrl && (
               <Link
                 href={translation.purchaseUrl}
-                className="btn btn-primary ml-4"
+                className="btn btn-primary"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -272,112 +288,63 @@ export default function ReadingRoom() {
             )}
             <button
               onClick={goPrevChapter}
-              className="btn btn-secondary text-sm font-body"
-              style={{ visibility: chapterIndex === 0 ? "hidden" : "visible" }}
+              className={`btn btn-secondary ${chapterIndex === 0 ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+              disabled={chapterIndex === 0}
             >
               ← prev
             </button>
             <button
               onClick={goNextChapter}
-              className="btn btn-secondary text-sm font-body"
-              style={{
-                visibility:
-                  chapterIndex === totalChapters - 1 ? "hidden" : "visible",
-              }}
+              className={`btn btn-secondary ${chapterIndex === totalChapters - 1
+                ? "opacity-50 cursor-not-allowed"
+                : ""
+                }`}
+              disabled={chapterIndex === totalChapters - 1}
             >
               next →
             </button>
-          </div>
-        </div>
-      </header>
-
-      {/* only show audio player row if there's an audioSrc */}
-      {chapterData?.audioSrc && (
-        <div className="relative flex flex-col md:flex-row items-center md:items-stretch justify-between gap-4 px-4 py-3 bg-[#2c2c3a]">
-          {/* wave */}
-          <div id="waveform" className="flex-1 h-16" />
-          {isAudioLoading && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-10">
-              <div className="text-white text-sm font-body animate-pulse">
-                loading up the vibes...
-              </div>
-            </div>
-          )}
-          {/* controls on the right */}
-          <div className="flex items-center gap-3">
-            <button onClick={togglePlayPause} className="btn btn-primary text-sm font-body">
-              {isPlaying ? "pause" : "play"}
-            </button>
-            <button onClick={openShareModal} className="btn btn-secondary text-sm font-body">
+            <button onClick={openShareModal} className="btn btn-secondary">
               share
             </button>
-            <div className="flex flex-col items-end text-xs font-body">
-              <span className="text-peachy">{formatTime(currentTime)}</span>
-              <span className="text-white/50">{formatTime(totalTime)}</span>
+          </div>
+        </header>
+
+        {/* audio & download row */}
+        {chapterData?.audioSrc && (
+          <div className="p-4 bg-[#2c2c3a] relative">
+            {isAudioLoading && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-10">
+                <div className="text-white text-sm font-body animate-pulse">
+                  loading up the vibes...
+                </div>
+              </div>
+            )}
+            <div className="flex items-center gap-4">
+              <div id="waveform" className="flex-1 h-[48px]" />
+              <button onClick={togglePlayPause} className="btn btn-primary">
+                {isPlaying ? "pause" : "play"}
+              </button>
+              <div className="text-xs text-peachy whitespace-nowrap">
+                {formatTime(currentTime)} / {formatTime(totalTime)}
+              </div>
+              <button onClick={openDownloadModal} className="btn btn-secondary">
+                download
+              </button>
             </div>
           </div>
-        </div>
-      )}
-
-      {/* only show these if there's audio to download */}
-      {chapterData?.audioSrc && (
-        <div className="p-4 flex gap-4">
-          <DownloadButton slug={slug?.toString() || ""} type="chapter" chapter={chapterIndex + 1} />
-          <DownloadButton slug={slug?.toString() || ""} type="full" classNames="btn-secondary" />
-        </div>
-      )}
-
-      {/* horizontal chapter pills */}
-      <div className="overflow-x-auto flex gap-2 p-4">
-        {chaptersArray.map((cNum) => {
-          const isActive = cNum === chapterIndex
-          return (
-            <button
-              key={cNum}
-              onClick={() => handleChapterClick(cNum)}
-              className={`px-3 py-1 rounded-full border text-sm font-body ${isActive
-                  ? "bg-peachy text-midnight border-peachy"
-                  : "bg-black/30 text-white/80 border-white/20 hover:bg-black/50"
-                }`}
-            >
-              {cNum + 1}
-            </button>
-          )
-        })}
-      </div>
-
-      {/* reading content or loading placeholder */}
-      <main className="flex-1 max-w-3xl w-full mx-auto p-4 leading-relaxed">
-        {isTextLoading ? (
-          <div className="text-center text-lavender animate-pulse">
-            loading text, hold up...
-          </div>
-        ) : (
-          lines
         )}
-      </main>
 
-      {/* bottom nav */}
-      <div className="flex items-center justify-center gap-4 py-3 bg-black/40 backdrop-blur-md">
-        <button
-          onClick={goPrevChapter}
-          className="btn btn-secondary text-sm font-body"
-          style={{ visibility: chapterIndex === 0 ? "hidden" : "visible" }}
-        >
-          ← prev
-        </button>
-        <button
-          onClick={goNextChapter}
-          className="btn btn-secondary text-sm font-body"
-          style={{
-            visibility:
-              !translation || chapterIndex === translation.chapters.length - 1
-                ? "hidden"
-                : "visible",
-          }}
-        >
-          next →
-        </button>
+        {/* actual text */}
+        <main className="flex-1 overflow-y-auto p-4 max-w-3xl mx-auto">
+          {isTextLoading ? (
+            <div className="text-center text-lavender animate-pulse">
+              loading text, hold up...
+            </div>
+          ) : (
+            lines
+          )}
+        </main>
       </div>
 
       {/* share modal */}
@@ -385,7 +352,7 @@ export default function ReadingRoom() {
         <div
           className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center px-4 z-20"
           onClick={(e) => {
-            if (e.target === e.currentTarget) closeShareModal()
+            if (e.target === e.currentTarget) closeShareModal();
           }}
         >
           <div className="w-full max-w-sm bg-[#2c2c3a] p-4 rounded-md relative">
@@ -396,8 +363,6 @@ export default function ReadingRoom() {
               ✕
             </button>
             <h2 className="text-xl mb-3 font-display">share the vibe</h2>
-
-            {/* toggles */}
             <div className="space-y-2 mb-4">
               <label className="flex items-center gap-2">
                 <input
@@ -416,8 +381,6 @@ export default function ReadingRoom() {
                 <span>include timestamp</span>
               </label>
             </div>
-
-            {/* link display */}
             <div className="space-y-2">
               <label className="text-sm">your link</label>
               <input
@@ -427,21 +390,51 @@ export default function ReadingRoom() {
                 value={getShareUrl()}
               />
             </div>
-
-            {/* copy button */}
             <button
               onClick={copyShareUrl}
               className="btn btn-primary mt-3 block w-full"
             >
               copy link
             </button>
-            {/* ephemeral feedback */}
             {shareFeedback && (
               <div className="mt-2 text-sm text-peachy">{shareFeedback}</div>
             )}
           </div>
         </div>
       )}
+
+      {/* download modal */}
+      {isDownloadOpen && (
+        <div
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center px-4 z-20"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) closeDownloadModal();
+          }}
+        >
+          <div className="w-full max-w-sm bg-[#2c2c3a] p-4 rounded-md relative">
+            <button
+              className="absolute top-2 right-2 text-lavender text-sm"
+              onClick={closeDownloadModal}
+            >
+              ✕
+            </button>
+            <h2 className="text-xl mb-3 font-display">download options</h2>
+            <div className="flex flex-col space-y-2">
+              <DownloadButton
+                slug={slug?.toString() || ""}
+                type="chapter"
+                chapter={chapterIndex + 1}
+                classNames="btn btn-primary"
+              />
+              <DownloadButton
+                slug={slug?.toString() || ""}
+                type="full"
+                classNames="btn btn-secondary"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
-  )
+  );
 }

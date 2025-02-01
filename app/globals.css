@@ -90,11 +90,6 @@ h1, h2, h3, h4 {
   margin-top: auto;
 }
 
-/* waveform container */
-#waveform {
-  @apply w-full h-16;
-}
-
 .fade-in-up {
   @apply animate-fadeInUp;
 }
