@@ -12,12 +12,14 @@ const PREFERRED_FORMATS = [
   'application/x-mobipocket-ebook',
 ]
 
-// helper to send an SSE event to the client
+// helper to send an sse event to the client
 function sseSend(controller: ReadableStreamDefaultController, event: string, data: string) {
-  // data must be JSON-escaped or free of CRLF
-  // we do a simple approach: replace CRLF with \n
-  const safeData = data.replace(/\r?\n/g, '\n')
-  const payload = `event: ${event}\ndata: ${safeData}\n\n`
+  // replace crlf with newline for safe transmission
+  const safeData = data.replace(/(\r\n|\n|\r)/g, '\n')
+  const payload = `event: ${event}
+data: ${safeData}
+
+`
   controller.enqueue(new TextEncoder().encode(payload))
 }
 
@@ -89,25 +91,19 @@ async function fetchBookText(id: number) {
 }
 
 /**
- * tries to chunk on double newlines first.
- * if that yields only 1 chunk of large size, try single newline approach.
- * or forcibly chunk by size in the worst case.
+ * chunk text flexibly based on double newlines, falling back as needed.
  */
 function flexibleChunkText(fullText: string, maxSize = DEFAULT_CHUNK_SIZE) {
-  // 1) attempt splitting on double newlines
   let paragraphs = fullText.split('\n\n')
   if (paragraphs.length < 2) {
-    // might be a single block => try splitting on single newline
     paragraphs = fullText.split('\n')
   }
 
-  // we now have an array of paragraphs (some might be short).
   const chunks: string[] = []
   let current: string[] = []
   let currentSize = 0
 
   for (const para of paragraphs) {
-    // +2 accounts for double newlines we'll re-inject
     const sizeWithBuffer = para.length + 2
     if (currentSize + sizeWithBuffer > maxSize) {
       chunks.push(current.join('\n\n'))
@@ -192,7 +188,12 @@ async function translateChunk(
         { role: 'system', content: systemPrompt },
         {
           role: 'user',
-          content: `${userPrompt}\n\n---\noriginal text chunk:\n\n${chunk}`,
+          content: `${userPrompt}
+
+---
+original text chunk:
+
+${chunk}`,
         },
       ],
       reasoning_effort: 'high',
@@ -204,7 +205,12 @@ async function translateChunk(
         { role: 'system', content: systemPrompt },
         {
           role: 'user',
-          content: `${userPrompt}\n\n---\noriginal text chunk:\n\n${chunk}`,
+          content: `${userPrompt}
+
+---
+original text chunk:
+
+${chunk}`,
         },
       ],
       temperature: temp,
@@ -260,12 +266,7 @@ async function translateChunkWithRetries(
 const OPENAI_MODELS = ['o3-mini', 'o1', 'gpt-4o']
 const OPENROUTER_MODELS = [
   'deepseek/deepseek-r1',
-  // 'anthropic/claude-3.5-sonnet:beta',
-  // 'anthropic/claude-3.5-sonnet',
-  // 'google/gemini-flash-1.5',
-  // 'google/gemini-pro-1.5',
-  // 'meta-llama/llama-3.3-70b-instruct',
-  // 'nousresearch/hermes-3-llama-3.1-405b',
+  // other models commented out
 ]
 
 function instantiateOpenAI(model: string): OpenAI {
@@ -297,6 +298,7 @@ export async function GET(request: NextRequest) {
     const model = searchParams.get('model') || ''
     const password = searchParams.get('password') || ''
     const notes = searchParams.get('notes') || ''
+    const bookIdParam = searchParams.get('bookId')
 
     if (!process.env.TRANSLATE_PASSWORD) {
       return new NextResponse('no server password set', { status: 500 })
@@ -305,39 +307,42 @@ export async function GET(request: NextRequest) {
       return new NextResponse('unauthorized', { status: 401 })
     }
 
-    if (!query.trim()) {
-      return new NextResponse('missing query param', { status: 400 })
-    }
-    if (!model) {
-      return new NextResponse('missing model param', { status: 400 })
-    }
-
     const openai = instantiateOpenAI(model)
 
     const stream = new ReadableStream({
       async start(controller) {
         try {
-          sseSend(controller, 'log', `starting gutendex search for: ${query}`)
-          const results = await gutendexSearch(query)
-          sseSend(controller, 'log', `found ${results.length} search results`)
-
-          if (!results.length) {
-            sseSend(controller, 'error', `no results found`)
+          if (!bookIdParam) {
+            // perform search and return top 5 results with extra metadata
+            sseSend(controller, 'log', `starting gutendex search for: ${query}`)
+            const results = await gutendexSearch(query)
+            sseSend(controller, 'log', `found ${results.length} search results`)
+            if (!results.length) {
+              sseSend(controller, 'error', `no results found`)
+              controller.close()
+              return
+            }
+            const topResults = results.slice(0, 5).map((book: any) => ({
+              id: book.id,
+              title: book.title,
+              authors: (book.authors || []).map((a: any) => a.name).join(', ') || 'unknown',
+              downloadCount: book.download_count || 0
+            }))
+            sseSend(controller, 'results', JSON.stringify(topResults))
             controller.close()
             return
           }
 
-          const best = results[0]
-          sseSend(controller, 'log', `using first result: ${best.title} (id=${best.id})`)
-
-          const { title, authors, text } = await fetchBookText(best.id)
+          // proceed with translation if bookid is provided
+          const bookId = parseInt(bookIdParam, 10)
+          sseSend(controller, 'log', `using selected book id: ${bookId}`)
+          const { title, authors, text } = await fetchBookText(bookId)
           sseSend(
             controller,
             'log',
             `downloaded text for '${title}' by ${authors}, length=${text.length}`
           )
 
-          // send "source" event
           const sourceFilename = `source_${title.replace(/\W+/g, '_').toLowerCase()}.txt`
           const sourcePayload = JSON.stringify({
             filename: sourceFilename,
@@ -349,9 +354,6 @@ export async function GET(request: NextRequest) {
           let chunks = flexibleChunkText(text, DEFAULT_CHUNK_SIZE)
           sseSend(controller, 'log', `after flexible chunking, we got ${chunks.length} chunks.`)
 
-          // if for some reason it's still only 1 chunk but it's huge, forcibly chop it up
-          // to smaller segments. e.g. chunk the single chunk into smaller slices:
-          // note: you can skip this if you trust flexibleChunkText is enough.
           if (chunks.length === 1 && chunks[0].length > DEFAULT_CHUNK_SIZE * 1.5) {
             sseSend(controller, 'log', 'only 1 chunk found, forcibly subdividing into ~10k chars each.')
             const forcedSubChunks: string[] = []

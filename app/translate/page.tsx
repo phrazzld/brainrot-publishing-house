@@ -11,20 +11,22 @@ export default function TranslatePage() {
   const [error, setError] = useState("")
   const [running, setRunning] = useState(false)
   const [evtSource, setEvtSource] = useState<EventSource | null>(null)
+  const [searchResults, setSearchResults] = useState<any[]>([])
 
-  function startTranslation() {
+  // initiate search to fetch top 5 results
+  function startSearch() {
     if (!query.trim() || !password.trim()) {
       alert("need query + password")
       return
     }
     setLogs([])
     setError("")
+    setSearchResults([])
     setRunning(true)
 
     let url = `/api/translate?query=${encodeURIComponent(query)}&model=${encodeURIComponent(
       model
     )}&password=${encodeURIComponent(password)}`
-
     if (notes.length > 0) {
       url += `&notes=${encodeURIComponent(notes)}`
     }
@@ -40,15 +42,55 @@ export default function TranslatePage() {
       setLogs((old) => [`[log] ${event.data}`, ...old])
     })
 
-    es.addEventListener("error", (event: MessageEvent) => {
-      console.error("SSE error event", event)
-      setError(`error: ${event.data}`)
+    es.addEventListener("results", (event: MessageEvent) => {
+      try {
+        const results = JSON.parse(event.data)
+        setSearchResults(results)
+        setLogs((old) => [`[log] received search results`, ...old])
+      } catch (err) {
+        console.error("failed to parse results event", err)
+        setError("couldn't parse search results: " + String(err))
+      }
       es.close()
       setEvtSource(null)
       setRunning(false)
     })
 
-    // automatically download the raw source text on "source" event
+    es.addEventListener("error", (event: MessageEvent) => {
+      console.error("sse error event", event)
+      setError(`error: ${event.data}`)
+      es.close()
+      setEvtSource(null)
+      setRunning(false)
+    })
+  }
+
+  // automatically start translation when a search result is selected
+  function startTranslationWithBook(bookId: number) {
+    setLogs([])
+    setError("")
+    setRunning(true)
+
+    let url = `/api/translate?bookId=${encodeURIComponent(
+      bookId.toString()
+    )}&query=${encodeURIComponent(query)}&model=${encodeURIComponent(
+      model
+    )}&password=${encodeURIComponent(password)}`
+    if (notes.length > 0) {
+      url += `&notes=${encodeURIComponent(notes)}`
+    }
+
+    const es = new EventSource(url)
+    setEvtSource(es)
+
+    es.onmessage = (evt) => {
+      console.log("onmessage:", evt.data)
+    }
+
+    es.addEventListener("log", (event: MessageEvent) => {
+      setLogs((old) => [`[log] ${event.data}`, ...old])
+    })
+
     es.addEventListener("source", (event: MessageEvent) => {
       try {
         const payload = JSON.parse(event.data)
@@ -62,7 +104,6 @@ export default function TranslatePage() {
         link.click()
         document.body.removeChild(link)
         URL.revokeObjectURL(downloadUrl)
-
         setLogs((old) => [`[log] downloaded source text -> ${filename}`, ...old])
       } catch (err) {
         console.error("failed to parse source event", err)
@@ -70,7 +111,6 @@ export default function TranslatePage() {
       }
     })
 
-    // automatically download the final translation on "done" event
     es.addEventListener("done", (event: MessageEvent) => {
       setLogs((old) => ["[log] translation complete! initiating download...", ...old])
       try {
@@ -92,6 +132,19 @@ export default function TranslatePage() {
       setEvtSource(null)
       setRunning(false)
     })
+
+    es.addEventListener("error", (event: MessageEvent) => {
+      console.error("sse error event", event)
+      setError(`error: ${event.data}`)
+      es.close()
+      setEvtSource(null)
+      setRunning(false)
+    })
+  }
+
+  // reset search results to allow reselecting
+  function resetSelection() {
+    setSearchResults([])
   }
 
   useEffect(() => {
@@ -140,18 +193,38 @@ export default function TranslatePage() {
         <label>other notes</label>
         <input
           className="p-2 text-black"
-          placeholder={"e.g. always start chapters with \"whadup chat, it's ya boi\""}
+          placeholder={`e.g. always start chapters with "whadup chat, it's ya boi"`}
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
         />
 
-        <button
-          className="btn btn-primary"
-          onClick={startTranslation}
-          disabled={running}
-        >
-          {running ? "translating..." : "translate → sse stream"}
-        </button>
+        {searchResults.length === 0 && (
+          <button className="btn btn-primary" onClick={startSearch} disabled={running}>
+            {running ? "searching..." : "search"}
+          </button>
+        )}
+
+        {searchResults.length > 0 && (
+          <div className="mt-4">
+            <h2 className="text-xl mb-2">select a book from the results:</h2>
+            <div className="grid gap-4">
+              {searchResults.map((book) => (
+                <div
+                  key={book.id}
+                  className="p-4 border rounded-lg hover:bg-gray-100 cursor-pointer"
+                  onClick={() => startTranslationWithBook(book.id)}
+                >
+                  <h3 className="font-bold text-lg">{book.title}</h3>
+                  <p className="italic">by {book.authors}</p>
+                  <p className="text-sm text-gray-600">downloads: {book.downloadCount}</p>
+                </div>
+              ))}
+            </div>
+            <button className="mt-2 underline text-blue-500" onClick={resetSelection}>
+              or search again
+            </button>
+          </div>
+        )}
       </div>
 
       {error && <div className="text-red-400">error: {error}</div>}
