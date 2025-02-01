@@ -6,7 +6,7 @@ const translations = [
     slug: 'the-iliad',
     title: 'the iliad',
     shortDescription: 'achilles big salty, trojan bros caught in 4k, city going bruh-level meltdown. w drama, 100% based.',
-    coverImage: '/assets/images/achilles-03.png',
+    coverImage: '/assets/the-iliad/images/the-iliad-01.png',
     status: 'available',
     purchaseUrl: 'https://www.amazon.com/Iliad-Homer-Greece-ebook/dp/B0DTFP8DY7',
     chapters: [
@@ -136,7 +136,7 @@ const translations = [
     slug: 'the-odyssey',
     title: 'the odyssey',
     shortDescription: 'odysseus ghosting cyclops & sirens, tries not to flop but finna get that home sweet home. big bde of cunning tbh.',
-    coverImage: '/assets/images/achilles-01.png',
+    coverImage: '/assets/the-odyssey/images/the-odyssey-01.png',
     status: 'available',
     chapters: [
       {
@@ -265,7 +265,7 @@ const translations = [
     slug: 'the-aeneid',
     title: 'the aeneid',
     shortDescription: 'trojan boi aeneas on a no cap mission to found rome, basically said “secure the bag or crash out.” spoiler: he secures it, bestie.',
-    coverImage: '/assets/images/aeneid-02.png',
+    coverImage: '/assets/the-aeneid/images/the-aeneid-01.png',
     status: 'available',
     chapters: [
       {
@@ -334,7 +334,7 @@ const translations = [
     slug: 'the-declaration-of-independence',
     title: 'the declaration of independence',
     shortDescription: 'king george acting real sus, colonies hit him with the "it\'s not me, it\'s you" vibes. hard-launches freedom era, no cap.',
-    coverImage: '/assets/images/america-02.png',
+    coverImage: '/assets/the-declaration-of-independence/images/america-02.png',
     status: 'available',
     chapters: [
       {
@@ -347,17 +347,232 @@ const translations = [
   {
     slug: 'the-adventures-of-huckleberry-finn',
     title: 'the adventures of huckleberry finn',
-    shortDescription: 'huck yeets from civil society, links with jim, raft life hits diff. dodging L’s, chasing W’s, river got that main character energy.',
-    coverImage: '/assets/images/huck-finn-02.png',
-    status: 'coming soon',
+    shortDescription: 'huck yeets from civil society, links with jim, raft life hits diff. dodging l’s, chasing w’s, river got that main character energy.',
+    coverImage: '/assets/the-adventures-of-huckleberry-finn/images/huck-finn-09.png',
+    status: 'available',
     chapters: [
-    ],
+      {
+        title: 'chapter i',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-i.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter ii',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-ii.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter iii',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-iii.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter iv',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-iv.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter v',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-v.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter vi',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-vi.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter vii',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-vii.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter viii',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-viii.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter ix',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-ix.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter x',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-x.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter xi',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xi.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter xii',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xii.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter xiii',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xiii.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter xiv',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xiv.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter xv',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xv.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter xvi',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xvi.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter xvii',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xvii.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter xviii',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xviii.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter xix',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xix.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter xx',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xx.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter xxi',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxi.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter xxii',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxii.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter xxiii',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxiii.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter xxiv',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxiv.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter xxv',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxv.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter xxvi',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxvi.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter xxvii',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxvii.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter xxviii',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxviii.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter xxix',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxix.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter xxx',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxx.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter xxxi',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxi.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter xxxii',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxii.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter xxxiii',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxiii.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter xxxiv',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxiv.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter xxxv',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxv.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter xxxvi',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxvi.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter xxxvii',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxvii.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter xxxviii',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxviii.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter xxxix',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxix.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter xl',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xl.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter xli',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xli.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter xlii',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xlii.txt',
+        audioSrc: null
+      },
+      {
+        title: 'chapter the last',
+        text: '/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-the-last.txt',
+        audioSrc: null
+      },
+    ]
   },
   {
     slug: 'meditations',
     title: 'meditations',
     shortDescription: 'life be lifin\', but marcus just vibes. control what you can, ignore the clowns, stay based.',
-    coverImage: '/assets/images/meditations-01.png',
+    coverImage: '/assets/meditations/images/meditations-01.png',
     status: 'coming soon',
     chapters: [
     ],

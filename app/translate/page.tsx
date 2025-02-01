@@ -37,7 +37,7 @@ export default function TranslatePage() {
     }
 
     es.addEventListener("log", (event: MessageEvent) => {
-      setLogs((old) => [...old, `[log] ${event.data}`])
+      setLogs((old) => [`[log] ${event.data}`, ...old])
     })
 
     es.addEventListener("error", (event: MessageEvent) => {
@@ -63,7 +63,7 @@ export default function TranslatePage() {
         document.body.removeChild(link)
         URL.revokeObjectURL(downloadUrl)
 
-        setLogs((old) => [...old, `[log] downloaded source text -> ${filename}`])
+        setLogs((old) => [`[log] downloaded source text -> ${filename}`, ...old])
       } catch (err) {
         console.error("failed to parse source event", err)
         setError("couldn't parse raw source text: " + String(err))
@@ -72,7 +72,7 @@ export default function TranslatePage() {
 
     // automatically download the final translation on "done" event
     es.addEventListener("done", (event: MessageEvent) => {
-      setLogs((old) => [...old, "[log] translation complete! initiating download..."])
+      setLogs((old) => ["[log] translation complete! initiating download...", ...old])
       try {
         const { filename, content } = JSON.parse(event.data)
         const blob = new Blob([content], { type: "text/plain" })
