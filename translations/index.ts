@@ -331,20 +331,6 @@ const translations = [
     ],
   },
   {
-    slug: 'the-declaration-of-independence',
-    title: 'the declaration of independence',
-    shortDescription: 'king george acting real sus, colonies hit him with the "it\'s not me, it\'s you" vibes. hard-launches freedom era, no cap.',
-    coverImage: '/assets/the-declaration-of-independence/images/america-02.png',
-    status: 'available',
-    chapters: [
-      {
-        title: 'the declaration of independence',
-        text: "/assets/the-declaration-of-independence/text/the-declaration-of-independence.txt",
-        audioSrc: '/the-declaration-of-independence/audio/the-declaration-of-independence.mp3'
-      },
-    ],
-  },
-  {
     slug: 'the-adventures-of-huckleberry-finn',
     title: 'the adventures of huckleberry finn',
     shortDescription: 'huck yeets from civil society, links with jim, raft life hits diff. dodging l’s, chasing w’s, river got that main character energy.',
@@ -578,7 +564,7 @@ const translations = [
       {
         title: 'act i',
         text: '/assets/hamlet/text/brainrot/act-i.txt',
-        audioSrc: null
+        audioSrc: '/hamlet/audio/act-i.mp3',
       },
       {
         title: 'act ii',
@@ -607,6 +593,79 @@ const translations = [
     title: 'the republic',
     shortDescription: 'socrates pulls up, asks “what if we made a city that slaps?”—ends up min-maxing justice, dunking on poets, and inventing the philosopher-king meta',
     coverImage: '/assets/the-republic/images/republic-07.png',
+    status: 'available',
+    chapters: [
+      {
+        title: 'book i',
+        text: '/assets/the-republic/text/brainrot/book-i.txt',
+        audioSrc: null
+      },
+      {
+        title: 'book ii',
+        text: '/assets/the-republic/text/brainrot/book-ii.txt',
+        audioSrc: null
+      },
+      {
+        title: 'book iii',
+        text: '/assets/the-republic/text/brainrot/book-iii.txt',
+        audioSrc: null
+      },
+      {
+        title: 'book iv',
+        text: '/assets/the-republic/text/brainrot/book-iv.txt',
+        audioSrc: null
+      },
+      {
+        title: 'book v',
+        text: '/assets/the-republic/text/brainrot/book-v.txt',
+        audioSrc: null
+      },
+      {
+        title: 'book vi',
+        text: '/assets/the-republic/text/brainrot/book-vi.txt',
+        audioSrc: null
+      },
+      {
+        title: 'book vii',
+        text: '/assets/the-republic/text/brainrot/book-vii.txt',
+        audioSrc: null
+      },
+      {
+        title: 'book viii',
+        text: '/assets/the-republic/text/brainrot/book-viii.txt',
+        audioSrc: null
+      },
+      {
+        title: 'book ix',
+        text: '/assets/the-republic/text/brainrot/book-ix.txt',
+        audioSrc: null
+      },
+      {
+        title: 'book x',
+        text: '/assets/the-republic/text/brainrot/book-x.txt',
+        audioSrc: null
+      },
+    ],
+  },
+  {
+    slug: 'the-declaration-of-independence',
+    title: 'the declaration of independence',
+    shortDescription: 'king george acting real sus, colonies hit him with the "it\'s not me, it\'s you" vibes. hard-launches freedom era, no cap.',
+    coverImage: '/assets/the-declaration-of-independence/images/america-02.png',
+    status: 'available',
+    chapters: [
+      {
+        title: 'the declaration of independence',
+        text: "/assets/the-declaration-of-independence/text/the-declaration-of-independence.txt",
+        audioSrc: '/the-declaration-of-independence/audio/the-declaration-of-independence.mp3'
+      },
+    ],
+  },
+  {
+    slug: 'paradise-lost',
+    title: 'paradise lost',
+    shortDescription: 'god builds a perfect utopia, satan says “not on my watch,” humans fumble the bag instantly. paradise lost, drama found.',
+    coverImage: '/assets/paradise-lost/images/paradise-lost-01.png',
     status: 'coming soon',
     chapters: [
     ],
