@@ -8,7 +8,7 @@ const translations = [
     shortDescription: 'achilles big salty, trojan bros caught in 4k, city going bruh-level meltdown. w drama, 100% based.',
     coverImage: '/assets/the-iliad/images/the-iliad-01.png',
     status: 'available',
-    purchaseUrl: 'https://www.amazon.com/Iliad-Homer-Greece-ebook/dp/B0DTFP8DY7',
+    purchaseUrl: 'https://a.co/d/3Jgk26x',
     chapters: [
       {
         title: 'book 1',
@@ -133,209 +133,12 @@ const translations = [
     ],
   },
   {
-    slug: 'the-odyssey',
-    title: 'the odyssey',
-    shortDescription: 'odysseus ghosting cyclops & sirens, tries not to flop but finna get that home sweet home. big bde of cunning tbh.',
-    coverImage: '/assets/the-odyssey/images/the-odyssey-01.png',
-    status: 'available',
-    chapters: [
-      {
-        title: 'book 1',
-        text: "/assets/the-odyssey/text/book-01.txt",
-        audioSrc: '/the-odyssey/audio/book-01.mp3'
-      },
-      {
-        title: 'book 2',
-        text: "/assets/the-odyssey/text/book-02.txt",
-        audioSrc: '/the-odyssey/audio/book-02.mp3'
-      },
-      {
-        title: 'book 3',
-        text: "/assets/the-odyssey/text/book-03.txt",
-        audioSrc: '/the-odyssey/audio/book-03.mp3'
-      },
-      {
-        title: 'book 4',
-        text: "/assets/the-odyssey/text/book-04.txt",
-        audioSrc: '/the-odyssey/audio/book-04.mp3'
-      },
-      {
-        title: 'book 5',
-        text: "/assets/the-odyssey/text/book-05.txt",
-        audioSrc: '/the-odyssey/audio/book-05.mp3'
-      },
-      {
-        title: 'book 6',
-        text: "/assets/the-odyssey/text/book-06.txt",
-        audioSrc: '/the-odyssey/audio/book-06.mp3'
-      },
-      {
-        title: 'book 7',
-        text: "/assets/the-odyssey/text/book-07.txt",
-        audioSrc: '/the-odyssey/audio/book-07.mp3'
-      },
-      {
-        title: 'book 8',
-        text: "/assets/the-odyssey/text/book-08.txt",
-        audioSrc: '/the-odyssey/audio/book-08.mp3'
-      },
-      {
-        title: 'book 9',
-        text: "/assets/the-odyssey/text/book-09.txt",
-        audioSrc: '/the-odyssey/audio/book-09.mp3'
-      },
-      {
-        title: 'book 10',
-        text: "/assets/the-odyssey/text/book-10.txt",
-        audioSrc: '/the-odyssey/audio/book-10.mp3'
-      },
-      {
-        title: 'book 11',
-        text: "/assets/the-odyssey/text/book-11.txt",
-        audioSrc: '/the-odyssey/audio/book-11.mp3'
-      },
-      {
-        title: 'book 12',
-        text: "/assets/the-odyssey/text/book-12.txt",
-        audioSrc: '/the-odyssey/audio/book-12.mp3'
-      },
-      {
-        title: 'book 13',
-        text: "/assets/the-odyssey/text/book-13.txt",
-        audioSrc: '/the-odyssey/audio/book-13.mp3'
-      },
-      {
-        title: 'book 14',
-        text: "/assets/the-odyssey/text/book-14.txt",
-        audioSrc: '/the-odyssey/audio/book-14.mp3'
-      },
-      {
-        title: 'book 15',
-        text: "/assets/the-odyssey/text/book-15.txt",
-        audioSrc: '/the-odyssey/audio/book-15.mp3'
-      },
-      {
-        title: 'book 16',
-        text: "/assets/the-odyssey/text/book-16.txt",
-        audioSrc: '/the-odyssey/audio/book-16.mp3'
-      },
-      {
-        title: 'book 17',
-        text: "/assets/the-odyssey/text/book-17.txt",
-        audioSrc: '/the-odyssey/audio/book-17.mp3'
-      },
-      {
-        title: 'book 18',
-        text: "/assets/the-odyssey/text/book-18.txt",
-        audioSrc: '/the-odyssey/audio/book-18.mp3'
-      },
-      {
-        title: 'book 19',
-        text: "/assets/the-odyssey/text/book-19.txt",
-        audioSrc: '/the-odyssey/audio/book-19.mp3'
-      },
-      {
-        title: 'book 20',
-        text: "/assets/the-odyssey/text/book-20.txt",
-        audioSrc: '/the-odyssey/audio/book-20.mp3'
-      },
-      {
-        title: 'book 21',
-        text: "/assets/the-odyssey/text/book-21.txt",
-        audioSrc: '/the-odyssey/audio/book-21.mp3'
-      },
-      {
-        title: 'book 22',
-        text: "/assets/the-odyssey/text/book-22.txt",
-        audioSrc: '/the-odyssey/audio/book-22.mp3'
-      },
-      {
-        title: 'book 23',
-        text: "/assets/the-odyssey/text/book-23.txt",
-        audioSrc: '/the-odyssey/audio/book-23.mp3'
-      },
-      {
-        title: 'book 24',
-        text: "/assets/the-odyssey/text/book-24.txt",
-        audioSrc: '/the-odyssey/audio/book-24.mp3'
-      },
-    ],
-  },
-  {
-    slug: 'the-aeneid',
-    title: 'the aeneid',
-    shortDescription: 'trojan boi aeneas on a no cap mission to found rome, basically said “secure the bag or crash out.” spoiler: he secures it, bestie.',
-    coverImage: '/assets/the-aeneid/images/the-aeneid-01.png',
-    status: 'available',
-    chapters: [
-      {
-        title: 'book 1',
-        text: "/assets/the-aeneid/text/book-01.txt",
-        audioSrc: '/the-aeneid/audio/book-01.mp3'
-      },
-      {
-        title: 'book 2',
-        text: "/assets/the-aeneid/text/book-02.txt",
-        audioSrc: '/the-aeneid/audio/book-02.mp3'
-      },
-      {
-        title: 'book 3',
-        text: "/assets/the-aeneid/text/book-03.txt",
-        audioSrc: '/the-aeneid/audio/book-03.mp3'
-      },
-      {
-        title: 'book 4',
-        text: "/assets/the-aeneid/text/book-04.txt",
-        audioSrc: '/the-aeneid/audio/book-04.mp3'
-      },
-      {
-        title: 'book 5',
-        text: "/assets/the-aeneid/text/book-05.txt",
-        audioSrc: '/the-aeneid/audio/book-05.mp3'
-      },
-      {
-        title: 'book 6',
-        text: "/assets/the-aeneid/text/book-06.txt",
-        audioSrc: '/the-aeneid/audio/book-06.mp3'
-      },
-      {
-        title: 'book 7',
-        text: "/assets/the-aeneid/text/book-07.txt",
-        audioSrc: '/the-aeneid/audio/book-07.mp3'
-      },
-      {
-        title: 'book 8',
-        text: "/assets/the-aeneid/text/book-08.txt",
-        audioSrc: '/the-aeneid/audio/book-08.mp3'
-      },
-      {
-        title: 'book 9',
-        text: "/assets/the-aeneid/text/book-09.txt",
-        audioSrc: '/the-aeneid/audio/book-09.mp3'
-      },
-      {
-        title: 'book 10',
-        text: "/assets/the-aeneid/text/book-10.txt",
-        audioSrc: '/the-aeneid/audio/book-10.mp3'
-      },
-      {
-        title: 'book 11',
-        text: "/assets/the-aeneid/text/book-11.txt",
-        audioSrc: '/the-aeneid/audio/book-11.mp3'
-      },
-      {
-        title: 'book 12',
-        text: "/assets/the-aeneid/text/book-12.txt",
-        audioSrc: '/the-aeneid/audio/book-12.mp3'
-      },
-    ],
-  },
-  {
     slug: 'the-adventures-of-huckleberry-finn',
     title: 'the adventures of huckleberry finn',
     shortDescription: 'huck yeets from civil society, links with jim, raft life hits diff. dodging l’s, chasing w’s, river got that main character energy.',
     coverImage: '/assets/the-adventures-of-huckleberry-finn/images/huck-finn-09.png',
     status: 'available',
+    purchaseUrl: 'https://a.co/d/4hjXftX',
     chapters: [
       {
         title: 'chapter i',
@@ -555,6 +358,204 @@ const translations = [
     ]
   },
   {
+    slug: 'the-odyssey',
+    title: 'the odyssey',
+    shortDescription: 'odysseus ghosting cyclops & sirens, tries not to flop but finna get that home sweet home. big bde of cunning tbh.',
+    coverImage: '/assets/the-odyssey/images/the-odyssey-01.png',
+    status: 'available',
+    chapters: [
+      {
+        title: 'book 1',
+        text: "/assets/the-odyssey/text/book-01.txt",
+        audioSrc: '/the-odyssey/audio/book-01.mp3'
+      },
+      {
+        title: 'book 2',
+        text: "/assets/the-odyssey/text/book-02.txt",
+        audioSrc: '/the-odyssey/audio/book-02.mp3'
+      },
+      {
+        title: 'book 3',
+        text: "/assets/the-odyssey/text/book-03.txt",
+        audioSrc: '/the-odyssey/audio/book-03.mp3'
+      },
+      {
+        title: 'book 4',
+        text: "/assets/the-odyssey/text/book-04.txt",
+        audioSrc: '/the-odyssey/audio/book-04.mp3'
+      },
+      {
+        title: 'book 5',
+        text: "/assets/the-odyssey/text/book-05.txt",
+        audioSrc: '/the-odyssey/audio/book-05.mp3'
+      },
+      {
+        title: 'book 6',
+        text: "/assets/the-odyssey/text/book-06.txt",
+        audioSrc: '/the-odyssey/audio/book-06.mp3'
+      },
+      {
+        title: 'book 7',
+        text: "/assets/the-odyssey/text/book-07.txt",
+        audioSrc: '/the-odyssey/audio/book-07.mp3'
+      },
+      {
+        title: 'book 8',
+        text: "/assets/the-odyssey/text/book-08.txt",
+        audioSrc: '/the-odyssey/audio/book-08.mp3'
+      },
+      {
+        title: 'book 9',
+        text: "/assets/the-odyssey/text/book-09.txt",
+        audioSrc: '/the-odyssey/audio/book-09.mp3'
+      },
+      {
+        title: 'book 10',
+        text: "/assets/the-odyssey/text/book-10.txt",
+        audioSrc: '/the-odyssey/audio/book-10.mp3'
+      },
+      {
+        title: 'book 11',
+        text: "/assets/the-odyssey/text/book-11.txt",
+        audioSrc: '/the-odyssey/audio/book-11.mp3'
+      },
+      {
+        title: 'book 12',
+        text: "/assets/the-odyssey/text/book-12.txt",
+        audioSrc: '/the-odyssey/audio/book-12.mp3'
+      },
+      {
+        title: 'book 13',
+        text: "/assets/the-odyssey/text/book-13.txt",
+        audioSrc: '/the-odyssey/audio/book-13.mp3'
+      },
+      {
+        title: 'book 14',
+        text: "/assets/the-odyssey/text/book-14.txt",
+        audioSrc: '/the-odyssey/audio/book-14.mp3'
+      },
+      {
+        title: 'book 15',
+        text: "/assets/the-odyssey/text/book-15.txt",
+        audioSrc: '/the-odyssey/audio/book-15.mp3'
+      },
+      {
+        title: 'book 16',
+        text: "/assets/the-odyssey/text/book-16.txt",
+        audioSrc: '/the-odyssey/audio/book-16.mp3'
+      },
+      {
+        title: 'book 17',
+        text: "/assets/the-odyssey/text/book-17.txt",
+        audioSrc: '/the-odyssey/audio/book-17.mp3'
+      },
+      {
+        title: 'book 18',
+        text: "/assets/the-odyssey/text/book-18.txt",
+        audioSrc: '/the-odyssey/audio/book-18.mp3'
+      },
+      {
+        title: 'book 19',
+        text: "/assets/the-odyssey/text/book-19.txt",
+        audioSrc: '/the-odyssey/audio/book-19.mp3'
+      },
+      {
+        title: 'book 20',
+        text: "/assets/the-odyssey/text/book-20.txt",
+        audioSrc: '/the-odyssey/audio/book-20.mp3'
+      },
+      {
+        title: 'book 21',
+        text: "/assets/the-odyssey/text/book-21.txt",
+        audioSrc: '/the-odyssey/audio/book-21.mp3'
+      },
+      {
+        title: 'book 22',
+        text: "/assets/the-odyssey/text/book-22.txt",
+        audioSrc: '/the-odyssey/audio/book-22.mp3'
+      },
+      {
+        title: 'book 23',
+        text: "/assets/the-odyssey/text/book-23.txt",
+        audioSrc: '/the-odyssey/audio/book-23.mp3'
+      },
+      {
+        title: 'book 24',
+        text: "/assets/the-odyssey/text/book-24.txt",
+        audioSrc: '/the-odyssey/audio/book-24.mp3'
+      },
+    ],
+  },
+  {
+    slug: 'the-aeneid',
+    title: 'the aeneid',
+    shortDescription: 'trojan boi aeneas on a no cap mission to found rome, basically said “secure the bag or crash out.” spoiler: he secures it, bestie.',
+    coverImage: '/assets/the-aeneid/images/the-aeneid-01.png',
+    status: 'available',
+    chapters: [
+      {
+        title: 'book 1',
+        text: "/assets/the-aeneid/text/book-01.txt",
+        audioSrc: '/the-aeneid/audio/book-01.mp3'
+      },
+      {
+        title: 'book 2',
+        text: "/assets/the-aeneid/text/book-02.txt",
+        audioSrc: '/the-aeneid/audio/book-02.mp3'
+      },
+      {
+        title: 'book 3',
+        text: "/assets/the-aeneid/text/book-03.txt",
+        audioSrc: '/the-aeneid/audio/book-03.mp3'
+      },
+      {
+        title: 'book 4',
+        text: "/assets/the-aeneid/text/book-04.txt",
+        audioSrc: '/the-aeneid/audio/book-04.mp3'
+      },
+      {
+        title: 'book 5',
+        text: "/assets/the-aeneid/text/book-05.txt",
+        audioSrc: '/the-aeneid/audio/book-05.mp3'
+      },
+      {
+        title: 'book 6',
+        text: "/assets/the-aeneid/text/book-06.txt",
+        audioSrc: '/the-aeneid/audio/book-06.mp3'
+      },
+      {
+        title: 'book 7',
+        text: "/assets/the-aeneid/text/book-07.txt",
+        audioSrc: '/the-aeneid/audio/book-07.mp3'
+      },
+      {
+        title: 'book 8',
+        text: "/assets/the-aeneid/text/book-08.txt",
+        audioSrc: '/the-aeneid/audio/book-08.mp3'
+      },
+      {
+        title: 'book 9',
+        text: "/assets/the-aeneid/text/book-09.txt",
+        audioSrc: '/the-aeneid/audio/book-09.mp3'
+      },
+      {
+        title: 'book 10',
+        text: "/assets/the-aeneid/text/book-10.txt",
+        audioSrc: '/the-aeneid/audio/book-10.mp3'
+      },
+      {
+        title: 'book 11',
+        text: "/assets/the-aeneid/text/book-11.txt",
+        audioSrc: '/the-aeneid/audio/book-11.mp3'
+      },
+      {
+        title: 'book 12',
+        text: "/assets/the-aeneid/text/book-12.txt",
+        audioSrc: '/the-aeneid/audio/book-12.mp3'
+      },
+    ],
+  },
+  {
     slug: 'hamlet',
     title: 'hamlet',
     shortDescription: 'hamlet mad pressed, dad ghost drops the worst dm of all time, uncle sus af. whole kingdom in shambles cuz bro won\'t touch grass.',
@@ -591,7 +592,7 @@ const translations = [
   {
     slug: 'the-republic',
     title: 'the republic',
-    shortDescription: 'socrates pulls up, asks “what if we made a city that slaps?”—ends up min-maxing justice, dunking on poets, and inventing the philosopher-king meta',
+    shortDescription: 'socrates pulls up, asks “what if we made a city that slaps?”—ends up min-maxing justice, dunking on poets, and inventing the philosopher-king meta.',
     coverImage: '/assets/the-republic/images/republic-07.png',
     status: 'available',
     chapters: [
@@ -659,6 +660,15 @@ const translations = [
         text: "/assets/the-declaration-of-independence/text/the-declaration-of-independence.txt",
         audioSrc: '/the-declaration-of-independence/audio/the-declaration-of-independence.mp3'
       },
+    ],
+  },
+  {
+    slug: 'pride-and-prejudice',
+    title: 'pride and prejudice',
+    shortDescription: 'mom says “marry rich,” dad says “marry smart,” lizzy says “i’m built different.” cue romantic turbulence.',
+    coverImage: '/assets/pride-and-prejudice/images/pride-and-prejudice-01.png',
+    status: 'coming soon',
+    chapters: [
     ],
   },
   {
