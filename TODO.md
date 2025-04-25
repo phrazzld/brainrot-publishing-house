@@ -17,7 +17,7 @@
 - [x] Write tests for Blob storage access
 - [x] Update DownloadButton component to use Blob for file downloads
 - [x] Update api/download route to use Blob instead of S3
-- [ ] Test all book rendering with Blob-stored content
+- [x] Test all book rendering with Blob-stored content
 - [ ] Clean up local assets after successful migration
 
 ## ESLint Configuration ✅
