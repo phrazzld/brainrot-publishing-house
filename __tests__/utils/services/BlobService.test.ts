@@ -265,6 +265,63 @@ describe('BlobService', () => {
       // Assert
       expect(result).toBe('https://public.blob.vercel-storage.com/books/hamlet/scene1.txt');
     });
+    
+    it('should use provided baseUrl option', () => {
+      // Arrange
+      const path = 'books/hamlet/scene1.txt';
+      const options = { baseUrl: 'https://custom-cdn.example.com' };
+      
+      // Even with env var set, should use provided baseUrl
+      process.env.NEXT_PUBLIC_BLOB_BASE_URL = 'https://my-blob-store.com';
+      
+      // Act
+      const result = blobService.getUrlForPath(path, options);
+      
+      // Assert
+      expect(result).toBe('https://custom-cdn.example.com/books/hamlet/scene1.txt');
+    });
+    
+    it('should add cache busting parameter when noCache is true', () => {
+      // Arrange
+      const path = 'books/hamlet/scene1.txt';
+      const options = { noCache: true };
+      
+      // Mock Date.now() to get consistent test output
+      const originalDateNow = Date.now;
+      Date.now = jest.fn(() => 1234567890);
+      
+      try {
+        // Act
+        const result = blobService.getUrlForPath(path, options);
+        
+        // Assert
+        expect(result).toBe('https://public.blob.vercel-storage.com/books/hamlet/scene1.txt?_t=1234567890');
+      } finally {
+        // Restore original Date.now
+        Date.now = originalDateNow;
+      }
+    });
+    
+    it('should correctly append cache busting parameter to URLs with existing query parameters', () => {
+      // Arrange
+      const path = 'books/hamlet/scene1.txt?existing=param';
+      const options = { noCache: true };
+      
+      // Mock Date.now() to get consistent test output
+      const originalDateNow = Date.now;
+      Date.now = jest.fn(() => 1234567890);
+      
+      try {
+        // Act
+        const result = blobService.getUrlForPath(path, options);
+        
+        // Assert
+        expect(result).toBe('https://public.blob.vercel-storage.com/books/hamlet/scene1.txt?existing=param&_t=1234567890');
+      } finally {
+        // Restore original Date.now
+        Date.now = originalDateNow;
+      }
+    });
   });
   
   describe('fetchText', () => {

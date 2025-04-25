@@ -14,7 +14,7 @@
 - [x] Create a function to generate public URL for Blob assets
 - [x] Add Blob URL caching to improve performance
 - [x] Create fallback mechanism for assets still being migrated
-- [ ] Write tests for Blob storage access
+- [x] Write tests for Blob storage access
 - [ ] Update DownloadButton component to use Blob for file downloads
 - [ ] Update api/download route to use Blob instead of S3
 - [ ] Test all book rendering with Blob-stored content
