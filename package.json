@@ -22,7 +22,9 @@
     "migrate:brainrot-text:dry": "tsx scripts/migrateBrainrotTextFiles.ts --dry-run",
     "migrate:source-text": "tsx scripts/migrateSourceTextFiles.ts",
     "migrate:source-text:dry": "tsx scripts/migrateSourceTextFiles.ts --dry-run",
-    "verify:blob": "tsx scripts/verifyBlobStorage.ts"
+    "verify:blob": "tsx scripts/verifyBlobStorage.ts",
+    "cleanup:assets": "tsx scripts/cleanupLocalAssets.ts",
+    "cleanup:assets:delete": "tsx scripts/cleanupLocalAssets.ts --delete"
   },
   "dependencies": {
     "@vercel/blob": "^1.0.0",
