@@ -191,3 +191,32 @@ The script:
 - Verifies successful uploads
 - Maintains a migration log for tracking progress
 - Provides detailed output with success/failure information by book
+
+##### Brainrot Text Files Migration
+
+```bash
+# Dry run (simulation without uploading)
+npm run migrate:brainrot-text:dry
+
+# Perform actual migration
+npm run migrate:brainrot-text
+
+# Advanced options
+npx tsx scripts/migrateBrainrotTextFiles.ts --books=hamlet,the-republic --force
+```
+
+Options:
+- `--dry-run`: Simulate migration without uploading
+- `--books=slug1,slug2`: Comma-separated list of book slugs to migrate (default: all)
+- `--force`: Re-upload even if already migrated
+- `--retries=3`: Number of retries for failed uploads (default: 3)
+- `--concurrency=5`: Number of concurrent uploads (default: 5)
+- `--log-file=path`: Path to migration log file (default: brainrot-text-migration.json)
+
+The script:
+- Scans the filesystem for brainrot text files in each book's directory
+- Maps local paths to Blob paths using BlobPathService
+- Uploads text content with appropriate caching headers (1-hour cache)
+- Verifies successful uploads
+- Maintains a migration log for tracking progress
+- Provides detailed output with success/failure information by book

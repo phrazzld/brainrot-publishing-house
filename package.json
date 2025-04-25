@@ -14,7 +14,9 @@
     "migrate:cover-images": "tsx scripts/migrateBookCoverImages.ts",
     "migrate:cover-images:dry": "tsx scripts/migrateBookCoverImages.ts --dry-run",
     "migrate:chapter-images": "tsx scripts/migrateBookChapterImages.ts",
-    "migrate:chapter-images:dry": "tsx scripts/migrateBookChapterImages.ts --dry-run"
+    "migrate:chapter-images:dry": "tsx scripts/migrateBookChapterImages.ts --dry-run",
+    "migrate:brainrot-text": "tsx scripts/migrateBrainrotTextFiles.ts",
+    "migrate:brainrot-text:dry": "tsx scripts/migrateBrainrotTextFiles.ts --dry-run"
   },
   "dependencies": {
     "@vercel/blob": "^1.0.0",

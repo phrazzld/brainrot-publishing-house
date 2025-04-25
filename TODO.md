@@ -7,7 +7,7 @@
 - [x] Write a script to inventory all existing assets (images and text files)
 - [x] Create a migration script for book cover images
 - [x] Create a migration script for book chapter images
-- [ ] Create a migration script for brainrot text files
+- [x] Create a migration script for brainrot text files
 - [ ] Create a migration script for source text files
 - [ ] Update translations/index.ts references to use Blob URLs
 - [ ] Modify reading-room component to fetch text content from Blob
