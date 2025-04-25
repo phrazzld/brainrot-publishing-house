@@ -7,54 +7,91 @@ This project uses Vercel Blob for storing and serving assets like images and tex
 To use Vercel Blob, you need to set up the following environment variables:
 
 - `BLOB_READ_WRITE_TOKEN`: A token for read and write access to your Blob storage
+- `NEXT_PUBLIC_BLOB_BASE_URL`: The base URL for public blob storage (defaults to https://public.blob.vercel-storage.com)
 
-Create a `.env.local` file in the project root with the above variable (see `.env.local.example` for reference).
+Create a `.env.local` file in the project root with the above variables (see `.env.local.example` for reference).
 
-## Basic Usage
+## Using BlobService
 
-Vercel Blob provides a simple API for uploading, listing, and deleting files:
-
-### Upload a file
+The project includes a `BlobService` utility class to simplify interactions with Vercel Blob. This provides a consistent interface for all blob operations:
 
 ```typescript
-import { put } from '@vercel/blob';
+import { blobService } from '@/utils/services';
 
-// In a server action or API route:
-const blob = await put('path/to/file.png', file, {
-  access: 'public', // or 'private'
+// Upload a file
+const result = await blobService.uploadFile(file, {
+  pathname: 'books/hamlet/images',
+  access: 'public'
 });
 
-// blob.url -> The URL of the uploaded file
-// blob.pathname -> The path of the file in the storage
+// Upload text content
+await blobService.uploadText('Hello world', 'books/hamlet/text/greeting.txt');
+
+// List files
+const { blobs } = await blobService.listFiles({
+  prefix: 'books/hamlet/'
+});
+
+// Get file info
+const info = await blobService.getFileInfo(blobUrl);
+
+// Delete a file
+await blobService.deleteFile(blobUrl);
+
+// Get URL for a path (without uploading)
+const url = blobService.getUrlForPath('books/hamlet/text/act1.txt');
+
+// Fetch text from a blob URL
+const text = await blobService.fetchText(textBlobUrl);
 ```
 
-### List files
+## BlobService API
 
-```typescript
-import { list } from '@vercel/blob';
+### `uploadFile(file: File, options?: UploadOptions): Promise<PutBlobResult>`
 
-// List all blobs
-const { blobs } = await list();
+Uploads a file to Blob storage.
 
-// List blobs in a specific directory
-const { blobs } = await list({ prefix: 'books/hamlet/' });
-```
+Options:
+- `pathname`: Directory path (e.g., 'books/hamlet/images')
+- `filename`: Custom filename (defaults to file.name)
+- `access`: 'public' or 'private' (defaults to 'public')
+- `addRandomSuffix`: Whether to add a random suffix to the filename
+- `cacheControl`: Cache-Control header
+- `contentType`: Content-Type header
 
-### Get file details
+### `uploadText(content: string, path: string, options?): Promise<PutBlobResult>`
 
-```typescript
-import { head } from '@vercel/blob';
+Uploads text content to Blob storage.
 
-const blob = await head('path/to/file.png');
-```
+Parameters:
+- `content`: The text content to upload
+- `path`: The full path including filename (e.g., 'books/hamlet/text/act1.txt')
+- `options`: Additional upload options
 
-### Delete a file
+### `listFiles(options?: ListOptions): Promise<{ blobs: ListBlobResultBlob[]; cursor?: string }>`
 
-```typescript
-import { del } from '@vercel/blob';
+Lists files in Blob storage.
 
-await del('https://qz0xmohbvfpirfb6.public.blob.vercel-storage.com/path/to/file.png');
-```
+Options:
+- `prefix`: Filter files by prefix
+- `limit`: Maximum number of files to return
+- `cursor`: Pagination cursor
+
+### `getFileInfo(url: string): Promise<HeadBlobResult>`
+
+Gets information about a file.
+
+### `deleteFile(url: string): Promise<void>`
+
+Deletes a file from Blob storage.
+
+### `getUrlForPath(path: string): string`
+
+Generates a URL for a path (useful for referencing files before they're uploaded).
+
+### `fetchText(url: string): Promise<string>`
+
+Fetches text content from a Blob URL.
 
 ## Testing
 
