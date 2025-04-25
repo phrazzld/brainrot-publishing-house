@@ -8,7 +8,7 @@
 - [x] Create a migration script for book cover images
 - [x] Create a migration script for book chapter images
 - [x] Create a migration script for brainrot text files
-- [ ] Create a migration script for source text files
+- [x] Create a migration script for source text files
 - [ ] Update translations/index.ts references to use Blob URLs
 - [ ] Modify reading-room component to fetch text content from Blob
 - [ ] Create a function to generate public URL for Blob assets
