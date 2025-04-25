@@ -11,6 +11,7 @@
     "lint:strict": "eslint --max-warnings=0 ."
   },
   "dependencies": {
+    "@vercel/blob": "^1.0.0",
     "aws-sdk": "^2.1692.0",
     "cheerio": "^1.0.0",
     "gsap": "^3.12.5",

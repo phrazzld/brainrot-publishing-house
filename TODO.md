@@ -1,5 +1,25 @@
 # CI/CD and Precommit Hooks Implementation TODO
 
+## Vercel Blob Migration
+- [x] Install and configure @vercel/blob package
+- [ ] Create a BlobService utility class with upload/download/list operations
+- [ ] Create a Blob storage path structure plan that mirrors current organization
+- [ ] Write a script to inventory all existing assets (images and text files)
+- [ ] Create a migration script for book cover images
+- [ ] Create a migration script for book chapter images
+- [ ] Create a migration script for brainrot text files
+- [ ] Create a migration script for source text files
+- [ ] Update translations/index.ts references to use Blob URLs
+- [ ] Modify reading-room component to fetch text content from Blob
+- [ ] Create a function to generate public URL for Blob assets
+- [ ] Add Blob URL caching to improve performance
+- [ ] Create fallback mechanism for assets still being migrated
+- [ ] Write tests for Blob storage access
+- [ ] Update DownloadButton component to use Blob for file downloads
+- [ ] Update api/download route to use Blob instead of S3
+- [ ] Test all book rendering with Blob-stored content
+- [ ] Clean up local assets after successful migration
+
 ## ESLint Configuration ✅
 - [x] Install ESLint and necessary TypeScript plugins
 - [x] Install eslint-plugin-react, eslint-plugin-react-hooks, and eslint-plugin-jsx-a11y
