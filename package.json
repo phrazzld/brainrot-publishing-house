@@ -12,7 +12,9 @@
     "inventory": "tsx scripts/inventory-assets.ts",
     "inventory:md": "tsx scripts/inventory-assets.ts --format=md --output=asset-inventory.md",
     "migrate:cover-images": "tsx scripts/migrateBookCoverImages.ts",
-    "migrate:cover-images:dry": "tsx scripts/migrateBookCoverImages.ts --dry-run"
+    "migrate:cover-images:dry": "tsx scripts/migrateBookCoverImages.ts --dry-run",
+    "migrate:chapter-images": "tsx scripts/migrateBookChapterImages.ts",
+    "migrate:chapter-images:dry": "tsx scripts/migrateBookChapterImages.ts --dry-run"
   },
   "dependencies": {
     "@vercel/blob": "^1.0.0",

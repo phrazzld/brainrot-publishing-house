@@ -161,3 +161,33 @@ The script:
 - Verifies successful uploads
 - Maintains a migration log for tracking progress
 - Provides detailed output with success/failure information
+
+##### Book Chapter Images Migration
+
+```bash
+# Dry run (simulation without uploading)
+npm run migrate:chapter-images:dry
+
+# Perform actual migration
+npm run migrate:chapter-images
+
+# Advanced options
+npx tsx scripts/migrateBookChapterImages.ts --books=hamlet,the-republic --force
+```
+
+Options:
+- `--dry-run`: Simulate migration without uploading
+- `--books=slug1,slug2`: Comma-separated list of book slugs to migrate (default: all)
+- `--force`: Re-upload even if already migrated
+- `--retries=3`: Number of retries for failed uploads (default: 3)
+- `--concurrency=5`: Number of concurrent uploads (default: 5)
+- `--log-file=path`: Path to migration log file (default: chapter-images-migration.json)
+
+The script:
+- Scans the filesystem for chapter images in each book's directory
+- Also migrates shared images in the general images directory
+- Maps local paths to Blob paths using BlobPathService
+- Uploads files with appropriate caching headers
+- Verifies successful uploads
+- Maintains a migration log for tracking progress
+- Provides detailed output with success/failure information by book
