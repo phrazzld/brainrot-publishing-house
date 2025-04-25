@@ -97,12 +97,36 @@ Fetches text content from a Blob URL.
 
 A test page is available at `/blob-test` to verify that the Blob storage is properly configured. You can use this page to upload, list, and delete files.
 
-## Migration from S3/DigitalOcean Spaces
+## Asset Inventory and Migration
+
+### Asset Inventory Script
+
+The project includes a script to inventory all assets in the `public/assets` directory:
+
+```bash
+# Generate inventory in JSON format (prints to stdout)
+npm run inventory
+
+# Generate inventory in Markdown format and save to file
+npm run inventory:md
+
+# Custom options
+npx tsx scripts/inventory-assets.ts --format=csv --output=asset-inventory.csv
+```
+
+The inventory includes:
+- All image and text files categorized by book and type
+- File sizes and last modified dates
+- Future Blob paths for each asset 
+- Summary statistics by book and asset type
+
+### Migration from S3/DigitalOcean Spaces
 
 When migrating from S3 or DigitalOcean Spaces:
 
-1. Download the files from the existing storage
-2. Upload the files to Vercel Blob using the same path structure
-3. Update the references in your code to use the new Blob URLs
+1. Run the inventory script to understand the assets to migrate
+2. Download the files from the existing storage
+3. Upload the files to Vercel Blob using the path structure defined in BLOB_PATH_STRUCTURE.md
+4. Update the references in your code to use the new Blob URLs
 
-See the migration scripts in the project for more details.
+Migration scripts are available for different asset types in the `scripts` directory.
