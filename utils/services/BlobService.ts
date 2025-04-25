@@ -152,16 +152,28 @@ export class BlobService {
    * Generate a full URL for a blob path within Blob storage
    * This is useful when you need to reference a file that will be uploaded in the future
    * @param path The path of the file
+   * @param options Optional configuration for URL generation
    * @returns The full URL to the file (this assumes public access)
    */
-  public getUrlForPath(path: string): string {
-    // This is a simplification - it would be better to use the store's hostname from config
-    const hostname = process.env.NEXT_PUBLIC_BLOB_BASE_URL || 'https://public.blob.vercel-storage.com';
+  public getUrlForPath(path: string, options?: { baseUrl?: string; noCache?: boolean }): string {
+    // Use provided base URL, environment variable, or default
+    const hostname = options?.baseUrl || 
+      process.env.NEXT_PUBLIC_BLOB_BASE_URL || 
+      'https://public.blob.vercel-storage.com';
     
     // Clean up the path and ensure it doesn't start with a slash
     const cleanPath = path.replace(/^\/+/, '');
     
-    return `${hostname}/${cleanPath}`;
+    // Generate the URL
+    const url = `${hostname}/${cleanPath}`;
+    
+    // Add cache busting if requested
+    if (options?.noCache) {
+      const cacheBuster = `_t=${Date.now()}`;
+      return url.includes('?') ? `${url}&${cacheBuster}` : `${url}?${cacheBuster}`;
+    }
+    
+    return url;
   }
   
   /**

@@ -11,8 +11,8 @@
 - [x] Create a migration script for source text files
 - [x] Update translations/index.ts references to use Blob URLs
 - [x] Modify reading-room component to fetch text content from Blob
-- [ ] Create a function to generate public URL for Blob assets
-- [ ] Add Blob URL caching to improve performance
+- [x] Create a function to generate public URL for Blob assets
+- [x] Add Blob URL caching to improve performance
 - [ ] Create fallback mechanism for assets still being migrated
 - [ ] Write tests for Blob storage access
 - [ ] Update DownloadButton component to use Blob for file downloads
