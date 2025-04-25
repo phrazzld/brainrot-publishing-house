@@ -16,6 +16,9 @@ export interface BlobUrlOptions {
 // Cache for blob URLs to improve performance
 const urlCache: Record<string, string> = {};
 
+// Cache for existence checks to avoid repeated HEAD requests
+const existenceCache: Record<string, boolean> = {};
+
 /**
  * Generate a public URL for a Blob asset
  * 
@@ -108,23 +111,112 @@ export function getAssetUrl(
  * 
  * @param legacyPath The legacy path
  * @param options Optional URL generation options
+ * @param useCache Whether to use cached existence results (defaults to true)
  * @returns Promise resolving to true if the asset exists in Blob storage, false otherwise
  */
 export async function assetExistsInBlobStorage(
   legacyPath: string,
-  options: Omit<BlobUrlOptions, 'useBlobStorage' | 'noCache'> = {}
+  options: Omit<BlobUrlOptions, 'useBlobStorage' | 'noCache'> = {},
+  useCache: boolean = true
 ): Promise<boolean> {
+  // Check existence cache if enabled
+  if (useCache && legacyPath in existenceCache) {
+    return existenceCache[legacyPath];
+  }
+  
   try {
     // Always use noCache for checking existence to avoid cached 404 responses
     const blobUrl = getBlobUrl(legacyPath, { ...options, noCache: true });
     const fileInfo = await blobService.getFileInfo(blobUrl);
-    return fileInfo.size > 0;
+    const exists = fileInfo.size > 0;
+    
+    // Cache the result if caching is enabled
+    if (useCache) {
+      existenceCache[legacyPath] = exists;
+    }
+    
+    return exists;
   } catch (error) {
+    if (useCache) {
+      existenceCache[legacyPath] = false;
+    }
     return false;
   }
 }
 
-// Clear the URL cache - useful for testing or when URLs might change
+/**
+ * Gets a URL for an asset with automatic fallback to local path
+ * if the asset doesn't exist in Blob storage
+ * 
+ * This function is ideal during migration when some assets may
+ * be in Blob storage while others are still served locally.
+ * 
+ * @param legacyPath The legacy path to the asset
+ * @param options Optional URL generation options
+ * @returns Promise resolving to the most appropriate URL for the asset
+ */
+export async function getAssetUrlWithFallback(
+  legacyPath: string,
+  options: Omit<BlobUrlOptions, 'useBlobStorage'> = {}
+): Promise<string> {
+  try {
+    // Check if the asset exists in Blob storage (use cache for performance)
+    const exists = await assetExistsInBlobStorage(legacyPath, options);
+    
+    if (exists) {
+      // If it exists in Blob, use the Blob URL
+      return getBlobUrl(legacyPath, options);
+    } else {
+      // If it doesn't exist in Blob, use the local path
+      console.info(`Asset not found in Blob storage, using local path: ${legacyPath}`);
+      return legacyPath;
+    }
+  } catch (error) {
+    // On any error, fall back to the local path for safety
+    console.warn(`Error checking Blob storage, falling back to local path: ${legacyPath}`, error);
+    return legacyPath;
+  }
+}
+
+/**
+ * Utility to fetch text content with automatic fallback
+ * 
+ * Tries to fetch from Blob storage first, falls back to local path if needed
+ * 
+ * @param legacyPath The legacy path to the text asset
+ * @param options Optional URL generation options
+ * @returns Promise resolving to the text content
+ */
+export async function fetchTextWithFallback(
+  legacyPath: string,
+  options: Omit<BlobUrlOptions, 'useBlobStorage'> = {}
+): Promise<string> {
+  try {
+    // First try Blob storage
+    const blobUrl = getBlobUrl(legacyPath, options);
+    try {
+      return await blobService.fetchText(blobUrl);
+    } catch (blobError) {
+      console.warn(`Failed to fetch from Blob, trying local path: ${legacyPath}`, blobError);
+      
+      // If Blob fetch fails, try the local path
+      const response = await fetch(legacyPath);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return await response.text();
+    }
+  } catch (error) {
+    console.error(`All fetch attempts failed for: ${legacyPath}`, error);
+    throw new Error(`Failed to fetch text: ${error instanceof Error ? error.message : String(error)}`);
+  }
+}
+
+/**
+ * Clear the URL cache and existence cache
+ * Useful for testing or when URLs or asset availability might change
+ */
 export function clearBlobUrlCache(): void {
   Object.keys(urlCache).forEach(key => delete urlCache[key]);
+  Object.keys(existenceCache).forEach(key => delete existenceCache[key]);
 }

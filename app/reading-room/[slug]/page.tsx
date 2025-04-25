@@ -2,7 +2,7 @@
 
 import DownloadButton from "@/components/DownloadButton";
 import translations from "@/translations";
-import { blobService } from "@/utils/services/BlobService";
+import { fetchTextWithFallback } from "@/utils";
 import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -71,30 +71,16 @@ export default function ReadingRoom() {
   useEffect(() => {
     if (!chapterData) return;
 
-    // load text
+    // load text with automatic fallback
     setIsTextLoading(true);
-    blobService.fetchText(chapterData.text)
+    fetchTextWithFallback(chapterData.text)
       .then((txt) => {
         // preserve line breaks
         setRawText(txt);
       })
-      .catch((err) => {
-        console.warn("Blob fetch failed, falling back to direct fetch:", err);
-        // Fallback to regular fetch as a backup during migration
-        return fetch(chapterData.text)
-          .then((res) => {
-            if (!res.ok) {
-              throw new Error(`HTTP error! Status: ${res.status}`);
-            }
-            return res.text();
-          })
-          .then((txt) => {
-            setRawText(txt);
-          })
-          .catch((fetchErr) => {
-            console.error("Fallback fetch also failed:", fetchErr);
-            setRawText(`Error loading text. Please try again later.`);
-          });
+      .catch((error) => {
+        console.error("Failed to load text:", error);
+        setRawText(`Error loading text. Please try again later.`);
       })
       .finally(() => setIsTextLoading(false));
 
