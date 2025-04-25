@@ -129,4 +129,35 @@ When migrating from S3 or DigitalOcean Spaces:
 3. Upload the files to Vercel Blob using the path structure defined in BLOB_PATH_STRUCTURE.md
 4. Update the references in your code to use the new Blob URLs
 
-Migration scripts are available for different asset types in the `scripts` directory.
+#### Migration Scripts
+
+The following scripts are available for migrating different asset types:
+
+##### Book Cover Images Migration
+
+```bash
+# Dry run (simulation without uploading)
+npm run migrate:cover-images:dry
+
+# Perform actual migration
+npm run migrate:cover-images
+
+# Advanced options
+npx tsx scripts/migrateBookCoverImages.ts --books=hamlet,the-iliad --force
+```
+
+Options:
+- `--dry-run`: Simulate migration without uploading
+- `--books=slug1,slug2`: Comma-separated list of book slugs to migrate (default: all)
+- `--force`: Re-upload even if already migrated
+- `--retries=3`: Number of retries for failed uploads (default: 3)
+- `--concurrency=5`: Number of concurrent uploads (default: 5)
+- `--log-file=path`: Path to migration log file (default: cover-images-migration.json)
+
+The script:
+- Identifies all book cover images from translations/index.ts
+- Maps local paths to Blob paths using BlobPathService
+- Uploads files with appropriate caching headers
+- Verifies successful uploads
+- Maintains a migration log for tracking progress
+- Provides detailed output with success/failure information
