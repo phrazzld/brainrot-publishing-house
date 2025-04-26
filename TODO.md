@@ -46,7 +46,7 @@
    Depends On: [T208]
    AC Ref: None
 
-10. [ ] Perform actual cleanup (T210)
+10. [x] Perform actual cleanup (T210)
     Action: Run `npx tsx scripts/cleanupLocalAssets.ts --delete` to remove local assets that have been successfully migrated.
     Depends On: [T209]
     AC Ref: None
