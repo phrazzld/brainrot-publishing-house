@@ -21,7 +21,7 @@
    Depends On: [T203]
    AC Ref: None
 
-5. [ ] Migrate source text files (T205)
+5. [x] Migrate source text files (T205)
    Action: Run `npx tsx scripts/migrateSourceTextFiles.ts --dry-run` to verify, then `npx tsx scripts/migrateSourceTextFiles.ts` to perform the migration.
    Depends On: [T204]
    AC Ref: None
