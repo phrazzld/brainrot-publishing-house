@@ -21,8 +21,12 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 import { existsSync, readdirSync } from 'fs';
 import { fileURLToPath } from 'url';
+import * as dotenv from 'dotenv';
 import { blobService } from '../utils/services/BlobService.js';
 import { blobPathService } from '../utils/services/BlobPathService.js';
+
+// Load environment variables from .env.local
+dotenv.config({ path: '.env.local' });
 
 // Get this file's directory
 const __filename = fileURLToPath(import.meta.url);
@@ -511,6 +515,7 @@ class ChapterImageMigrationService {
                 pathname,
                 filename,
                 access: 'public',
+                allowOverwrite: true,
                 cacheControl: 'max-age=31536000, immutable', // 1 year cache
               });
               
@@ -638,6 +643,7 @@ class ChapterImageMigrationService {
           pathname,
           filename,
           access: 'public',
+          allowOverwrite: true,
           cacheControl: 'max-age=31536000, immutable', // 1 year cache
         });
         

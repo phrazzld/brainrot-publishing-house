@@ -11,7 +11,7 @@
    Depends On: [T201]
    AC Ref: None
 
-3. [ ] Migrate book chapter images (T203)
+3. [x] Migrate book chapter images (T203)
    Action: Run `npx tsx scripts/migrateBookChapterImages.ts --dry-run` to verify, then `npx tsx scripts/migrateBookChapterImages.ts` to perform the migration.
    Depends On: [T202]
    AC Ref: None

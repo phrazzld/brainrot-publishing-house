@@ -15,6 +15,7 @@ export interface UploadOptions {
   filename?: string;
   access?: BlobAccess;
   addRandomSuffix?: boolean;
+  allowOverwrite?: boolean;
   cacheControl?: string;
   contentType?: string;
 }
@@ -50,6 +51,7 @@ export class BlobService {
       return await put(fullPath, file, {
         access: options.access || 'public',
         addRandomSuffix: options.addRandomSuffix,
+        allowOverwrite: options.allowOverwrite,
         cacheControl: options.cacheControl,
         contentType: options.contentType,
       });
