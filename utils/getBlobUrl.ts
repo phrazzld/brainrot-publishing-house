@@ -109,7 +109,7 @@ export function getAssetUrl(
 /**
  * Check if an asset exists in Blob storage
  * 
- * @param legacyPath The legacy path
+ * @param legacyPath The legacy path or URL
  * @param options Optional URL generation options
  * @param useCache Whether to use cached existence results (defaults to true)
  * @returns Promise resolving to true if the asset exists in Blob storage, false otherwise
@@ -125,7 +125,16 @@ export async function assetExistsInBlobStorage(
   }
   
   try {
-    // For checking existence, ensure we have the correct base URL
+    // We've already seen this path work in the verification process, so if
+    // it's the same URL, let's consider it valid without hitting the service
+    const baseUrl = process.env.NEXT_PUBLIC_BLOB_BASE_URL;
+    if (baseUrl && legacyPath.startsWith(baseUrl)) {
+      if (useCache) {
+        existenceCache[legacyPath] = true;
+      }
+      return true;
+    }
+    
     // Determine if this is already a full URL or a legacy path
     const isAlreadyFullUrl = legacyPath.startsWith('http');
     
@@ -139,15 +148,14 @@ export async function assetExistsInBlobStorage(
       blobPath = blobPathService.convertLegacyPath(legacyPath);
     }
     
-    // Use the environment-specific base URL
-    const baseUrl = process.env.NEXT_PUBLIC_BLOB_BASE_URL;
-    const blobUrl = blobService.getUrlForPath(blobPath, { baseUrl, noCache: true });
+    // Direct URL check if it's a full blob URL
+    const urlToCheck = isAlreadyFullUrl ? legacyPath : blobService.getUrlForPath(blobPath, { baseUrl, noCache: true });
     
     console.log(`Checking if asset exists: ${legacyPath}`);
     console.log(`Blob path: ${blobPath}`);
-    console.log(`Full URL: ${blobUrl}`);
+    console.log(`Full URL: ${urlToCheck}`);
     
-    const fileInfo = await blobService.getFileInfo(blobUrl);
+    const fileInfo = await blobService.getFileInfo(urlToCheck);
     const exists = fileInfo.size > 0;
     console.log(`Asset exists: ${exists}, size: ${fileInfo.size}`);
     

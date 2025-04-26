@@ -1,0 +1,504 @@
+{
+  "hamlet": {
+    "hamlet-03.png": {
+      "status": "success",
+      "originalPath": "/assets/hamlet/images/hamlet-03.png",
+      "blobPath": "books/hamlet/images/hamlet-03.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/hamlet/images/hamlet-03.png"
+    },
+    "hamlet-02.png": {
+      "status": "success",
+      "originalPath": "/assets/hamlet/images/hamlet-02.png",
+      "blobPath": "books/hamlet/images/hamlet-02.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/hamlet/images/hamlet-02.png"
+    },
+    "hamlet-04.png": {
+      "status": "success",
+      "originalPath": "/assets/hamlet/images/hamlet-04.png",
+      "blobPath": "books/hamlet/images/hamlet-04.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/hamlet/images/hamlet-04.png"
+    },
+    "hamlet-05.png": {
+      "status": "success",
+      "originalPath": "/assets/hamlet/images/hamlet-05.png",
+      "blobPath": "books/hamlet/images/hamlet-05.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/hamlet/images/hamlet-05.png"
+    },
+    "hamlet-01.png": {
+      "status": "success",
+      "originalPath": "/assets/hamlet/images/hamlet-01.png",
+      "blobPath": "books/hamlet/images/hamlet-01.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/hamlet/images/hamlet-01.png"
+    },
+    "hamlet-06.png": {
+      "status": "success",
+      "originalPath": "/assets/hamlet/images/hamlet-06.png",
+      "blobPath": "books/hamlet/images/hamlet-06.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/hamlet/images/hamlet-06.png"
+    },
+    "hamlet-08.png": {
+      "status": "success",
+      "originalPath": "/assets/hamlet/images/hamlet-08.png",
+      "blobPath": "books/hamlet/images/hamlet-08.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/hamlet/images/hamlet-08.png"
+    },
+    "hamlet-10.png": {
+      "status": "success",
+      "originalPath": "/assets/hamlet/images/hamlet-10.png",
+      "blobPath": "books/hamlet/images/hamlet-10.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/hamlet/images/hamlet-10.png"
+    },
+    "hamlet-07.png": {
+      "status": "success",
+      "originalPath": "/assets/hamlet/images/hamlet-07.png",
+      "blobPath": "books/hamlet/images/hamlet-07.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/hamlet/images/hamlet-07.png"
+    },
+    "hamlet-09.png": {
+      "status": "success",
+      "originalPath": "/assets/hamlet/images/hamlet-09.png",
+      "blobPath": "books/hamlet/images/hamlet-09.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/hamlet/images/hamlet-09.png"
+    },
+    "hamlet-12.png": {
+      "status": "success",
+      "originalPath": "/assets/hamlet/images/hamlet-12.png",
+      "blobPath": "books/hamlet/images/hamlet-12.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/hamlet/images/hamlet-12.png"
+    },
+    "hamlet-11.png": {
+      "status": "success",
+      "originalPath": "/assets/hamlet/images/hamlet-11.png",
+      "blobPath": "books/hamlet/images/hamlet-11.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/hamlet/images/hamlet-11.png"
+    }
+  },
+  "shared": {
+    "gita-02.png": {
+      "status": "success",
+      "originalPath": "/assets/images/gita-02.png",
+      "blobPath": "images/gita-02.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/images/gita-02.png"
+    },
+    "gita-03.png": {
+      "status": "success",
+      "originalPath": "/assets/images/gita-03.png",
+      "blobPath": "images/gita-03.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/images/gita-03.png"
+    },
+    "gita-01.png": {
+      "status": "success",
+      "originalPath": "/assets/images/gita-01.png",
+      "blobPath": "images/gita-01.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/images/gita-01.png"
+    },
+    "gilgamesh-01.png": {
+      "status": "success",
+      "originalPath": "/assets/images/gilgamesh-01.png",
+      "blobPath": "images/gilgamesh-01.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/images/gilgamesh-01.png"
+    },
+    "achilles-02.png": {
+      "status": "success",
+      "originalPath": "/assets/images/achilles-02.png",
+      "blobPath": "images/achilles-02.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/images/achilles-02.png"
+    },
+    "midsummer-01.png": {
+      "status": "success",
+      "originalPath": "/assets/images/midsummer-01.png",
+      "blobPath": "images/midsummer-01.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/images/midsummer-01.png"
+    },
+    "inferno-03.png": {
+      "status": "success",
+      "originalPath": "/assets/images/inferno-03.png",
+      "blobPath": "images/inferno-03.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/images/inferno-03.png"
+    },
+    "inferno-01.png": {
+      "status": "success",
+      "originalPath": "/assets/images/inferno-01.png",
+      "blobPath": "images/inferno-01.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/images/inferno-01.png"
+    },
+    "inferno-02.png": {
+      "status": "success",
+      "originalPath": "/assets/images/inferno-02.png",
+      "blobPath": "images/inferno-02.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/images/inferno-02.png"
+    },
+    "inferno-04.png": {
+      "status": "success",
+      "originalPath": "/assets/images/inferno-04.png",
+      "blobPath": "images/inferno-04.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/images/inferno-04.png"
+    },
+    "new-testament-01.png": {
+      "status": "success",
+      "originalPath": "/assets/images/new-testament-01.png",
+      "blobPath": "images/new-testament-01.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/images/new-testament-01.png"
+    },
+    "old-testament-01.png": {
+      "status": "success",
+      "originalPath": "/assets/images/old-testament-01.png",
+      "blobPath": "images/old-testament-01.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/images/old-testament-01.png"
+    },
+    "midsummer-02.png": {
+      "status": "success",
+      "originalPath": "/assets/images/midsummer-02.png",
+      "blobPath": "images/midsummer-02.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/images/midsummer-02.png"
+    },
+    "midsummer-03.png": {
+      "status": "success",
+      "originalPath": "/assets/images/midsummer-03.png",
+      "blobPath": "images/midsummer-03.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/images/midsummer-03.png"
+    },
+    "old-testament-02.png": {
+      "status": "success",
+      "originalPath": "/assets/images/old-testament-02.png",
+      "blobPath": "images/old-testament-02.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/images/old-testament-02.png"
+    },
+    "purgatorio-02.png": {
+      "status": "success",
+      "originalPath": "/assets/images/purgatorio-02.png",
+      "blobPath": "images/purgatorio-02.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/images/purgatorio-02.png"
+    },
+    "paradiso-02.png": {
+      "status": "success",
+      "originalPath": "/assets/images/paradiso-02.png",
+      "blobPath": "images/paradiso-02.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/images/paradiso-02.png"
+    },
+    "paradiso-01.png": {
+      "status": "success",
+      "originalPath": "/assets/images/paradiso-01.png",
+      "blobPath": "images/paradiso-01.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/images/paradiso-01.png"
+    },
+    "purgatorio-01.png": {
+      "status": "success",
+      "originalPath": "/assets/images/purgatorio-01.png",
+      "blobPath": "images/purgatorio-01.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/images/purgatorio-01.png"
+    },
+    "old-testament-03.png": {
+      "status": "success",
+      "originalPath": "/assets/images/old-testament-03.png",
+      "blobPath": "images/old-testament-03.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/images/old-testament-03.png"
+    },
+    "romeo-and-juliet-02.png": {
+      "status": "success",
+      "originalPath": "/assets/images/romeo-and-juliet-02.png",
+      "blobPath": "images/romeo-and-juliet-02.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/images/romeo-and-juliet-02.png"
+    },
+    "romeo-and-juliet-03.png": {
+      "status": "success",
+      "originalPath": "/assets/images/romeo-and-juliet-03.png",
+      "blobPath": "images/romeo-and-juliet-03.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/images/romeo-and-juliet-03.png"
+    },
+    "quran-01.png": {
+      "status": "success",
+      "originalPath": "/assets/images/quran-01.png",
+      "blobPath": "images/quran-01.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/images/quran-01.png"
+    },
+    "romeo-and-juliet-01.png": {
+      "status": "success",
+      "originalPath": "/assets/images/romeo-and-juliet-01.png",
+      "blobPath": "images/romeo-and-juliet-01.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/images/romeo-and-juliet-01.png"
+    }
+  },
+  "pride-and-prejudice": {
+    "pride-and-prejudice-03.png": {
+      "status": "success",
+      "originalPath": "/assets/pride-and-prejudice/images/pride-and-prejudice-03.png",
+      "blobPath": "books/pride-and-prejudice/images/pride-and-prejudice-03.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/pride-and-prejudice/images/pride-and-prejudice-03.png"
+    },
+    "pride-and-prejudice-02.png": {
+      "status": "success",
+      "originalPath": "/assets/pride-and-prejudice/images/pride-and-prejudice-02.png",
+      "blobPath": "books/pride-and-prejudice/images/pride-and-prejudice-02.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/pride-and-prejudice/images/pride-and-prejudice-02.png"
+    },
+    "pride-and-prejudice-01.png": {
+      "status": "success",
+      "originalPath": "/assets/pride-and-prejudice/images/pride-and-prejudice-01.png",
+      "blobPath": "books/pride-and-prejudice/images/pride-and-prejudice-01.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/pride-and-prejudice/images/pride-and-prejudice-01.png"
+    }
+  },
+  "meditations": {
+    "meditations-02.png": {
+      "status": "success",
+      "originalPath": "/assets/meditations/images/meditations-02.png",
+      "blobPath": "books/meditations/images/meditations-02.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/meditations/images/meditations-02.png"
+    },
+    "meditations-03.png": {
+      "status": "success",
+      "originalPath": "/assets/meditations/images/meditations-03.png",
+      "blobPath": "books/meditations/images/meditations-03.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/meditations/images/meditations-03.png"
+    },
+    "meditations-04.png": {
+      "status": "success",
+      "originalPath": "/assets/meditations/images/meditations-04.png",
+      "blobPath": "books/meditations/images/meditations-04.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/meditations/images/meditations-04.png"
+    },
+    "meditations-01.png": {
+      "status": "success",
+      "originalPath": "/assets/meditations/images/meditations-01.png",
+      "blobPath": "books/meditations/images/meditations-01.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/meditations/images/meditations-01.png"
+    }
+  },
+  "the-adventures-of-huckleberry-finn": {
+    "huck-finn-04.png": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/images/huck-finn-04.png",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/images/huck-finn-04.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/images/huck-finn-04.png"
+    },
+    "huck-finn-02.png": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/images/huck-finn-02.png",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/images/huck-finn-02.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/images/huck-finn-02.png"
+    },
+    "huck-finn-01.png": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/images/huck-finn-01.png",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/images/huck-finn-01.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/images/huck-finn-01.png"
+    },
+    "huck-finn-03.png": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/images/huck-finn-03.png",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/images/huck-finn-03.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/images/huck-finn-03.png"
+    },
+    "huck-finn-05.png": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/images/huck-finn-05.png",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/images/huck-finn-05.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/images/huck-finn-05.png"
+    },
+    "huck-finn-08.png": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/images/huck-finn-08.png",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/images/huck-finn-08.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/images/huck-finn-08.png"
+    },
+    "huck-finn-06.png": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/images/huck-finn-06.png",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/images/huck-finn-06.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/images/huck-finn-06.png"
+    },
+    "huck-finn-10.png": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/images/huck-finn-10.png",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/images/huck-finn-10.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/images/huck-finn-10.png"
+    },
+    "huck-finn-07.png": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/images/huck-finn-07.png",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/images/huck-finn-07.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/images/huck-finn-07.png"
+    },
+    "huck-finn-09.png": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/images/huck-finn-09.png",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/images/huck-finn-09.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/images/huck-finn-09.png"
+    }
+  },
+  "paradise-lost": {
+    "paradise-lost-01.png": {
+      "status": "success",
+      "originalPath": "/assets/paradise-lost/images/paradise-lost-01.png",
+      "blobPath": "books/paradise-lost/images/paradise-lost-01.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/paradise-lost/images/paradise-lost-01.png"
+    },
+    "paradise-lost-02.png": {
+      "status": "success",
+      "originalPath": "/assets/paradise-lost/images/paradise-lost-02.png",
+      "blobPath": "books/paradise-lost/images/paradise-lost-02.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/paradise-lost/images/paradise-lost-02.png"
+    },
+    "paradise-lost-03.png": {
+      "status": "success",
+      "originalPath": "/assets/paradise-lost/images/paradise-lost-03.png",
+      "blobPath": "books/paradise-lost/images/paradise-lost-03.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/paradise-lost/images/paradise-lost-03.png"
+    },
+    "paradise-lost-05.png": {
+      "status": "success",
+      "originalPath": "/assets/paradise-lost/images/paradise-lost-05.png",
+      "blobPath": "books/paradise-lost/images/paradise-lost-05.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/paradise-lost/images/paradise-lost-05.png"
+    },
+    "paradise-lost-04.png": {
+      "status": "success",
+      "originalPath": "/assets/paradise-lost/images/paradise-lost-04.png",
+      "blobPath": "books/paradise-lost/images/paradise-lost-04.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/paradise-lost/images/paradise-lost-04.png"
+    }
+  },
+  "the-republic": {
+    "republic-02.png": {
+      "status": "success",
+      "originalPath": "/assets/the-republic/images/republic-02.png",
+      "blobPath": "books/the-republic/images/republic-02.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-republic/images/republic-02.png"
+    },
+    "republic-05.png": {
+      "status": "success",
+      "originalPath": "/assets/the-republic/images/republic-05.png",
+      "blobPath": "books/the-republic/images/republic-05.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-republic/images/republic-05.png"
+    },
+    "republic-04.png": {
+      "status": "success",
+      "originalPath": "/assets/the-republic/images/republic-04.png",
+      "blobPath": "books/the-republic/images/republic-04.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-republic/images/republic-04.png"
+    },
+    "republic-03.png": {
+      "status": "success",
+      "originalPath": "/assets/the-republic/images/republic-03.png",
+      "blobPath": "books/the-republic/images/republic-03.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-republic/images/republic-03.png"
+    },
+    "republic-01.png": {
+      "status": "success",
+      "originalPath": "/assets/the-republic/images/republic-01.png",
+      "blobPath": "books/the-republic/images/republic-01.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-republic/images/republic-01.png"
+    },
+    "republic-07.png": {
+      "status": "success",
+      "originalPath": "/assets/the-republic/images/republic-07.png",
+      "blobPath": "books/the-republic/images/republic-07.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-republic/images/republic-07.png"
+    },
+    "republic-09.png": {
+      "status": "success",
+      "originalPath": "/assets/the-republic/images/republic-09.png",
+      "blobPath": "books/the-republic/images/republic-09.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-republic/images/republic-09.png"
+    },
+    "republic-06.png": {
+      "status": "success",
+      "originalPath": "/assets/the-republic/images/republic-06.png",
+      "blobPath": "books/the-republic/images/republic-06.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-republic/images/republic-06.png"
+    },
+    "republic-08.png": {
+      "status": "success",
+      "originalPath": "/assets/the-republic/images/republic-08.png",
+      "blobPath": "books/the-republic/images/republic-08.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-republic/images/republic-08.png"
+    },
+    "republic-10.png": {
+      "status": "success",
+      "originalPath": "/assets/the-republic/images/republic-10.png",
+      "blobPath": "books/the-republic/images/republic-10.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-republic/images/republic-10.png"
+    },
+    "republic-14.png": {
+      "status": "success",
+      "originalPath": "/assets/the-republic/images/republic-14.png",
+      "blobPath": "books/the-republic/images/republic-14.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-republic/images/republic-14.png"
+    },
+    "republic-11.png": {
+      "status": "success",
+      "originalPath": "/assets/the-republic/images/republic-11.png",
+      "blobPath": "books/the-republic/images/republic-11.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-republic/images/republic-11.png"
+    },
+    "republic-15.png": {
+      "status": "success",
+      "originalPath": "/assets/the-republic/images/republic-15.png",
+      "blobPath": "books/the-republic/images/republic-15.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-republic/images/republic-15.png"
+    },
+    "republic-13.png": {
+      "status": "success",
+      "originalPath": "/assets/the-republic/images/republic-13.png",
+      "blobPath": "books/the-republic/images/republic-13.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-republic/images/republic-13.png"
+    },
+    "republic-12.png": {
+      "status": "success",
+      "originalPath": "/assets/the-republic/images/republic-12.png",
+      "blobPath": "books/the-republic/images/republic-12.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-republic/images/republic-12.png"
+    }
+  },
+  "the-odyssey": {
+    "the-odyssey-01.png": {
+      "status": "success",
+      "originalPath": "/assets/the-odyssey/images/the-odyssey-01.png",
+      "blobPath": "books/the-odyssey/images/the-odyssey-01.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-odyssey/images/the-odyssey-01.png"
+    }
+  },
+  "the-iliad": {
+    "the-iliad-01.png": {
+      "status": "success",
+      "originalPath": "/assets/the-iliad/images/the-iliad-01.png",
+      "blobPath": "books/the-iliad/images/the-iliad-01.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-iliad/images/the-iliad-01.png"
+    }
+  },
+  "the-declaration-of-independence": {
+    "america-03.png": {
+      "status": "success",
+      "originalPath": "/assets/the-declaration-of-independence/images/america-03.png",
+      "blobPath": "books/the-declaration-of-independence/images/america-03.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-declaration-of-independence/images/america-03.png"
+    },
+    "america-01.png": {
+      "status": "success",
+      "originalPath": "/assets/the-declaration-of-independence/images/america-01.png",
+      "blobPath": "books/the-declaration-of-independence/images/america-01.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-declaration-of-independence/images/america-01.png"
+    },
+    "america-02.png": {
+      "status": "success",
+      "originalPath": "/assets/the-declaration-of-independence/images/america-02.png",
+      "blobPath": "books/the-declaration-of-independence/images/america-02.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-declaration-of-independence/images/america-02.png"
+    }
+  },
+  "the-aeneid": {
+    "the-aeneid-01.png": {
+      "status": "success",
+      "originalPath": "/assets/the-aeneid/images/the-aeneid-01.png",
+      "blobPath": "books/the-aeneid/images/the-aeneid-01.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-aeneid/images/the-aeneid-01.png"
+    },
+    "the-aeneid-02.png": {
+      "status": "success",
+      "originalPath": "/assets/the-aeneid/images/the-aeneid-02.png",
+      "blobPath": "books/the-aeneid/images/the-aeneid-02.png",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-aeneid/images/the-aeneid-02.png"
+    }
+  }
+}

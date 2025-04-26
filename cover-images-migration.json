@@ -1,0 +1,142 @@
+{
+  "the-iliad": {
+    "status": "failed",
+    "originalPath": "https://public.blob.vercel-storage.com/books/the-iliad/images/the-iliad-01.png",
+    "blobPath": "https://public.blob.vercel-storage.com/books/the-iliad/images/the-iliad-01.png",
+    "blobUrl": "",
+    "error": "File not found: /Users/phaedrus/Development/brainrot-publishing-house/public/https:/public.blob.vercel-storage.com/books/the-iliad/images/the-iliad-01.png"
+  },
+  "the-adventures-of-huckleberry-finn": {
+    "status": "failed",
+    "originalPath": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/images/huck-finn-09.png",
+    "blobPath": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/images/huck-finn-09.png",
+    "blobUrl": "",
+    "error": "File not found: /Users/phaedrus/Development/brainrot-publishing-house/public/https:/public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/images/huck-finn-09.png"
+  },
+  "the-odyssey": {
+    "status": "failed",
+    "originalPath": "https://public.blob.vercel-storage.com/books/the-odyssey/images/the-odyssey-01.png",
+    "blobPath": "https://public.blob.vercel-storage.com/books/the-odyssey/images/the-odyssey-01.png",
+    "blobUrl": "",
+    "error": "File not found: /Users/phaedrus/Development/brainrot-publishing-house/public/https:/public.blob.vercel-storage.com/books/the-odyssey/images/the-odyssey-01.png"
+  },
+  "the-aeneid": {
+    "status": "failed",
+    "originalPath": "https://public.blob.vercel-storage.com/books/the-aeneid/images/the-aeneid-01.png",
+    "blobPath": "https://public.blob.vercel-storage.com/books/the-aeneid/images/the-aeneid-01.png",
+    "blobUrl": "",
+    "error": "File not found: /Users/phaedrus/Development/brainrot-publishing-house/public/https:/public.blob.vercel-storage.com/books/the-aeneid/images/the-aeneid-01.png"
+  },
+  "hamlet": {
+    "status": "failed",
+    "originalPath": "https://public.blob.vercel-storage.com/books/hamlet/images/hamlet-07.png",
+    "blobPath": "https://public.blob.vercel-storage.com/books/hamlet/images/hamlet-07.png",
+    "blobUrl": "",
+    "error": "File not found: /Users/phaedrus/Development/brainrot-publishing-house/public/https:/public.blob.vercel-storage.com/books/hamlet/images/hamlet-07.png"
+  },
+  "the-republic": {
+    "status": "failed",
+    "originalPath": "https://public.blob.vercel-storage.com/books/the-republic/images/republic-07.png",
+    "blobPath": "https://public.blob.vercel-storage.com/books/the-republic/images/republic-07.png",
+    "blobUrl": "",
+    "error": "File not found: /Users/phaedrus/Development/brainrot-publishing-house/public/https:/public.blob.vercel-storage.com/books/the-republic/images/republic-07.png"
+  },
+  "the-declaration-of-independence": {
+    "status": "failed",
+    "originalPath": "https://public.blob.vercel-storage.com/books/the-declaration-of-independence/images/america-02.png",
+    "blobPath": "https://public.blob.vercel-storage.com/books/the-declaration-of-independence/images/america-02.png",
+    "blobUrl": "",
+    "error": "File not found: /Users/phaedrus/Development/brainrot-publishing-house/public/https:/public.blob.vercel-storage.com/books/the-declaration-of-independence/images/america-02.png"
+  },
+  "pride-and-prejudice": {
+    "status": "failed",
+    "originalPath": "https://public.blob.vercel-storage.com/books/pride-and-prejudice/images/pride-and-prejudice-01.png",
+    "blobPath": "https://public.blob.vercel-storage.com/books/pride-and-prejudice/images/pride-and-prejudice-01.png",
+    "blobUrl": "",
+    "error": "File not found: /Users/phaedrus/Development/brainrot-publishing-house/public/https:/public.blob.vercel-storage.com/books/pride-and-prejudice/images/pride-and-prejudice-01.png"
+  },
+  "paradise-lost": {
+    "status": "failed",
+    "originalPath": "https://public.blob.vercel-storage.com/books/paradise-lost/images/paradise-lost-01.png",
+    "blobPath": "https://public.blob.vercel-storage.com/books/paradise-lost/images/paradise-lost-01.png",
+    "blobUrl": "",
+    "error": "File not found: /Users/phaedrus/Development/brainrot-publishing-house/public/https:/public.blob.vercel-storage.com/books/paradise-lost/images/paradise-lost-01.png"
+  },
+  "meditations": {
+    "status": "failed",
+    "originalPath": "https://public.blob.vercel-storage.com/books/meditations/images/meditations-01.png",
+    "blobPath": "https://public.blob.vercel-storage.com/books/meditations/images/meditations-01.png",
+    "blobUrl": "",
+    "error": "File not found: /Users/phaedrus/Development/brainrot-publishing-house/public/https:/public.blob.vercel-storage.com/books/meditations/images/meditations-01.png"
+  },
+  "the-divine-comedy-inferno": {
+    "status": "failed",
+    "originalPath": "https://public.blob.vercel-storage.com/images/inferno-01.png",
+    "blobPath": "https://public.blob.vercel-storage.com/images/inferno-01.png",
+    "blobUrl": "",
+    "error": "File not found: /Users/phaedrus/Development/brainrot-publishing-house/public/https:/public.blob.vercel-storage.com/images/inferno-01.png"
+  },
+  "the-divine-comedy-purgatorio": {
+    "status": "failed",
+    "originalPath": "https://public.blob.vercel-storage.com/images/purgatorio-02.png",
+    "blobPath": "https://public.blob.vercel-storage.com/images/purgatorio-02.png",
+    "blobUrl": "",
+    "error": "File not found: /Users/phaedrus/Development/brainrot-publishing-house/public/https:/public.blob.vercel-storage.com/images/purgatorio-02.png"
+  },
+  "the-divine-comedy-paradiso": {
+    "status": "failed",
+    "originalPath": "https://public.blob.vercel-storage.com/images/paradiso-02.png",
+    "blobPath": "https://public.blob.vercel-storage.com/images/paradiso-02.png",
+    "blobUrl": "",
+    "error": "File not found: /Users/phaedrus/Development/brainrot-publishing-house/public/https:/public.blob.vercel-storage.com/images/paradiso-02.png"
+  },
+  "the-bible-old-testament": {
+    "status": "failed",
+    "originalPath": "https://public.blob.vercel-storage.com/images/old-testament-03.png",
+    "blobPath": "https://public.blob.vercel-storage.com/images/old-testament-03.png",
+    "blobUrl": "",
+    "error": "File not found: /Users/phaedrus/Development/brainrot-publishing-house/public/https:/public.blob.vercel-storage.com/images/old-testament-03.png"
+  },
+  "the-bible-new-testament": {
+    "status": "failed",
+    "originalPath": "https://public.blob.vercel-storage.com/images/new-testament-01.png",
+    "blobPath": "https://public.blob.vercel-storage.com/images/new-testament-01.png",
+    "blobUrl": "",
+    "error": "File not found: /Users/phaedrus/Development/brainrot-publishing-house/public/https:/public.blob.vercel-storage.com/images/new-testament-01.png"
+  },
+  "the-quran": {
+    "status": "failed",
+    "originalPath": "https://public.blob.vercel-storage.com/images/quran-01.png",
+    "blobPath": "https://public.blob.vercel-storage.com/images/quran-01.png",
+    "blobUrl": "",
+    "error": "File not found: /Users/phaedrus/Development/brainrot-publishing-house/public/https:/public.blob.vercel-storage.com/images/quran-01.png"
+  },
+  "romeo-and-juliet": {
+    "status": "failed",
+    "originalPath": "https://public.blob.vercel-storage.com/images/romeo-and-juliet-02.png",
+    "blobPath": "https://public.blob.vercel-storage.com/images/romeo-and-juliet-02.png",
+    "blobUrl": "",
+    "error": "File not found: /Users/phaedrus/Development/brainrot-publishing-house/public/https:/public.blob.vercel-storage.com/images/romeo-and-juliet-02.png"
+  },
+  "a-midsummer-nights-dream": {
+    "status": "failed",
+    "originalPath": "https://public.blob.vercel-storage.com/images/midsummer-02.png",
+    "blobPath": "https://public.blob.vercel-storage.com/images/midsummer-02.png",
+    "blobUrl": "",
+    "error": "File not found: /Users/phaedrus/Development/brainrot-publishing-house/public/https:/public.blob.vercel-storage.com/images/midsummer-02.png"
+  },
+  "gilgamesh": {
+    "status": "failed",
+    "originalPath": "https://public.blob.vercel-storage.com/images/gilgamesh-01.png",
+    "blobPath": "https://public.blob.vercel-storage.com/images/gilgamesh-01.png",
+    "blobUrl": "",
+    "error": "File not found: /Users/phaedrus/Development/brainrot-publishing-house/public/https:/public.blob.vercel-storage.com/images/gilgamesh-01.png"
+  },
+  "bhagavad-gita": {
+    "status": "failed",
+    "originalPath": "https://public.blob.vercel-storage.com/images/gita-01.png",
+    "blobPath": "https://public.blob.vercel-storage.com/images/gita-01.png",
+    "blobUrl": "",
+    "error": "File not found: /Users/phaedrus/Development/brainrot-publishing-house/public/https:/public.blob.vercel-storage.com/images/gita-01.png"
+  }
+}

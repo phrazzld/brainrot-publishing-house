@@ -1,0 +1,304 @@
+{
+  "the-adventures-of-huckleberry-finn": {
+    "chapter_I_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_I_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_I_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_I_.txt"
+    },
+    "chapter_III_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_III_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_III_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_III_.txt"
+    },
+    "chapter_IX_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_IX_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_IX_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_IX_.txt"
+    },
+    "chapter_II_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_II_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_II_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_II_.txt"
+    },
+    "chapter_IV_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_IV_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_IV_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_IV_.txt"
+    },
+    "chapter_VII_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_VII_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_VII_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_VII_.txt"
+    },
+    "chapter_V_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_V_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_V_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_V_.txt"
+    },
+    "chapter_VIII_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_VIII_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_VIII_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_VIII_.txt"
+    },
+    "chapter_VI_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_VI_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_VI_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_VI_.txt"
+    },
+    "chapter_THE_LAST.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_THE_LAST.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_THE_LAST.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_THE_LAST.txt"
+    },
+    "chapter_XIII_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_XIII_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XIII_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_XIII_.txt"
+    },
+    "chapter_XIV_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_XIV_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XIV_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_XIV_.txt"
+    },
+    "chapter_XI_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_XI_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XI_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_XI_.txt"
+    },
+    "chapter_XII_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_XII_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XII_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_XII_.txt"
+    },
+    "chapter_XIX_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_XIX_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XIX_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_XIX_.txt"
+    },
+    "chapter_XLII_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_XLII_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XLII_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_XLII_.txt"
+    },
+    "chapter_XVII_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_XVII_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XVII_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_XVII_.txt"
+    },
+    "chapter_XVIII_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_XVIII_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XVIII_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_XVIII_.txt"
+    },
+    "chapter_XL_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_XL_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XL_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_XL_.txt"
+    },
+    "chapter_XLI_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_XLI_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XLI_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_XLI_.txt"
+    },
+    "chapter_XXII_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_XXII_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXII_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_XXII_.txt"
+    },
+    "chapter_XVI_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_XVI_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XVI_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_XVI_.txt"
+    },
+    "chapter_XV_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_XV_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XV_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_XV_.txt"
+    },
+    "chapter_XXIV_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_XXIV_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXIV_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_XXIV_.txt"
+    },
+    "chapter_XXIII_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_XXIII_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXIII_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_XXIII_.txt"
+    },
+    "chapter_XXVIII_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_XXVIII_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXVIII_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_XXVIII_.txt"
+    },
+    "chapter_XXI_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_XXI_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXI_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_XXI_.txt"
+    },
+    "chapter_XXIX_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_XXIX_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXIX_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_XXIX_.txt"
+    },
+    "chapter_XXVII_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_XXVII_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXVII_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_XXVII_.txt"
+    },
+    "chapter_XXVI_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_XXVI_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXVI_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_XXVI_.txt"
+    },
+    "chapter_XXXIII_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_XXXIII_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXXIII_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_XXXIII_.txt"
+    },
+    "chapter_XXV_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_XXV_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXV_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_XXV_.txt"
+    },
+    "chapter_XXXIX_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_XXXIX_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXXIX_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_XXXIX_.txt"
+    },
+    "chapter_XXXII_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_XXXII_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXXII_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_XXXII_.txt"
+    },
+    "chapter_XXXIV_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_XXXIV_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXXIV_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_XXXIV_.txt"
+    },
+    "chapter_XXXV_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_XXXV_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXXV_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_XXXV_.txt"
+    },
+    "chapter_XXXVIII_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_XXXVIII_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXXVIII_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_XXXVIII_.txt"
+    },
+    "chapter_XXXI_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_XXXI_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXXI_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_XXXI_.txt"
+    },
+    "chapter_XXXVI_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_XXXVI_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXXVI_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_XXXVI_.txt"
+    },
+    "chapter_XXXVII_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_XXXVII_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXXVII_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_XXXVII_.txt"
+    },
+    "chapter_XXX_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_XXX_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXX_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_XXX_.txt"
+    },
+    "chapter_X_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_X_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_X_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_X_.txt"
+    },
+    "chapter_XX_.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/chapter_XX_.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XX_.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/chapter_XX_.txt"
+    },
+    "huck-finn-source-processed.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/huck-finn-source-processed.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/huck-finn-source-processed.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/huck-finn-source-processed.txt"
+    },
+    "huck-finn-source.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/source/huck-finn-source.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/source/huck-finn-source.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/source/huck-finn-source.txt"
+    }
+  },
+  "hamlet": {
+    "hamlet-source-processed.txt": {
+      "status": "success",
+      "originalPath": "/assets/hamlet/text/source/hamlet-source-processed.txt",
+      "blobPath": "books/hamlet/text/source/hamlet-source-processed.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/hamlet/text/source/hamlet-source-processed.txt"
+    },
+    "hamlet-source.txt": {
+      "status": "success",
+      "originalPath": "/assets/hamlet/text/source/hamlet-source.txt",
+      "blobPath": "books/hamlet/text/source/hamlet-source.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/hamlet/text/source/hamlet-source.txt"
+    }
+  },
+  "pride-and-prejudice": {
+    "fulltext.txt": {
+      "status": "success",
+      "originalPath": "/assets/pride-and-prejudice/text/source/fulltext.txt",
+      "blobPath": "books/pride-and-prejudice/text/source/fulltext.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/pride-and-prejudice/text/source/fulltext.txt"
+    }
+  },
+  "the-republic": {
+    "fulltext.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-republic/text/source/fulltext.txt",
+      "blobPath": "books/the-republic/text/source/fulltext.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-republic/text/source/fulltext.txt"
+    }
+  }
+}
