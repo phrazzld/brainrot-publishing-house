@@ -31,7 +31,7 @@
    Depends On: [T205]
    AC Ref: None
 
-7. [ ] Manually test in browser (T207)
+7. [x] Manually test in browser (T207)
    Action: Visit the `/blob-verification` route in your browser and confirm all books have green status indicators.
    Depends On: [T206]
    AC Ref: None
