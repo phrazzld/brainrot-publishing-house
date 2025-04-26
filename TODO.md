@@ -51,9 +51,24 @@
     Depends On: [T209]
     AC Ref: None
 
-11. [ ] Final verification (T211)
+11. [x] Final verification (T211)
     Action: Test the application thoroughly to confirm everything works correctly after migration and cleanup.
     Depends On: [T210]
+    AC Ref: None
+
+12. [x] Complete migration of remaining text assets (T212)
+    Action: Run `npx tsx scripts/migrateBrainrotTextFiles.ts` and `npx tsx scripts/migrateSourceTextFiles.ts` targeting specific books that were not fully migrated (The Iliad, The Odyssey, The Aeneid, Declaration of Independence).
+    Depends On: [T211]
+    AC Ref: None
+
+13. [ ] Create and execute audio migration script (T213)
+    Action: Create a dedicated script for audio file migration and run it to migrate all audio assets to Blob storage.
+    Depends On: [T212]
+    AC Ref: None
+
+14. [ ] Run final asset verification (T214)
+    Action: Run `npx tsx scripts/verifyBlobStorage.ts` to confirm 100% of assets are now in Blob storage and fix any remaining issues.
+    Depends On: [T213]
     AC Ref: None
 
 ## Vercel Blob Migration

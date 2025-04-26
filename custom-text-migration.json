@@ -1,0 +1,388 @@
+{
+  "the-odyssey": {
+    "book-05.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-odyssey/text/book-05.txt",
+      "blobPath": "books/the-odyssey/text/book-05.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-odyssey/text/book-05.txt"
+    },
+    "book-01.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-odyssey/text/book-01.txt",
+      "blobPath": "books/the-odyssey/text/book-01.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-odyssey/text/book-01.txt"
+    },
+    "book-04.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-odyssey/text/book-04.txt",
+      "blobPath": "books/the-odyssey/text/book-04.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-odyssey/text/book-04.txt"
+    },
+    "book-02.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-odyssey/text/book-02.txt",
+      "blobPath": "books/the-odyssey/text/book-02.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-odyssey/text/book-02.txt"
+    },
+    "book-03.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-odyssey/text/book-03.txt",
+      "blobPath": "books/the-odyssey/text/book-03.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-odyssey/text/book-03.txt"
+    },
+    "book-06.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-odyssey/text/book-06.txt",
+      "blobPath": "books/the-odyssey/text/book-06.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-odyssey/text/book-06.txt"
+    },
+    "book-09.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-odyssey/text/book-09.txt",
+      "blobPath": "books/the-odyssey/text/book-09.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-odyssey/text/book-09.txt"
+    },
+    "book-08.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-odyssey/text/book-08.txt",
+      "blobPath": "books/the-odyssey/text/book-08.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-odyssey/text/book-08.txt"
+    },
+    "book-07.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-odyssey/text/book-07.txt",
+      "blobPath": "books/the-odyssey/text/book-07.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-odyssey/text/book-07.txt"
+    },
+    "book-10.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-odyssey/text/book-10.txt",
+      "blobPath": "books/the-odyssey/text/book-10.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-odyssey/text/book-10.txt"
+    },
+    "book-11.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-odyssey/text/book-11.txt",
+      "blobPath": "books/the-odyssey/text/book-11.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-odyssey/text/book-11.txt"
+    },
+    "book-15.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-odyssey/text/book-15.txt",
+      "blobPath": "books/the-odyssey/text/book-15.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-odyssey/text/book-15.txt"
+    },
+    "book-14.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-odyssey/text/book-14.txt",
+      "blobPath": "books/the-odyssey/text/book-14.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-odyssey/text/book-14.txt"
+    },
+    "book-13.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-odyssey/text/book-13.txt",
+      "blobPath": "books/the-odyssey/text/book-13.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-odyssey/text/book-13.txt"
+    },
+    "book-12.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-odyssey/text/book-12.txt",
+      "blobPath": "books/the-odyssey/text/book-12.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-odyssey/text/book-12.txt"
+    },
+    "book-18.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-odyssey/text/book-18.txt",
+      "blobPath": "books/the-odyssey/text/book-18.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-odyssey/text/book-18.txt"
+    },
+    "book-16.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-odyssey/text/book-16.txt",
+      "blobPath": "books/the-odyssey/text/book-16.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-odyssey/text/book-16.txt"
+    },
+    "book-19.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-odyssey/text/book-19.txt",
+      "blobPath": "books/the-odyssey/text/book-19.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-odyssey/text/book-19.txt"
+    },
+    "book-20.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-odyssey/text/book-20.txt",
+      "blobPath": "books/the-odyssey/text/book-20.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-odyssey/text/book-20.txt"
+    },
+    "book-17.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-odyssey/text/book-17.txt",
+      "blobPath": "books/the-odyssey/text/book-17.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-odyssey/text/book-17.txt"
+    },
+    "book-22.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-odyssey/text/book-22.txt",
+      "blobPath": "books/the-odyssey/text/book-22.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-odyssey/text/book-22.txt"
+    },
+    "book-24.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-odyssey/text/book-24.txt",
+      "blobPath": "books/the-odyssey/text/book-24.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-odyssey/text/book-24.txt"
+    },
+    "book-23.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-odyssey/text/book-23.txt",
+      "blobPath": "books/the-odyssey/text/book-23.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-odyssey/text/book-23.txt"
+    },
+    "book-21.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-odyssey/text/book-21.txt",
+      "blobPath": "books/the-odyssey/text/book-21.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-odyssey/text/book-21.txt"
+    }
+  },
+  "the-aeneid": {
+    "book-01.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-aeneid/text/book-01.txt",
+      "blobPath": "books/the-aeneid/text/book-01.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-aeneid/text/book-01.txt"
+    },
+    "book-05.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-aeneid/text/book-05.txt",
+      "blobPath": "books/the-aeneid/text/book-05.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-aeneid/text/book-05.txt"
+    },
+    "book-04.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-aeneid/text/book-04.txt",
+      "blobPath": "books/the-aeneid/text/book-04.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-aeneid/text/book-04.txt"
+    },
+    "book-03.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-aeneid/text/book-03.txt",
+      "blobPath": "books/the-aeneid/text/book-03.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-aeneid/text/book-03.txt"
+    },
+    "book-02.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-aeneid/text/book-02.txt",
+      "blobPath": "books/the-aeneid/text/book-02.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-aeneid/text/book-02.txt"
+    },
+    "book-10.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-aeneid/text/book-10.txt",
+      "blobPath": "books/the-aeneid/text/book-10.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-aeneid/text/book-10.txt"
+    },
+    "book-06.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-aeneid/text/book-06.txt",
+      "blobPath": "books/the-aeneid/text/book-06.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-aeneid/text/book-06.txt"
+    },
+    "book-07.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-aeneid/text/book-07.txt",
+      "blobPath": "books/the-aeneid/text/book-07.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-aeneid/text/book-07.txt"
+    },
+    "book-08.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-aeneid/text/book-08.txt",
+      "blobPath": "books/the-aeneid/text/book-08.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-aeneid/text/book-08.txt"
+    },
+    "book-09.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-aeneid/text/book-09.txt",
+      "blobPath": "books/the-aeneid/text/book-09.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-aeneid/text/book-09.txt"
+    },
+    "book-12.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-aeneid/text/book-12.txt",
+      "blobPath": "books/the-aeneid/text/book-12.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-aeneid/text/book-12.txt"
+    },
+    "book-11.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-aeneid/text/book-11.txt",
+      "blobPath": "books/the-aeneid/text/book-11.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-aeneid/text/book-11.txt"
+    }
+  },
+  "the-iliad": {
+    "book-04.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-iliad/text/book-04.txt",
+      "blobPath": "books/the-iliad/text/book-04.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-iliad/text/book-04.txt"
+    },
+    "book-02.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-iliad/text/book-02.txt",
+      "blobPath": "books/the-iliad/text/book-02.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-iliad/text/book-02.txt"
+    },
+    "book-01.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-iliad/text/book-01.txt",
+      "blobPath": "books/the-iliad/text/book-01.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-iliad/text/book-01.txt"
+    },
+    "book-03.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-iliad/text/book-03.txt",
+      "blobPath": "books/the-iliad/text/book-03.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-iliad/text/book-03.txt"
+    },
+    "book-05.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-iliad/text/book-05.txt",
+      "blobPath": "books/the-iliad/text/book-05.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-iliad/text/book-05.txt"
+    },
+    "book-06.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-iliad/text/book-06.txt",
+      "blobPath": "books/the-iliad/text/book-06.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-iliad/text/book-06.txt"
+    },
+    "book-09.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-iliad/text/book-09.txt",
+      "blobPath": "books/the-iliad/text/book-09.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-iliad/text/book-09.txt"
+    },
+    "book-10.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-iliad/text/book-10.txt",
+      "blobPath": "books/the-iliad/text/book-10.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-iliad/text/book-10.txt"
+    },
+    "book-08.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-iliad/text/book-08.txt",
+      "blobPath": "books/the-iliad/text/book-08.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-iliad/text/book-08.txt"
+    },
+    "book-07.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-iliad/text/book-07.txt",
+      "blobPath": "books/the-iliad/text/book-07.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-iliad/text/book-07.txt"
+    },
+    "book-14.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-iliad/text/book-14.txt",
+      "blobPath": "books/the-iliad/text/book-14.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-iliad/text/book-14.txt"
+    },
+    "book-12.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-iliad/text/book-12.txt",
+      "blobPath": "books/the-iliad/text/book-12.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-iliad/text/book-12.txt"
+    },
+    "book-15.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-iliad/text/book-15.txt",
+      "blobPath": "books/the-iliad/text/book-15.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-iliad/text/book-15.txt"
+    },
+    "book-13.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-iliad/text/book-13.txt",
+      "blobPath": "books/the-iliad/text/book-13.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-iliad/text/book-13.txt"
+    },
+    "book-11.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-iliad/text/book-11.txt",
+      "blobPath": "books/the-iliad/text/book-11.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-iliad/text/book-11.txt"
+    },
+    "book-20.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-iliad/text/book-20.txt",
+      "blobPath": "books/the-iliad/text/book-20.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-iliad/text/book-20.txt"
+    },
+    "book-19.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-iliad/text/book-19.txt",
+      "blobPath": "books/the-iliad/text/book-19.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-iliad/text/book-19.txt"
+    },
+    "book-16.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-iliad/text/book-16.txt",
+      "blobPath": "books/the-iliad/text/book-16.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-iliad/text/book-16.txt"
+    },
+    "book-18.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-iliad/text/book-18.txt",
+      "blobPath": "books/the-iliad/text/book-18.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-iliad/text/book-18.txt"
+    },
+    "book-17.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-iliad/text/book-17.txt",
+      "blobPath": "books/the-iliad/text/book-17.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-iliad/text/book-17.txt"
+    },
+    "book-21.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-iliad/text/book-21.txt",
+      "blobPath": "books/the-iliad/text/book-21.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-iliad/text/book-21.txt"
+    },
+    "book-23.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-iliad/text/book-23.txt",
+      "blobPath": "books/the-iliad/text/book-23.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-iliad/text/book-23.txt"
+    },
+    "introduction.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-iliad/text/introduction.txt",
+      "blobPath": "books/the-iliad/text/introduction.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-iliad/text/introduction.txt"
+    },
+    "book-24.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-iliad/text/book-24.txt",
+      "blobPath": "books/the-iliad/text/book-24.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-iliad/text/book-24.txt"
+    },
+    "book-22.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-iliad/text/book-22.txt",
+      "blobPath": "books/the-iliad/text/book-22.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-iliad/text/book-22.txt"
+    },
+    "translators-preface.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-iliad/text/translators-preface.txt",
+      "blobPath": "books/the-iliad/text/translators-preface.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-iliad/text/translators-preface.txt"
+    }
+  },
+  "the-declaration-of-independence": {
+    "the-declaration-of-independence.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-declaration-of-independence/text/the-declaration-of-independence.txt",
+      "blobPath": "books/the-declaration-of-independence/text/the-declaration-of-independence.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-declaration-of-independence/text/the-declaration-of-independence.txt"
+    }
+  }
+}
