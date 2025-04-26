@@ -56,6 +56,25 @@ interface CleanupReport {
 
 // Converts a blob URL path to a local file path
 function blobPathToLocalPath(blobPath: string): string {
+  // Handle full URLs
+  if (blobPath.startsWith('http')) {
+    try {
+      const url = new URL(blobPath);
+      // Extract the path from the URL
+      let urlPath = url.pathname;
+      // Strip any base paths like '/books/'
+      if (urlPath.startsWith('/')) {
+        urlPath = urlPath.substring(1);
+      }
+      
+      // Now process the path without the URL part
+      return blobPathToLocalPath(urlPath);
+    } catch (error) {
+      console.error(`Error parsing URL: ${blobPath}`, error);
+      return '';
+    }
+  }
+  
   if (blobPath.startsWith('/')) {
     // Already a local path
     return path.join(process.cwd(), blobPath.replace(/^\//, ''));

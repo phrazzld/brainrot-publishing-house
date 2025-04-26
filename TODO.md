@@ -41,7 +41,7 @@
    Depends On: [T207]
    AC Ref: None
 
-9. [ ] Review cleanup report (T209)
+9. [x] Review cleanup report (T209)
    Action: Check the generated report to ensure only migrated assets will be deleted.
    Depends On: [T208]
    AC Ref: None
