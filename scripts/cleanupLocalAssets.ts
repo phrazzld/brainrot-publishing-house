@@ -8,6 +8,10 @@
  * 4. Has a dry-run mode for safety (enabled by default)
  */
 
+import * as dotenv from 'dotenv';
+// Load environment variables from .env.local
+dotenv.config({ path: '.env.local' });
+
 import translations from '../translations';
 import { assetExistsInBlobStorage } from '../utils';
 import fs from 'fs';
@@ -281,7 +285,8 @@ async function main() {
     console.log('\nAre you sure you want to proceed? (yes/no)');
     
     // Simple prompt implementation
-    const readline = require('readline').createInterface({
+    const { createInterface } = await import('readline');
+    const readline = createInterface({
       input: process.stdin,
       output: process.stdout
     });
@@ -314,7 +319,8 @@ async function main() {
 }
 
 // Run the script if executed directly
-if (require.main === module) {
+const isMainModule = import.meta.url.endsWith(process.argv[1].replace(/^file:\/\//, ''));
+if (isMainModule) {
   main();
 }
 

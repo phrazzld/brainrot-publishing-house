@@ -36,7 +36,7 @@
    Depends On: [T206]
    AC Ref: None
 
-8. [ ] Cleanup local assets - dry run (T208)
+8. [x] Cleanup local assets - dry run (T208)
    Action: Run `npx tsx scripts/cleanupLocalAssets.ts` (without the --delete flag) to see what assets would be deleted.
    Depends On: [T207]
    AC Ref: None
