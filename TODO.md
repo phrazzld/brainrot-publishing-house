@@ -26,7 +26,7 @@
    Depends On: [T204]
    AC Ref: None
 
-6. [ ] Run verification script (T206)
+6. [x] Run verification script (T206)
    Action: Run `npx tsx scripts/verifyBlobStorage.ts` to confirm all required assets were successfully migrated to Blob storage.
    Depends On: [T205]
    AC Ref: None

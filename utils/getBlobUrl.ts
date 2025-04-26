@@ -125,10 +125,31 @@ export async function assetExistsInBlobStorage(
   }
   
   try {
-    // Always use noCache for checking existence to avoid cached 404 responses
-    const blobUrl = getBlobUrl(legacyPath, { ...options, noCache: true });
+    // For checking existence, ensure we have the correct base URL
+    // Determine if this is already a full URL or a legacy path
+    const isAlreadyFullUrl = legacyPath.startsWith('http');
+    
+    let blobPath;
+    if (isAlreadyFullUrl) {
+      // If it's already a full URL, we need to extract just the path part
+      const url = new URL(legacyPath);
+      blobPath = url.pathname.replace(/^\//, ''); // Remove leading slash
+    } else {
+      // If it's a legacy path, convert it to a blob path
+      blobPath = blobPathService.convertLegacyPath(legacyPath);
+    }
+    
+    // Use the environment-specific base URL
+    const baseUrl = process.env.NEXT_PUBLIC_BLOB_BASE_URL;
+    const blobUrl = blobService.getUrlForPath(blobPath, { baseUrl, noCache: true });
+    
+    console.log(`Checking if asset exists: ${legacyPath}`);
+    console.log(`Blob path: ${blobPath}`);
+    console.log(`Full URL: ${blobUrl}`);
+    
     const fileInfo = await blobService.getFileInfo(blobUrl);
     const exists = fileInfo.size > 0;
+    console.log(`Asset exists: ${exists}, size: ${fileInfo.size}`);
     
     // Cache the result if caching is enabled
     if (useCache) {
@@ -137,6 +158,7 @@ export async function assetExistsInBlobStorage(
     
     return exists;
   } catch (error) {
+    console.log(`Error checking asset: ${legacyPath}`, error);
     if (useCache) {
       existenceCache[legacyPath] = false;
     }

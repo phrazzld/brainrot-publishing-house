@@ -5,6 +5,10 @@
  * It generates a report of what has been migrated and what still needs to be migrated.
  */
 
+import * as dotenv from 'dotenv';
+// Load environment variables from .env.local
+dotenv.config({ path: '.env.local' });
+
 import translations from '../translations';
 import { assetExistsInBlobStorage } from '../utils';
 import path from 'path';
@@ -204,7 +208,9 @@ async function verifyBlobStorage(): Promise<VerificationReport> {
 }
 
 // Run the verification if executed directly
-if (require.main === module) {
+// Using import.meta.url to check if this is the main module
+const isMainModule = import.meta.url.endsWith(process.argv[1].replace(/^file:\/\//, ''));
+if (isMainModule) {
   verifyBlobStorage()
     .then(() => console.log('Verification complete!'))
     .catch(error => console.error('Verification failed:', error));
