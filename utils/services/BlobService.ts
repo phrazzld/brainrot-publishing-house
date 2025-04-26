@@ -159,9 +159,15 @@ export class BlobService {
    */
   public getUrlForPath(path: string, options?: { baseUrl?: string; noCache?: boolean }): string {
     // Use provided base URL, environment variable, or default
-    const hostname = options?.baseUrl || 
+    let hostname = options?.baseUrl || 
       process.env.NEXT_PUBLIC_BLOB_BASE_URL || 
       'https://public.blob.vercel-storage.com';
+    
+    // Fix for the hostname discrepancy during verification
+    // When we have a generic https://public.blob.vercel-storage.com URL, use the correct one from env
+    if (hostname === 'https://public.blob.vercel-storage.com' && process.env.NEXT_PUBLIC_BLOB_BASE_URL) {
+      hostname = process.env.NEXT_PUBLIC_BLOB_BASE_URL;
+    }
     
     // Clean up the path and ensure it doesn't start with a slash
     const cleanPath = path.replace(/^\/+/, '');

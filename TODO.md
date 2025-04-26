@@ -71,7 +71,7 @@
     Depends On: [T213]
     AC Ref: None
 
-15. [ ] Diagnose asset verification discrepancies (T215)
+15. [x] Diagnose asset verification discrepancies (T215)
     Action: Investigate why verification reports show incomplete migration despite completed migration tasks. Check URL formats and paths between migration and verification scripts.
     Depends On: [T214]
     AC Ref: None

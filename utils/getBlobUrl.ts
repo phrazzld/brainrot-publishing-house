@@ -125,10 +125,26 @@ export async function assetExistsInBlobStorage(
   }
   
   try {
+    const baseUrl = process.env.NEXT_PUBLIC_BLOB_BASE_URL;
+    
+    // Handle URL normalization between formats
+    // This fixes the discrepancy between the URLs in translations and actual blob storage
+    let normalizedPath = legacyPath;
+    
+    // If the path contains the generic Vercel Blob URL but we have a specific one, replace it
+    if (baseUrl && 
+        legacyPath.startsWith('https://public.blob.vercel-storage.com/') && 
+        baseUrl !== 'https://public.blob.vercel-storage.com') {
+      normalizedPath = legacyPath.replace(
+        'https://public.blob.vercel-storage.com/', 
+        baseUrl + '/'
+      );
+      console.log(`Normalized URL from ${legacyPath} to ${normalizedPath}`);
+    }
+    
     // We've already seen this path work in the verification process, so if
     // it's the same URL, let's consider it valid without hitting the service
-    const baseUrl = process.env.NEXT_PUBLIC_BLOB_BASE_URL;
-    if (baseUrl && legacyPath.startsWith(baseUrl)) {
+    if (baseUrl && normalizedPath.startsWith(baseUrl)) {
       if (useCache) {
         existenceCache[legacyPath] = true;
       }
@@ -136,22 +152,22 @@ export async function assetExistsInBlobStorage(
     }
     
     // Determine if this is already a full URL or a legacy path
-    const isAlreadyFullUrl = legacyPath.startsWith('http');
+    const isAlreadyFullUrl = normalizedPath.startsWith('http');
     
     let blobPath;
     if (isAlreadyFullUrl) {
       // If it's already a full URL, we need to extract just the path part
-      const url = new URL(legacyPath);
+      const url = new URL(normalizedPath);
       blobPath = url.pathname.replace(/^\//, ''); // Remove leading slash
     } else {
       // If it's a legacy path, convert it to a blob path
-      blobPath = blobPathService.convertLegacyPath(legacyPath);
+      blobPath = blobPathService.convertLegacyPath(normalizedPath);
     }
     
     // Direct URL check if it's a full blob URL
-    const urlToCheck = isAlreadyFullUrl ? legacyPath : blobService.getUrlForPath(blobPath, { baseUrl, noCache: true });
+    const urlToCheck = isAlreadyFullUrl ? normalizedPath : blobService.getUrlForPath(blobPath, { baseUrl, noCache: true });
     
-    console.log(`Checking if asset exists: ${legacyPath}`);
+    console.log(`Checking if asset exists: ${normalizedPath}`);
     console.log(`Blob path: ${blobPath}`);
     console.log(`Full URL: ${urlToCheck}`);
     
