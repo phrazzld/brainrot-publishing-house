@@ -61,7 +61,7 @@
     Depends On: [T211]
     AC Ref: None
 
-13. [ ] Create and execute audio migration script (T213)
+13. [x] Create and execute audio migration script (T213)
     Action: Create a dedicated script for audio file migration and run it to migrate all audio assets to Blob storage.
     Depends On: [T212]
     AC Ref: None
