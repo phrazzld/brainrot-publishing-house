@@ -21,8 +21,12 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 import { existsSync } from 'fs';
 import { fileURLToPath } from 'url';
+import * as dotenv from 'dotenv';
 import { blobService } from '../utils/services/BlobService.js';
 import { blobPathService } from '../utils/services/BlobPathService.js';
+
+// Load environment variables from .env.local
+dotenv.config({ path: '.env.local' });
 
 // Get this file's directory
 const __filename = fileURLToPath(import.meta.url);
@@ -410,6 +414,7 @@ class BrainrotTextMigrationService {
         // Upload to Blob storage
         const uploadResult = await this.blobService.uploadText(content, blobPath, {
           access: 'public',
+          allowOverwrite: true,
           // Use a shorter cache time for text content which might be updated
           cacheControl: 'max-age=3600', // 1 hour cache
         });

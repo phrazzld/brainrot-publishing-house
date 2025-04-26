@@ -16,7 +16,7 @@
    Depends On: [T202]
    AC Ref: None
 
-4. [ ] Migrate brainrot text files (T204)
+4. [x] Migrate brainrot text files (T204)
    Action: Run `npx tsx scripts/migrateBrainrotTextFiles.ts --dry-run` to verify, then `npx tsx scripts/migrateBrainrotTextFiles.ts` to perform the migration.
    Depends On: [T203]
    AC Ref: None
