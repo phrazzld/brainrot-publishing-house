@@ -27,7 +27,7 @@ const translations: Translation[] = [
   {
     slug: 'the-iliad',
     title: 'the iliad',
-    shortDescription: 'achilles big salty, trojan bros caught in 4k, city going bruh-level meltdown. w drama, 100% based.',
+    shortDescription: "achilles big salty, trojan bros caught in 4k, city going bruh-level meltdown. w drama, 100% based.",
     coverImage: getAssetUrl('/assets/the-iliad/images/the-iliad-01.png', USE_BLOB_STORAGE),
     status: 'available',
     purchaseUrl: 'https://a.co/d/3Jgk26x',
@@ -157,7 +157,7 @@ const translations: Translation[] = [
   {
     slug: 'the-adventures-of-huckleberry-finn',
     title: 'the adventures of huckleberry finn',
-    shortDescription: 'huck yeets from civil society, links with jim, raft life hits diff. dodging l's, chasing w's, river got that main character energy.',
+    shortDescription: "huck yeets from civil society, links with jim, raft life hits diff. dodging l's, chasing w's, river got that main character energy.",
     coverImage: getAssetUrl('/assets/the-adventures-of-huckleberry-finn/images/huck-finn-09.png', USE_BLOB_STORAGE),
     status: 'available',
     purchaseUrl: 'https://a.co/d/4hjXftX',
@@ -382,7 +382,7 @@ const translations: Translation[] = [
   {
     slug: 'the-odyssey',
     title: 'the odyssey',
-    shortDescription: 'odysseus ghosting cyclops & sirens, tries not to flop but finna get that home sweet home. big bde of cunning tbh.',
+    shortDescription: "odysseus ghosting cyclops & sirens, tries not to flop but finna get that home sweet home. big bde of cunning tbh.",
     coverImage: getAssetUrl('/assets/the-odyssey/images/the-odyssey-01.png', USE_BLOB_STORAGE),
     status: 'available',
     chapters: [
@@ -511,7 +511,7 @@ const translations: Translation[] = [
   {
     slug: 'the-aeneid',
     title: 'the aeneid',
-    shortDescription: 'trojan boi aeneas on a no cap mission to found rome, basically said "secure the bag or crash out." spoiler: he secures it, bestie.',
+    shortDescription: "trojan boi aeneas on a no cap mission to found rome, basically said \"secure the bag or crash out.\" spoiler: he secures it, bestie.",
     coverImage: getAssetUrl('/assets/the-aeneid/images/the-aeneid-01.png', USE_BLOB_STORAGE),
     status: 'available',
     chapters: [
@@ -614,7 +614,7 @@ const translations: Translation[] = [
   {
     slug: 'the-republic',
     title: 'the republic',
-    shortDescription: 'socrates pulls up, asks "what if we made a city that slaps?"—ends up min-maxing justice, dunking on poets, and inventing the philosopher-king meta.',
+    shortDescription: "socrates pulls up, asks \"what if we made a city that slaps?\"—ends up min-maxing justice, dunking on poets, and inventing the philosopher-king meta.",
     coverImage: getAssetUrl('/assets/the-republic/images/republic-07.png', USE_BLOB_STORAGE),
     status: 'available',
     chapters: [
@@ -687,7 +687,7 @@ const translations: Translation[] = [
   {
     slug: 'pride-and-prejudice',
     title: 'pride and prejudice',
-    shortDescription: 'mom says "marry rich," dad says "marry smart," lizzy says "i'm built different." cue romantic turbulence.',
+    shortDescription: 'mom says "marry rich," dad says "marry smart," lizzy says "I\'m built different." cue romantic turbulence.',
     coverImage: getAssetUrl('/assets/pride-and-prejudice/images/pride-and-prejudice-01.png', USE_BLOB_STORAGE),
     status: 'coming soon',
     chapters: [
@@ -696,7 +696,7 @@ const translations: Translation[] = [
   {
     slug: 'paradise-lost',
     title: 'paradise lost',
-    shortDescription: 'god builds a perfect utopia, satan says "not on my watch," humans fumble the bag instantly. paradise lost, drama found.',
+    shortDescription: "god builds a perfect utopia, satan says \"not on my watch,\" humans fumble the bag instantly. paradise lost, drama found.",
     coverImage: getAssetUrl('/assets/paradise-lost/images/paradise-lost-01.png', USE_BLOB_STORAGE),
     status: 'coming soon',
     chapters: [
@@ -705,7 +705,7 @@ const translations: Translation[] = [
   {
     slug: 'meditations',
     title: 'meditations',
-    shortDescription: 'life be lifin\', but marcus just vibes. control what you can, ignore the clowns, stay based.',
+    shortDescription: "life be lifin', but marcus just vibes. control what you can, ignore the clowns, stay based.",
     coverImage: getAssetUrl('/assets/meditations/images/meditations-01.png', USE_BLOB_STORAGE),
     status: 'coming soon',
     chapters: [
@@ -714,7 +714,7 @@ const translations: Translation[] = [
   {
     slug: 'the-divine-comedy-inferno',
     title: 'the divine comedy: the inferno',
-    shortDescription: 'dante finna see hell like it's giving meltdown vibes. devils be sus asf.',
+    shortDescription: "dante finna see hell like it's giving meltdown vibes. devils be sus asf.",
     coverImage: getAssetUrl('/assets/images/inferno-01.png', USE_BLOB_STORAGE),
     status: 'coming soon',
     chapters: [
@@ -723,7 +723,7 @@ const translations: Translation[] = [
   {
     slug: 'the-divine-comedy-purgatorio',
     title: 'the divine comedy: the purgatorio',
-    shortDescription: 'man's took a vibe check, climbing that mountain with the homies to get cleansed. era SHIFT.',
+    shortDescription: "man's took a vibe check, climbing that mountain with the homies to get cleansed. era SHIFT.",
     coverImage: getAssetUrl('/assets/images/purgatorio-02.png', USE_BLOB_STORAGE),
     status: 'coming soon',
     chapters: [
@@ -732,7 +732,7 @@ const translations: Translation[] = [
   {
     slug: 'the-divine-comedy-paradiso',
     title: 'the divine comedy: the paradiso',
-    shortDescription: 'big glow-up in heaven, man's ratio unstoppable, angels all like "sheesh."',
+    shortDescription: "big glow-up in heaven, man's ratio unstoppable, angels all like \"sheesh.\"",
     coverImage: getAssetUrl('/assets/images/paradiso-02.png', USE_BLOB_STORAGE),
     status: 'coming soon',
     chapters: [
@@ -741,7 +741,7 @@ const translations: Translation[] = [
   {
     slug: 'the-bible-old-testament',
     title: 'the bible: old testament',
-    shortDescription: 'it's giving creation myths, floods, epic L's & W's, everyone's on that vibe check from abraham to moses. savage.',
+    shortDescription: "it's giving creation myths, floods, epic L's & W's, everyone's on that vibe check from abraham to moses. savage.",
     coverImage: getAssetUrl('/assets/images/old-testament-03.png', USE_BLOB_STORAGE),
     status: 'coming soon',
     chapters: [
@@ -750,7 +750,7 @@ const translations: Translation[] = [
   {
     slug: 'the-bible-new-testament',
     title: 'the bible: new testament',
-    shortDescription: 'jesus is the main character, raising the dead, turning water to wine, big rizz energy. the apostles be living rent-free in everyone's mind.',
+    shortDescription: "jesus is the main character, raising the dead, turning water to wine, big rizz energy. the apostles be living rent-free in everyone's mind.",
     coverImage: getAssetUrl('/assets/images/new-testament-01.png', USE_BLOB_STORAGE),
     status: 'coming soon',
     chapters: [
@@ -759,7 +759,7 @@ const translations: Translation[] = [
   {
     slug: 'the-quran',
     title: 'the quran',
-    shortDescription: 'revelation meltdown, the prophet mohammed spitting bars from the top—milk & honey drip, soul-level era. absolutely no flop.',
+    shortDescription: "revelation meltdown, the prophet mohammed spitting bars from the top—milk & honey drip, soul-level era. absolutely no flop.",
     coverImage: getAssetUrl('/assets/images/quran-01.png', USE_BLOB_STORAGE),
     status: 'coming soon',
     chapters: [
@@ -768,7 +768,7 @@ const translations: Translation[] = [
   {
     slug: 'romeo-and-juliet',
     title: 'romeo and juliet',
-    shortDescription: 'star-crossed bffr, love doping them up, they crash out frfr. big yikes vibes.',
+    shortDescription: "star-crossed bffr, love doping them up, they crash out frfr. big yikes vibes.",
     coverImage: getAssetUrl('/assets/images/romeo-and-juliet-02.png', USE_BLOB_STORAGE),
     status: 'coming soon',
     chapters: [
@@ -776,8 +776,8 @@ const translations: Translation[] = [
   },
   {
     slug: 'a-midsummer-nights-dream',
-    title: 'a midsummer night's dream',
-    shortDescription: 'fairy squad messing up couples, donkey transformation, oh so chaotic. it's literally a bruh moment in the forest.',
+    title: "a midsummer night's dream",
+    shortDescription: "fairy squad messing up couples, donkey transformation, oh so chaotic. it's literally a bruh moment in the forest.",
     coverImage: getAssetUrl('/assets/images/midsummer-02.png', USE_BLOB_STORAGE),
     status: 'coming soon',
     chapters: [
@@ -786,7 +786,7 @@ const translations: Translation[] = [
   {
     slug: 'gilgamesh',
     title: 'gilgamesh',
-    shortDescription: 'og epic, demigod king's bff dies, so he tries to unalive immortality. ultimate big sad, but he glows up in the end.',
+    shortDescription: "og epic, demigod king's bff dies, so he tries to unalive immortality. ultimate big sad, but he glows up in the end.",
     coverImage: getAssetUrl('/assets/images/gilgamesh-01.png', USE_BLOB_STORAGE),
     status: 'coming soon',
     chapters: [
@@ -795,7 +795,7 @@ const translations: Translation[] = [
   {
     slug: 'bhagavad-gita',
     title: 'bhagavad gita',
-    shortDescription: 'krishna spitting that moral code, telling arjuna to stop capping & fight. talk about rizz for your soul, bestie.',
+    shortDescription: "krishna spitting that moral code, telling arjuna to stop capping & fight. talk about rizz for your soul, bestie.",
     coverImage: getAssetUrl('/assets/images/gita-01.png', USE_BLOB_STORAGE),
     status: 'coming soon',
     chapters: [
