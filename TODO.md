@@ -6,7 +6,7 @@
    Depends On: None
    AC Ref: None
 
-2. [~] Migrate book cover images (T202)
+2. [x] Migrate book cover images (T202)
    Action: Run `npx tsx scripts/migrateBookCoverImages.ts --dry-run` to verify, then `npx tsx scripts/migrateBookCoverImages.ts` to perform the migration.
    Depends On: [T201]
    AC Ref: None
