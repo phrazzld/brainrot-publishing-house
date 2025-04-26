@@ -66,7 +66,7 @@
     Depends On: [T212]
     AC Ref: None
 
-14. [ ] Run final asset verification (T214)
+14. [x] Run final asset verification (T214)
     Action: Run `npx tsx scripts/verifyBlobStorage.ts` to confirm 100% of assets are now in Blob storage and fix any remaining issues.
     Depends On: [T213]
     AC Ref: None
