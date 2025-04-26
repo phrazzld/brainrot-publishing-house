@@ -71,6 +71,26 @@
     Depends On: [T213]
     AC Ref: None
 
+15. [ ] Diagnose asset verification discrepancies (T215)
+    Action: Investigate why verification reports show incomplete migration despite completed migration tasks. Check URL formats and paths between migration and verification scripts.
+    Depends On: [T214]
+    AC Ref: None
+
+16. [ ] Complete remaining asset migration (T216)
+    Action: Create and run a script to identify and migrate any remaining assets not yet in Blob storage, including any recently added content.
+    Depends On: [T215]
+    AC Ref: None
+
+17. [ ] Execute final local asset cleanup (T217)
+    Action: After 100% verification success, perform final cleanup by running `npx tsx scripts/cleanupLocalAssets.ts --delete --force` to remove all local assets.
+    Depends On: [T216]
+    AC Ref: None
+
+18. [ ] Git removal of asset directory structure (T218)
+    Action: Once all assets are verified in Blob storage and local cleanup is complete, remove the empty public/assets directory structure from the repository and commit the changes.
+    Depends On: [T217]
+    AC Ref: None
+
 ## Vercel Blob Migration
 - [x] Install and configure @vercel/blob package
 - [x] Create a BlobService utility class with upload/download/list operations
