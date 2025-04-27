@@ -99,7 +99,22 @@ export default function ReadingRoom() {
         cursorColor: "#ffdaab",
         height: 48, // taller waveform
       });
-      const fullAudioSrc = `${process.env.NEXT_PUBLIC_SPACES_BASE_URL}${chapterData.audioSrc}`;
+      // Normalize the URL just like we do for text content
+      const baseUrl = process.env.NEXT_PUBLIC_BLOB_BASE_URL;
+      let fullAudioSrc = chapterData.audioSrc;
+      
+      // If the path contains the generic Vercel Blob URL but we have a specific one, replace it
+      if (baseUrl && 
+          chapterData.audioSrc.startsWith('https://public.blob.vercel-storage.com/') && 
+          baseUrl !== 'https://public.blob.vercel-storage.com') {
+        fullAudioSrc = chapterData.audioSrc.replace(
+          'https://public.blob.vercel-storage.com/', 
+          baseUrl + '/'
+        );
+        console.log(`Normalized audio URL from ${chapterData.audioSrc} to ${fullAudioSrc}`);
+      }
+      
+      console.log('Loading audio from:', fullAudioSrc);
       ws.load(fullAudioSrc);
 
       ws.on("ready", () => {
@@ -124,17 +139,46 @@ export default function ReadingRoom() {
       });
 
       setWaveSurfer(ws);
+      
+      // Improved cleanup function with explicit checks and error handling
       return () => {
         try {
-          ws.destroy();
-        } catch { }
+          // Check if wavesurfer instance is still valid before trying to destroy it
+          if (ws && typeof ws.destroy === 'function') {
+            // First remove all event listeners to prevent race conditions
+            ws.un("ready");
+            ws.un("audioprocess");
+            ws.un("play");
+            ws.un("pause");
+            ws.un("finish");
+            
+            // Now destroy the instance
+            ws.destroy();
+            console.log("WaveSurfer instance destroyed successfully");
+          }
+        } catch (error) {
+          console.error("Error during WaveSurfer cleanup:", error);
+        }
       };
     } else {
       // no audio available
       if (waveSurfer) {
         try {
+          // First remove all event listeners
+          if (typeof waveSurfer.un === 'function') {
+            waveSurfer.un("ready");
+            waveSurfer.un("audioprocess");
+            waveSurfer.un("play");
+            waveSurfer.un("pause");
+            waveSurfer.un("finish");
+          }
+          
+          // Then destroy
           waveSurfer.destroy();
-        } catch { }
+          console.log("Existing WaveSurfer instance destroyed (no audio available)");
+        } catch (error) {
+          console.error("Error destroying existing WaveSurfer:", error);
+        }
       }
       setWaveSurfer(null);
       setIsPlaying(false);

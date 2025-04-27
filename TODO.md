@@ -1,5 +1,26 @@
 # CI/CD and Precommit Hooks Implementation TODO
 
+## Audio Migration Fix Tasks
+1. [ ] Create audio download utility (T219)
+   Action: Create a utility function to download audio files from Digital Ocean Spaces based on URLs in translations file.
+   Depends On: None
+   AC Ref: None
+   
+2. [ ] Create a proper audio migration script (T220)
+   Action: Develop a script that downloads each audio file from Digital Ocean, verifies its integrity, and uploads it to Vercel Blob.
+   Depends On: [T219]
+   AC Ref: None
+   
+3. [ ] Run audio migration with validation (T221)
+   Action: Execute the audio migration script and validate each file has been properly uploaded with a content check.
+   Depends On: [T220]
+   AC Ref: None
+   
+4. [ ] Fix audio URL handling in reading-room component (T222)
+   Action: Update the reading-room component to properly handle audio URLs, including normalization and fallback logic.
+   Depends On: [T221]
+   AC Ref: None
+
 ## Vercel Blob Migration and Cleanup Tasks
 1. [x] Verify Blob storage configuration (T201)
    Action: Run `npx tsx scripts/test-blob-storage.ts` to confirm your Blob token and URL configuration are working properly.
@@ -78,7 +99,7 @@
 
 16. [ ] Complete remaining asset migration (T216)
     Action: Create and run a script to identify and migrate any remaining assets not yet in Blob storage, including any recently added content.
-    Depends On: [T215]
+    Depends On: [T215, T222]
     AC Ref: None
 
 17. [ ] Execute final local asset cleanup (T217)

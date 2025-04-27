@@ -238,10 +238,33 @@ export async function fetchTextWithFallback(
   options: Omit<BlobUrlOptions, 'useBlobStorage'> = {}
 ): Promise<string> {
   try {
-    // First try Blob storage
-    const blobUrl = getBlobUrl(legacyPath, options);
+    // Handle URL normalization for tenant-specific domains
+    const baseUrl = process.env.NEXT_PUBLIC_BLOB_BASE_URL;
+    let normalizedPath = legacyPath;
+    
+    // If the path contains the generic Vercel Blob URL but we have a specific one, replace it
+    if (baseUrl && 
+        legacyPath.startsWith('https://public.blob.vercel-storage.com/') && 
+        baseUrl !== 'https://public.blob.vercel-storage.com') {
+      normalizedPath = legacyPath.replace(
+        'https://public.blob.vercel-storage.com/', 
+        baseUrl + '/'
+      );
+      console.log(`Normalized text URL from ${legacyPath} to ${normalizedPath}`);
+    }
+    
+    // First try Blob storage with the normalized URL
     try {
-      return await blobService.fetchText(blobUrl);
+      // If it's already a full URL after normalization, use it directly
+      if (normalizedPath.startsWith('http')) {
+        console.log(`Fetching text from normalized URL: ${normalizedPath}`);
+        return await blobService.fetchText(normalizedPath);
+      } else {
+        // Otherwise generate a Blob URL
+        const blobUrl = getBlobUrl(normalizedPath, options);
+        console.log(`Fetching text from generated URL: ${blobUrl}`);
+        return await blobService.fetchText(blobUrl);
+      }
     } catch (blobError) {
       console.warn(`Failed to fetch from Blob, trying local path: ${legacyPath}`, blobError);
       
