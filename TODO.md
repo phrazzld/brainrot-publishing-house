@@ -15,6 +15,7 @@
    Action: Execute the audio migration script and validate each file has been properly uploaded with a content check.
    Depends On: [T220]
    AC Ref: None
+   Note: Migration validation shows files exist but they are placeholders only. See T221-completion-report.md.
    
 4. [ ] Fix audio URL handling in reading-room component (T222)
    Action: Update the reading-room component to properly handle audio URLs, including normalization and fallback logic.
