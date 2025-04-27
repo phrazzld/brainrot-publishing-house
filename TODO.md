@@ -1,7 +1,7 @@
 # CI/CD and Precommit Hooks Implementation TODO
 
 ## Audio Migration Fix Tasks
-1. [ ] Create audio download utility (T219)
+1. [x] Create audio download utility (T219)
    Action: Create a utility function to download audio files from Digital Ocean Spaces based on URLs in translations file.
    Depends On: None
    AC Ref: None
