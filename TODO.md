@@ -6,7 +6,7 @@
    Depends On: None
    AC Ref: None
    
-2. [ ] Create a proper audio migration script (T220)
+2. [x] Create a proper audio migration script (T220)
    Action: Develop a script that downloads each audio file from Digital Ocean, verifies its integrity, and uploads it to Vercel Blob.
    Depends On: [T219]
    AC Ref: None
