@@ -11,7 +11,7 @@
    Depends On: [T219]
    AC Ref: None
    
-3. [ ] Run audio migration with validation (T221)
+3. [x] Run audio migration with validation (T221)
    Action: Execute the audio migration script and validate each file has been properly uploaded with a content check.
    Depends On: [T220]
    AC Ref: None
