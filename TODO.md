@@ -178,7 +178,7 @@
    Action: Access the Vercel build logs URL from the error message and identify the root cause of the `npm install` failure.  
    Depends On: None  
    AC Ref: None
-- [ ] Reproduce the npm install error locally with matching Node version (T102)  
+- [x] Reproduce the npm install error locally with matching Node version (T102)  
    Action: Use `nvm use <version>` to match Vercel's Node version, remove `node_modules` and `package-lock.json`, then run `npm install`.  
    Depends On: [T101]  
    AC Ref: None
