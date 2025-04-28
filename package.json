@@ -3,9 +3,23 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "installConfig": {
+    "pnpm": {
+      "peerDependencyRules": {
+        "allowedVersions": {
+          "react": "19"
+        }
+      }
+    }
+  },
+  "// NOTE": "This project requires --legacy-peer-deps to install due to React 19 compatibility issues with @testing-library/react",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
+    "setup": "npm install --legacy-peer-deps",
     "start": "next start",
     "lint": "next lint",
     "lint:strict": "eslint --max-warnings=0 .",
@@ -33,7 +47,7 @@
     "cheerio": "^1.0.0",
     "dotenv": "^16.5.0",
     "gsap": "^3.12.5",
-    "next": "15.1.3",
+    "next": "^15.3.1",
     "openai": "^4.80.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

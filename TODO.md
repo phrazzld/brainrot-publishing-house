@@ -182,7 +182,7 @@
    Action: Use `nvm use <version>` to match Vercel's Node version, remove `node_modules` and `package-lock.json`, then run `npm install`.  
    Depends On: [T101]  
    AC Ref: None
-- [ ] Resolve reported installation issues (T103)  
+- [x] Resolve reported installation issues (T103)  
    Action: Update or add peer dependencies in `package.json`, align the `"engines".node` field with Vercel's Node version, regenerate `package-lock.json`, and commit changes.  
    Depends On: [T102]  
    AC Ref: None
