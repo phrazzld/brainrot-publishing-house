@@ -174,7 +174,7 @@
 - [x] Clean up local assets after successful migration
 
 ## Vercel Blob Configuration
-- [ ] Inspect Vercel build logs for npm install error (T101)  
+- [x] Inspect Vercel build logs for npm install error (T101)  
    Action: Access the Vercel build logs URL from the error message and identify the root cause of the `npm install` failure.  
    Depends On: None  
    AC Ref: None
