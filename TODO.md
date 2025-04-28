@@ -143,7 +143,7 @@
     Depends On: [T215, T222]
     AC Ref: None
 
-17. [ ] Execute final local asset cleanup (T217)
+17. [x] Execute final local asset cleanup (T217)
     Action: After 100% verification success, perform final cleanup by running `npx tsx scripts/cleanupLocalAssets.ts --delete --force` to remove all local assets.
     Depends On: [T216]
     AC Ref: None
