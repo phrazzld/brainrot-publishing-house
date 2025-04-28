@@ -67,3 +67,9 @@ aws-do-config.ini
 
 # local assets (migrated to blob storage)
 /public/assets/
+
+# local environment configuration
+.tool-versions
+
+# backups
+/backups/
