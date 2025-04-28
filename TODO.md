@@ -7,7 +7,7 @@
    AC Ref: None
    Priority: Critical
    
-2. [ ] Verify audio files exist in Digital Ocean (T224)
+2. [x] Verify audio files exist in Digital Ocean (T224)
    Action: Verify audio files are accessible in Digital Ocean Space with proper file sizes and create an inventory.
    Depends On: [T223]
    AC Ref: None
