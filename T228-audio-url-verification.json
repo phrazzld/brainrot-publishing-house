@@ -1,0 +1,655 @@
+{
+  "timestamp": "2025-04-28T06:30:33.691Z",
+  "totalUrls": 62,
+  "successCount": 62,
+  "failureCount": 0,
+  "bookResults": {
+    "the-iliad": {
+      "total": 24,
+      "success": 24,
+      "failure": 0
+    },
+    "the-odyssey": {
+      "total": 24,
+      "success": 24,
+      "failure": 0
+    },
+    "the-aeneid": {
+      "total": 12,
+      "success": 12,
+      "failure": 0
+    },
+    "hamlet": {
+      "total": 1,
+      "success": 1,
+      "failure": 0
+    },
+    "the-declaration-of-independence": {
+      "total": 1,
+      "success": 1,
+      "failure": 0
+    }
+  },
+  "results": [
+    {
+      "book": "the-iliad",
+      "chapterTitle": "book 1",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-01.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-01.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 9696006
+    },
+    {
+      "book": "the-iliad",
+      "chapterTitle": "book 2",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-02.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-02.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 8763462
+    },
+    {
+      "book": "the-iliad",
+      "chapterTitle": "book 3",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-03.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-03.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 12444295
+    },
+    {
+      "book": "the-iliad",
+      "chapterTitle": "book 4",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-04.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-04.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 7499192
+    },
+    {
+      "book": "the-iliad",
+      "chapterTitle": "book 5",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-05.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-05.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "application/octet-stream",
+      "contentLength": 14461758
+    },
+    {
+      "book": "the-iliad",
+      "chapterTitle": "book 6",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-06.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-06.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 7499558
+    },
+    {
+      "book": "the-iliad",
+      "chapterTitle": "book 7",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-07.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-07.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 11158256
+    },
+    {
+      "book": "the-iliad",
+      "chapterTitle": "book 8",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-08.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-08.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 7276568
+    },
+    {
+      "book": "the-iliad",
+      "chapterTitle": "book 9",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-09.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-09.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 9151728
+    },
+    {
+      "book": "the-iliad",
+      "chapterTitle": "book 10",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-10.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-10.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 17405819
+    },
+    {
+      "book": "the-iliad",
+      "chapterTitle": "book 11",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-11.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-11.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 14435808
+    },
+    {
+      "book": "the-iliad",
+      "chapterTitle": "book 12",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-12.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-12.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 7348533
+    },
+    {
+      "book": "the-iliad",
+      "chapterTitle": "book 13",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-13.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-13.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 12987812
+    },
+    {
+      "book": "the-iliad",
+      "chapterTitle": "book 14",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-14.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-14.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 9865073
+    },
+    {
+      "book": "the-iliad",
+      "chapterTitle": "book 15",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-15.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-15.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 6367855
+    },
+    {
+      "book": "the-iliad",
+      "chapterTitle": "book 16",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-16.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-16.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 8722062
+    },
+    {
+      "book": "the-iliad",
+      "chapterTitle": "book 17",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-17.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-17.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 4939945
+    },
+    {
+      "book": "the-iliad",
+      "chapterTitle": "book 18",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-18.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-18.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 16931395
+    },
+    {
+      "book": "the-iliad",
+      "chapterTitle": "book 19",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-19.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-19.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 5881701
+    },
+    {
+      "book": "the-iliad",
+      "chapterTitle": "book 20",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-20.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-20.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 11946894
+    },
+    {
+      "book": "the-iliad",
+      "chapterTitle": "book 21",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-21.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-21.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 7817973
+    },
+    {
+      "book": "the-iliad",
+      "chapterTitle": "book 22",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-22.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-22.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 5778382
+    },
+    {
+      "book": "the-iliad",
+      "chapterTitle": "book 23",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-23.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-23.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 11495287
+    },
+    {
+      "book": "the-iliad",
+      "chapterTitle": "book 24",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-24.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-24.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 6842199
+    },
+    {
+      "book": "the-odyssey",
+      "chapterTitle": "book 1",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-01.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-01.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 7313815
+    },
+    {
+      "book": "the-odyssey",
+      "chapterTitle": "book 2",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-02.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-02.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 7628416
+    },
+    {
+      "book": "the-odyssey",
+      "chapterTitle": "book 3",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-03.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-03.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 8746744
+    },
+    {
+      "book": "the-odyssey",
+      "chapterTitle": "book 4",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-04.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-04.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 8482767
+    },
+    {
+      "book": "the-odyssey",
+      "chapterTitle": "book 5",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-05.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-05.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 3654295
+    },
+    {
+      "book": "the-odyssey",
+      "chapterTitle": "book 6",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-06.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-06.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 5013600
+    },
+    {
+      "book": "the-odyssey",
+      "chapterTitle": "book 7",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-07.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-07.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 11634353
+    },
+    {
+      "book": "the-odyssey",
+      "chapterTitle": "book 8",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-08.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-08.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 9771351
+    },
+    {
+      "book": "the-odyssey",
+      "chapterTitle": "book 9",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-09.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-09.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 7894518
+    },
+    {
+      "book": "the-odyssey",
+      "chapterTitle": "book 10",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-10.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-10.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 10170491
+    },
+    {
+      "book": "the-odyssey",
+      "chapterTitle": "book 11",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-11.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-11.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 5754946
+    },
+    {
+      "book": "the-odyssey",
+      "chapterTitle": "book 12",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-12.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-12.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 10626510
+    },
+    {
+      "book": "the-odyssey",
+      "chapterTitle": "book 13",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-13.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-13.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 6805903
+    },
+    {
+      "book": "the-odyssey",
+      "chapterTitle": "book 14",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-14.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-14.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 7863549
+    },
+    {
+      "book": "the-odyssey",
+      "chapterTitle": "book 15",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-15.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-15.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 12158996
+    },
+    {
+      "book": "the-odyssey",
+      "chapterTitle": "book 16",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-16.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-16.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 7836354
+    },
+    {
+      "book": "the-odyssey",
+      "chapterTitle": "book 17",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-17.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-17.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 8876851
+    },
+    {
+      "book": "the-odyssey",
+      "chapterTitle": "book 18",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-18.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-18.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 5314411
+    },
+    {
+      "book": "the-odyssey",
+      "chapterTitle": "book 19",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-19.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-19.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 7393727
+    },
+    {
+      "book": "the-odyssey",
+      "chapterTitle": "book 20",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-20.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-20.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 9994750
+    },
+    {
+      "book": "the-odyssey",
+      "chapterTitle": "book 21",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-21.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-21.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 5511876
+    },
+    {
+      "book": "the-odyssey",
+      "chapterTitle": "book 22",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-22.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-22.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 5128639
+    },
+    {
+      "book": "the-odyssey",
+      "chapterTitle": "book 23",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-23.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-23.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 6159521
+    },
+    {
+      "book": "the-odyssey",
+      "chapterTitle": "book 24",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-24.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-24.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 6861122
+    },
+    {
+      "book": "the-aeneid",
+      "chapterTitle": "book 1",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-01.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-01.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 12040185
+    },
+    {
+      "book": "the-aeneid",
+      "chapterTitle": "book 2",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-02.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-02.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 12241827
+    },
+    {
+      "book": "the-aeneid",
+      "chapterTitle": "book 3",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-03.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-03.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 3524596
+    },
+    {
+      "book": "the-aeneid",
+      "chapterTitle": "book 4",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-04.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-04.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 4788092
+    },
+    {
+      "book": "the-aeneid",
+      "chapterTitle": "book 5",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-05.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-05.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 8522080
+    },
+    {
+      "book": "the-aeneid",
+      "chapterTitle": "book 6",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-06.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-06.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 17291204
+    },
+    {
+      "book": "the-aeneid",
+      "chapterTitle": "book 7",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-07.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-07.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 14439157
+    },
+    {
+      "book": "the-aeneid",
+      "chapterTitle": "book 8",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-08.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-08.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 3090739
+    },
+    {
+      "book": "the-aeneid",
+      "chapterTitle": "book 9",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-09.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-09.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 4969654
+    },
+    {
+      "book": "the-aeneid",
+      "chapterTitle": "book 10",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-10.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-10.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 2451463
+    },
+    {
+      "book": "the-aeneid",
+      "chapterTitle": "book 11",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-11.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-11.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 10213148
+    },
+    {
+      "book": "the-aeneid",
+      "chapterTitle": "book 12",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-12.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-12.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 14997671
+    },
+    {
+      "book": "hamlet",
+      "chapterTitle": "act i",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/hamlet/audio/act-i.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/hamlet/audio/act-i.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 35254554
+    },
+    {
+      "book": "the-declaration-of-independence",
+      "chapterTitle": "the declaration of independence",
+      "originalUrl": "https://public.blob.vercel-storage.com/books/the-declaration-of-independence/audio/the-declaration-of-independence.mp3",
+      "resolvedUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-declaration-of-independence/audio/the-declaration-of-independence.mp3",
+      "status": "success",
+      "statusCode": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 3299171
+    }
+  ]
+}

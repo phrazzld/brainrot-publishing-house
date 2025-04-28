@@ -31,7 +31,7 @@
    AC Ref: None
    Priority: Critical
    
-6. [ ] Verify audio file integrity and access (T228)
+6. [x] Verify audio file integrity and access (T228)
    Action: Test a sample of audio files on the site to confirm they play correctly.
    Depends On: [T227]
    AC Ref: None
