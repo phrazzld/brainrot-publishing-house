@@ -148,7 +148,7 @@
     Depends On: [T216]
     AC Ref: None
 
-18. [ ] Git removal of asset directory structure (T218)
+18. [x] Git removal of asset directory structure (T218)
     Action: Once all assets are verified in Blob storage and local cleanup is complete, remove the empty public/assets directory structure from the repository and commit the changes.
     Depends On: [T217]
     AC Ref: None
