@@ -1,0 +1,54 @@
+{
+  "summary": {
+    "timestamp": "2025-04-28T06:16:19.818Z",
+    "total": 1,
+    "successful": 1,
+    "skipped": 0,
+    "failed": 0,
+    "totalDownloadSize": 3299171,
+    "totalUploadSize": 0,
+    "totalDuration": 5278,
+    "booksCovered": [
+      "the-declaration-of-independence"
+    ],
+    "validationSuccess": 1,
+    "validationFailed": 0,
+    "startTime": "2025-04-28T06:16:14.540Z",
+    "endTime": "2025-04-28T06:16:19.818Z"
+  },
+  "options": {
+    "dryRun": false,
+    "books": [
+      "the-declaration-of-independence"
+    ],
+    "force": true,
+    "retries": 3,
+    "concurrency": 3,
+    "logFile": "migration-logs/declaration-migration.json",
+    "verbose": true,
+    "sizeThreshold": 100
+  },
+  "results": [
+    {
+      "status": "success",
+      "bookSlug": "the-declaration-of-independence",
+      "chapterTitle": "the declaration of independence",
+      "key": "the-declaration-of-independence/audio/the-declaration-of-independence.mp3",
+      "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/the-declaration-of-independence/audio/the-declaration-of-independence.mp3",
+      "blobPath": "the-declaration-of-independence/audio/the-declaration-of-independence.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-declaration-of-independence/audio/the-declaration-of-independence.mp3",
+      "totalTime": 5277,
+      "validated": true,
+      "downloadSize": 3299171,
+      "contentType": "audio/mpeg",
+      "downloadTime": 2177,
+      "validationInfo": {
+        "sizeMatch": true,
+        "contentValidated": true,
+        "expectedSize": 3299171,
+        "actualSize": 3299171
+      },
+      "uploadTime": 2273
+    }
+  ]
+}

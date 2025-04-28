@@ -1,0 +1,54 @@
+{
+  "summary": {
+    "timestamp": "2025-04-28T06:15:59.206Z",
+    "total": 1,
+    "successful": 1,
+    "skipped": 0,
+    "failed": 0,
+    "totalDownloadSize": 35254554,
+    "totalUploadSize": 0,
+    "totalDuration": 21783,
+    "booksCovered": [
+      "hamlet"
+    ],
+    "validationSuccess": 1,
+    "validationFailed": 0,
+    "startTime": "2025-04-28T06:15:37.423Z",
+    "endTime": "2025-04-28T06:15:59.206Z"
+  },
+  "options": {
+    "dryRun": false,
+    "books": [
+      "hamlet"
+    ],
+    "force": true,
+    "retries": 3,
+    "concurrency": 3,
+    "logFile": "migration-logs/hamlet-migration.json",
+    "verbose": true,
+    "sizeThreshold": 100
+  },
+  "results": [
+    {
+      "status": "success",
+      "bookSlug": "hamlet",
+      "chapterTitle": "act i",
+      "key": "hamlet/audio/act-i.mp3",
+      "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/hamlet/audio/act-i.mp3",
+      "blobPath": "hamlet/audio/act-i.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/hamlet/audio/act-i.mp3",
+      "totalTime": 21782,
+      "validated": true,
+      "downloadSize": 35254554,
+      "contentType": "audio/mpeg",
+      "downloadTime": 12639,
+      "validationInfo": {
+        "sizeMatch": true,
+        "contentValidated": true,
+        "expectedSize": 35254554,
+        "actualSize": 35254554
+      },
+      "uploadTime": 7429
+    }
+  ]
+}
