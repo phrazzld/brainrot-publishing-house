@@ -47,5 +47,20 @@ yarn-error.log*
 next-env.d.ts
 .env*.local
 
-# reports
+# reports and generated files
 /reports
+audio-files-report.json
+audio-inventory-verified.json
+audio-inventory.json
+audio-migration-cdn.json
+audio-migration-with-content.json
+audio-migration-with-placeholders.json
+audio-url-verification.json
+placeholder-deletion-results.json
+
+# temporary directories
+/temp
+/tmp
+
+# credentials and config
+aws-do-config.ini

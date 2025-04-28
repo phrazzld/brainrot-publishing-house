@@ -5,6 +5,7 @@ import {
   assetExistsInBlobStorage 
 } from '../../utils/getBlobUrl';
 import { blobService } from '../../utils/services/BlobService';
+import { blobPathService } from '../../utils/services/BlobPathService';
 
 // Mock the services
 jest.mock('../../utils/services/BlobService', () => ({
@@ -171,6 +172,108 @@ describe('Fallback mechanism', () => {
       // Second call with useCache = false
       await assetExistsInBlobStorage(legacyPath, {}, false);
       expect(blobService.getFileInfo).toHaveBeenCalledTimes(2);
+    });
+  });
+  
+  describe('Audio URL handling', () => {
+    it('should properly handle audio URLs with the standard format', async () => {
+      // Mock the blobPathService.convertLegacyPath function for audio paths
+      (blobPathService.convertLegacyPath as jest.Mock).mockImplementationOnce(
+        (path) => {
+          if (path.match(/^\/[^/]+\/audio\//)) {
+            // Convert audio path format
+            const audioMatch = path.match(/^\/([^/]+)\/audio\/(.+)$/);
+            if (audioMatch) {
+              const [, bookSlug, filename] = audioMatch;
+              return `books/${bookSlug}/audio/${filename}`;
+            }
+          }
+          return path.replace(/^\//, '');
+        }
+      );
+
+      // Mock asset exists in Blob
+      (blobService.getFileInfo as jest.Mock).mockResolvedValueOnce({
+        url: 'https://blob-storage.example.com/books/the-iliad/audio/book-01.mp3',
+        size: 1024
+      });
+
+      const audioSrc = '/the-iliad/audio/book-01.mp3';
+      const result = await getAssetUrlWithFallback(audioSrc);
+      
+      expect(blobService.getFileInfo).toHaveBeenCalled();
+      expect(result).toBe('https://blob-storage.example.com/books/the-iliad/audio/book-01.mp3');
+    });
+
+    it('should handle full URL audio sources', async () => {
+      // Mock the condition where a full URL is detected
+      (blobPathService.convertLegacyPath as jest.Mock).mockImplementationOnce(
+        (path) => path // For full URLs, just return as is
+      );
+
+      // Mock asset exists in Blob by passing a URL check
+      process.env.NEXT_PUBLIC_BLOB_BASE_URL = 'https://public.blob.vercel-storage.com';
+      
+      (blobService.getFileInfo as jest.Mock).mockResolvedValueOnce({
+        url: 'https://public.blob.vercel-storage.com/books/the-iliad/audio/book-01.mp3',
+        size: 1024
+      });
+
+      const audioSrc = 'https://public.blob.vercel-storage.com/books/the-iliad/audio/book-01.mp3';
+      
+      // We need to mock the URL check logic to make it pass without hitting actual URL endpoints
+      jest.spyOn(global, 'fetch').mockImplementationOnce(() => 
+        Promise.resolve({
+          ok: true,
+          status: 200,
+          headers: new Headers({ 'content-length': '1024' })
+        } as Response)
+      );
+      
+      const result = await getAssetUrlWithFallback(audioSrc);
+      
+      expect(result).toBe('https://public.blob.vercel-storage.com/books/the-iliad/audio/book-01.mp3');
+    });
+
+    it('should handle audio URLs with tenant-specific domains', async () => {
+      // Setup environment variable for tenant-specific URL
+      process.env.NEXT_PUBLIC_BLOB_BASE_URL = 'https://tenant-specific.blob.vercel-storage.com';
+      
+      // Don't convert tenant-specific URLs
+      (blobPathService.convertLegacyPath as jest.Mock).mockImplementationOnce(
+        (path) => path // For full URLs, just return as is
+      );
+      
+      // Mock the URL normalization by making sure it detects the right conditions
+      const normalizedAudioSrc = 'https://tenant-specific.blob.vercel-storage.com/books/the-iliad/audio/book-01.mp3';
+      
+      // Mock a successful getFileInfo response
+      (blobService.getFileInfo as jest.Mock).mockResolvedValueOnce({
+        url: normalizedAudioSrc,
+        size: 1024
+      });
+      
+      // Mock the URL check to avoid actual HTTP requests
+      jest.spyOn(global, 'fetch').mockImplementationOnce(() => 
+        Promise.resolve({
+          ok: true,
+          status: 200,
+          headers: new Headers({ 'content-length': '1024' })
+        } as Response)
+      );
+      
+      const audioSrc = 'https://public.blob.vercel-storage.com/books/the-iliad/audio/book-01.mp3';
+      
+      // Test the assetExistsInBlobStorage function directly since getAssetUrlWithFallback uses it
+      const exists = await assetExistsInBlobStorage(audioSrc);
+      expect(exists).toBe(true);
+      
+      // Now test the full getAssetUrlWithFallback function
+      const result = await getAssetUrlWithFallback(audioSrc);
+      expect(result).toBe(normalizedAudioSrc);
+      
+      // Reset environment variable
+      process.env.NEXT_PUBLIC_BLOB_BASE_URL = 'https://public.blob.vercel-storage.com';
     });
   });
 });
