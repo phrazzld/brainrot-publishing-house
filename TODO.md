@@ -186,11 +186,11 @@
    Action: Update or add peer dependencies in `package.json`, align the `"engines".node` field with Vercel's Node version, regenerate `package-lock.json`, and commit changes.  
    Depends On: [T102]  
    AC Ref: None
-- [ ] Configure legacy peer-deps install in Vercel settings if needed (T104)  
+- [x] Configure legacy peer-deps install in Vercel settings if needed (T104)  
    Action: In Vercel Project Settings → General → Install Command, set `npm install --legacy-peer-deps` as the install command (temporary workaround).  
    Depends On: [T103]  
    AC Ref: None
-- [ ] Declare blob storage in vercel.json (T105)  
+- [x] Declare blob storage in vercel.json (T105)  
    Action: Create or update `vercel.json` at project root to include a `"storage"` entry named `"blob"` with type `"blob"`, regions, `maxDuration`, and set `NEXT_PUBLIC_BLOB_BASE_URL` in `"env"`.  
    Depends On: [T103]  
    AC Ref: None
