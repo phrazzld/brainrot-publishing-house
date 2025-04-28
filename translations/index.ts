@@ -117,47 +117,47 @@ const translations: Translation[] = [
       {
         title: 'book 16',
         text: getAssetUrl("/assets/the-iliad/text/book-16.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-iliad/audio/book-16.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-iliad', 'book-16')
       },
       {
         title: 'book 17',
         text: getAssetUrl("/assets/the-iliad/text/book-17.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-iliad/audio/book-17.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-iliad', 'book-17')
       },
       {
         title: 'book 18',
         text: getAssetUrl("/assets/the-iliad/text/book-18.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-iliad/audio/book-18.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-iliad', 'book-18')
       },
       {
         title: 'book 19',
         text: getAssetUrl("/assets/the-iliad/text/book-19.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-iliad/audio/book-19.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-iliad', 'book-19')
       },
       {
         title: 'book 20',
         text: getAssetUrl("/assets/the-iliad/text/book-20.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-iliad/audio/book-20.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-iliad', 'book-20')
       },
       {
         title: 'book 21',
         text: getAssetUrl("/assets/the-iliad/text/book-21.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-iliad/audio/book-21.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-iliad', 'book-21')
       },
       {
         title: 'book 22',
         text: getAssetUrl("/assets/the-iliad/text/book-22.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-iliad/audio/book-22.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-iliad', 'book-22')
       },
       {
         title: 'book 23',
         text: getAssetUrl("/assets/the-iliad/text/book-23.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-iliad/audio/book-23.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-iliad', 'book-23')
       },
       {
         title: 'book 24',
         text: getAssetUrl("/assets/the-iliad/text/book-24.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-iliad/audio/book-24.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-iliad', 'book-24')
       },
     ],
   },
@@ -401,117 +401,117 @@ const translations: Translation[] = [
       {
         title: 'book 2',
         text: getAssetUrl("/assets/the-odyssey/text/book-02.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-odyssey/audio/book-02.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-odyssey', 'book-02')
       },
       {
         title: 'book 3',
         text: getAssetUrl("/assets/the-odyssey/text/book-03.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-odyssey/audio/book-03.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-odyssey', 'book-03')
       },
       {
         title: 'book 4',
         text: getAssetUrl("/assets/the-odyssey/text/book-04.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-odyssey/audio/book-04.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-odyssey', 'book-04')
       },
       {
         title: 'book 5',
         text: getAssetUrl("/assets/the-odyssey/text/book-05.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-odyssey/audio/book-05.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-odyssey', 'book-05')
       },
       {
         title: 'book 6',
         text: getAssetUrl("/assets/the-odyssey/text/book-06.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-odyssey/audio/book-06.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-odyssey', 'book-06')
       },
       {
         title: 'book 7',
         text: getAssetUrl("/assets/the-odyssey/text/book-07.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-odyssey/audio/book-07.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-odyssey', 'book-07')
       },
       {
         title: 'book 8',
         text: getAssetUrl("/assets/the-odyssey/text/book-08.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-odyssey/audio/book-08.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-odyssey', 'book-08')
       },
       {
         title: 'book 9',
         text: getAssetUrl("/assets/the-odyssey/text/book-09.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-odyssey/audio/book-09.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-odyssey', 'book-09')
       },
       {
         title: 'book 10',
         text: getAssetUrl("/assets/the-odyssey/text/book-10.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-odyssey/audio/book-10.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-odyssey', 'book-10')
       },
       {
         title: 'book 11',
         text: getAssetUrl("/assets/the-odyssey/text/book-11.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-odyssey/audio/book-11.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-odyssey', 'book-11')
       },
       {
         title: 'book 12',
         text: getAssetUrl("/assets/the-odyssey/text/book-12.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-odyssey/audio/book-12.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-odyssey', 'book-12')
       },
       {
         title: 'book 13',
         text: getAssetUrl("/assets/the-odyssey/text/book-13.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-odyssey/audio/book-13.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-odyssey', 'book-13')
       },
       {
         title: 'book 14',
         text: getAssetUrl("/assets/the-odyssey/text/book-14.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-odyssey/audio/book-14.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-odyssey', 'book-14')
       },
       {
         title: 'book 15',
         text: getAssetUrl("/assets/the-odyssey/text/book-15.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-odyssey/audio/book-15.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-odyssey', 'book-15')
       },
       {
         title: 'book 16',
         text: getAssetUrl("/assets/the-odyssey/text/book-16.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-odyssey/audio/book-16.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-odyssey', 'book-16')
       },
       {
         title: 'book 17',
         text: getAssetUrl("/assets/the-odyssey/text/book-17.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-odyssey/audio/book-17.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-odyssey', 'book-17')
       },
       {
         title: 'book 18',
         text: getAssetUrl("/assets/the-odyssey/text/book-18.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-odyssey/audio/book-18.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-odyssey', 'book-18')
       },
       {
         title: 'book 19',
         text: getAssetUrl("/assets/the-odyssey/text/book-19.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-odyssey/audio/book-19.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-odyssey', 'book-19')
       },
       {
         title: 'book 20',
         text: getAssetUrl("/assets/the-odyssey/text/book-20.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-odyssey/audio/book-20.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-odyssey', 'book-20')
       },
       {
         title: 'book 21',
         text: getAssetUrl("/assets/the-odyssey/text/book-21.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-odyssey/audio/book-21.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-odyssey', 'book-21')
       },
       {
         title: 'book 22',
         text: getAssetUrl("/assets/the-odyssey/text/book-22.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-odyssey/audio/book-22.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-odyssey', 'book-22')
       },
       {
         title: 'book 23',
         text: getAssetUrl("/assets/the-odyssey/text/book-23.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-odyssey/audio/book-23.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-odyssey', 'book-23')
       },
       {
         title: 'book 24',
         text: getAssetUrl("/assets/the-odyssey/text/book-24.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-odyssey/audio/book-24.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-odyssey', 'book-24')
       },
     ],
   },
@@ -525,62 +525,62 @@ const translations: Translation[] = [
       {
         title: 'book 1',
         text: getAssetUrl("/assets/the-aeneid/text/book-01.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-aeneid/audio/book-01.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-aeneid', 'book-01')
       },
       {
         title: 'book 2',
         text: getAssetUrl("/assets/the-aeneid/text/book-02.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-aeneid/audio/book-02.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-aeneid', 'book-02')
       },
       {
         title: 'book 3',
         text: getAssetUrl("/assets/the-aeneid/text/book-03.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-aeneid/audio/book-03.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-aeneid', 'book-03')
       },
       {
         title: 'book 4',
         text: getAssetUrl("/assets/the-aeneid/text/book-04.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-aeneid/audio/book-04.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-aeneid', 'book-04')
       },
       {
         title: 'book 5',
         text: getAssetUrl("/assets/the-aeneid/text/book-05.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-aeneid/audio/book-05.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-aeneid', 'book-05')
       },
       {
         title: 'book 6',
         text: getAssetUrl("/assets/the-aeneid/text/book-06.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-aeneid/audio/book-06.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-aeneid', 'book-06')
       },
       {
         title: 'book 7',
         text: getAssetUrl("/assets/the-aeneid/text/book-07.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-aeneid/audio/book-07.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-aeneid', 'book-07')
       },
       {
         title: 'book 8',
         text: getAssetUrl("/assets/the-aeneid/text/book-08.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-aeneid/audio/book-08.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-aeneid', 'book-08')
       },
       {
         title: 'book 9',
         text: getAssetUrl("/assets/the-aeneid/text/book-09.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-aeneid/audio/book-09.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-aeneid', 'book-09')
       },
       {
         title: 'book 10',
         text: getAssetUrl("/assets/the-aeneid/text/book-10.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-aeneid/audio/book-10.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-aeneid', 'book-10')
       },
       {
         title: 'book 11',
         text: getAssetUrl("/assets/the-aeneid/text/book-11.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-aeneid/audio/book-11.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-aeneid', 'book-11')
       },
       {
         title: 'book 12',
         text: getAssetUrl("/assets/the-aeneid/text/book-12.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-aeneid/audio/book-12.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-aeneid', 'book-12')
       },
     ],
   },
@@ -594,7 +594,7 @@ const translations: Translation[] = [
       {
         title: 'act i',
         text: getAssetUrl('/assets/hamlet/text/brainrot/act-i.txt', USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/hamlet/audio/act-i.mp3', USE_BLOB_STORAGE),
+        audioSrc: getDirectAudioUrl('hamlet', 'act-i'),
       },
       {
         title: 'act ii',
@@ -687,7 +687,7 @@ const translations: Translation[] = [
       {
         title: 'the declaration of independence',
         text: getAssetUrl("/assets/the-declaration-of-independence/text/the-declaration-of-independence.txt", USE_BLOB_STORAGE),
-        audioSrc: getAssetUrl('/the-declaration-of-independence/audio/the-declaration-of-independence.mp3', USE_BLOB_STORAGE)
+        audioSrc: getDirectAudioUrl('the-declaration-of-independence', 'the-declaration-of-independence')
       },
     ],
   },
