@@ -5,7 +5,7 @@ import translations from "@/translations";
 import { fetchTextWithFallback, getAssetUrlWithFallback } from "@/utils";
 import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import WaveSurfer from "wavesurfer.js";
 
 export default function ReadingRoom() {
@@ -19,6 +19,9 @@ export default function ReadingRoom() {
   const [currentTime, setCurrentTime] = useState(0);
   const [totalTime, setTotalTime] = useState(0);
   const [chapterIndex, setChapterIndex] = useState(0);
+  
+  // Use a ref for the waveform container
+  const waveformRef = useRef<HTMLDivElement>(null);
 
   // share modal
   const [isShareOpen, setIsShareOpen] = useState(false);
@@ -132,6 +135,9 @@ export default function ReadingRoom() {
           
           // Then destroy the instance
           waveSurfer.destroy();
+          
+          // Set to null immediately to avoid dangling references
+          setWaveSurfer(null);
         } catch (error) {
           console.error("Error destroying previous WaveSurfer instance:", error);
         }
@@ -144,142 +150,125 @@ export default function ReadingRoom() {
       
       setIsAudioLoading(true);
       
-      try {
-        // Create a new WaveSurfer instance
-        const ws = WaveSurfer.create({
-          container: "#waveform",
-          waveColor: "#666",
-          progressColor: "#e0afff",
-          cursorColor: "#ffdaab",
-          height: 48, // taller waveform
-        });
+      // Create a small delay before initializing a new WaveSurfer
+      // This helps ensure previous instance is fully cleaned up
+      setTimeout(() => {
+        if (signal.aborted) return; // Don't proceed if aborted
         
-        // Setup error handler before loading
-        const errorHandler = (error) => {
-          // Check for abort before updating state
-          if (!signal.aborted) {
-            console.error('WaveSurfer error:', error);
-            setIsAudioLoading(false);
+        try {
+          // Use waveformRef element for mounting
+          if (!waveformRef.current) {
+            throw new Error("Waveform container ref not available");
           }
-        };
-        
-        ws.on('error', errorHandler);
-        
-        // The audio source URL is already a complete Blob storage URL
-        // But let's check if it's actually a valid URL
-        console.log('Original audio URL:', chapterData.audioSrc);
-        
-        // Extract the correct URL format from translations
-        // The issue might be that the audioSrc has the Blob URL format but needs to be normalized
-        let audioUrl = chapterData.audioSrc;
-        
-        // Check for invalid URL patterns and fix them
-        if (audioUrl && audioUrl.includes('https://public.blob.vercel-storage.com')) {
-          // Replace with the correct tenant-specific URL
-          const baseUrl = 'https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com';
           
-          // Extract just the path portion (after the domain)
-          const urlObj = new URL(audioUrl);
-          const pathPart = urlObj.pathname;
+          // Ensure the element is empty
+          waveformRef.current.innerHTML = '';
           
-          // Create a corrected URL
-          audioUrl = `${baseUrl}${pathPart}`;
-          console.log('Corrected audio URL:', audioUrl);
-        }
-        
-        // Additional logging
-        console.log('Final audio URL to load:', audioUrl);
-        
-        // Only proceed if not aborted
-        if (!signal.aborted) {
-          try {
-            // Load the audio file with corrected URL
-            ws.load(audioUrl);
-          } catch (loadError) {
+          // Create WaveSurfer instance
+          const ws = WaveSurfer.create({
+            container: waveformRef.current,
+            waveColor: "#666",
+            progressColor: "#e0afff",
+            cursorColor: "#ffdaab",
+            height: 48, // taller waveform
+          });
+          
+          // Setup error handler before loading
+          const errorHandler = (error) => {
             if (!signal.aborted) {
-              console.error('Error loading audio:', loadError);
+              console.error('WaveSurfer error:', error);
               setIsAudioLoading(false);
             }
+          };
+          
+          // Setup event handlers with better abort handling
+          const readyHandler = () => {
+            if (!signal.aborted) {
+              setIsPlaying(false);
+              setTotalTime(ws.getDuration());
+              setCurrentTime(0);
+              setIsAudioLoading(false);
+            }
+          };
+          
+          const processHandler = () => {
+            if (!signal.aborted) {
+              setCurrentTime(ws.getCurrentTime());
+            }
+          };
+          
+          const playHandler = () => {
+            if (!signal.aborted) {
+              setIsPlaying(true);
+            }
+          };
+          
+          const pauseHandler = () => {
+            if (!signal.aborted) {
+              setIsPlaying(false);
+              setCurrentTime(ws.getCurrentTime());
+              updateUrlWithChapterAndTimestamp(ws.getCurrentTime());
+            }
+          };
+          
+          const finishHandler = () => {
+            if (!signal.aborted) {
+              setIsPlaying(false);
+              setCurrentTime(0);
+              updateUrlWithChapterAndTimestamp(0);
+            }
+          };
+          
+          // Register all handlers
+          ws.on('error', errorHandler);
+          ws.on("ready", readyHandler);
+          ws.on("audioprocess", processHandler);
+          ws.on("play", playHandler);
+          ws.on("pause", pauseHandler);
+          ws.on("finish", finishHandler);
+          
+          // Extract the correct URL format from translations
+          let audioUrl = chapterData.audioSrc;
+          
+          // Check for invalid URL patterns and fix them
+          if (audioUrl && audioUrl.includes('https://public.blob.vercel-storage.com')) {
+            // Replace with the correct tenant-specific URL
+            const baseUrl = 'https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com';
+            
+            // Extract just the path portion (after the domain)
+            const urlObj = new URL(audioUrl);
+            const pathPart = urlObj.pathname;
+            
+            // Create a corrected URL
+            audioUrl = `${baseUrl}${pathPart}`;
           }
-        }
-
-        // Setup event handlers with better abort handling
-        const readyHandler = () => {
-          // Check for abort before updating state
+          
+          // Only proceed if not aborted
           if (!signal.aborted) {
-            setIsPlaying(false);
-            setTotalTime(ws.getDuration());
-            setCurrentTime(0);
+            try {
+              // Load the audio file with corrected URL
+              ws.load(audioUrl);
+              
+              // Only set the wavesurfer if not aborted
+              setWaveSurfer(ws);
+            } catch (loadError) {
+              if (!signal.aborted) {
+                console.error('Error loading audio:', loadError);
+                setIsAudioLoading(false);
+              }
+            }
+          } else {
+            // Clean up if aborted during this process
+            cleanupWaveSurfer(ws);
+          }
+        } catch (error) {
+          // Handle any errors during setup
+          if (!signal.aborted) {
+            console.error("Error setting up WaveSurfer:", error);
             setIsAudioLoading(false);
           }
-        };
-        
-        const processHandler = () => {
-          // Check for abort before updating state
-          if (!signal.aborted) {
-            setCurrentTime(ws.getCurrentTime());
-          }
-        };
-        
-        const playHandler = () => {
-          // Check for abort before updating state
-          if (!signal.aborted) {
-            setIsPlaying(true);
-          }
-        };
-        
-        const pauseHandler = () => {
-          // Check for abort before updating state
-          if (!signal.aborted) {
-            setIsPlaying(false);
-            setCurrentTime(ws.getCurrentTime());
-            updateUrlWithChapterAndTimestamp(ws.getCurrentTime());
-          }
-        };
-        
-        const finishHandler = () => {
-          // Check for abort before updating state
-          if (!signal.aborted) {
-            setIsPlaying(false);
-            setCurrentTime(0);
-            updateUrlWithChapterAndTimestamp(0);
-          }
-        };
-        
-        // Register all handlers
-        ws.on("ready", readyHandler);
-        ws.on("audioprocess", processHandler);
-        ws.on("play", playHandler);
-        ws.on("pause", pauseHandler);
-        ws.on("finish", finishHandler);
-        
-        // Only set the wavesurfer if not aborted
-        if (!signal.aborted) {
-          setWaveSurfer(ws);
-        } else {
-          // If already aborted by this point, clean up the WaveSurfer
-          try {
-            // Remove all event listeners first
-            ws.un("ready", readyHandler);
-            ws.un("audioprocess", processHandler);
-            ws.un("play", playHandler);
-            ws.un("pause", pauseHandler);
-            ws.un("finish", finishHandler);
-            ws.un("error", errorHandler);
-            
-            // Then destroy
-            ws.destroy();
-          } catch (error) {
-            console.error("Error destroying WaveSurfer after abort:", error);
-          }
         }
-      } catch (error) {
-        // Handle any errors during the WaveSurfer setup
-        if (!signal.aborted) {
-          console.error("Error setting up WaveSurfer:", error);
-          setIsAudioLoading(false);
-        }
-      }
+      }, 50);
     } else {
       // no audio available - clean up any existing wavesurfer
       if (waveSurfer) {
@@ -289,17 +278,12 @@ export default function ReadingRoom() {
             waveSurfer.pause();
           }
           
-          // First remove all event listeners
-          if (typeof waveSurfer.un === 'function') {
-            waveSurfer.un("ready");
-            waveSurfer.un("audioprocess");
-            waveSurfer.un("play");
-            waveSurfer.un("pause");
-            waveSurfer.un("finish");
-          }
-          
-          // Then destroy
+          // Then destroy the instance
           waveSurfer.destroy();
+          
+          // Null out the reference
+          setWaveSurfer(null);
+          
           console.log("Existing WaveSurfer instance destroyed (no audio available)");
         } catch (error) {
           console.error("Error destroying existing WaveSurfer:", error);
@@ -308,11 +292,25 @@ export default function ReadingRoom() {
       
       // Only update state if not aborted
       if (!signal.aborted) {
-        setWaveSurfer(null);
         setIsPlaying(false);
         setCurrentTime(0);
         setTotalTime(0);
         setIsAudioLoading(false);
+      }
+    }
+
+    // Helper function to clean up a WaveSurfer instance
+    function cleanupWaveSurfer(ws: WaveSurfer) {
+      try {
+        ws.un("ready");
+        ws.un("audioprocess");
+        ws.un("play");
+        ws.un("pause");
+        ws.un("finish");
+        ws.un("error");
+        ws.destroy();
+      } catch (error) {
+        console.error("Error during WaveSurfer cleanup:", error);
       }
     }
 
@@ -329,17 +327,9 @@ export default function ReadingRoom() {
             waveSurfer.pause();
           }
           
-          // Remove all event listeners before destroying
-          // Use general un() method without specifying handlers to detach all listeners
-          waveSurfer.un("ready"); 
-          waveSurfer.un("audioprocess");
-          waveSurfer.un("play");
-          waveSurfer.un("pause");
-          waveSurfer.un("finish");
-          waveSurfer.un("error");
+          // Then clean up the instance
+          cleanupWaveSurfer(waveSurfer);
           
-          // Then destroy the instance
-          waveSurfer.destroy();
           console.log("WaveSurfer instance destroyed successfully during cleanup");
         } catch (error) {
           console.error("Error during WaveSurfer cleanup:", error);
@@ -543,7 +533,8 @@ export default function ReadingRoom() {
               </div>
             )}
             <div className="flex items-center gap-4">
-              <div id="waveform" className="flex-1 h-[48px]" />
+              {/* Use a stable ref for the waveform container */}
+              <div className="flex-1 h-[48px]" ref={waveformRef} />
               <button onClick={togglePlayPause} className="btn btn-primary">
                 {isPlaying ? "pause" : "play"}
               </button>
