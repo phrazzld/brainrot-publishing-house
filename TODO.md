@@ -1,26 +1,66 @@
 # CI/CD and Precommit Hooks Implementation TODO
 
-## Audio Migration Fix Tasks
+## Audio Migration Fix Tasks (Critical)
+1. [x] Fix Digital Ocean Space credentials and access (T223)
+   Action: Configure and verify AWS CLI can access Digital Ocean Spaces and download audio files.
+   Depends On: None
+   AC Ref: None
+   Priority: Critical
+   
+2. [ ] Verify audio files exist in Digital Ocean (T224)
+   Action: Verify audio files are accessible in Digital Ocean Space with proper file sizes and create an inventory.
+   Depends On: [T223]
+   AC Ref: None
+   Priority: Critical
+   
+3. [ ] Delete placeholder audio files from Vercel Blob (T225)
+   Action: Identify and delete all existing 1KB placeholder audio files from Vercel Blob.
+   Depends On: None
+   AC Ref: None
+   Priority: Critical
+   
+4. [ ] Create enhanced audio migration script with validation (T226)
+   Action: Create a script that properly downloads real audio files from Digital Ocean and uploads to Vercel Blob.
+   Depends On: [T223, T224, T225]
+   AC Ref: None
+   Priority: Critical
+   
+5. [ ] Execute audio migration from Digital Ocean to Vercel Blob (T227)
+   Action: Run the enhanced migration script to migrate all audio files with validation of file sizes.
+   Depends On: [T226]
+   AC Ref: None
+   Priority: Critical
+   
+6. [ ] Verify audio file integrity and access (T228)
+   Action: Test a sample of audio files on the site to confirm they play correctly.
+   Depends On: [T227]
+   AC Ref: None
+   Priority: Critical
+
+## Previously Completed Audio Tasks (Problematic)
 1. [x] Create audio download utility (T219)
    Action: Create a utility function to download audio files from Digital Ocean Spaces based on URLs in translations file.
    Depends On: None
    AC Ref: None
+   Note: This utility failed to properly download audio files.
    
 2. [x] Create a proper audio migration script (T220)
    Action: Develop a script that downloads each audio file from Digital Ocean, verifies its integrity, and uploads it to Vercel Blob.
    Depends On: [T219]
    AC Ref: None
+   Note: This script created placeholder files instead of downloading actual content.
    
 3. [x] Run audio migration with validation (T221)
    Action: Execute the audio migration script and validate each file has been properly uploaded with a content check.
    Depends On: [T220]
    AC Ref: None
-   Note: Migration validation shows files exist but they are placeholders only. See T221-completion-report.md.
+   Note: Migration reported as successful but only created placeholders instead of migrating full content.
    
-4. [ ] Fix audio URL handling in reading-room component (T222)
+4. [x] Fix audio URL handling in reading-room component (T222)
    Action: Update the reading-room component to properly handle audio URLs, including normalization and fallback logic.
    Depends On: [T221]
    AC Ref: None
+   Note: This fixed URL handling but couldn't address the missing audio content issue.
 
 ## Vercel Blob Migration and Cleanup Tasks
 1. [x] Verify Blob storage configuration (T201)
