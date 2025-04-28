@@ -64,3 +64,6 @@ placeholder-deletion-results.json
 
 # credentials and config
 aws-do-config.ini
+
+# local assets (migrated to blob storage)
+/public/assets/
