@@ -138,7 +138,7 @@
     Depends On: [T214]
     AC Ref: None
 
-16. [ ] Complete remaining asset migration (T216)
+16. [x] Complete remaining asset migration (T216)
     Action: Create and run a script to identify and migrate any remaining assets not yet in Blob storage, including any recently added content.
     Depends On: [T215, T222]
     AC Ref: None
