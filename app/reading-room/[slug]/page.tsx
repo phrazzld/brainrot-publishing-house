@@ -2,7 +2,7 @@
 
 import DownloadButton from "@/components/DownloadButton";
 import translations from "@/translations";
-import { fetchTextWithFallback } from "@/utils";
+import { fetchTextWithFallback, getAssetUrlWithFallback } from "@/utils";
 import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -41,29 +41,56 @@ export default function ReadingRoom() {
     const cParam = searchParams.get("c");
     if (cParam) {
       const cNum = parseInt(cParam, 10);
-      if (!isNaN(cNum)) setChapterIndex(cNum);
+      // Only update chapter index if valid and different from current
+      if (!isNaN(cNum) && cNum !== chapterIndex) {
+        // First pause any audio playback before changing chapters to avoid race conditions
+        if (waveSurfer && waveSurfer.isPlaying()) {
+          waveSurfer.pause();
+        }
+        setChapterIndex(cNum);
+      }
     }
-  }, [searchParams]);
+  }, [searchParams, chapterIndex, waveSurfer]);
 
   // once waveSurfer is ready, parse "t" param to seek
   useEffect(() => {
     if (!waveSurfer) return;
 
+    // Create an AbortController for cleanup
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+
     function handleReady() {
-      if (!waveSurfer) return;
-      const tParam = searchParams.get("t");
-      const duration = waveSurfer.getDuration();
-      if (tParam && duration && !isNaN(duration) && duration > 0) {
-        const numericT = Number(tParam);
-        if (numericT > 0) {
-          waveSurfer.seekTo(numericT / duration);
+      if (!waveSurfer || signal.aborted) return;
+      
+      try {
+        const tParam = searchParams.get("t");
+        const duration = waveSurfer.getDuration();
+        if (tParam && duration && !isNaN(duration) && duration > 0) {
+          const numericT = Number(tParam);
+          if (numericT > 0) {
+            waveSurfer.seekTo(numericT / duration);
+          }
         }
+      } catch (error) {
+        console.error("Error seeking to timestamp:", error);
       }
     }
 
     waveSurfer.on("ready", handleReady);
+    
     return () => {
-      waveSurfer.un("ready", handleReady);
+      // Abort any in-flight operations
+      abortController.abort();
+      
+      // Safely remove event listener if WaveSurfer still exists
+      try {
+        if (waveSurfer && typeof waveSurfer.un === 'function') {
+          waveSurfer.un("ready", handleReady);
+        }
+      } catch (error) {
+        console.error("Error removing ready event handler:", error);
+      }
     };
   }, [waveSurfer, searchParams]);
 
@@ -71,99 +98,197 @@ export default function ReadingRoom() {
   useEffect(() => {
     if (!chapterData) return;
 
+    // Create an AbortController for cleanup
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+
     // load text with automatic fallback
     setIsTextLoading(true);
     fetchTextWithFallback(chapterData.text)
       .then((txt) => {
+        if (signal.aborted) return; // Don't update state if aborted
         // preserve line breaks
         setRawText(txt);
       })
       .catch((error) => {
+        if (signal.aborted) return; // Don't update state if aborted
         console.error("Failed to load text:", error);
         setRawText(`Error loading text. Please try again later.`);
       })
-      .finally(() => setIsTextLoading(false));
+      .finally(() => {
+        if (signal.aborted) return; // Don't update state if aborted
+        setIsTextLoading(false);
+      });
 
     // audio setup
     if (chapterData.audioSrc) {
+      // Safely destroy existing WaveSurfer instance
       if (waveSurfer) {
         try {
-          waveSurfer.destroy();
-        } catch { }
-      }
-      setIsAudioLoading(true);
-      const ws = WaveSurfer.create({
-        container: "#waveform",
-        waveColor: "#666",
-        progressColor: "#e0afff",
-        cursorColor: "#ffdaab",
-        height: 48, // taller waveform
-      });
-      // Normalize the URL just like we do for text content
-      const baseUrl = process.env.NEXT_PUBLIC_BLOB_BASE_URL;
-      let fullAudioSrc = chapterData.audioSrc;
-      
-      // If the path contains the generic Vercel Blob URL but we have a specific one, replace it
-      if (baseUrl && 
-          chapterData.audioSrc.startsWith('https://public.blob.vercel-storage.com/') && 
-          baseUrl !== 'https://public.blob.vercel-storage.com') {
-        fullAudioSrc = chapterData.audioSrc.replace(
-          'https://public.blob.vercel-storage.com/', 
-          baseUrl + '/'
-        );
-        console.log(`Normalized audio URL from ${chapterData.audioSrc} to ${fullAudioSrc}`);
-      }
-      
-      console.log('Loading audio from:', fullAudioSrc);
-      ws.load(fullAudioSrc);
-
-      ws.on("ready", () => {
-        setIsPlaying(false);
-        setTotalTime(ws.getDuration());
-        setCurrentTime(0);
-        setIsAudioLoading(false);
-      });
-      ws.on("audioprocess", () => {
-        setCurrentTime(ws.getCurrentTime());
-      });
-      ws.on("play", () => setIsPlaying(true));
-      ws.on("pause", () => {
-        setIsPlaying(false);
-        setCurrentTime(ws.getCurrentTime());
-        updateUrlWithChapterAndTimestamp(ws.getCurrentTime());
-      });
-      ws.on("finish", () => {
-        setIsPlaying(false);
-        setCurrentTime(0);
-        updateUrlWithChapterAndTimestamp(0);
-      });
-
-      setWaveSurfer(ws);
-      
-      // Improved cleanup function with explicit checks and error handling
-      return () => {
-        try {
-          // Check if wavesurfer instance is still valid before trying to destroy it
-          if (ws && typeof ws.destroy === 'function') {
-            // First remove all event listeners to prevent race conditions
-            ws.un("ready");
-            ws.un("audioprocess");
-            ws.un("play");
-            ws.un("pause");
-            ws.un("finish");
-            
-            // Now destroy the instance
-            ws.destroy();
-            console.log("WaveSurfer instance destroyed successfully");
+          // First stop audio playback to prevent fetch-related errors
+          if (waveSurfer.isPlaying()) {
+            waveSurfer.pause();
           }
+          
+          // Then destroy the instance
+          waveSurfer.destroy();
         } catch (error) {
-          console.error("Error during WaveSurfer cleanup:", error);
+          console.error("Error destroying previous WaveSurfer instance:", error);
         }
-      };
+      }
+      
+      // Check if the effect has been aborted before proceeding
+      if (signal.aborted) {
+        return; // Exit early if already aborted
+      }
+      
+      setIsAudioLoading(true);
+      
+      try {
+        // Create a new WaveSurfer instance
+        const ws = WaveSurfer.create({
+          container: "#waveform",
+          waveColor: "#666",
+          progressColor: "#e0afff",
+          cursorColor: "#ffdaab",
+          height: 48, // taller waveform
+        });
+        
+        // Setup error handler before loading
+        const errorHandler = (error) => {
+          // Check for abort before updating state
+          if (!signal.aborted) {
+            console.error('WaveSurfer error:', error);
+            setIsAudioLoading(false);
+          }
+        };
+        
+        ws.on('error', errorHandler);
+        
+        // The audio source URL is already a complete Blob storage URL
+        // But let's check if it's actually a valid URL
+        console.log('Original audio URL:', chapterData.audioSrc);
+        
+        // Extract the correct URL format from translations
+        // The issue might be that the audioSrc has the Blob URL format but needs to be normalized
+        let audioUrl = chapterData.audioSrc;
+        
+        // Check for invalid URL patterns and fix them
+        if (audioUrl && audioUrl.includes('https://public.blob.vercel-storage.com')) {
+          // Replace with the correct tenant-specific URL
+          const baseUrl = 'https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com';
+          
+          // Extract just the path portion (after the domain)
+          const urlObj = new URL(audioUrl);
+          const pathPart = urlObj.pathname;
+          
+          // Create a corrected URL
+          audioUrl = `${baseUrl}${pathPart}`;
+          console.log('Corrected audio URL:', audioUrl);
+        }
+        
+        // Additional logging
+        console.log('Final audio URL to load:', audioUrl);
+        
+        // Only proceed if not aborted
+        if (!signal.aborted) {
+          try {
+            // Load the audio file with corrected URL
+            ws.load(audioUrl);
+          } catch (loadError) {
+            if (!signal.aborted) {
+              console.error('Error loading audio:', loadError);
+              setIsAudioLoading(false);
+            }
+          }
+        }
+
+        // Setup event handlers with better abort handling
+        const readyHandler = () => {
+          // Check for abort before updating state
+          if (!signal.aborted) {
+            setIsPlaying(false);
+            setTotalTime(ws.getDuration());
+            setCurrentTime(0);
+            setIsAudioLoading(false);
+          }
+        };
+        
+        const processHandler = () => {
+          // Check for abort before updating state
+          if (!signal.aborted) {
+            setCurrentTime(ws.getCurrentTime());
+          }
+        };
+        
+        const playHandler = () => {
+          // Check for abort before updating state
+          if (!signal.aborted) {
+            setIsPlaying(true);
+          }
+        };
+        
+        const pauseHandler = () => {
+          // Check for abort before updating state
+          if (!signal.aborted) {
+            setIsPlaying(false);
+            setCurrentTime(ws.getCurrentTime());
+            updateUrlWithChapterAndTimestamp(ws.getCurrentTime());
+          }
+        };
+        
+        const finishHandler = () => {
+          // Check for abort before updating state
+          if (!signal.aborted) {
+            setIsPlaying(false);
+            setCurrentTime(0);
+            updateUrlWithChapterAndTimestamp(0);
+          }
+        };
+        
+        // Register all handlers
+        ws.on("ready", readyHandler);
+        ws.on("audioprocess", processHandler);
+        ws.on("play", playHandler);
+        ws.on("pause", pauseHandler);
+        ws.on("finish", finishHandler);
+        
+        // Only set the wavesurfer if not aborted
+        if (!signal.aborted) {
+          setWaveSurfer(ws);
+        } else {
+          // If already aborted by this point, clean up the WaveSurfer
+          try {
+            // Remove all event listeners first
+            ws.un("ready", readyHandler);
+            ws.un("audioprocess", processHandler);
+            ws.un("play", playHandler);
+            ws.un("pause", pauseHandler);
+            ws.un("finish", finishHandler);
+            ws.un("error", errorHandler);
+            
+            // Then destroy
+            ws.destroy();
+          } catch (error) {
+            console.error("Error destroying WaveSurfer after abort:", error);
+          }
+        }
+      } catch (error) {
+        // Handle any errors during the WaveSurfer setup
+        if (!signal.aborted) {
+          console.error("Error setting up WaveSurfer:", error);
+          setIsAudioLoading(false);
+        }
+      }
     } else {
-      // no audio available
+      // no audio available - clean up any existing wavesurfer
       if (waveSurfer) {
         try {
+          // First stop audio playback to prevent fetch-related errors
+          if (waveSurfer.isPlaying()) {
+            waveSurfer.pause();
+          }
+          
           // First remove all event listeners
           if (typeof waveSurfer.un === 'function') {
             waveSurfer.un("ready");
@@ -180,12 +305,47 @@ export default function ReadingRoom() {
           console.error("Error destroying existing WaveSurfer:", error);
         }
       }
-      setWaveSurfer(null);
-      setIsPlaying(false);
-      setCurrentTime(0);
-      setTotalTime(0);
-      setIsAudioLoading(false);
+      
+      // Only update state if not aborted
+      if (!signal.aborted) {
+        setWaveSurfer(null);
+        setIsPlaying(false);
+        setCurrentTime(0);
+        setTotalTime(0);
+        setIsAudioLoading(false);
+      }
     }
+
+    // Return cleanup function
+    return () => {
+      // First abort all in-flight fetch operations
+      abortController.abort();
+      
+      // Then do the rest of the cleanup
+      if (waveSurfer) {
+        try {
+          // First stop any playback to avoid race conditions
+          if (waveSurfer.isPlaying()) {
+            waveSurfer.pause();
+          }
+          
+          // Remove all event listeners before destroying
+          // Use general un() method without specifying handlers to detach all listeners
+          waveSurfer.un("ready"); 
+          waveSurfer.un("audioprocess");
+          waveSurfer.un("play");
+          waveSurfer.un("pause");
+          waveSurfer.un("finish");
+          waveSurfer.un("error");
+          
+          // Then destroy the instance
+          waveSurfer.destroy();
+          console.log("WaveSurfer instance destroyed successfully during cleanup");
+        } catch (error) {
+          console.error("Error during WaveSurfer cleanup:", error);
+        }
+      }
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chapterData]);
 
@@ -213,18 +373,33 @@ export default function ReadingRoom() {
 
   function goPrevChapter() {
     if (chapterIndex > 0) {
+      // Safely pause any audio playback before changing chapters
+      if (waveSurfer && waveSurfer.isPlaying()) {
+        waveSurfer.pause();
+      }
       setChapterIndex(chapterIndex - 1);
     }
   }
 
   function goNextChapter() {
     if (translation && chapterIndex < translation.chapters.length - 1) {
+      // Safely pause any audio playback before changing chapters
+      if (waveSurfer && waveSurfer.isPlaying()) {
+        waveSurfer.pause();
+      }
       setChapterIndex(chapterIndex + 1);
     }
   }
 
   function handleChapterClick(i: number) {
-    setChapterIndex(i);
+    // Only change if actually different
+    if (i !== chapterIndex) {
+      // Safely pause any audio playback before changing chapters
+      if (waveSurfer && waveSurfer.isPlaying()) {
+        waveSurfer.pause();
+      }
+      setChapterIndex(i);
+    }
   }
 
   function formatTime(sec: number) {
