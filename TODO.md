@@ -194,11 +194,11 @@
    Action: Create or update `vercel.json` at project root to include a `"storage"` entry named `"blob"` with type `"blob"`, regions, `maxDuration`, and set `NEXT_PUBLIC_BLOB_BASE_URL` in `"env"`.  
    Depends On: [T103]  
    AC Ref: None
-- [ ] Commit and push vercel.json changes (T106)  
+- [x] Commit and push vercel.json changes (T106)  
    Action: Stage, commit, and push the updated `vercel.json` to the remote repository.  
    Depends On: [T105]  
    AC Ref: None
-- [ ] Link local repo to Vercel via CLI (T107)  
+- [x] Link local repo to Vercel via CLI (T107)  
    Action: Run `vercel login` (if not already logged in), then `vercel link` to associate the local directory with the Vercel project.  
    Depends On: [T106]  
    AC Ref: None
