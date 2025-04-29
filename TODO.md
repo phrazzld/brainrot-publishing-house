@@ -7,7 +7,7 @@
   Depends On: None  
   AC Ref: None
 
-- [ ] T2: Fix `no-explicit-any` Violations
+- [x] T2: Fix `no-explicit-any` Violations
   Action: Search for all instances of the `any` type flagged by ESLint (`@typescript-eslint/no-explicit-any`) and replace them with precise types, `unknown` with guards, or proper interfaces. Ensure no `any` remains.
   Depends On: T1
   AC Ref: None

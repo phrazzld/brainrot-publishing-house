@@ -43,8 +43,9 @@ export default function DownloadButton({ slug, type, chapter, classNames }: Down
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-    } catch (err: Error | unknown) {
-      console.error('Download error:', err instanceof Error ? err.message : String(err));
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      console.error('Download error:', errorMessage);
       setError('failed to download. sry bestie.');
     } finally {
       setIsDownloading(false);

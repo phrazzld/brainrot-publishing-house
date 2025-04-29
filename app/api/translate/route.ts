@@ -2,6 +2,15 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import * as cheerio from 'cheerio';
 import OpenAI from 'openai';
+import { ChatCompletion } from 'openai/resources/chat/completions';
+import { 
+  BookDetail, 
+  BookSearchResult, 
+  GutendexAuthor, 
+  GutendexBookDetails,
+  GutendexSearchResponse, 
+  GutendexSearchResultItem 
+} from '../../utils/types';
 
 const DEFAULT_CHUNK_SIZE = 20000;
 const PREFERRED_FORMATS = [
@@ -51,12 +60,18 @@ function parseHtmlIntoText(html: string) {
   return combined;
 }
 
-async function gutendexSearch(query: string) {
+async function gutendexSearch(query: string): Promise<GutendexSearchResultItem[]> {
   const url = `https://gutendex.com/books?search=${encodeURIComponent(query)}`;
   const res = await fetch(url);
   if (!res.ok) throw new Error(`gutendex search failed: ${res.status}`);
-  const data = await res.json();
-  return data.results;
+  const data: unknown = await res.json();
+  
+  // Basic validation
+  if (typeof data !== 'object' || data === null || !('results' in data) || !Array.isArray((data as GutendexSearchResponse).results)) {
+    throw new Error('Invalid search response structure from Gutendex');
+  }
+  
+  return (data as GutendexSearchResponse).results;
 }
 
 function pickBestFormat(formats: Record<string, string>) {
@@ -68,15 +83,23 @@ function pickBestFormat(formats: Record<string, string>) {
   throw new Error('no recognized format found in gutendex data');
 }
 
-async function fetchBookText(id: number) {
+async function fetchBookText(id: number): Promise<BookDetail> {
   const url = `https://gutendex.com/books/${id}`;
   const res = await fetch(url);
   if (!res.ok) throw new Error(`gutendex metadata fetch failed: ${res.status}`);
-  const data = await res.json();
-
-  const { chosenFormat, downloadUrl } = pickBestFormat(data.formats);
-  const title = data.title;
-  const authors = (data.authors || []).map((a: any) => a.name).join(', ') || 'unknown';
+  const data: unknown = await res.json();
+  
+  // Type validation
+  if (typeof data !== 'object' || data === null || 
+      !('formats' in data) || !('title' in data) || !('authors' in data)) {
+    throw new Error('Invalid book details structure from Gutendex');
+  }
+  
+  const bookData = data as GutendexBookDetails;
+  
+  const { chosenFormat, downloadUrl } = pickBestFormat(bookData.formats);
+  const title = bookData.title;
+  const authors = (bookData.authors || []).map((a: GutendexAuthor) => a.name).join(', ') || 'unknown';
 
   const downloadRes = await fetch(downloadUrl);
   if (!downloadRes.ok) throw new Error(`failed to download text: ${downloadRes.status}`);
@@ -278,7 +301,7 @@ async function translateChunk(
   model: string,
   temp: number
 ): Promise<string> {
-  let resp: any;
+  let resp: ChatCompletion;
   if (['o3-mini', 'o1'].includes(model)) {
     resp = await openai.chat.completions.create({
       model,
@@ -344,17 +367,23 @@ async function translateChunkWithRetries(
       );
       const result = await translateChunk(openai, systemPrompt, userPrompt, chunk, model, temp);
       return result;
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : String(err);
       sseSend(
         sseController,
         'log',
-        `error on attempt ${attempt} for chunk ${chunkIndex}/${chunkCount} (model '${model}'): ${String(err)}`
+        `error on attempt ${attempt} for chunk ${chunkIndex}/${chunkCount} (model '${model}'): ${errorMessage}`
       );
       if (attempt < MAX_RETRIES) {
         sseSend(sseController, 'log', 'retrying in 3s...');
         await new Promise((r) => setTimeout(r, 3000));
       } else {
-        throw err;
+        // Re-throw original error if possible, or a new one with context
+        if (err instanceof Error) {
+          throw err;
+        } else {
+          throw new Error(`Translation failed after ${MAX_RETRIES} retries: ${errorMessage}`);
+        }
       }
     }
   }
@@ -420,10 +449,10 @@ export async function GET(request: NextRequest) {
               controller.close();
               return;
             }
-            const topResults = results.slice(0, 5).map((book: any) => ({
+            const topResults: BookSearchResult[] = results.slice(0, 5).map((book: GutendexSearchResultItem) => ({
               id: book.id,
               title: book.title,
-              authors: (book.authors || []).map((a: any) => a.name).join(', ') || 'unknown',
+              authors: (book.authors || []).map((a: GutendexAuthor) => a.name).join(', ') || 'unknown',
               downloadCount: book.download_count || 0,
             }));
             sseSend(controller, 'results', JSON.stringify(topResults));
@@ -524,8 +553,10 @@ export async function GET(request: NextRequest) {
           });
           sseSend(controller, 'done', finalPayload);
           controller.close();
-        } catch (err: any) {
-          sseSend(controller, 'error', `caught error: ${String(err)}`);
+        } catch (err: unknown) {
+          const errorMessage = err instanceof Error ? err.message : String(err);
+          console.error("Stream Error:", err);
+          sseSend(controller, 'error', `Stream error: ${errorMessage}`);
           controller.close();
         }
       },
@@ -538,7 +569,12 @@ export async function GET(request: NextRequest) {
         Connection: 'keep-alive',
       },
     });
-  } catch (err: any) {
-    return new NextResponse(`error: ${String(err)}`, { status: 500 });
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : String(err);
+    console.error('API Route Error:', err);
+    return new NextResponse(JSON.stringify({ error: 'An internal server error occurred' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 }

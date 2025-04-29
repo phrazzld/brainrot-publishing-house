@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { BookSearchResult } from '../../utils/types';
 
 export default function TranslatePage() {
   const [query, setQuery] = useState('');
@@ -11,7 +12,7 @@ export default function TranslatePage() {
   const [error, setError] = useState('');
   const [running, setRunning] = useState(false);
   const [evtSource, setEvtSource] = useState<EventSource | null>(null);
-  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [searchResults, setSearchResults] = useState<BookSearchResult[]>([]);
 
   // initiate search to fetch top 5 results
   function startSearch() {
