@@ -267,8 +267,8 @@
 
 ## Prettier Configuration
 - [x] Install Prettier and ESLint Prettier integration (T269)
-- [ ] Create `.prettierrc.js` with code formatting standards (T270)
-- [ ] Create `.prettierignore` file for build artifacts and dependencies
+- [x] Create `.prettierrc.js` with code formatting standards (T270)
+- [ ] Create `.prettierignore` file for build artifacts and dependencies (T271)
 - [ ] Add Prettier npm script to package.json
 - [ ] Configure Prettier/ESLint integration to avoid conflicts
 
