@@ -1,8 +1,9 @@
-import * as cheerio from 'cheerio'
-import { NextRequest, NextResponse } from 'next/server'
-import OpenAI from 'openai'
+import { NextRequest, NextResponse } from 'next/server';
 
-const DEFAULT_CHUNK_SIZE = 20000
+import * as cheerio from 'cheerio';
+import OpenAI from 'openai';
+
+const DEFAULT_CHUNK_SIZE = 20000;
 const PREFERRED_FORMATS = [
   'text/plain; charset=utf-8',
   'text/plain',
@@ -10,115 +11,115 @@ const PREFERRED_FORMATS = [
   'text/html',
   'application/epub+zip',
   'application/x-mobipocket-ebook',
-]
+];
 
 // helper to send an sse event to the client
 function sseSend(controller: ReadableStreamDefaultController, event: string, data: string) {
   // replace crlf with newline for safe transmission
-  const safeData = data.replace(/(\r\n|\n|\r)/g, '\n')
+  const safeData = data.replace(/(\r\n|\n|\r)/g, '\n');
   const payload = `event: ${event}
 data: ${safeData}
 
-`
-  controller.enqueue(new TextEncoder().encode(payload))
+`;
+  controller.enqueue(new TextEncoder().encode(payload));
 }
 
 function parseHtmlIntoText(html: string) {
-  const $ = cheerio.load(html)
-  $('script, style').remove()
+  const $ = cheerio.load(html);
+  $('script, style').remove();
 
-  const textChunks: string[] = []
+  const textChunks: string[] = [];
   $('h1, h2, h3, p, br').each((_, el) => {
-    const tag = el.tagName.toLowerCase()
+    const tag = el.tagName.toLowerCase();
     if (['h1', 'h2', 'h3'].includes(tag)) {
-      const headingText = $(el).text().trim()
+      const headingText = $(el).text().trim();
       if (headingText) {
-        textChunks.push(headingText.toUpperCase(), '')
+        textChunks.push(headingText.toUpperCase(), '');
       }
     } else if (tag === 'p') {
-      const pText = $(el).text().trim().replace(/\s+/g, ' ')
+      const pText = $(el).text().trim().replace(/\s+/g, ' ');
       if (pText) {
-        textChunks.push(pText, '')
+        textChunks.push(pText, '');
       }
     } else if (tag === 'br') {
-      textChunks.push('')
+      textChunks.push('');
     }
-  })
+  });
 
-  let combined = textChunks.join('\n')
-  combined = combined.replace(/\n{3,}/g, '\n\n').trim()
-  return combined
+  let combined = textChunks.join('\n');
+  combined = combined.replace(/\n{3,}/g, '\n\n').trim();
+  return combined;
 }
 
 async function gutendexSearch(query: string) {
-  const url = `https://gutendex.com/books?search=${encodeURIComponent(query)}`
-  const res = await fetch(url)
-  if (!res.ok) throw new Error(`gutendex search failed: ${res.status}`)
-  const data = await res.json()
-  return data.results
+  const url = `https://gutendex.com/books?search=${encodeURIComponent(query)}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`gutendex search failed: ${res.status}`);
+  const data = await res.json();
+  return data.results;
 }
 
 function pickBestFormat(formats: Record<string, string>) {
   for (const fmt of PREFERRED_FORMATS) {
     if (formats[fmt]) {
-      return { chosenFormat: fmt, downloadUrl: formats[fmt] }
+      return { chosenFormat: fmt, downloadUrl: formats[fmt] };
     }
   }
-  throw new Error('no recognized format found in gutendex data')
+  throw new Error('no recognized format found in gutendex data');
 }
 
 async function fetchBookText(id: number) {
-  const url = `https://gutendex.com/books/${id}`
-  const res = await fetch(url)
-  if (!res.ok) throw new Error(`gutendex metadata fetch failed: ${res.status}`)
-  const data = await res.json()
+  const url = `https://gutendex.com/books/${id}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`gutendex metadata fetch failed: ${res.status}`);
+  const data = await res.json();
 
-  const { chosenFormat, downloadUrl } = pickBestFormat(data.formats)
-  const title = data.title
-  const authors = (data.authors || []).map((a: any) => a.name).join(', ') || 'unknown'
+  const { chosenFormat, downloadUrl } = pickBestFormat(data.formats);
+  const title = data.title;
+  const authors = (data.authors || []).map((a: any) => a.name).join(', ') || 'unknown';
 
-  const downloadRes = await fetch(downloadUrl)
-  if (!downloadRes.ok) throw new Error(`failed to download text: ${downloadRes.status}`)
-  const buf = await downloadRes.arrayBuffer()
-  const utf8Text = new TextDecoder('utf-8', { fatal: false }).decode(buf)
+  const downloadRes = await fetch(downloadUrl);
+  if (!downloadRes.ok) throw new Error(`failed to download text: ${downloadRes.status}`);
+  const buf = await downloadRes.arrayBuffer();
+  const utf8Text = new TextDecoder('utf-8', { fatal: false }).decode(buf);
 
   if (chosenFormat.includes('text/plain')) {
-    return { title, authors, text: utf8Text }
+    return { title, authors, text: utf8Text };
   } else if (chosenFormat.includes('text/html')) {
-    return { title, authors, text: parseHtmlIntoText(utf8Text) }
+    return { title, authors, text: parseHtmlIntoText(utf8Text) };
   }
-  throw new Error('no plain text/html found; only epub/mobi. cannot parse.')
+  throw new Error('no plain text/html found; only epub/mobi. cannot parse.');
 }
 
 /**
  * chunk text flexibly based on double newlines, falling back as needed.
  */
 function flexibleChunkText(fullText: string, maxSize = DEFAULT_CHUNK_SIZE) {
-  let paragraphs = fullText.split('\n\n')
+  let paragraphs = fullText.split('\n\n');
   if (paragraphs.length < 2) {
-    paragraphs = fullText.split('\n')
+    paragraphs = fullText.split('\n');
   }
 
-  const chunks: string[] = []
-  let current: string[] = []
-  let currentSize = 0
+  const chunks: string[] = [];
+  let current: string[] = [];
+  let currentSize = 0;
 
   for (const para of paragraphs) {
-    const sizeWithBuffer = para.length + 2
+    const sizeWithBuffer = para.length + 2;
     if (currentSize + sizeWithBuffer > maxSize) {
-      chunks.push(current.join('\n\n'))
-      current = [para]
-      currentSize = sizeWithBuffer
+      chunks.push(current.join('\n\n'));
+      current = [para];
+      currentSize = sizeWithBuffer;
     } else {
-      current.push(para)
-      currentSize += sizeWithBuffer
+      current.push(para);
+      currentSize += sizeWithBuffer;
     }
   }
   if (current.length) {
-    chunks.push(current.join('\n\n'))
+    chunks.push(current.join('\n\n'));
   }
 
-  return chunks
+  return chunks;
 }
 
 // function buildSystemPrompt(author: string, title: string, notes: string = '') {
@@ -258,7 +259,7 @@ sksksksk??? anyway, throw me them savage bars, muse, i’m so ready i’m shook.
 
 <other notes>
 ${notes}
-</other notes>`.trim()
+</other notes>`.trim();
 }
 
 function buildUserPrompt(author: string, title: string) {
@@ -266,7 +267,7 @@ function buildUserPrompt(author: string, title: string) {
 translate the full text of '${title}' by ${author} according to the meltdown-tier rules in the system prompt.
 output only the final translation, in all lowercase, preserving the original structure but saturating every line with an extreme, borderline incoherent stack of zoomer slang, random memes, meltdown exclamations, chaotic run-ons, keysmashes, and weird references.
 no intro or outro. just meltdown.
-`.trim()
+`.trim();
 }
 
 async function translateChunk(
@@ -294,7 +295,7 @@ ${chunk}`,
         },
       ],
       reasoning_effort: 'high',
-    })
+    });
   } else {
     resp = await openai.chat.completions.create({
       model,
@@ -311,15 +312,15 @@ ${chunk}`,
         },
       ],
       temperature: temp,
-    })
+    });
   }
   if (!resp.choices?.length) {
-    throw new Error('[error: no choices returned]')
+    throw new Error('[error: no choices returned]');
   }
-  return resp.choices[0].message?.content || '[error: no content]'
+  return resp.choices[0].message?.content || '[error: no content]';
 }
 
-const MAX_RETRIES = 3
+const MAX_RETRIES = 3;
 
 async function translateChunkWithRetries(
   openai: OpenAI,
@@ -332,153 +333,161 @@ async function translateChunkWithRetries(
   chunkIndex: number,
   chunkCount: number
 ): Promise<string> {
-  let attempt = 0
+  let attempt = 0;
   while (attempt < MAX_RETRIES) {
-    attempt++
+    attempt++;
     try {
       sseSend(
         sseController,
         'log',
         `attempt ${attempt}/${MAX_RETRIES} on chunk ${chunkIndex}/${chunkCount} with model '${model}' (chunk size=${chunk.length})`
-      )
-      const result = await translateChunk(openai, systemPrompt, userPrompt, chunk, model, temp)
-      return result
+      );
+      const result = await translateChunk(openai, systemPrompt, userPrompt, chunk, model, temp);
+      return result;
     } catch (err: any) {
       sseSend(
         sseController,
         'log',
         `error on attempt ${attempt} for chunk ${chunkIndex}/${chunkCount} (model '${model}'): ${String(err)}`
-      )
+      );
       if (attempt < MAX_RETRIES) {
-        sseSend(sseController, 'log', 'retrying in 3s...')
-        await new Promise((r) => setTimeout(r, 3000))
+        sseSend(sseController, 'log', 'retrying in 3s...');
+        await new Promise((r) => setTimeout(r, 3000));
       } else {
-        throw err
+        throw err;
       }
     }
   }
-  throw new Error('all retries failed')
+  throw new Error('all retries failed');
 }
 
-const OPENAI_MODELS = ['o3-mini', 'o1', 'gpt-4o']
+const OPENAI_MODELS = ['o3-mini', 'o1', 'gpt-4o'];
 const OPENROUTER_MODELS = [
   'deepseek/deepseek-r1',
   // other models commented out
-]
+];
 
 function instantiateOpenAI(model: string): OpenAI {
   if (OPENAI_MODELS.includes(model)) {
     if (!process.env.OPENAI_API_KEY) {
-      throw new Error('missing OPENAI_API_KEY')
+      throw new Error('missing OPENAI_API_KEY');
     }
-    return new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+    return new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
   } else if (OPENROUTER_MODELS.includes(model)) {
     if (!process.env.OPENROUTER_API_KEY) {
-      throw new Error('missing OPENROUTER_API_KEY')
+      throw new Error('missing OPENROUTER_API_KEY');
     }
     return new OpenAI({
       baseURL: 'https://openrouter.ai/api/v1',
       apiKey: process.env.OPENROUTER_API_KEY,
-    })
+    });
   }
-  throw new Error(`unknown model '${model}'`)
+  throw new Error(`unknown model '${model}'`);
 }
 
 export const config = {
   runtime: 'edge',
-}
+};
 
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url)
-    const query = searchParams.get('query') || ''
-    const model = searchParams.get('model') || ''
-    const password = searchParams.get('password') || ''
-    const notes = searchParams.get('notes') || ''
-    const bookIdParam = searchParams.get('bookId')
+    const { searchParams } = new URL(request.url);
+    const query = searchParams.get('query') || '';
+    const model = searchParams.get('model') || '';
+    const password = searchParams.get('password') || '';
+    const notes = searchParams.get('notes') || '';
+    const bookIdParam = searchParams.get('bookId');
 
     if (!process.env.TRANSLATE_PASSWORD) {
-      return new NextResponse('no server password set', { status: 500 })
+      return new NextResponse('no server password set', { status: 500 });
     }
     if (password !== process.env.TRANSLATE_PASSWORD) {
-      return new NextResponse('unauthorized', { status: 401 })
+      return new NextResponse('unauthorized', { status: 401 });
     }
 
-    const openai = instantiateOpenAI(model)
+    const openai = instantiateOpenAI(model);
 
     const stream = new ReadableStream({
       async start(controller) {
         try {
           if (!bookIdParam) {
             // perform search and return top 5 results with extra metadata
-            sseSend(controller, 'log', `starting gutendex search for: ${query}`)
-            const results = await gutendexSearch(query)
-            sseSend(controller, 'log', `found ${results.length} search results`)
+            sseSend(controller, 'log', `starting gutendex search for: ${query}`);
+            const results = await gutendexSearch(query);
+            sseSend(controller, 'log', `found ${results.length} search results`);
             if (!results.length) {
-              sseSend(controller, 'error', `no results found`)
-              controller.close()
-              return
+              sseSend(controller, 'error', `no results found`);
+              controller.close();
+              return;
             }
             const topResults = results.slice(0, 5).map((book: any) => ({
               id: book.id,
               title: book.title,
               authors: (book.authors || []).map((a: any) => a.name).join(', ') || 'unknown',
-              downloadCount: book.download_count || 0
-            }))
-            sseSend(controller, 'results', JSON.stringify(topResults))
-            controller.close()
-            return
+              downloadCount: book.download_count || 0,
+            }));
+            sseSend(controller, 'results', JSON.stringify(topResults));
+            controller.close();
+            return;
           }
 
           // proceed with translation if bookid is provided
-          const bookId = parseInt(bookIdParam, 10)
-          sseSend(controller, 'log', `using selected book id: ${bookId}`)
-          const { title, authors, text } = await fetchBookText(bookId)
+          const bookId = parseInt(bookIdParam, 10);
+          sseSend(controller, 'log', `using selected book id: ${bookId}`);
+          const { title, authors, text } = await fetchBookText(bookId);
           sseSend(
             controller,
             'log',
             `downloaded text for '${title}' by ${authors}, length=${text.length}`
-          )
+          );
 
-          const sourceFilename = `source_${title.replace(/\W+/g, '_').toLowerCase()}.txt`
+          const sourceFilename = `source_${title.replace(/\W+/g, '_').toLowerCase()}.txt`;
           const sourcePayload = JSON.stringify({
             filename: sourceFilename,
             content: text,
-          })
-          sseSend(controller, 'source', sourcePayload)
+          });
+          sseSend(controller, 'source', sourcePayload);
 
-          sseSend(controller, 'log', `attempting flexible chunking with max size ~${DEFAULT_CHUNK_SIZE}`)
-          let chunks = flexibleChunkText(text, DEFAULT_CHUNK_SIZE)
-          sseSend(controller, 'log', `after flexible chunking, we got ${chunks.length} chunks.`)
+          sseSend(
+            controller,
+            'log',
+            `attempting flexible chunking with max size ~${DEFAULT_CHUNK_SIZE}`
+          );
+          let chunks = flexibleChunkText(text, DEFAULT_CHUNK_SIZE);
+          sseSend(controller, 'log', `after flexible chunking, we got ${chunks.length} chunks.`);
 
           if (chunks.length === 1 && chunks[0].length > DEFAULT_CHUNK_SIZE * 1.5) {
-            sseSend(controller, 'log', 'only 1 chunk found, forcibly subdividing into ~10k chars each.')
-            const forcedSubChunks: string[] = []
-            const single = chunks[0]
-            let start = 0
-            const forcedSize = 10000
+            sseSend(
+              controller,
+              'log',
+              'only 1 chunk found, forcibly subdividing into ~10k chars each.'
+            );
+            const forcedSubChunks: string[] = [];
+            const single = chunks[0];
+            let start = 0;
+            const forcedSize = 10000;
             while (start < single.length) {
-              forcedSubChunks.push(single.slice(start, start + forcedSize))
-              start += forcedSize
+              forcedSubChunks.push(single.slice(start, start + forcedSize));
+              start += forcedSize;
             }
-            chunks = forcedSubChunks
-            sseSend(controller, 'log', `forced chunking yields ${chunks.length} chunk(s).`)
+            chunks = forcedSubChunks;
+            sseSend(controller, 'log', `forced chunking yields ${chunks.length} chunk(s).`);
           }
 
-          sseSend(controller, 'log', `final chunk count: ${chunks.length}`)
+          sseSend(controller, 'log', `final chunk count: ${chunks.length}`);
 
-          const systemPrompt = buildSystemPrompt(authors, title, notes)
-          const userPrompt = buildUserPrompt(authors, title)
+          const systemPrompt = buildSystemPrompt(authors, title, notes);
+          const userPrompt = buildUserPrompt(authors, title);
 
-          const translatedPieces: string[] = []
+          const translatedPieces: string[] = [];
           for (let i = 0; i < chunks.length; i++) {
-            const chunkText = chunks[i]
-            const chunkNum = i + 1
+            const chunkText = chunks[i];
+            const chunkNum = i + 1;
             sseSend(
               controller,
               'log',
               `translating chunk ${chunkNum}/${chunks.length}, size=${chunkText.length}`
-            )
+            );
 
             const partial = await translateChunkWithRetries(
               openai,
@@ -490,33 +499,37 @@ export async function GET(request: NextRequest) {
               0.6,
               chunkNum,
               chunks.length
-            )
+            );
 
             sseSend(
               controller,
               'log',
               `finished chunk ${chunkNum} of ${chunks.length}, partial length=${partial.length}`
-            )
+            );
 
-            translatedPieces.push(partial)
+            translatedPieces.push(partial);
           }
 
-          const combined = translatedPieces.join('\n\n')
-          const filename = `brainrot_${title.replace(/\W+/g, '_').toLowerCase()}.txt`
-          sseSend(controller, 'log', `translation complete (final length=${combined.length}). sending "done" event.`)
+          const combined = translatedPieces.join('\n\n');
+          const filename = `brainrot_${title.replace(/\W+/g, '_').toLowerCase()}.txt`;
+          sseSend(
+            controller,
+            'log',
+            `translation complete (final length=${combined.length}). sending "done" event.`
+          );
 
           const finalPayload = JSON.stringify({
             filename,
             content: combined,
-          })
-          sseSend(controller, 'done', finalPayload)
-          controller.close()
+          });
+          sseSend(controller, 'done', finalPayload);
+          controller.close();
         } catch (err: any) {
-          sseSend(controller, 'error', `caught error: ${String(err)}`)
-          controller.close()
+          sseSend(controller, 'error', `caught error: ${String(err)}`);
+          controller.close();
         }
       },
-    })
+    });
 
     return new NextResponse(stream, {
       headers: {
@@ -524,8 +537,8 @@ export async function GET(request: NextRequest) {
         'Cache-Control': 'no-cache, no-transform',
         Connection: 'keep-alive',
       },
-    })
+    });
   } catch (err: any) {
-    return new NextResponse(`error: ${String(err)}`, { status: 500 })
+    return new NextResponse(`error: ${String(err)}`, { status: 500 });
   }
 }

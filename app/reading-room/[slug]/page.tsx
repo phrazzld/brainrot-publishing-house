@@ -1,31 +1,33 @@
-"use client";
+'use client';
 
-import DownloadButton from "@/components/DownloadButton";
-import translations from "@/translations";
-import { fetchTextWithFallback, getAssetUrlWithFallback } from "@/utils";
-import Link from "next/link";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState, useRef } from "react";
-import WaveSurfer from "wavesurfer.js";
+import Link from 'next/link';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
+
+import WaveSurfer from 'wavesurfer.js';
+
+import DownloadButton from '@/components/DownloadButton';
+import translations from '@/translations';
+import { fetchTextWithFallback, getAssetUrlWithFallback } from '@/utils';
 
 export default function ReadingRoom() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { slug } = useParams();
 
-  const [rawText, setRawText] = useState("");
+  const [rawText, setRawText] = useState('');
   const [waveSurfer, setWaveSurfer] = useState<WaveSurfer | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [totalTime, setTotalTime] = useState(0);
   const [chapterIndex, setChapterIndex] = useState(0);
-  
+
   // Use a ref for the waveform container
   const waveformRef = useRef<HTMLDivElement>(null);
 
   // share modal
   const [isShareOpen, setIsShareOpen] = useState(false);
-  const [shareFeedback, setShareFeedback] = useState("");
+  const [shareFeedback, setShareFeedback] = useState('');
   const [includeChapter, setIncludeChapter] = useState(true);
   const [includeTimestamp, setIncludeTimestamp] = useState(true);
 
@@ -41,7 +43,7 @@ export default function ReadingRoom() {
 
   // pick up "c" param from the url if it exists
   useEffect(() => {
-    const cParam = searchParams.get("c");
+    const cParam = searchParams.get('c');
     if (cParam) {
       const cNum = parseInt(cParam, 10);
       // Only update chapter index if valid and different from current
@@ -65,9 +67,9 @@ export default function ReadingRoom() {
 
     function handleReady() {
       if (!waveSurfer || signal.aborted) return;
-      
+
       try {
-        const tParam = searchParams.get("t");
+        const tParam = searchParams.get('t');
         const duration = waveSurfer.getDuration();
         if (tParam && duration && !isNaN(duration) && duration > 0) {
           const numericT = Number(tParam);
@@ -76,23 +78,23 @@ export default function ReadingRoom() {
           }
         }
       } catch (error) {
-        console.error("Error seeking to timestamp:", error);
+        console.error('Error seeking to timestamp:', error);
       }
     }
 
-    waveSurfer.on("ready", handleReady);
-    
+    waveSurfer.on('ready', handleReady);
+
     return () => {
       // Abort any in-flight operations
       abortController.abort();
-      
+
       // Safely remove event listener if WaveSurfer still exists
       try {
         if (waveSurfer && typeof waveSurfer.un === 'function') {
-          waveSurfer.un("ready", handleReady);
+          waveSurfer.un('ready', handleReady);
         }
       } catch (error) {
-        console.error("Error removing ready event handler:", error);
+        console.error('Error removing ready event handler:', error);
       }
     };
   }, [waveSurfer, searchParams]);
@@ -115,7 +117,7 @@ export default function ReadingRoom() {
       })
       .catch((error) => {
         if (signal.aborted) return; // Don't update state if aborted
-        console.error("Failed to load text:", error);
+        console.error('Failed to load text:', error);
         setRawText(`Error loading text. Please try again later.`);
       })
       .finally(() => {
@@ -132,47 +134,47 @@ export default function ReadingRoom() {
           if (waveSurfer.isPlaying()) {
             waveSurfer.pause();
           }
-          
+
           // Then destroy the instance
           waveSurfer.destroy();
-          
+
           // Set to null immediately to avoid dangling references
           setWaveSurfer(null);
         } catch (error) {
-          console.error("Error destroying previous WaveSurfer instance:", error);
+          console.error('Error destroying previous WaveSurfer instance:', error);
         }
       }
-      
+
       // Check if the effect has been aborted before proceeding
       if (signal.aborted) {
         return; // Exit early if already aborted
       }
-      
+
       setIsAudioLoading(true);
-      
+
       // Create a small delay before initializing a new WaveSurfer
       // This helps ensure previous instance is fully cleaned up
       setTimeout(() => {
         if (signal.aborted) return; // Don't proceed if aborted
-        
+
         try {
           // Use waveformRef element for mounting
           if (!waveformRef.current) {
-            throw new Error("Waveform container ref not available");
+            throw new Error('Waveform container ref not available');
           }
-          
+
           // Ensure the element is empty
           waveformRef.current.innerHTML = '';
-          
+
           // Create WaveSurfer instance
           const ws = WaveSurfer.create({
             container: waveformRef.current,
-            waveColor: "#666",
-            progressColor: "#e0afff",
-            cursorColor: "#ffdaab",
+            waveColor: '#666',
+            progressColor: '#e0afff',
+            cursorColor: '#ffdaab',
             height: 48, // taller waveform
           });
-          
+
           // Setup error handler before loading
           const errorHandler = (error) => {
             if (!signal.aborted) {
@@ -180,7 +182,7 @@ export default function ReadingRoom() {
               setIsAudioLoading(false);
             }
           };
-          
+
           // Setup event handlers with better abort handling
           const readyHandler = () => {
             if (!signal.aborted) {
@@ -190,19 +192,19 @@ export default function ReadingRoom() {
               setIsAudioLoading(false);
             }
           };
-          
+
           const processHandler = () => {
             if (!signal.aborted) {
               setCurrentTime(ws.getCurrentTime());
             }
           };
-          
+
           const playHandler = () => {
             if (!signal.aborted) {
               setIsPlaying(true);
             }
           };
-          
+
           const pauseHandler = () => {
             if (!signal.aborted) {
               setIsPlaying(false);
@@ -210,7 +212,7 @@ export default function ReadingRoom() {
               updateUrlWithChapterAndTimestamp(ws.getCurrentTime());
             }
           };
-          
+
           const finishHandler = () => {
             if (!signal.aborted) {
               setIsPlaying(false);
@@ -218,37 +220,37 @@ export default function ReadingRoom() {
               updateUrlWithChapterAndTimestamp(0);
             }
           };
-          
+
           // Register all handlers
           ws.on('error', errorHandler);
-          ws.on("ready", readyHandler);
-          ws.on("audioprocess", processHandler);
-          ws.on("play", playHandler);
-          ws.on("pause", pauseHandler);
-          ws.on("finish", finishHandler);
-          
+          ws.on('ready', readyHandler);
+          ws.on('audioprocess', processHandler);
+          ws.on('play', playHandler);
+          ws.on('pause', pauseHandler);
+          ws.on('finish', finishHandler);
+
           // Extract the correct URL format from translations
           let audioUrl = chapterData.audioSrc;
-          
+
           // Check for invalid URL patterns and fix them
           if (audioUrl && audioUrl.includes('https://public.blob.vercel-storage.com')) {
             // Replace with the correct tenant-specific URL
             const baseUrl = 'https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com';
-            
+
             // Extract just the path portion (after the domain)
             const urlObj = new URL(audioUrl);
             const pathPart = urlObj.pathname;
-            
+
             // Create a corrected URL
             audioUrl = `${baseUrl}${pathPart}`;
           }
-          
+
           // Only proceed if not aborted
           if (!signal.aborted) {
             try {
               // Load the audio file with corrected URL
               ws.load(audioUrl);
-              
+
               // Only set the wavesurfer if not aborted
               setWaveSurfer(ws);
             } catch (loadError) {
@@ -264,7 +266,7 @@ export default function ReadingRoom() {
         } catch (error) {
           // Handle any errors during setup
           if (!signal.aborted) {
-            console.error("Error setting up WaveSurfer:", error);
+            console.error('Error setting up WaveSurfer:', error);
             setIsAudioLoading(false);
           }
         }
@@ -277,19 +279,19 @@ export default function ReadingRoom() {
           if (waveSurfer.isPlaying()) {
             waveSurfer.pause();
           }
-          
+
           // Then destroy the instance
           waveSurfer.destroy();
-          
+
           // Null out the reference
           setWaveSurfer(null);
-          
-          console.log("Existing WaveSurfer instance destroyed (no audio available)");
+
+          console.log('Existing WaveSurfer instance destroyed (no audio available)');
         } catch (error) {
-          console.error("Error destroying existing WaveSurfer:", error);
+          console.error('Error destroying existing WaveSurfer:', error);
         }
       }
-      
+
       // Only update state if not aborted
       if (!signal.aborted) {
         setIsPlaying(false);
@@ -302,15 +304,15 @@ export default function ReadingRoom() {
     // Helper function to clean up a WaveSurfer instance
     function cleanupWaveSurfer(ws: WaveSurfer) {
       try {
-        ws.un("ready");
-        ws.un("audioprocess");
-        ws.un("play");
-        ws.un("pause");
-        ws.un("finish");
-        ws.un("error");
+        ws.un('ready');
+        ws.un('audioprocess');
+        ws.un('play');
+        ws.un('pause');
+        ws.un('finish');
+        ws.un('error');
         ws.destroy();
       } catch (error) {
-        console.error("Error during WaveSurfer cleanup:", error);
+        console.error('Error during WaveSurfer cleanup:', error);
       }
     }
 
@@ -318,7 +320,7 @@ export default function ReadingRoom() {
     return () => {
       // First abort all in-flight fetch operations
       abortController.abort();
-      
+
       // Then do the rest of the cleanup
       if (waveSurfer) {
         try {
@@ -326,13 +328,13 @@ export default function ReadingRoom() {
           if (waveSurfer.isPlaying()) {
             waveSurfer.pause();
           }
-          
+
           // Then clean up the instance
           cleanupWaveSurfer(waveSurfer);
-          
-          console.log("WaveSurfer instance destroyed successfully during cleanup");
+
+          console.log('WaveSurfer instance destroyed successfully during cleanup');
         } catch (error) {
-          console.error("Error during WaveSurfer cleanup:", error);
+          console.error('Error during WaveSurfer cleanup:', error);
         }
       }
     };
@@ -393,22 +395,22 @@ export default function ReadingRoom() {
   }
 
   function formatTime(sec: number) {
-    if (!sec || isNaN(sec)) return "0:00";
+    if (!sec || isNaN(sec)) return '0:00';
     const m = Math.floor(sec / 60);
     const s = Math.floor(sec % 60);
-    return `${m}:${s < 10 ? "0" + s : s}`;
+    return `${m}:${s < 10 ? '0' + s : s}`;
   }
 
   // share modal handlers
   function openShareModal() {
     setIsShareOpen(true);
-    setShareFeedback("");
+    setShareFeedback('');
   }
   function closeShareModal() {
     setIsShareOpen(false);
   }
   function getShareUrl() {
-    if (typeof window === "undefined") return "";
+    if (typeof window === 'undefined') return '';
     const baseUrl = window.location.origin;
     let url = `${baseUrl}/reading-room/${slug}`;
     if (includeChapter) {
@@ -424,7 +426,7 @@ export default function ReadingRoom() {
     const shareUrl = getShareUrl();
     try {
       await navigator.clipboard.writeText(shareUrl);
-      setShareFeedback("link is in your clipboard, glhf!");
+      setShareFeedback('link is in your clipboard, glhf!');
     } catch (err) {
       console.error(err);
       setShareFeedback("couldn't copy link sry man");
@@ -449,7 +451,7 @@ export default function ReadingRoom() {
 
   const totalChapters = translation.chapters.length;
   const chaptersArray = Array.from({ length: totalChapters }, (_, i) => i);
-  const lines = rawText.split("\n").map((line, i) => (
+  const lines = rawText.split('\n').map((line, i) => (
     <div key={i} className="my-1">
       {line.trim() ? line : <>&nbsp;</>}
     </div>
@@ -467,10 +469,11 @@ export default function ReadingRoom() {
               <button
                 key={cNum}
                 onClick={() => handleChapterClick(cNum)}
-                className={`px-3 py-2 rounded border text-sm font-body text-left ${isActive
-                  ? "bg-peachy text-midnight border-peachy"
-                  : "bg-black/30 text-white/80 border-white/20 hover:bg-black/50"
-                  }`}
+                className={`px-3 py-2 rounded border text-sm font-body text-left ${
+                  isActive
+                    ? 'bg-peachy text-midnight border-peachy'
+                    : 'bg-black/30 text-white/80 border-white/20 hover:bg-black/50'
+                }`}
               >
                 {translation.chapters[cNum].title}
               </button>
@@ -500,18 +503,18 @@ export default function ReadingRoom() {
             )}
             <button
               onClick={goPrevChapter}
-              className={`btn btn-secondary ${chapterIndex === 0 ? "opacity-50 cursor-not-allowed" : ""
-                }`}
+              className={`btn btn-secondary ${
+                chapterIndex === 0 ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
               disabled={chapterIndex === 0}
             >
               ← prev
             </button>
             <button
               onClick={goNextChapter}
-              className={`btn btn-secondary ${chapterIndex === totalChapters - 1
-                ? "opacity-50 cursor-not-allowed"
-                : ""
-                }`}
+              className={`btn btn-secondary ${
+                chapterIndex === totalChapters - 1 ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
               disabled={chapterIndex === totalChapters - 1}
             >
               next →
@@ -536,7 +539,7 @@ export default function ReadingRoom() {
               {/* Use a stable ref for the waveform container */}
               <div className="flex-1 h-[48px]" ref={waveformRef} />
               <button onClick={togglePlayPause} className="btn btn-primary">
-                {isPlaying ? "pause" : "play"}
+                {isPlaying ? 'pause' : 'play'}
               </button>
               <div className="text-xs text-peachy whitespace-nowrap">
                 {formatTime(currentTime)} / {formatTime(totalTime)}
@@ -551,9 +554,7 @@ export default function ReadingRoom() {
         {/* actual text */}
         <main className="flex-1 overflow-y-auto p-4 max-w-3xl mx-auto">
           {isTextLoading ? (
-            <div className="text-center text-lavender animate-pulse">
-              loading text, hold up...
-            </div>
+            <div className="text-center text-lavender animate-pulse">loading text, hold up...</div>
           ) : (
             lines
           )}
@@ -603,15 +604,10 @@ export default function ReadingRoom() {
                 value={getShareUrl()}
               />
             </div>
-            <button
-              onClick={copyShareUrl}
-              className="btn btn-primary mt-3 block w-full"
-            >
+            <button onClick={copyShareUrl} className="btn btn-primary mt-3 block w-full">
               copy link
             </button>
-            {shareFeedback && (
-              <div className="mt-2 text-sm text-peachy">{shareFeedback}</div>
-            )}
+            {shareFeedback && <div className="mt-2 text-sm text-peachy">{shareFeedback}</div>}
           </div>
         </div>
       )}
@@ -634,13 +630,13 @@ export default function ReadingRoom() {
             <h2 className="text-xl mb-3 font-display">download options</h2>
             <div className="flex flex-col space-y-2">
               <DownloadButton
-                slug={slug?.toString() || ""}
+                slug={slug?.toString() || ''}
                 type="chapter"
                 chapter={chapterIndex + 1}
                 classNames="btn btn-primary"
               />
               <DownloadButton
-                slug={slug?.toString() || ""}
+                slug={slug?.toString() || ''}
                 type="full"
                 classNames="btn btn-secondary"
               />

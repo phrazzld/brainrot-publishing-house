@@ -1,8 +1,9 @@
-"use client"
+'use client';
 
-import translations from "@/translations"
-import Image from "next/image"
-import Link from "next/link"
+import Image from 'next/image';
+import Link from 'next/link';
+
+import translations from '@/translations';
 
 export default function ExplorePage() {
   return (
@@ -12,12 +13,11 @@ export default function ExplorePage() {
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
         {translations.map((t) => {
-          const isAvailable = t.status === "available"
+          const isAvailable = t.status === 'available';
           return (
             <div
               key={t.slug}
-              className={`card relative ${!isAvailable ? "opacity-70 grayscale" : ""
-                }`}
+              className={`card relative ${!isAvailable ? 'opacity-70 grayscale' : ''}`}
             >
               <Image
                 src={t.coverImage}
@@ -35,10 +35,7 @@ export default function ExplorePage() {
                       read now
                     </Link>
                   ) : (
-                    <button
-                      className="btn btn-secondary cursor-not-allowed"
-                      title="coming soon"
-                    >
+                    <button className="btn btn-secondary cursor-not-allowed" title="coming soon">
                       coming soon
                     </button>
                   )}
@@ -60,9 +57,9 @@ export default function ExplorePage() {
                 </div>
               )}
             </div>
-          )
+          );
         })}
       </div>
     </section>
-  )
+  );
 }
