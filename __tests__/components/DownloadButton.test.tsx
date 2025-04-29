@@ -4,6 +4,13 @@ import '@testing-library/jest-dom';
 import DownloadButton from '../../components/DownloadButton';
 import * as blobUrlUtils from '../../utils/getBlobUrl';
 
+// Create a custom render function that provides a container
+const customRender = (ui, options = {}) => {
+  const container = document.createElement('div');
+  document.body.appendChild(container);
+  return render(ui, { container, ...options });
+};
+
 // Mock the getBlobUrl utilities
 jest.mock('../../utils/getBlobUrl', () => ({
   getAssetUrlWithFallback: jest.fn(),
@@ -22,9 +29,12 @@ const mockLink = {
   click: mockClick,
 };
 
+// Store original document.createElement to avoid recursion
+const originalCreateElement = document.createElement;
 document.createElement = jest.fn().mockImplementation((tag) => {
   if (tag === 'a') return mockLink;
-  return document.createElement(tag);
+  // Use the original createElement to avoid recursion
+  return originalCreateElement.call(document, tag);
 });
 
 document.body.appendChild = mockAppendChild;
@@ -44,19 +54,19 @@ describe('DownloadButton Component', () => {
   });
 
   it('renders the download button for a full audiobook', () => {
-    render(<DownloadButton slug="hamlet" type="full" />);
+    customRender(<DownloadButton slug="hamlet" type="full" />);
     
     expect(screen.getByText('download full audiobook')).toBeInTheDocument();
   });
 
   it('renders the download button for a chapter', () => {
-    render(<DownloadButton slug="hamlet" type="chapter" chapter={3} />);
+    customRender(<DownloadButton slug="hamlet" type="chapter" chapter={3} />);
     
     expect(screen.getByText('download chapter 3')).toBeInTheDocument();
   });
 
   it('downloads a full audiobook from Blob storage', async () => {
-    render(<DownloadButton slug="hamlet" type="full" />);
+    customRender(<DownloadButton slug="hamlet" type="full" />);
     
     fireEvent.click(screen.getByText('download full audiobook'));
     
@@ -81,7 +91,7 @@ describe('DownloadButton Component', () => {
   });
 
   it('downloads a chapter audiobook from Blob storage', async () => {
-    render(<DownloadButton slug="hamlet" type="chapter" chapter={3} />);
+    customRender(<DownloadButton slug="hamlet" type="chapter" chapter={3} />);
     
     fireEvent.click(screen.getByText('download chapter 3'));
     
@@ -98,7 +108,7 @@ describe('DownloadButton Component', () => {
     // Mock fetch to fail
     (global.fetch as jest.Mock).mockRejectedValue(new Error('Network error'));
     
-    render(<DownloadButton slug="hamlet" type="full" />);
+    customRender(<DownloadButton slug="hamlet" type="full" />);
     
     fireEvent.click(screen.getByText('download full audiobook'));
     
@@ -113,7 +123,7 @@ describe('DownloadButton Component', () => {
       ok: false,
     });
     
-    render(<DownloadButton slug="hamlet" type="full" />);
+    customRender(<DownloadButton slug="hamlet" type="full" />);
     
     fireEvent.click(screen.getByText('download full audiobook'));
     

@@ -274,8 +274,8 @@
 
 ## Testing Infrastructure
 - [x] Install Jest and React Testing Library (T274)
-- [ ] Configure Jest for TypeScript and Next.js (T275)
-- [ ] Set up test scripts in package.json
+- [x] Configure Jest for TypeScript and Next.js (T275)
+- [ ] Set up test scripts in package.json (T276)
 - [ ] Create basic smoke test to verify the setup
 - [ ] Configure test coverage reporting
 
