@@ -1,0 +1,84 @@
+# Dependencies
+node_modules
+.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# Build outputs
+.next/
+out/
+build/
+dist/
+public/assets/
+
+# Testing
+coverage/
+__snapshots__/
+*.snap
+
+# Vercel
+.vercel/
+
+# Environment and config files
+.env*
+!.env.*.example
+aws-do-config.ini
+.tool-versions
+
+# Package files
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# TypeScript build info
+*.tsbuildinfo
+next-env.d.ts
+
+# Cache
+.eslintcache
+.stylelintcache
+.cache/
+
+# Reports and generated files
+/reports/
+audio-files-report.json
+audio-inventory-verified.json
+audio-inventory.json
+audio-migration-cdn.json
+audio-migration-with-content.json
+audio-migration-with-placeholders.json
+audio-url-verification.json
+placeholder-deletion-results.json
+*.log
+temp/
+tmp/
+/backups/
+
+# Migration files (large JSON files)
+*-migration.json
+brainrot-text-migration.json
+chapter-images-migration.json
+cover-images-migration.json
+source-text-migration.json
+custom-text-migration.json
+
+# Generated file backups
+*.bak
+*.backup
+*.tmp
+*.orig
+
+# Mac OS
+.DS_Store
+
+# Other artifacts
+*.pem
+*.log
+*.hprof
+
+# Project-specific files
+T*-audio-url-verification.json
