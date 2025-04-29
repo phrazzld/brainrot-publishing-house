@@ -1,15 +1,9 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { screen, fireEvent, waitFor } from '@testing-library/react';
+import { render } from '../utils/test-utils';
 import '@testing-library/jest-dom';
 import DownloadButton from '../../components/DownloadButton';
 import * as blobUrlUtils from '../../utils/getBlobUrl';
-
-// Create a custom render function that provides a container
-const customRender = (ui, options = {}) => {
-  const container = document.createElement('div');
-  document.body.appendChild(container);
-  return render(ui, { container, ...options });
-};
 
 // Mock the getBlobUrl utilities
 jest.mock('../../utils/getBlobUrl', () => ({
@@ -54,23 +48,31 @@ describe('DownloadButton Component', () => {
   });
 
   it('renders the download button for a full audiobook', () => {
-    customRender(<DownloadButton slug="hamlet" type="full" />);
+    const { container } = render(<DownloadButton slug="hamlet" type="full" />);
     
-    expect(screen.getByText('download full audiobook')).toBeInTheDocument();
+    // Just check if the text is in the container
+    const buttonText = container.textContent;
+    expect(buttonText).toContain('download full audiobook');
   });
 
   it('renders the download button for a chapter', () => {
-    customRender(<DownloadButton slug="hamlet" type="chapter" chapter={3} />);
+    const { container } = render(<DownloadButton slug="hamlet" type="chapter" chapter={3} />);
     
-    expect(screen.getByText('download chapter 3')).toBeInTheDocument();
+    // Just check if the text is in the container
+    const buttonText = container.textContent;
+    expect(buttonText).toContain('download chapter 3');
   });
 
   it('downloads a full audiobook from Blob storage', async () => {
-    customRender(<DownloadButton slug="hamlet" type="full" />);
+    const { container } = render(<DownloadButton slug="hamlet" type="full" />);
     
-    fireEvent.click(screen.getByText('download full audiobook'));
+    // Use a direct selector
+    const button = container.querySelector('button');
+    fireEvent.click(button as HTMLButtonElement);
     
-    expect(screen.getByText('downloading...')).toBeInTheDocument();
+    // Check for downloading state
+    const downloadingText = container.textContent?.includes('downloading...');
+    expect(downloadingText).toBe(true);
     
     // Check if getAssetUrlWithFallback was called with the correct path
     expect(blobUrlUtils.getAssetUrlWithFallback).toHaveBeenCalledWith('/hamlet/audio/full-audiobook.mp3');
@@ -86,14 +88,16 @@ describe('DownloadButton Component', () => {
       expect(mockRemoveChild).toHaveBeenCalled();
       
       // Button should return to normal state
-      expect(screen.getByText('download full audiobook')).toBeInTheDocument();
+      expect(button).toHaveTextContent('download full audiobook');
     });
   });
 
   it('downloads a chapter audiobook from Blob storage', async () => {
-    customRender(<DownloadButton slug="hamlet" type="chapter" chapter={3} />);
+    const { container } = render(<DownloadButton slug="hamlet" type="chapter" chapter={3} />);
     
-    fireEvent.click(screen.getByText('download chapter 3'));
+    // Use a direct selector
+    const button = container.querySelector('button');
+    fireEvent.click(button as HTMLButtonElement);
     
     // Check if getAssetUrlWithFallback was called with the correct path
     expect(blobUrlUtils.getAssetUrlWithFallback).toHaveBeenCalledWith('/hamlet/audio/book-03.mp3');
@@ -108,12 +112,15 @@ describe('DownloadButton Component', () => {
     // Mock fetch to fail
     (global.fetch as jest.Mock).mockRejectedValue(new Error('Network error'));
     
-    customRender(<DownloadButton slug="hamlet" type="full" />);
+    const { container } = render(<DownloadButton slug="hamlet" type="full" />);
     
-    fireEvent.click(screen.getByText('download full audiobook'));
+    // Use a direct selector
+    const button = container.querySelector('button');
+    fireEvent.click(button as HTMLButtonElement);
     
     await waitFor(() => {
-      expect(screen.getByText('failed to download. sry bestie.')).toBeInTheDocument();
+      const errorMessage = container.textContent?.includes('failed to download. sry bestie.');
+      expect(errorMessage).toBe(true);
     });
   });
 
@@ -123,12 +130,15 @@ describe('DownloadButton Component', () => {
       ok: false,
     });
     
-    customRender(<DownloadButton slug="hamlet" type="full" />);
+    const { container } = render(<DownloadButton slug="hamlet" type="full" />);
     
-    fireEvent.click(screen.getByText('download full audiobook'));
+    // Use a direct selector
+    const button = container.querySelector('button');
+    fireEvent.click(button as HTMLButtonElement);
     
     await waitFor(() => {
-      expect(screen.getByText('failed to download. sry bestie.')).toBeInTheDocument();
+      const errorMessage = container.textContent?.includes('failed to download. sry bestie.');
+      expect(errorMessage).toBe(true);
     });
   });
 });

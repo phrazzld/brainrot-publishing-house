@@ -8,6 +8,23 @@ if (typeof global.TextDecoder === 'undefined') {
   global.TextEncoder = TextEncoder;
 }
 
+// Mock import.meta for ESM compatibility
+if (typeof global.import === 'undefined') {
+  global.import = {};
+  global.import.meta = { url: 'file:///mock-url.js' };
+}
+
+// Set up a proper DOM environment for React 19
+const { JSDOM } = require('jsdom');
+const jsdom = new JSDOM('<!doctype html><html><body></body></html>', {
+  url: 'http://localhost',
+});
+global.window = jsdom.window;
+global.document = jsdom.window.document;
+global.navigator = {
+  userAgent: 'node.js',
+};
+
 // Mock the window.URL.createObjectURL
 if (typeof window !== 'undefined') {
   window.URL.createObjectURL = jest.fn(() => 'mock-blob-url');

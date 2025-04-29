@@ -60,8 +60,11 @@ module.exports = {
   
   // Ignore patterns - transform certain node_modules that use ESM
   transformIgnorePatterns: [
-    '/node_modules/(?!(@vercel/blob|react|react-dom|wavesurfer.js|next)/)',
+    '/node_modules/(?!(@vercel/blob|react|react-dom|wavesurfer.js|next|process)/)',
   ],
+  
+  // Handle ESM modules
+  extensionsToTreatAsEsm: ['.ts', '.tsx'],
   
   // Module file extensions
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
