@@ -8,7 +8,7 @@ import WaveSurfer from 'wavesurfer.js';
 
 import DownloadButton from '@/components/DownloadButton';
 import translations from '@/translations';
-import { fetchTextWithFallback, getAssetUrlWithFallback } from '@/utils';
+import { fetchTextWithFallback } from '@/utils';
 
 export default function ReadingRoom() {
   const router = useRouter();

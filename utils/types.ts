@@ -34,9 +34,8 @@ export interface GutendexSearchResponse {
 }
 
 // Represents the detailed book metadata from /books/{id}
-export interface GutendexBookDetails extends GutendexSearchResultItem {
-  // Add any fields specific to the details endpoint if different from search item
-}
+// Currently identical to search result item, but may have specific fields in the future
+export type GutendexBookDetails = GutendexSearchResultItem;
 
 // ---- Internal Application Types ----
 

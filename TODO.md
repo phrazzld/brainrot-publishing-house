@@ -12,7 +12,7 @@
   Depends On: T1
   AC Ref: None
 
-- [ ] T3: Remove Unused Variables and Imports
+- [x] T3: Remove Unused Variables and Imports
   Action: Identify all variables, function parameters, and imports flagged by `@typescript-eslint/no-unused-vars` and remove or rename (prefix with `_` if intentionally unused) so that no unused symbols remain.
   Depends On: T2
   AC Ref: None

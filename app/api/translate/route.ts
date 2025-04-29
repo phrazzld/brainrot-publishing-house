@@ -570,7 +570,6 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (err: unknown) {
-    const errorMessage = err instanceof Error ? err.message : String(err);
     console.error('API Route Error:', err);
     return new NextResponse(JSON.stringify({ error: 'An internal server error occurred' }), {
       status: 500,
