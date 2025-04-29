@@ -39,11 +39,15 @@ module.exports = {
   transform: {
     // Use custom babel transformer for React components (TSX files)
     '^.+\\.tsx$': '<rootDir>/jest-babel-transformer.cjs',
-    // Use ts-jest for TypeScript files
+    // Use custom ESM transformer for script files in scripts/ directory
+    'scripts/.*\\.ts$': '<rootDir>/jest-esm-transformer.cjs',
+    // Use ts-jest for all other TypeScript files
     '^.+\\.ts$': [
       'ts-jest',
       {
         tsconfig: 'tsconfig.json',
+        useESM: true,
+        isolatedModules: true,
       },
     ],
     // Use babel-jest for JavaScript files
@@ -60,7 +64,7 @@ module.exports = {
   
   // Ignore patterns - transform certain node_modules that use ESM
   transformIgnorePatterns: [
-    '/node_modules/(?!(@vercel/blob|react|react-dom|wavesurfer.js|next|process)/)',
+    '/node_modules/(?!(@vercel/blob|react|react-dom|wavesurfer.js|next|process|dotenv)/)',
   ],
   
   // Handle ESM modules
@@ -71,4 +75,7 @@ module.exports = {
   
   // Setup files
   setupFilesAfterEnv: ['<rootDir>/jest.setup.cjs'],
+  
+  // ESM module support
+  resolver: 'jest-ts-webcompat-resolver',
 };

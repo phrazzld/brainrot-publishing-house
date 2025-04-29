@@ -1,11 +1,10 @@
-import { jest } from '@jest/globals';
-import fs from 'fs';
-import path from 'path';
-import * as utils from '../../utils';
+// Import Jest using CommonJS
+const fs = require('fs');
+const path = require('path');
 
-// Use jest.requireActual to import our mock instead of the actual module
+// Use require for the mock instead of importing the actual module with ESM
 // This avoids ESM-related issues with import.meta
-const cleanupLocalAssets = jest.requireActual('../../__mocks__/cleanupLocalAssets.js');
+const cleanupLocalAssets = require('../../__mocks__/cleanupLocalAssets.js');
 
 // Mock modules
 jest.mock('fs');
@@ -33,7 +32,8 @@ describe('cleanupLocalAssets', () => {
     jest.clearAllMocks();
     
     // Mock utils.assetExistsInBlobStorage
-    (utils.assetExistsInBlobStorage as jest.Mock).mockImplementation(async (path: string) => {
+    const utils = require('../../utils');
+    utils.assetExistsInBlobStorage.mockImplementation(async (path) => {
       // Return true for cover and text, false for audio to test both scenarios
       if (path.includes('audio')) {
         return false;
@@ -42,13 +42,13 @@ describe('cleanupLocalAssets', () => {
     });
     
     // Mock fs functions
-    (fs.existsSync as jest.Mock).mockReturnValue(true);
-    (fs.unlinkSync as jest.Mock).mockReturnValue(undefined);
-    (fs.mkdirSync as jest.Mock).mockReturnValue(undefined);
-    (fs.writeFileSync as jest.Mock).mockReturnValue(undefined);
+    fs.existsSync.mockReturnValue(true);
+    fs.unlinkSync.mockReturnValue(undefined);
+    fs.mkdirSync.mockReturnValue(undefined);
+    fs.writeFileSync.mockReturnValue(undefined);
     
     // Mock path functions
-    (path.join as jest.Mock).mockImplementation((...parts) => parts.join('/'));
+    path.join.mockImplementation((...parts) => parts.join('/'));
   });
   
   it('should run in dry-run mode without deleting files', async () => {
@@ -72,10 +72,10 @@ describe('cleanupLocalAssets', () => {
     expect(report.overallSummary.assetsKept).toBe(1);
   });
   
-  it('should not delete files that don\'t exist in Blob storage', async () => {
+  it("should not delete files that don't exist in Blob storage", async () => {
     const report = await cleanupLocalAssets(false);
     
     // Check that the audio file (which doesn't exist in Blob) wasn't deleted
-    expect(report.bookResults[0].results.find(r => r.type === 'audio')?.wasDeleted).toBe(false);
+    expect(report.bookResults[0].results.find(r => r.type === 'audio').wasDeleted).toBe(false);
   });
 });

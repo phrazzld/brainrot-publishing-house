@@ -7,7 +7,7 @@
   - Action: Update the Jest configuration to properly handle React 19 component tests, focusing on fixing the failing DownloadButton.test.tsx tests
   - Priority: Critical
 
-- [ ] Fix ESM module import issues in tests
+- [x] Fix ESM module import issues in tests
   - Action: Update the Jest configuration to properly handle ESM modules, especially in scripts like cleanupLocalAssets.test.ts that use import.meta
   - Priority: Critical
 

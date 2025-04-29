@@ -11,7 +11,18 @@ if (typeof global.TextDecoder === 'undefined') {
 // Mock import.meta for ESM compatibility
 if (typeof global.import === 'undefined') {
   global.import = {};
-  global.import.meta = { url: 'file:///mock-url.js' };
+  global.import.meta = { 
+    url: 'file:///mock-url.js',
+    // Add resolver for relative paths
+    resolve: (specifier) => {
+      return new URL(specifier, 'file:///mock-url.js').href;
+    }
+  };
+}
+
+// Provide import.meta directly on global
+if (typeof global.import?.meta === 'undefined') {
+  global.import = { meta: { url: 'file:///mock-url.js' } };
 }
 
 // Set up a proper DOM environment for React 19

@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, act } from '../utils/test-utils';
 import '@testing-library/jest-dom';
 import { fetchTextWithFallback, getAssetUrlWithFallback } from '../../utils/getBlobUrl';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
@@ -102,7 +102,9 @@ describe('Reading Room with Blob Storage', () => {
   });
   
   it('should render the reading room component with text from Blob storage', async () => {
-    render(<ReadingRoom />);
+    await act(async () => {
+      render(<ReadingRoom />);
+    });
     
     // Check if the component is trying to fetch text from Blob
     expect(fetchTextWithFallback).toHaveBeenCalledWith('/assets/test-book/text/brainrot/chapter-1.txt');
@@ -117,7 +119,9 @@ describe('Reading Room with Blob Storage', () => {
     // Mock a fetch failure
     (fetchTextWithFallback as jest.Mock).mockRejectedValue(new Error('Failed to fetch'));
     
-    render(<ReadingRoom />);
+    await act(async () => {
+      render(<ReadingRoom />);
+    });
     
     // Check if the component is trying to fetch text from Blob
     expect(fetchTextWithFallback).toHaveBeenCalledWith('/assets/test-book/text/brainrot/chapter-1.txt');
@@ -129,7 +133,12 @@ describe('Reading Room with Blob Storage', () => {
   });
   
   it('should change chapter when chapter index changes', async () => {
-    const { rerender } = render(<ReadingRoom />);
+    let rerenderFn;
+    
+    await act(async () => {
+      const { rerender } = render(<ReadingRoom />);
+      rerenderFn = rerender;
+    });
     
     // Initial chapter
     expect(fetchTextWithFallback).toHaveBeenCalledWith('/assets/test-book/text/brainrot/chapter-1.txt');
@@ -145,14 +154,18 @@ describe('Reading Room with Blob Storage', () => {
     (fetchTextWithFallback as jest.Mock).mockClear();
     
     // Re-render with new chapter
-    rerender(<ReadingRoom />);
+    await act(async () => {
+      rerenderFn(<ReadingRoom />);
+    });
     
     // Should fetch new chapter
     expect(fetchTextWithFallback).toHaveBeenCalledWith('/assets/test-book/text/brainrot/chapter-2.txt');
   });
 
   it('should use getAssetUrlWithFallback for audio URLs', async () => {
-    render(<ReadingRoom />);
+    await act(async () => {
+      render(<ReadingRoom />);
+    });
     
     // Check if the component is trying to resolve the audio URL
     expect(getAssetUrlWithFallback).toHaveBeenCalledWith('/assets/test-book/audio/chapter-1.mp3');
@@ -169,7 +182,9 @@ describe('Reading Room with Blob Storage', () => {
     // Mock a failure in audio URL resolution
     (getAssetUrlWithFallback as jest.Mock).mockRejectedValue(new Error('Failed to resolve audio URL'));
     
-    render(<ReadingRoom />);
+    await act(async () => {
+      render(<ReadingRoom />);
+    });
     
     // Check if the component tried to resolve the audio URL
     expect(getAssetUrlWithFallback).toHaveBeenCalledWith('/assets/test-book/audio/chapter-1.mp3');
@@ -188,7 +203,9 @@ describe('Reading Room with Blob Storage', () => {
       return null;
     });
     
-    render(<ReadingRoom />);
+    await act(async () => {
+      render(<ReadingRoom />);
+    });
     
     // Should not call getAssetUrlWithFallback for audio
     expect(getAssetUrlWithFallback).not.toHaveBeenCalled();
@@ -203,8 +220,13 @@ describe('Reading Room with Blob Storage', () => {
   });
 
   it('should handle changing to a chapter with audio', async () => {
+    let rerenderFn;
+    
     // Start with chapter 1 (has audio)
-    const { rerender } = render(<ReadingRoom />);
+    await act(async () => {
+      const { rerender } = render(<ReadingRoom />);
+      rerenderFn = rerender;
+    });
     
     // Clear previous calls
     (getAssetUrlWithFallback as jest.Mock).mockClear();
@@ -217,7 +239,9 @@ describe('Reading Room with Blob Storage', () => {
       return null;
     });
     
-    rerender(<ReadingRoom />);
+    await act(async () => {
+      rerenderFn(<ReadingRoom />);
+    });
     
     // Should not call getAssetUrlWithFallback for audio
     expect(getAssetUrlWithFallback).not.toHaveBeenCalled();
@@ -232,7 +256,9 @@ describe('Reading Room with Blob Storage', () => {
     // Clear previous calls again
     (getAssetUrlWithFallback as jest.Mock).mockClear();
     
-    rerender(<ReadingRoom />);
+    await act(async () => {
+      rerenderFn(<ReadingRoom />);
+    });
     
     // Should call getAssetUrlWithFallback for audio
     expect(getAssetUrlWithFallback).toHaveBeenCalledWith('/assets/test-book/audio/chapter-3.mp3');
