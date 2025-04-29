@@ -9,6 +9,8 @@ module.exports = {
   transform: {
     '^.+\\.(ts|tsx)$': ['ts-jest', {
       tsconfig: 'tsconfig.json',
+      isolatedModules: true, // Moved from globals to transform config for ts-jest
+      jsx: 'react-jsx', // Use React 19 JSX transform
     }],
   },
   testMatch: [
@@ -19,9 +21,8 @@ module.exports = {
   ],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-  globals: {
-    'ts-jest': {
-      isolatedModules: true,
-    }
+  testEnvironmentOptions: {
+    customExportConditions: [''], // For React 19 compatibility with ESM
   },
+  // Removed deprecated globals section
 };

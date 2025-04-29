@@ -273,8 +273,8 @@
 - [x] Configure Prettier/ESLint integration to avoid conflicts (T273)
 
 ## Testing Infrastructure
-- [ ] Install Jest and React Testing Library
-- [ ] Configure Jest for TypeScript and Next.js
+- [x] Install Jest and React Testing Library (T274)
+- [ ] Configure Jest for TypeScript and Next.js (T275)
 - [ ] Set up test scripts in package.json
 - [ ] Create basic smoke test to verify the setup
 - [ ] Configure test coverage reporting
