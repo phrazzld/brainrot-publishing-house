@@ -1,4 +1,5 @@
 // Custom Jest transformer to handle React components
+// This file is only used by Jest and not detected by Next.js/Turbopack
 const babelJest = require('babel-jest').default;
 
 // Create a Babel transformer with specific configuration for React 19
