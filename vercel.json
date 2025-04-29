@@ -3,13 +3,6 @@
   "buildCommand": "npm run build",
   "installCommand": "npm install --legacy-peer-deps",
   "framework": "nextjs",
-  "storage": {
-    "blob": {
-      "type": "blob",
-      "regions": ["global"],
-      "maxDuration": 3600
-    }
-  },
   "env": {
     "NEXT_PUBLIC_BLOB_BASE_URL": "https://public.blob.vercel-storage.com"
   }
