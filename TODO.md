@@ -269,8 +269,8 @@
 - [x] Install Prettier and ESLint Prettier integration (T269)
 - [x] Create `.prettierrc.js` with code formatting standards (T270)
 - [x] Create `.prettierignore` file for build artifacts and dependencies (T271)
-- [ ] Add Prettier npm script to package.json (T272)
-- [ ] Configure Prettier/ESLint integration to avoid conflicts
+- [x] Add Prettier npm script to package.json (T272)
+- [ ] Configure Prettier/ESLint integration to avoid conflicts (T273)
 
 ## Testing Infrastructure
 - [ ] Install Jest and React Testing Library
