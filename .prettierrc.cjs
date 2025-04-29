@@ -7,7 +7,10 @@
  * 3. Provide clear, readable code that follows best practices
  */
 
-export default {
+// Explicitly require the plugin in CJS format
+const sortImports = require('@trivago/prettier-plugin-sort-imports');
+
+module.exports = {
   // Basic formatting
   printWidth: 100,          // Line length where Prettier will try to wrap
   tabWidth: 2,              // Number of spaces per indentation level
@@ -17,7 +20,7 @@ export default {
   
   // JSX specific
   jsxSingleQuote: false,    // Use double quotes in JSX
-  jsxBracketSameLine: false, // Put the closing bracket of JSX elements on a new line
+  bracketSameLine: false,   // Put the closing bracket of JSX elements on a new line
   
   // Object formatting
   trailingComma: 'es5',     // Include trailing commas where valid in ES5 (objects, arrays, etc.)
@@ -30,13 +33,16 @@ export default {
   // End of file handling
   endOfLine: 'lf',          // Line feed only for consistent line endings
   
-  // Ensure consistent ordering of imports
+  // Import order configuration (requires @trivago/prettier-plugin-sort-imports)
   importOrder: [
     '^(react|next)(/.*)?$', // React and Next.js imports first
     '<THIRD_PARTY_MODULES>',  // Then other third-party modules
     '^@/(.*)$',             // Then local aliases
     '^[./]',                // Then relative imports
   ],
+  importOrderSeparation: true,          // Add newline between import groups
+  importOrderSortSpecifiers: true,      // Sort named imports within import statements
+  importOrderGroupNamespaceSpecifiers: true, // Group namespace imports
   
   // Configure overrides for specific file types
   overrides: [
@@ -53,4 +59,7 @@ export default {
       },
     },
   ],
+  
+  // Explicitly define the plugins to use
+  plugins: [sortImports],
 };
