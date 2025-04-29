@@ -4,14 +4,13 @@
 
 import { render, screen, waitFor, act } from '../utils/test-utils';
 import '@testing-library/jest-dom';
-import { fetchTextWithFallback, getAssetUrlWithFallback } from '../../utils/getBlobUrl';
+import { fetchTextWithFallback } from '../../utils/getBlobUrl';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import translations from '../../translations';
 
 // Mock the utils module
 jest.mock('../../utils/getBlobUrl', () => ({
-  fetchTextWithFallback: jest.fn(),
-  getAssetUrlWithFallback: jest.fn()
+  fetchTextWithFallback: jest.fn()
 }));
 
 // Mock next/navigation
@@ -97,8 +96,7 @@ describe('Reading Room with Blob Storage', () => {
     // Mock the fetchTextWithFallback function
     (fetchTextWithFallback as jest.Mock).mockResolvedValue('Test chapter content from Blob storage');
     
-    // Mock the getAssetUrlWithFallback function
-    (getAssetUrlWithFallback as jest.Mock).mockResolvedValue('https://resolved-audio-url.com/audio.mp3');
+    // getAssetUrlWithFallback no longer used in component
   });
   
   it('should render the reading room component with text from Blob storage', async () => {
@@ -162,36 +160,16 @@ describe('Reading Room with Blob Storage', () => {
     expect(fetchTextWithFallback).toHaveBeenCalledWith('/assets/test-book/text/brainrot/chapter-2.txt');
   });
 
-  it('should use getAssetUrlWithFallback for audio URLs', async () => {
+  it('should render audio player if audioSrc is available', async () => {
     await act(async () => {
       render(<ReadingRoom />);
     });
-    
-    // Check if the component is trying to resolve the audio URL
-    expect(getAssetUrlWithFallback).toHaveBeenCalledWith('/assets/test-book/audio/chapter-1.mp3');
     
     // Wait for the audio player to be present
     await waitFor(() => {
       // Because the WaveSurfer is mocked, we can check for the play button
       expect(screen.getByText('play')).toBeInTheDocument();
       expect(screen.getByText('0:00 / 2:00')).toBeInTheDocument(); // 120 seconds = 2:00
-    });
-  });
-
-  it('should handle audio URL resolution failures gracefully', async () => {
-    // Mock a failure in audio URL resolution
-    (getAssetUrlWithFallback as jest.Mock).mockRejectedValue(new Error('Failed to resolve audio URL'));
-    
-    await act(async () => {
-      render(<ReadingRoom />);
-    });
-    
-    // Check if the component tried to resolve the audio URL
-    expect(getAssetUrlWithFallback).toHaveBeenCalledWith('/assets/test-book/audio/chapter-1.mp3');
-    
-    // Component should still render the text content
-    await waitFor(() => {
-      expect(screen.getByText('Test chapter content from Blob storage')).toBeInTheDocument();
     });
   });
 
@@ -206,9 +184,6 @@ describe('Reading Room with Blob Storage', () => {
     await act(async () => {
       render(<ReadingRoom />);
     });
-    
-    // Should not call getAssetUrlWithFallback for audio
-    expect(getAssetUrlWithFallback).not.toHaveBeenCalled();
     
     // Should still fetch text
     expect(fetchTextWithFallback).toHaveBeenCalledWith('/assets/test-book/text/brainrot/chapter-2.txt');
@@ -229,7 +204,6 @@ describe('Reading Room with Blob Storage', () => {
     });
     
     // Clear previous calls
-    (getAssetUrlWithFallback as jest.Mock).mockClear();
     (fetchTextWithFallback as jest.Mock).mockClear();
     
     // Change to chapter 2 (no audio)
@@ -243,8 +217,10 @@ describe('Reading Room with Blob Storage', () => {
       rerenderFn(<ReadingRoom />);
     });
     
-    // Should not call getAssetUrlWithFallback for audio
-    expect(getAssetUrlWithFallback).not.toHaveBeenCalled();
+    // Audio player should not be displayed for chapter 2
+    await waitFor(() => {
+      expect(screen.queryByText('play')).not.toBeInTheDocument();
+    });
     
     // Then change to chapter 3 (has audio)
     mockSearchParams.get.mockImplementation((param) => {
@@ -254,16 +230,13 @@ describe('Reading Room with Blob Storage', () => {
     });
     
     // Clear previous calls again
-    (getAssetUrlWithFallback as jest.Mock).mockClear();
+    (fetchTextWithFallback as jest.Mock).mockClear();
     
     await act(async () => {
       rerenderFn(<ReadingRoom />);
     });
     
-    // Should call getAssetUrlWithFallback for audio
-    expect(getAssetUrlWithFallback).toHaveBeenCalledWith('/assets/test-book/audio/chapter-3.mp3');
-    
-    // Audio player should be displayed
+    // Audio player should be displayed for chapter 3
     await waitFor(() => {
       expect(screen.getByText('play')).toBeInTheDocument();
     });

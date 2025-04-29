@@ -206,15 +206,17 @@ export default function TranslatePage() {
             <h2 className="text-xl mb-2">select a book from the results:</h2>
             <div className="grid gap-4">
               {searchResults.map((book) => (
-                <div
+                <button
+                  type="button"
                   key={book.id}
-                  className="p-4 border rounded-lg hover:bg-gray-100 cursor-pointer"
+                  className="p-4 border rounded-lg hover:bg-gray-100 text-left w-full appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
                   onClick={() => startTranslationWithBook(book.id)}
+                  disabled={running}
                 >
                   <h3 className="font-bold text-lg">{book.title}</h3>
                   <p className="italic">by {book.authors}</p>
                   <p className="text-sm text-gray-600">downloads: {book.downloadCount}</p>
-                </div>
+                </button>
               ))}
             </div>
             <button className="mt-2 underline text-blue-500" onClick={resetSelection}>

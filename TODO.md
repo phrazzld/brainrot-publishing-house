@@ -17,7 +17,7 @@
   Depends On: T2
   AC Ref: None
 
-- [ ] T4: Add Keyboard Event Handlers to Interactive Elements
+- [x] T4: Add Keyboard Event Handlers to Interactive Elements
   Action: For all clickable non-interactive elements (e.g., `<div onClick>`), either convert them to semantic `<button>` elements or add `role="button"`, `tabIndex={0}`, and appropriate `onKeyDown` handlers (handling Enter/Space).
   Depends On: T3
   AC Ref: None

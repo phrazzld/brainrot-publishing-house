@@ -2,13 +2,13 @@
 
 import Link from 'next/link';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { KeyboardEvent, useEffect, useRef, useState } from 'react';
 
 import WaveSurfer from 'wavesurfer.js';
 
 import DownloadButton from '@/components/DownloadButton';
 import translations from '@/translations';
-import { fetchTextWithFallback } from '@/utils';
+import { fetchTextWithFallback, handleKeyboardInteraction } from '@/utils';
 
 export default function ReadingRoom() {
   const router = useRouter();
@@ -56,6 +56,19 @@ export default function ReadingRoom() {
       }
     }
   }, [searchParams, chapterIndex, waveSurfer]);
+  
+  // Add global Escape key handler for modals
+  useEffect(() => {
+    const handleGlobalKeyDown = (event: globalThis.KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        if (isShareOpen) closeShareModal();
+        if (isDownloadOpen) closeDownloadModal();
+      }
+    };
+    
+    document.addEventListener('keydown', handleGlobalKeyDown);
+    return () => document.removeEventListener('keydown', handleGlobalKeyDown);
+  }, [isShareOpen, isDownloadOpen]);
 
   // once waveSurfer is ready, parse "t" param to seek
   useEffect(() => {
@@ -564,19 +577,32 @@ export default function ReadingRoom() {
       {/* share modal */}
       {isShareOpen && (
         <div
+          role="button"
+          tabIndex={0}
           className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center px-4 z-20"
           onClick={(e) => {
             if (e.target === e.currentTarget) closeShareModal();
           }}
+          onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => {
+            if (e.target === e.currentTarget) {
+              handleKeyboardInteraction(e, closeShareModal);
+            }
+          }}
         >
-          <div className="w-full max-w-sm bg-[#2c2c3a] p-4 rounded-md relative">
+          <div 
+            className="w-full max-w-sm bg-[#2c2c3a] p-4 rounded-md relative"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="share-modal-title"
+          >
             <button
               className="absolute top-2 right-2 text-lavender text-sm"
               onClick={closeShareModal}
+              aria-label="Close share modal"
             >
               ✕
             </button>
-            <h2 className="text-xl mb-3 font-display">share the vibe</h2>
+            <h2 id="share-modal-title" className="text-xl mb-3 font-display">share the vibe</h2>
             <div className="space-y-2 mb-4">
               <label className="flex items-center gap-2">
                 <input
@@ -615,19 +641,32 @@ export default function ReadingRoom() {
       {/* download modal */}
       {isDownloadOpen && (
         <div
+          role="button"
+          tabIndex={0}
           className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center px-4 z-20"
           onClick={(e) => {
             if (e.target === e.currentTarget) closeDownloadModal();
           }}
+          onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => {
+            if (e.target === e.currentTarget) {
+              handleKeyboardInteraction(e, closeDownloadModal);
+            }
+          }}
         >
-          <div className="w-full max-w-sm bg-[#2c2c3a] p-4 rounded-md relative">
+          <div 
+            className="w-full max-w-sm bg-[#2c2c3a] p-4 rounded-md relative"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="download-modal-title"
+          >
             <button
               className="absolute top-2 right-2 text-lavender text-sm"
               onClick={closeDownloadModal}
+              aria-label="Close download modal"
             >
               ✕
             </button>
-            <h2 className="text-xl mb-3 font-display">download options</h2>
+            <h2 id="download-modal-title" className="text-xl mb-3 font-display">download options</h2>
             <div className="flex flex-col space-y-2">
               <DownloadButton
                 slug={slug?.toString() || ''}
