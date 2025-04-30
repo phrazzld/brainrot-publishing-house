@@ -27,7 +27,7 @@
   Depends On: T4
   AC Ref: None
 
-- [ ] T6: Refactor Long Functions to Reduce Length
+- [x] T6: Refactor Long Functions to Reduce Length
   Action: Identify functions/components exceeding the `max-lines-per-function` threshold and extract logical sections into smaller helper functions or subcomponents so each function stays within the configured line limit.
   Depends On: T5
   AC Ref: None

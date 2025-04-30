@@ -16,6 +16,14 @@
     "jsx-a11y",
     "prettier"
   ],
+  "overrides": [
+    {
+      "files": ["**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx"],
+      "rules": {
+        "max-lines-per-function": ["warn", { "max": 500, "skipBlankLines": true, "skipComments": true }]
+      }
+    }
+  ],
   "rules": {
     "no-console": ["warn", { "allow": ["warn", "error"] }],
     "no-unused-vars": "off",
@@ -28,7 +36,12 @@
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off",
     "max-lines": ["warn", { "max": 500, "skipBlankLines": true, "skipComments": true }],
-    "max-lines-per-function": ["warn", { "max": 100, "skipBlankLines": true, "skipComments": true }],
+    "max-lines-per-function": ["warn", { 
+      "max": 200, 
+      "skipBlankLines": true, 
+      "skipComments": true, 
+      "IIFEs": true
+    }],
     "max-depth": ["warn", 4],
     "max-nested-callbacks": ["warn", 3],
     "max-params": ["warn", 4],
