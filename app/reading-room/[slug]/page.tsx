@@ -56,7 +56,7 @@ export default function ReadingRoom() {
       }
     }
   }, [searchParams, chapterIndex, waveSurfer]);
-  
+
   // Add global Escape key handler for modals
   useEffect(() => {
     const handleGlobalKeyDown = (event: globalThis.KeyboardEvent) => {
@@ -65,7 +65,7 @@ export default function ReadingRoom() {
         if (isDownloadOpen) closeDownloadModal();
       }
     };
-    
+
     document.addEventListener('keydown', handleGlobalKeyDown);
     return () => document.removeEventListener('keydown', handleGlobalKeyDown);
   }, [isShareOpen, isDownloadOpen]);
@@ -589,7 +589,7 @@ export default function ReadingRoom() {
             }
           }}
         >
-          <div 
+          <div
             className="w-full max-w-sm bg-[#2c2c3a] p-4 rounded-md relative"
             role="dialog"
             aria-modal="true"
@@ -602,18 +602,22 @@ export default function ReadingRoom() {
             >
               ✕
             </button>
-            <h2 id="share-modal-title" className="text-xl mb-3 font-display">share the vibe</h2>
+            <h2 id="share-modal-title" className="text-xl mb-3 font-display">
+              share the vibe
+            </h2>
             <div className="space-y-2 mb-4">
-              <label className="flex items-center gap-2">
+              <label className="flex items-center gap-2" htmlFor="include-chapter">
                 <input
+                  id="include-chapter"
                   type="checkbox"
                   checked={includeChapter}
                   onChange={() => setIncludeChapter((prev) => !prev)}
                 />
                 <span>include chapter</span>
               </label>
-              <label className="flex items-center gap-2">
+              <label className="flex items-center gap-2" htmlFor="include-timestamp">
                 <input
+                  id="include-timestamp"
                   type="checkbox"
                   checked={includeTimestamp}
                   onChange={() => setIncludeTimestamp((prev) => !prev)}
@@ -622,8 +626,11 @@ export default function ReadingRoom() {
               </label>
             </div>
             <div className="space-y-2">
-              <label className="text-sm">your link</label>
+              <label className="text-sm" htmlFor="share-url">
+                your link
+              </label>
               <input
+                id="share-url"
                 type="text"
                 className="w-full p-2 rounded bg-[#1f1f29] text-gray-100"
                 readOnly
@@ -653,7 +660,7 @@ export default function ReadingRoom() {
             }
           }}
         >
-          <div 
+          <div
             className="w-full max-w-sm bg-[#2c2c3a] p-4 rounded-md relative"
             role="dialog"
             aria-modal="true"
@@ -666,7 +673,9 @@ export default function ReadingRoom() {
             >
               ✕
             </button>
-            <h2 id="download-modal-title" className="text-xl mb-3 font-display">download options</h2>
+            <h2 id="download-modal-title" className="text-xl mb-3 font-display">
+              download options
+            </h2>
             <div className="flex flex-col space-y-2">
               <DownloadButton
                 slug={slug?.toString() || ''}

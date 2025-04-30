@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+
 import { BookSearchResult } from '../../utils/types';
 
 export default function TranslatePage() {
@@ -161,8 +162,9 @@ export default function TranslatePage() {
       <h1 className="text-3xl">translate some public domain text</h1>
 
       <div className="flex flex-col gap-2 max-w-md">
-        <label>password (for private usage)</label>
+        <label htmlFor="password-input">password (for private usage)</label>
         <input
+          id="password-input"
           type="password"
           className="p-2 text-black"
           placeholder="enter secret"
@@ -170,8 +172,13 @@ export default function TranslatePage() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <label>pick a model</label>
-        <select className="p-2 text-black" value={model} onChange={(e) => setModel(e.target.value)}>
+        <label htmlFor="model-select">pick a model</label>
+        <select
+          id="model-select"
+          className="p-2 text-black"
+          value={model}
+          onChange={(e) => setModel(e.target.value)}
+        >
           {MODEL_OPTIONS.map(({ value, label }) => (
             <option key={value} value={value}>
               {label}
@@ -179,16 +186,18 @@ export default function TranslatePage() {
           ))}
         </select>
 
-        <label>enter book/author query</label>
+        <label htmlFor="query-input">enter book/author query</label>
         <input
+          id="query-input"
           className="p-2 text-black"
           placeholder="e.g. alice in wonderland"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
 
-        <label>other notes</label>
+        <label htmlFor="notes-input">other notes</label>
         <input
+          id="notes-input"
           className="p-2 text-black"
           placeholder={`e.g. always start chapters with "whadup chat, it's ya boi"`}
           value={notes}

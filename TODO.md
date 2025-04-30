@@ -22,7 +22,7 @@
   Depends On: T3
   AC Ref: None
 
-- [ ] T5: Associate Form Labels with Controls
+- [x] T5: Associate Form Labels with Controls
   Action: Update all `<label>` elements flagged by `jsx-a11y/label-has-associated-control` to use `htmlFor` with matching `id` attributes on inputs or to wrap the form control inside the label.
   Depends On: T4
   AC Ref: None
