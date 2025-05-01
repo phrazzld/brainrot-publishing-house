@@ -77,4 +77,14 @@ aws-do-config.ini
 # backups
 /backups/
 
+# thinktank directories
+thinktank_*/
+
+# planning files
+*-plan.md
+
+# glance documentation files
+glance.md
+**/glance.md
+
 **/.claude/settings.local.json
