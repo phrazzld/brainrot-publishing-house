@@ -54,7 +54,7 @@
       Depends On: T8
       AC Ref: None
 
-- [ ] T10: Implement Pre-commit Hooks for Linting and Formatting
+- [x] T10: Implement Pre-commit Hooks for Linting and Formatting
       Action: Install and configure Husky and lint-staged to run `eslint --fix` and `prettier --write` on staged files before every commit, preventing future violations from being committed.
       Depends On: T9
       AC Ref: None

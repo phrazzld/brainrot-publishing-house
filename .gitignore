@@ -42,6 +42,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# Don't ignore Husky hooks
+!.husky/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
@@ -73,3 +76,5 @@ aws-do-config.ini
 
 # backups
 /backups/
+
+**/.claude/settings.local.json
