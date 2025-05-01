@@ -10,17 +10,8 @@ interface BlobFile {
   uploadedAt: string;
 }
 
-// Breaking the component into smaller parts to avoid max-lines-per-function warning
-function FileUploadForm({
-  onUpload,
-  file,
-  setFile,
-  pathname,
-  setPathname,
-  uploading,
-  error,
-  success,
-}: {
+// Props interface for FileUploadForm
+interface FileUploadFormProps {
   onUpload: (e: React.FormEvent) => Promise<void>;
   file: File | null;
   setFile: (file: File | null) => void;
@@ -29,7 +20,14 @@ function FileUploadForm({
   uploading: boolean;
   error: string;
   success: string;
-}) {
+}
+
+/**
+ * Form component for uploading files to blob storage.
+ * @param props - The component props.
+ */
+function FileUploadForm(props: FileUploadFormProps) {
+  const { onUpload, file, setFile, pathname, setPathname, uploading, error, success } = props;
   return (
     <div className="mb-8 p-4 bg-[#2c2c3a] rounded-md">
       <h2 className="text-xl font-display mb-2">Upload File</h2>
@@ -71,18 +69,20 @@ function FileUploadForm({
   );
 }
 
-// BlobList component
-function BlobList({
-  blobs,
-  loading,
-  onDelete,
-  onRefresh,
-}: {
+// Props interface for BlobList
+interface BlobListProps {
   blobs: BlobFile[];
   loading: boolean;
   onDelete: (url: string) => Promise<void>;
   onRefresh: () => Promise<void>;
-}) {
+}
+
+/**
+ * Component for displaying uploaded files in blob storage.
+ * @param props - The component props.
+ */
+function BlobList(props: BlobListProps) {
+  const { blobs, loading, onDelete, onRefresh } = props;
   return (
     <div className="p-4 bg-[#2c2c3a] rounded-md">
       <h2 className="text-xl font-display mb-2">Stored Files</h2>
@@ -155,8 +155,8 @@ export default function BlobTestPage() {
 
       const data = await res.json();
       setBlobs(data.blobs || []);
-    } catch (err: Error) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : String(err));
     } finally {
       setLoading(false);
     }
@@ -201,8 +201,8 @@ export default function BlobTestPage() {
       // Reset form
       setFile(null);
       setPathname('');
-    } catch (err: Error) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : String(err));
     } finally {
       setUploading(false);
     }
@@ -226,8 +226,8 @@ export default function BlobTestPage() {
 
       // Refresh blob list
       fetchBlobs();
-    } catch (err: Error) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : String(err));
     }
   }
 

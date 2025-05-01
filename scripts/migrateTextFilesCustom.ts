@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 /**
  * Custom Text Files Migration Script
- * 
+ *
  * This script migrates text files from the local filesystem to Vercel Blob storage
  * for books that don't follow the standard brainrot/source subdirectory structure.
  * It's specifically designed for books like The Iliad, The Odyssey, The Aeneid,
  * and The Declaration of Independence.
- * 
+ *
  * Usage:
  *   npx tsx scripts/migrateTextFilesCustom.ts [options]
- * 
+ *
  * Options:
  *   --dry-run             Simulate migration without uploading (default: false)
  *   --books=slug1,slug2   Comma-separated list of book slugs to migrate (default: all)
@@ -18,14 +18,14 @@
  *   --concurrency=5       Number of concurrent uploads (default: 5)
  *   --log-file=path       Path to migration log file (default: custom-text-migration.json)
  */
-
+import * as dotenv from 'dotenv';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 import { existsSync } from 'fs';
 import { fileURLToPath } from 'url';
-import * as dotenv from 'dotenv';
-import { blobService } from '../utils/services/BlobService.js';
+
 import { blobPathService } from '../utils/services/BlobPathService.js';
+import { blobService } from '../utils/services/BlobService.js';
 
 // Load environment variables from .env.local
 dotenv.config({ path: '.env.local' });
@@ -37,12 +37,7 @@ const projectRoot = path.resolve(__dirname, '..');
 const ASSETS_DIR = path.join(projectRoot, 'public', 'assets');
 
 // Books to target by default
-const TARGET_BOOKS = [
-  'the-iliad',
-  'the-odyssey',
-  'the-aeneid',
-  'the-declaration-of-independence'
-];
+const TARGET_BOOKS = ['the-iliad', 'the-odyssey', 'the-aeneid', 'the-declaration-of-independence'];
 
 // Migration options
 interface MigrationOptions {
@@ -93,13 +88,11 @@ interface MigrationResult {
 class MigrationLog {
   private log: Record<string, Record<string, TextFileMigrationResult>> = {};
   private readonly logPath: string;
-  
+
   constructor(logFile: string) {
-    this.logPath = path.isAbsolute(logFile) 
-      ? logFile 
-      : path.join(projectRoot, logFile);
+    this.logPath = path.isAbsolute(logFile) ? logFile : path.join(projectRoot, logFile);
   }
-  
+
   /**
    * Load existing migration log if available
    */
@@ -114,11 +107,13 @@ class MigrationLog {
         this.log = {};
       }
     } catch (error) {
-      console.warn(`Error loading migration log: ${error instanceof Error ? error.message : String(error)}`);
+      console.warn(
+        `Error loading migration log: ${error instanceof Error ? error.message : String(error)}`
+      );
       this.log = {};
     }
   }
-  
+
   /**
    * Save migration log to disk
    */
@@ -127,11 +122,15 @@ class MigrationLog {
       await fs.writeFile(this.logPath, JSON.stringify(this.log, null, 2), 'utf8');
       console.log(`Migration log saved to ${this.logPath}`);
     } catch (error) {
-      console.error(`Error saving migration log: ${error instanceof Error ? error.message : String(error)}`);
-      throw new Error(`Failed to save migration log: ${error instanceof Error ? error.message : String(error)}`);
+      console.error(
+        `Error saving migration log: ${error instanceof Error ? error.message : String(error)}`
+      );
+      throw new Error(
+        `Failed to save migration log: ${error instanceof Error ? error.message : String(error)}`
+      );
     }
   }
-  
+
   /**
    * Add a text file migration entry
    */
@@ -141,18 +140,18 @@ class MigrationLog {
     }
     this.log[bookSlug][fileName] = result;
   }
-  
+
   /**
    * Check if a text file has been migrated
    */
   public has(bookSlug: string, fileName: string): boolean {
     return (
-      bookSlug in this.log && 
-      fileName in this.log[bookSlug] && 
+      bookSlug in this.log &&
+      fileName in this.log[bookSlug] &&
       this.log[bookSlug][fileName].status === 'success'
     );
   }
-  
+
   /**
    * Get a specific text file's migration result
    */
@@ -162,14 +161,14 @@ class MigrationLog {
     }
     return undefined;
   }
-  
+
   /**
    * Get all text files for a book
    */
   public getBookFiles(bookSlug: string): Record<string, TextFileMigrationResult> | undefined {
     return this.log[bookSlug];
   }
-  
+
   /**
    * Get all migration results
    */
@@ -183,22 +182,22 @@ class MigrationLog {
  */
 class CustomTextMigrationService {
   private migrationLog: MigrationLog;
-  
+
   constructor(
-    private readonly blobService = blobService,
-    private readonly blobPathService = blobPathService,
+    private readonly blobService: any,
+    private readonly blobPathService: any,
     logFile: string = 'custom-text-migration.json'
   ) {
     this.migrationLog = new MigrationLog(logFile);
   }
-  
+
   /**
    * Validate and filter book directories
    */
   private async validateBookDirectories(targetBooks: string[]): Promise<string[]> {
     // Check if each book exists
     const validBooks: string[] = [];
-    
+
     for (const bookSlug of targetBooks) {
       const bookDir = path.join(ASSETS_DIR, bookSlug);
       if (existsSync(bookDir)) {
@@ -207,30 +206,30 @@ class CustomTextMigrationService {
         console.warn(`Book directory not found: ${bookDir}`);
       }
     }
-    
+
     return validBooks;
   }
-  
+
   /**
    * Find text files for a specific book (directly in the text directory)
    */
   private async findTextFiles(bookSlug: string): Promise<string[]> {
     const textDir = path.join(ASSETS_DIR, bookSlug, 'text');
-    
+
     if (!existsSync(textDir)) {
       return [];
     }
-    
+
     const files = await fs.readdir(textDir);
-    return files.filter(file => file.toLowerCase().endsWith('.txt'));
+    return files.filter((file) => file.toLowerCase().endsWith('.txt'));
   }
-  
+
   /**
    * Migrate all text files for specified books
    */
   public async migrateAll(options: MigrationOptions = {}): Promise<MigrationResult> {
     const startTime = new Date();
-    
+
     const result: MigrationResult = {
       total: 0,
       migrated: 0,
@@ -241,174 +240,192 @@ class CustomTextMigrationService {
       endTime: '',
       duration: 0,
     };
-    
+
     console.log('Starting custom text files migration');
     console.log(`Options: ${JSON.stringify(options, null, 2)}`);
-    
+
     // Load existing migration log
     await this.migrationLog.load();
-    
+
     // Get target books
-    let bookSlugs = options.books && options.books.length > 0 
-      ? options.books 
-      : TARGET_BOOKS;
-    
+    let bookSlugs = options.books && options.books.length > 0 ? options.books : TARGET_BOOKS;
+
     // Validate book directories
     bookSlugs = await this.validateBookDirectories(bookSlugs);
     console.log(`Found ${bookSlugs.length} valid book directories: ${bookSlugs.join(', ')}`);
-    
+
     if (options.dryRun) {
       console.log('DRY RUN: No files will be uploaded');
     }
-    
+
     // Process books with limited concurrency
     const concurrency = options.concurrency || 5;
     const chunks = this.chunkArray(bookSlugs, concurrency);
-    
+
     for (const chunk of chunks) {
-      await Promise.all(chunk.map(async (bookSlug) => {
-        // Track results for this book
-        const bookResult: BookTextFilesResult = {
-          bookSlug,
-          total: 0,
-          migrated: 0,
-          skipped: 0,
-          failed: 0,
-          files: {},
-        };
-        
-        try {
-          // Find all text files for this book
-          const textFiles = await this.findTextFiles(bookSlug);
-          bookResult.total = textFiles.length;
-          
-          if (textFiles.length === 0) {
-            console.log(`No text files found for book: ${bookSlug}`);
+      await Promise.all(
+        chunk.map(async (bookSlug) => {
+          // Track results for this book
+          const bookResult: BookTextFilesResult = {
+            bookSlug,
+            total: 0,
+            migrated: 0,
+            skipped: 0,
+            failed: 0,
+            files: {},
+          };
+
+          try {
+            // Find all text files for this book
+            const textFiles = await this.findTextFiles(bookSlug);
+            bookResult.total = textFiles.length;
+
+            if (textFiles.length === 0) {
+              console.log(`No text files found for book: ${bookSlug}`);
+              result.books[bookSlug] = bookResult;
+              return;
+            }
+
+            console.log(`Found ${textFiles.length} text files for book: ${bookSlug}`);
+
+            // Process files with limited concurrency
+            const fileChunks = this.chunkArray(textFiles, concurrency);
+
+            for (const fileChunk of fileChunks) {
+              await Promise.all(
+                fileChunk.map(async (fileName) => {
+                  try {
+                    // Skip if already migrated and not forced
+                    if (
+                      this.migrationLog.has(bookSlug, fileName) &&
+                      !options.force &&
+                      !options.dryRun
+                    ) {
+                      const existingResult = this.migrationLog.get(bookSlug, fileName)!;
+                      console.log(
+                        `Skipping ${bookSlug}/${fileName} (already migrated to ${existingResult.blobPath})`
+                      );
+
+                      bookResult.skipped++;
+                      bookResult.files[fileName] = existingResult;
+                      return;
+                    }
+
+                    // Calculate paths
+                    const originalPath = `/assets/${bookSlug}/text/${fileName}`;
+                    const blobPath = this.blobPathService.convertLegacyPath(originalPath);
+                    const blobUrl = this.blobService.getUrlForPath(blobPath);
+
+                    // Skip actual upload in dry run mode
+                    if (options.dryRun) {
+                      console.log(`DRY RUN: Would migrate ${originalPath} to ${blobPath}`);
+
+                      const migrationResult: TextFileMigrationResult = {
+                        status: 'skipped',
+                        originalPath,
+                        blobPath,
+                        blobUrl,
+                      };
+
+                      bookResult.skipped++;
+                      bookResult.files[fileName] = migrationResult;
+                      this.migrationLog.add(bookSlug, fileName, migrationResult);
+                      return;
+                    }
+
+                    // Perform actual migration
+                    console.log(`Migrating ${bookSlug} text file: ${originalPath} -> ${blobPath}`);
+                    const migrationResult = await this.migrateTextFile(
+                      bookSlug,
+                      fileName,
+                      options.retries || 3
+                    );
+
+                    // Update statistics
+                    if (migrationResult.status === 'success') {
+                      console.log(
+                        `✅ Successfully migrated ${bookSlug}/${fileName} to ${migrationResult.blobUrl}`
+                      );
+                      bookResult.migrated++;
+                    } else if (migrationResult.status === 'skipped') {
+                      console.log(`⏭️ Skipped ${bookSlug}/${fileName}`);
+                      bookResult.skipped++;
+                    } else {
+                      console.error(
+                        `❌ Failed to migrate ${bookSlug}/${fileName}: ${migrationResult.error}`
+                      );
+                      bookResult.failed++;
+                    }
+
+                    // Store result
+                    bookResult.files[fileName] = migrationResult;
+                    this.migrationLog.add(bookSlug, fileName, migrationResult);
+                  } catch (error) {
+                    const errorMessage = error instanceof Error ? error.message : String(error);
+                    console.error(`⚠️ Error migrating ${bookSlug}/${fileName}: ${errorMessage}`);
+
+                    // Record failure
+                    const failedResult: TextFileMigrationResult = {
+                      status: 'failed',
+                      originalPath: `/assets/${bookSlug}/text/${fileName}`,
+                      blobPath: this.blobPathService.convertLegacyPath(
+                        `/assets/${bookSlug}/text/${fileName}`
+                      ),
+                      blobUrl: '',
+                      error: errorMessage,
+                    };
+
+                    bookResult.failed++;
+                    bookResult.files[fileName] = failedResult;
+                    this.migrationLog.add(bookSlug, fileName, failedResult);
+                  }
+                })
+              );
+            }
+
+            // Update overall statistics
+            result.total += bookResult.total;
+            result.migrated += bookResult.migrated;
+            result.skipped += bookResult.skipped;
+            result.failed += bookResult.failed;
+
+            // Store book result
             result.books[bookSlug] = bookResult;
-            return;
+          } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            console.error(`⚠️ Error processing book ${bookSlug}: ${errorMessage}`);
           }
-          
-          console.log(`Found ${textFiles.length} text files for book: ${bookSlug}`);
-          
-          // Process files with limited concurrency
-          const fileChunks = this.chunkArray(textFiles, concurrency);
-          
-          for (const fileChunk of fileChunks) {
-            await Promise.all(fileChunk.map(async (fileName) => {
-              try {
-                // Skip if already migrated and not forced
-                if (this.migrationLog.has(bookSlug, fileName) && !options.force && !options.dryRun) {
-                  const existingResult = this.migrationLog.get(bookSlug, fileName)!;
-                  console.log(`Skipping ${bookSlug}/${fileName} (already migrated to ${existingResult.blobPath})`);
-                  
-                  bookResult.skipped++;
-                  bookResult.files[fileName] = existingResult;
-                  return;
-                }
-                
-                // Calculate paths
-                const originalPath = `/assets/${bookSlug}/text/${fileName}`;
-                const blobPath = this.blobPathService.convertLegacyPath(originalPath);
-                const blobUrl = this.blobService.getUrlForPath(blobPath);
-                
-                // Skip actual upload in dry run mode
-                if (options.dryRun) {
-                  console.log(`DRY RUN: Would migrate ${originalPath} to ${blobPath}`);
-                  
-                  const migrationResult: TextFileMigrationResult = {
-                    status: 'skipped',
-                    originalPath,
-                    blobPath,
-                    blobUrl,
-                  };
-                  
-                  bookResult.skipped++;
-                  bookResult.files[fileName] = migrationResult;
-                  this.migrationLog.add(bookSlug, fileName, migrationResult);
-                  return;
-                }
-                
-                // Perform actual migration
-                console.log(`Migrating ${bookSlug} text file: ${originalPath} -> ${blobPath}`);
-                const migrationResult = await this.migrateTextFile(bookSlug, fileName, options.retries || 3);
-                
-                // Update statistics
-                if (migrationResult.status === 'success') {
-                  console.log(`✅ Successfully migrated ${bookSlug}/${fileName} to ${migrationResult.blobUrl}`);
-                  bookResult.migrated++;
-                } else if (migrationResult.status === 'skipped') {
-                  console.log(`⏭️ Skipped ${bookSlug}/${fileName}`);
-                  bookResult.skipped++;
-                } else {
-                  console.error(`❌ Failed to migrate ${bookSlug}/${fileName}: ${migrationResult.error}`);
-                  bookResult.failed++;
-                }
-                
-                // Store result
-                bookResult.files[fileName] = migrationResult;
-                this.migrationLog.add(bookSlug, fileName, migrationResult);
-              } catch (error) {
-                const errorMessage = error instanceof Error ? error.message : String(error);
-                console.error(`⚠️ Error migrating ${bookSlug}/${fileName}: ${errorMessage}`);
-                
-                // Record failure
-                const failedResult: TextFileMigrationResult = {
-                  status: 'failed',
-                  originalPath: `/assets/${bookSlug}/text/${fileName}`,
-                  blobPath: this.blobPathService.convertLegacyPath(`/assets/${bookSlug}/text/${fileName}`),
-                  blobUrl: '',
-                  error: errorMessage,
-                };
-                
-                bookResult.failed++;
-                bookResult.files[fileName] = failedResult;
-                this.migrationLog.add(bookSlug, fileName, failedResult);
-              }
-            }));
-          }
-          
-          // Update overall statistics
-          result.total += bookResult.total;
-          result.migrated += bookResult.migrated;
-          result.skipped += bookResult.skipped;
-          result.failed += bookResult.failed;
-          
-          // Store book result
-          result.books[bookSlug] = bookResult;
-        } catch (error) {
-          const errorMessage = error instanceof Error ? error.message : String(error);
-          console.error(`⚠️ Error processing book ${bookSlug}: ${errorMessage}`);
-        }
-      }));
+        })
+      );
     }
-    
+
     // Save migration log
     if (!options.dryRun) {
       await this.migrationLog.save();
     }
-    
+
     // Calculate duration
     const endTime = new Date();
     result.endTime = endTime.toISOString();
     result.duration = endTime.getTime() - startTime.getTime();
-    
+
     return result;
   }
-  
+
   /**
    * Migrate a single text file
    */
   private async migrateTextFile(
-    bookSlug: string, 
+    bookSlug: string,
     fileName: string,
     maxRetries: number = 3
   ): Promise<TextFileMigrationResult> {
     const originalPath = `/assets/${bookSlug}/text/${fileName}`;
     const blobPath = this.blobPathService.convertLegacyPath(originalPath);
-    
+
     // Verify file exists
     const fullPath = path.join(projectRoot, 'public', originalPath);
-    
+
     if (!existsSync(fullPath)) {
       return {
         status: 'failed',
@@ -418,10 +435,10 @@ class CustomTextMigrationService {
         error: `File not found: ${fullPath}`,
       };
     }
-    
+
     // Read file content
     const content = await fs.readFile(fullPath, 'utf-8');
-    
+
     // Try upload with retries
     let lastError = '';
     for (let attempt = 0; attempt < maxRetries; attempt++) {
@@ -429,39 +446,37 @@ class CustomTextMigrationService {
         // Upload to Blob storage
         const uploadResult = await this.blobService.uploadText(content, blobPath, {
           access: 'public',
-          allowOverwrite: true,
           // Use a medium cache time for text content
           cacheControl: 'max-age=43200', // 12 hour cache
         });
-        
+
         // Verify upload
         const verified = await this.verifyUpload(uploadResult.url);
-        
+
         if (!verified) {
           lastError = 'Verification failed after upload';
           continue; // Retry
         }
-        
+
         return {
           status: 'success',
           originalPath,
           blobPath,
           blobUrl: uploadResult.url,
-          size: uploadResult.size,
           uploadedAt: uploadResult.uploadedAt,
         };
       } catch (error) {
         lastError = error instanceof Error ? error.message : String(error);
         console.warn(`Attempt ${attempt + 1}/${maxRetries} failed: ${lastError}`);
-        
+
         // Wait before retry (exponential backoff)
         if (attempt < maxRetries - 1) {
           const delay = Math.pow(2, attempt) * 1000; // 1s, 2s, 4s, etc.
-          await new Promise(resolve => setTimeout(resolve, delay));
+          await new Promise((resolve) => setTimeout(resolve, delay));
         }
       }
     }
-    
+
     // All retries failed
     return {
       status: 'failed',
@@ -471,7 +486,7 @@ class CustomTextMigrationService {
       error: `Failed after ${maxRetries} attempts. Last error: ${lastError}`,
     };
   }
-  
+
   /**
    * Verify a file was uploaded successfully
    */
@@ -481,11 +496,13 @@ class CustomTextMigrationService {
       const fileInfo = await this.blobService.getFileInfo(blobUrl);
       return fileInfo.size > 0;
     } catch (error) {
-      console.warn(`Verification failed for ${blobUrl}: ${error instanceof Error ? error.message : String(error)}`);
+      console.warn(
+        `Verification failed for ${blobUrl}: ${error instanceof Error ? error.message : String(error)}`
+      );
       return false;
     }
   }
-  
+
   /**
    * Split an array into chunks for concurrency control
    */
@@ -509,15 +526,15 @@ function parseArgs(): MigrationOptions {
     concurrency: 5,
     logFile: 'custom-text-migration.json',
   };
-  
+
   for (let i = 2; i < process.argv.length; i++) {
     const arg = process.argv[i];
-    
+
     if (arg === '--dry-run') {
       options.dryRun = true;
     } else if (arg.startsWith('--books=')) {
       const books = arg.substring('--books='.length).split(',');
-      options.books = books.map(b => b.trim()).filter(Boolean);
+      options.books = books.map((b) => b.trim()).filter(Boolean);
     } else if (arg === '--force') {
       options.force = true;
     } else if (arg.startsWith('--retries=')) {
@@ -528,7 +545,7 @@ function parseArgs(): MigrationOptions {
       options.logFile = arg.substring('--log-file='.length);
     }
   }
-  
+
   return options;
 }
 
@@ -542,14 +559,14 @@ function printResults(result: MigrationResult): void {
   console.log(`Skipped: ${result.skipped}`);
   console.log(`Failed: ${result.failed}`);
   console.log(`Duration: ${(result.duration / 1000).toFixed(2)}s`);
-  
+
   if (result.failed > 0) {
     console.log('\nFailed migrations by book:');
     Object.entries(result.books)
       .filter(([_, r]) => r.failed > 0)
       .forEach(([bookSlug, r]) => {
         console.log(`  - ${bookSlug}: ${r.failed} failed`);
-        
+
         // Show details for each failed file
         Object.entries(r.files)
           .filter(([_, fr]) => fr.status === 'failed')
@@ -558,7 +575,7 @@ function printResults(result: MigrationResult): void {
           });
       });
   }
-  
+
   console.log('\nCompleted at:', result.endTime);
 }
 
@@ -569,20 +586,20 @@ async function main(): Promise<void> {
   try {
     // Parse arguments
     const options = parseArgs();
-    
+
     // Create migration service
     const migrationService = new CustomTextMigrationService(
       blobService,
       blobPathService,
       options.logFile
     );
-    
+
     // Run migration
     const result = await migrationService.migrateAll(options);
-    
+
     // Print results
     printResults(result);
-    
+
     // Exit with appropriate code
     process.exit(result.failed > 0 ? 1 : 0);
   } catch (error) {

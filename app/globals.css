@@ -3,13 +3,17 @@
 @tailwind utilities;
 
 /* adopt the newly declared families */
-html, body {
+html,
+body {
   @apply m-0 p-0 bg-midnight text-white font-body;
   scroll-behavior: smooth;
 }
 
 /* headings get display font */
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
   @apply font-display tracking-wider uppercase;
 }
 
@@ -40,17 +44,39 @@ h1, h2, h3, h4 {
   clip: rect(0, 900px, 0, 0);
 }
 @keyframes glitch {
-  0% { clip: rect(54px,9999px,56px,0); transform: skew(0.3deg);}
-  5% { clip: rect(12px,9999px,29px,0); transform: skew(0.8deg);}
-  10% { clip: rect(30px,9999px,77px,0); transform: skew(0.2deg);}
-  15% { clip: rect(40px,9999px,60px,0); transform: skew(0.3deg);}
-  20% { clip: rect(1px,9999px,85px,0); transform: skew(0.9deg);}
-  100% { clip: rect(54px,9999px,56px,0); transform: skew(0.3deg);}
+  0% {
+    clip: rect(54px, 9999px, 56px, 0);
+    transform: skew(0.3deg);
+  }
+  5% {
+    clip: rect(12px, 9999px, 29px, 0);
+    transform: skew(0.8deg);
+  }
+  10% {
+    clip: rect(30px, 9999px, 77px, 0);
+    transform: skew(0.2deg);
+  }
+  15% {
+    clip: rect(40px, 9999px, 60px, 0);
+    transform: skew(0.3deg);
+  }
+  20% {
+    clip: rect(1px, 9999px, 85px, 0);
+    transform: skew(0.9deg);
+  }
+  100% {
+    clip: rect(54px, 9999px, 56px, 0);
+    transform: skew(0.3deg);
+  }
 }
 
 @keyframes typewriter {
-  0% { width: 0 }
-  100% { width: 100% }
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
 }
 
 /* marquee animation in tailwind config -> marquee-slow */
@@ -100,8 +126,12 @@ h1, h2, h3, h4 {
     animation: marquee 15s linear infinite;
   }
   @keyframes marquee {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
   }
 }
 
@@ -110,12 +140,14 @@ h1, h2, h3, h4 {
   @apply inline-block px-5 py-2 rounded font-semibold transition-all relative;
 }
 .btn::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
   border-radius: inherit;
   opacity: 0;
-  transition: opacity 0.2s, box-shadow 0.2s;
+  transition:
+    opacity 0.2s,
+    box-shadow 0.2s;
   box-shadow: 0 0 0 0 rgba(224, 175, 255, 0.7);
 }
 .btn:hover::before {

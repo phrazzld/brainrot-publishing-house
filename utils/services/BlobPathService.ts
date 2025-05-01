@@ -1,6 +1,6 @@
 /**
  * BlobPathService
- * 
+ *
  * Utility service for generating consistent Blob storage paths
  * Ensures that all code uses the same path structure when interacting with Blob storage
  */

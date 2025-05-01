@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+
 import { Translation } from '@/utils/types';
 
 interface ChapterHeaderProps {
@@ -12,14 +13,19 @@ interface ChapterHeaderProps {
   onOpenShareModal: () => void;
 }
 
-export default function ChapterHeader({
-  translation,
-  chapterIndex,
-  totalChapters,
-  onPrevChapter,
-  onNextChapter,
-  onOpenShareModal,
-}: ChapterHeaderProps) {
+/**
+ * Header component for displaying chapter title and navigation controls.
+ * @param props - The component props.
+ */
+export default function ChapterHeader(props: ChapterHeaderProps) {
+  const {
+    translation,
+    chapterIndex,
+    totalChapters,
+    onPrevChapter,
+    onNextChapter,
+    onOpenShareModal,
+  } = props;
   return (
     <header className="px-4 py-3 flex items-center justify-between bg-black/40 backdrop-blur-md">
       <div>

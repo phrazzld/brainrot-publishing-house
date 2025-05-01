@@ -23,6 +23,7 @@ public/assets/
 ```
 
 Key observations:
+
 1. Book assets are organized by book slug
 2. Each book has its own images directory
 3. Text files are split into "brainrot" (final content) and "source" versions
@@ -58,12 +59,14 @@ blob:/
 ## Path Generation Rules
 
 1. **Book Assets**: `books/[book-slug]/[type]/[filename]`
+
    - Images: `books/hamlet/images/hamlet-01.png`
    - Brainrot Text: `books/hamlet/text/brainrot/act-i.txt`
    - Source Text: `books/hamlet/text/source/hamlet-source.txt`
    - Audio: `books/hamlet/audio/act-i.mp3` (future)
 
 2. **Shared Assets**: `images/[filename]`
+
    - General images: `images/inferno-01.png`
 
 3. **UI Assets**: `site-assets/[filename]`
@@ -136,10 +139,12 @@ export const blobPathService = new BlobPathService();
 When migrating assets to the new Blob structure:
 
 1. **Path Mapping**: Create a mapping function that converts current paths to Blob paths:
+
    - `/assets/hamlet/images/hamlet-01.png` → `books/hamlet/images/hamlet-01.png`
    - `/assets/hamlet/text/brainrot/act-i.txt` → `books/hamlet/text/brainrot/act-i.txt`
 
 2. **URL Generation**: Update the `translations/index.ts` file to use `blobService.getUrlForPath()` with the path service:
+
    ```typescript
    import { blobService } from '@/utils/services';
    import { blobPathService } from '@/utils/services';
@@ -150,10 +155,8 @@ When migrating assets to the new Blob structure:
        coverImage: blobService.getUrlForPath(
          blobPathService.getBookImagePath('hamlet', 'hamlet-07.png')
        ),
-       text: blobService.getUrlForPath(
-         blobPathService.getBrainrotTextPath('hamlet', 'act-i')
-       ),
-     }
+       text: blobService.getUrlForPath(blobPathService.getBrainrotTextPath('hamlet', 'act-i')),
+     },
    ];
    ```
 
@@ -167,11 +170,12 @@ When migrating assets to the new Blob structure:
 ## Implementation Steps
 
 1. Create the BlobPathService utility class
-2. Update BlobService to support the new path structure 
+2. Update BlobService to support the new path structure
 3. Create migration scripts for each asset type
 4. Update the application code to use the new Blob URLs
 
 The migration should be done incrementally by asset type:
+
 1. Book cover images
 2. Book chapter images
 3. Brainrot text files

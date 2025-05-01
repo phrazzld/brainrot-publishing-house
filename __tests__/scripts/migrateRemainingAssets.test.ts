@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals';
-import path from 'path';
 import fs from 'fs';
+import path from 'path';
 
 // Mock dependencies
 jest.mock('@vercel/blob', () => ({
@@ -107,7 +107,7 @@ global.fetch = jest.fn().mockImplementation((url) => {
   if (url.includes('error')) {
     return Promise.reject(new Error('Network error'));
   }
-  
+
   return Promise.resolve({
     ok: true,
     status: 200,
@@ -135,11 +135,11 @@ describe('migrateRemainingAssets', () => {
   beforeAll(async () => {
     // Dynamically import the module after mocks are set up
     jest.doMock('../../scripts/migrateRemainingAssets');
-    
+
     try {
       // We need to mock the module before requiring it
       const module = await import('../../scripts/migrateRemainingAssets');
-      // Extract the functions we want to test - in a real implementation 
+      // Extract the functions we want to test - in a real implementation
       // you would export these functions from the module
       migrateRemainingAssets = module.default;
     } catch (error) {
@@ -155,12 +155,12 @@ describe('migrateRemainingAssets', () => {
     // Since we can't directly test the internal function, we'll test the whole migration
     // with the dry-run option and check the results
     const { assetExistsInBlobStorage } = await import('../../utils/getBlobUrl');
-    
+
     // Mock implementation to simulate specific missing assets
     (assetExistsInBlobStorage as jest.Mock).mockImplementation((path: string) => {
       return Promise.resolve(!path.includes('missing'));
     });
-    
+
     // We would run the full migration with dry-run option
     // For this test, we'll just assert that assetExistsInBlobStorage is called
     // with the expected paths
@@ -169,7 +169,7 @@ describe('migrateRemainingAssets', () => {
 
   it('should handle different asset types appropriately', async () => {
     const { blobService } = await import('../../utils/services/BlobService');
-    
+
     // Test that the appropriate upload method is called for each asset type
     expect(blobService.uploadFile).toHaveBeenCalled();
     expect(blobService.uploadText).toHaveBeenCalled();
@@ -177,10 +177,10 @@ describe('migrateRemainingAssets', () => {
 
   it('should handle retry logic for failed uploads', async () => {
     const { blobService } = await import('../../utils/services/BlobService');
-    
+
     // Mock a failure followed by success to test retry
     (blobService.uploadFile as jest.Mock).mockRejectedValueOnce(new Error('Temporary error'));
-    
+
     // In a real test, we'd verify that after a failure, it tries again
     // For this unit test, we'll just verify the mock was called multiple times
     expect(blobService.uploadFile).toHaveBeenCalled();
@@ -188,15 +188,15 @@ describe('migrateRemainingAssets', () => {
 
   it('should generate appropriate reports', async () => {
     const { writeFile } = await import('fs/promises');
-    
+
     // Verify that report files are created
     expect(writeFile).toHaveBeenCalled();
-    
+
     // Check that both JSON and markdown reports are generated
     const writeFileCalls = (writeFile as jest.Mock).mock.calls;
-    const jsonReport = writeFileCalls.some(call => call[0].includes('.json'));
-    const markdownReport = writeFileCalls.some(call => call[0].includes('.md'));
-    
+    const jsonReport = writeFileCalls.some((call) => call[0].includes('.json'));
+    const markdownReport = writeFileCalls.some((call) => call[0].includes('.md'));
+
     expect(jsonReport).toBeTruthy();
     expect(markdownReport).toBeTruthy();
   });

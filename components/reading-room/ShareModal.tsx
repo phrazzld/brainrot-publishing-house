@@ -1,6 +1,7 @@
 'use client';
 
-import { KeyboardEvent, useState } from 'react';
+import { KeyboardEvent } from 'react';
+
 import { handleKeyboardInteraction } from '@/utils';
 
 interface ShareModalProps {
@@ -15,17 +16,23 @@ interface ShareModalProps {
   shareFeedback: string;
 }
 
-export default function ShareModal({
-  isOpen,
-  onClose,
-  includeChapter,
-  onIncludeChapterChange,
-  includeTimestamp,
-  onIncludeTimestampChange,
-  getShareUrl,
-  onCopyUrl,
-  shareFeedback,
-}: ShareModalProps) {
+/**
+ * Modal component for generating and copying shareable URLs.
+ * @param props - The component props.
+ */
+export default function ShareModal(props: ShareModalProps) {
+  // Destructure props inside the function body
+  const {
+    isOpen,
+    onClose,
+    includeChapter,
+    onIncludeChapterChange,
+    includeTimestamp,
+    onIncludeTimestampChange,
+    getShareUrl,
+    onCopyUrl,
+    shareFeedback,
+  } = props;
   if (!isOpen) return null;
 
   return (

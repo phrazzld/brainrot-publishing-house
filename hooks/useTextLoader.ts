@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+
 import { fetchTextWithFallback } from '@/utils';
 
 interface TextLoaderState {
@@ -17,11 +18,11 @@ export function useTextLoader(textPath: string | undefined): TextLoaderState {
       setRawText('');
       return;
     }
-    
+
     // Create an AbortController for cleanup
     const abortController = new AbortController();
     const signal = abortController.signal;
-    
+
     // Load text with automatic fallback
     setIsTextLoading(true);
     fetchTextWithFallback(textPath)
@@ -38,7 +39,7 @@ export function useTextLoader(textPath: string | undefined): TextLoaderState {
         if (signal.aborted) return; // Don't update state if aborted
         setIsTextLoading(false);
       });
-    
+
     return () => {
       abortController.abort();
     };

@@ -1,10 +1,10 @@
 'use client';
 
-import { RefObject, useCallback, useEffect, useState } from 'react';
-import WaveSurfer from 'wavesurfer.js';
+import { RefObject, useCallback, useEffect, useRef, useState } from 'react';
+
+import { useWavesurfer } from '@wavesurfer/react';
 
 interface AudioPlayerState {
-  waveSurfer: WaveSurfer | null;
   isPlaying: boolean;
   isAudioLoading: boolean;
   currentTime: number;
@@ -16,213 +16,235 @@ interface AudioPlayerActions {
   formatTime: (sec: number) => string;
 }
 
+/**
+ * Custom hook for audio playback and waveform visualization
+ * Uses @wavesurfer/react to properly handle React lifecycle
+ */
 export function useAudioPlayer(
-  waveformRef: RefObject<HTMLDivElement>,
-  audioSrc: string | undefined,
+  waveformRef: RefObject<HTMLDivElement | null>,
+  audioSrc: string | null | undefined,
   onTimeUpdate?: (time: number) => void
 ): [AudioPlayerState, AudioPlayerActions] {
-  const [waveSurfer, setWaveSurfer] = useState<WaveSurfer | null>(null);
+  // State for UI
   const [isPlaying, setIsPlaying] = useState(false);
   const [isAudioLoading, setIsAudioLoading] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [totalTime, setTotalTime] = useState(0);
 
-  // Initialize or update WaveSurfer when audioSrc changes
-  useEffect(() => {
-    if (!audioSrc) {
-      // Clean up any existing wavesurfer
-      if (waveSurfer) {
-        try {
-          if (waveSurfer.isPlaying()) {
-            waveSurfer.pause();
-          }
-          waveSurfer.destroy();
-          setWaveSurfer(null);
-          setIsPlaying(false);
-          setCurrentTime(0);
-          setTotalTime(0);
-          setIsAudioLoading(false);
-        } catch (error) {
-          console.error('Error destroying existing WaveSurfer:', error);
-        }
+  // Ref to track mounted state
+  const isMounted = useRef(true);
+  const currentAudioSrc = useRef<string | null | undefined>(undefined);
+
+  // Memoize the render function to prevent recreation on every render
+  // This draws the waveform visualization with bars
+  const renderFunction = useCallback((peaks: number[] | null, ctx: CanvasRenderingContext2D | null) => {
+    if (!ctx || !peaks) return;
+    
+    const { width, height } = ctx.canvas;
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = '#666';
+    
+    const barWidth = 2;
+    const barGap = 1;
+    const barCount = Math.floor(width / (barWidth + barGap));
+    const step = Math.floor(peaks.length / barCount) || 1;
+    
+    for (let i = 0; i < barCount; i++) {
+      const peakIndex = Math.floor(i * step);
+      const peak = peaks[peakIndex] || 0;
+      const barHeight = Math.max(1, Math.abs(peak) * height);
+      ctx.fillRect(
+        i * (barWidth + barGap),
+        (height - barHeight) / 2,
+        barWidth,
+        barHeight
+      );
+    }
+  }, []);
+
+  // Use the React wavesurfer hook with memoized config
+  const { wavesurfer } = useWavesurfer({
+    container: waveformRef,
+    height: 48,
+    waveColor: '#8d8d9d',
+    progressColor: '#e0afff',
+    cursorColor: '#ffdaab',
+    normalize: true,
+    barWidth: 2,
+    barGap: 1,
+    minPxPerSec: 50,
+    fillParent: true,
+    interact: true,
+    url: audioSrc || undefined, // Pass URL directly
+    renderFunction
+  });
+
+  // Helper to safely set state only when mounted
+  const safeSetState = useCallback(
+    <T>(setter: React.Dispatch<React.SetStateAction<T>>, value: T | ((prev: T) => T)) => {
+      if (isMounted.current) {
+        setter(value);
       }
+    },
+    []
+  );
+
+  // Format time helper function
+  const formatTime = useCallback((seconds: number): string => {
+    if (!seconds || isNaN(seconds)) return '0:00';
+    const minutes = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${minutes}:${secs < 10 ? '0' + secs : secs}`;
+  }, []);
+
+  // Toggle play/pause - safe to external calls
+  const togglePlayPause = useCallback(() => {
+    if (wavesurfer) {
+      try {
+        wavesurfer.playPause();
+      } catch (e) {
+        console.error('Error toggling playback:', e);
+      }
+    }
+  }, [wavesurfer]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    isMounted.current = true;
+
+    return () => {
+      isMounted.current = false;
+      currentAudioSrc.current = undefined;
+    };
+  }, []);
+
+  // Set up events when wavesurfer is ready
+  useEffect(() => {
+    if (!wavesurfer) {
       return;
     }
 
-    // Create an AbortController for cleanup
-    const abortController = new AbortController();
-    const signal = abortController.signal;
-
-    // If we already have an instance, destroy it first
-    if (waveSurfer) {
-      try {
-        if (waveSurfer.isPlaying()) {
-          waveSurfer.pause();
-        }
-        waveSurfer.destroy();
-        setWaveSurfer(null);
-      } catch (error) {
-        console.error('Error destroying previous WaveSurfer instance:', error);
+    // Set up event handlers
+    const handleReady = () => {
+      if (isMounted.current) {
+        const duration = wavesurfer.getDuration() || 0;
+        setTotalTime(duration);
+        setCurrentTime(0);
+        setIsAudioLoading(false);
       }
+    };
+
+    const handleAudioprocess = () => {
+      if (isMounted.current) {
+        const time = wavesurfer.getCurrentTime() || 0;
+        setCurrentTime(time);
+        // Don't call onTimeUpdate on every audioprocess event
+        // This causes excessive URL updates and network requests
+      }
+    };
+
+    const handlePlay = () => {
+      if (isMounted.current) {
+        setIsPlaying(true);
+      }
+    };
+
+    const handlePause = () => {
+      if (isMounted.current) {
+        setIsPlaying(false);
+        const time = wavesurfer.getCurrentTime() || 0;
+        setCurrentTime(time);
+        // Only update URL timestamp when pausing to avoid excessive updates
+        if (onTimeUpdate) onTimeUpdate(time);
+      }
+    };
+
+    const handleFinish = () => {
+      if (isMounted.current) {
+        setIsPlaying(false);
+        setCurrentTime(0);
+        if (onTimeUpdate) onTimeUpdate(0);
+      }
+    };
+
+    const handleError = (error: Error) => {
+      console.error('WaveSurfer error:', error);
+      if (isMounted.current) {
+        setIsAudioLoading(false);
+      }
+    };
+
+    // Add event listeners
+    wavesurfer.on('ready', handleReady);
+    wavesurfer.on('audioprocess', handleAudioprocess);
+    wavesurfer.on('play', handlePlay);
+    wavesurfer.on('pause', handlePause);
+    wavesurfer.on('finish', handleFinish);
+    wavesurfer.on('error', handleError);
+
+    // Cleanup event listeners
+    return () => {
+      wavesurfer.un('ready', handleReady);
+      wavesurfer.un('audioprocess', handleAudioprocess);
+      wavesurfer.un('play', handlePlay);
+      wavesurfer.un('pause', handlePause);
+      wavesurfer.un('finish', handleFinish);
+      wavesurfer.un('error', handleError);
+    };
+  }, [wavesurfer, onTimeUpdate, safeSetState]);
+
+  // Handle audioSrc changes
+  useEffect(() => {
+    // Skip if not mounted or wavesurfer not initialized
+    if (!isMounted.current || !wavesurfer) {
+      return;
     }
 
-    if (signal.aborted) return;
+    // Prevent reloading the same source
+    if (currentAudioSrc.current === audioSrc) {
+      return;
+    }
 
+    // Reset state at the beginning of each source change
+    setIsPlaying(false);
+    setCurrentTime(0);
+
+    // Track current audio source
+    currentAudioSrc.current = audioSrc;
+
+    // Early return if no audio source
+    if (!audioSrc) {
+      setIsAudioLoading(false);
+      setTotalTime(0);
+      return;
+    }
+
+    // Set loading state
     setIsAudioLoading(true);
 
-    // Small delay to ensure cleanup is complete
-    setTimeout(() => {
-      if (signal.aborted) return;
-
+    // Load the audio with a small delay to ensure the waveform is properly initialized
+    const loadTimer = setTimeout(() => {
       try {
-        if (!waveformRef.current) {
-          throw new Error('Waveform container ref not available');
-        }
-
-        waveformRef.current.innerHTML = '';
-
-        // Create WaveSurfer instance
-        const ws = WaveSurfer.create({
-          container: waveformRef.current,
-          waveColor: '#666',
-          progressColor: '#e0afff',
-          cursorColor: '#ffdaab',
-          height: 48,
-        });
-
-        // Event handlers
-        const setupEventHandlers = () => {
-          // Error handler
-          ws.on('error', (error) => {
-            if (!signal.aborted) {
-              console.error('WaveSurfer error:', error);
-              setIsAudioLoading(false);
-            }
-          });
-
-          // Ready handler
-          ws.on('ready', () => {
-            if (!signal.aborted) {
-              setIsPlaying(false);
-              setTotalTime(ws.getDuration());
-              setCurrentTime(0);
-              setIsAudioLoading(false);
-            }
-          });
-
-          // Process handler (time update)
-          ws.on('audioprocess', () => {
-            if (!signal.aborted) {
-              const time = ws.getCurrentTime();
-              setCurrentTime(time);
-              if (onTimeUpdate) onTimeUpdate(time);
-            }
-          });
-
-          // Play handler
-          ws.on('play', () => {
-            if (!signal.aborted) {
-              setIsPlaying(true);
-            }
-          });
-
-          // Pause handler
-          ws.on('pause', () => {
-            if (!signal.aborted) {
-              setIsPlaying(false);
-              setCurrentTime(ws.getCurrentTime());
-              if (onTimeUpdate) onTimeUpdate(ws.getCurrentTime());
-            }
-          });
-
-          // Finish handler
-          ws.on('finish', () => {
-            if (!signal.aborted) {
-              setIsPlaying(false);
-              setCurrentTime(0);
-              if (onTimeUpdate) onTimeUpdate(0);
-            }
-          });
-        };
-
-        setupEventHandlers();
-
-        // Correct URL if needed (for certain storage providers)
-        let correctedUrl = audioSrc;
-        if (audioSrc && audioSrc.includes('https://public.blob.vercel-storage.com')) {
-          const baseUrl = 'https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com';
-          const urlObj = new URL(audioSrc);
-          const pathPart = urlObj.pathname;
-          correctedUrl = `${baseUrl}${pathPart}`;
-        }
-
-        if (!signal.aborted) {
-          try {
-            ws.load(correctedUrl);
-            setWaveSurfer(ws);
-          } catch (loadError) {
-            if (!signal.aborted) {
-              console.error('Error loading audio:', loadError);
-              setIsAudioLoading(false);
-            }
-          }
-        } else {
-          cleanupWaveSurfer(ws);
+        if (wavesurfer && audioSrc && isMounted.current) {
+          console.log('Loading audio source:', audioSrc);
+          wavesurfer.load(audioSrc);
         }
       } catch (error) {
-        if (!signal.aborted) {
-          console.error('Error setting up WaveSurfer:', error);
+        console.error('Error loading audio:', error);
+        if (isMounted.current) {
           setIsAudioLoading(false);
         }
       }
-    }, 50);
-
-    // Helper function to clean up WaveSurfer instance
-    function cleanupWaveSurfer(ws: WaveSurfer) {
-      try {
-        ws.un('ready');
-        ws.un('audioprocess');
-        ws.un('play');
-        ws.un('pause');
-        ws.un('finish');
-        ws.un('error');
-        ws.destroy();
-      } catch (error) {
-        console.error('Error during WaveSurfer cleanup:', error);
-      }
-    }
-
-    // Return cleanup function
+    }, 100);
+    
     return () => {
-      abortController.abort();
-      if (waveSurfer) {
-        try {
-          if (waveSurfer.isPlaying()) {
-            waveSurfer.pause();
-          }
-          cleanupWaveSurfer(waveSurfer);
-        } catch (error) {
-          console.error('Error during WaveSurfer cleanup:', error);
-        }
-      }
+      clearTimeout(loadTimer);
     };
-  }, [audioSrc, waveformRef, onTimeUpdate]);
+  }, [audioSrc, wavesurfer]);
 
-  // Format time helper
-  const formatTime = useCallback((sec: number): string => {
-    if (!sec || isNaN(sec)) return '0:00';
-    const m = Math.floor(sec / 60);
-    const s = Math.floor(sec % 60);
-    return `${m}:${s < 10 ? '0' + s : s}`;
-  }, []);
-
-  // Play/pause toggle
-  const togglePlayPause = useCallback(() => {
-    waveSurfer?.playPause();
-  }, [waveSurfer]);
-
+  // Return state and actions
   return [
-    { waveSurfer, isPlaying, isAudioLoading, currentTime, totalTime },
-    { togglePlayPause, formatTime }
+    { isPlaying, isAudioLoading, currentTime, totalTime },
+    { togglePlayPause, formatTime },
   ];
 }

@@ -1,8 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+
 import { BookSearchResult } from '../utils/types';
 
+// --- State and Action Types ---
 interface TranslationStreamState {
   logs: string[];
   error: string;
@@ -16,6 +18,9 @@ interface TranslationStreamActions {
   resetResults: () => void;
 }
 
+// --- Parameter Object Types ---
+
+// Base parameters shared by search and translation
 interface SearchParams {
   query: string;
   model: string;
@@ -23,8 +28,18 @@ interface SearchParams {
   notes: string;
 }
 
+// Parameters specific to translation (includes bookId)
 interface TranslationParams extends SearchParams {
   bookId: number;
+}
+
+/**
+ * Options for building the API URL.
+ * Contains base search parameters and an optional book ID.
+ */
+interface BuildApiUrlOptions {
+  searchParams: SearchParams;
+  bookId?: number; // Optional bookId distinguishes search from translation
 }
 
 export function useTranslationStream(): [TranslationStreamState, TranslationStreamActions] {
@@ -34,28 +49,38 @@ export function useTranslationStream(): [TranslationStreamState, TranslationStre
   const [searchResults, setSearchResults] = useState<BookSearchResult[]>([]);
   const [evtSource, setEvtSource] = useState<EventSource | null>(null);
 
-  // Creates a URL with query parameters for the API endpoint
-  const buildApiUrl = (params: SearchParams, bookId?: number): string => {
+  /**
+   * Creates a URL with query parameters for the API endpoint.
+   * @param options - Contains search parameters and optional bookId.
+   * @returns The constructed API URL string.
+   */
+  const buildApiUrl = (options: BuildApiUrlOptions): string => {
+    // Destructure the nested options object
+    const { searchParams, bookId } = options;
     let url = '/api/translate?';
-    
+
+    // Build query parameters from searchParams
     const queryParams: Record<string, string> = {
-      query: params.query,
-      model: params.model,
-      password: params.password,
+      query: searchParams.query,
+      model: searchParams.model,
+      password: searchParams.password,
     };
-    
+
+    // Add bookId if it exists (for translation requests)
     if (bookId !== undefined) {
       queryParams.bookId = bookId.toString();
     }
-    
-    if (params.notes?.length > 0) {
-      queryParams.notes = params.notes;
+
+    // Add notes if they exist
+    if (searchParams.notes?.length > 0) {
+      queryParams.notes = searchParams.notes;
     }
-    
+
+    // Encode parameters and append to URL
     const paramString = Object.entries(queryParams)
       .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
       .join('&');
-      
+
     return url + paramString;
   };
 
@@ -63,15 +88,15 @@ export function useTranslationStream(): [TranslationStreamState, TranslationStre
   const setupEventSource = (url: string): EventSource => {
     const es = new EventSource(url);
     setEvtSource(es);
-    
+
     es.onmessage = (evt) => {
       console.log('onmessage:', evt.data);
     };
-    
+
     es.addEventListener('log', (event: MessageEvent) => {
       setLogs((old) => [`[log] ${event.data}`, ...old]);
     });
-    
+
     es.addEventListener('error', (event: MessageEvent) => {
       console.error('sse error event', event);
       setError(`error: ${event.data}`);
@@ -79,26 +104,28 @@ export function useTranslationStream(): [TranslationStreamState, TranslationStre
       setEvtSource(null);
       setRunning(false);
     });
-    
+
     return es;
   };
 
   // Start search operation
-  const startSearch = ({ query, model, password, notes }: SearchParams) => {
-    if (!query.trim() || !password.trim()) {
+  const startSearch = (searchParams: SearchParams) => {
+    // Accepts SearchParams
+    if (!searchParams.query.trim() || !searchParams.password.trim()) {
       alert('need query + password');
       return;
     }
-    
+
     // Reset state
     setLogs([]);
     setError('');
     setSearchResults([]);
     setRunning(true);
-    
-    const url = buildApiUrl({ query, model, password, notes });
+
+    // Call buildApiUrl with the new options object structure (no bookId)
+    const url = buildApiUrl({ searchParams });
     const es = setupEventSource(url);
-    
+
     // Handle search results
     es.addEventListener('results', (event: MessageEvent) => {
       try {
@@ -129,15 +156,20 @@ export function useTranslationStream(): [TranslationStreamState, TranslationStre
   };
 
   // Start translation operation
-  const startTranslation = ({ bookId, query, model, password, notes }: TranslationParams) => {
+  const startTranslation = (translationParams: TranslationParams) => {
+    // Accepts TranslationParams
+    // Separate bookId from the rest of the search params
+    const { bookId, ...searchParams } = translationParams;
+
     // Reset state
     setLogs([]);
     setError('');
     setRunning(true);
-    
-    const url = buildApiUrl({ query, model, password, notes }, bookId);
+
+    // Call buildApiUrl with the new options object structure (including bookId)
+    const url = buildApiUrl({ searchParams, bookId });
     const es = setupEventSource(url);
-    
+
     // Handle source text event
     es.addEventListener('source', (event: MessageEvent) => {
       try {
@@ -150,7 +182,7 @@ export function useTranslationStream(): [TranslationStreamState, TranslationStre
         setError(`couldn't parse raw source text: ${String(err)}`);
       }
     });
-    
+
     // Handle translation completion
     es.addEventListener('done', (event: MessageEvent) => {
       setLogs((old) => ['[log] translation complete! initiating download...', ...old]);
@@ -183,6 +215,6 @@ export function useTranslationStream(): [TranslationStreamState, TranslationStre
 
   return [
     { logs, error, running, searchResults },
-    { startSearch, startTranslation, resetResults }
+    { startSearch, startTranslation, resetResults },
   ];
 }

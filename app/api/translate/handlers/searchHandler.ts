@@ -1,7 +1,9 @@
 import { ReadableStreamDefaultController } from 'stream/web';
-import { BookSearchResult, GutendexAuthor, GutendexSearchResultItem } from '../../../utils/types';
-import { sseSend } from '../utils/sseUtils';
+
+import { BookSearchResult, GutendexAuthor, GutendexSearchResultItem } from '@/utils/types';
+
 import { gutendexSearch } from '../services/gutendexService';
+import { sseSend } from '../utils/sseUtils';
 
 /**
  * Handles the search functionality when no bookId is provided.
@@ -21,12 +23,14 @@ export async function handleSearchRequest(
     return;
   }
 
-  const topResults: BookSearchResult[] = results.slice(0, 5).map((book: GutendexSearchResultItem) => ({
-    id: book.id,
-    title: book.title,
-    authors: (book.authors || []).map((a: GutendexAuthor) => a.name).join(', ') || 'unknown',
-    downloadCount: book.download_count || 0,
-  }));
+  const topResults: BookSearchResult[] = results
+    .slice(0, 5)
+    .map((book: GutendexSearchResultItem) => ({
+      id: book.id,
+      title: book.title,
+      authors: (book.authors || []).map((a: GutendexAuthor) => a.name).join(', ') || 'unknown',
+      downloadCount: book.download_count || 0,
+    }));
 
   sseSend(controller, 'results', JSON.stringify(topResults));
   controller.close();

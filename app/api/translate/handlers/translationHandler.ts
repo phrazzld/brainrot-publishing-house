@@ -1,55 +1,97 @@
-import { ReadableStreamDefaultController } from 'stream/web';
 import OpenAI from 'openai';
-import { sseSend } from '../utils/sseUtils';
+import { ReadableStreamDefaultController } from 'stream/web';
+
 import { fetchBookText } from '../services/gutendexService';
-import { flexibleChunkText } from '../utils/textUtils';
+import {
+  TranslateChunkWithRetriesOptions,
+  translateChunkWithRetries,
+} from '../services/translationService';
 import { buildSystemPrompt, buildUserPrompt } from '../utils/promptUtils';
-import { translateChunkWithRetries } from '../services/translationService';
+import { sseSend } from '../utils/sseUtils';
+import { flexibleChunkText } from '../utils/textUtils';
 
 const DEFAULT_CHUNK_SIZE = 20000;
+const DEFAULT_TEMP = 0.6; // Define default temperature
+
+/**
+ * Options for handling a translation request for a specific book.
+ */
+export interface HandleTranslationRequestOptions {
+  bookId: number;
+  model: string;
+  notes: string;
+  openai: OpenAI;
+  controller: ReadableStreamDefaultController;
+  // Optional: Allow overriding default temperature if needed in the future
+  temp?: number;
+}
+
+/**
+ * Options for translating all text chunks.
+ */
+interface TranslateAllChunksOptions {
+  chunks: string[];
+  systemPrompt: string;
+  userPrompt: string;
+  model: string;
+  temp: number;
+  openai: OpenAI;
+  controller: ReadableStreamDefaultController;
+}
 
 /**
  * Handles the translation functionality when a bookId is provided.
- * Fetches book text, chunks it, translates each chunk, and returns the result.
+ * Fetches book text, chunks it, translates each chunk, and streams the result.
+ * @param options - The parameters for the translation request.
  */
 export async function handleTranslationRequest(
-  bookId: number,
-  model: string,
-  notes: string,
-  openai: OpenAI,
-  controller: ReadableStreamDefaultController
+  options: HandleTranslationRequestOptions
 ): Promise<void> {
-  // Fetch and log book text
-  sseSend(controller, 'log', `using selected book id: ${bookId}`);
-  const { title, authors, text } = await fetchBookText(bookId);
-  sseSend(
-    controller,
-    'log',
-    `downloaded text for '${title}' by ${authors}, length=${text.length}`
-  );
+  const { bookId, model, notes, openai, controller } = options;
+  const temp = options.temp ?? DEFAULT_TEMP; // Use provided temp or default
 
-  // Send source text to client
-  await sendSourceText(title, text, controller);
+  try {
+    // Fetch and log book text
+    sseSend(controller, 'log', `using selected book id: ${bookId}`);
+    const { title, authors, text } = await fetchBookText(bookId);
+    sseSend(
+      controller,
+      'log',
+      `downloaded text for '${title}' by ${authors}, length=${text.length}`
+    );
 
-  // Chunk the text for processing
-  const chunks = chunkTextForProcessing(text, controller);
+    // Send source text to client
+    await sendSourceText(title, text, controller);
 
-  // Generate prompts
-  const systemPrompt = buildSystemPrompt(authors, title, notes);
-  const userPrompt = buildUserPrompt(authors, title);
+    // Chunk the text for processing
+    const chunks = chunkTextForProcessing(text, controller);
 
-  // Translate chunks and combine results
-  const combined = await translateAllChunks(
-    chunks,
-    systemPrompt,
-    userPrompt,
-    model,
-    openai,
-    controller
-  );
+    // Generate prompts
+    const systemPrompt = buildSystemPrompt(authors, title, notes);
+    const userPrompt = buildUserPrompt(authors, title);
 
-  // Send final translation
-  await sendFinalTranslation(title, combined, controller);
+    // Translate chunks and combine results
+    const translateAllOptions: TranslateAllChunksOptions = {
+      chunks,
+      systemPrompt,
+      userPrompt,
+      model,
+      temp,
+      openai,
+      controller,
+    };
+
+    // Call translateAllChunks with the options object
+    const combined = await translateAllChunks(translateAllOptions);
+
+    // Send final translation
+    await sendFinalTranslation(title, combined, controller);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error('Translation handler error:', error);
+    sseSend(controller, 'error', `Handler Error: ${message}`);
+    controller.close(); // Ensure controller is closed on error
+  }
 }
 
 /**
@@ -75,33 +117,25 @@ function chunkTextForProcessing(
   text: string,
   controller: ReadableStreamDefaultController
 ): string[] {
-  sseSend(
-    controller,
-    'log',
-    `attempting flexible chunking with max size ~${DEFAULT_CHUNK_SIZE}`
-  );
-  
+  sseSend(controller, 'log', `attempting flexible chunking with max size ~${DEFAULT_CHUNK_SIZE}`);
+
   let chunks = flexibleChunkText(text, DEFAULT_CHUNK_SIZE);
   sseSend(controller, 'log', `after flexible chunking, we got ${chunks.length} chunks.`);
 
   // Force subdivision if we ended up with a single large chunk
   if (chunks.length === 1 && chunks[0].length > DEFAULT_CHUNK_SIZE * 1.5) {
-    sseSend(
-      controller,
-      'log',
-      'only 1 chunk found, forcibly subdividing into ~10k chars each.'
-    );
-    
+    sseSend(controller, 'log', 'only 1 chunk found, forcibly subdividing into ~10k chars each.');
+
     const forcedSubChunks: string[] = [];
     const single = chunks[0];
     let start = 0;
     const forcedSize = 10000;
-    
+
     while (start < single.length) {
       forcedSubChunks.push(single.slice(start, start + forcedSize));
       start += forcedSize;
     }
-    
+
     chunks = forcedSubChunks;
     sseSend(controller, 'log', `forced chunking yields ${chunks.length} chunk(s).`);
   }
@@ -111,38 +145,38 @@ function chunkTextForProcessing(
 }
 
 /**
- * Translates all chunks and combines them into a single text
+ * Translates all chunks and combines them into a single text.
+ * @param options - The parameters for translating all chunks.
+ * @returns The combined translated text.
  */
-async function translateAllChunks(
-  chunks: string[],
-  systemPrompt: string,
-  userPrompt: string,
-  model: string,
-  openai: OpenAI,
-  controller: ReadableStreamDefaultController
-): Promise<string> {
+async function translateAllChunks(options: TranslateAllChunksOptions): Promise<string> {
+  const { chunks, systemPrompt, userPrompt, model, temp, openai, controller } = options;
   const translatedPieces: string[] = [];
-  
+
   for (let i = 0; i < chunks.length; i++) {
     const chunkText = chunks[i];
-    const chunkNum = i + 1;
+    const chunkNum = i + 1; // Use 1-based index for logging
     sseSend(
       controller,
       'log',
       `translating chunk ${chunkNum}/${chunks.length}, size=${chunkText.length}`
     );
 
-    const partial = await translateChunkWithRetries(
+    // Prepare options for translateChunkWithRetries
+    const retryOptions: TranslateChunkWithRetriesOptions = {
       openai,
-      controller,
+      sseController: controller,
       systemPrompt,
       userPrompt,
-      chunkText,
+      chunk: chunkText,
       model,
-      0.6,
-      chunkNum,
-      chunks.length
-    );
+      temp,
+      chunkIndex: i, // Use 0-based index internally
+      chunkCount: chunks.length,
+    };
+
+    // Call translateChunkWithRetries with the options object
+    const partial = await translateChunkWithRetries(retryOptions);
 
     sseSend(
       controller,
@@ -175,7 +209,7 @@ async function sendFinalTranslation(
     filename,
     content: translatedText,
   });
-  
+
   sseSend(controller, 'done', finalPayload);
   controller.close();
 }

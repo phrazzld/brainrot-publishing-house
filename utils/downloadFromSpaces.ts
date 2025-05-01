@@ -32,7 +32,7 @@ export interface DownloadResult {
 
 /**
  * Downloads a file from Digital Ocean Spaces (or any URL)
- * 
+ *
  * @param url The URL to download the file from
  * @param options Download options
  * @returns Promise resolving to download result with file content
@@ -42,11 +42,7 @@ export async function downloadFromSpaces(
   options: DownloadOptions = {}
 ): Promise<DownloadResult> {
   // Default options
-  const {
-    maxRetries = 3,
-    timeout = 30000,
-    verbose = false,
-  } = options;
+  const { maxRetries = 3, timeout = 30000, verbose = false } = options;
 
   let retries = 0;
   let lastError: Error | null = null;
@@ -56,7 +52,7 @@ export async function downloadFromSpaces(
 
   // Process the URL to ensure it's properly formatted
   let fullUrl = url;
-  
+
   // If the url is just a path, add the base URL from env
   if (!url.startsWith('http')) {
     // Remove leading slash if present
@@ -77,11 +73,11 @@ export async function downloadFromSpaces(
 
       try {
         // Fetch the file
-        const response = await fetch(fullUrl, { 
+        const response = await fetch(fullUrl, {
           signal: controller.signal,
           headers: {
             // Add any required headers for authentication here if needed
-          }
+          },
         });
 
         // Check if the request was successful
@@ -125,17 +121,19 @@ export async function downloadFromSpaces(
 
       // If we've used all retries, throw the error
       if (retries > maxRetries) {
-        throw new Error(`Failed to download from ${fullUrl} after ${maxRetries} attempts: ${lastError.message}`);
+        throw new Error(
+          `Failed to download from ${fullUrl} after ${maxRetries} attempts: ${lastError.message}`
+        );
       }
 
       // Exponential backoff
       const delay = Math.min(1000 * Math.pow(2, retries - 1), 10000);
-      
+
       if (verbose) {
         console.log(`Retrying in ${delay}ms...`);
       }
-      
-      await new Promise(resolve => setTimeout(resolve, delay));
+
+      await new Promise((resolve) => setTimeout(resolve, delay));
     }
   }
 
@@ -146,7 +144,7 @@ export async function downloadFromSpaces(
 
 /**
  * Extracts an audio path from a URL string in the translations file
- * 
+ *
  * @param audioSrc The audio source URL or path from translations
  * @returns A clean path that can be used with downloadFromSpaces
  */
@@ -157,12 +155,12 @@ export function getAudioPathFromUrl(audioSrc: string): string {
     const url = new URL(audioSrc);
     return url.pathname.startsWith('/') ? url.pathname.slice(1) : url.pathname;
   }
-  
+
   // If it starts with a slash, remove it
   if (audioSrc.startsWith('/')) {
     return audioSrc.slice(1);
   }
-  
+
   // Otherwise return as is
   return audioSrc;
 }

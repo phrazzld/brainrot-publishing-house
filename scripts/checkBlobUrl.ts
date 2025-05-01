@@ -1,9 +1,8 @@
 /**
  * Script to check if specific blob URLs are accessible
  */
-
-import fetch from 'node-fetch';
 import dotenv from 'dotenv';
+import fetch from 'node-fetch';
 
 // Load environment variables from .env.local
 dotenv.config({ path: '.env.local' });
@@ -36,7 +35,7 @@ async function main() {
     `${BASE_URL}/books/the-iliad/text/book-01.txt`,
     `${BASE_URL}/books/the-odyssey/text/book-01.txt`,
     `${BASE_URL}/books/the-aeneid/text/book-01.txt`,
-    `${BASE_URL}/books/the-declaration-of-independence/text/the-declaration-of-independence.txt`
+    `${BASE_URL}/books/the-declaration-of-independence/text/the-declaration-of-independence.txt`,
   ];
 
   console.log('Base URL:', BASE_URL);

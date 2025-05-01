@@ -1,30 +1,29 @@
 #!/usr/bin/env node
 /**
  * Asset Inventory Script
- * 
+ *
  * Scans the public/assets directory and generates a complete inventory
  * of all assets (images and text files) with their future Blob paths.
- * 
+ *
  * Usage:
  *   npx tsx scripts/inventory-assets.ts [options]
- * 
+ *
  * Options:
  *   --format=json|csv|md      Output format (default: json)
  *   --output=<path>           Output file path (default: stdout)
  *   --filter=images|text|all  Filter by asset type (default: all)
  */
-
+import { existsSync } from 'fs';
 import fs from 'fs/promises';
 import path from 'path';
-import { existsSync } from 'fs';
 import { fileURLToPath } from 'url';
+
+// Import BlobPathService from the project
+import { blobPathService } from '../utils/services/BlobPathService.js';
 
 // Utility to get this file's directory
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-// Import BlobPathService from the project
-import { blobPathService } from '../utils/services/BlobPathService.js';
 
 // Define inventory data structure
 interface AssetFile {
@@ -123,43 +122,43 @@ async function createAssetInventory(): Promise<AssetInventory> {
 
   // Scan all files in the assets directory
   const files = await scanDirectory(ASSETS_DIR);
-  
+
   // Process each file
   for (const relativePath of files) {
     const fullPath = path.join(ASSETS_DIR, relativePath);
     const assetType = getAssetType(fullPath);
-    
+
     if (assetType === 'other') continue; // Skip non-asset files
-    
+
     // Get file stats
     const stats = await fileStats(fullPath);
-    
+
     // Update total size
     inventory.totalSize += stats.size;
     inventory.totalAssets++;
-    
+
     // Create asset entry
     const assetPath = `/assets/${relativePath}`;
     const blobPath = blobPathService.convertLegacyPath(assetPath);
-    
+
     const assetEntry: AssetFile = {
       path: assetPath,
       blobPath,
       ...stats,
     };
-    
+
     // Special case for shared images
     if (relativePath.startsWith('images/')) {
       inventory.sharedImages.count++;
       inventory.sharedImages.files.push(assetEntry);
       continue;
     }
-    
+
     // Handle book assets
     const bookSlug = blobPathService.getBookSlugFromPath(assetPath);
-    
+
     if (!bookSlug) continue; // Skip if not a book asset
-    
+
     // Initialize book entry if needed
     if (!inventory.books[bookSlug]) {
       inventory.books[bookSlug] = {
@@ -169,7 +168,7 @@ async function createAssetInventory(): Promise<AssetInventory> {
         totalSize: 0,
       };
     }
-    
+
     // Add file to appropriate category
     if (assetType === 'image') {
       inventory.books[bookSlug].images.count++;
@@ -181,10 +180,10 @@ async function createAssetInventory(): Promise<AssetInventory> {
       inventory.books[bookSlug].sourceText.count++;
       inventory.books[bookSlug].sourceText.files.push(assetEntry);
     }
-    
+
     inventory.books[bookSlug].totalSize += stats.size;
   }
-  
+
   return inventory;
 }
 
@@ -195,30 +194,36 @@ function formatJson(inventory: AssetInventory): string {
 
 function formatCsv(inventory: AssetInventory): string {
   const rows: string[] = ['path,blobPath,size,lastModified,book,type'];
-  
+
   // Add shared images
   for (const file of inventory.sharedImages.files) {
     rows.push(`${file.path},${file.blobPath},${file.size},${file.lastModified},shared,image`);
   }
-  
+
   // Add book assets
   for (const [bookSlug, book] of Object.entries(inventory.books)) {
     // Images
     for (const file of book.images.files) {
-      rows.push(`${file.path},${file.blobPath},${file.size},${file.lastModified},${bookSlug},image`);
+      rows.push(
+        `${file.path},${file.blobPath},${file.size},${file.lastModified},${bookSlug},image`
+      );
     }
-    
+
     // Brainrot text
     for (const file of book.brainrotText.files) {
-      rows.push(`${file.path},${file.blobPath},${file.size},${file.lastModified},${bookSlug},brainrot`);
+      rows.push(
+        `${file.path},${file.blobPath},${file.size},${file.lastModified},${bookSlug},brainrot`
+      );
     }
-    
+
     // Source text
     for (const file of book.sourceText.files) {
-      rows.push(`${file.path},${file.blobPath},${file.size},${file.lastModified},${bookSlug},source`);
+      rows.push(
+        `${file.path},${file.blobPath},${file.size},${file.lastModified},${bookSlug},source`
+      );
     }
   }
-  
+
   return rows.join('\n');
 }
 
@@ -233,34 +238,34 @@ function formatMarkdown(inventory: AssetInventory): string {
     '## Book Assets',
     '',
   ];
-  
+
   // Book summary table
   lines.push('| Book | Images | Brainrot Text | Source Text | Total Size |');
   lines.push('|------|--------|--------------|-------------|------------|');
-  
+
   for (const [bookSlug, book] of Object.entries(inventory.books)) {
     lines.push(
       `| ${bookSlug} | ${book.images.count} | ${book.brainrotText.count} | ${book.sourceText.count} | ${formatSize(book.totalSize)} |`
     );
   }
-  
+
   lines.push('');
   lines.push('## Shared Images');
   lines.push('');
   lines.push(`- **Count:** ${inventory.sharedImages.count}`);
   lines.push('');
-  
+
   // Detail sections for each book
   for (const [bookSlug, book] of Object.entries(inventory.books)) {
     lines.push(`## ${bookSlug} Details`);
     lines.push('');
-    
+
     if (book.images.count > 0) {
       lines.push('### Images');
       lines.push('');
       lines.push('| Current Path | Future Blob Path | Size | Last Modified |');
       lines.push('|--------------|------------------|------|---------------|');
-      
+
       for (const file of book.images.files) {
         lines.push(
           `| ${file.path} | ${file.blobPath} | ${formatSize(file.size)} | ${formatDate(file.lastModified)} |`
@@ -268,13 +273,13 @@ function formatMarkdown(inventory: AssetInventory): string {
       }
       lines.push('');
     }
-    
+
     if (book.brainrotText.count > 0) {
       lines.push('### Brainrot Text');
       lines.push('');
       lines.push('| Current Path | Future Blob Path | Size | Last Modified |');
       lines.push('|--------------|------------------|------|---------------|');
-      
+
       for (const file of book.brainrotText.files) {
         lines.push(
           `| ${file.path} | ${file.blobPath} | ${formatSize(file.size)} | ${formatDate(file.lastModified)} |`
@@ -282,13 +287,13 @@ function formatMarkdown(inventory: AssetInventory): string {
       }
       lines.push('');
     }
-    
+
     if (book.sourceText.count > 0) {
       lines.push('### Source Text');
       lines.push('');
       lines.push('| Current Path | Future Blob Path | Size | Last Modified |');
       lines.push('|--------------|------------------|------|---------------|');
-      
+
       for (const file of book.sourceText.files) {
         lines.push(
           `| ${file.path} | ${file.blobPath} | ${formatSize(file.size)} | ${formatDate(file.lastModified)} |`
@@ -297,7 +302,7 @@ function formatMarkdown(inventory: AssetInventory): string {
       lines.push('');
     }
   }
-  
+
   return lines.join('\n');
 }
 
@@ -323,16 +328,16 @@ function parseArgs(): Record<string, string> {
     output: '',
     filter: 'all',
   };
-  
+
   for (let i = 2; i < process.argv.length; i++) {
     const arg = process.argv[i];
-    
+
     if (arg.startsWith('--')) {
       const [key, value] = arg.slice(2).split('=');
       if (value) args[key] = value;
     }
   }
-  
+
   return args;
 }
 
@@ -340,10 +345,10 @@ function parseArgs(): Record<string, string> {
 async function main() {
   try {
     const args = parseArgs();
-    
+
     console.log('Scanning assets directory...');
     const inventory = await createAssetInventory();
-    
+
     // Determine output format
     let output: string;
     switch (args.format.toLowerCase()) {
@@ -359,7 +364,7 @@ async function main() {
         output = formatJson(inventory);
         break;
     }
-    
+
     // Write output
     if (args.output) {
       await fs.writeFile(args.output, output);
@@ -367,12 +372,13 @@ async function main() {
     } else {
       console.log(output);
     }
-    
+
     // Print summary
-    console.error(`\nInventory complete: ${inventory.totalAssets} assets found (${formatSize(inventory.totalSize)})`);
+    console.error(
+      `\nInventory complete: ${inventory.totalAssets} assets found (${formatSize(inventory.totalSize)})`
+    );
     console.error(`Books: ${Object.keys(inventory.books).length}`);
     console.error(`Shared images: ${inventory.sharedImages.count}`);
-    
   } catch (error) {
     console.error('Error creating asset inventory:', error);
     process.exit(1);

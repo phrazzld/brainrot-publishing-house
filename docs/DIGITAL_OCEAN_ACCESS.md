@@ -16,6 +16,7 @@ DO_SPACES_BUCKET=brainrot-publishing
 ## Audio File Structure
 
 Audio files in Digital Ocean Spaces follow this structure:
+
 - Bucket: `brainrot-publishing`
 - Path pattern: `{book-slug}/audio/{filename}.mp3`
 
@@ -33,8 +34,8 @@ const client = new S3Client({
   endpoint: 'https://nyc3.digitaloceanspaces.com',
   credentials: {
     accessKeyId: process.env.DO_SPACES_ACCESS_KEY,
-    secretAccessKey: process.env.DO_SPACES_SECRET_KEY
-  }
+    secretAccessKey: process.env.DO_SPACES_SECRET_KEY,
+  },
 });
 ```
 

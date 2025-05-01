@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 /**
  * Remaining Assets Migration Script
- * 
+ *
  * This script identifies and migrates any remaining assets not yet in Vercel Blob storage.
  * It leverages the existing verification script to identify missing assets and then
  * uses the appropriate migration logic for each asset type.
- * 
+ *
  * Usage:
  *   npx tsx scripts/migrateRemainingAssets.ts [options]
- * 
+ *
  * Options:
  *   --dry-run             Simulate migration without uploading (default: false)
  *   --type=all|cover|chapter|audio|text Specify asset type to migrate (default: all)
@@ -17,19 +17,19 @@
  *   --retries=3           Number of retries for failed uploads (default: 3)
  *   --concurrency=5       Number of concurrent uploads (default: 5)
  */
-
 import * as dotenv from 'dotenv';
-// Load environment variables from .env.local
-dotenv.config({ path: '.env.local' });
-
-import fs from 'fs/promises';
 import { existsSync } from 'fs';
+import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
+
 import translations from '../translations';
-import { blobService } from '../utils/services/BlobService';
-import { blobPathService } from '../utils/services/BlobPathService';
 import { assetExistsInBlobStorage } from '../utils/getBlobUrl';
+import { blobPathService } from '../utils/services/BlobPathService';
+import { blobService } from '../utils/services/BlobService';
+
+// Load environment variables from .env.local
+dotenv.config({ path: '.env.local' });
 
 // Get the project root directory
 const __filename = fileURLToPath(import.meta.url);
@@ -93,15 +93,15 @@ interface MigrationResult {
 async function identifyMissingAssets(options: MigrationOptions): Promise<MissingAsset[]> {
   console.log('Identifying missing assets...');
   const missingAssets: MissingAsset[] = [];
-  
+
   // Filter books based on provided slug
   const books = options.bookSlug
-    ? translations.filter(book => book.slug === options.bookSlug)
+    ? translations.filter((book) => book.slug === options.bookSlug)
     : translations;
-  
+
   for (const book of books) {
     console.log(`Checking book: ${book.title} (${book.slug})`);
-    
+
     // Check cover image if type is 'cover' or 'all'
     if (options.type === 'cover' || options.type === 'all') {
       try {
@@ -112,7 +112,7 @@ async function identifyMissingAssets(options: MigrationOptions): Promise<Missing
             book: book.slug,
             type: 'cover',
             path: book.coverImage,
-            blobPath: blobPathService.convertLegacyPath(book.coverImage)
+            blobPath: blobPathService.convertLegacyPath(book.coverImage),
           });
         }
       } catch (error) {
@@ -122,24 +122,26 @@ async function identifyMissingAssets(options: MigrationOptions): Promise<Missing
           book: book.slug,
           type: 'cover',
           path: book.coverImage,
-          blobPath: blobPathService.convertLegacyPath(book.coverImage)
+          blobPath: blobPathService.convertLegacyPath(book.coverImage),
         });
       }
     }
-    
+
     // Check chapters
     for (const chapter of book.chapters) {
       // Chapter text
       if (options.type === 'chapter' || options.type === 'text' || options.type === 'all') {
         try {
-          const chapterExists = options.force ? false : await assetExistsInBlobStorage(chapter.text);
+          const chapterExists = options.force
+            ? false
+            : await assetExistsInBlobStorage(chapter.text);
           if (!chapterExists) {
             console.log(`Missing chapter text: ${chapter.text}`);
             missingAssets.push({
               book: book.slug,
               type: 'text',
               path: chapter.text,
-              blobPath: blobPathService.convertLegacyPath(chapter.text)
+              blobPath: blobPathService.convertLegacyPath(chapter.text),
             });
           }
         } catch (error) {
@@ -148,61 +150,63 @@ async function identifyMissingAssets(options: MigrationOptions): Promise<Missing
             book: book.slug,
             type: 'text',
             path: chapter.text,
-            blobPath: blobPathService.convertLegacyPath(chapter.text)
+            blobPath: blobPathService.convertLegacyPath(chapter.text),
           });
         }
       }
-      
+
       // Audio files
       if ((options.type === 'audio' || options.type === 'all') && chapter.audioSrc) {
         try {
-          const audioExists = options.force ? false : await assetExistsInBlobStorage(chapter.audioSrc);
+          const audioExists = options.force
+            ? false
+            : await assetExistsInBlobStorage(chapter.audioSrc);
           if (!audioExists) {
             console.log(`Missing audio: ${chapter.audioSrc}`);
-            
+
             // Handle audio URLs which might already be full blob URLs
             const isAlreadyFullUrl = chapter.audioSrc.startsWith('http');
             let blobPath;
-            
+
             if (isAlreadyFullUrl) {
               const url = new URL(chapter.audioSrc);
               blobPath = url.pathname.replace(/^\//, '');
             } else {
               blobPath = blobPathService.convertLegacyPath(chapter.audioSrc);
             }
-            
+
             missingAssets.push({
               book: book.slug,
               type: 'audio',
               path: chapter.audioSrc,
-              blobPath
+              blobPath,
             });
           }
         } catch (error) {
           console.error(`Error checking audio for ${book.slug}:`, error);
-          
+
           // Handle audio URLs which might already be full blob URLs
           const isAlreadyFullUrl = chapter.audioSrc.startsWith('http');
           let blobPath;
-          
+
           if (isAlreadyFullUrl) {
             const url = new URL(chapter.audioSrc);
             blobPath = url.pathname.replace(/^\//, '');
           } else {
             blobPath = blobPathService.convertLegacyPath(chapter.audioSrc);
           }
-          
+
           missingAssets.push({
             book: book.slug,
             type: 'audio',
             path: chapter.audioSrc,
-            blobPath
+            blobPath,
           });
         }
       }
     }
   }
-  
+
   return missingAssets;
 }
 
@@ -221,28 +225,28 @@ async function migrateBookCover(
     type: 'cover',
     path: originalPath,
     blobPath,
-    status: 'failed'
+    status: 'failed',
   };
-  
+
   try {
     // Verify file exists
     const fullPath = path.join(projectRoot, 'public', originalPath);
-    
+
     if (!existsSync(fullPath)) {
       result.error = `File not found: ${fullPath}`;
       return result;
     }
-    
+
     // Read file
     const fileBuffer = await fs.readFile(fullPath);
     const file = new File([fileBuffer], path.basename(originalPath), {
       type: getContentType(originalPath),
     });
-    
+
     // Get the directory path
     const pathname = path.dirname(blobPath);
     const filename = path.basename(blobPath);
-    
+
     // Try upload with retries
     let lastError = '';
     for (let attempt = 0; attempt < maxRetries; attempt++) {
@@ -251,35 +255,33 @@ async function migrateBookCover(
         const uploadResult = await blobService.uploadFile(file, {
           pathname,
           filename,
-          access: 'public',
-          cacheControl: 'max-age=31536000, immutable', // 1 year cache
+          access: 'public'
         });
-        
+
         // Verify upload
         const verified = await verifyUpload(uploadResult.url);
-        
+
         if (!verified) {
           lastError = 'Verification failed after upload';
           continue; // Retry
         }
-        
+
         // Success
         result.status = 'success';
         result.blobUrl = uploadResult.url;
-        result.size = uploadResult.size;
         return result;
       } catch (error) {
         lastError = error instanceof Error ? error.message : String(error);
         console.warn(`Attempt ${attempt + 1}/${maxRetries} failed: ${lastError}`);
-        
+
         // Wait before retry (exponential backoff)
         if (attempt < maxRetries - 1) {
           const delay = Math.pow(2, attempt) * 1000; // 1s, 2s, 4s, etc.
-          await new Promise(resolve => setTimeout(resolve, delay));
+          await new Promise((resolve) => setTimeout(resolve, delay));
         }
       }
     }
-    
+
     // All retries failed
     result.error = `Failed after ${maxRetries} attempts. Last error: ${lastError}`;
     return result;
@@ -304,21 +306,21 @@ async function migrateTextFile(
     type: 'text',
     path: originalPath,
     blobPath,
-    status: 'failed'
+    status: 'failed',
   };
-  
+
   try {
     // Verify file exists
     const fullPath = path.join(projectRoot, 'public', originalPath);
-    
+
     if (!existsSync(fullPath)) {
       result.error = `File not found: ${fullPath}`;
       return result;
     }
-    
+
     // Read file content
     const content = await fs.readFile(fullPath, 'utf8');
-    
+
     // Try upload with retries
     let lastError = '';
     for (let attempt = 0; attempt < maxRetries; attempt++) {
@@ -326,35 +328,33 @@ async function migrateTextFile(
         // Upload to Blob storage
         const uploadResult = await blobService.uploadText(content, blobPath, {
           access: 'public',
-          cacheControl: 'max-age=3600', // 1 hour cache for text files
           contentType: 'text/plain',
         });
-        
+
         // Verify upload
         const verified = await verifyUpload(uploadResult.url);
-        
+
         if (!verified) {
           lastError = 'Verification failed after upload';
           continue; // Retry
         }
-        
+
         // Success
         result.status = 'success';
         result.blobUrl = uploadResult.url;
-        result.size = uploadResult.size;
         return result;
       } catch (error) {
         lastError = error instanceof Error ? error.message : String(error);
         console.warn(`Attempt ${attempt + 1}/${maxRetries} failed: ${lastError}`);
-        
+
         // Wait before retry (exponential backoff)
         if (attempt < maxRetries - 1) {
           const delay = Math.pow(2, attempt) * 1000; // 1s, 2s, 4s, etc.
-          await new Promise(resolve => setTimeout(resolve, delay));
+          await new Promise((resolve) => setTimeout(resolve, delay));
         }
       }
     }
-    
+
     // All retries failed
     result.error = `Failed after ${maxRetries} attempts. Last error: ${lastError}`;
     return result;
@@ -379,91 +379,90 @@ async function migrateAudioFile(
     type: 'audio',
     path: originalPath,
     blobPath,
-    status: 'failed'
+    status: 'failed',
   };
-  
+
   try {
     // For audio files, we need to handle both legacy paths and full URLs
     let sourceUrl: string;
-    
+
     if (originalPath.startsWith('http')) {
       // If it's already a URL, use it directly
       sourceUrl = originalPath;
     } else {
       // If it's a legacy path, convert to URL
       // This assumes audio is hosted in Digital Ocean Spaces
-      const cdnBaseUrl = process.env.DO_SPACES_CDN_ENDPOINT || 'https://brainrot-audio.nyc3.digitaloceanspaces.com';
+      const cdnBaseUrl =
+        process.env.DO_SPACES_CDN_ENDPOINT || 'https://brainrot-audio.nyc3.digitaloceanspaces.com';
       sourceUrl = `${cdnBaseUrl}${originalPath}`;
     }
-    
+
     // Try to download the audio file
     let lastError = '';
     for (let attempt = 0; attempt < maxRetries; attempt++) {
       try {
         console.log(`Downloading audio from: ${sourceUrl}`);
-        
+
         // Fetch the audio file
         const response = await fetch(sourceUrl);
-        
+
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        
+
         // Get the audio content as array buffer
         const arrayBuffer = await response.arrayBuffer();
-        
+
         if (arrayBuffer.byteLength < 1000) {
           console.warn(`Warning: Audio file is very small (${arrayBuffer.byteLength} bytes)`);
         }
-        
+
         // Create a File object
         const file = new File([arrayBuffer], path.basename(originalPath), {
-          type: 'audio/mpeg'
+          type: 'audio/mpeg',
         });
-        
+
         console.log(`Downloaded ${file.size} bytes`);
-        
+
         // Upload to Vercel Blob
         console.log(`Uploading to Blob: ${blobPath}`);
-        
+
         // Get the directory path
         const pathname = path.dirname(blobPath);
         const filename = path.basename(blobPath);
-        
+
         // Upload to Blob storage
         const uploadResult = await blobService.uploadFile(file, {
           pathname,
           filename,
           access: 'public',
-          cacheControl: 'max-age=31536000, immutable', // 1 year cache
-          contentType: 'audio/mpeg'
+          contentType: 'audio/mpeg',
         });
-        
+
         // Verify upload
         const verified = await verifyUpload(uploadResult.url);
-        
+
         if (!verified) {
           lastError = 'Verification failed after upload';
           continue; // Retry
         }
-        
+
         // Success
         result.status = 'success';
         result.blobUrl = uploadResult.url;
-        result.size = uploadResult.size;
         return result;
       } catch (error) {
         lastError = error instanceof Error ? error.message : String(error);
         console.warn(`Attempt ${attempt + 1}/${maxRetries} failed: ${lastError}`);
-        
+
         // Wait before retry (exponential backoff)
         if (attempt < maxRetries - 1) {
           const delay = Math.pow(2, attempt) * 1000; // 1s, 2s, 4s, etc.
-          await new Promise(resolve => setTimeout(resolve, delay));
+          await new Promise((resolve) => setTimeout(resolve, delay));
         }
       }
     }
-    
+
     // All retries failed
     result.error = `Failed after ${maxRetries} attempts. Last error: ${lastError}`;
     return result;
@@ -494,7 +493,7 @@ async function migrateAsset(
   options: MigrationOptions
 ): Promise<AssetMigrationResult> {
   console.log(`Migrating ${asset.type} asset: ${asset.path} -> ${asset.blobPath}`);
-  
+
   // Skip in dry run mode
   if (options.dryRun) {
     console.log(`DRY RUN: Would migrate ${asset.path} to ${asset.blobPath}`);
@@ -504,10 +503,10 @@ async function migrateAsset(
       path: asset.path,
       blobPath: asset.blobPath,
       status: 'skipped',
-      error: 'Dry run mode'
+      error: 'Dry run mode',
     };
   }
-  
+
   // Select the appropriate migration function based on asset type
   switch (asset.type) {
     case 'cover':
@@ -525,7 +524,7 @@ async function migrateAsset(
         path: asset.path,
         blobPath: asset.blobPath,
         status: 'failed',
-        error: `Unknown asset type: ${asset.type}`
+        error: `Unknown asset type: ${asset.type}`,
       };
   }
 }
@@ -535,7 +534,7 @@ async function migrateAsset(
  */
 async function migrateRemainingAssets(options: MigrationOptions = {}): Promise<MigrationResult> {
   const startTime = new Date();
-  
+
   // Initialize result object
   const result: MigrationResult = {
     timestamp: startTime.toISOString(),
@@ -548,66 +547,64 @@ async function migrateRemainingAssets(options: MigrationOptions = {}): Promise<M
       cover: { total: 0, migrated: 0, skipped: 0, failed: 0 },
       chapter: { total: 0, migrated: 0, skipped: 0, failed: 0 },
       audio: { total: 0, migrated: 0, skipped: 0, failed: 0 },
-      text: { total: 0, migrated: 0, skipped: 0, failed: 0 }
+      text: { total: 0, migrated: 0, skipped: 0, failed: 0 },
     },
-    results: []
+    results: [],
   };
-  
+
   // Identify missing assets
   console.log('Starting missing assets identification...');
   const missingAssets = await identifyMissingAssets(options);
-  
+
   result.totalAssets = missingAssets.length;
   console.log(`Found ${result.totalAssets} missing assets`);
-  
+
   // Group assets by type for better reporting
   const assetsByType = {
-    cover: missingAssets.filter(a => a.type === 'cover').length,
-    chapter: missingAssets.filter(a => a.type === 'chapter').length,
-    audio: missingAssets.filter(a => a.type === 'audio').length,
-    text: missingAssets.filter(a => a.type === 'text').length
+    cover: missingAssets.filter((a) => a.type === 'cover').length,
+    chapter: missingAssets.filter((a) => a.type === 'chapter').length,
+    audio: missingAssets.filter((a) => a.type === 'audio').length,
+    text: missingAssets.filter((a) => a.type === 'text').length,
   };
-  
+
   console.log(`Cover images: ${assetsByType.cover}`);
   console.log(`Chapter images: ${assetsByType.chapter}`);
   console.log(`Audio files: ${assetsByType.audio}`);
   console.log(`Text files: ${assetsByType.text}`);
-  
+
   // Update result totals
   result.byType.cover.total = assetsByType.cover;
   result.byType.chapter.total = assetsByType.chapter;
   result.byType.audio.total = assetsByType.audio;
   result.byType.text.total = assetsByType.text;
-  
+
   // Skip if no assets to migrate
   if (missingAssets.length === 0) {
     console.log('No missing assets to migrate!');
     return result;
   }
-  
+
   // Confirm if not in dry run mode
   if (!options.dryRun) {
     console.log('\nReady to migrate assets. THIS WILL MODIFY BLOB STORAGE.');
     console.log('Press Ctrl+C to cancel or wait 5 seconds to continue...');
-    await new Promise(resolve => setTimeout(resolve, 5000));
+    await new Promise((resolve) => setTimeout(resolve, 5000));
   }
-  
+
   // Migrate assets with concurrency control
   const concurrency = options.concurrency || 5;
   const chunks = chunkArray(missingAssets, concurrency);
-  
+
   for (let i = 0; i < chunks.length; i++) {
     const chunk = chunks[i];
     console.log(`Processing chunk ${i + 1}/${chunks.length} (${chunk.length} assets)`);
-    
-    const chunkResults = await Promise.all(
-      chunk.map(asset => migrateAsset(asset, options))
-    );
-    
+
+    const chunkResults = await Promise.all(chunk.map((asset) => migrateAsset(asset, options)));
+
     // Process results
     for (const migrationResult of chunkResults) {
       result.results.push(migrationResult);
-      
+
       // Update statistics
       if (migrationResult.status === 'success') {
         result.migratedAssets++;
@@ -621,23 +618,21 @@ async function migrateRemainingAssets(options: MigrationOptions = {}): Promise<M
       }
     }
   }
-  
+
   // Generate and save report
   const reportFile = options.logFile || `remaining-assets-migration-${Date.now()}.json`;
-  const reportPath = path.isAbsolute(reportFile)
-    ? reportFile
-    : path.join(projectRoot, reportFile);
-  
+  const reportPath = path.isAbsolute(reportFile) ? reportFile : path.join(projectRoot, reportFile);
+
   await fs.writeFile(reportPath, JSON.stringify(result, null, 2), 'utf8');
   console.log(`Migration report saved to: ${reportPath}`);
-  
+
   // Generate markdown report
   const markdownReport = generateMarkdownReport(result);
   const markdownPath = reportPath.replace(/\.json$/, '.md');
-  
+
   await fs.writeFile(markdownPath, markdownReport, 'utf8');
   console.log(`Markdown report saved to: ${markdownPath}`);
-  
+
   return result;
 }
 
@@ -650,7 +645,9 @@ async function verifyUpload(blobUrl: string): Promise<boolean> {
     const fileInfo = await blobService.getFileInfo(blobUrl);
     return fileInfo.size > 0;
   } catch (error) {
-    console.warn(`Verification failed for ${blobUrl}: ${error instanceof Error ? error.message : String(error)}`);
+    console.warn(
+      `Verification failed for ${blobUrl}: ${error instanceof Error ? error.message : String(error)}`
+    );
     return false;
   }
 }
@@ -671,7 +668,7 @@ function chunkArray<T>(array: T[], size: number): T[][] {
  */
 function getContentType(filePath: string): string {
   const extension = path.extname(filePath).toLowerCase();
-  
+
   switch (extension) {
     case '.png':
       return 'image/png';
@@ -710,9 +707,9 @@ function generateMarkdownReport(result: MigrationResult): string {
     `- **Failed**: ${result.failedAssets}`,
     '',
     '## Results by Asset Type',
-    ''
+    '',
   ];
-  
+
   // Cover images
   lines.push('### Cover Images');
   lines.push('');
@@ -721,7 +718,7 @@ function generateMarkdownReport(result: MigrationResult): string {
   lines.push(`- **Skipped**: ${result.byType.cover.skipped}`);
   lines.push(`- **Failed**: ${result.byType.cover.failed}`);
   lines.push('');
-  
+
   // Chapter images
   lines.push('### Chapter Images');
   lines.push('');
@@ -730,7 +727,7 @@ function generateMarkdownReport(result: MigrationResult): string {
   lines.push(`- **Skipped**: ${result.byType.chapter.skipped}`);
   lines.push(`- **Failed**: ${result.byType.chapter.failed}`);
   lines.push('');
-  
+
   // Text files
   lines.push('### Text Files');
   lines.push('');
@@ -739,7 +736,7 @@ function generateMarkdownReport(result: MigrationResult): string {
   lines.push(`- **Skipped**: ${result.byType.text.skipped}`);
   lines.push(`- **Failed**: ${result.byType.text.failed}`);
   lines.push('');
-  
+
   // Audio files
   lines.push('### Audio Files');
   lines.push('');
@@ -748,13 +745,13 @@ function generateMarkdownReport(result: MigrationResult): string {
   lines.push(`- **Skipped**: ${result.byType.audio.skipped}`);
   lines.push(`- **Failed**: ${result.byType.audio.failed}`);
   lines.push('');
-  
+
   // Failed assets
   if (result.failedAssets > 0) {
     lines.push('## Failed Assets');
     lines.push('');
-    
-    const failedResults = result.results.filter(r => r.status === 'failed');
+
+    const failedResults = result.results.filter((r) => r.status === 'failed');
     for (const failed of failedResults) {
       lines.push(`### ${failed.book} (${failed.type})`);
       lines.push('');
@@ -764,7 +761,7 @@ function generateMarkdownReport(result: MigrationResult): string {
       lines.push('');
     }
   }
-  
+
   return lines.join('\n');
 }
 
@@ -778,12 +775,12 @@ function parseArgs(): MigrationOptions {
     force: false,
     retries: 3,
     concurrency: 5,
-    logFile: `remaining-assets-migration-${Date.now()}.json`
+    logFile: `remaining-assets-migration-${Date.now()}.json`,
   };
-  
+
   for (let i = 2; i < process.argv.length; i++) {
     const arg = process.argv[i];
-    
+
     if (arg === '--dry-run') {
       options.dryRun = true;
     } else if (arg.startsWith('--type=')) {
@@ -805,7 +802,7 @@ function parseArgs(): MigrationOptions {
       options.logFile = arg.substring('--log-file='.length);
     }
   }
-  
+
   return options;
 }
 
@@ -818,18 +815,22 @@ function printResults(result: MigrationResult): void {
   console.log(`Successfully migrated: ${result.migratedAssets}`);
   console.log(`Skipped: ${result.skippedAssets}`);
   console.log(`Failed: ${result.failedAssets}`);
-  
+
   console.log('\nResults by type:');
-  console.log(`Cover images: ${result.byType.cover.migrated}/${result.byType.cover.total} migrated`);
-  console.log(`Chapter images: ${result.byType.chapter.migrated}/${result.byType.chapter.total} migrated`);
+  console.log(
+    `Cover images: ${result.byType.cover.migrated}/${result.byType.cover.total} migrated`
+  );
+  console.log(
+    `Chapter images: ${result.byType.chapter.migrated}/${result.byType.chapter.total} migrated`
+  );
   console.log(`Text files: ${result.byType.text.migrated}/${result.byType.text.total} migrated`);
   console.log(`Audio files: ${result.byType.audio.migrated}/${result.byType.audio.total} migrated`);
-  
+
   if (result.failedAssets > 0) {
     console.log('\nFailed migrations:');
     result.results
-      .filter(r => r.status === 'failed')
-      .forEach(r => {
+      .filter((r) => r.status === 'failed')
+      .forEach((r) => {
         console.log(`- ${r.book} (${r.type}): ${r.error}`);
       });
   }
@@ -842,17 +843,17 @@ async function main(): Promise<void> {
   try {
     // Parse arguments
     const options = parseArgs();
-    
+
     console.log('Remaining Assets Migration');
     console.log('=========================');
     console.log(`Options: ${JSON.stringify(options, null, 2)}`);
-    
+
     // Run migration
     const result = await migrateRemainingAssets(options);
-    
+
     // Print results
     printResults(result);
-    
+
     // Exit with appropriate code
     process.exit(result.failedAssets > 0 ? 1 : 0);
   } catch (error) {

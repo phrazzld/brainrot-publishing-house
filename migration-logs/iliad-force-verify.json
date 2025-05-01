@@ -8,9 +8,7 @@
     "totalDownloadSize": 0,
     "totalUploadSize": 0,
     "totalDuration": 2854,
-    "booksCovered": [
-      "the-iliad"
-    ],
+    "booksCovered": ["the-iliad"],
     "validationSuccess": 0,
     "validationFailed": 0,
     "startTime": "2025-04-28T06:12:49.702Z",
@@ -18,9 +16,7 @@
   },
   "options": {
     "dryRun": true,
-    "books": [
-      "the-iliad"
-    ],
+    "books": ["the-iliad"],
     "force": true,
     "retries": 3,
     "concurrency": 3,

@@ -8,7 +8,8 @@ The `storage` property has been removed from `vercel.json` because it is not par
 
 The current configuration relies on the following:
 
-1. **Environment Variables**: 
+1. **Environment Variables**:
+
    - `BLOB_READ_WRITE_TOKEN`: Set in your project environment variables through the Vercel dashboard
    - `NEXT_PUBLIC_BLOB_BASE_URL`: Set in both your local `.env.local` file and in `vercel.json`'s `env` section
 

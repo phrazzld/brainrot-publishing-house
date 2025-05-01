@@ -37,6 +37,7 @@ npx tsx scripts/cleanupLocalAssets.ts --delete --no-interactive
 ## Cleanup Process
 
 1. **Dry Run First**: Always start with a dry run to see what will be deleted
+
    ```bash
    npx tsx scripts/cleanupLocalAssets.ts
    ```
@@ -44,6 +45,7 @@ npx tsx scripts/cleanupLocalAssets.ts --delete --no-interactive
 2. **Review the Report**: Check the generated report in the `/reports` directory
 
 3. **Delete with Confirmation**: When ready, run with the delete flag
+
    ```bash
    npx tsx scripts/cleanupLocalAssets.ts --delete
    ```

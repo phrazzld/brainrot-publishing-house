@@ -21,19 +21,25 @@ export interface SearchFormProps {
   modelOptions: ModelOption[];
 }
 
-export default function SearchForm({
-  query,
-  model,
-  password,
-  notes,
-  running,
-  onQueryChange,
-  onModelChange,
-  onPasswordChange,
-  onNotesChange,
-  onSearch,
-  modelOptions,
-}: SearchFormProps) {
+/**
+ * Renders the form for searching books or initiating translation.
+ * @param props - The component props.
+ */
+export default function SearchForm(props: SearchFormProps) {
+  // Destructure props inside the function body
+  const {
+    query,
+    model,
+    password,
+    notes,
+    running,
+    onQueryChange,
+    onModelChange,
+    onPasswordChange,
+    onNotesChange,
+    onSearch,
+    modelOptions,
+  } = props;
   return (
     <div className="flex flex-col gap-2 max-w-md">
       <label htmlFor="password-input">password (for private usage)</label>
@@ -47,12 +53,7 @@ export default function SearchForm({
       />
 
       <label htmlFor="model-select">pick a model</label>
-      <select
-        id="model-select"
-        className="p-2 text-black"
-        value={model}
-        onChange={onModelChange}
-      >
+      <select id="model-select" className="p-2 text-black" value={model} onChange={onModelChange}>
         {modelOptions.map(({ value, label }) => (
           <option key={value} value={value}>
             {label}

@@ -1,10 +1,13 @@
-### context ###
+### context
+
 specialization: creative genius with mastery of poetry, history, linguistics, art, and classical literature
 focus: translating classic texts into "zoomer brainrot" english dialect that is as comically absurd as it is faithful
 style adherence: strict compliance with the example style provided below, with an added mandate to pull from a broad spectrum of gen z, gen alpha, meme culture, terminally online lingo, and brainrot slang. the translation should feel like the original author wrote it if they had been living in a world of viral tiktoks, meme drops, and endless internet slang – every sentence dripping with references like "no cap," "bet," "skibidi," "yeet," etc., while maintaining the original’s poetic structure, imagery, and thematic resonance.
-### end context ###
 
-### example ###
+### end context
+
+### example
+
 [source: homer's *odyssey*]
 
 yap at me muse, about this guy who was lowkey built different,
@@ -40,13 +43,17 @@ that's when the goat of gods and humans started spitting facts:
 'cause he was thinking about that guy aegisthus (absolute w person btw),
 who got unalived by orestes (agamemnon's son, kind of a big deal):
 thinking about all that, he started throwing shade to the immortal squad:
-### end example ###
 
-### goal ###
-translate classic texts into zoomer brainrot english dialect with an unapologetic, over-the-top humor. the translation must be a direct, poetic *translation* that preserves the original narrative, imagery, epithets, extended similes, and rhythm, while infusing it with the irreverence and meme-laden language of gen z, gen alpha, and terminally online lingo. avoid summarization; the output should read as if the original author crafted the text in this hyperbolic, meme-infused dialect.
-### end goal ###
+### end example
 
-### adaptation rules ###
+### goal
+
+translate classic texts into zoomer brainrot english dialect with an unapologetic, over-the-top humor. the translation must be a direct, poetic _translation_ that preserves the original narrative, imagery, epithets, extended similes, and rhythm, while infusing it with the irreverence and meme-laden language of gen z, gen alpha, and terminally online lingo. avoid summarization; the output should read as if the original author crafted the text in this hyperbolic, meme-infused dialect.
+
+### end goal
+
+### adaptation rules
+
 1. **preserve structure**: maintain the original work’s chapters, breaks, headings, epithets, and refrains exactly as they appear in the source, but reframe them in zoomer dialect.
 2. **respect thematic weight**: adapt core themes with modern humor that reflects gen z and gen alpha sensibilities without oversimplifying or diluting the original emotional or narrative depth.
 3. **commit to imagery**: retain the visual and emotional intensity of the original, modernizing language only to enhance clarity and humor with internet meme references.
@@ -55,18 +62,24 @@ translate classic texts into zoomer brainrot english dialect with an unapologeti
 6. **meta-awareness**: incorporate self-aware commentary where appropriate, as if the translator is aware of the meme culture they’re channeling.
 7. **formatting**: output must be in all lowercase (except for proper names or emphatic elements when absolutely necessary).
 8. **overkill slang**: go really, really over-the-top with the zoomer brainrot slang; every sentence should drip and ooze with gen z and gen alpha meme references.
-### end adaptation rules ###
 
-### source material metadata ###
+### end adaptation rules
+
+### source material metadata
+
 **book**:
 **author**:
 **scope**:
 **notes**:
-### end source material metadata ###
 
-### source material contents ###
-### end source material contents ###
+### end source material metadata
 
-### task ###
+### source material contents
+
+### end source material contents
+
+### task
+
 now: write a totally over-the-top comedic yet faithful zoomer brainrot translation of the above source material. be sure to maintain the style, structure, and themes of the source material while infusing it with viral tiktok lingo, terminally online meme references, and the full spectrum of gen z and gen alpha slang from our glossary. do not include any introduction or concluding remarks; output only the complete translation.
-### end task ###
+
+### end task

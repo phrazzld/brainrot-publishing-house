@@ -1,27 +1,27 @@
 #!/usr/bin/env node
 /**
  * Audio URL Verification Script
- * 
- * This script verifies that all audio URLs in translations resolve correctly 
+ *
+ * This script verifies that all audio URLs in translations resolve correctly
  * to Vercel Blob storage and are accessible.
- * 
+ *
  * Usage:
  *   npx tsx scripts/verifyAudioUrls.ts [options]
- * 
+ *
  * Options:
  *   --verbose             Show detailed information
  *   --book=slug           Test only a specific book
  *   --download-sample     Download and verify sample data from each audio file
  */
-
 // Load environment variables
 import * as dotenv from 'dotenv';
-dotenv.config({ path: '.env.local' });
-
-import { getAssetUrlWithFallback } from '../utils/getBlobUrl';
-import translations from '../translations';
 import fs from 'fs/promises';
 import path from 'path';
+
+import translations from '../translations';
+import { getAssetUrlWithFallback } from '../utils/getBlobUrl';
+
+dotenv.config({ path: '.env.local' });
 
 // Define interfaces
 interface VerificationResult {
@@ -46,7 +46,7 @@ interface VerificationSummary {
       total: number;
       success: number;
       failure: number;
-    }
+    };
   };
   results: VerificationResult[];
 }
@@ -58,7 +58,7 @@ function parseArgs() {
     verbose: false,
     bookSlug: '',
     downloadSample: false,
-    outputFile: 'audio-url-verification.json'
+    outputFile: 'audio-url-verification.json',
   };
 
   for (const arg of args) {
@@ -80,7 +80,7 @@ function parseArgs() {
  * Verify a single audio URL
  */
 async function verifyAudioUrl(
-  bookSlug: string, 
+  bookSlug: string,
   chapterTitle: string,
   audioSrc: string
 ): Promise<VerificationResult> {
@@ -89,26 +89,26 @@ async function verifyAudioUrl(
     chapterTitle,
     originalUrl: audioSrc,
     resolvedUrl: '',
-    status: 'failure'
+    status: 'failure',
   };
 
   try {
     // Direct approach based on the migration data we have
     const baseUrl = 'https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com';
-    
+
     // Extract just the filename from the audio source
     const filename = audioSrc.split('/').pop() || '';
-    
+
     // Construct the URL directly using the known pattern from our migration results
     const directUrl = `${baseUrl}/${bookSlug}/audio/${filename}`;
-    
+
     console.log(`Testing direct URL: ${directUrl}`);
     result.resolvedUrl = directUrl;
 
     // Check if the URL is accessible
     const response = await fetch(directUrl, { method: 'HEAD' });
     result.statusCode = response.status;
-    
+
     if (response.ok) {
       result.status = 'success';
       result.contentType = response.headers.get('content-type') || undefined;
@@ -132,11 +132,9 @@ async function verifyAudioUrl(
  * Find all audio URLs in translations
  */
 function findAudioUrls(bookSlug: string = '') {
-  const audioUrls: { bookSlug: string, chapterTitle: string, audioSrc: string }[] = [];
+  const audioUrls: { bookSlug: string; chapterTitle: string; audioSrc: string }[] = [];
 
-  const books = bookSlug 
-    ? translations.filter(t => t.slug === bookSlug)
-    : translations;
+  const books = bookSlug ? translations.filter((t) => t.slug === bookSlug) : translations;
 
   for (const book of books) {
     if (!book.chapters) continue;
@@ -146,7 +144,7 @@ function findAudioUrls(bookSlug: string = '') {
         audioUrls.push({
           bookSlug: book.slug,
           chapterTitle: chapter.title,
-          audioSrc: chapter.audioSrc
+          audioSrc: chapter.audioSrc,
         });
       }
     }
@@ -162,7 +160,7 @@ async function main() {
   const options = parseArgs();
   console.log('Audio URL Verification');
   console.log('=====================');
-  
+
   if (options.bookSlug) {
     console.log(`Testing book: ${options.bookSlug}`);
   } else {
@@ -180,7 +178,7 @@ async function main() {
 
   for (let i = 0; i < audioUrls.length; i++) {
     const { bookSlug, chapterTitle, audioSrc } = audioUrls[i];
-    
+
     if (options.verbose) {
       console.log(`\nVerifying [${i + 1}/${audioUrls.length}]: ${bookSlug} - ${chapterTitle}`);
       console.log(`Original URL: ${audioSrc}`);
@@ -196,7 +194,9 @@ async function main() {
       if (options.verbose) {
         console.log(`✅ Success: ${result.resolvedUrl}`);
         console.log(`   Content Type: ${result.contentType}`);
-        console.log(`   Size: ${result.contentLength ? formatSize(result.contentLength) : 'unknown'}`);
+        console.log(
+          `   Size: ${result.contentLength ? formatSize(result.contentLength) : 'unknown'}`
+        );
       }
     } else {
       failureCount++;
@@ -212,13 +212,13 @@ async function main() {
   }
 
   // Generate summary
-  const bookResults: { [key: string]: { total: number, success: number, failure: number } } = {};
-  
+  const bookResults: { [key: string]: { total: number; success: number; failure: number } } = {};
+
   for (const result of results) {
     if (!bookResults[result.book]) {
       bookResults[result.book] = { total: 0, success: 0, failure: 0 };
     }
-    
+
     bookResults[result.book].total++;
     if (result.status === 'success') {
       bookResults[result.book].success++;
@@ -233,7 +233,7 @@ async function main() {
     successCount,
     failureCount,
     bookResults,
-    results
+    results,
   };
 
   // Print summary
@@ -241,7 +241,7 @@ async function main() {
   console.log(`Total URLs: ${summary.totalUrls}`);
   console.log(`Successful: ${summary.successCount}`);
   console.log(`Failed: ${summary.failureCount}`);
-  
+
   console.log('\nResults by Book:');
   for (const [book, counts] of Object.entries(summary.bookResults)) {
     console.log(`- ${book}: ${counts.success}/${counts.total} successful`);
@@ -251,7 +251,7 @@ async function main() {
   const outputPath = path.isAbsolute(options.outputFile)
     ? options.outputFile
     : path.join(process.cwd(), options.outputFile);
-    
+
   await fs.writeFile(outputPath, JSON.stringify(summary, null, 2));
   console.log(`\nDetailed results saved to: ${outputPath}`);
 
@@ -296,27 +296,25 @@ function generateMarkdownReport(summary: VerificationSummary): string {
     `- **Failed**: ${summary.failureCount}`,
     '',
     '## Results by Book',
-    ''
+    '',
   ];
 
   for (const [book, counts] of Object.entries(summary.bookResults)) {
-    const successPercent = counts.total > 0 
-      ? Math.round((counts.success / counts.total) * 100) 
-      : 0;
-      
+    const successPercent = counts.total > 0 ? Math.round((counts.success / counts.total) * 100) : 0;
+
     lines.push(`### ${book}`);
     lines.push('');
     lines.push(`- **Total**: ${counts.total}`);
     lines.push(`- **Successful**: ${counts.success} (${successPercent}%)`);
     lines.push(`- **Failed**: ${counts.failure}`);
     lines.push('');
-    
+
     // Add details for failed URLs
-    const failedUrls = summary.results.filter(r => r.book === book && r.status === 'failure');
+    const failedUrls = summary.results.filter((r) => r.book === book && r.status === 'failure');
     if (failedUrls.length > 0) {
       lines.push('#### Failed URLs');
       lines.push('');
-      
+
       for (const result of failedUrls) {
         lines.push(`- **${result.chapterTitle}**: ${result.error}`);
         lines.push(`  - Original: ${result.originalUrl}`);

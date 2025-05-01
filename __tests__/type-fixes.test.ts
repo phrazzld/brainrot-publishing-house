@@ -1,4 +1,4 @@
-import { describe, test, expect } from '@jest/globals';
+import { describe, expect, test } from '@jest/globals';
 
 // Let's create stubs for our type replacements and test their behavior
 
@@ -39,21 +39,23 @@ describe('Type guards for API responses', () => {
   // Type guard function
   function isBookSearchResultArray(data: unknown): data is BookSearchResult[] {
     if (!Array.isArray(data)) return false;
-    return data.every(item =>
-      typeof item === 'object' && item !== null &&
-      typeof (item as BookSearchResult).id === 'number' &&
-      typeof (item as BookSearchResult).title === 'string' &&
-      typeof (item as BookSearchResult).authors === 'string' &&
-      typeof (item as BookSearchResult).downloadCount === 'number'
+    return data.every(
+      (item) =>
+        typeof item === 'object' &&
+        item !== null &&
+        typeof (item as BookSearchResult).id === 'number' &&
+        typeof (item as BookSearchResult).title === 'string' &&
+        typeof (item as BookSearchResult).authors === 'string' &&
+        typeof (item as BookSearchResult).downloadCount === 'number'
     );
   }
 
   test('Valid BookSearchResult array is recognized', () => {
     const validData = [
       { id: 1, title: 'Book 1', authors: 'Author 1', downloadCount: 100 },
-      { id: 2, title: 'Book 2', authors: 'Author 2', downloadCount: 200 }
+      { id: 2, title: 'Book 2', authors: 'Author 2', downloadCount: 200 },
     ];
-    
+
     expect(isBookSearchResultArray(validData)).toBe(true);
   });
 
@@ -61,14 +63,14 @@ describe('Type guards for API responses', () => {
     // Missing properties
     const missingProps = [
       { id: 1, title: 'Book 1', downloadCount: 100 }, // missing authors
-      { id: 2, title: 'Book 2', authors: 'Author 2' } // missing downloadCount
+      { id: 2, title: 'Book 2', authors: 'Author 2' }, // missing downloadCount
     ];
     expect(isBookSearchResultArray(missingProps)).toBe(false);
 
     // Wrong property types
     const wrongTypes = [
       { id: '1', title: 'Book 1', authors: 'Author 1', downloadCount: 100 }, // id is string
-      { id: 2, title: 'Book 2', authors: 'Author 2', downloadCount: '200' } // downloadCount is string
+      { id: 2, title: 'Book 2', authors: 'Author 2', downloadCount: '200' }, // downloadCount is string
     ];
     expect(isBookSearchResultArray(wrongTypes)).toBe(false);
 
@@ -82,25 +84,24 @@ describe('Type guards for API responses', () => {
 describe('Safe JSON parsing with type checking', () => {
   test('Valid JSON is parsed and validated', () => {
     const jsonString = '{"name":"Test","value":123}';
-    
+
     // Parse to unknown first
     const parsed: unknown = JSON.parse(jsonString);
-    
+
     // Type check before using
-    const isValidObject = (
-      typeof parsed === 'object' && 
-      parsed !== null && 
-      'name' in parsed && 
-      typeof (parsed as {name: unknown}).name === 'string' &&
-      'value' in parsed && 
-      typeof (parsed as {value: unknown}).value === 'number'
-    );
-    
+    const isValidObject =
+      typeof parsed === 'object' &&
+      parsed !== null &&
+      'name' in parsed &&
+      typeof (parsed as { name: unknown }).name === 'string' &&
+      'value' in parsed &&
+      typeof (parsed as { value: unknown }).value === 'number';
+
     expect(isValidObject).toBe(true);
-    
+
     // Now safe to use after type checking
     if (isValidObject) {
-      const typedObject = parsed as {name: string, value: number};
+      const typedObject = parsed as { name: string; value: number };
       expect(typedObject.name).toBe('Test');
       expect(typedObject.value).toBe(123);
     }

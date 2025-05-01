@@ -46,6 +46,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.797.0",
     "@vercel/blob": "^1.0.0",
+    "@wavesurfer/react": "^1.0.11",
     "aws-sdk": "^2.1692.0",
     "cheerio": "^1.0.0",
     "dotenv": "^16.5.0",
@@ -66,6 +67,7 @@
     "@testing-library/react": "^15.0.7",
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "@types/jest": "^29.5.12",
+    "@types/minimist": "^1.2.5",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

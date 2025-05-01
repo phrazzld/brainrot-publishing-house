@@ -10,22 +10,22 @@ module.exports = {
     url: 'http://localhost',
     customExportConditions: [''],
   },
-  
+
   // Module handling
   moduleNameMapper: {
     // Handle module aliases
     '^@/(.*)$': '<rootDir>/$1',
-    
+
     // Handle CSS imports (with CSS modules)
     '\\.module\\.(css|sass|scss)$': 'identity-obj-proxy',
-    
+
     // Handle CSS imports (without CSS modules)
     '\\.(css|sass|scss)$': '<rootDir>/__mocks__/styleMock.js',
-    
+
     // Handle image imports
     '\\.(jpg|jpeg|png|gif|webp|svg)$': '<rootDir>/__mocks__/fileMock.js',
   },
-  
+
   // File patterns
   testMatch: [
     '**/__tests__/**/*.test.(ts|tsx|js|jsx)',
@@ -34,7 +34,7 @@ module.exports = {
     '**/__tests__/**/*.test.js',
     '**/__tests__/**/*.test.jsx',
   ],
-  
+
   // File transformations
   transform: {
     // Use custom babel transformer for React components (TSX files)
@@ -61,21 +61,21 @@ module.exports = {
       },
     ],
   },
-  
+
   // Ignore patterns - transform certain node_modules that use ESM
   transformIgnorePatterns: [
     '/node_modules/(?!(@vercel/blob|react|react-dom|wavesurfer.js|next|process|dotenv)/)',
   ],
-  
+
   // Handle ESM modules
   extensionsToTreatAsEsm: ['.ts', '.tsx'],
-  
+
   // Module file extensions
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
-  
+
   // Setup files
   setupFilesAfterEnv: ['<rootDir>/jest.setup.cjs'],
-  
+
   // ESM module support
   resolver: 'jest-ts-webcompat-resolver',
 };

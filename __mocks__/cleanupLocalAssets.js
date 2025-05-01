@@ -14,7 +14,7 @@ const cleanupLocalAssets = jest.fn().mockImplementation(async (dryRun = true) =>
       assetsInBlob: 2,
       assetsDeleted: dryRun ? 0 : 2,
       assetsKept: dryRun ? 0 : 1,
-      errors: 0
+      errors: 0,
     },
     bookResults: [
       {
@@ -23,35 +23,38 @@ const cleanupLocalAssets = jest.fn().mockImplementation(async (dryRun = true) =>
         results: [
           {
             path: '/assets/test-book/images/cover.png',
-            localPath: '/Users/phaedrus/Development/brainrot-publishing-house/public/assets/test-book/images/cover.png',
+            localPath:
+              '/Users/phaedrus/Development/brainrot-publishing-house/public/assets/test-book/images/cover.png',
             existsInBlob: true,
             wasDeleted: !dryRun,
-            type: 'cover'
+            type: 'cover',
           },
           {
             path: '/assets/test-book/text/brainrot/chapter-1.txt',
-            localPath: '/Users/phaedrus/Development/brainrot-publishing-house/public/assets/test-book/text/brainrot/chapter-1.txt',
+            localPath:
+              '/Users/phaedrus/Development/brainrot-publishing-house/public/assets/test-book/text/brainrot/chapter-1.txt',
             existsInBlob: true,
             wasDeleted: !dryRun,
-            type: 'chapter'
+            type: 'chapter',
           },
           {
             path: '/test-book/audio/chapter-1.mp3',
-            localPath: '/Users/phaedrus/Development/brainrot-publishing-house/public/test-book/audio/chapter-1.mp3',
+            localPath:
+              '/Users/phaedrus/Development/brainrot-publishing-house/public/test-book/audio/chapter-1.mp3',
             existsInBlob: false,
             wasDeleted: false,
-            type: 'audio'
-          }
+            type: 'audio',
+          },
         ],
         summary: {
           totalAssets: 3,
           existInBlob: 2,
           deleted: dryRun ? 0 : 2,
           keptLocal: dryRun ? 0 : 1,
-          errors: 0
-        }
-      }
-    ]
+          errors: 0,
+        },
+      },
+    ],
   };
 });
 

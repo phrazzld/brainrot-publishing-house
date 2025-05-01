@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react';
-import { render as rtlRender, act as rtlAct } from '@testing-library/react';
+
+import { act as rtlAct, render as rtlRender } from '@testing-library/react';
 
 // Custom render function for React 19 compatibility
 export function render(ui: ReactElement) {
@@ -7,17 +8,17 @@ export function render(ui: ReactElement) {
   const container = document.createElement('div');
   document.body.innerHTML = ''; // Clear any previous content
   document.body.appendChild(container);
-  
+
   // Use a more direct approach for React 19
   const wrapper = document.createElement('div');
   container.appendChild(wrapper);
-  
+
   // Render into the wrapper
   const result = rtlRender(ui, { container: wrapper });
-  
+
   return {
     ...result,
-    container: wrapper
+    container: wrapper,
   };
 }
 

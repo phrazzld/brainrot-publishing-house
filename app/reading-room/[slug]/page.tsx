@@ -27,7 +27,7 @@ export default function ReadingRoom() {
   const [
     { chapterIndex, slug, translation, chapterData, totalChapters },
     { handleChapterClick, goPrevChapter, goNextChapter, updateUrlWithChapterAndTimestamp },
-  ] = useChapterNavigation(translations, null);
+  ] = useChapterNavigation(translations);
 
   // Load chapter text
   const { rawText, isTextLoading } = useTextLoader(chapterData?.text);

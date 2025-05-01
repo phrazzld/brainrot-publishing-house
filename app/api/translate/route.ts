@@ -65,7 +65,13 @@ export async function GET(request: NextRequest) {
           } else {
             // Handle translation request
             const bookId = parseInt(bookIdParam, 10);
-            await handleTranslationRequest(bookId, model, notes, openai, controller);
+            await handleTranslationRequest({
+              bookId,
+              model,
+              notes,
+              openai,
+              controller,
+            });
           }
         } catch (err: unknown) {
           handleStreamError(err, controller);

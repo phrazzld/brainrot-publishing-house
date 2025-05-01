@@ -39,19 +39,19 @@ export function useShareModal(
 
   function getShareUrl() {
     if (typeof window === 'undefined') return '';
-    
+
     const baseUrl = window.location.origin;
     let url = `${baseUrl}/reading-room/${slug}`;
-    
+
     if (includeChapter) {
       url += `?c=${chapterIndex}`;
     }
-    
+
     const t = Math.floor(currentTime);
     if (includeTimestamp && t > 0) {
       url += includeChapter ? `&t=${t}` : `?t=${t}`;
     }
-    
+
     return url;
   }
 
@@ -68,6 +68,13 @@ export function useShareModal(
 
   return [
     { isShareOpen, shareFeedback, includeChapter, includeTimestamp },
-    { openShareModal, closeShareModal, setIncludeChapter, setIncludeTimestamp, getShareUrl, copyShareUrl }
+    {
+      openShareModal,
+      closeShareModal,
+      setIncludeChapter,
+      setIncludeTimestamp,
+      getShareUrl,
+      copyShareUrl,
+    },
   ];
 }

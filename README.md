@@ -42,6 +42,7 @@ this nextjs app is a total vibe: a reading + audio platform that merges sweet wa
 ## vision
 
 this is just the beginning:
+
 - line-by-line audio sync & highlight
 - buy physical copies with stripe or bitcoin
 - dynamic user accounts, profiles, reading stats

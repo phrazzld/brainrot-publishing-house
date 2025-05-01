@@ -1,7 +1,6 @@
 /**
  * ESLint v9 configuration (flat config format) that extends the existing .eslintrc.json
  */
-
 import { FlatCompat } from '@eslint/eslintrc';
 import js from '@eslint/js';
 import { dirname } from 'path';
@@ -20,7 +19,7 @@ const compat = new FlatCompat({
 export default [
   // Extend our existing configuration file
   ...compat.config({ extends: ['./.eslintrc.json'] }),
-  
+
   // Add any additional config specific to flat config format here
   {
     ignores: [

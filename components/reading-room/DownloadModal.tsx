@@ -1,6 +1,7 @@
 'use client';
 
 import { KeyboardEvent } from 'react';
+
 import DownloadButton from '@/components/DownloadButton';
 import { handleKeyboardInteraction } from '@/utils';
 
@@ -11,12 +12,7 @@ interface DownloadModalProps {
   chapterIndex: number;
 }
 
-export default function DownloadModal({
-  isOpen,
-  onClose,
-  slug,
-  chapterIndex,
-}: DownloadModalProps) {
+export default function DownloadModal({ isOpen, onClose, slug, chapterIndex }: DownloadModalProps) {
   if (!isOpen) return null;
 
   return (
@@ -56,11 +52,7 @@ export default function DownloadModal({
             chapter={chapterIndex + 1}
             classNames="btn btn-primary"
           />
-          <DownloadButton
-            slug={slug}
-            type="full"
-            classNames="btn btn-secondary"
-          />
+          <DownloadButton slug={slug} type="full" classNames="btn btn-secondary" />
         </div>
       </div>
     </div>

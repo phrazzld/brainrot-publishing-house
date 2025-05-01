@@ -55,31 +55,31 @@ const { put, list, head, del } = require('@vercel/blob');
 
 describe('BlobService', () => {
   let blobService;
-  
+
   beforeEach(() => {
     // Reset all mocks
     jest.clearAllMocks();
-    
+
     // Create a new instance for each test
     blobService = new BlobService();
-    
+
     // Set environment variables for testing
     process.env.NEXT_PUBLIC_BLOB_BASE_URL = 'https://blob.example.com';
   });
-  
+
   afterEach(() => {
     // Clean up environment variables
     delete process.env.NEXT_PUBLIC_BLOB_BASE_URL;
   });
-  
+
   describe('uploadFile', () => {
     it('should upload a file with default options', async () => {
       // Arrange
       const mockFile = new File(['test content'], 'test.txt', { type: 'text/plain' });
-      
+
       // Act
       const result = await blobService.uploadFile(mockFile);
-      
+
       // Assert
       expect(put).toHaveBeenCalledWith('test.txt', mockFile, { access: 'public' });
       expect(result).toEqual({
@@ -87,7 +87,7 @@ describe('BlobService', () => {
         pathname: 'test.txt',
       });
     });
-    
+
     it('should upload a file with custom options', async () => {
       // Arrange
       const mockFile = new File(['test content'], 'test.txt', { type: 'text/plain' });
@@ -99,10 +99,10 @@ describe('BlobService', () => {
         cacheControl: 'max-age=3600',
         contentType: 'text/html',
       };
-      
+
       // Act
       const result = await blobService.uploadFile(mockFile, options);
-      
+
       // Assert
       expect(put).toHaveBeenCalledWith('books/hamlet/custom.txt', mockFile, {
         access: 'private',
@@ -115,7 +115,7 @@ describe('BlobService', () => {
         pathname: 'test.txt',
       });
     });
-    
+
     it('should handle trailing slashes in pathname', async () => {
       // Arrange
       const mockFile = new File(['test content'], 'test.txt', { type: 'text/plain' });
@@ -123,10 +123,10 @@ describe('BlobService', () => {
         pathname: 'books/hamlet/',
         filename: 'scene.txt',
       };
-      
+
       // Act
       const result = await blobService.uploadFile(mockFile, options);
-      
+
       // Assert
       expect(put).toHaveBeenCalledWith('books/hamlet/scene.txt', mockFile, { access: 'public' });
       expect(result).toEqual({
@@ -134,29 +134,31 @@ describe('BlobService', () => {
         pathname: 'test.txt',
       });
     });
-    
+
     it('should throw error when upload fails', async () => {
       // Arrange
       const mockFile = new File(['test content'], 'test.txt', { type: 'text/plain' });
       put.mockRejectedValueOnce(new Error('Upload failed'));
-      
+
       // Act & Assert
-      await expect(blobService.uploadFile(mockFile)).rejects.toThrow('Failed to upload file: Upload failed');
+      await expect(blobService.uploadFile(mockFile)).rejects.toThrow(
+        'Failed to upload file: Upload failed'
+      );
     });
   });
-  
+
   describe('uploadText', () => {
     it('should upload text content', async () => {
       // Arrange
       const content = 'Hello, world!';
       const path = 'books/hamlet/scene1.txt';
-      
+
       // Spy on uploadFile method
       jest.spyOn(blobService, 'uploadFile');
-      
+
       // Act
       const result = await blobService.uploadText(content, path);
-      
+
       // Assert
       expect(blobService.uploadFile).toHaveBeenCalledWith(
         expect.any(File),
@@ -170,18 +172,18 @@ describe('BlobService', () => {
         pathname: 'test.txt',
       });
     });
-    
+
     it('should handle root path', async () => {
       // Arrange
       const content = 'Hello, world!';
       const path = 'file.txt';
-      
+
       // Spy on uploadFile method
       jest.spyOn(blobService, 'uploadFile');
-      
+
       // Act
       const result = await blobService.uploadText(content, path);
-      
+
       // Assert
       expect(blobService.uploadFile).toHaveBeenCalledWith(
         expect.any(File),
@@ -196,12 +198,12 @@ describe('BlobService', () => {
       });
     });
   });
-  
+
   describe('listFiles', () => {
     it('should list files with default options', async () => {
       // Act
       const result = await blobService.listFiles();
-      
+
       // Assert
       expect(list).toHaveBeenCalledWith({});
       expect(result).toEqual({
@@ -212,7 +214,7 @@ describe('BlobService', () => {
         cursor: undefined,
       });
     });
-    
+
     it('should list files with custom options', async () => {
       // Arrange
       const options = {
@@ -220,10 +222,10 @@ describe('BlobService', () => {
         limit: 10,
         cursor: 'abc123',
       };
-      
+
       // Act
       const result = await blobService.listFiles(options);
-      
+
       // Assert
       expect(list).toHaveBeenCalledWith(options);
       expect(result).toEqual({
@@ -235,15 +237,15 @@ describe('BlobService', () => {
       });
     });
   });
-  
+
   describe('getFileInfo', () => {
     it('should get file info', async () => {
       // Arrange
       const url = 'https://example.com/file.txt';
-      
+
       // Act
       const result = await blobService.getFileInfo(url);
-      
+
       // Assert
       expect(head).toHaveBeenCalledWith(url);
       expect(result).toEqual({
@@ -254,67 +256,67 @@ describe('BlobService', () => {
       });
     });
   });
-  
+
   describe('deleteFile', () => {
     it('should delete a file', async () => {
       // Arrange
       const url = 'https://example.com/file.txt';
-      
+
       // Act
       await blobService.deleteFile(url);
-      
+
       // Assert
       expect(del).toHaveBeenCalledWith(url);
     });
   });
-  
+
   describe('getUrlForPath', () => {
     it('should generate URL for path', () => {
       // Act
       const result = blobService.getUrlForPath('books/hamlet/scene1.txt');
-      
+
       // Assert
       expect(result).toBe('https://blob.example.com/books/hamlet/scene1.txt');
     });
-    
+
     it('should handle leading slashes', () => {
       // Act
       const result = blobService.getUrlForPath('/books/hamlet/scene1.txt');
-      
+
       // Assert
       expect(result).toBe('https://blob.example.com/books/hamlet/scene1.txt');
     });
-    
+
     it('should use default hostname if env var not set', () => {
       // Arrange - remove the environment variable
       delete process.env.NEXT_PUBLIC_BLOB_BASE_URL;
-      
+
       // Act
       const result = blobService.getUrlForPath('books/hamlet/scene1.txt');
-      
+
       // Assert
       expect(result).toBe('https://public.blob.vercel-storage.com/books/hamlet/scene1.txt');
     });
-    
+
     it('should use provided baseUrl option', () => {
       // Act
-      const result = blobService.getUrlForPath('books/hamlet/scene1.txt', { 
-        baseUrl: 'https://custom-cdn.example.com' 
+      const result = blobService.getUrlForPath('books/hamlet/scene1.txt', {
+        baseUrl: 'https://custom-cdn.example.com',
       });
-      
+
       // Assert
       expect(result).toBe('https://custom-cdn.example.com/books/hamlet/scene1.txt');
     });
-    
+
     it('should add cache busting parameter when noCache is true', () => {
       // Arrange - mock Date.now
       const originalDateNow = Date.now;
       Date.now = jest.fn(() => 1234567890);
-      
+
       try {
         // Act
         const result = blobService.getUrlForPath('books/hamlet/scene1.txt', { noCache: true });
-        
+
         // Assert
         expect(result).toBe('https://blob.example.com/books/hamlet/scene1.txt?_t=1234567890');
       } finally {
@@ -322,40 +324,42 @@ describe('BlobService', () => {
         Date.now = originalDateNow;
       }
     });
-    
+
     it('should correctly append cache busting parameter to URLs with existing query parameters', () => {
       // Arrange - mock Date.now
       const originalDateNow = Date.now;
       Date.now = jest.fn(() => 1234567890);
-      
+
       try {
         // Act
-        const result = blobService.getUrlForPath('books/hamlet/scene1.txt?existing=param', { 
-          noCache: true 
+        const result = blobService.getUrlForPath('books/hamlet/scene1.txt?existing=param', {
+          noCache: true,
         });
-        
+
         // Assert
-        expect(result).toBe('https://blob.example.com/books/hamlet/scene1.txt?existing=param&_t=1234567890');
+        expect(result).toBe(
+          'https://blob.example.com/books/hamlet/scene1.txt?existing=param&_t=1234567890'
+        );
       } finally {
         // Restore original Date.now
         Date.now = originalDateNow;
       }
     });
   });
-  
+
   describe('fetchText', () => {
     it('should fetch text from URL', async () => {
       // Arrange
       const url = 'https://example.com/file.txt';
-      
+
       // Act
       const result = await blobService.fetchText(url);
-      
+
       // Assert
       expect(global.fetch).toHaveBeenCalledWith(url);
       expect(result).toBe('Test content');
     });
-    
+
     it('should throw error when fetch fails', async () => {
       // Arrange
       const url = 'https://example.com/file.txt';
@@ -363,18 +367,22 @@ describe('BlobService', () => {
         ok: false,
         status: 404,
       });
-      
+
       // Act & Assert
-      await expect(blobService.fetchText(url)).rejects.toThrow('Failed to fetch text: HTTP error! Status: 404');
+      await expect(blobService.fetchText(url)).rejects.toThrow(
+        'Failed to fetch text: HTTP error! Status: 404'
+      );
     });
-    
+
     it('should throw error when network fails', async () => {
       // Arrange
       const url = 'https://example.com/file.txt';
       global.fetch.mockRejectedValueOnce(new Error('Network error'));
-      
+
       // Act & Assert
-      await expect(blobService.fetchText(url)).rejects.toThrow('Failed to fetch text: Network error');
+      await expect(blobService.fetchText(url)).rejects.toThrow(
+        'Failed to fetch text: Network error'
+      );
     });
   });
 });

@@ -4,7 +4,8 @@ import {
   GutendexBookDetails,
   GutendexSearchResponse,
   GutendexSearchResultItem,
-} from '../../../utils/types';
+} from '@/utils/types';
+
 import { parseHtmlIntoText } from '../utils/textUtils';
 
 const PREFERRED_FORMATS = [
@@ -22,11 +23,11 @@ const PREFERRED_FORMATS = [
 export async function gutendexSearch(query: string): Promise<GutendexSearchResultItem[]> {
   const url = `https://gutendex.com/books?search=${encodeURIComponent(query)}`;
   const res = await fetch(url);
-  
+
   if (!res.ok) {
     throw new Error(`gutendex search failed: ${res.status}`);
   }
-  
+
   const data: unknown = await res.json();
 
   // Basic validation
@@ -60,11 +61,11 @@ export function pickBestFormat(formats: Record<string, string>) {
 export async function fetchBookText(id: number): Promise<BookDetail> {
   const url = `https://gutendex.com/books/${id}`;
   const res = await fetch(url);
-  
+
   if (!res.ok) {
     throw new Error(`gutendex metadata fetch failed: ${res.status}`);
   }
-  
+
   const data: unknown = await res.json();
 
   // Type validation
@@ -89,7 +90,7 @@ export async function fetchBookText(id: number): Promise<BookDetail> {
   if (!downloadRes.ok) {
     throw new Error(`failed to download text: ${downloadRes.status}`);
   }
-  
+
   const buf = await downloadRes.arrayBuffer();
   const utf8Text = new TextDecoder('utf-8', { fatal: false }).decode(buf);
 
@@ -98,6 +99,6 @@ export async function fetchBookText(id: number): Promise<BookDetail> {
   } else if (chosenFormat.includes('text/html')) {
     return { title, authors, text: parseHtmlIntoText(utf8Text) };
   }
-  
+
   throw new Error('no plain text/html found; only epub/mobi. cannot parse.');
 }

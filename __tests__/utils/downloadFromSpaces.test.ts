@@ -7,7 +7,8 @@ describe('downloadFromSpaces', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     // Mock environment variable
-    process.env.NEXT_PUBLIC_SPACES_BASE_URL = 'https://brainrot-publishing.nyc3.digitaloceanspaces.com';
+    process.env.NEXT_PUBLIC_SPACES_BASE_URL =
+      'https://brainrot-publishing.nyc3.digitaloceanspaces.com';
   });
 
   afterEach(() => {
@@ -21,13 +22,14 @@ describe('downloadFromSpaces', () => {
     mockFetch.mockResolvedValueOnce({
       ok: true,
       headers: {
-        get: jest.fn().mockReturnValue('audio/mpeg')
+        get: jest.fn().mockReturnValue('audio/mpeg'),
       },
-      arrayBuffer: jest.fn().mockResolvedValue(mockArrayBuffer)
+      arrayBuffer: jest.fn().mockResolvedValue(mockArrayBuffer),
     });
 
     // Call the function
-    const url = 'https://brainrot-publishing.nyc3.digitaloceanspaces.com/the-iliad/audio/book-01.mp3';
+    const url =
+      'https://brainrot-publishing.nyc3.digitaloceanspaces.com/the-iliad/audio/book-01.mp3';
     const result = await downloadFromSpaces(url);
 
     // Assertions
@@ -44,14 +46,15 @@ describe('downloadFromSpaces', () => {
     mockFetch.mockResolvedValueOnce({
       ok: true,
       headers: {
-        get: jest.fn().mockReturnValue('audio/mpeg')
+        get: jest.fn().mockReturnValue('audio/mpeg'),
       },
-      arrayBuffer: jest.fn().mockResolvedValue(mockArrayBuffer)
+      arrayBuffer: jest.fn().mockResolvedValue(mockArrayBuffer),
     });
 
     // Call the function
     const path = 'the-iliad/audio/book-01.mp3';
-    const expectedUrl = 'https://brainrot-publishing.nyc3.digitaloceanspaces.com/the-iliad/audio/book-01.mp3';
+    const expectedUrl =
+      'https://brainrot-publishing.nyc3.digitaloceanspaces.com/the-iliad/audio/book-01.mp3';
     const result = await downloadFromSpaces(path);
 
     // Assertions
@@ -66,14 +69,15 @@ describe('downloadFromSpaces', () => {
     mockFetch.mockResolvedValueOnce({
       ok: true,
       headers: {
-        get: jest.fn().mockReturnValue('audio/mpeg')
+        get: jest.fn().mockReturnValue('audio/mpeg'),
       },
-      arrayBuffer: jest.fn().mockResolvedValue(mockArrayBuffer)
+      arrayBuffer: jest.fn().mockResolvedValue(mockArrayBuffer),
     });
 
     // Call the function
     const path = '/the-iliad/audio/book-01.mp3';
-    const expectedUrl = 'https://brainrot-publishing.nyc3.digitaloceanspaces.com/the-iliad/audio/book-01.mp3';
+    const expectedUrl =
+      'https://brainrot-publishing.nyc3.digitaloceanspaces.com/the-iliad/audio/book-01.mp3';
     const result = await downloadFromSpaces(path);
 
     // Assertions
@@ -85,17 +89,15 @@ describe('downloadFromSpaces', () => {
     // Mock implementation
     const mockArrayBuffer = new ArrayBuffer(1024);
     const mockFetch = global.fetch as jest.Mock;
-    
+
     // First call fails, second succeeds
-    mockFetch
-      .mockRejectedValueOnce(new Error('Network error'))
-      .mockResolvedValueOnce({
-        ok: true,
-        headers: {
-          get: jest.fn().mockReturnValue('audio/mpeg')
-        },
-        arrayBuffer: jest.fn().mockResolvedValue(mockArrayBuffer)
-      });
+    mockFetch.mockRejectedValueOnce(new Error('Network error')).mockResolvedValueOnce({
+      ok: true,
+      headers: {
+        get: jest.fn().mockReturnValue('audio/mpeg'),
+      },
+      arrayBuffer: jest.fn().mockResolvedValue(mockArrayBuffer),
+    });
 
     // Reduce timeout and retry delay for test
     jest.spyOn(global, 'setTimeout').mockImplementation((callback: any) => {
@@ -104,7 +106,8 @@ describe('downloadFromSpaces', () => {
     });
 
     // Call the function
-    const url = 'https://brainrot-publishing.nyc3.digitaloceanspaces.com/the-iliad/audio/book-01.mp3';
+    const url =
+      'https://brainrot-publishing.nyc3.digitaloceanspaces.com/the-iliad/audio/book-01.mp3';
     const result = await downloadFromSpaces(url, { maxRetries: 3 });
 
     // Assertions
@@ -125,20 +128,22 @@ describe('downloadFromSpaces', () => {
     });
 
     // Call the function
-    const url = 'https://brainrot-publishing.nyc3.digitaloceanspaces.com/the-iliad/audio/book-01.mp3';
-    
+    const url =
+      'https://brainrot-publishing.nyc3.digitaloceanspaces.com/the-iliad/audio/book-01.mp3';
+
     // Assertions
-    await expect(downloadFromSpaces(url, { maxRetries: 2 }))
-      .rejects
-      .toThrow('Failed to download from');
-    
+    await expect(downloadFromSpaces(url, { maxRetries: 2 })).rejects.toThrow(
+      'Failed to download from'
+    );
+
     expect(mockFetch).toHaveBeenCalledTimes(3); // Initial + 2 retries
   });
 });
 
 describe('getAudioPathFromUrl', () => {
   it('should extract path from URL', () => {
-    const url = 'https://brainrot-publishing.nyc3.digitaloceanspaces.com/the-iliad/audio/book-01.mp3';
+    const url =
+      'https://brainrot-publishing.nyc3.digitaloceanspaces.com/the-iliad/audio/book-01.mp3';
     expect(getAudioPathFromUrl(url)).toBe('the-iliad/audio/book-01.mp3');
   });
 

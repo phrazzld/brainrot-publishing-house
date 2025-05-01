@@ -21,7 +21,7 @@ import { blobService } from '@/utils/services';
 // Upload a file
 const result = await blobService.uploadFile(file, {
   pathname: 'books/hamlet/images',
-  access: 'public'
+  access: 'public',
 });
 
 // Upload text content
@@ -29,7 +29,7 @@ await blobService.uploadText('Hello world', 'books/hamlet/text/greeting.txt');
 
 // List files
 const { blobs } = await blobService.listFiles({
-  prefix: 'books/hamlet/'
+  prefix: 'books/hamlet/',
 });
 
 // Get file info
@@ -52,6 +52,7 @@ const text = await blobService.fetchText(textBlobUrl);
 Uploads a file to Blob storage.
 
 Options:
+
 - `pathname`: Directory path (e.g., 'books/hamlet/images')
 - `filename`: Custom filename (defaults to file.name)
 - `access`: 'public' or 'private' (defaults to 'public')
@@ -64,6 +65,7 @@ Options:
 Uploads text content to Blob storage.
 
 Parameters:
+
 - `content`: The text content to upload
 - `path`: The full path including filename (e.g., 'books/hamlet/text/act1.txt')
 - `options`: Additional upload options
@@ -73,6 +75,7 @@ Parameters:
 Lists files in Blob storage.
 
 Options:
+
 - `prefix`: Filter files by prefix
 - `limit`: Maximum number of files to return
 - `cursor`: Pagination cursor
@@ -115,9 +118,10 @@ npx tsx scripts/inventory-assets.ts --format=csv --output=asset-inventory.csv
 ```
 
 The inventory includes:
+
 - All image and text files categorized by book and type
 - File sizes and last modified dates
-- Future Blob paths for each asset 
+- Future Blob paths for each asset
 - Summary statistics by book and asset type
 
 ### Migration from S3/DigitalOcean Spaces
@@ -147,6 +151,7 @@ npx tsx scripts/migrateBookCoverImages.ts --books=hamlet,the-iliad --force
 ```
 
 Options:
+
 - `--dry-run`: Simulate migration without uploading
 - `--books=slug1,slug2`: Comma-separated list of book slugs to migrate (default: all)
 - `--force`: Re-upload even if already migrated
@@ -155,6 +160,7 @@ Options:
 - `--log-file=path`: Path to migration log file (default: cover-images-migration.json)
 
 The script:
+
 - Identifies all book cover images from translations/index.ts
 - Maps local paths to Blob paths using BlobPathService
 - Uploads files with appropriate caching headers
@@ -176,6 +182,7 @@ npx tsx scripts/migrateBookChapterImages.ts --books=hamlet,the-republic --force
 ```
 
 Options:
+
 - `--dry-run`: Simulate migration without uploading
 - `--books=slug1,slug2`: Comma-separated list of book slugs to migrate (default: all)
 - `--force`: Re-upload even if already migrated
@@ -184,6 +191,7 @@ Options:
 - `--log-file=path`: Path to migration log file (default: chapter-images-migration.json)
 
 The script:
+
 - Scans the filesystem for chapter images in each book's directory
 - Also migrates shared images in the general images directory
 - Maps local paths to Blob paths using BlobPathService
@@ -206,6 +214,7 @@ npx tsx scripts/migrateBrainrotTextFiles.ts --books=hamlet,the-republic --force
 ```
 
 Options:
+
 - `--dry-run`: Simulate migration without uploading
 - `--books=slug1,slug2`: Comma-separated list of book slugs to migrate (default: all)
 - `--force`: Re-upload even if already migrated
@@ -214,6 +223,7 @@ Options:
 - `--log-file=path`: Path to migration log file (default: brainrot-text-migration.json)
 
 The script:
+
 - Scans the filesystem for brainrot text files in each book's directory
 - Maps local paths to Blob paths using BlobPathService
 - Uploads text content with appropriate caching headers (1-hour cache)
@@ -235,6 +245,7 @@ npx tsx scripts/migrateSourceTextFiles.ts --books=hamlet,the-republic --force
 ```
 
 Options:
+
 - `--dry-run`: Simulate migration without uploading
 - `--books=slug1,slug2`: Comma-separated list of book slugs to migrate (default: all)
 - `--force`: Re-upload even if already migrated
@@ -243,6 +254,7 @@ Options:
 - `--log-file=path`: Path to migration log file (default: source-text-migration.json)
 
 The script:
+
 - Scans the filesystem for source text files in each book's directory
 - Maps local paths to Blob paths using BlobPathService
 - Uploads text content with appropriate caching headers (24-hour cache)

@@ -1,103 +1,129 @@
-import { ReadableStreamDefaultController } from 'stream/web';
 import OpenAI from 'openai';
-import { ChatCompletion } from 'openai/resources/chat/completions';
+import { ReadableStreamDefaultController } from 'stream/web';
+
 import { sseSend } from '../utils/sseUtils';
 
 const MAX_RETRIES = 3;
 
 /**
- * Translates a single text chunk using the specified OpenAI model
+ * Options for the translateChunk function.
  */
-export async function translateChunk(
-  openai: OpenAI,
-  systemPrompt: string,
-  userPrompt: string,
-  chunk: string,
-  model: string,
-  temp: number
-): Promise<string> {
-  let resp: ChatCompletion;
-  
-  // Different parameters based on model type
-  if (['o3-mini', 'o1'].includes(model)) {
-    resp = await openai.chat.completions.create({
-      model,
-      messages: [
-        { role: 'system', content: systemPrompt },
-        {
-          role: 'user',
-          content: `${userPrompt}
+export interface TranslateChunkOptions {
+  openai: OpenAI;
+  systemPrompt: string;
+  userPrompt: string;
+  chunk: string;
+  model: string;
+  temp: number;
+}
+
+/**
+ * Options for the translateChunkWithRetries function.
+ */
+export interface TranslateChunkWithRetriesOptions {
+  openai: OpenAI;
+  sseController: ReadableStreamDefaultController;
+  systemPrompt: string;
+  userPrompt: string;
+  chunk: string;
+  model: string;
+  temp: number;
+  chunkIndex: number; // 0-based index
+  chunkCount: number;
+}
+
+/**
+ * Translates a single text chunk using the specified OpenAI model.
+ * @param options - The translation parameters.
+ * @returns The translated text chunk.
+ */
+export async function translateChunk(options: TranslateChunkOptions): Promise<string> {
+  const { openai, systemPrompt, userPrompt, chunk, model, temp } = options;
+
+  const basePayload = {
+    model,
+    messages: [
+      { role: 'system' as const, content: systemPrompt },
+      {
+        role: 'user' as const,
+        content: `${userPrompt}
 
 ---
 original text chunk:
 
 ${chunk}`,
-        },
-      ],
-      reasoning_effort: 'high',
-    });
-  } else {
-    resp = await openai.chat.completions.create({
-      model,
-      messages: [
-        { role: 'system', content: systemPrompt },
-        {
-          role: 'user',
-          content: `${userPrompt}
+      },
+    ],
+  };
 
----
-original text chunk:
+  // Use reasoning_effort or temperature based on model
+  const payload = ['o3-mini', 'o1'].includes(model)
+    ? { ...basePayload, reasoning_effort: 'high' as const } // Specific to certain models
+    : { ...basePayload, temperature: temp };
 
-${chunk}`,
-        },
-      ],
-      temperature: temp,
-    });
-  }
-  
+  const resp = await openai.chat.completions.create(payload);
+
   if (!resp.choices?.length) {
     throw new Error('[error: no choices returned]');
   }
-  
+
   return resp.choices[0].message?.content || '[error: no content]';
 }
 
 /**
- * Translates a chunk with automatic retries on failure
+ * Translates a chunk with automatic retries on failure.
+ * @param options - The translation parameters including retry context.
+ * @returns The translated text chunk after successful translation or throws after retries.
  */
 export async function translateChunkWithRetries(
-  openai: OpenAI,
-  sseController: ReadableStreamDefaultController,
-  systemPrompt: string,
-  userPrompt: string,
-  chunk: string,
-  model: string,
-  temp: number,
-  chunkIndex: number,
-  chunkCount: number
+  options: TranslateChunkWithRetriesOptions
 ): Promise<string> {
+  const {
+    openai,
+    sseController,
+    systemPrompt,
+    userPrompt,
+    chunk,
+    model,
+    temp,
+    chunkIndex,
+    chunkCount,
+  } = options;
   let attempt = 0;
-  
+
   while (attempt < MAX_RETRIES) {
     attempt++;
     try {
+      // Use 1-based index for user-facing logs
       sseSend(
         sseController,
         'log',
-        `attempt ${attempt}/${MAX_RETRIES} on chunk ${chunkIndex}/${chunkCount} with model '${model}' (chunk size=${chunk.length})`
+        `attempt ${attempt}/${MAX_RETRIES} on chunk ${chunkIndex + 1}/${chunkCount} with model '${model}' (chunk size=${chunk.length})`
       );
-      
-      const result = await translateChunk(openai, systemPrompt, userPrompt, chunk, model, temp);
+
+      // Prepare options for the underlying translateChunk call
+      const translateOptions: TranslateChunkOptions = {
+        openai,
+        systemPrompt,
+        userPrompt,
+        chunk,
+        model,
+        temp,
+      };
+
+      // Call translateChunk with the options object
+      const result = await translateChunk(translateOptions);
       return result;
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : String(err);
-      
+
+      // Use 1-based index for user-facing logs
       sseSend(
         sseController,
         'log',
-        `error on attempt ${attempt} for chunk ${chunkIndex}/${chunkCount} (model '${model}'): ${errorMessage}`
+        `error on attempt ${attempt} for chunk ${chunkIndex + 1}/${chunkCount} (model '${model}'): ${errorMessage}`
       );
-      
+
       if (attempt < MAX_RETRIES) {
         sseSend(sseController, 'log', 'retrying in 3s...');
         await new Promise((r) => setTimeout(r, 3000));
@@ -111,6 +137,6 @@ export async function translateChunkWithRetries(
       }
     }
   }
-  
+
   throw new Error('all retries failed');
 }

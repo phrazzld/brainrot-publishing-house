@@ -11,12 +11,12 @@ if (typeof global.TextDecoder === 'undefined') {
 // Mock import.meta for ESM compatibility
 if (typeof global.import === 'undefined') {
   global.import = {};
-  global.import.meta = { 
+  global.import.meta = {
     url: 'file:///mock-url.js',
     // Add resolver for relative paths
     resolve: (specifier) => {
       return new URL(specifier, 'file:///mock-url.js').href;
-    }
+    },
   };
 }
 

@@ -8,9 +8,10 @@ export async function GET(_request: NextRequest) {
     const { blobs } = await list();
 
     return NextResponse.json({ blobs });
-  } catch (error: Error) {
+  } catch (error: unknown) {
     console.error('Error listing blobs:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
 
@@ -34,9 +35,10 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json(blob);
-  } catch (error: Error) {
+  } catch (error: unknown) {
     console.error('Error uploading to blob storage:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
 
@@ -53,8 +55,9 @@ export async function DELETE(request: NextRequest) {
     await del(url);
 
     return NextResponse.json({ success: true });
-  } catch (error: Error) {
+  } catch (error: unknown) {
     console.error('Error deleting blob:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }

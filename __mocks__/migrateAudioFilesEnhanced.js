@@ -9,7 +9,7 @@ module.exports = {
       constructor(options) {
         this.options = options;
       }
-      
+
       async run() {
         return {
           timestamp: new Date().toISOString(),
@@ -24,9 +24,9 @@ module.exports = {
           validationSuccess: 1,
           validationFailed: 0,
           startTime: new Date().toISOString(),
-          endTime: new Date().toISOString()
+          endTime: new Date().toISOString(),
         };
       }
-    }
-  }
+    },
+  },
 };
