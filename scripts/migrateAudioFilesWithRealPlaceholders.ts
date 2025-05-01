@@ -401,7 +401,7 @@ class AudioFilesMigrator {
 
       // Read the file as buffer
       const fileBuffer = fs.readFileSync(placeholderFile.path);
-      
+
       // Create a File object from the buffer
       const file = new File([fileBuffer], path.basename(targetBlobPath), { type: 'audio/mpeg' });
 

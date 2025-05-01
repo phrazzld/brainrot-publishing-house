@@ -151,9 +151,7 @@ async function migrateAudioFile(bookNumber: number): Promise<void> {
     });
 
     const uploadDuration = Date.now() - uploadStartTime;
-    console.log(
-      `✅ Uploaded to ${uploadResult.url} in ${(uploadDuration / 1000).toFixed(1)}s`
-    );
+    console.log(`✅ Uploaded to ${uploadResult.url} in ${(uploadDuration / 1000).toFixed(1)}s`);
 
     // Verify the upload
     console.log(`\n🔍 Verifying upload...`);

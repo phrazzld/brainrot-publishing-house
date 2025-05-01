@@ -305,9 +305,7 @@ class AudioFilesMigrator {
       });
 
       const uploadDuration = Date.now() - uploadStartTime;
-      this.log(
-        `   ✅ Uploaded to ${uploadResult.url} in ${uploadDuration}ms`
-      );
+      this.log(`   ✅ Uploaded to ${uploadResult.url} in ${uploadDuration}ms`);
 
       // Verify the upload
       const verifyResult = await blobService.getFileInfo(uploadResult.url);

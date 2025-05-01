@@ -56,7 +56,7 @@ async function testAssetMigration() {
     const result = await blobService.uploadFile(file, {
       pathname,
       filename,
-      access: 'public'
+      access: 'public',
     });
 
     console.log('✅ Upload successful!');

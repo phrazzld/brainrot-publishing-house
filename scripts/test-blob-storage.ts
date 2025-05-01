@@ -44,7 +44,7 @@ async function testBlobStorage() {
     const result = await blobService.uploadText(
       testContent,
       `test/service-${timestamp}.txt`,
-      { } // No special options needed
+      {} // No special options needed
     );
 
     console.log('✅ BlobService upload successful!');

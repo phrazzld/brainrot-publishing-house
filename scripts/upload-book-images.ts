@@ -82,7 +82,7 @@ async function uploadBookImages() {
         const result = await blobService.uploadFile(fileObj, {
           pathname,
           filename,
-          access: 'public'
+          access: 'public',
         });
 
         console.log(`✅ Uploaded ${file.filename} to ${result.url}`);

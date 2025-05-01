@@ -2,20 +2,21 @@
 /**
  * Script to remove console statements from the codebase
  * Usage: npx tsx scripts/remove-console-statements.ts
- * 
+ *
  * This script identifies all console.log, console.error, console.warn, and other console
  * statements in the codebase and removes them.
  */
-
 import * as fs from 'fs';
 import * as path from 'path';
 import { execSync } from 'child_process';
 
 // File patterns to process
-const FILE_PATTERNS = ['ts', 'tsx', 'js', 'jsx'].map(ext => `--include="*.${ext}"`).join(' ');
+const FILE_PATTERNS = ['ts', 'tsx', 'js', 'jsx'].map((ext) => `--include="*.${ext}"`).join(' ');
 
 // Directories to exclude
-const EXCLUDED_DIRS = ['node_modules', '.next', '.git', 'dist', 'build'].map(dir => `--exclude-dir="${dir}"`).join(' ');
+const EXCLUDED_DIRS = ['node_modules', '.next', '.git', 'dist', 'build']
+  .map((dir) => `--exclude-dir="${dir}"`)
+  .join(' ');
 
 // Count console statements before removal
 function countConsoleStatements(): number {
@@ -46,23 +47,23 @@ function processFile(filePath: string): boolean {
   try {
     // Read file content
     const content = fs.readFileSync(filePath, 'utf8');
-    
+
     // Replace console statements
     // This regex matches console.X(...) statements, including multi-line ones
     const newContent = content.replace(
       /console\.(log|error|warn|info|debug|trace|time|timeEnd|assert|count|countReset|group|groupEnd|table)\s*\([^;]*\);?/g,
       ''
     );
-    
+
     // Also remove entire lines that only contained a console statement (to avoid empty lines)
     const cleanedContent = newContent.replace(/^\s*\/\/?\s*console\..*$/gm, '');
-    
+
     // Write file if content changed
     if (cleanedContent !== content) {
       fs.writeFileSync(filePath, cleanedContent, 'utf8');
       return true;
     }
-    
+
     return false;
   } catch (error) {
     console.error(`Error processing file ${filePath}:`, error);
@@ -75,11 +76,11 @@ async function main() {
   // Count console statements before removal
   const initialCount = countConsoleStatements();
   console.log(`Found ${initialCount} console statements in the codebase.`);
-  
+
   // Find files with console statements
   const files = findFilesWithConsoleStatements();
   console.log(`Found ${files.length} files with console statements.`);
-  
+
   // Process each file
   let modifiedCount = 0;
   for (const file of files) {
@@ -89,28 +90,28 @@ async function main() {
       console.log(`Processed: ${file}`);
     }
   }
-  
+
   // Count console statements after removal
   const finalCount = countConsoleStatements();
   const removedCount = initialCount - finalCount;
-  
+
   console.log(`
 Summary:
 - Modified ${modifiedCount} files
 - Removed ${removedCount} console statements
 - ${finalCount} console statements remain (these may require manual intervention)
 `);
-  
+
   // If statements remain, list the files
   if (finalCount > 0) {
     console.log('Files with remaining console statements:');
     const remainingFiles = findFilesWithConsoleStatements();
-    remainingFiles.forEach(file => console.log(`- ${file}`));
+    remainingFiles.forEach((file) => console.log(`- ${file}`));
   }
 }
 
 // Run the script
-main().catch(error => {
+main().catch((error) => {
   console.error('Error running script:', error);
   process.exit(1);
 });

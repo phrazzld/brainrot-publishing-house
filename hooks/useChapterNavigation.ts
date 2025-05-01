@@ -78,26 +78,26 @@ export function useChapterNavigation(
 
   // We use a debounce approach to avoid excessive URL updates
   const lastUpdateTimestamp = useRef<number>(0);
-  
+
   function updateUrlWithChapterAndTimestamp(ts: number) {
     if (!slug) return;
-    
+
     // Skip frequent updates - only update URL every 5 seconds or on explicit events
     const now = Date.now();
     const timeSinceLastUpdate = now - lastUpdateTimestamp.current;
     if (timeSinceLastUpdate < 5000 && ts > 0 && ts < totalChapters) {
       return;
     }
-    
+
     lastUpdateTimestamp.current = now;
-    
+
     const c = chapterIndex;
     const t = Math.floor(ts);
     let newUrl = `/reading-room/${slug}?c=${c}`;
     if (t > 0) {
       newUrl += `&t=${t}`;
     }
-    
+
     // Use replace to avoid creating new history entries
     router.replace(newUrl);
   }

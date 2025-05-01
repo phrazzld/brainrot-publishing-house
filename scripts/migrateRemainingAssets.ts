@@ -255,7 +255,7 @@ async function migrateBookCover(
         const uploadResult = await blobService.uploadFile(file, {
           pathname,
           filename,
-          access: 'public'
+          access: 'public',
         });
 
         // Verify upload

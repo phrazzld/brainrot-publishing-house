@@ -33,8 +33,9 @@ export default function AudioPlayer(props: AudioPlayerProps) {
           <div className="text-white text-sm font-body animate-pulse">loading up the vibes...</div>
         </div>
         <div className="flex items-center gap-4">
-          <div className="flex-1 h-[48px] bg-[#1f1f29] rounded-sm overflow-hidden"
-            ref={waveformRef} 
+          <div
+            className="flex-1 h-[48px] bg-[#1f1f29] rounded-sm overflow-hidden"
+            ref={waveformRef}
             data-testid="waveform-container-loading"
           />
           <button onClick={onTogglePlayPause} className="btn btn-primary" disabled>
@@ -53,8 +54,9 @@ export default function AudioPlayer(props: AudioPlayerProps) {
     <div className="p-4 bg-[#2c2c3a] relative">
       <div className="flex items-center gap-4">
         {/* Use a stable ref for the waveform container */}
-        <div className="flex-1 h-[48px] bg-[#1f1f29] rounded-sm overflow-hidden" 
-          ref={waveformRef} 
+        <div
+          className="flex-1 h-[48px] bg-[#1f1f29] rounded-sm overflow-hidden"
+          ref={waveformRef}
           data-testid="waveform-container"
         />
         <button onClick={onTogglePlayPause} className="btn btn-primary">

@@ -49,7 +49,7 @@
       Depends On: T7
       AC Ref: None
 
-- [ ] T9: Apply Prettier Formatting Fixes
+- [x] T9: Apply Prettier Formatting Fixes
       Action: Run the Prettier formatter across the codebase (e.g., `npx prettier --write .`) or manually adjust files to satisfy formatting rules.
       Depends On: T8
       AC Ref: None

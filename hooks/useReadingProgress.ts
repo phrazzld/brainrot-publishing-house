@@ -1,18 +1,11 @@
-// hooks/useReadingProgress.ts
-// track reading progress based on scroll (for that little bar at the top)
 'use client';
 
 import { useEffect, useState } from 'react';
 
-// hooks/useReadingProgress.ts
-// track reading progress based on scroll (for that little bar at the top)
-
-// hooks/useReadingProgress.ts
-// track reading progress based on scroll (for that little bar at the top)
-
-// hooks/useReadingProgress.ts
-// track reading progress based on scroll (for that little bar at the top)
-
+/**
+ * A hook that tracks reading progress based on scroll position
+ * Used for the progress bar at the top of the page
+ */
 export function useReadingProgress() {
   const [progress, setProgress] = useState(0);
 

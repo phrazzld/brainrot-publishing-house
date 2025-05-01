@@ -37,30 +37,28 @@ export function useAudioPlayer(
 
   // Memoize the render function to prevent recreation on every render
   // This draws the waveform visualization with bars
-  const renderFunction = useCallback((peaks: number[] | null, ctx: CanvasRenderingContext2D | null) => {
-    if (!ctx || !peaks) return;
-    
-    const { width, height } = ctx.canvas;
-    ctx.clearRect(0, 0, width, height);
-    ctx.fillStyle = '#666';
-    
-    const barWidth = 2;
-    const barGap = 1;
-    const barCount = Math.floor(width / (barWidth + barGap));
-    const step = Math.floor(peaks.length / barCount) || 1;
-    
-    for (let i = 0; i < barCount; i++) {
-      const peakIndex = Math.floor(i * step);
-      const peak = peaks[peakIndex] || 0;
-      const barHeight = Math.max(1, Math.abs(peak) * height);
-      ctx.fillRect(
-        i * (barWidth + barGap),
-        (height - barHeight) / 2,
-        barWidth,
-        barHeight
-      );
-    }
-  }, []);
+  const renderFunction = useCallback(
+    (peaks: number[] | null, ctx: CanvasRenderingContext2D | null) => {
+      if (!ctx || !peaks) return;
+
+      const { width, height } = ctx.canvas;
+      ctx.clearRect(0, 0, width, height);
+      ctx.fillStyle = '#666';
+
+      const barWidth = 2;
+      const barGap = 1;
+      const barCount = Math.floor(width / (barWidth + barGap));
+      const step = Math.floor(peaks.length / barCount) || 1;
+
+      for (let i = 0; i < barCount; i++) {
+        const peakIndex = Math.floor(i * step);
+        const peak = peaks[peakIndex] || 0;
+        const barHeight = Math.max(1, Math.abs(peak) * height);
+        ctx.fillRect(i * (barWidth + barGap), (height - barHeight) / 2, barWidth, barHeight);
+      }
+    },
+    []
+  );
 
   // Use the React wavesurfer hook with memoized config
   const { wavesurfer } = useWavesurfer({
@@ -76,7 +74,7 @@ export function useAudioPlayer(
     fillParent: true,
     interact: true,
     url: audioSrc || undefined, // Pass URL directly
-    renderFunction
+    renderFunction,
   });
 
   // Helper to safely set state only when mounted
@@ -237,7 +235,7 @@ export function useAudioPlayer(
         }
       }
     }, 100);
-    
+
     return () => {
       clearTimeout(loadTimer);
     };
