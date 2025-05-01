@@ -67,11 +67,11 @@ export async function GET(req: NextRequest) {
       // respond with json
       return NextResponse.json({ url: signedUrl });
     } catch (assetError) {
-      console.error('Error retrieving asset URL:', assetError);
+      // Return 404 error for file not found
       return NextResponse.json({ error: 'file not found' }, { status: 404 });
     }
   } catch (err) {
-    console.error('Download route error:', err);
+    // Return generic error to client
     return NextResponse.json(
       { error: err instanceof Error ? err.message : 'An unknown error occurred' },
       { status: 500 }

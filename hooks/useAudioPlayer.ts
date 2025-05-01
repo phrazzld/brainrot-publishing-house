@@ -102,8 +102,9 @@ export function useAudioPlayer(
     if (wavesurfer) {
       try {
         wavesurfer.playPause();
-      } catch (e) {
-        console.error('Error toggling playback:', e);
+      } catch (_e) {
+        // Silently handle playback toggle errors
+        // No user-visible action needed as UI state won't change
       }
     }
   }, [wavesurfer]);
@@ -167,8 +168,8 @@ export function useAudioPlayer(
       }
     };
 
-    const handleError = (error: Error) => {
-      console.error('WaveSurfer error:', error);
+    const handleError = (_error: Error) => {
+      // Handle wavesurfer errors by updating loading state
       if (isMounted.current) {
         setIsAudioLoading(false);
       }
@@ -226,11 +227,11 @@ export function useAudioPlayer(
     const loadTimer = setTimeout(() => {
       try {
         if (wavesurfer && audioSrc && isMounted.current) {
-          console.log('Loading audio source:', audioSrc);
+          // Audio source loading
           wavesurfer.load(audioSrc);
         }
       } catch (error) {
-        console.error('Error loading audio:', error);
+        // Handle audio loading error
         if (isMounted.current) {
           setIsAudioLoading(false);
         }

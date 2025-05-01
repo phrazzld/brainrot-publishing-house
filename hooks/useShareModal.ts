@@ -60,8 +60,8 @@ export function useShareModal(
     try {
       await navigator.clipboard.writeText(shareUrl);
       setShareFeedback('link is in your clipboard, glhf!');
-    } catch (err) {
-      console.error(err);
+    } catch (_err) {
+      // Set error feedback message
       setShareFeedback("couldn't copy link sry man");
     }
   }

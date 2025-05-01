@@ -88,7 +88,7 @@ export async function handleTranslationRequest(
     await sendFinalTranslation(title, combined, controller);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    console.error('Translation handler error:', error);
+    // Error is sent to the client via SSE
     sseSend(controller, 'error', `Handler Error: ${message}`);
     controller.close(); // Ensure controller is closed on error
   }

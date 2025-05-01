@@ -89,8 +89,9 @@ export function useTranslationStream(): [TranslationStreamState, TranslationStre
     const es = new EventSource(url);
     setEvtSource(es);
 
+    // Listen for generic messages (not used, but preserved for EventSource initialization)
     es.onmessage = (evt) => {
-      console.log('onmessage:', evt.data);
+      // No-op: specific message types are handled by event listeners below
     };
 
     es.addEventListener('log', (event: MessageEvent) => {
@@ -98,7 +99,7 @@ export function useTranslationStream(): [TranslationStreamState, TranslationStre
     });
 
     es.addEventListener('error', (event: MessageEvent) => {
-      console.error('sse error event', event);
+      // Set error state and close connection
       setError(`error: ${event.data}`);
       es.close();
       setEvtSource(null);
@@ -133,7 +134,7 @@ export function useTranslationStream(): [TranslationStreamState, TranslationStre
         setSearchResults(results);
         setLogs((old) => [`[log] received search results`, ...old]);
       } catch (err) {
-        console.error('failed to parse results event', err);
+        // Handle JSON parse error
         setError(`couldn't parse search results: ${String(err)}`);
       }
       es.close();
@@ -178,7 +179,7 @@ export function useTranslationStream(): [TranslationStreamState, TranslationStre
         downloadFile(filename, content);
         setLogs((old) => [`[log] downloaded source text -> ${filename}`, ...old]);
       } catch (err) {
-        console.error('failed to parse source event', err);
+        // Handle JSON parse error
         setError(`couldn't parse raw source text: ${String(err)}`);
       }
     });
@@ -190,7 +191,7 @@ export function useTranslationStream(): [TranslationStreamState, TranslationStre
         const { filename, content } = JSON.parse(event.data);
         downloadFile(filename, content);
       } catch (err) {
-        console.error('failed to parse done event', err);
+        // Handle JSON parse error for translation completion
         setError(`failed to parse final text: ${String(err)}`);
       }
       es.close();

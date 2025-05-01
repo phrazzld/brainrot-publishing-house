@@ -97,7 +97,7 @@ export async function GET(request: NextRequest) {
  */
 function handleStreamError(err: unknown, controller: ReadableStreamDefaultController): void {
   const errorMessage = err instanceof Error ? err.message : String(err);
-  console.error('Stream Error:', err);
+  // Error is sent to the client via SSE - no need for console.error
   sseSend(controller, 'error', `Stream error: ${errorMessage}`);
   controller.close();
 }
@@ -106,7 +106,7 @@ function handleStreamError(err: unknown, controller: ReadableStreamDefaultContro
  * Handles API-level errors
  */
 function handleApiError(err: unknown): NextResponse {
-  console.error('API Route Error:', err);
+  // We return a generic error to the client for security reasons
   return new NextResponse(JSON.stringify({ error: 'An internal server error occurred' }), {
     status: 500,
     headers: { 'Content-Type': 'application/json' },

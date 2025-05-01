@@ -30,9 +30,9 @@ export function useTextLoader(textPath: string | undefined): TextLoaderState {
         if (signal.aborted) return; // Don't update state if aborted
         setRawText(txt);
       })
-      .catch((error) => {
+      .catch((_error) => {
         if (signal.aborted) return; // Don't update state if aborted
-        console.error('Failed to load text:', error);
+        // Set fallback error message
         setRawText('Error loading text. Please try again later.');
       })
       .finally(() => {

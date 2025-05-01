@@ -44,7 +44,7 @@
       Depends On: T6
       AC Ref: None
 
-- [ ] T8: Remove All `console.log` Statements
+- [x] T8: Remove All `console.log` Statements
       Action: Search for and delete any `console.log`, `console.warn`, `console.error`, etc., replacing them with the project's structured logging API if runtime logging is required.
       Depends On: T7
       AC Ref: None
