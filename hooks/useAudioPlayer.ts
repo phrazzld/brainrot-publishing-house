@@ -38,8 +38,12 @@ export function useAudioPlayer(
   // Memoize the render function to prevent recreation on every render
   // This draws the waveform visualization with bars
   const renderFunction = useCallback(
-    (peaks: number[] | null, ctx: CanvasRenderingContext2D | null) => {
-      if (!ctx || !peaks) return;
+    (peaks: (Float32Array | number[])[], ctx: CanvasRenderingContext2D) => {
+      if (!ctx || !peaks.length) return;
+
+      // Get the first channel's data (mono or left channel)
+      const channelData = peaks[0];
+      if (!channelData || !channelData.length) return;
 
       const { width, height } = ctx.canvas;
       ctx.clearRect(0, 0, width, height);
@@ -48,11 +52,11 @@ export function useAudioPlayer(
       const barWidth = 2;
       const barGap = 1;
       const barCount = Math.floor(width / (barWidth + barGap));
-      const step = Math.floor(peaks.length / barCount) || 1;
+      const step = Math.floor(channelData.length / barCount) || 1;
 
       for (let i = 0; i < barCount; i++) {
         const peakIndex = Math.floor(i * step);
-        const peak = peaks[peakIndex] || 0;
+        const peak = channelData[peakIndex] || 0;
         const barHeight = Math.max(1, Math.abs(peak) * height);
         ctx.fillRect(i * (barWidth + barGap), (height - barHeight) / 2, barWidth, barHeight);
       }
@@ -100,7 +104,7 @@ export function useAudioPlayer(
     if (wavesurfer) {
       try {
         wavesurfer.playPause();
-      } catch (_e) {
+      } catch {
         // Silently handle playback toggle errors
         // No user-visible action needed as UI state won't change
       }
@@ -228,7 +232,7 @@ export function useAudioPlayer(
           // Audio source loading
           wavesurfer.load(audioSrc);
         }
-      } catch (error) {
+      } catch {
         // Handle audio loading error
         if (isMounted.current) {
           setIsAudioLoading(false);

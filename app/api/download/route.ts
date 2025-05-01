@@ -66,7 +66,7 @@ export async function GET(req: NextRequest) {
 
       // respond with json
       return NextResponse.json({ url: signedUrl });
-    } catch (assetError) {
+    } catch {
       // Return 404 error for file not found
       return NextResponse.json({ error: 'file not found' }, { status: 404 });
     }

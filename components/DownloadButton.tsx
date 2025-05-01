@@ -43,7 +43,7 @@ export default function DownloadButton({ slug, type, chapter, classNames }: Down
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-    } catch (err: unknown) {
+    } catch {
       // Set user-friendly error message
       setError('failed to download. sry bestie.');
     } finally {

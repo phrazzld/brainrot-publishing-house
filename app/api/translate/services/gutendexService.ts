@@ -56,18 +56,9 @@ export function pickBestFormat(formats: Record<string, string>) {
 }
 
 /**
- * Fetches book text from Gutendex by book ID
+ * Validates the Gutendex book data
  */
-export async function fetchBookText(id: number): Promise<BookDetail> {
-  const url = `https://gutendex.com/books/${id}`;
-  const res = await fetch(url);
-
-  if (!res.ok) {
-    throw new Error(`gutendex metadata fetch failed: ${res.status}`);
-  }
-
-  const data: unknown = await res.json();
-
+function validateBookData(data: unknown): GutendexBookDetails {
   // Type validation
   if (
     typeof data !== 'object' ||
@@ -79,13 +70,49 @@ export async function fetchBookText(id: number): Promise<BookDetail> {
     throw new Error('Invalid book details structure from Gutendex');
   }
 
-  const bookData = data as GutendexBookDetails;
+  return data as GutendexBookDetails;
+}
 
+/**
+ * Formats author information from book data
+ */
+function formatAuthors(authors: GutendexAuthor[] | undefined): string {
+  return (authors || []).map((a: GutendexAuthor) => a.name).join(', ') || 'unknown';
+}
+
+/**
+ * Processes the downloaded text based on format
+ */
+function processBookText(text: string, format: string): string {
+  if (format.includes('text/plain')) {
+    return text;
+  } else if (format.includes('text/html')) {
+    return parseHtmlIntoText(text);
+  }
+  throw new Error('no plain text/html found; only epub/mobi. cannot parse.');
+}
+
+/**
+ * Fetches book text from Gutendex by book ID
+ */
+export async function fetchBookText(id: number): Promise<BookDetail> {
+  // Fetch book metadata
+  const url = `https://gutendex.com/books/${id}`;
+  const res = await fetch(url);
+
+  if (!res.ok) {
+    throw new Error(`gutendex metadata fetch failed: ${res.status}`);
+  }
+
+  const data = await res.json();
+  const bookData = validateBookData(data);
+
+  // Get book details
   const { chosenFormat, downloadUrl } = pickBestFormat(bookData.formats);
   const title = bookData.title;
-  const authors =
-    (bookData.authors || []).map((a: GutendexAuthor) => a.name).join(', ') || 'unknown';
+  const authors = formatAuthors(bookData.authors);
 
+  // Download and process text content
   const downloadRes = await fetch(downloadUrl);
   if (!downloadRes.ok) {
     throw new Error(`failed to download text: ${downloadRes.status}`);
@@ -93,12 +120,7 @@ export async function fetchBookText(id: number): Promise<BookDetail> {
 
   const buf = await downloadRes.arrayBuffer();
   const utf8Text = new TextDecoder('utf-8', { fatal: false }).decode(buf);
+  const processedText = processBookText(utf8Text, chosenFormat);
 
-  if (chosenFormat.includes('text/plain')) {
-    return { title, authors, text: utf8Text };
-  } else if (chosenFormat.includes('text/html')) {
-    return { title, authors, text: parseHtmlIntoText(utf8Text) };
-  }
-
-  throw new Error('no plain text/html found; only epub/mobi. cannot parse.');
+  return { title, authors, text: processedText };
 }

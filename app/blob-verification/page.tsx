@@ -170,6 +170,26 @@ export default function BlobVerificationPage() {
   const loadingCount = Object.values(bookStatuses).filter((s) => s.overall === 'loading').length;
   const totalBooks = translations.length;
 
+  // Helper function to determine status color
+  function getStatusColor(overall: string): string {
+    if (overall === 'success') return 'bg-green-200 dark:bg-green-800';
+    if (overall === 'partial') return 'bg-yellow-200 dark:bg-yellow-800';
+    if (overall === 'failed') return 'bg-red-200 dark:bg-red-800';
+    return 'bg-blue-200 dark:bg-blue-800';
+  }
+
+  // Helper function to render resource status indicator
+  function ResourceStatusIndicator({
+    status,
+  }: {
+    status: { loading: boolean; exists: boolean; error?: string | null };
+  }) {
+    if (status.loading) return <>⏳</>;
+    if (status.exists) return <>✅</>;
+    if (status.error === 'No audio available') return <>N/A</>;
+    return <>❌</>;
+  }
+
   // Book Card Component
   function BookVerificationCard({
     book,
@@ -180,12 +200,7 @@ export default function BlobVerificationPage() {
     status: BookVerificationStatus;
     onVerify: () => void;
   }) {
-    // Determine the status color
-    let statusColor = 'bg-blue-200';
-    if (status.overall === 'success') statusColor = 'bg-green-200 dark:bg-green-800';
-    else if (status.overall === 'partial') statusColor = 'bg-yellow-200 dark:bg-yellow-800';
-    else if (status.overall === 'failed') statusColor = 'bg-red-200 dark:bg-red-800';
-    else statusColor = 'bg-blue-200 dark:bg-blue-800';
+    const statusColor = getStatusColor(status.overall);
 
     return (
       <div className={`${statusColor} p-4 rounded-lg`}>
@@ -194,26 +209,22 @@ export default function BlobVerificationPage() {
         <div className="mb-4">
           <div className="flex justify-between">
             <div>Cover Image:</div>
-            <div>{status.coverImage.loading ? '⏳' : status.coverImage.exists ? '✅' : '❌'}</div>
+            <div>
+              <ResourceStatusIndicator status={status.coverImage} />
+            </div>
           </div>
 
           <div className="flex justify-between">
             <div>First Chapter:</div>
             <div>
-              {status.firstChapter.loading ? '⏳' : status.firstChapter.exists ? '✅' : '❌'}
+              <ResourceStatusIndicator status={status.firstChapter} />
             </div>
           </div>
 
           <div className="flex justify-between">
             <div>Audio:</div>
             <div>
-              {status.audio.loading
-                ? '⏳'
-                : status.audio.exists
-                  ? '✅'
-                  : status.audio.error === 'No audio available'
-                    ? 'N/A'
-                    : '❌'}
+              <ResourceStatusIndicator status={status.audio} />
             </div>
           </div>
         </div>

@@ -105,7 +105,7 @@ function handleStreamError(err: unknown, controller: ReadableStreamDefaultContro
 /**
  * Handles API-level errors
  */
-function handleApiError(err: unknown): NextResponse {
+function handleApiError(_err: unknown): NextResponse {
   // We return a generic error to the client for security reasons
   return new NextResponse(JSON.stringify({ error: 'An internal server error occurred' }), {
     status: 500,
