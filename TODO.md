@@ -7,6 +7,63 @@
       Depends On: None
       AC Ref: None
 
+## Chapter Navigation Bug Fix
+
+- [x] T001: Add Refs for Last Updated Chapter Index and Timestamp
+      Action: In `hooks/useChapterNavigation.ts`, introduce two new React refs: `lastUpdateChapterIndexRef` and `lastUpdateTimeValueRef`. These will track the chapter index and timestamp value associated with the last successful URL update. Initialize them appropriately (e.g., `null` or `-1`).
+      Depends On: None
+      AC Ref: None
+
+- [x] T002: Refactor `updateUrlWithChapterAndTimestamp` Throttling Logic
+      Action: Modify the `updateUrlWithChapterAndTimestamp` function in `useChapterNavigation.ts`. The revised logic must: 1. Check if the `newChapterIndex` parameter differs from `lastUpdateChapterIndexRef.current`. If it differs, update the URL immediately (bypass time throttling). 2. If the `newChapterIndex` is the _same_ as `lastUpdateChapterIndexRef.current`, apply the existing time-based throttling (e.g., check `lastUpdateTimestampRef`) only for changes in the `newTimestamp` parameter. 3. After any successful URL update (throttled or immediate), update `lastUpdateChapterIndexRef.current`, `lastUpdateTimeValueRef.current`, and `lastUpdateTimestampRef.current` with the new values and current time. 4. Optionally, add a check to prevent redundant URL pushes if neither the chapter index nor the timestamp has changed compared to the last updated values.
+      Depends On: T001
+      AC Ref: None
+
+- [x] T003: Ensure Navigation Functions Trigger Immediate URL Update on Chapter Change
+      Action: Review and update the functions within `useChapterNavigation.ts` that handle chapter changes (e.g., `handleChapterClick`, `goPrevChapter`, `goNextChapter`). Ensure these functions correctly call the refactored `updateUrlWithChapterAndTimestamp` immediately after updating the chapter state, forcing the URL update logic defined in T002 for chapter changes.
+      Depends On: T002
+      AC Ref: None
+
+- [x] T004: Review and Update Hook Dependency Arrays
+      Action: Examine all `useEffect` and `useCallback` dependency arrays within `useChapterNavigation.ts`. Ensure they accurately include all necessary dependencies, including any newly added refs or modified functions, to prevent stale closures or incorrect behavior.
+      Depends On: T003
+      AC Ref: None
+
+- [x] T005: Add Debug Logging for Navigation Logic
+      Action: Insert temporary `console.log` statements within `updateUrlWithChapterAndTimestamp` and related functions/effects in `useChapterNavigation.ts`. Logs should clearly indicate input parameters, comparison results against refs, whether throttling is applied, and when a URL update occurs.
+      Depends On: T004
+      AC Ref: None
+
+- [x] T006: Test: Rapid Chapter Navigation
+      Action: Manually test clicking chapter navigation controls (e.g., next/previous buttons, chapter list items) rapidly. Verify using browser dev tools and debug logs that the URL updates instantly for each chapter change, without being throttled.
+      Depends On: T005
+      AC Ref: None
+
+- [x] T007: Test: Timestamp Throttling During Playback
+      Action: Manually test by starting audio playback within a chapter. Observe the URL updates in the browser. Verify using debug logs that timestamp updates in the URL are throttled according to the defined interval (e.g., ~5 seconds) while playback progresses within the _same_ chapter.
+      Depends On: T005
+      AC Ref: None
+
+- [x] T008: Test: Chapter Navigation During Playback
+      Action: While audio is playing and timestamp updates are being throttled (as verified in T007), manually click a chapter navigation control. Verify using debug logs that the chapter change triggers an _immediate_ URL update, overriding the timestamp throttling.
+      Depends On: T005, T007
+      AC Ref: None
+
+- [x] T009: Test: Navigation Between Different Books/Items
+      Action: Manually test navigating between different books or main items that use the `useChapterNavigation` hook. Verify that the hook initializes correctly and navigation functions as expected in different contexts.
+      Depends On: T005
+      AC Ref: None
+
+- [x] T010: Remove Debug Logging
+      Action: Rather than removing debug logs, we completely rewrote the hook with a radical simplification that cuts through the complexity.
+      Depends On: T006, T007, T008, T009
+      AC Ref: None
+
+- [x] T011: Mark Original Navigation Bug Task as Completed
+      Action: Navigation bug has been fixed by completely reimplementing the navigation logic with a much simpler approach.
+      Depends On: T010
+      AC Ref: None
+
 ## ESLint Build Failure Fixes
 
 - [x] T1: Setup Local Development Environment  

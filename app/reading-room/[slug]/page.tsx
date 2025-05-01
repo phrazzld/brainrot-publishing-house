@@ -26,7 +26,7 @@ export default function ReadingRoom() {
   // Set up chapter navigation
   const [
     { chapterIndex, slug, translation, chapterData, totalChapters },
-    { handleChapterClick, goPrevChapter, goNextChapter, updateUrlWithChapterAndTimestamp },
+    { handleChapterClick, goPrevChapter, goNextChapter, updateTimestamp },
   ] = useChapterNavigation(translations);
 
   // Load chapter text
@@ -34,7 +34,7 @@ export default function ReadingRoom() {
 
   // Set up audio player
   const [{ isPlaying, isAudioLoading, currentTime, totalTime }, { togglePlayPause, formatTime }] =
-    useAudioPlayer(waveformRef, chapterData?.audioSrc, updateUrlWithChapterAndTimestamp);
+    useAudioPlayer(waveformRef, chapterData?.audioSrc, updateTimestamp);
 
   // Set up share modal
   const [
