@@ -98,7 +98,7 @@ Fetches text content from a Blob URL.
 
 ## Testing
 
-A test page is available at `/blob-test` to verify that the Blob storage is properly configured. You can use this page to upload, list, and delete files.
+You can use the `verifyBlobStorage.ts` script to check if Blob storage is properly configured and verify that assets are accessible.
 
 ## Asset Inventory and Migration
 

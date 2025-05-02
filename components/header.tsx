@@ -12,9 +12,6 @@ export default function Header() {
         <Link href="/explore" className="hover:text-peachy transition font-body">
           explore
         </Link>
-        <Link href="/blob-verification" className="hover:text-peachy transition font-body">
-          verify
-        </Link>
       </nav>
     </header>
   );

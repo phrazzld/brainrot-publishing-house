@@ -8,7 +8,7 @@ Before running the cleanup process, ensure:
 
 1. All assets have been successfully migrated to Blob storage
 2. You have run the verification script (`scripts/verifyBlobStorage.ts`) and confirmed assets render correctly
-3. The verification page (`/blob-verification`) shows all books with green status indicators
+3. You have manually tested the reading room to confirm all books load properly
 
 ## Cleanup Script
 

@@ -4,10 +4,9 @@ This document provides instructions for verifying that all book content renders 
 
 ## Testing Tools
 
-We provide two main tools for testing Blob storage functionality:
+We provide command-line verification for testing Blob storage functionality:
 
-1. **Verification Page:** Navigate to `/blob-verification` in the application to see real-time status of all books and their assets.
-2. **Command-line Verification:** Run `npm run verify:blob` to generate a detailed report of all assets and their migration status.
+- **Command-line Verification:** Run `npm run verify:blob` to generate a detailed report of all assets and their migration status.
 
 ## Manual Testing Checklist
 
@@ -32,7 +31,6 @@ For a thorough verification, follow this checklist for each book:
 - [ ] Test with browser cache cleared
 - [ ] Test on different browsers (Chrome, Firefox, Safari)
 - [ ] Test with network throttling enabled in devtools
-- [ ] Clear the application's URL cache using the "Clear Cache" button on the verification page
 
 ## Test Report Template
 
@@ -91,20 +89,19 @@ Tester: [YOUR NAME]
 
 ### Images Not Loading from Blob
 
-1. Check if the image has been migrated using the verification page
+1. Check if the image has been migrated by running `npm run verify:blob`
 2. Verify the image path in the translations file
 3. Check browser network tab for 404 errors
-4. Try clearing the URL cache
 
 ### Text Content Not Loading
 
-1. Check if text files have been migrated
+1. Check if text files have been migrated using command-line verification
 2. Look for errors in the browser console
 3. Verify the text path in the translations file
 
 ### Audio Playback Issues
 
-1. Confirm audio has been migrated to Blob storage
+1. Confirm audio has been migrated to Blob storage with `npm run verify:blob`
 2. Check browser support for audio format
 3. Verify audio URL in network tab
 
