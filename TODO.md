@@ -29,7 +29,7 @@
     1. Visit `/translate` and verify it returns a 404.
   - **Depends‑on:** [T001]
 
-- [ ] **T003 · Refactor · P1: remove translation hooks and utilities**
+- [x] **T003 · Refactor · P1: remove translation hooks and utilities**
 
   - **Context:** Remove supporting client-side translation code
   - **Action:**

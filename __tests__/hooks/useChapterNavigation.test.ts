@@ -37,10 +37,9 @@ const mockTranslations: Translation[] = [
   {
     title: 'Test Book',
     slug: 'test-book',
-    author: 'Test Author',
-    description: 'A test book',
+    shortDescription: 'A test book description',
     coverImage: '/cover.jpg',
-    publishingInfo: 'Test Publisher, 2023',
+    status: 'available',
     chapters: [
       { title: 'Chapter 1', text: 'file1.txt', audioSrc: 'audio1.mp3' },
       { title: 'Chapter 2', text: 'file2.txt', audioSrc: 'audio2.mp3' },
