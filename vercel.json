@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "buildCommand": "npm run build",
+  "installCommand": "npm install --legacy-peer-deps",
+  "framework": "nextjs",
+  "env": {
+    "NEXT_PUBLIC_BLOB_BASE_URL": "https://public.blob.vercel-storage.com"
+  }
+}

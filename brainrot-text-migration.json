@@ -1,0 +1,436 @@
+{
+  "hamlet": {
+    "act-v.txt": {
+      "status": "success",
+      "originalPath": "/assets/hamlet/text/brainrot/act-v.txt",
+      "blobPath": "books/hamlet/text/brainrot/act-v.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/hamlet/text/brainrot/act-v.txt"
+    },
+    "act-ii.txt": {
+      "status": "success",
+      "originalPath": "/assets/hamlet/text/brainrot/act-ii.txt",
+      "blobPath": "books/hamlet/text/brainrot/act-ii.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/hamlet/text/brainrot/act-ii.txt"
+    },
+    "act-iv.txt": {
+      "status": "success",
+      "originalPath": "/assets/hamlet/text/brainrot/act-iv.txt",
+      "blobPath": "books/hamlet/text/brainrot/act-iv.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/hamlet/text/brainrot/act-iv.txt"
+    },
+    "act-i.txt": {
+      "status": "success",
+      "originalPath": "/assets/hamlet/text/brainrot/act-i.txt",
+      "blobPath": "books/hamlet/text/brainrot/act-i.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/hamlet/text/brainrot/act-i.txt"
+    },
+    "act-iii.txt": {
+      "status": "success",
+      "originalPath": "/assets/hamlet/text/brainrot/act-iii.txt",
+      "blobPath": "books/hamlet/text/brainrot/act-iii.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/hamlet/text/brainrot/act-iii.txt"
+    },
+    "fulltext.txt": {
+      "status": "success",
+      "originalPath": "/assets/hamlet/text/brainrot/fulltext.txt",
+      "blobPath": "books/hamlet/text/brainrot/fulltext.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/hamlet/text/brainrot/fulltext.txt"
+    }
+  },
+  "pride-and-prejudice": {
+    "chapter-ii.txt": {
+      "status": "success",
+      "originalPath": "/assets/pride-and-prejudice/text/brainrot/chapter-ii.txt",
+      "blobPath": "books/pride-and-prejudice/text/brainrot/chapter-ii.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/pride-and-prejudice/text/brainrot/chapter-ii.txt"
+    },
+    "chapter-v.txt": {
+      "status": "success",
+      "originalPath": "/assets/pride-and-prejudice/text/brainrot/chapter-v.txt",
+      "blobPath": "books/pride-and-prejudice/text/brainrot/chapter-v.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/pride-and-prejudice/text/brainrot/chapter-v.txt"
+    },
+    "chapter-i.txt": {
+      "status": "success",
+      "originalPath": "/assets/pride-and-prejudice/text/brainrot/chapter-i.txt",
+      "blobPath": "books/pride-and-prejudice/text/brainrot/chapter-i.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/pride-and-prejudice/text/brainrot/chapter-i.txt"
+    },
+    "chapter-iii.txt": {
+      "status": "success",
+      "originalPath": "/assets/pride-and-prejudice/text/brainrot/chapter-iii.txt",
+      "blobPath": "books/pride-and-prejudice/text/brainrot/chapter-iii.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/pride-and-prejudice/text/brainrot/chapter-iii.txt"
+    },
+    "chapter-iv.txt": {
+      "status": "success",
+      "originalPath": "/assets/pride-and-prejudice/text/brainrot/chapter-iv.txt",
+      "blobPath": "books/pride-and-prejudice/text/brainrot/chapter-iv.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/pride-and-prejudice/text/brainrot/chapter-iv.txt"
+    },
+    "chapter-vi.txt": {
+      "status": "success",
+      "originalPath": "/assets/pride-and-prejudice/text/brainrot/chapter-vi.txt",
+      "blobPath": "books/pride-and-prejudice/text/brainrot/chapter-vi.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/pride-and-prejudice/text/brainrot/chapter-vi.txt"
+    },
+    "fulltext-copy.txt": {
+      "status": "success",
+      "originalPath": "/assets/pride-and-prejudice/text/brainrot/fulltext-copy.txt",
+      "blobPath": "books/pride-and-prejudice/text/brainrot/fulltext-copy.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/pride-and-prejudice/text/brainrot/fulltext-copy.txt"
+    },
+    "fulltext.txt": {
+      "status": "success",
+      "originalPath": "/assets/pride-and-prejudice/text/brainrot/fulltext.txt",
+      "blobPath": "books/pride-and-prejudice/text/brainrot/fulltext.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/pride-and-prejudice/text/brainrot/fulltext.txt"
+    }
+  },
+  "the-adventures-of-huckleberry-finn": {
+    "chapter-i.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-i.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-i.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-i.txt"
+    },
+    "chapter-iv.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-iv.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-iv.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-iv.txt"
+    },
+    "chapter-ii.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-ii.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-ii.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-ii.txt"
+    },
+    "chapter-iii.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-iii.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-iii.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-iii.txt"
+    },
+    "chapter-ix.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-ix.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-ix.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-ix.txt"
+    },
+    "chapter-vii.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-vii.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-vii.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-vii.txt"
+    },
+    "chapter-v.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-v.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-v.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-v.txt"
+    },
+    "chapter-viii.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-viii.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-viii.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-viii.txt"
+    },
+    "chapter-the-last.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-the-last.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-the-last.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-the-last.txt"
+    },
+    "chapter-vi.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-vi.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-vi.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-vi.txt"
+    },
+    "chapter-xiv.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xiv.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xiv.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xiv.txt"
+    },
+    "chapter-xiii.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xiii.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xiii.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xiii.txt"
+    },
+    "chapter-x.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-x.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-x.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-x.txt"
+    },
+    "chapter-xii.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xii.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xii.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xii.txt"
+    },
+    "chapter-xi.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xi.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xi.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xi.txt"
+    },
+    "chapter-xv.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xv.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xv.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xv.txt"
+    },
+    "chapter-xl.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xl.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xl.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xl.txt"
+    },
+    "chapter-xli.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xli.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xli.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xli.txt"
+    },
+    "chapter-xix.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xix.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xix.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xix.txt"
+    },
+    "chapter-xlii.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xlii.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xlii.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xlii.txt"
+    },
+    "chapter-xxi.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxi.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxi.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxi.txt"
+    },
+    "chapter-xviii.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xviii.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xviii.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xviii.txt"
+    },
+    "chapter-xvi.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xvi.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xvi.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xvi.txt"
+    },
+    "chapter-xx.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xx.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xx.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xx.txt"
+    },
+    "chapter-xvii.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xvii.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xvii.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xvii.txt"
+    },
+    "chapter-xxix.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxix.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxix.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxix.txt"
+    },
+    "chapter-xxiii.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxiii.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxiii.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxiii.txt"
+    },
+    "chapter-xxiv.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxiv.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxiv.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxiv.txt"
+    },
+    "chapter-xxv.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxv.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxv.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxv.txt"
+    },
+    "chapter-xxii.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxii.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxii.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxii.txt"
+    },
+    "chapter-xxvi.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxvi.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxvi.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxvi.txt"
+    },
+    "chapter-xxxi.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxi.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxi.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxi.txt"
+    },
+    "chapter-xxviii.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxviii.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxviii.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxviii.txt"
+    },
+    "chapter-xxx.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxx.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxx.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxx.txt"
+    },
+    "chapter-xxvii.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxvii.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxvii.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxvii.txt"
+    },
+    "chapter-xxxiii.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxiii.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxiii.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxiii.txt"
+    },
+    "chapter-xxxii.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxii.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxii.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxii.txt"
+    },
+    "chapter-xxxix.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxix.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxix.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxix.txt"
+    },
+    "chapter-xxxv.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxv.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxv.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxv.txt"
+    },
+    "chapter-xxxiv.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxiv.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxiv.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxiv.txt"
+    },
+    "chapter-xxxvi.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxvi.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxvi.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxvi.txt"
+    },
+    "chapter-xxxvii.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxvii.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxvii.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxvii.txt"
+    },
+    "chapter-xxxviii.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxviii.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxviii.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxviii.txt"
+    },
+    "huck-finn-brainrot-processed.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/huck-finn-brainrot-processed.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/huck-finn-brainrot-processed.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/huck-finn-brainrot-processed.txt"
+    },
+    "huck-finn-brainrot.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-adventures-of-huckleberry-finn/text/brainrot/huck-finn-brainrot.txt",
+      "blobPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/huck-finn-brainrot.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/huck-finn-brainrot.txt"
+    }
+  },
+  "the-republic": {
+    "book-ix.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-republic/text/brainrot/book-ix.txt",
+      "blobPath": "books/the-republic/text/brainrot/book-ix.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-republic/text/brainrot/book-ix.txt"
+    },
+    "book-iii.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-republic/text/brainrot/book-iii.txt",
+      "blobPath": "books/the-republic/text/brainrot/book-iii.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-republic/text/brainrot/book-iii.txt"
+    },
+    "book-iv.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-republic/text/brainrot/book-iv.txt",
+      "blobPath": "books/the-republic/text/brainrot/book-iv.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-republic/text/brainrot/book-iv.txt"
+    },
+    "book-i.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-republic/text/brainrot/book-i.txt",
+      "blobPath": "books/the-republic/text/brainrot/book-i.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-republic/text/brainrot/book-i.txt"
+    },
+    "book-ii.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-republic/text/brainrot/book-ii.txt",
+      "blobPath": "books/the-republic/text/brainrot/book-ii.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-republic/text/brainrot/book-ii.txt"
+    },
+    "book-v.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-republic/text/brainrot/book-v.txt",
+      "blobPath": "books/the-republic/text/brainrot/book-v.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-republic/text/brainrot/book-v.txt"
+    },
+    "book-x.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-republic/text/brainrot/book-x.txt",
+      "blobPath": "books/the-republic/text/brainrot/book-x.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-republic/text/brainrot/book-x.txt"
+    },
+    "book-vi.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-republic/text/brainrot/book-vi.txt",
+      "blobPath": "books/the-republic/text/brainrot/book-vi.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-republic/text/brainrot/book-vi.txt"
+    },
+    "book-viii.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-republic/text/brainrot/book-viii.txt",
+      "blobPath": "books/the-republic/text/brainrot/book-viii.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-republic/text/brainrot/book-viii.txt"
+    },
+    "book-vii.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-republic/text/brainrot/book-vii.txt",
+      "blobPath": "books/the-republic/text/brainrot/book-vii.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-republic/text/brainrot/book-vii.txt"
+    },
+    "fulltext-copy.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-republic/text/brainrot/fulltext-copy.txt",
+      "blobPath": "books/the-republic/text/brainrot/fulltext-copy.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-republic/text/brainrot/fulltext-copy.txt"
+    },
+    "fulltext.txt": {
+      "status": "success",
+      "originalPath": "/assets/the-republic/text/brainrot/fulltext.txt",
+      "blobPath": "books/the-republic/text/brainrot/fulltext.txt",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-republic/text/brainrot/fulltext.txt"
+    }
+  }
+}

@@ -1,12 +1,14 @@
-/* hooks/useFocusMode.ts */
-"use client"
-import { useState } from 'react'
+'use client';
 
+import { useState } from 'react';
+
+/**
+ * A hook that provides focus mode state and toggle functionality
+ */
 export function useFocusMode() {
-  const [focusMode, setFocusMode] = useState(false)
+  const [focusMode, setFocusMode] = useState(false);
   function toggleFocusMode() {
-    setFocusMode((prev) => !prev)
+    setFocusMode((prev) => !prev);
   }
-  return { focusMode, toggleFocusMode }
+  return { focusMode, toggleFocusMode };
 }
-

@@ -30,12 +30,61 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+# allow example env files
+!.env.*.example
 
 # vercel
 .vercel
 
+# Don't ignore Husky hooks
+!.husky/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+.env*.local
+
+# reports and generated files
+/reports
+audio-files-report.json
+audio-inventory-verified.json
+audio-inventory.json
+audio-migration-cdn.json
+audio-migration-with-content.json
+audio-migration-with-placeholders.json
+audio-url-verification.json
+placeholder-deletion-results.json
+
+# temporary directories
+/temp
+/tmp
+
+# credentials and config
+aws-do-config.ini
+
+# local assets (migrated to blob storage)
+/public/assets/
+
+# local environment configuration
+.tool-versions
+
+# backups
+/backups/
+
+# thinktank directories
+thinktank_*/
+
+# planning files
+*-plan.md
+
+# glance documentation files
+glance.md
+**/glance.md
+
+**/.claude/settings.local.json

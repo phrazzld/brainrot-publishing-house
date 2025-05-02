@@ -12,15 +12,21 @@ this nextjs app is a total vibe: a reading + audio platform that merges sweet wa
 
 - **app/reading-room/[slug]**: main reading component. fetches your text, loads audio, manages chapters/timestamps.
 - **hooks & components**: reusable building blocks to handle reading progress, theme toggles, etc.
-- **digitalocean spaces**: you set a `NEXT_PUBLIC_SPACES_BASE_URL` that points to your bucket, then waveforms load audio from that public url.
-- **env**: `.env.local` holds your secrets (stripe key, do spaces credentials, etc.). config them on vercel for deploy.
+- **vercel blob storage**: assets are stored in Vercel Blob using a standardized path structure.
+- **env**: `.env.local` holds your secrets (stripe key, blob credentials, etc.). config them on vercel for deploy.
+
+## documentation
+
+- [BLOB_STORAGE.md](docs/BLOB_STORAGE.md): details about Blob storage configuration
+- [BLOB_PATH_STRUCTURE.md](docs/BLOB_PATH_STRUCTURE.md): path structure for assets in Blob storage
+- [ASSET_CLEANUP.md](docs/ASSET_CLEANUP.md): guide for cleaning up local assets after migration
 
 ## stack
 
 - **nextjs** (app router) for zero-config routing & serverless endpoints.
 - **react** for the core ui.
 - **wavesurfer** for audio waveforms and playback.
-- **digitalocean spaces**: configured with cors, publicly hosted audio.
+- **vercel blob storage**: high-performance asset storage that replaces DigitalOcean Spaces.
 - **tailwindcss** for speed-coded styling.
 
 ## running locally
@@ -36,6 +42,7 @@ this nextjs app is a total vibe: a reading + audio platform that merges sweet wa
 ## vision
 
 this is just the beginning:
+
 - line-by-line audio sync & highlight
 - buy physical copies with stripe or bitcoin
 - dynamic user accounts, profiles, reading stats

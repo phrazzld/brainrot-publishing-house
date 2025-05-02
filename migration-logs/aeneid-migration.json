@@ -1,0 +1,285 @@
+{
+  "summary": {
+    "timestamp": "2025-04-28T06:17:31.791Z",
+    "total": 12,
+    "successful": 12,
+    "skipped": 0,
+    "failed": 0,
+    "totalDownloadSize": 108569816,
+    "totalUploadSize": 0,
+    "totalDuration": 56398,
+    "booksCovered": [
+      "the-aeneid"
+    ],
+    "validationSuccess": 12,
+    "validationFailed": 0,
+    "startTime": "2025-04-28T06:16:35.393Z",
+    "endTime": "2025-04-28T06:17:31.791Z"
+  },
+  "options": {
+    "dryRun": false,
+    "books": [
+      "the-aeneid"
+    ],
+    "force": true,
+    "retries": 3,
+    "concurrency": 3,
+    "logFile": "migration-logs/aeneid-migration.json",
+    "verbose": true,
+    "sizeThreshold": 100
+  },
+  "results": [
+    {
+      "status": "success",
+      "bookSlug": "the-aeneid",
+      "chapterTitle": "book 3",
+      "key": "the-aeneid/audio/book-03.mp3",
+      "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/the-aeneid/audio/book-03.mp3",
+      "blobPath": "the-aeneid/audio/book-03.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-03.mp3",
+      "totalTime": 6045,
+      "validated": true,
+      "downloadSize": 3524596,
+      "contentType": "audio/mpeg",
+      "downloadTime": 2655,
+      "validationInfo": {
+        "sizeMatch": true,
+        "contentValidated": false,
+        "expectedSize": 3524596,
+        "actualSize": 3524596
+      },
+      "uploadTime": 1947
+    },
+    {
+      "status": "success",
+      "bookSlug": "the-aeneid",
+      "chapterTitle": "book 2",
+      "key": "the-aeneid/audio/book-02.mp3",
+      "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/the-aeneid/audio/book-02.mp3",
+      "blobPath": "the-aeneid/audio/book-02.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-02.mp3",
+      "totalTime": 12359,
+      "validated": true,
+      "downloadSize": 12241827,
+      "contentType": "audio/mpeg",
+      "downloadTime": 7537,
+      "validationInfo": {
+        "sizeMatch": true,
+        "contentValidated": false,
+        "expectedSize": 12241827,
+        "actualSize": 12241827
+      },
+      "uploadTime": 3968
+    },
+    {
+      "status": "success",
+      "bookSlug": "the-aeneid",
+      "chapterTitle": "book 1",
+      "key": "the-aeneid/audio/book-01.mp3",
+      "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/the-aeneid/audio/book-01.mp3",
+      "blobPath": "the-aeneid/audio/book-01.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-01.mp3",
+      "totalTime": 14157,
+      "validated": true,
+      "downloadSize": 12040185,
+      "contentType": "audio/mpeg",
+      "downloadTime": 7322,
+      "validationInfo": {
+        "sizeMatch": true,
+        "contentValidated": false,
+        "expectedSize": 12040185,
+        "actualSize": 12040185
+      },
+      "uploadTime": 5987
+    },
+    {
+      "status": "success",
+      "bookSlug": "the-aeneid",
+      "chapterTitle": "book 4",
+      "key": "the-aeneid/audio/book-04.mp3",
+      "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/the-aeneid/audio/book-04.mp3",
+      "blobPath": "the-aeneid/audio/book-04.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-04.mp3",
+      "totalTime": 8574,
+      "validated": true,
+      "downloadSize": 4788092,
+      "contentType": "audio/mpeg",
+      "downloadTime": 5955,
+      "validationInfo": {
+        "sizeMatch": true,
+        "contentValidated": false,
+        "expectedSize": 4788092,
+        "actualSize": 4788092
+      },
+      "uploadTime": 1859
+    },
+    {
+      "status": "success",
+      "bookSlug": "the-aeneid",
+      "chapterTitle": "book 5",
+      "key": "the-aeneid/audio/book-05.mp3",
+      "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/the-aeneid/audio/book-05.mp3",
+      "blobPath": "the-aeneid/audio/book-05.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-05.mp3",
+      "totalTime": 11839,
+      "validated": true,
+      "downloadSize": 8522080,
+      "contentType": "audio/mpeg",
+      "downloadTime": 6585,
+      "validationInfo": {
+        "sizeMatch": true,
+        "contentValidated": false,
+        "expectedSize": 8522080,
+        "actualSize": 8522080
+      },
+      "uploadTime": 3807
+    },
+    {
+      "status": "success",
+      "bookSlug": "the-aeneid",
+      "chapterTitle": "book 8",
+      "key": "the-aeneid/audio/book-08.mp3",
+      "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/the-aeneid/audio/book-08.mp3",
+      "blobPath": "the-aeneid/audio/book-08.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-08.mp3",
+      "totalTime": 3745,
+      "validated": true,
+      "downloadSize": 3090739,
+      "contentType": "audio/mpeg",
+      "downloadTime": 1847,
+      "validationInfo": {
+        "sizeMatch": true,
+        "contentValidated": false,
+        "expectedSize": 3090739,
+        "actualSize": 3090739
+      },
+      "uploadTime": 1457
+    },
+    {
+      "status": "success",
+      "bookSlug": "the-aeneid",
+      "chapterTitle": "book 6",
+      "key": "the-aeneid/audio/book-06.mp3",
+      "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/the-aeneid/audio/book-06.mp3",
+      "blobPath": "the-aeneid/audio/book-06.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-06.mp3",
+      "totalTime": 21066,
+      "validated": true,
+      "downloadSize": 17291204,
+      "contentType": "audio/mpeg",
+      "downloadTime": 14209,
+      "validationInfo": {
+        "sizeMatch": true,
+        "contentValidated": false,
+        "expectedSize": 17291204,
+        "actualSize": 17291204
+      },
+      "uploadTime": 5776
+    },
+    {
+      "status": "success",
+      "bookSlug": "the-aeneid",
+      "chapterTitle": "book 7",
+      "key": "the-aeneid/audio/book-07.mp3",
+      "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/the-aeneid/audio/book-07.mp3",
+      "blobPath": "the-aeneid/audio/book-07.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-07.mp3",
+      "totalTime": 21201,
+      "validated": true,
+      "downloadSize": 14439157,
+      "contentType": "audio/mpeg",
+      "downloadTime": 16622,
+      "validationInfo": {
+        "sizeMatch": true,
+        "contentValidated": false,
+        "expectedSize": 14439157,
+        "actualSize": 14439157
+      },
+      "uploadTime": 3973
+    },
+    {
+      "status": "success",
+      "bookSlug": "the-aeneid",
+      "chapterTitle": "book 9",
+      "key": "the-aeneid/audio/book-09.mp3",
+      "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/the-aeneid/audio/book-09.mp3",
+      "blobPath": "the-aeneid/audio/book-09.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-09.mp3",
+      "totalTime": 10509,
+      "validated": true,
+      "downloadSize": 4969654,
+      "contentType": "audio/mpeg",
+      "downloadTime": 8001,
+      "validationInfo": {
+        "sizeMatch": true,
+        "contentValidated": false,
+        "expectedSize": 4969654,
+        "actualSize": 4969654
+      },
+      "uploadTime": 2057
+    },
+    {
+      "status": "success",
+      "bookSlug": "the-aeneid",
+      "chapterTitle": "book 10",
+      "key": "the-aeneid/audio/book-10.mp3",
+      "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/the-aeneid/audio/book-10.mp3",
+      "blobPath": "the-aeneid/audio/book-10.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-10.mp3",
+      "totalTime": 7391,
+      "validated": true,
+      "downloadSize": 2451463,
+      "contentType": "audio/mpeg",
+      "downloadTime": 4174,
+      "validationInfo": {
+        "sizeMatch": true,
+        "contentValidated": true,
+        "expectedSize": 2451463,
+        "actualSize": 2451463
+      },
+      "uploadTime": 2478
+    },
+    {
+      "status": "success",
+      "bookSlug": "the-aeneid",
+      "chapterTitle": "book 11",
+      "key": "the-aeneid/audio/book-11.mp3",
+      "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/the-aeneid/audio/book-11.mp3",
+      "blobPath": "the-aeneid/audio/book-11.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-11.mp3",
+      "totalTime": 17700,
+      "validated": true,
+      "downloadSize": 10213148,
+      "contentType": "audio/mpeg",
+      "downloadTime": 12333,
+      "validationInfo": {
+        "sizeMatch": true,
+        "contentValidated": false,
+        "expectedSize": 10213148,
+        "actualSize": 10213148
+      },
+      "uploadTime": 4528
+    },
+    {
+      "status": "success",
+      "bookSlug": "the-aeneid",
+      "chapterTitle": "book 12",
+      "key": "the-aeneid/audio/book-12.mp3",
+      "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/the-aeneid/audio/book-12.mp3",
+      "blobPath": "the-aeneid/audio/book-12.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-12.mp3",
+      "totalTime": 17925,
+      "validated": true,
+      "downloadSize": 14997671,
+      "contentType": "audio/mpeg",
+      "downloadTime": 13299,
+      "validationInfo": {
+        "sizeMatch": true,
+        "contentValidated": false,
+        "expectedSize": 14997671,
+        "actualSize": 14997671
+      },
+      "uploadTime": 3871
+    }
+  ]
+}

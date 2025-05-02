@@ -1,0 +1,1681 @@
+{
+  "date": "2025-04-26T11:38:09.774Z",
+  "dryRun": true,
+  "overallSummary": {
+    "totalBooks": 20,
+    "totalAssets": 201,
+    "assetsInBlob": 78,
+    "assetsDeleted": 0,
+    "assetsKept": 78,
+    "errors": 0
+  },
+  "bookResults": [
+    {
+      "slug": "the-iliad",
+      "title": "the iliad",
+      "results": [
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/images/the-iliad-01.png",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/images/the-iliad-01.png",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "cover"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-01.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/text/book-01.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-01.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/audio/book-01.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-02.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/text/book-02.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-02.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/audio/book-02.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-03.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/text/book-03.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-03.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/audio/book-03.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-04.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/text/book-04.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-04.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/audio/book-04.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-05.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/text/book-05.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-05.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/audio/book-05.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-06.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/text/book-06.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-06.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/audio/book-06.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-07.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/text/book-07.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-07.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/audio/book-07.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-08.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/text/book-08.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-08.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/audio/book-08.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-09.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/text/book-09.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-09.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/audio/book-09.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-10.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/text/book-10.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-10.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/audio/book-10.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-11.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/text/book-11.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-11.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/audio/book-11.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-12.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/text/book-12.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-12.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/audio/book-12.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-13.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/text/book-13.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-13.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/audio/book-13.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-14.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/text/book-14.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-14.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/audio/book-14.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-15.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/text/book-15.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-15.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/audio/book-15.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-16.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/text/book-16.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-16.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/audio/book-16.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-17.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/text/book-17.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-17.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/audio/book-17.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-18.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/text/book-18.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-18.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/audio/book-18.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-19.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/text/book-19.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-19.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/audio/book-19.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-20.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/text/book-20.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-20.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/audio/book-20.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-21.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/text/book-21.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-21.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/audio/book-21.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-22.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/text/book-22.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-22.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/audio/book-22.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-23.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/text/book-23.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-23.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/audio/book-23.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-24.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/text/book-24.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-24.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/audio/book-24.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        }
+      ],
+      "summary": {
+        "totalAssets": 49,
+        "existInBlob": 1,
+        "deleted": 0,
+        "keptLocal": 1,
+        "errors": 0
+      }
+    },
+    {
+      "slug": "the-adventures-of-huckleberry-finn",
+      "title": "the adventures of huckleberry finn",
+      "results": [
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/images/huck-finn-09.png",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/images/huck-finn-09.png",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "cover"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-i.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-i.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-ii.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-ii.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-iii.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-iii.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-iv.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-iv.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-v.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-v.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-vi.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-vi.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-vii.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-vii.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-viii.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-viii.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-ix.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-ix.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-x.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-x.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xi.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xi.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xii.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xii.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xiii.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xiii.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xiv.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xiv.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xv.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xv.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xvi.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xvi.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xvii.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xvii.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xviii.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xviii.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xix.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xix.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xx.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xx.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxi.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxi.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxii.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxii.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxiii.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxiii.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxiv.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxiv.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxv.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxv.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxvi.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxvi.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxvii.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxvii.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxviii.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxviii.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxix.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxix.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxx.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxx.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxi.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxi.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxii.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxii.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxiii.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxiii.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxiv.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxiv.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxv.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxv.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxvi.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxvi.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxvii.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxvii.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxviii.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxviii.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxix.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxix.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xl.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xl.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xli.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xli.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xlii.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xlii.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-the-last.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-the-last.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        }
+      ],
+      "summary": {
+        "totalAssets": 44,
+        "existInBlob": 44,
+        "deleted": 0,
+        "keptLocal": 44,
+        "errors": 0
+      }
+    },
+    {
+      "slug": "the-odyssey",
+      "title": "the odyssey",
+      "results": [
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/images/the-odyssey-01.png",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/images/the-odyssey-01.png",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "cover"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-01.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/text/book-01.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-01.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/audio/book-01.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-02.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/text/book-02.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-02.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/audio/book-02.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-03.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/text/book-03.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-03.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/audio/book-03.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-04.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/text/book-04.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-04.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/audio/book-04.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-05.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/text/book-05.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-05.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/audio/book-05.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-06.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/text/book-06.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-06.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/audio/book-06.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-07.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/text/book-07.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-07.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/audio/book-07.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-08.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/text/book-08.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-08.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/audio/book-08.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-09.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/text/book-09.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-09.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/audio/book-09.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-10.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/text/book-10.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-10.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/audio/book-10.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-11.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/text/book-11.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-11.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/audio/book-11.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-12.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/text/book-12.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-12.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/audio/book-12.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-13.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/text/book-13.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-13.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/audio/book-13.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-14.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/text/book-14.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-14.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/audio/book-14.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-15.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/text/book-15.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-15.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/audio/book-15.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-16.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/text/book-16.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-16.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/audio/book-16.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-17.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/text/book-17.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-17.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/audio/book-17.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-18.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/text/book-18.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-18.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/audio/book-18.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-19.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/text/book-19.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-19.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/audio/book-19.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-20.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/text/book-20.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-20.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/audio/book-20.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-21.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/text/book-21.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-21.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/audio/book-21.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-22.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/text/book-22.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-22.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/audio/book-22.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-23.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/text/book-23.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-23.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/audio/book-23.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-24.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/text/book-24.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-24.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/audio/book-24.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        }
+      ],
+      "summary": {
+        "totalAssets": 49,
+        "existInBlob": 1,
+        "deleted": 0,
+        "keptLocal": 1,
+        "errors": 0
+      }
+    },
+    {
+      "slug": "the-aeneid",
+      "title": "the aeneid",
+      "results": [
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-aeneid/images/the-aeneid-01.png",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-aeneid/images/the-aeneid-01.png",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "cover"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-aeneid/text/book-01.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-aeneid/text/book-01.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-01.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-aeneid/audio/book-01.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-aeneid/text/book-02.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-aeneid/text/book-02.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-02.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-aeneid/audio/book-02.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-aeneid/text/book-03.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-aeneid/text/book-03.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-03.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-aeneid/audio/book-03.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-aeneid/text/book-04.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-aeneid/text/book-04.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-04.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-aeneid/audio/book-04.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-aeneid/text/book-05.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-aeneid/text/book-05.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-05.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-aeneid/audio/book-05.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-aeneid/text/book-06.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-aeneid/text/book-06.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-06.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-aeneid/audio/book-06.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-aeneid/text/book-07.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-aeneid/text/book-07.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-07.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-aeneid/audio/book-07.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-aeneid/text/book-08.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-aeneid/text/book-08.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-08.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-aeneid/audio/book-08.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-aeneid/text/book-09.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-aeneid/text/book-09.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-09.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-aeneid/audio/book-09.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-aeneid/text/book-10.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-aeneid/text/book-10.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-10.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-aeneid/audio/book-10.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-aeneid/text/book-11.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-aeneid/text/book-11.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-11.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-aeneid/audio/book-11.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-aeneid/text/book-12.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-aeneid/text/book-12.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-12.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-aeneid/audio/book-12.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        }
+      ],
+      "summary": {
+        "totalAssets": 25,
+        "existInBlob": 1,
+        "deleted": 0,
+        "keptLocal": 1,
+        "errors": 0
+      }
+    },
+    {
+      "slug": "hamlet",
+      "title": "hamlet",
+      "results": [
+        {
+          "path": "https://public.blob.vercel-storage.com/books/hamlet/images/hamlet-07.png",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/hamlet/images/hamlet-07.png",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "cover"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/hamlet/text/brainrot/act-i.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/hamlet/text/brainrot/act-i.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/hamlet/audio/act-i.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/hamlet/audio/act-i.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/hamlet/text/brainrot/act-ii.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/hamlet/text/brainrot/act-ii.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/hamlet/text/brainrot/act-iii.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/hamlet/text/brainrot/act-iii.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/hamlet/text/brainrot/act-iv.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/hamlet/text/brainrot/act-iv.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/hamlet/text/brainrot/act-v.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/hamlet/text/brainrot/act-v.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        }
+      ],
+      "summary": {
+        "totalAssets": 7,
+        "existInBlob": 6,
+        "deleted": 0,
+        "keptLocal": 6,
+        "errors": 0
+      }
+    },
+    {
+      "slug": "the-republic",
+      "title": "the republic",
+      "results": [
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-republic/images/republic-07.png",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-republic/images/republic-07.png",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "cover"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-republic/text/brainrot/book-i.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-republic/text/brainrot/book-i.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-republic/text/brainrot/book-ii.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-republic/text/brainrot/book-ii.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-republic/text/brainrot/book-iii.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-republic/text/brainrot/book-iii.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-republic/text/brainrot/book-iv.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-republic/text/brainrot/book-iv.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-republic/text/brainrot/book-v.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-republic/text/brainrot/book-v.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-republic/text/brainrot/book-vi.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-republic/text/brainrot/book-vi.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-republic/text/brainrot/book-vii.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-republic/text/brainrot/book-vii.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-republic/text/brainrot/book-viii.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-republic/text/brainrot/book-viii.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-republic/text/brainrot/book-ix.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-republic/text/brainrot/book-ix.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-republic/text/brainrot/book-x.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-republic/text/brainrot/book-x.txt",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "chapter"
+        }
+      ],
+      "summary": {
+        "totalAssets": 11,
+        "existInBlob": 11,
+        "deleted": 0,
+        "keptLocal": 11,
+        "errors": 0
+      }
+    },
+    {
+      "slug": "the-declaration-of-independence",
+      "title": "the declaration of independence",
+      "results": [
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-declaration-of-independence/images/america-02.png",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-declaration-of-independence/images/america-02.png",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "cover"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-declaration-of-independence/text/the-declaration-of-independence.txt",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-declaration-of-independence/text/the-declaration-of-independence.txt",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "chapter"
+        },
+        {
+          "path": "https://public.blob.vercel-storage.com/books/the-declaration-of-independence/audio/the-declaration-of-independence.mp3",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-declaration-of-independence/audio/the-declaration-of-independence.mp3",
+          "existsInBlob": false,
+          "wasDeleted": false,
+          "type": "audio"
+        }
+      ],
+      "summary": {
+        "totalAssets": 3,
+        "existInBlob": 1,
+        "deleted": 0,
+        "keptLocal": 1,
+        "errors": 0
+      }
+    },
+    {
+      "slug": "pride-and-prejudice",
+      "title": "pride and prejudice",
+      "results": [
+        {
+          "path": "https://public.blob.vercel-storage.com/books/pride-and-prejudice/images/pride-and-prejudice-01.png",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/pride-and-prejudice/images/pride-and-prejudice-01.png",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "cover"
+        }
+      ],
+      "summary": {
+        "totalAssets": 1,
+        "existInBlob": 1,
+        "deleted": 0,
+        "keptLocal": 1,
+        "errors": 0
+      }
+    },
+    {
+      "slug": "paradise-lost",
+      "title": "paradise lost",
+      "results": [
+        {
+          "path": "https://public.blob.vercel-storage.com/books/paradise-lost/images/paradise-lost-01.png",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/paradise-lost/images/paradise-lost-01.png",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "cover"
+        }
+      ],
+      "summary": {
+        "totalAssets": 1,
+        "existInBlob": 1,
+        "deleted": 0,
+        "keptLocal": 1,
+        "errors": 0
+      }
+    },
+    {
+      "slug": "meditations",
+      "title": "meditations",
+      "results": [
+        {
+          "path": "https://public.blob.vercel-storage.com/books/meditations/images/meditations-01.png",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/meditations/images/meditations-01.png",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "cover"
+        }
+      ],
+      "summary": {
+        "totalAssets": 1,
+        "existInBlob": 1,
+        "deleted": 0,
+        "keptLocal": 1,
+        "errors": 0
+      }
+    },
+    {
+      "slug": "the-divine-comedy-inferno",
+      "title": "the divine comedy: the inferno",
+      "results": [
+        {
+          "path": "https://public.blob.vercel-storage.com/images/inferno-01.png",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/images/inferno-01.png",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "cover"
+        }
+      ],
+      "summary": {
+        "totalAssets": 1,
+        "existInBlob": 1,
+        "deleted": 0,
+        "keptLocal": 1,
+        "errors": 0
+      }
+    },
+    {
+      "slug": "the-divine-comedy-purgatorio",
+      "title": "the divine comedy: the purgatorio",
+      "results": [
+        {
+          "path": "https://public.blob.vercel-storage.com/images/purgatorio-02.png",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/images/purgatorio-02.png",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "cover"
+        }
+      ],
+      "summary": {
+        "totalAssets": 1,
+        "existInBlob": 1,
+        "deleted": 0,
+        "keptLocal": 1,
+        "errors": 0
+      }
+    },
+    {
+      "slug": "the-divine-comedy-paradiso",
+      "title": "the divine comedy: the paradiso",
+      "results": [
+        {
+          "path": "https://public.blob.vercel-storage.com/images/paradiso-02.png",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/images/paradiso-02.png",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "cover"
+        }
+      ],
+      "summary": {
+        "totalAssets": 1,
+        "existInBlob": 1,
+        "deleted": 0,
+        "keptLocal": 1,
+        "errors": 0
+      }
+    },
+    {
+      "slug": "the-bible-old-testament",
+      "title": "the bible: old testament",
+      "results": [
+        {
+          "path": "https://public.blob.vercel-storage.com/images/old-testament-03.png",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/images/old-testament-03.png",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "cover"
+        }
+      ],
+      "summary": {
+        "totalAssets": 1,
+        "existInBlob": 1,
+        "deleted": 0,
+        "keptLocal": 1,
+        "errors": 0
+      }
+    },
+    {
+      "slug": "the-bible-new-testament",
+      "title": "the bible: new testament",
+      "results": [
+        {
+          "path": "https://public.blob.vercel-storage.com/images/new-testament-01.png",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/images/new-testament-01.png",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "cover"
+        }
+      ],
+      "summary": {
+        "totalAssets": 1,
+        "existInBlob": 1,
+        "deleted": 0,
+        "keptLocal": 1,
+        "errors": 0
+      }
+    },
+    {
+      "slug": "the-quran",
+      "title": "the quran",
+      "results": [
+        {
+          "path": "https://public.blob.vercel-storage.com/images/quran-01.png",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/images/quran-01.png",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "cover"
+        }
+      ],
+      "summary": {
+        "totalAssets": 1,
+        "existInBlob": 1,
+        "deleted": 0,
+        "keptLocal": 1,
+        "errors": 0
+      }
+    },
+    {
+      "slug": "romeo-and-juliet",
+      "title": "romeo and juliet",
+      "results": [
+        {
+          "path": "https://public.blob.vercel-storage.com/images/romeo-and-juliet-02.png",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/images/romeo-and-juliet-02.png",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "cover"
+        }
+      ],
+      "summary": {
+        "totalAssets": 1,
+        "existInBlob": 1,
+        "deleted": 0,
+        "keptLocal": 1,
+        "errors": 0
+      }
+    },
+    {
+      "slug": "a-midsummer-nights-dream",
+      "title": "a midsummer night's dream",
+      "results": [
+        {
+          "path": "https://public.blob.vercel-storage.com/images/midsummer-02.png",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/images/midsummer-02.png",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "cover"
+        }
+      ],
+      "summary": {
+        "totalAssets": 1,
+        "existInBlob": 1,
+        "deleted": 0,
+        "keptLocal": 1,
+        "errors": 0
+      }
+    },
+    {
+      "slug": "gilgamesh",
+      "title": "gilgamesh",
+      "results": [
+        {
+          "path": "https://public.blob.vercel-storage.com/images/gilgamesh-01.png",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/images/gilgamesh-01.png",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "cover"
+        }
+      ],
+      "summary": {
+        "totalAssets": 1,
+        "existInBlob": 1,
+        "deleted": 0,
+        "keptLocal": 1,
+        "errors": 0
+      }
+    },
+    {
+      "slug": "bhagavad-gita",
+      "title": "bhagavad gita",
+      "results": [
+        {
+          "path": "https://public.blob.vercel-storage.com/images/gita-01.png",
+          "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/images/gita-01.png",
+          "existsInBlob": true,
+          "wasDeleted": false,
+          "type": "cover"
+        }
+      ],
+      "summary": {
+        "totalAssets": 1,
+        "existInBlob": 1,
+        "deleted": 0,
+        "keptLocal": 1,
+        "errors": 0
+      }
+    }
+  ]
+}

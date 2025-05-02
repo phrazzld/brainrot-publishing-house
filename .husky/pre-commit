@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Run lint-staged to automatically format and lint staged files
+echo "Running pre-commit hooks..."
+npx lint-staged

@@ -1,0 +1,408 @@
+{
+  "date": "2025-04-26T13:02:37.581Z",
+  "dryRun": false,
+  "books": [
+    "the-iliad",
+    "the-adventures-of-huckleberry-finn",
+    "the-odyssey",
+    "the-aeneid",
+    "hamlet",
+    "the-republic",
+    "the-declaration-of-independence",
+    "pride-and-prejudice",
+    "paradise-lost",
+    "meditations",
+    "the-divine-comedy-inferno",
+    "the-divine-comedy-purgatorio",
+    "the-divine-comedy-paradiso",
+    "the-bible-old-testament",
+    "the-bible-new-testament",
+    "the-quran",
+    "romeo-and-juliet",
+    "a-midsummer-nights-dream",
+    "gilgamesh",
+    "bhagavad-gita"
+  ],
+  "results": [
+    {
+      "path": "books/the-iliad/audio/book-01.mp3",
+      "blobPath": "books/the-iliad/audio/book-01.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-iliad/audio/book-03.mp3",
+      "blobPath": "books/the-iliad/audio/book-03.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-iliad/audio/book-05.mp3",
+      "blobPath": "books/the-iliad/audio/book-05.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-iliad/audio/book-02.mp3",
+      "blobPath": "books/the-iliad/audio/book-02.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-iliad/audio/book-04.mp3",
+      "blobPath": "books/the-iliad/audio/book-04.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-iliad/audio/book-07.mp3",
+      "blobPath": "books/the-iliad/audio/book-07.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-iliad/audio/book-08.mp3",
+      "blobPath": "books/the-iliad/audio/book-08.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-iliad/audio/book-10.mp3",
+      "blobPath": "books/the-iliad/audio/book-10.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-iliad/audio/book-09.mp3",
+      "blobPath": "books/the-iliad/audio/book-09.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-iliad/audio/book-06.mp3",
+      "blobPath": "books/the-iliad/audio/book-06.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-iliad/audio/book-12.mp3",
+      "blobPath": "books/the-iliad/audio/book-12.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-iliad/audio/book-13.mp3",
+      "blobPath": "books/the-iliad/audio/book-13.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-iliad/audio/book-11.mp3",
+      "blobPath": "books/the-iliad/audio/book-11.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-iliad/audio/book-14.mp3",
+      "blobPath": "books/the-iliad/audio/book-14.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-iliad/audio/book-17.mp3",
+      "blobPath": "books/the-iliad/audio/book-17.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-iliad/audio/book-16.mp3",
+      "blobPath": "books/the-iliad/audio/book-16.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-iliad/audio/book-18.mp3",
+      "blobPath": "books/the-iliad/audio/book-18.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-iliad/audio/book-19.mp3",
+      "blobPath": "books/the-iliad/audio/book-19.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-iliad/audio/book-15.mp3",
+      "blobPath": "books/the-iliad/audio/book-15.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-iliad/audio/book-22.mp3",
+      "blobPath": "books/the-iliad/audio/book-22.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-iliad/audio/book-23.mp3",
+      "blobPath": "books/the-iliad/audio/book-23.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-iliad/audio/book-20.mp3",
+      "blobPath": "books/the-iliad/audio/book-20.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-odyssey/audio/book-01.mp3",
+      "blobPath": "books/the-odyssey/audio/book-01.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-iliad/audio/book-21.mp3",
+      "blobPath": "books/the-iliad/audio/book-21.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-odyssey/audio/book-02.mp3",
+      "blobPath": "books/the-odyssey/audio/book-02.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-iliad/audio/book-24.mp3",
+      "blobPath": "books/the-iliad/audio/book-24.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-odyssey/audio/book-03.mp3",
+      "blobPath": "books/the-odyssey/audio/book-03.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-odyssey/audio/book-04.mp3",
+      "blobPath": "books/the-odyssey/audio/book-04.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-odyssey/audio/book-06.mp3",
+      "blobPath": "books/the-odyssey/audio/book-06.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-odyssey/audio/book-07.mp3",
+      "blobPath": "books/the-odyssey/audio/book-07.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-odyssey/audio/book-08.mp3",
+      "blobPath": "books/the-odyssey/audio/book-08.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-odyssey/audio/book-05.mp3",
+      "blobPath": "books/the-odyssey/audio/book-05.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-odyssey/audio/book-10.mp3",
+      "blobPath": "books/the-odyssey/audio/book-10.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-odyssey/audio/book-11.mp3",
+      "blobPath": "books/the-odyssey/audio/book-11.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-odyssey/audio/book-09.mp3",
+      "blobPath": "books/the-odyssey/audio/book-09.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-odyssey/audio/book-12.mp3",
+      "blobPath": "books/the-odyssey/audio/book-12.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-odyssey/audio/book-14.mp3",
+      "blobPath": "books/the-odyssey/audio/book-14.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-odyssey/audio/book-15.mp3",
+      "blobPath": "books/the-odyssey/audio/book-15.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-odyssey/audio/book-17.mp3",
+      "blobPath": "books/the-odyssey/audio/book-17.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-odyssey/audio/book-13.mp3",
+      "blobPath": "books/the-odyssey/audio/book-13.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-odyssey/audio/book-16.mp3",
+      "blobPath": "books/the-odyssey/audio/book-16.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-odyssey/audio/book-19.mp3",
+      "blobPath": "books/the-odyssey/audio/book-19.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-odyssey/audio/book-20.mp3",
+      "blobPath": "books/the-odyssey/audio/book-20.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-odyssey/audio/book-21.mp3",
+      "blobPath": "books/the-odyssey/audio/book-21.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-odyssey/audio/book-22.mp3",
+      "blobPath": "books/the-odyssey/audio/book-22.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-odyssey/audio/book-18.mp3",
+      "blobPath": "books/the-odyssey/audio/book-18.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-odyssey/audio/book-24.mp3",
+      "blobPath": "books/the-odyssey/audio/book-24.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-odyssey/audio/book-23.mp3",
+      "blobPath": "books/the-odyssey/audio/book-23.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-aeneid/audio/book-01.mp3",
+      "blobPath": "books/the-aeneid/audio/book-01.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-aeneid/audio/book-02.mp3",
+      "blobPath": "books/the-aeneid/audio/book-02.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-aeneid/audio/book-03.mp3",
+      "blobPath": "books/the-aeneid/audio/book-03.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-aeneid/audio/book-04.mp3",
+      "blobPath": "books/the-aeneid/audio/book-04.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-aeneid/audio/book-05.mp3",
+      "blobPath": "books/the-aeneid/audio/book-05.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-aeneid/audio/book-08.mp3",
+      "blobPath": "books/the-aeneid/audio/book-08.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-aeneid/audio/book-06.mp3",
+      "blobPath": "books/the-aeneid/audio/book-06.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-aeneid/audio/book-09.mp3",
+      "blobPath": "books/the-aeneid/audio/book-09.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-aeneid/audio/book-07.mp3",
+      "blobPath": "books/the-aeneid/audio/book-07.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-aeneid/audio/book-10.mp3",
+      "blobPath": "books/the-aeneid/audio/book-10.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-aeneid/audio/book-11.mp3",
+      "blobPath": "books/the-aeneid/audio/book-11.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/hamlet/audio/act-i.mp3",
+      "blobPath": "books/hamlet/audio/act-i.mp3",
+      "size": 0,
+      "success": true,
+      "skipReason": "already exists"
+    },
+    {
+      "path": "books/the-aeneid/audio/book-12.mp3",
+      "blobPath": "books/the-aeneid/audio/book-12.mp3",
+      "size": 1024,
+      "success": true
+    },
+    {
+      "path": "books/the-declaration-of-independence/audio/the-declaration-of-independence.mp3",
+      "blobPath": "books/the-declaration-of-independence/audio/the-declaration-of-independence.mp3",
+      "size": 1024,
+      "success": true
+    }
+  ],
+  "summary": {
+    "total": 62,
+    "successful": 62,
+    "failed": 0,
+    "skipped": 1,
+    "totalSize": 62464
+  }
+}
