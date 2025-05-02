@@ -42,7 +42,7 @@
     1. Run codebase search for "translation" and verify no remaining translation functionality.
   - **Depends‑on:** [T002]
 
-- [ ] **T004 · Test · P1: remove translation-specific tests**
+- [x] **T004 · Test · P1: remove translation-specific tests**
 
   - **Context:** Remove tests that are no longer relevant
   - **Action:**
