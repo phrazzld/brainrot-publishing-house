@@ -70,7 +70,7 @@
     2. Review documentation and verify no outdated translation references.
   - **Depends‑on:** [T002]
 
-- [ ] **T006 · Chore · P2: remove unused environment variables and configuration**
+- [x] **T006 · Chore · P2: remove unused environment variables and configuration**
 
   - **Context:** Clean up translation-related configuration
   - **Action:**
