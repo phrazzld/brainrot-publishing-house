@@ -104,8 +104,11 @@
       "eslint --fix",
       "prettier --write"
     ],
-    "*.{json,css,md}": [
+    "*.{json,css}": [
       "prettier --write"
+    ],
+    "*.md": [
+      "sh -c 'if [ ! -L \"$1\" ]; then prettier --write \"$1\"; fi' --"
     ]
   }
 }

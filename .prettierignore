@@ -82,3 +82,7 @@ custom-text-migration.json
 
 # Project-specific files
 T*-audio-url-verification.json
+
+# Symlinks
+docs/DEVELOPMENT_PHILOSOPHY_APPENDIX_TYPESCRIPT.md
+docs/DEVELOPMENT_PHILOSOPHY_APPENDIX_FRONTEND.md
