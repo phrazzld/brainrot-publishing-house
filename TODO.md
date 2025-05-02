@@ -1,122 +1,93 @@
-# TODO
+# Todo
 
-## High Priority Tasks
+## Remove Translation Functionality
 
-- [x] T224: Replace raw wavesurfer.js with @wavesurfer/react
-      Action: Replace our current direct usage of wavesurfer.js with the official React integration package @wavesurfer/react to properly handle React lifecycle and prevent AbortError issues.
-      Depends On: None
-      AC Ref: None
+- [x] **T001 · Refactor · P0: remove `/api/translate` route implementation**
 
-## Chapter Navigation Bug Fix
+  - **Context:** Remove translation API endpoints
+  - **Action:**
+    1. Delete the file `app/api/translate/route.ts`.
+    2. Remove the associated handlers in `app/api/translate/handlers/` directory.
+    3. Remove any other files exclusively used by the translate API (e.g., services, utils).
+  - **Done‑when:**
+    1. All API route files associated with translation are removed.
+    2. Server-side translation code is completely removed.
+  - **Verification:**
+    1. Make a request to `/api/translate` and verify it returns a 404.
+  - **Depends‑on:** none
 
-- [x] T001: Add Refs for Last Updated Chapter Index and Timestamp
-      Action: In `hooks/useChapterNavigation.ts`, introduce two new React refs: `lastUpdateChapterIndexRef` and `lastUpdateTimeValueRef`. These will track the chapter index and timestamp value associated with the last successful URL update. Initialize them appropriately (e.g., `null` or `-1`).
-      Depends On: None
-      AC Ref: None
+- [ ] **T002 · Refactor · P1: remove translation frontend components**
 
-- [x] T002: Refactor `updateUrlWithChapterAndTimestamp` Throttling Logic
-      Action: Modify the `updateUrlWithChapterAndTimestamp` function in `useChapterNavigation.ts`. The revised logic must: 1. Check if the `newChapterIndex` parameter differs from `lastUpdateChapterIndexRef.current`. If it differs, update the URL immediately (bypass time throttling). 2. If the `newChapterIndex` is the _same_ as `lastUpdateChapterIndexRef.current`, apply the existing time-based throttling (e.g., check `lastUpdateTimestampRef`) only for changes in the `newTimestamp` parameter. 3. After any successful URL update (throttled or immediate), update `lastUpdateChapterIndexRef.current`, `lastUpdateTimeValueRef.current`, and `lastUpdateTimestampRef.current` with the new values and current time. 4. Optionally, add a check to prevent redundant URL pushes if neither the chapter index nor the timestamp has changed compared to the last updated values.
-      Depends On: T001
-      AC Ref: None
+  - **Context:** Remove client-side translation interface
+  - **Action:**
+    1. Delete `app/translate/page.tsx`.
+    2. Remove components in `components/translate/` directory.
+    3. Remove any supporting components exclusively used by the translation page.
+  - **Done‑when:**
+    1. All frontend translation components are removed.
+  - **Verification:**
+    1. Visit `/translate` and verify it returns a 404.
+  - **Depends‑on:** [T001]
 
-- [x] T003: Ensure Navigation Functions Trigger Immediate URL Update on Chapter Change
-      Action: Review and update the functions within `useChapterNavigation.ts` that handle chapter changes (e.g., `handleChapterClick`, `goPrevChapter`, `goNextChapter`). Ensure these functions correctly call the refactored `updateUrlWithChapterAndTimestamp` immediately after updating the chapter state, forcing the URL update logic defined in T002 for chapter changes.
-      Depends On: T002
-      AC Ref: None
+- [ ] **T003 · Refactor · P1: remove translation hooks and utilities**
 
-- [x] T004: Review and Update Hook Dependency Arrays
-      Action: Examine all `useEffect` and `useCallback` dependency arrays within `useChapterNavigation.ts`. Ensure they accurately include all necessary dependencies, including any newly added refs or modified functions, to prevent stale closures or incorrect behavior.
-      Depends On: T003
-      AC Ref: None
+  - **Context:** Remove supporting client-side translation code
+  - **Action:**
+    1. Identify and remove translation-specific hooks (e.g., `useTranslationStream.ts`).
+    2. Remove any utility functions/modules exclusively used for translation.
+  - **Done‑when:**
+    1. All translation-specific hooks and utilities are removed.
+    2. No references to translation functionality remain in the codebase.
+  - **Verification:**
+    1. Run codebase search for "translation" and verify no remaining translation functionality.
+  - **Depends‑on:** [T002]
 
-- [x] T005: Add Debug Logging for Navigation Logic
-      Action: Insert temporary `console.log` statements within `updateUrlWithChapterAndTimestamp` and related functions/effects in `useChapterNavigation.ts`. Logs should clearly indicate input parameters, comparison results against refs, whether throttling is applied, and when a URL update occurs.
-      Depends On: T004
-      AC Ref: None
+- [ ] **T004 · Test · P1: remove translation-specific tests**
 
-- [x] T006: Test: Rapid Chapter Navigation
-      Action: Manually test clicking chapter navigation controls (e.g., next/previous buttons, chapter list items) rapidly. Verify using browser dev tools and debug logs that the URL updates instantly for each chapter change, without being throttled.
-      Depends On: T005
-      AC Ref: None
+  - **Context:** Remove tests that are no longer relevant
+  - **Action:**
+    1. Remove API tests for `/api/translate`.
+    2. Remove component tests for translation UI components.
+    3. Remove any E2E tests specific to translation functionality.
+  - **Done‑when:**
+    1. All translation-specific tests are removed.
+    2. Test suite passes with no errors.
+  - **Verification:**
+    1. Run the test suite and verify no translation-related tests remain.
+  - **Depends‑on:** [T001, T002, T003]
 
-- [x] T007: Test: Timestamp Throttling During Playback
-      Action: Manually test by starting audio playback within a chapter. Observe the URL updates in the browser. Verify using debug logs that timestamp updates in the URL are throttled according to the defined interval (e.g., ~5 seconds) while playback progresses within the _same_ chapter.
-      Depends On: T005
-      AC Ref: None
+- [ ] **T005 · Chore · P2: update navigation and documentation**
 
-- [x] T008: Test: Chapter Navigation During Playback
-      Action: While audio is playing and timestamp updates are being throttled (as verified in T007), manually click a chapter navigation control. Verify using debug logs that the chapter change triggers an _immediate_ URL update, overriding the timestamp throttling.
-      Depends On: T005, T007
-      AC Ref: None
+  - **Context:** Update documentation and navigation to reflect removal
+  - **Action:**
+    1. Remove any navigation links to the `/translate` page.
+    2. Update documentation (READMEs, etc.) to remove references to translation functionality.
+  - **Done‑when:**
+    1. No UI navigation to translate page exists.
+    2. Documentation is updated to remove translation references.
+  - **Verification:**
+    1. Check all navigation UI and verify no links to `/translate`.
+    2. Review documentation and verify no outdated translation references.
+  - **Depends‑on:** [T002]
 
-- [x] T009: Test: Navigation Between Different Books/Items
-      Action: Manually test navigating between different books or main items that use the `useChapterNavigation` hook. Verify that the hook initializes correctly and navigation functions as expected in different contexts.
-      Depends On: T005
-      AC Ref: None
+- [ ] **T006 · Chore · P2: remove unused environment variables and configuration**
 
-- [x] T010: Remove Debug Logging
-      Action: Rather than removing debug logs, we completely rewrote the hook with a radical simplification that cuts through the complexity.
-      Depends On: T006, T007, T008, T009
-      AC Ref: None
+  - **Context:** Clean up translation-related configuration
+  - **Action:**
+    1. Remove translation-related environment variables from `.env.local.example`.
+    2. Document the removal in a comment in relevant files.
+    3. Remove any configuration specific to translation in other config files (if any).
+  - **Done‑when:**
+    1. No translation-related environment variables or configuration remain.
+  - **Verification:**
+    1. Review all configuration files and verify no translation settings remain.
+  - **Depends‑on:** [T001]
 
-- [x] T011: Mark Original Navigation Bug Task as Completed
-      Action: Navigation bug has been fixed by completely reimplementing the navigation logic with a much simpler approach.
-      Depends On: T010
-      AC Ref: None
-
-## ESLint Build Failure Fixes
-
-- [x] T1: Setup Local Development Environment  
-       Action: Clone the repo, install dependencies (`npm install`), and verify linting scripts locally (e.g., `npm run lint`). Confirm that the same ESLint errors observed in the CI pipeline appear locally.  
-       Depends On: None  
-       AC Ref: None
-
-- [x] T2: Fix `no-explicit-any` Violations
-      Action: Search for all instances of the `any` type flagged by ESLint (`@typescript-eslint/no-explicit-any`) and replace them with precise types, `unknown` with guards, or proper interfaces. Ensure no `any` remains.
-      Depends On: T1
-      AC Ref: None
-
-- [x] T3: Remove Unused Variables and Imports
-      Action: Identify all variables, function parameters, and imports flagged by `@typescript-eslint/no-unused-vars` and remove or rename (prefix with `_` if intentionally unused) so that no unused symbols remain.
-      Depends On: T2
-      AC Ref: None
-
-- [x] T4: Add Keyboard Event Handlers to Interactive Elements
-      Action: For all clickable non-interactive elements (e.g., `<div onClick>`), either convert them to semantic `<button>` elements or add `role="button"`, `tabIndex={0}`, and appropriate `onKeyDown` handlers (handling Enter/Space).
-      Depends On: T3
-      AC Ref: None
-
-- [x] T5: Associate Form Labels with Controls
-      Action: Update all `<label>` elements flagged by `jsx-a11y/label-has-associated-control` to use `htmlFor` with matching `id` attributes on inputs or to wrap the form control inside the label.
-      Depends On: T4
-      AC Ref: None
-
-- [x] T6: Refactor Long Functions to Reduce Length
-      Action: Identify functions/components exceeding the `max-lines-per-function` threshold and extract logical sections into smaller helper functions or subcomponents so each function stays within the configured line limit.
-      Depends On: T5
-      AC Ref: None
-
-- [x] T7: Refactor Functions with Too Many Parameters
-      Action: Locate functions violating `max-params` (e.g., `translateChunk`, API handlers) and refactor their signatures to accept a single options object or grouped parameters to reduce individual argument count.
-      Depends On: T6
-      AC Ref: None
-
-- [x] T8: Remove All `console.log` Statements
-      Action: Search for and delete any `console.log`, `console.warn`, `console.error`, etc., replacing them with the project's structured logging API if runtime logging is required.
-      Depends On: T7
-      AC Ref: None
-
-- [x] T9: Apply Prettier Formatting Fixes
-      Action: Run the Prettier formatter across the codebase (e.g., `npx prettier --write .`) or manually adjust files to satisfy formatting rules.
-      Depends On: T8
-      AC Ref: None
-
-- [x] T10: Implement Pre-commit Hooks for Linting and Formatting
-      Action: Install and configure Husky and lint-staged to run `eslint --fix` and `prettier --write` on staged files before every commit, preventing future violations from being committed.
-      Depends On: T9
-      AC Ref: None
-
-- [x] T11: Verify Fix and CI Build
-      Action: Run `npm run lint`, `npm run build`, and full test suite locally to confirm no ESLint errors or warnings remain and that the build succeeds. Push changes and ensure the Vercel CI pipeline passes without errors.
-      Depends On: T10
-      AC Ref: None
+- [ ] **T007 · Chore · P3: add changelog entry for translation removal**
+  - **Context:** Document the removal of this feature
+  - **Action:**
+    1. Add an entry to `CHANGELOG.md` documenting the removal of the translation functionality.
+    2. Include a brief explanation that this will be replaced by a separate admin tool in the future.
+  - **Done‑when:**
+    1. `CHANGELOG.md` includes an entry for the removed functionality.
+  - **Depends‑on:** [T001, T002, T003]
