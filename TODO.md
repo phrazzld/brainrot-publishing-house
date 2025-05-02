@@ -56,7 +56,7 @@
     1. Run the test suite and verify no translation-related tests remain.
   - **Depends‑on:** [T001, T002, T003]
 
-- [ ] **T005 · Chore · P2: update navigation and documentation**
+- [x] **T005 · Chore · P2: update navigation and documentation**
 
   - **Context:** Update documentation and navigation to reflect removal
   - **Action:**
