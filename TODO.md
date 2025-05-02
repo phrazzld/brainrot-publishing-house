@@ -83,7 +83,7 @@
     1. Review all configuration files and verify no translation settings remain.
   - **Depends‑on:** [T001]
 
-- [ ] **T007 · Chore · P3: add changelog entry for translation removal**
+- [x] **T007 · Chore · P3: add changelog entry for translation removal**
   - **Context:** Document the removal of this feature
   - **Action:**
     1. Add an entry to `CHANGELOG.md` documenting the removal of the translation functionality.
