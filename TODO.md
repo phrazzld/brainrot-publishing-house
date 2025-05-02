@@ -16,7 +16,7 @@
     1. Make a request to `/api/translate` and verify it returns a 404.
   - **Depends‑on:** none
 
-- [ ] **T002 · Refactor · P1: remove translation frontend components**
+- [x] **T002 · Refactor · P1: remove translation frontend components**
 
   - **Context:** Remove client-side translation interface
   - **Action:**
