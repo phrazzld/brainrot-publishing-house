@@ -15,7 +15,7 @@
 
 ## S3 Signed URL Generation
 
-- [ ] **T002 · Feature · P1: implement s3 signed url generator service**
+- [x] **T002 · Feature · P1: implement s3 signed url generator service**
   - **Context:** PLAN.md > Detailed Build Steps > 2. Create S3 Generator Service
   - **Action:**
     1. Create `services/s3SignedUrlGenerator.ts` implementing `S3SignedUrlGenerator`.
