@@ -1,10 +1,7 @@
 import {
-  // These imports will be used in T005 when implementing the method body
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   AssetNotFoundError,
   AssetUrlResolver,
   S3SignedUrlGenerator,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   SigningError,
 } from '../types/dependencies';
 
@@ -55,11 +52,87 @@ export class DownloadService {
    * @throws {AssetNotFoundError} When the requested asset cannot be found
    * @throws {SigningError} When S3 URL signing fails
    */
-  async getDownloadUrl(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    params: DownloadRequestParams
-  ): Promise<string> {
-    // Implementation will be added in T005
-    throw new Error('Not implemented');
+  async getDownloadUrl(params: DownloadRequestParams): Promise<string> {
+    const { slug, type, chapter } = params;
+
+    // Generate the legacy path based on the request parameters
+    const legacyPath = this.generateLegacyPath(slug, type, chapter);
+
+    try {
+      // Attempt to get the asset URL with fallback mechanism
+      const resolvedUrl = await this.assetUrlResolver.getAssetUrlWithFallback(legacyPath);
+
+      // If no URL was resolved, throw an AssetNotFoundError
+      if (!resolvedUrl) {
+        throw new AssetNotFoundError(`Asset not found: ${legacyPath}`);
+      }
+
+      // Check if the resolved URL is an S3 URL that needs signing
+      if (resolvedUrl.includes(this.s3Endpoint)) {
+        try {
+          // Generate a signed URL for the S3 path
+          return await this.s3SignedUrlGenerator.createSignedS3Url(resolvedUrl);
+        } catch (error) {
+          // Wrap any signing errors and rethrow
+          throw new SigningError(
+            `Failed to generate signed URL for ${resolvedUrl}`,
+            error instanceof Error ? error : undefined
+          );
+        }
+      }
+
+      // If not an S3 URL, return the resolved URL directly (e.g., Blob URL)
+      return resolvedUrl;
+    } catch (error) {
+      // If the resolver already threw an AssetNotFoundError, propagate it
+      if (error instanceof AssetNotFoundError) {
+        throw error;
+      }
+
+      // If it's a SigningError, propagate it
+      if (error instanceof SigningError) {
+        throw error;
+      }
+
+      // Otherwise, wrap in a new AssetNotFoundError
+      throw new AssetNotFoundError(
+        `Failed to resolve URL for ${legacyPath}: ${error instanceof Error ? error.message : String(error)}`
+      );
+    }
+  }
+
+  /**
+   * Generates the legacy file path based on request parameters.
+   *
+   * @param slug - The book slug
+   * @param type - The download type (full or chapter)
+   * @param chapter - Optional chapter number (required when type is 'chapter')
+   * @returns The legacy file path
+   * @private
+   */
+  private generateLegacyPath(slug: string, type: 'full' | 'chapter', chapter?: string): string {
+    if (type === 'full') {
+      return `/${slug}/audio/full-audiobook.mp3`;
+    } else {
+      if (!chapter) {
+        throw new Error('Chapter parameter is required when type is "chapter"');
+      }
+
+      const paddedChapter = this.zeroPad(parseInt(chapter, 10), 2);
+      return `/${slug}/audio/book-${paddedChapter}.mp3`;
+    }
+  }
+
+  /**
+   * Pads a number with leading zeros to reach the specified number of places.
+   *
+   * @param num - The number to pad
+   * @param places - The desired length after padding
+   * @returns A string with the padded number
+   * @private
+   */
+  private zeroPad(num: number, places: number): string {
+    const zero = places - num.toString().length + 1;
+    return Array(+(zero > 0 && zero)).join('0') + num;
   }
 }

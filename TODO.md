@@ -49,7 +49,7 @@
     2. Dependencies are correctly typed and accepted.
     3. Code compiles successfully.
   - **Depends‑on:** [T001]
-- [ ] **T005 · Feature · P1: implement download service core logic**
+- [x] **T005 · Feature · P1: implement download service core logic**
   - **Context:** PLAN.md > Detailed Build Steps > 5. Implement Service Logic
   - **Action:**
     1. Implement `async getDownloadUrl(params: DownloadRequestParams)`: construct `legacyPath`, call `assetUrlResolver.getAssetUrlWithFallback`.
