@@ -26,7 +26,7 @@
     2. Configuration is loaded securely via environment variables.
     3. Service generates signed URLs or throws `SigningError`.
   - **Depends‑on:** [T001]
-- [ ] **T003 · Test · P1: unit test s3 signed url generator**
+- [x] **T003 · Test · P1: unit test s3 signed url generator**
   - **Context:** PLAN.md > Detailed Build Steps > 7. Write/Update Unit Tests (`s3SignedUrlGenerator.test.ts`)
   - **Action:**
     1. Create `__tests__/services/s3SignedUrlGenerator.test.ts`.
