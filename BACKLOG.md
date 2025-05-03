@@ -2,15 +2,6 @@
 
 ## High Priority
 
-### Security & Compliance
-
-- **[Enhancement]**: Enforce Dependency Vulnerability Scanning Failure in CI
-  - **Type**: Enhancement
-  - **Complexity**: Simple
-  - **Rationale**: Proactively mitigates security risks from third-party libraries. Aligns with secure dependency management and operational excellence.
-  - **Expected Outcome**: CI pipeline includes a step (e.g., `npm audit --audit-level=high`) that fails the build if new high or critical severity vulnerabilities are detected.
-  - **Dependencies**: Basic CI Pipeline Setup
-
 ### Infrastructure: CI/CD, Quality Gates & Automation
 
 - **[Feature]**: Implement Basic GitHub Actions CI Workflow (Lint, Test, Build)
