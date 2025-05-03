@@ -12,24 +12,12 @@
   "plugins": ["@typescript-eslint", "react", "react-hooks", "jsx-a11y", "prettier"],
   "overrides": [
     {
-      "files": [
-        "**/*.test.ts",
-        "**/*.test.tsx",
-        "**/*.spec.ts",
-        "**/*.spec.tsx",
-        "**/*.test.js",
-        "**/*.test.jsx",
-        "**/__mocks__/**/*.js"
-      ],
-      "env": {
-        "jest": true
-      },
+      "files": ["**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx"],
       "rules": {
         "max-lines-per-function": [
           "warn",
           { "max": 500, "skipBlankLines": true, "skipComments": true }
-        ],
-        "@typescript-eslint/no-require-imports": "off"
+        ]
       }
     }
   ],
