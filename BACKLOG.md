@@ -1,6 +1,10 @@
 # BACKLOG
 
 - migrate from jest to vitest
+- completely nuke 100% of the /translate functionality
+  - no translate api
+  - no translate ui
+  - no translate tests
 
 ## High Priority
 
