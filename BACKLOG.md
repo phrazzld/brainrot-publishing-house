@@ -1,352 +1,345 @@
 # BACKLOG
 
-- migrate from jest to vitest
-- completely nuke 100% of the /translate functionality
-  - no translate api
-  - no translate ui
-  - no translate tests
+This backlog outlines planned work, balancing immediate needs, technical excellence, operational stability, and future innovation, guided by the provided development philosophy documents and codebase analysis.
 
 ## High Priority
 
-### Issues from Vulnerability Scanning Implementation Code Review
-
-- **[Fix]**: Re-enable CI Quality Gates (Tests and Strict Linting)
-
-  - **Type**: Fix
-  - **Complexity**: Medium
-  - **Rationale**: The CI pipeline, the supposed gatekeeper, is currently crippled by commenting out both the strict linting (`lint:strict`) and the test execution (`npm test`) steps. This renders the CI pipeline fundamentally useless for its core purpose.
-  - **Expected Outcome**: The CI configuration re-enables `npm run lint:strict` and `npm test`. Pre-existing issues are fixed in separate PRs.
-  - **Dependencies**: Fixing linting issues and addressing test configuration issues.
-
-- **[Refactor]**: Fix Mocking of Internal Collaborator in Download API Tests
-
-  - **Type**: Refactor
-  - **Complexity**: Medium
-  - **Rationale**: The test directly mocks `@/utils` (`getAssetUrlWithFallback`), an internal utility function, not an external boundary. This creates a brittle test and violates the explicit prohibition against mocking internal collaborators.
-  - **Expected Outcome**: The `GET` route handler accepts `getAssetUrlWithFallback` (or an interface it implements) via Dependency Injection. Tests inject the real function or a controlled fake implementation.
-  - **Dependencies**: None
-
-- **[Fix]**: Resolve Dependency Conflicts Instead of Using `--legacy-peer-deps`
-
-  - **Type**: Fix
-  - **Complexity**: Medium
-  - **Rationale**: Using `npm ci --legacy-peer-deps` explicitly ignores peer dependency conflicts. This is a band-aid that masks underlying version incompatibilities or outdated dependencies.
-  - **Expected Outcome**: Peer dependency conflicts identified and resolved. The `--legacy-peer-deps` flag removed once dependencies install cleanly.
-  - **Dependencies**: None
-
-- **[Fix]**: Enforce Strict Linting in CI
-  - **Type**: Fix
-  - **Complexity**: Medium
-  - **Rationale**: Running `npm run lint` instead of `npm run lint:strict` allows the build to pass despite potentially hundreds of documented lint warnings and errors. This actively permits the accumulation of technical debt.
-  - **Expected Outcome**: CI step changed to use `npm run lint:strict`. Lint errors fixed to meet the strict checks.
-  - **Dependencies**: None
-
 ### Infrastructure: CI/CD, Quality Gates & Automation
+
+- **[Fix]**: Re-enable and Stabilize CI Quality Gates (Tests and Strict Linting)
+
+  - **Type**: Fix
+  - **Complexity**: Medium
+  - **Rationale**: The CI pipeline currently bypasses mandatory quality checks (`lint:strict`, `npm test`). This violates fundamental quality gate principles and allows technical debt accumulation. Re-enabling is critical for code reliability and adherence to philosophy.
+  - **Expected Outcome**: CI configuration (`.github/workflows/ci.yml`) updated to execute `npm run lint:strict` and `npm test`. Pipeline fails if these checks do not pass. Pre-existing issues preventing this are addressed by dependent items below.
+  - **Dependencies**: [Fix]: Enforce Strict Linting in CI & Address Violations, [Fix]: Resolve Dependency Conflicts, [Refactor]: Eliminate Internal Service Mocking in Tests via Dependency Injection.
+
+- **[Fix]**: Enforce Strict Linting in CI & Address Violations
+
+  - **Type**: Fix
+  - **Complexity**: Medium
+  - **Rationale**: Running non-strict linting allows code quality issues to accumulate, violating mandatory coding standards. Enforcing `lint:strict` is essential for maintainability and technical excellence.
+  - **Expected Outcome**: CI step changed from `npm run lint` to `npm run lint:strict`. All existing lint errors/warnings violating the strict configuration are fixed across the codebase. Pre-commit hooks updated accordingly.
+  - **Dependencies**: [Fix]: Re-enable and Stabilize CI Quality Gates.
+
+- **[Fix]**: Resolve Dependency Conflicts (Remove `--legacy-peer-deps`)
+
+  - **Type**: Fix
+  - **Complexity**: Medium
+  - **Rationale**: Using `--legacy-peer-deps` masks underlying dependency incompatibilities, risking runtime errors and violating disciplined dependency management principles. Resolving conflicts ensures a stable and reliable build.
+  - **Expected Outcome**: `npm ci` runs successfully without the `--legacy-peer-deps` flag. All peer dependency conflicts identified and resolved through dependency updates or necessary version adjustments.
+  - **Dependencies**: None (requires investigation).
 
 - **[Feature]**: Implement Basic GitHub Actions CI Workflow (Lint, Test, Build)
 
   - **Type**: Feature
   - **Complexity**: Medium
-  - **Rationale**: Establishes automated quality gates, ensuring code consistency, reducing manual effort, and enabling reliable deployments. Foundational for technical excellence.
-  - **Expected Outcome**: A functional `.github/workflows/ci.yml` triggering on push/PR to master. Workflow installs dependencies (with caching), runs linters, executes tests (unit/integration), and verifies the application build completes successfully.
+  - **Rationale**: Establishes the foundational automated quality gates required by the development philosophy, ensuring code consistency, reducing manual effort, and enabling reliable deployments. Foundational for technical excellence.
+  - **Expected Outcome**: A functional `.github/workflows/ci.yml` triggering on push/PR to the main branch. Workflow installs dependencies (with caching), runs linters (`lint:strict`), executes tests (`npm test`), and verifies the application build (`npm run build`) completes successfully.
   - **Dependencies**: Linting, Testing, Build scripts defined in `package.json`.
 
 - **[Feature]**: Setup Husky & Lint-Staged for Pre-commit Quality Checks
 
   - **Type**: Feature
   - **Complexity**: Simple
-  - **Rationale**: Provides immediate feedback to developers, enforces code style and quality standards locally before commits reach the repository, reducing CI failures. Improves developer experience.
-  - **Expected Outcome**: Husky v9 and lint-staged installed and configured. Pre-commit hook automatically runs linters (ESLint) and formatters (Prettier) on staged files, preventing commits with violations. `prepare` script ensures hooks installation.
-  - **Dependencies**: Linters and formatters configured.
+  - **Rationale**: Provides immediate feedback to developers locally, enforcing code style (Prettier) and quality standards (ESLint strict) before commits reach the repository. Reduces CI failures and improves DX, as mandated by philosophy's automation principles.
+  - **Expected Outcome**: Husky v9+ and lint-staged installed and configured. Pre-commit hook automatically runs Prettier formatter and ESLint (`lint:strict`) on staged files, preventing commits with violations. `prepare` script ensures hooks installation.
+  - **Dependencies**: Prettier & ESLint configured.
 
 - **[Feature]**: Setup Commitlint for Conventional Commits Enforcement
 
   - **Type**: Feature
   - **Complexity**: Simple
-  - **Rationale**: Ensures consistent commit history, enabling automated changelog generation, semantic versioning, and clearer code evolution tracking. Aligns with development philosophy.
+  - **Rationale**: Enforces the mandatory Conventional Commits standard for consistent history, enabling automated changelog generation, semantic versioning, and clearer code evolution tracking per philosophy.
   - **Expected Outcome**: Commitlint installed and configured with a `commit-msg` Husky hook. Commits not adhering to the Conventional Commits standard are rejected.
-  - **Dependencies**: Husky setup.
+  - **Dependencies**: Husky Setup.
 
-- **[Feature]**: Configure Branch Protection Rules for `master` Branch
+- **[Feature]**: Configure Branch Protection Rules for Main Branch
   - **Type**: Feature
   - **Complexity**: Simple
-  - **Rationale**: Protects the production branch from direct pushes and ensures quality checks (CI, reviews) pass before merging, enforcing workflow standards and operational stability.
-  - **Expected Outcome**: `master` branch requires Pull Requests, passing CI status checks, minimum number of reviewer approvals, prevents force pushes, and potentially requires linear history.
-  - **Dependencies**: Basic CI Pipeline Setup
+  - **Rationale**: Protects the primary branch (`master`/`main`) from direct pushes and ensures mandatory quality checks (CI, reviews) pass before merging. Enforces workflow standards and operational stability per philosophy.
+  - **Expected Outcome**: Main branch requires Pull Requests, passing CI status checks (linting, tests, build), minimum number of reviewer approvals (e.g., 1), prevents force pushes, and requires linear history.
+  - **Dependencies**: Basic CI Pipeline Setup.
 
-### Infrastructure: Logging & Observability
+### Infrastructure: Observability
 
 - **[Enhancement]**: Implement Structured Logging (JSON) & Remove Console Statements
 
   - **Type**: Enhancement
   - **Complexity**: Medium
-  - **Rationale**: Essential for effective debugging, monitoring, and analysis in deployed environments. Replaces unreliable `console.log` with parseable, contextual logs. Mandatory per philosophy.
-  - **Expected Outcome**: A structured logging library (e.g., Pino) integrated. All operational `console.*` calls replaced. Logs output JSON with mandatory fields (timestamp, level, message, service_name, correlation_id) in relevant environments.
-  - **Dependencies**: Correlation ID Propagation
+  - **Rationale**: Mandatory per philosophy's Logging Strategy for effective debugging, monitoring, and analysis in deployed environments. Replaces unreliable `console.log` with parseable, contextual logs. Foundational for operational excellence.
+  - **Expected Outcome**: A standard structured logging library (e.g., Pino) integrated. All operational `console.*` calls replaced with logger calls. Logs output JSON with mandatory fields (timestamp, level, message, service_name, correlation_id) in relevant environments.
+  - **Dependencies**: [Enhancement]: Implement Correlation ID Propagation.
 
 - **[Enhancement]**: Implement Correlation ID Propagation
   - **Type**: Enhancement
   - **Complexity**: Medium
-  - **Rationale**: Enables tracing requests across asynchronous operations and potentially distributed services, crucial for debugging complex flows. Mandatory per philosophy.
-  - **Expected Outcome**: A unique correlation ID generated for each incoming API request/job is included in all related structured log entries. Mechanisms like `AsyncLocalStorage` or context passing implemented.
-  - **Dependencies**: Structured Logging Implementation
+  - **Rationale**: Mandatory per philosophy's Logging Strategy for tracing requests across asynchronous operations, crucial for debugging complex flows and effective structured logging. Enables future distributed tracing.
+  - **Expected Outcome**: A unique correlation ID generated for each incoming API request/job is reliably propagated (e.g., via `AsyncLocalStorage`) and included in all related structured log entries.
+  - **Dependencies**: Structured Logging Implementation.
 
-### Infrastructure: Testing & Quality
+### Technical Excellence: Architecture & Refactoring
 
-- **[Feature]**: Setup Comprehensive E2E Testing Framework (e.g., Playwright/Cypress)
+- **[Refactor]**: Eliminate Internal Service Mocking in API Tests via Dependency Injection
 
-  - **Type**: Feature
+  - **Type**: Refactor
   - **Complexity**: Medium
-  - **Rationale**: Provides the tooling foundation for verifying critical user journeys end-to-end, building confidence in the application's behavior. Required by testing strategy.
-  - **Expected Outcome**: An E2E testing framework is installed, configured, integrated into `package.json` scripts, and potentially runnable within the CI pipeline.
-  - **Dependencies**: Basic CI Pipeline Setup
-
-- **[Enhancement]**: Enforce Test Coverage Thresholds in CI
-  - **Type**: Enhancement
-  - **Complexity**: Simple
-  - **Rationale**: Maintains code quality by ensuring adequate test coverage and preventing regressions. Mandatory per philosophy.
-  - **Expected Outcome**: Test runner configured to generate coverage reports. CI pipeline fails if coverage drops below predefined thresholds (e.g., 85%).
-  - **Dependencies**: Basic CI Pipeline Setup, Test suite implementation.
-
-### Technical Excellence: Refactoring & Architecture
+  - **Rationale**: The current Download API test mocks an internal utility (`@/utils`), violating the **critical** philosophy rule against mocking internal collaborators. This creates brittle tests and requires immediate refactoring for reliable testing and adherence to Dependency Inversion.
+  - **Expected Outcome**: The `GET` route handler (or its extracted service logic) accepts dependencies like `getAssetUrlWithFallback` via constructor/parameter injection. The test injects the real utility or a controlled fake implementation conforming to an interface. The direct mock of `@/utils` is removed.
+  - **Dependencies**: Potentially [Refactor]: Refactor API Routes for Clear Separation of Concerns.
 
 - **[Refactor]**: Refactor API Routes for Clear Separation of Concerns
 
   - **Type**: Refactor
   - **Complexity**: Medium
-  - **Rationale**: Improves maintainability, testability, and adheres to architectural principles by decoupling business logic from framework-specific routing.
-  - **Expected Outcome**: Business logic extracted from API route handlers into dedicated, testable service functions/modules. Route handlers become thin controllers.
-  - **Dependencies**: None
+  - **Rationale**: Improves maintainability, testability, and adheres to architectural principles (Separation of Concerns, Dependency Inversion) by decoupling business logic from framework-specific routing. Essential for testability without internal mocking.
+  - **Expected Outcome**: Business logic extracted from API route handlers into dedicated, framework-agnostic, testable service functions/classes/modules. Route handlers become thin controllers responsible only for request/response mapping and calling services.
+  - **Dependencies**: None.
 
-- **[Refactor]**: Eliminate Internal Service Mocking in Tests via Dependency Injection
+- **[Enhancement]**: Enforce Strict TypeScript Configuration
+  - **Type**: Enhancement
+  - **Complexity**: Medium
+  - **Rationale**: Maximizes type safety, catching potential errors at compile time and improving code quality and maintainability. Mandatory per TypeScript appendix philosophy (`strict: true`).
+  - **Expected Outcome**: `tsconfig.json` configured with `strict: true` and other recommended strictness flags. All resulting TypeScript errors across the codebase are resolved.
+  - **Dependencies**: None.
 
-  - **Type**: Refactor
-  - **Complexity**: Complex
-  - **Rationale**: Critical for reliable testing and adherence to philosophy (No Internal Mocking). Ensures tests verify actual integration and encourages better design (DI).
-  - **Expected Outcome**: Tests refactored to use dependency injection. Mocks are only used for true external boundaries (e.g., DB client, external API client interfaces). Internal modules used directly in integration tests.
-  - **Dependencies**: Refactor API Routes (likely exposes services needing DI)
+### UI & Component Architecture (Frontend Focus)
 
 - **[Refactor]**: Implement Foundational Atomic Design Structure (Folders & Core Atoms)
+
   - **Type**: Refactor
   - **Complexity**: Medium
-  - **Rationale**: Establishes the mandatory component structure (Atoms, Molecules, Organisms), promoting UI consistency, reusability, and maintainability per frontend philosophy.
-  - **Expected Outcome**: `components` directory restructured. Foundational UI primitives (Button, Input, Text, etc.) created/refactored as Atoms with appropriate styling (e.g., Tailwind).
-  - **Dependencies**: None
-
-### Developer Experience (DX)
+  - **Rationale**: Establishes the mandatory Atomic Design component structure required by the frontend philosophy, promoting UI consistency, reusability, and maintainability. Foundational for scalable UI development.
+  - **Expected Outcome**: `components` directory restructured into `atoms`, `molecules`, `organisms`. Foundational UI primitives (Button, Input, Text, Label, etc.) created/refactored as Atoms within `/atoms`, adhering to styling standards (Tailwind) and accessibility basics.
+  - **Dependencies**: None.
 
 - **[Feature]**: Setup Storybook & Create Stories for Core Atoms
   - **Type**: Feature
   - **Complexity**: Medium
-  - **Rationale**: Enables mandatory Storybook-First workflow, providing isolated component development, visual documentation, and testing capabilities for UI primitives.
-  - **Expected Outcome**: Storybook installed and configured. Stories demonstrating props, states, and variants created for all core Atom components.
-  - **Dependencies**: Foundational Atomic Design Structure
+  - **Rationale**: Enables the mandatory Storybook-First workflow defined in the frontend philosophy. Provides isolated component development, visual documentation, and testing capabilities for UI primitives. Improves DX.
+  - **Expected Outcome**: Storybook installed, configured, and integrated. Stories (`*.stories.tsx`) demonstrating props, states, and variants created for all core Atom components. Storybook build potentially integrated into CI.
+  - **Dependencies**: Foundational Atomic Design Structure (Core Atoms defined).
 
-### Core Application Features
+### Infrastructure: Storage
 
 - **[Feature]**: Configure and Verify Vercel Blob Storage Setup
-
   - **Type**: Feature
   - **Complexity**: Medium
-  - **Rationale**: Provides scalable cloud storage essential for storing assets (text, audio).
-  - **Expected Outcome**: Vercel Blob storage provisioned. `BLOB_READ_WRITE_TOKEN` secured and configured locally (`.env.local`) and in CI. Migration/verification scripts (T113-T117) tested and functional. `docs/BLOB_STORAGE.md` updated.
-  - **Dependencies**: Basic CI Pipeline Setup (for secrets)
+  - **Rationale**: Provides scalable cloud storage essential for storing application assets (e.g., book content). Foundational infrastructure for core features and operational stability.
+  - **Expected Outcome**: Vercel Blob storage provisioned. `BLOB_READ_WRITE_TOKEN` secured via environment variables. Relevant setup/migration/verification scripts tested and functional. `docs/BLOB_STORAGE.md` updated.
+  - **Dependencies**: Basic CI Pipeline Setup (for secrets management).
+
+### Core Application Features & Cleanup
+
+- **[Refactor]**: Remove Deprecated Translation Functionality
+  - **Type**: Refactor
+  - **Complexity**: Medium
+  - **Rationale**: Cleans up codebase by removing the explicitly deprecated `/translate` functionality (API, UI, tests), reducing complexity, maintenance overhead, and potential security surface. Aligns with Simplicity First principle.
+  - **Expected Outcome**: All code, tests, UI components, API routes, and documentation related to the `/translate` feature are completely removed from the repository.
+  - **Dependencies**: None.
 
 ## Medium Priority
 
-### Infrastructure: CI/CD, Quality Gates & Automation
+### Infrastructure & Operational Excellence
 
 - **[Enhancement]**: Configure CodeQL Security Scanning in CI
+
   - **Type**: Enhancement
   - **Complexity**: Simple
-  - **Rationale**: Adds static analysis security testing (SAST) to automatically detect potential vulnerabilities in the application code itself.
-  - **Expected Outcome**: GitHub Actions workflow includes CodeQL analysis step. Findings trigger alerts or notifications as configured.
-  - **Dependencies**: Basic CI Pipeline Setup
-
-### Infrastructure: Testing & Quality
-
-- **[Feature]**: Implement E2E Tests for Critical User Flows
-  - **Type**: Feature
-  - **Complexity**: Complex
-  - **Rationale**: Verifies core application functionality from a user's perspective (e.g., search, select book, view translation), ensuring key journeys work as expected. Builds confidence for releases.
-  - **Expected Outcome**: Automated E2E tests covering primary user flows are implemented using the chosen framework and integrated into the CI pipeline.
-  - **Dependencies**: E2E Testing Framework Setup, Core Application Features (UI for selection)
-
-### Technical Excellence: Refactoring & Architecture
+  - **Rationale**: Adds static analysis security testing (SAST) to automatically detect potential vulnerabilities, improving security posture per philosophy.
+  - **Expected Outcome**: GitHub Actions workflow includes CodeQL analysis step. Findings trigger alerts or notifications.
+  - **Dependencies**: Basic CI Pipeline Setup.
 
 - **[Enhancement]**: Externalize All Environment-Specific Configuration
 
   - **Type**: Enhancement
   - **Complexity**: Medium
-  - **Rationale**: Improves security, deployment flexibility, and adheres to Twelve-Factor App principles by removing hardcoded configuration. Mandatory per philosophy.
-  - **Expected Outcome**: Codebase audited. All configuration values (API keys, feature flags, external URLs) loaded from environment variables. `.env` files used for local defaults, `.env.local` ignored.
-  - **Dependencies**: None
+  - **Rationale**: Improves security, deployment flexibility, and adheres to Twelve-Factor App principles. Mandatory per Configuration Management philosophy section.
+  - **Expected Outcome**: All configuration values loaded strictly from environment variables. `.env` files used for local development defaults, `.env.local` ignored. Strongly-typed config objects populated from environment variables.
+  - **Dependencies**: None.
 
 - **[Enhancement]**: Implement Robust Input Validation in API Routes
 
   - **Type**: Enhancement
   - **Complexity**: Medium
-  - **Rationale**: Enhances security and system robustness by preventing invalid or malicious data from entering API endpoints.
-  - **Expected Outcome**: Input validation (e.g., using Zod schemas) applied to all API route handlers or service layers, checking types, formats, ranges, and required fields. Standardized errors returned for failures.
-  - **Dependencies**: Standardized API Error Handling
+  - **Rationale**: Enhances security and system robustness by preventing invalid or malicious data entry. A core Security Consideration.
+  - **Expected Outcome**: Input validation libraries (e.g., Zod) applied to all API route handlers or service layers. Schemas define expected types, formats, etc. Standardized validation errors returned.
+  - **Dependencies**: [Enhancement]: Standardize API Error Handling and Responses.
 
 - **[Enhancement]**: Standardize API Error Handling and Responses
 
   - **Type**: Enhancement
   - **Complexity**: Medium
-  - **Rationale**: Provides consistent, predictable error communication from the API, improving client-side handling and developer experience.
+  - **Rationale**: Provides consistent, predictable error communication, improving client-side handling and DX, per philosophy's Consistent Error Handling principle.
   - **Expected Outcome**: Centralized error handling mechanism catches errors, logs them (with correlation ID), and maps them to standardized JSON error responses with appropriate HTTP status codes.
-  - **Dependencies**: Structured Logging, Correlation ID Propagation
+  - **Dependencies**: Structured Logging, Correlation ID Propagation.
 
-- **[Enhancement]**: Enforce Strict TypeScript Configuration
+- **[Enhancement]**: Enforce Test Coverage Thresholds in CI
   - **Type**: Enhancement
+  - **Complexity**: Simple
+  - **Rationale**: Maintains code quality by ensuring adequate test coverage and preventing regressions. Mandatory per Testing Strategy in philosophy.
+  - **Expected Outcome**: Test runner configured for coverage reports. CI pipeline fails if coverage drops below predefined thresholds (e.g., 85%).
+  - **Dependencies**: Basic CI Pipeline Setup, Test suite implementation.
+
+### Testing & Quality
+
+- **[Feature]**: Setup Comprehensive E2E Testing Framework (e.g., Playwright/Cypress)
+
+  - **Type**: Feature
   - **Complexity**: Medium
-  - **Rationale**: Maximizes type safety, catching potential errors at compile time and improving code quality and maintainability. Mandatory per philosophy.
-  - **Expected Outcome**: `tsconfig.json` configured with `strict: true` and other strictness flags. All resulting TypeScript errors resolved.
-  - **Dependencies**: None
+  - **Rationale**: Provides the tooling foundation for verifying critical user journeys end-to-end, building confidence in application behavior as required by the frontend testing strategy.
+  - **Expected Outcome**: An E2E testing framework (e.g., Playwright) installed, configured, integrated into `package.json` scripts, and potentially runnable within CI. Basic setup structure established.
+  - **Dependencies**: Basic CI Pipeline Setup, A deployable version of the application.
 
-### UI & Component Architecture
+- **[Feature]**: Implement E2E Tests for Critical User Flows
+  - **Type**: Feature
+  - **Complexity**: Complex
+  - **Rationale**: Verifies core application functionality from a user's perspective (e.g., search, select book, view content), ensuring key journeys work reliably. Fulfills mandatory E2E testing requirement.
+  - **Expected Outcome**: Automated E2E tests covering primary user flows implemented using the chosen framework. Tests integrated into the CI pipeline and run against preview deployments or a test environment.
+  - **Dependencies**: E2E Testing Framework Setup, Core Application Features (UI for selection, content view).
 
-- **[Refactor]**: Refactor Components into Atomic Molecules & Organisms
+### UI & Component Architecture (Frontend Focus)
+
+- **[Refactor]**: Refactor Existing Components into Atomic Molecules & Organisms
 
   - **Type**: Refactor
   - **Complexity**: Medium
-  - **Rationale**: Continues implementation of Atomic Design, organizing composite components for better structure, reuse, and testability.
-  - **Expected Outcome**: Existing UI components refactored and organized into `molecules` and `organisms` directories, composing lower-level atoms/molecules correctly.
-  - **Dependencies**: Foundational Atomic Design Structure
+  - **Rationale**: Continues mandatory implementation of Atomic Design, organizing composite components for better structure, reuse, and testability per frontend philosophy.
+  - **Expected Outcome**: Existing UI components refactored and organized into `molecules` and `organisms` directories, correctly composing lower-level atoms/molecules.
+  - **Dependencies**: Foundational Atomic Design Structure (Core Atoms defined).
 
 - **[Enhancement]**: Create Storybook Stories for Core Molecules & Organisms
 
   - **Type**: Enhancement
   - **Complexity**: Medium
-  - **Rationale**: Expands Storybook coverage to composite UI components, enabling isolated development, testing, and documentation per frontend philosophy.
-  - **Expected Outcome**: Storybook stories created for key Molecule and Organism components, demonstrating composition, props, states (loading/error), and interactions.
-  - **Dependencies**: Storybook Setup, Refactor Components (Molecules/Organisms)
+  - **Rationale**: Expands Storybook coverage to composite UI components, enabling isolated development, testing, and documentation per mandatory Storybook-First frontend philosophy. Improves DX.
+  - **Expected Outcome**: Storybook stories created for key Molecule and Organism components, demonstrating composition, props, various states, and interactions.
+  - **Dependencies**: Storybook Setup, Refactor Components into Atomic Molecules & Organisms.
 
 - **[Feature]**: Conduct Accessibility Audit (WCAG 2.1 AA) & Create Remediation Plan
   - **Type**: Feature
   - **Complexity**: Medium
-  - **Rationale**: Ensures the application is usable by people with disabilities, meeting compliance requirements and ethical standards. Mandatory per philosophy.
-  - **Expected Outcome**: Audit performed using automated tools and manual checks. A prioritized backlog of issues detailing WCAG 2.1 AA violations created for remediation.
-  - **Dependencies**: Basic UI implemented.
+  - **Rationale**: Ensures the application is usable by people with disabilities, meeting mandatory compliance requirements (WCAG 2.1 AA) and ethical standards per frontend philosophy.
+  - **Expected Outcome**: Audit performed using automated tools and manual checks. A prioritized backlog of distinct, actionable accessibility issues created for remediation.
+  - **Dependencies**: Basic UI implemented for core features.
 
 ### Core Application Features
 
-- **[Feature]**: Develop UI for Book Selection & Translation Initiation
+- **[Feature]**: Develop UI for Book Selection & Content Display
 
   - **Type**: Feature
   - **Complexity**: Medium
-  - **Rationale**: Provides the primary user interface for interacting with the core translation feature, enabling users to select content. Drives business value.
-  - **Expected Outcome**: Frontend components allowing users to search/select a book and trigger the translation pipeline via the secure API. UI provides feedback on job status.
-  - **Dependencies**: Secure API Authentication, Foundational Atomic Design components.
+  - **Rationale**: Provides the primary user interface for core application features: finding books and viewing content. Drives business value and user adoption.
+  - **Expected Outcome**: Frontend components (built using Atomic Design) allowing users to search/browse/select a book and view its content fetched from storage. UI provides feedback for loading/error states.
+  - **Dependencies**: Backend API for book data, Foundational Atomic Design components, Vercel Blob Storage Setup.
 
-- **[Feature]**: Migrate Existing/Generated Translation Assets to Vercel Blob
+- **[Feature]**: Migrate Existing/Generated Content Assets to Vercel Blob
   - **Type**: Feature
   - **Complexity**: Medium
-  - **Rationale**: Moves translation data to scalable cloud storage, improving performance and reliability. Completes the Vercel Blob integration.
-  - **Expected Outcome**: All necessary translation assets (text, potentially audio/images later) stored in Vercel Blob. Application reads assets from Blob storage. Local asset cleanup performed (T116, T117).
-  - **Dependencies**: Vercel Blob Storage Setup, Translation Pipeline generates assets.
+  - **Rationale**: Moves application content to scalable cloud storage, improving performance, reliability, and completing the Blob integration. Aligns with operational excellence.
+  - **Expected Outcome**: All necessary content assets stored in Vercel Blob. Application reads assets from Blob storage URLs. Local asset storage removed. Migration scripts created if needed.
+  - **Dependencies**: Vercel Blob Storage Setup, Content generation/acquisition process.
 
 ### Business & Value Delivery
 
 - **[Feature]**: Redesign & Implement Landing Page for Marketing/Conversion
   - **Type**: Feature
   - **Complexity**: Medium
-  - **Rationale**: Improves user acquisition and communicates the project's value proposition effectively. Addresses identified need to enhance the current landing page.
-  - **Expected Outcome**: A new, implemented landing page with improved visual design, clearer messaging, stronger calls-to-action, adhering to accessibility and responsive design standards.
+  - **Rationale**: Improves user acquisition and communicates the project's value proposition effectively. Addresses potential need to enhance the current landing page for clarity and engagement. Drives business value.
+  - **Expected Outcome**: A new, implemented landing page with improved visual design, clearer messaging, stronger calls-to-action, adhering to accessibility and responsive design standards. Built using established Atomic Design components.
   - **Dependencies**: Foundational Atomic Design components.
 
 ### Developer Experience (DX) & Documentation
 
 - **[Documentation]**: Create Comprehensive CONTRIBUTING.md
+
   - **Type**: Documentation
   - **Complexity**: Simple
-  - **Rationale**: Provides clear guidelines for contributors, streamlining onboarding and ensuring consistency in development practices.
-  - **Expected Outcome**: A detailed `CONTRIBUTING.md` file covering project setup, development workflow, coding standards, testing strategy, commit conventions, PR process, and links to key resources.
-  - **Dependencies**: Key processes (CI, Commitlint, Testing) established.
+  - **Rationale**: Provides clear guidelines for contributors, streamlining onboarding and ensuring consistency in development practices per philosophy. Improves DX.
+  - **Expected Outcome**: A detailed `CONTRIBUTING.md` file covering project setup, development workflow (pre-commit hooks, Storybook), coding standards, testing strategy, commit conventions, PR process, and links to key resources.
+  - **Dependencies**: Key processes (CI, Commitlint, Testing Strategy, Storybook) established.
+
+- **[Refactor]**: Migrate from Jest to Vitest
+  - **Type**: Refactor
+  - **Complexity**: Medium
+  - **Rationale**: Vitest offers significantly faster test execution, improving developer feedback loops and CI times. This is a direct improvement to Developer Experience (DX) and Automation efficiency.
+  - **Expected Outcome**: Jest removed, Vitest installed and configured. All existing tests pass using Vitest. CI pipeline updated.
+  - **Dependencies**: Existing test suite.
 
 ## Low Priority
 
 ### Technical Debt & Maintenance
 
-- **[Refactor]**: Avoid Broad Lint Rule Suppression for Require Usage
+- **[Refactor]**: Avoid Broad Lint Rule Suppression for `require` Usage
 
   - **Type**: Refactor
   - **Complexity**: Simple
-  - **Rationale**: Disabling the `no-require-imports` rule across all test and mock files is overly broad. It prevents the linter from flagging CommonJS `require` usage, hindering the adoption of standard ES Modules.
-  - **Expected Outcome**: The rule is re-enabled. Where `require` is absolutely necessary, targeted inline `eslint-disable-next-line` comments are used with justifications, or more specific file patterns in the override applied only for unavoidable cases.
-  - **Dependencies**: None
+  - **Rationale**: Disabling `no-require-imports` broadly hinders ES Module adoption and hides potential issues. Fixing this aligns with philosophy principles.
+  - **Expected Outcome**: Global suppression removed. Targeted inline suppressions with justification used only where unavoidable. Code refactored to use `import` where possible.
+  - **Dependencies**: None.
 
-- **[Refactor]**: Improve Type Safety in API Tests
-
-  - **Type**: Refactor
-  - **Complexity**: Simple
-  - **Rationale**: Casting partial mock objects to the full type using `as NextRequest` bypasses TypeScript's structural type checking, potentially leading to false positives or unexpected failures.
-  - **Expected Outcome**: The `MockNextRequest` interface is enhanced to include all properties of `NextRequest` actually accessed by the handler. Type assertions are minimized to ensure the mock structurally matches the required parts of the real type.
-  - **Dependencies**: None
-
-- **[Refactor]**: Simplify NextResponse Mocking in API Tests
+- **[Refactor]**: Improve Type Safety in API Test Mocks (`NextRequest`)
 
   - **Type**: Refactor
   - **Complexity**: Simple
-  - **Rationale**: The current mock for `next/server` includes a detailed implementation for `NextResponse.json` that couples the test to internal implementation details of `NextResponse`, making it brittle if Next.js changes.
-  - **Expected Outcome**: The mock is simplified. Tests assert properties on the returned `NextResponse` instance instead of mocking the `NextResponse.json` static method itself.
-  - **Dependencies**: None
+  - **Rationale**: Using `as NextRequest` for partial mocks bypasses TypeScript's checks, violating type diligence principles. Improving this increases test reliability.
+  - **Expected Outcome**: Mocks used in API tests structurally match required parts of `NextRequest`, minimizing unsafe assertions.
+  - **Dependencies**: None.
 
-- **[Refactor]**: Remove Redundant Partial Mock Interface
+- **[Refactor]**: Simplify `NextResponse` Mocking in API Tests
 
   - **Type**: Refactor
   - **Complexity**: Simple
-  - **Rationale**: The `MockNextRequest` interface defining only `{ url: string; }` adds verbosity without significant type safety benefit, especially since type assertion is used anyway.
-  - **Expected Outcome**: The interface is removed and mock objects are defined inline before casting.
-  - **Dependencies**: None
+  - **Rationale**: Mocking static methods like `NextResponse.json` couples tests to framework implementation details. Simplifying makes tests more robust.
+  - **Expected Outcome**: Tests refactored to avoid mocking `NextResponse.json` directly. Assertions made on the properties of the returned instance.
+  - **Dependencies**: None.
 
 - **[Fix]**: Add Missing Newlines at End of Files
 
   - **Type**: Fix
   - **Complexity**: Simple
-  - **Rationale**: Missing newlines at the end of files can cause issues with some POSIX tools and creates inconsistency in the codebase.
-  - **Expected Outcome**: Trailing newline characters added to all affected files.
-  - **Dependencies**: None
+  - **Rationale**: Ensures consistency and compatibility with POSIX tools. Minor code quality fix.
+  - **Expected Outcome**: All text files end with a single newline character. Enforced via Prettier/EditorConfig.
+  - **Dependencies**: None.
 
-- **[Enhancement]**: Add Tracking References to TODO Comments
+- **[Enhancement]**: Add Tracking References (Ticket IDs) to TODO Comments
 
   - **Type**: Enhancement
   - **Complexity**: Simple
-  - **Rationale**: TODO comments without links to backlog items or issue trackers are easily lost and lack accountability.
-  - **Expected Outcome**: TODO comments updated to include specific ticket numbers for tracking and accountability.
-  - **Dependencies**: None
+  - **Rationale**: TODOs without tracking are easily lost. Linking them to backlog items ensures visibility and accountability for technical debt.
+  - **Expected Outcome**: Codebase scanned for TODO comments. Each valid TODO updated to include a corresponding backlog item ID.
+  - **Dependencies**: Backlog established.
 
 - **[Refactor]**: Audit and Minimize Project Dependencies
 
   - **Type**: Refactor
   - **Complexity**: Simple
-  - **Rationale**: Reduces bundle size, potential security vulnerabilities, and maintenance overhead by removing unused or evaluating heavy dependencies.
-  - **Expected Outcome**: `package.json` reviewed. Unused dependencies removed. Report on potential replacements for large/unmaintained libraries.
+  - **Rationale**: Reduces bundle size, potential security vulnerabilities, build times, and maintenance overhead. Aligns with disciplined dependency management.
+  - **Expected Outcome**: `package.json` reviewed using tools like `depcheck`. Unused dependencies removed. Report generated on potentially large dependencies.
   - **Dependencies**: Project features stabilizing.
 
 - **[Enhancement]**: Automate Dependency Updates (Renovate/Dependabot)
 
   - **Type**: Enhancement
   - **Complexity**: Simple
-  - **Rationale**: Keeps dependencies current with security patches and bug fixes with minimal manual effort. Reduces technical debt accumulation.
-  - **Expected Outcome**: Renovate or Dependabot configured to automatically create PRs for dependency updates, verified by CI pipeline.
-  - **Dependencies**: Basic CI Pipeline Setup
+  - **Rationale**: Keeps dependencies current with security patches and bug fixes with minimal manual effort, reducing technical debt accumulation per philosophy.
+  - **Expected Outcome**: Renovate Bot or Dependabot configured. Automatically creates PRs for dependency updates, verified by CI.
+  - **Dependencies**: Basic CI Pipeline Setup (stable).
 
 - **[Refactor]**: Refactor Migration Scripts for Testability and Modularity
   - **Type**: Refactor
   - **Complexity**: Medium
-  - **Rationale**: Improves the reliability and maintainability of setup or data migration scripts (e.g., Vercel Blob migration).
-  - **Expected Outcome**: Complex script logic broken into smaller, testable functions. Dry-run modes enhanced.
-  - **Dependencies**: Vercel Blob Migration Complete.
+  - **Rationale**: Improves the reliability and maintainability of setup or data migration scripts. Aligns with modularity and testability principles.
+  - **Expected Outcome**: Complex script logic broken into smaller, testable functions. Enhanced logging and error handling. Dry-run modes implemented or improved. Tests added.
+  - **Dependencies**: Vercel Blob Migration Complete (or scripts defined).
 
-### UI & Component Architecture
+### UI & Component Architecture (Frontend Focus)
 
 - **[Enhancement]**: Implement React Error Boundaries for Key UI Sections
   - **Type**: Enhancement
   - **Complexity**: Simple
-  - **Rationale**: Improves UI resilience by catching rendering errors gracefully, preventing a full application crash for the user.
-  - **Expected Outcome**: React Error Boundary components wrap major UI layouts/sections, displaying a fallback UI and logging the error.
+  - **Rationale**: Improves UI resilience by catching rendering errors gracefully, preventing a full application crash for the user, enhancing UX.
+  - **Expected Outcome**: React Error Boundary components implemented and wrapped around major UI layouts/sections. Fallback UI displayed on error. Errors captured and logged.
   - **Dependencies**: Stable UI Structure, Structured Logging.
 
 ### Developer Experience (DX) & Documentation
@@ -355,35 +348,44 @@
 
   - **Type**: Documentation
   - **Complexity**: Medium
-  - **Rationale**: Improves code understanding, maintainability, and IDE support by documenting interfaces and complex implementations.
-  - **Expected Outcome**: TSDoc comments added to exported functions, classes, types, and complex internal algorithms, explaining purpose, params, returns, and potential errors.
+  - **Rationale**: Improves code understanding, maintainability, and IDE support by documenting interfaces and complex implementations per documentation philosophy.
+  - **Expected Outcome**: TSDoc comments added to all exported members and key complex internal functions/classes, explaining purpose, params, returns, etc.
   - **Dependencies**: Codebase structure stabilizing.
 
 - **[Documentation]**: Add CI Badge and Finalize Workflow Documentation
   - **Type**: Documentation
   - **Complexity**: Simple
-  - **Rationale**: Improves project visibility and provides clear documentation for development processes.
-  - **Expected Outcome**: CI status badge added to README.md. CONTRIBUTING.md updated with final details on CI/CD, pre-commit hooks, testing, etc.
+  - **Rationale**: Improves project visibility (CI status) and provides clear, finalized documentation for development processes.
+  - **Expected Outcome**: CI status badge added to README.md. CONTRIBUTING.md updated with final details on CI/CD, pre-commit hooks, testing, Storybook, etc.
   - **Dependencies**: CI/CD setup complete, CONTRIBUTING.md drafted.
 
 ### Accessibility & User Experience
 
-- **[Enhancement]**: Remediate Accessibility Issues from Audit
+- **[Enhancement]**: Remediate Accessibility Issues from Audit (WCAG 2.1 AA)
   - **Type**: Enhancement
-  - **Complexity**: Complex
-  - **Rationale**: Addresses identified accessibility barriers, ensuring the application is inclusive and compliant with WCAG 2.1 AA standards.
-  - **Expected Outcome**: Issues identified in the accessibility audit are resolved through code changes and verified via re-testing.
-  - **Dependencies**: Accessibility Audit Completion.
+  - **Complexity**: Complex (effort depends on audit findings)
+  - **Rationale**: Addresses identified accessibility barriers based on the audit, ensuring the application is inclusive and compliant with mandatory WCAG 2.1 AA standards per frontend philosophy.
+  - **Expected Outcome**: Issues identified in the accessibility audit backlog are systematically resolved through code changes and verified via re-testing.
+  - **Dependencies**: Accessibility Audit Completion and Remediation Plan.
 
 ## Future Considerations
+
+Items valuable for the long-term vision but not prioritized for immediate development cycles.
 
 ### Innovation & Exploration
 
 - **[Research]**: Explore Support for Additional Content Sources
+
   - **Type**: Research
   - **Complexity**: Medium
-  - **Rationale**: Investigate feasibility of integrating content from sources beyond Project Gutenberg (e.g., fanfiction sites, other public domain libraries) to expand user appeal.
-  - **Expected Outcome**: Feasibility study on 1-2 potential sources, covering technical challenges, legal/ethical considerations, and estimated effort.
+  - **Rationale**: Investigate feasibility of integrating content from sources beyond the initial scope to expand user appeal and application value. Informs future roadmap.
+  - **Expected Outcome**: A feasibility study document outlining 1-2 potential new content sources, including technical challenges, legal/licensing considerations, effort estimates, and user value.
+
+- **[Research]**: Investigate AI-Powered Features (Summarization, Analysis)
+  - **Type**: Research
+  - **Complexity**: Medium
+  - **Rationale**: Explore the potential of integrating AI/LLM capabilities to offer value-added features around the core content. Drives innovation.
+  - **Expected Outcome**: Research spike identifying potential AI features, evaluating models/APIs, assessing feasibility, cost, and UX benefits. PoC if warranted.
 
 ### Operational Excellence
 
@@ -391,20 +393,22 @@
 
   - **Type**: Enhancement
   - **Complexity**: Complex
-  - **Rationale**: Provides deep visibility into request flows for debugging performance bottlenecks, especially if the system grows in complexity.
-  - **Expected Outcome**: OpenTelemetry SDK integrated. Trace context propagated. Spans generated for key operations. Traces exportable to a backend.
-  - **Dependencies**: Correlation ID Propagation.
+  - **Rationale**: Provides deep visibility into request flows across services (if architecture becomes distributed) for debugging performance bottlenecks and understanding system interactions. Aligns with advanced observability goals.
+  - **Expected Outcome**: OpenTelemetry SDK integrated. Trace context propagated. Spans generated for key operations. Traces exportable to a compatible backend.
+  - **Dependencies**: Correlation ID Propagation, Structured Logging. Decision on distributed architecture.
 
 - **[Enhancement]**: Implement Real User Monitoring (RUM) & Enhanced Error Tracking (Sentry/LogRocket)
   - **Type**: Enhancement
   - **Complexity**: Medium
-  - **Rationale**: Gain insights into real-world user performance and capture frontend errors more effectively than basic logging.
-  - **Expected Outcome**: RUM tool integrated to track Core Web Vitals and user interactions. Enhanced error tracking service captures and aggregates frontend/backend errors.
+  - **Rationale**: Gain insights into real-world user performance (Core Web Vitals) and capture frontend errors with more context (session replay) than basic logging alone. Improves operational awareness.
+  - **Expected Outcome**: RUM tool integrated to track Core Web Vitals. Enhanced error tracking service integrated to capture and aggregate frontend/backend errors with rich context.
+  - **Dependencies**: Stable frontend application deployment.
 
 ### Product Expansion
 
-- **[Feature]**: User Accounts & Reading History
+- **[Feature]**: User Accounts & Reading History/Bookmarks
   - **Type**: Feature
   - **Complexity**: Complex
-  - **Rationale**: Enable personalization, user retention, and potentially community features by allowing users to register, log in, and save their reading history.
-  - **Expected Outcome**: Secure authentication system implemented. User profiles and database schema for storing user data and reading history. UI for login/signup and managing saved items.
+  - **Rationale**: Enable personalization, user retention, and cross-device synchronization. Significant business value potential through increased engagement.
+  - **Expected Outcome**: Secure authentication system implemented. User profile management UI. Database schema extensions. Backend APIs for managing user data. UI integration for login/signup and accessing saved state.
+  - **Dependencies**: Secure API Authentication (if applicable), Persistent Storage (Database).
