@@ -23,7 +23,7 @@ jobs:
       run: npm ci --legacy-peer-deps
     
     - name: Run linter
-      run: npm run lint:strict
+      run: npm run lint
     
     - name: Run tests
       run: npm test

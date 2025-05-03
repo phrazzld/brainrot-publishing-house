@@ -1,5 +1,10 @@
+import { NextRequest } from 'next/server';
+
 import { GET } from '@/app/api/download/route';
 import { getAssetUrlWithFallback } from '@/utils';
+
+// Create a type for our mock request
+type MockRequest = Pick<NextRequest, 'url'>;
 
 // Mock NextRequest and NextResponse
 jest.mock('next/server', () => ({
@@ -41,10 +46,10 @@ describe('Download API Route', () => {
 
   it('should return an error for missing query params', async () => {
     // Create a mock URL without query params
-    const mockReq = { url: 'https://example.com/api/download' };
+    const mockReq: MockRequest = { url: 'https://example.com/api/download' };
 
     // Call the handler
-    const res = await GET(mockReq as any);
+    const res = await GET(mockReq);
     const data = await res.json();
 
     expect(res.status).toBe(400);
@@ -58,10 +63,10 @@ describe('Download API Route', () => {
     );
 
     // Create a mock URL with query params
-    const mockReq = { url: 'https://example.com/api/download?slug=hamlet&type=full' };
+    const mockReq: MockRequest = { url: 'https://example.com/api/download?slug=hamlet&type=full' };
 
     // Call the handler
-    const res = await GET(mockReq as any);
+    const res = await GET(mockReq);
     const data = await res.json();
 
     // Expect a successful response with the Blob URL
@@ -82,10 +87,12 @@ describe('Download API Route', () => {
     );
 
     // Create a mock URL with query params
-    const mockReq = { url: 'https://example.com/api/download?slug=hamlet&type=chapter&chapter=1' };
+    const mockReq: MockRequest = {
+      url: 'https://example.com/api/download?slug=hamlet&type=chapter&chapter=1',
+    };
 
     // Call the handler
-    const res = await GET(mockReq as any);
+    const res = await GET(mockReq);
     const data = await res.json();
 
     // Expect a successful response with the signed S3 URL
@@ -100,10 +107,12 @@ describe('Download API Route', () => {
     (getAssetUrlWithFallback as jest.Mock).mockRejectedValue(new Error('File not found'));
 
     // Create a mock URL with query params
-    const mockReq = { url: 'https://example.com/api/download?slug=nonexistent&type=full' };
+    const mockReq: MockRequest = {
+      url: 'https://example.com/api/download?slug=nonexistent&type=full',
+    };
 
     // Call the handler
-    const res = await GET(mockReq as any);
+    const res = await GET(mockReq);
     const data = await res.json();
 
     // Expect a 404 response
