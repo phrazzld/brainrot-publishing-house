@@ -1,6 +1,41 @@
 # BACKLOG
 
+- migrate from jest to vitest
+
 ## High Priority
+
+### Issues from Vulnerability Scanning Implementation Code Review
+
+- **[Fix]**: Re-enable CI Quality Gates (Tests and Strict Linting)
+
+  - **Type**: Fix
+  - **Complexity**: Medium
+  - **Rationale**: The CI pipeline, the supposed gatekeeper, is currently crippled by commenting out both the strict linting (`lint:strict`) and the test execution (`npm test`) steps. This renders the CI pipeline fundamentally useless for its core purpose.
+  - **Expected Outcome**: The CI configuration re-enables `npm run lint:strict` and `npm test`. Pre-existing issues are fixed in separate PRs.
+  - **Dependencies**: Fixing linting issues and addressing test configuration issues.
+
+- **[Refactor]**: Fix Mocking of Internal Collaborator in Download API Tests
+
+  - **Type**: Refactor
+  - **Complexity**: Medium
+  - **Rationale**: The test directly mocks `@/utils` (`getAssetUrlWithFallback`), an internal utility function, not an external boundary. This creates a brittle test and violates the explicit prohibition against mocking internal collaborators.
+  - **Expected Outcome**: The `GET` route handler accepts `getAssetUrlWithFallback` (or an interface it implements) via Dependency Injection. Tests inject the real function or a controlled fake implementation.
+  - **Dependencies**: None
+
+- **[Fix]**: Resolve Dependency Conflicts Instead of Using `--legacy-peer-deps`
+
+  - **Type**: Fix
+  - **Complexity**: Medium
+  - **Rationale**: Using `npm ci --legacy-peer-deps` explicitly ignores peer dependency conflicts. This is a band-aid that masks underlying version incompatibilities or outdated dependencies.
+  - **Expected Outcome**: Peer dependency conflicts identified and resolved. The `--legacy-peer-deps` flag removed once dependencies install cleanly.
+  - **Dependencies**: None
+
+- **[Fix]**: Enforce Strict Linting in CI
+  - **Type**: Fix
+  - **Complexity**: Medium
+  - **Rationale**: Running `npm run lint` instead of `npm run lint:strict` allows the build to pass despite potentially hundreds of documented lint warnings and errors. This actively permits the accumulation of technical debt.
+  - **Expected Outcome**: CI step changed to use `npm run lint:strict`. Lint errors fixed to meet the strict checks.
+  - **Dependencies**: None
 
 ### Infrastructure: CI/CD, Quality Gates & Automation
 
@@ -229,6 +264,54 @@
 ## Low Priority
 
 ### Technical Debt & Maintenance
+
+- **[Refactor]**: Avoid Broad Lint Rule Suppression for Require Usage
+
+  - **Type**: Refactor
+  - **Complexity**: Simple
+  - **Rationale**: Disabling the `no-require-imports` rule across all test and mock files is overly broad. It prevents the linter from flagging CommonJS `require` usage, hindering the adoption of standard ES Modules.
+  - **Expected Outcome**: The rule is re-enabled. Where `require` is absolutely necessary, targeted inline `eslint-disable-next-line` comments are used with justifications, or more specific file patterns in the override applied only for unavoidable cases.
+  - **Dependencies**: None
+
+- **[Refactor]**: Improve Type Safety in API Tests
+
+  - **Type**: Refactor
+  - **Complexity**: Simple
+  - **Rationale**: Casting partial mock objects to the full type using `as NextRequest` bypasses TypeScript's structural type checking, potentially leading to false positives or unexpected failures.
+  - **Expected Outcome**: The `MockNextRequest` interface is enhanced to include all properties of `NextRequest` actually accessed by the handler. Type assertions are minimized to ensure the mock structurally matches the required parts of the real type.
+  - **Dependencies**: None
+
+- **[Refactor]**: Simplify NextResponse Mocking in API Tests
+
+  - **Type**: Refactor
+  - **Complexity**: Simple
+  - **Rationale**: The current mock for `next/server` includes a detailed implementation for `NextResponse.json` that couples the test to internal implementation details of `NextResponse`, making it brittle if Next.js changes.
+  - **Expected Outcome**: The mock is simplified. Tests assert properties on the returned `NextResponse` instance instead of mocking the `NextResponse.json` static method itself.
+  - **Dependencies**: None
+
+- **[Refactor]**: Remove Redundant Partial Mock Interface
+
+  - **Type**: Refactor
+  - **Complexity**: Simple
+  - **Rationale**: The `MockNextRequest` interface defining only `{ url: string; }` adds verbosity without significant type safety benefit, especially since type assertion is used anyway.
+  - **Expected Outcome**: The interface is removed and mock objects are defined inline before casting.
+  - **Dependencies**: None
+
+- **[Fix]**: Add Missing Newlines at End of Files
+
+  - **Type**: Fix
+  - **Complexity**: Simple
+  - **Rationale**: Missing newlines at the end of files can cause issues with some POSIX tools and creates inconsistency in the codebase.
+  - **Expected Outcome**: Trailing newline characters added to all affected files.
+  - **Dependencies**: None
+
+- **[Enhancement]**: Add Tracking References to TODO Comments
+
+  - **Type**: Enhancement
+  - **Complexity**: Simple
+  - **Rationale**: TODO comments without links to backlog items or issue trackers are easily lost and lack accountability.
+  - **Expected Outcome**: TODO comments updated to include specific ticket numbers for tracking and accountability.
+  - **Dependencies**: None
 
 - **[Refactor]**: Audit and Minimize Project Dependencies
 
