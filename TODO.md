@@ -39,7 +39,7 @@
 
 ## Download Service Logic
 
-- [ ] **T004 · Feature · P1: define download service class structure and constructor**
+- [x] **T004 · Feature · P1: define download service class structure and constructor**
   - **Context:** PLAN.md > Detailed Build Steps > 3. Create Download Service & 4. Implement Service Constructor
   - **Action:**
     1. Create `services/downloadService.ts` defining `DownloadService` class and `DownloadRequestParams` type.
