@@ -164,7 +164,7 @@
     1. Code review confirms secure handling of secrets and configuration.
     2. Input validation logic is present and correct.
   - **Depends‑on:** [T002, T008]
-- [ ] **T015 · Chore · P2: verify signed url expiry configuration**
+- [x] **T015 · Chore · P2: verify signed url expiry configuration**
   - **Context:** PLAN.md > Security & Config
   - **Action:**
     1. Confirm a reasonable signed URL expiry time (e.g., 5-15 minutes) is configured and loaded via `process.env` in `s3SignedUrlGenerator.ts`.

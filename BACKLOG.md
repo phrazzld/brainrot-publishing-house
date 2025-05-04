@@ -123,11 +123,19 @@ This backlog outlines planned work, balancing immediate needs, technical excelle
 ### Infrastructure: Storage
 
 - **[Feature]**: Configure and Verify Vercel Blob Storage Setup
+
   - **Type**: Feature
   - **Complexity**: Medium
   - **Rationale**: Provides scalable cloud storage essential for storing application assets (e.g., book content). Foundational infrastructure for core features and operational stability.
   - **Expected Outcome**: Vercel Blob storage provisioned. `BLOB_READ_WRITE_TOKEN` secured via environment variables. Relevant setup/migration/verification scripts tested and functional. `docs/BLOB_STORAGE.md` updated.
   - **Dependencies**: Basic CI Pipeline Setup (for secrets management).
+
+- **[Feature]**: Complete Digital Ocean Spaces Migration and Cleanup
+  - **Type**: Feature
+  - **Complexity**: Medium
+  - **Rationale**: Remove all dependencies on Digital Ocean Spaces after successful migration to Vercel Blob to simplify the codebase, reduce dependencies, and eliminate need for maintaining multiple storage providers.
+  - **Expected Outcome**: All Digital Ocean assets deleted, all Digital Ocean references (environment variables, code logic, S3 signed URL generation) removed from codebase, download service refactored to use only Vercel Blob, download API route handler simplified, all tests updated to remove S3/Digital Ocean mocks.
+  - **Dependencies**: Confirmation that all assets have been successfully migrated to Vercel Blob.
 
 ### Core Application Features & Cleanup
 
