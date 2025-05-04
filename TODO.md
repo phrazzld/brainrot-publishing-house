@@ -182,7 +182,7 @@
   - **Done‑when:**
     1. All new/modified public APIs have comprehensive TSDoc comments.
   - **Depends‑on:** [T001, T002, T005]
-- [ ] **T017 · Chore · P2: perform final code cleanup**
+- [x] **T017 · Chore · P2: perform final code cleanup**
   - **Context:** PLAN.md > Detailed Build Steps > 9. Code Cleanup
   - **Action:**
     1. Remove any unused imports, old mock functions, commented-out code related to the refactor.
@@ -209,14 +209,3 @@
   - **Done‑when:**
     1. All lint rules and tests (unit, integration, coverage) pass in local and CI environments.
   - **Depends‑on:** [T017, T010, T003, T006, T012, T013, T014, T015, T016]
-
----
-
-### Clarifications & Assumptions
-
-- [ ] **Issue:** Need confirmation on the exact behavior of `getAssetUrlWithFallback` regarding "not found" cases (e.g., does it throw, return null/undefined, or a specific value?).
-  - **Context:** Error & Edge‑Case Strategy, Service (`downloadService.ts`) bullet 1. Affects T005, T006, T010.
-  - **Blocking?:** yes
-- [ ] **Issue:** Confirm if correlation ID should always be generated fresh per request, or if it should be read from incoming headers (e.g., `X-Request-ID`) if present.
-  - **Context:** PLAN.md, Logging & Observability. Affects T011.
-  - **Blocking?:** no

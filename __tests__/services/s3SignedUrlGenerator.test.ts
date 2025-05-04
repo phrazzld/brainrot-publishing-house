@@ -50,8 +50,7 @@ describe('RealS3SignedUrlGenerator', () => {
 
   describe('constructor', () => {
     it('should initialize with all required environment variables', () => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const generator = new RealS3SignedUrlGenerator();
+      new RealS3SignedUrlGenerator();
       expect(S3Client).toHaveBeenCalledWith(
         expect.objectContaining({
           region: 'test-region',
@@ -94,8 +93,7 @@ describe('RealS3SignedUrlGenerator', () => {
 
     it('should use default region when not provided', () => {
       delete process.env.SPACES_REGION;
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const generator = new RealS3SignedUrlGenerator();
+      new RealS3SignedUrlGenerator();
       expect(S3Client).toHaveBeenCalledWith(
         expect.objectContaining({
           region: 'us-east-1', // Default value from the implementation
@@ -232,7 +230,6 @@ describe('RealS3SignedUrlGenerator', () => {
 
   describe('createS3SignedUrlGenerator', () => {
     it('should return a valid S3SignedUrlGenerator instance', () => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const generator = createS3SignedUrlGenerator();
       expect(generator).toBeInstanceOf(RealS3SignedUrlGenerator);
       expect(generator).toHaveProperty('createSignedS3Url');

@@ -205,8 +205,7 @@ describe('DownloadService', () => {
         // Should include the URL in the message
         await expect(downloadService.getDownloadUrl(fullAudiobookParams)).rejects.toMatchObject({
           name: 'SigningError',
-          message: expect.stringContaining('Failed to generate signed URL for'),
-          message: expect.stringContaining(TEST_S3_URL),
+          message: expect.stringContaining(`Failed to generate signed URL for ${TEST_S3_URL}`),
           cause: originalError,
         });
       });
