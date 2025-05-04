@@ -174,7 +174,7 @@
 
 ## Documentation & Cleanup
 
-- [ ] **T016 · Chore · P2: add tsdoc comments to new/refactored code**
+- [x] **T016 · Chore · P2: add tsdoc comments to new/refactored code**
   - **Context:** PLAN.md > Documentation > Code Self-Doc
   - **Action:**
     1. Add/update TSDoc comments for all exported interfaces, classes, methods, and errors in `types/dependencies.ts`, `services/s3SignedUrlGenerator.ts`, `services/downloadService.ts`.

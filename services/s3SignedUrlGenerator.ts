@@ -4,7 +4,11 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { S3SignedUrlGenerator, SigningError } from '../types/dependencies';
 
 /**
- * Default values for S3 configuration when not provided via environment variables
+ * Default values for S3 configuration when not provided via environment variables.
+ * These values are used as fallbacks when the corresponding environment variables are missing.
+ *
+ * @property {string} region - Default AWS region to use (us-east-1)
+ * @property {number} expirySeconds - Default URL expiry time in seconds (900 = 15 minutes)
  */
 const DEFAULT_CONFIG = {
   region: 'us-east-1',
@@ -15,6 +19,16 @@ const DEFAULT_CONFIG = {
  * Implementation of the S3SignedUrlGenerator interface that creates
  * time-limited signed URLs for accessing protected assets in S3 buckets.
  * Uses AWS SDK v3 and loads configuration from environment variables.
+ *
+ * This implementation expects the following environment variables:
+ * - SPACES_ACCESS_KEY_ID: The access key for the S3-compatible service
+ * - SPACES_SECRET_ACCESS_KEY: The secret key for the S3-compatible service
+ * - SPACES_ENDPOINT: The service endpoint URL (e.g., nyc3.digitaloceanspaces.com)
+ * - SPACES_BUCKET: The bucket name where assets are stored
+ * - SPACES_REGION: (Optional) The region code (defaults to us-east-1)
+ * - SPACES_EXPIRY_SECONDS: (Optional) URL expiry time in seconds (defaults to 900)
+ *
+ * @implements {S3SignedUrlGenerator}
  */
 export class RealS3SignedUrlGenerator implements S3SignedUrlGenerator {
   private s3Client: S3Client;
@@ -123,7 +137,16 @@ export class RealS3SignedUrlGenerator implements S3SignedUrlGenerator {
  * Factory function that creates and returns a new instance of RealS3SignedUrlGenerator.
  * Useful for dependency injection in contexts where a factory is preferred over direct instantiation.
  *
- * @returns A new S3SignedUrlGenerator instance
+ * This function simplifies the creation of the signed URL generator by handling the instantiation
+ * logic, allowing consumers to simply call this function instead of using the 'new' operator.
+ * It's particularly useful in dependency injection scenarios where factories are preferred.
+ *
+ * @returns A new S3SignedUrlGenerator instance configured with environment variables
+ * @throws {Error} When required environment variables are missing
+ * @example
+ * // In a service or API route
+ * const s3Generator = createS3SignedUrlGenerator();
+ * const signedUrl = await s3Generator.createSignedS3Url('path/to/resource.mp3');
  */
 export function createS3SignedUrlGenerator(): S3SignedUrlGenerator {
   return new RealS3SignedUrlGenerator();
