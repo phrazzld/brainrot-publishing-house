@@ -60,7 +60,7 @@
     2. Handles Blob URL case, S3 signing case, asset not found case, and signing error case.
     3. Throws specified custom errors (`AssetNotFoundError`, `SigningError`).
   - **Depends‑on:** [T004, T002]
-- [ ] **T006 · Test · P1: unit test download service**
+- [x] **T006 · Test · P1: unit test download service**
   - **Context:** PLAN.md > Detailed Build Steps > 7. Write/Update Unit Tests (`downloadService.test.ts`)
   - **Action:**
     1. Create `__tests__/services/downloadService.test.ts`.
