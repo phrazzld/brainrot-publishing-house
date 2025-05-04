@@ -132,7 +132,7 @@
     1. Correlation ID is generated in the route handler and passed to the service.
     2. Service accepts and can potentially use the correlation ID.
   - **Depends‑on:** [T009, T005]
-- [ ] **T012 · Feature · P2: implement structured logging in route handler**
+- [x] **T012 · Feature · P2: implement structured logging in route handler**
   - **Context:** PLAN.md > Logging & Observability > Route Handler (`route.ts`)
   - **Action:**
     1. Add structured logging (e.g., Pino/Winston) to `app/api/download/route.ts`.

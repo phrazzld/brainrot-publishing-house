@@ -6,6 +6,7 @@ import { DownloadService } from '@/services/downloadService';
 import { createS3SignedUrlGenerator } from '@/services/s3SignedUrlGenerator';
 import { AssetNotFoundError, AssetUrlResolver, SigningError } from '@/types/dependencies';
 import { getAssetUrlWithFallback } from '@/utils';
+import { createRequestLogger } from '@/utils/logger';
 
 // Create an adapter that implements the AssetUrlResolver interface
 const assetUrlResolver: AssetUrlResolver = {
@@ -15,7 +16,17 @@ const assetUrlResolver: AssetUrlResolver = {
 export async function GET(req: NextRequest) {
   // Generate a unique correlation ID for this request
   const correlationId = randomUUID();
-  console.info(`[${correlationId}] Download API request received: ${req.url}`);
+
+  // Create a logger instance with the correlation ID
+  const log = createRequestLogger(correlationId);
+
+  // Log request received with structured data
+  log.info({
+    msg: 'Download API request received',
+    method: req.method,
+    url: req.url,
+    userAgent: req.headers.get('user-agent'),
+  });
 
   try {
     // Parse query params
@@ -26,19 +37,19 @@ export async function GET(req: NextRequest) {
 
     // Validate required parameters
     if (!slug) {
-      console.warn(`[${correlationId}] Missing required parameter: slug`);
+      log.warn({ msg: 'Missing required parameter', param: 'slug' });
       return NextResponse.json({ error: 'Missing required parameter: slug' }, { status: 400 });
     }
 
     // Validate type parameter
     if (!type) {
-      console.warn(`[${correlationId}] Missing required parameter: type`);
+      log.warn({ msg: 'Missing required parameter', param: 'type' });
       return NextResponse.json({ error: 'Missing required parameter: type' }, { status: 400 });
     }
 
     // Validate type has allowed values
     if (type !== 'full' && type !== 'chapter') {
-      console.warn(`[${correlationId}] Invalid value for type parameter: ${type}`);
+      log.warn({ msg: 'Invalid value for parameter', param: 'type', value: type });
       return NextResponse.json(
         { error: 'Invalid value for type parameter. Must be "full" or "chapter"' },
         { status: 400 }
@@ -48,7 +59,11 @@ export async function GET(req: NextRequest) {
     // Validate chapter when type is 'chapter'
     if (type === 'chapter') {
       if (!chapter) {
-        console.warn(`[${correlationId}] Missing required parameter: chapter (when type=chapter)`);
+        log.warn({
+          msg: 'Missing required parameter when type=chapter',
+          param: 'chapter',
+          type,
+        });
         return NextResponse.json(
           { error: 'Missing required parameter: chapter (required when type is "chapter")' },
           { status: 400 }
@@ -58,7 +73,11 @@ export async function GET(req: NextRequest) {
       // Validate chapter is a number
       const chapterNum = Number(chapter);
       if (isNaN(chapterNum)) {
-        console.warn(`[${correlationId}] Invalid chapter parameter (not a number): ${chapter}`);
+        log.warn({
+          msg: 'Invalid chapter parameter (not a number)',
+          param: 'chapter',
+          value: chapter,
+        });
         return NextResponse.json(
           { error: 'Invalid chapter parameter: must be a number' },
           { status: 400 }
@@ -67,7 +86,11 @@ export async function GET(req: NextRequest) {
 
       // Validate chapter is positive
       if (chapterNum <= 0) {
-        console.warn(`[${correlationId}] Invalid chapter parameter (not positive): ${chapterNum}`);
+        log.warn({
+          msg: 'Invalid chapter parameter (not positive)',
+          param: 'chapter',
+          value: chapterNum,
+        });
         return NextResponse.json(
           { error: 'Invalid chapter parameter: must be a positive number' },
           { status: 400 }
@@ -76,9 +99,11 @@ export async function GET(req: NextRequest) {
 
       // Validate chapter is an integer
       if (!Number.isInteger(chapterNum)) {
-        console.warn(
-          `[${correlationId}] Invalid chapter parameter (not an integer): ${chapterNum}`
-        );
+        log.warn({
+          msg: 'Invalid chapter parameter (not an integer)',
+          param: 'chapter',
+          value: chapterNum,
+        });
         return NextResponse.json(
           { error: 'Invalid chapter parameter: must be an integer' },
           { status: 400 }
@@ -106,18 +131,29 @@ export async function GET(req: NextRequest) {
         correlationId, // Pass the correlation ID to the service
       });
 
-      console.info(
-        `[${correlationId}] Successfully generated download URL for ${slug}/${validatedType}`
-      );
+      // Log successful URL generation
+      log.info({
+        msg: 'Successfully generated download URL',
+        slug,
+        type: validatedType,
+        chapter: chapterParam,
+        urlType: url.includes(s3Endpoint) ? 's3-signed' : 'blob',
+      });
 
       // Respond with success and the URL
       return NextResponse.json({ url }, { status: 200 });
     } catch (error) {
       // Map errors to appropriate status codes and messages
       if (error instanceof AssetNotFoundError) {
-        console.warn(
-          `[${correlationId}] Asset not found: ${slug}/${validatedType}${chapterParam ? `/${chapterParam}` : ''}`
-        );
+        // Log asset not found error with structured data
+        log.warn({
+          msg: 'Asset not found',
+          slug,
+          type: validatedType,
+          chapter: chapterParam,
+          error: error.message,
+        });
+
         return NextResponse.json(
           {
             error: 'Resource not found',
@@ -130,7 +166,17 @@ export async function GET(req: NextRequest) {
       }
 
       if (error instanceof SigningError) {
-        console.error(`[${correlationId}] Failed to generate signed URL:`, error);
+        // Log signing error with structured data
+        log.error({
+          msg: 'Failed to generate signed URL',
+          slug,
+          type: validatedType,
+          chapter: chapterParam,
+          error: error.message,
+          stack: error.stack,
+          cause: error.cause,
+        });
+
         return NextResponse.json(
           {
             error: 'Failed to generate download URL',
@@ -143,7 +189,15 @@ export async function GET(req: NextRequest) {
       }
 
       // Handle any other unexpected errors
-      console.error(`[${correlationId}] Unexpected error in download API:`, error);
+      log.error({
+        msg: 'Unexpected error in download API',
+        slug,
+        type: validatedType,
+        chapter: chapterParam,
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      });
+
       return NextResponse.json(
         {
           error: 'Internal server error',
@@ -156,7 +210,12 @@ export async function GET(req: NextRequest) {
     }
   } catch (err) {
     // This outer catch block is for errors that might occur during validation or service setup
-    console.error(`[${correlationId}] Critical error in download API route:`, err);
+    log.error({
+      msg: 'Critical error in download API route',
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
     return NextResponse.json(
       {
         error: 'Internal server error',
