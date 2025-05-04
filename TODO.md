@@ -108,7 +108,7 @@
 
 ## Integration Testing
 
-- [ ] **T010 · Test · P1: update download api integration tests**
+- [~] **T010 · Test · P1: update download api integration tests**
   - **Context:** PLAN.md > Detailed Build Steps > 8. Update Integration Tests (`download.test.ts`)
   - **Action:**
     1. Modify `__tests__/api/download.test.ts`: remove mocks for internal collaborators (`DownloadService`, `getAssetUrlWithFallback`).
@@ -122,7 +122,7 @@
 
 ## Logging & Observability
 
-- [ ] **T011 · Feature · P2: implement correlation id generation and propagation**
+- [x] **T011 · Feature · P2: implement correlation id generation and propagation**
   - **Context:** PLAN.md > Logging & Observability > Correlation ID
   - **Action:**
     1. In `app/api/download/route.ts`, generate a unique correlation ID (e.g., `crypto.randomUUID()`) per request.
