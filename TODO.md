@@ -201,7 +201,7 @@
     1. Route handler passes linting without warnings about complexity.
     2. Functionality remains unchanged.
   - **Depends‑on:** [T009]
-- [ ] **T018 · Chore · P1: run final lint and test checks**
+- [x] **T018 · Chore · P1: run final lint and test checks**
   - **Context:** PLAN.md > Detailed Build Steps > 10. Run Checks
   - **Action:**
     1. Execute `npm run lint:strict` and `npm test` locally.

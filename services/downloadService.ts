@@ -122,87 +122,156 @@ export class DownloadService {
     const legacyPath = this.generateLegacyPath(slug, type, chapter, log);
 
     try {
-      // Attempt to get the asset URL with fallback mechanism
-      const resolvedUrl = await this.assetUrlResolver.getAssetUrlWithFallback(legacyPath);
+      // Resolve the URL using asset resolver
+      const resolvedUrl = await this.resolveAssetUrl(legacyPath, log);
+      // Process the resolved URL (handle S3 vs Blob)
+      return await this.processResolvedUrl(resolvedUrl, log);
+    } catch (error) {
+      return this.handleUrlResolutionError(error, legacyPath, log);
+    }
+  }
 
-      // If no URL was resolved, throw an AssetNotFoundError
-      if (!resolvedUrl) {
-        log?.warn({
-          msg: 'Asset not found',
-          legacyPath,
-          action: 'downloadService.assetNotFound',
-        });
-        throw new AssetNotFoundError(`Asset not found: ${legacyPath}`);
-      }
+  /**
+   * Resolves an asset URL using the asset resolver service.
+   *
+   * @param legacyPath - The legacy path to resolve
+   * @param log - Optional logger instance
+   * @returns The resolved URL
+   * @throws {AssetNotFoundError} When the asset cannot be found
+   * @private
+   */
+  private async resolveAssetUrl(
+    legacyPath: string,
+    log?: ReturnType<typeof createRequestLogger>
+  ): Promise<string> {
+    // Attempt to get the asset URL with fallback mechanism
+    const resolvedUrl = await this.assetUrlResolver.getAssetUrlWithFallback(legacyPath);
 
-      // Check if the resolved URL is an S3 URL that needs signing
-      if (resolvedUrl.includes(this.s3Endpoint)) {
-        log?.info({
-          msg: 'Generating signed URL for S3 path',
-          s3Path: resolvedUrl,
-          action: 'downloadService.generateSignedUrl.start',
-        });
+    // If no URL was resolved, throw an AssetNotFoundError
+    if (!resolvedUrl) {
+      log?.warn({
+        msg: 'Asset not found',
+        legacyPath,
+        action: 'downloadService.assetNotFound',
+      });
+      throw new AssetNotFoundError(`Asset not found: ${legacyPath}`);
+    }
 
-        try {
-          // Generate a signed URL for the S3 path
-          const signedUrl = await this.s3SignedUrlGenerator.createSignedS3Url(resolvedUrl);
+    return resolvedUrl;
+  }
 
-          log?.debug({
-            msg: 'Successfully generated signed URL',
-            action: 'downloadService.generateSignedUrl.success',
-          });
+  /**
+   * Processes a resolved URL by determining if it needs S3 signing.
+   *
+   * @param resolvedUrl - The URL to process
+   * @param log - Optional logger instance
+   * @returns The final URL (either signed S3 URL or direct Blob URL)
+   * @throws {SigningError} When S3 URL signing fails
+   * @private
+   */
+  private async processResolvedUrl(
+    resolvedUrl: string,
+    log?: ReturnType<typeof createRequestLogger>
+  ): Promise<string> {
+    // Check if the resolved URL is an S3 URL that needs signing
+    if (resolvedUrl.includes(this.s3Endpoint)) {
+      return await this.generateSignedS3Url(resolvedUrl, log);
+    }
 
-          return signedUrl;
-        } catch (error) {
-          log?.error({
-            msg: 'Failed to generate signed URL',
-            s3Path: resolvedUrl,
-            error: error instanceof Error ? error.message : String(error),
-            stack: error instanceof Error ? error.stack : undefined,
-            action: 'downloadService.generateSignedUrl.error',
-          });
+    // If not an S3 URL, return the resolved URL directly (e.g., Blob URL)
+    log?.debug({
+      msg: 'Returning direct Blob URL',
+      urlType: 'blob',
+      action: 'downloadService.blobUrlFound',
+    });
 
-          // Wrap any signing errors and rethrow
-          throw new SigningError(
-            `Failed to generate signed URL for ${resolvedUrl}`,
-            error instanceof Error ? error : undefined
-          );
-        }
-      }
+    return resolvedUrl;
+  }
 
-      // If not an S3 URL, return the resolved URL directly (e.g., Blob URL)
+  /**
+   * Generates a signed S3 URL for the given S3 path.
+   *
+   * @param s3Url - The S3 URL to sign
+   * @param log - Optional logger instance
+   * @returns The signed S3 URL
+   * @throws {SigningError} When signing fails
+   * @private
+   */
+  private async generateSignedS3Url(
+    s3Url: string,
+    log?: ReturnType<typeof createRequestLogger>
+  ): Promise<string> {
+    log?.info({
+      msg: 'Generating signed URL for S3 path',
+      s3Path: s3Url,
+      action: 'downloadService.generateSignedUrl.start',
+    });
+
+    try {
+      // Generate a signed URL for the S3 path
+      const signedUrl = await this.s3SignedUrlGenerator.createSignedS3Url(s3Url);
+
       log?.debug({
-        msg: 'Returning direct Blob URL',
-        urlType: 'blob',
-        action: 'downloadService.blobUrlFound',
+        msg: 'Successfully generated signed URL',
+        action: 'downloadService.generateSignedUrl.success',
       });
 
-      return resolvedUrl;
+      return signedUrl;
     } catch (error) {
-      // If the resolver already threw an AssetNotFoundError, propagate it
-      if (error instanceof AssetNotFoundError) {
-        throw error;
-      }
-
-      // If it's a SigningError, propagate it
-      if (error instanceof SigningError) {
-        throw error;
-      }
-
-      // Log unexpected errors with structured data
       log?.error({
-        msg: 'Unexpected error resolving URL',
-        legacyPath,
+        msg: 'Failed to generate signed URL',
+        s3Path: s3Url,
         error: error instanceof Error ? error.message : String(error),
         stack: error instanceof Error ? error.stack : undefined,
-        action: 'downloadService.unexpectedError',
+        action: 'downloadService.generateSignedUrl.error',
       });
 
-      // Otherwise, wrap in a new AssetNotFoundError
-      throw new AssetNotFoundError(
-        `Failed to resolve URL for ${legacyPath}: ${error instanceof Error ? error.message : String(error)}`
+      // Wrap any signing errors and rethrow
+      throw new SigningError(
+        `Failed to generate signed URL for ${s3Url}`,
+        error instanceof Error ? error : undefined
       );
     }
+  }
+
+  /**
+   * Handles errors that occur during URL resolution.
+   *
+   * @param error - The error that occurred
+   * @param legacyPath - The legacy path being processed
+   * @param log - Optional logger instance
+   * @returns Never returns as it always throws an error
+   * @throws {AssetNotFoundError|SigningError} The appropriate error type
+   * @private
+   */
+  private handleUrlResolutionError(
+    error: unknown,
+    legacyPath: string,
+    log?: ReturnType<typeof createRequestLogger>
+  ): never {
+    // If the resolver already threw an AssetNotFoundError, propagate it
+    if (error instanceof AssetNotFoundError) {
+      throw error;
+    }
+
+    // If it's a SigningError, propagate it
+    if (error instanceof SigningError) {
+      throw error;
+    }
+
+    // Log unexpected errors with structured data
+    log?.error({
+      msg: 'Unexpected error resolving URL',
+      legacyPath,
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+      action: 'downloadService.unexpectedError',
+    });
+
+    // Otherwise, wrap in a new AssetNotFoundError
+    throw new AssetNotFoundError(
+      `Failed to resolve URL for ${legacyPath}: ${error instanceof Error ? error.message : String(error)}`
+    );
   }
 
   /**
