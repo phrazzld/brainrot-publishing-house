@@ -291,14 +291,25 @@ export class DownloadService {
     chapter?: string,
     log?: ReturnType<typeof createRequestLogger>
   ): string {
+    // Get bucket and region from environment variables with defaults
+    const bucket =
+      process.env.DO_SPACES_BUCKET || process.env.SPACES_BUCKET_NAME || 'brainrot-publishing';
+    const region = 'nyc3'; // This is hardcoded as it's consistent
+
+    // Always use direct CDN URLs since we don't have these assets in Vercel Blob
     if (type === 'full') {
-      const path = `/${slug}/audio/full-audiobook.mp3`;
+      // Generate the appropriate path for full audiobook
+      const path = `https://${bucket}.${region}.cdn.digitaloceanspaces.com/${slug}/audio/full-audiobook.mp3`;
+
       log?.debug({
-        msg: 'Generated full audiobook path',
+        msg: 'Generated full audiobook path (direct CDN URL)',
         slug,
         path,
+        bucket,
+        region,
         action: 'downloadService.generateLegacyPath.full',
       });
+
       return path;
     } else {
       if (!chapter) {
@@ -312,14 +323,20 @@ export class DownloadService {
       }
 
       const paddedChapter = this.zeroPad(parseInt(chapter, 10), 2);
-      const path = `/${slug}/audio/book-${paddedChapter}.mp3`;
+
+      // Generate the direct CDN path for chapter audiobook
+      const path = `https://${bucket}.${region}.cdn.digitaloceanspaces.com/${slug}/audio/book-${paddedChapter}.mp3`;
+
       log?.debug({
-        msg: 'Generated chapter audiobook path',
+        msg: 'Generated chapter audiobook path (direct CDN URL)',
         slug,
         chapter: paddedChapter,
         path,
+        bucket,
+        region,
         action: 'downloadService.generateLegacyPath.chapter',
       });
+
       return path;
     }
   }

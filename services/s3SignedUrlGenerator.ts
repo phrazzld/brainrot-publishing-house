@@ -42,24 +42,29 @@ export class RealS3SignedUrlGenerator implements S3SignedUrlGenerator {
    * @throws {Error} When required environment variables are missing
    */
   constructor() {
-    const accessKeyId = process.env.SPACES_ACCESS_KEY_ID;
-    const secretAccessKey = process.env.SPACES_SECRET_ACCESS_KEY;
-    const endpoint = process.env.SPACES_ENDPOINT;
-    const bucket = process.env.SPACES_BUCKET;
+    // Check both new and legacy environment variable names
+    const accessKeyId = process.env.SPACES_ACCESS_KEY_ID || process.env.DO_SPACES_ACCESS_KEY;
+    const secretAccessKey =
+      process.env.SPACES_SECRET_ACCESS_KEY || process.env.DO_SPACES_SECRET_KEY;
+    const endpoint = process.env.SPACES_ENDPOINT || process.env.DO_SPACES_ENDPOINT;
+    const bucket =
+      process.env.SPACES_BUCKET_NAME || process.env.SPACES_BUCKET || process.env.DO_SPACES_BUCKET;
 
     // Validate required environment variables
     if (!accessKeyId || !secretAccessKey) {
       throw new Error(
-        'Missing required S3 credentials: SPACES_ACCESS_KEY_ID or SPACES_SECRET_ACCESS_KEY'
+        'Missing required S3 credentials: SPACES_ACCESS_KEY_ID/DO_SPACES_ACCESS_KEY or SPACES_SECRET_ACCESS_KEY/DO_SPACES_SECRET_KEY'
       );
     }
 
     if (!endpoint) {
-      throw new Error('Missing required S3 configuration: SPACES_ENDPOINT');
+      throw new Error('Missing required S3 configuration: SPACES_ENDPOINT/DO_SPACES_ENDPOINT');
     }
 
     if (!bucket) {
-      throw new Error('Missing required S3 configuration: SPACES_BUCKET');
+      throw new Error(
+        'Missing required S3 configuration: SPACES_BUCKET_NAME/SPACES_BUCKET/DO_SPACES_BUCKET'
+      );
     }
 
     // Initialize the S3 client with credentials and configuration

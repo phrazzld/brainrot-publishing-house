@@ -11,16 +11,24 @@ The application supports serving downloadable assets from both Vercel Blob and S
 Configure S3 signed URL generation using these environment variables:
 
 ```
-# Required variables
+# Standard variables (recommended)
 SPACES_ACCESS_KEY_ID=your_access_key
 SPACES_SECRET_ACCESS_KEY=your_secret_key
 SPACES_ENDPOINT=your_s3_endpoint.com
-SPACES_BUCKET=your_bucket_name
+SPACES_BUCKET_NAME=your_bucket_name
+
+# Legacy variables (supported for backward compatibility)
+DO_SPACES_ACCESS_KEY=your_access_key
+DO_SPACES_SECRET_KEY=your_secret_key
+DO_SPACES_ENDPOINT=your_s3_endpoint.com
+DO_SPACES_BUCKET=your_bucket_name
 
 # Optional variables
 SPACES_REGION=us-east-1  # Optional: Default is us-east-1
 SPACES_EXPIRY_SECONDS=900  # Optional: Default is 900 (15 minutes)
 ```
+
+The system checks for both the standard and legacy variable names, using whichever is defined. If both are defined, the standard names take precedence.
 
 ## Signed URL Expiry Configuration
 
@@ -74,6 +82,79 @@ const signedUrl = await getSignedUrl(this.s3Client, command, {
   expiresIn: this.expirySeconds,
 });
 ```
+
+## Client-Side Usage
+
+When implementing download functionality in client-side components, **always use the `/api/download` API endpoint** rather than trying to generate or access Blob URLs directly. This ensures proper access control and prevents Vercel Blob token errors in local development.
+
+The download API has two operating modes:
+
+1. **URL Generation Mode**: Returns a URL that the client can use to download directly
+2. **Proxy Mode**: Streams the file content through the API route to bypass CORS restrictions
+
+Example of the recommended approach that handles both modes:
+
+```typescript
+// Fetch the download URL from our API
+const params = new URLSearchParams({
+  slug,
+  type,
+  ...(chapter ? { chapter: String(chapter) } : {}),
+});
+
+const apiUrl = `/api/download?${params.toString()}`;
+const response = await fetch(apiUrl);
+
+if (response.ok) {
+  const { url, shouldProxy } = await response.json();
+
+  let blob;
+
+  // If the API suggests proxying (likely due to CORS issues), use the proxy approach
+  if (shouldProxy) {
+    // Create a proxy URL by adding the proxy parameter
+    const proxyParams = new URLSearchParams({
+      slug,
+      type,
+      ...(chapter ? { chapter: String(chapter) } : {}),
+      proxy: 'true',
+    });
+
+    const proxyUrl = `/api/download?${proxyParams.toString()}`;
+
+    // Fetch directly from our API endpoint which will proxy the file
+    const fileRes = await fetch(proxyUrl);
+
+    if (fileRes.ok) {
+      blob = await fileRes.blob();
+    }
+  } else {
+    // Direct fetch if no proxy needed (e.g., Vercel Blob URLs)
+    const fileRes = await fetch(url);
+
+    if (fileRes.ok) {
+      blob = await fileRes.blob();
+    }
+  }
+
+  if (blob) {
+    // Create a download link from the blob
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `filename.mp3`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+}
+```
+
+This approach provides several advantages:
+
+1. **CORS Compatibility**: Handles both CORS-enabled and CORS-restricted URLs
+2. **Security**: All token-based authentication happens on the server side
+3. **Reliability**: Works across all environments (local development, staging, production)
+4. **Simplicity**: Client code doesn't need to worry about storage backends
 
 ## Testing
 

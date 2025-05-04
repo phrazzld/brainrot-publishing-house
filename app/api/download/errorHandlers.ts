@@ -4,6 +4,22 @@ import { AssetNotFoundError, SigningError } from '@/types/dependencies';
 import { Logger } from '@/utils/logger';
 
 /**
+ * Safely logs errors to prevent logger crashes
+ */
+export function safeLog(
+  logger: Logger,
+  level: 'info' | 'warn' | 'error' | 'debug',
+  data: Record<string, unknown>
+) {
+  try {
+    logger[level](data);
+  } catch {
+    // Fallback to console if logger fails
+    console.error(`[${level.toUpperCase()}]`, data);
+  }
+}
+
+/**
  * Maps a download service error to an appropriate NextResponse
  * @param error - The error that occurred during download service execution
  * @param params - Request parameters and metadata for error context
@@ -25,7 +41,7 @@ export function handleDownloadServiceError(
 
   // Handle AssetNotFoundError (404)
   if (error instanceof AssetNotFoundError) {
-    log.warn({
+    safeLog(log, 'warn', {
       msg: 'Asset not found',
       slug,
       type,
@@ -46,7 +62,7 @@ export function handleDownloadServiceError(
 
   // Handle SigningError (500)
   if (error instanceof SigningError) {
-    log.error({
+    safeLog(log, 'error', {
       msg: 'Failed to generate signed URL',
       slug,
       type,
@@ -68,7 +84,7 @@ export function handleDownloadServiceError(
   }
 
   // Handle any other unexpected errors (500)
-  log.error({
+  safeLog(log, 'error', {
     msg: 'Unexpected error in download API',
     slug,
     type,
@@ -100,7 +116,7 @@ export function handleCriticalError(
   correlationId: string,
   log: Logger
 ): NextResponse {
-  log.error({
+  safeLog(log, 'error', {
     msg: 'Critical error in download API route',
     error: error instanceof Error ? error.message : String(error),
     stack: error instanceof Error ? error.stack : undefined,
