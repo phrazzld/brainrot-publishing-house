@@ -12,14 +12,63 @@ const assetUrlResolver: AssetUrlResolver = {
 
 export async function GET(req: NextRequest) {
   try {
-    // parse query params
+    // Parse query params
     const { searchParams } = new URL(req.url);
-    const slug = searchParams.get('slug');
-    const type = searchParams.get('type') as 'full' | 'chapter';
-    const chapter = searchParams.get('chapter') || '';
+    const slug = searchParams.get('slug')?.trim();
+    const type = searchParams.get('type')?.trim();
+    const chapter = searchParams.get('chapter')?.trim();
 
-    if (!slug || !type) {
-      return NextResponse.json({ error: 'missing query params' }, { status: 400 });
+    // Validate required parameters
+    if (!slug) {
+      return NextResponse.json({ error: 'Missing required parameter: slug' }, { status: 400 });
+    }
+
+    // Validate type parameter
+    if (!type) {
+      return NextResponse.json({ error: 'Missing required parameter: type' }, { status: 400 });
+    }
+
+    // Validate type has allowed values
+    if (type !== 'full' && type !== 'chapter') {
+      return NextResponse.json(
+        { error: 'Invalid value for type parameter. Must be "full" or "chapter"' },
+        { status: 400 }
+      );
+    }
+
+    // Validate chapter when type is 'chapter'
+    if (type === 'chapter') {
+      if (!chapter) {
+        return NextResponse.json(
+          { error: 'Missing required parameter: chapter (required when type is "chapter")' },
+          { status: 400 }
+        );
+      }
+
+      // Validate chapter is a number
+      const chapterNum = Number(chapter);
+      if (isNaN(chapterNum)) {
+        return NextResponse.json(
+          { error: 'Invalid chapter parameter: must be a number' },
+          { status: 400 }
+        );
+      }
+
+      // Validate chapter is positive
+      if (chapterNum <= 0) {
+        return NextResponse.json(
+          { error: 'Invalid chapter parameter: must be a positive number' },
+          { status: 400 }
+        );
+      }
+
+      // Validate chapter is an integer
+      if (!Number.isInteger(chapterNum)) {
+        return NextResponse.json(
+          { error: 'Invalid chapter parameter: must be an integer' },
+          { status: 400 }
+        );
+      }
     }
 
     // Create dependencies for the download service
@@ -31,10 +80,14 @@ export async function GET(req: NextRequest) {
 
     // Try getting the download URL using the service
     try {
+      // We know the types are valid now due to validation
+      const validatedType = type as 'full' | 'chapter';
+      const chapterParam = validatedType === 'chapter' ? chapter : undefined;
+
       const url = await downloadService.getDownloadUrl({
         slug,
-        type,
-        chapter: type === 'chapter' ? chapter : undefined,
+        type: validatedType,
+        chapter: chapterParam,
       });
 
       // respond with json

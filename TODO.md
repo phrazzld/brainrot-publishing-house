@@ -83,7 +83,7 @@
     2. Old S3 logic and direct SDK usage are removed.
     3. Code compiles.
   - **Depends‑on:** [T005, T002]
-- [ ] **T008 · Refactor · P1: implement input validation in route handler**
+- [x] **T008 · Refactor · P1: implement input validation in route handler**
   - **Context:** PLAN.md > Detailed Build Steps > 6. Refactor Route Handler (`route.ts`) & Security & Config
   - **Action:**
     1. In `app/api/download/route.ts` `GET` handler, implement strict validation for `slug`, `type`, and optional `chapter` query parameters.
