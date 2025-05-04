@@ -108,7 +108,7 @@
 
 ## Integration Testing
 
-- [~] **T010 · Test · P1: update download api integration tests**
+- [x] **T010 · Test · P1: update download api integration tests**
   - **Context:** PLAN.md > Detailed Build Steps > 8. Update Integration Tests (`download.test.ts`)
   - **Action:**
     1. Modify `__tests__/api/download.test.ts`: remove mocks for internal collaborators (`DownloadService`, `getAssetUrlWithFallback`).
