@@ -73,7 +73,7 @@
 
 ## API Route Handler Refactoring
 
-- [ ] **T007 · Refactor · P1: refactor download api route handler dependencies**
+- [x] **T007 · Refactor · P1: refactor download api route handler dependencies**
   - **Context:** PLAN.md > Detailed Build Steps > 6. Refactor Route Handler (`route.ts`)
   - **Action:**
     1. Modify `app/api/download/route.ts`: remove inline S3 logic/imports, import `DownloadService`, real dependency implementations (`getAssetUrlWithFallback`, `RealS3SignedUrlGenerator`), and custom errors.
