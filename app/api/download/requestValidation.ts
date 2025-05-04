@@ -93,7 +93,7 @@ function validateParameters(
     valid: true,
     slug: slug as string,
     type: type as 'full' | 'chapter',
-    chapter: type === 'chapter' ? chapter : undefined,
+    chapter: type === 'chapter' ? (chapter ?? undefined) : undefined,
   };
 }
 
