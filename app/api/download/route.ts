@@ -78,39 +78,68 @@ export async function GET(req: NextRequest) {
     // Create the download service with dependencies
     const downloadService = new DownloadService(assetUrlResolver, s3SignedUrlGenerator, s3Endpoint);
 
-    // Try getting the download URL using the service
-    try {
-      // We know the types are valid now due to validation
-      const validatedType = type as 'full' | 'chapter';
-      const chapterParam = validatedType === 'chapter' ? chapter : undefined;
+    // We know the types are valid now due to validation
+    const validatedType = type as 'full' | 'chapter';
+    const chapterParam = validatedType === 'chapter' ? chapter : undefined;
 
+    try {
+      // Call the download service to get the URL
       const url = await downloadService.getDownloadUrl({
         slug,
         type: validatedType,
         chapter: chapterParam,
       });
 
-      // respond with json
-      return NextResponse.json({ url });
+      // Respond with success and the URL
+      return NextResponse.json({ url }, { status: 200 });
     } catch (error) {
+      // Map errors to appropriate status codes and messages
       if (error instanceof AssetNotFoundError) {
-        // Return 404 error for file not found
-        return NextResponse.json({ error: 'file not found' }, { status: 404 });
+        console.warn(
+          `Asset not found: ${slug}/${validatedType}${chapterParam ? `/${chapterParam}` : ''}`
+        );
+        return NextResponse.json(
+          {
+            error: 'Resource not found',
+            message: `The requested ${validatedType === 'full' ? 'audiobook' : 'chapter'} for "${slug}" could not be found`,
+            type: 'NOT_FOUND',
+          },
+          { status: 404 }
+        );
       }
 
-      // Re-throw other errors to be handled by the outer catch block
-      throw error;
+      if (error instanceof SigningError) {
+        console.error('Failed to generate signed URL:', error);
+        return NextResponse.json(
+          {
+            error: 'Failed to generate download URL',
+            message: 'There was an issue preparing the download URL. Please try again later.',
+            type: 'SIGNING_ERROR',
+          },
+          { status: 500 }
+        );
+      }
+
+      // Handle any other unexpected errors
+      console.error('Unexpected error in download API:', error);
+      return NextResponse.json(
+        {
+          error: 'Internal server error',
+          message: 'An unexpected error occurred. Please try again later.',
+          type: 'SERVER_ERROR',
+        },
+        { status: 500 }
+      );
     }
   } catch (err) {
-    // Check for specific error types
-    if (err instanceof SigningError) {
-      // Log the signing error for debugging
-      console.error('S3 signing error:', err);
-    }
-
-    // Return generic error to client
+    // This outer catch block is for errors that might occur during validation or service setup
+    console.error('Critical error in download API route:', err);
     return NextResponse.json(
-      { error: err instanceof Error ? err.message : 'An unknown error occurred' },
+      {
+        error: 'Internal server error',
+        message: 'An unexpected error occurred. Please try again later.',
+        type: 'CRITICAL_ERROR',
+      },
       { status: 500 }
     );
   }

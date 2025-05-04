@@ -92,7 +92,7 @@
     1. Handler validates query parameters before processing.
     2. Invalid requests result in a 400 response.
   - **Depends‑on:** [T007]
-- [ ] **T009 · Refactor · P1: implement service call and error mapping in route handler**
+- [x] **T009 · Refactor · P1: implement service call and error mapping in route handler**
   - **Context:** PLAN.md > Detailed Build Steps > 6. Refactor Route Handler (`route.ts`)
   - **Action:**
     1. In `app/api/download/route.ts` `GET` handler, wrap `downloadService.getDownloadUrl` call in a `try...catch`.
@@ -191,6 +191,16 @@
     1. Codebase is free of artifacts from the refactoring process.
     2. Linter and formatter checks pass.
   - **Depends‑on:** [T010]
+- [ ] **T019 · Refactor · P2: reduce route handler complexity**
+  - **Context:** Code quality and ESLint warnings
+  - **Action:**
+    1. Refactor the download API route handler to reduce complexity below the ESLint threshold.
+    2. Extract validation logic into separate helper functions.
+    3. Extract error handling logic into helper functions.
+  - **Done‑when:**
+    1. Route handler passes linting without warnings about complexity.
+    2. Functionality remains unchanged.
+  - **Depends‑on:** [T009]
 - [ ] **T018 · Chore · P1: run final lint and test checks**
   - **Context:** PLAN.md > Detailed Build Steps > 10. Run Checks
   - **Action:**
