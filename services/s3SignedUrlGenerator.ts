@@ -67,8 +67,12 @@ export class RealS3SignedUrlGenerator implements S3SignedUrlGenerator {
       : DEFAULT_CONFIG.expirySeconds;
 
     // Validate expiry is a reasonable number
+    const MAX_EXPIRY_SECONDS = 7 * 24 * 60 * 60; // 7 days (AWS SDK max)
     if (isNaN(this.expirySeconds) || this.expirySeconds <= 0) {
       this.expirySeconds = DEFAULT_CONFIG.expirySeconds;
+    } else if (this.expirySeconds > MAX_EXPIRY_SECONDS) {
+      // Cap the expiry time to the maximum allowed
+      this.expirySeconds = MAX_EXPIRY_SECONDS;
     }
   }
 

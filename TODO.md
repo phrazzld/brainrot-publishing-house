@@ -154,7 +154,7 @@
 
 ## Security & Configuration
 
-- [ ] **T014 · Chore · P1: verify secure configuration loading and usage**
+- [x] **T014 · Chore · P1: verify secure configuration loading and usage**
   - **Context:** PLAN.md > Security & Config
   - **Action:**
     1. Verify AWS credentials and S3 config are loaded exclusively via `process.env` in `s3SignedUrlGenerator.ts` (per T002).

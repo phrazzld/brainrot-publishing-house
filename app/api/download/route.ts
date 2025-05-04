@@ -41,6 +41,23 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Missing required parameter: slug' }, { status: 400 });
     }
 
+    // Validate slug format (alphanumeric with hyphens and underscores only)
+    const slugPattern = /^[a-zA-Z0-9-_]+$/;
+    if (!slugPattern.test(slug)) {
+      log.warn({
+        msg: 'Invalid slug format',
+        param: 'slug',
+        value: slug,
+      });
+      return NextResponse.json(
+        {
+          error:
+            'Invalid slug format. Must contain only letters, numbers, hyphens, or underscores.',
+        },
+        { status: 400 }
+      );
+    }
+
     // Validate type parameter
     if (!type) {
       log.warn({ msg: 'Missing required parameter', param: 'type' });
@@ -113,7 +130,24 @@ export async function GET(req: NextRequest) {
 
     // Create dependencies for the download service
     const s3SignedUrlGenerator = createS3SignedUrlGenerator();
-    const s3Endpoint = process.env.SPACES_ENDPOINT || '';
+    const s3Endpoint = process.env.SPACES_ENDPOINT;
+
+    // Validate S3 endpoint configuration
+    if (!s3Endpoint) {
+      log.error({
+        msg: 'Missing required S3 configuration',
+        param: 'SPACES_ENDPOINT',
+      });
+      return NextResponse.json(
+        {
+          error: 'Internal server error',
+          message: 'Server is not configured correctly. Please contact support.',
+          type: 'CONFIG_ERROR',
+          correlationId,
+        },
+        { status: 500 }
+      );
+    }
 
     // Create the download service with dependencies
     const downloadService = new DownloadService(assetUrlResolver, s3SignedUrlGenerator, s3Endpoint);
