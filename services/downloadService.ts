@@ -4,6 +4,7 @@ import {
   S3SignedUrlGenerator,
   SigningError,
 } from '../types/dependencies';
+import { createRequestLogger } from '../utils/logger';
 
 /**
  * Parameters required to request a download URL.
@@ -61,15 +62,20 @@ export class DownloadService {
   async getDownloadUrl(params: DownloadRequestParams): Promise<string> {
     const { slug, type, chapter, correlationId } = params;
 
-    // Log entry with correlation ID if available
-    if (correlationId) {
-      console.debug(
-        `[${correlationId}] Getting download URL for ${slug}/${type}${chapter ? `/${chapter}` : ''}`
-      );
-    }
+    // Create a logger with correlation ID if available
+    const log = correlationId ? createRequestLogger(correlationId) : undefined;
+
+    // Log method entry with detailed request parameters
+    log?.debug({
+      msg: 'Getting download URL',
+      slug,
+      type,
+      chapter,
+      action: 'downloadService.getDownloadUrl.entry',
+    });
 
     // Generate the legacy path based on the request parameters
-    const legacyPath = this.generateLegacyPath(slug, type, chapter);
+    const legacyPath = this.generateLegacyPath(slug, type, chapter, log);
 
     try {
       // Attempt to get the asset URL with fallback mechanism
@@ -77,31 +83,40 @@ export class DownloadService {
 
       // If no URL was resolved, throw an AssetNotFoundError
       if (!resolvedUrl) {
-        if (correlationId) {
-          console.warn(`[${correlationId}] Asset not found: ${legacyPath}`);
-        }
+        log?.warn({
+          msg: 'Asset not found',
+          legacyPath,
+          action: 'downloadService.assetNotFound',
+        });
         throw new AssetNotFoundError(`Asset not found: ${legacyPath}`);
       }
 
       // Check if the resolved URL is an S3 URL that needs signing
       if (resolvedUrl.includes(this.s3Endpoint)) {
-        if (correlationId) {
-          console.info(`[${correlationId}] Generating signed URL for S3 path: ${resolvedUrl}`);
-        }
+        log?.info({
+          msg: 'Generating signed URL for S3 path',
+          s3Path: resolvedUrl,
+          action: 'downloadService.generateSignedUrl.start',
+        });
 
         try {
           // Generate a signed URL for the S3 path
           const signedUrl = await this.s3SignedUrlGenerator.createSignedS3Url(resolvedUrl);
 
-          if (correlationId) {
-            console.debug(`[${correlationId}] Successfully generated signed URL`);
-          }
+          log?.debug({
+            msg: 'Successfully generated signed URL',
+            action: 'downloadService.generateSignedUrl.success',
+          });
 
           return signedUrl;
         } catch (error) {
-          if (correlationId) {
-            console.error(`[${correlationId}] Signing error`, error);
-          }
+          log?.error({
+            msg: 'Failed to generate signed URL',
+            s3Path: resolvedUrl,
+            error: error instanceof Error ? error.message : String(error),
+            stack: error instanceof Error ? error.stack : undefined,
+            action: 'downloadService.generateSignedUrl.error',
+          });
 
           // Wrap any signing errors and rethrow
           throw new SigningError(
@@ -112,9 +127,11 @@ export class DownloadService {
       }
 
       // If not an S3 URL, return the resolved URL directly (e.g., Blob URL)
-      if (correlationId) {
-        console.debug(`[${correlationId}] Returning direct Blob URL`);
-      }
+      log?.debug({
+        msg: 'Returning direct Blob URL',
+        urlType: 'blob',
+        action: 'downloadService.blobUrlFound',
+      });
 
       return resolvedUrl;
     } catch (error) {
@@ -128,13 +145,14 @@ export class DownloadService {
         throw error;
       }
 
-      // Log unexpected errors with correlation ID
-      if (correlationId) {
-        console.error(
-          `[${correlationId}] Unexpected error resolving URL for ${legacyPath}:`,
-          error
-        );
-      }
+      // Log unexpected errors with structured data
+      log?.error({
+        msg: 'Unexpected error resolving URL',
+        legacyPath,
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+        action: 'downloadService.unexpectedError',
+      });
 
       // Otherwise, wrap in a new AssetNotFoundError
       throw new AssetNotFoundError(
@@ -149,19 +167,47 @@ export class DownloadService {
    * @param slug - The book slug
    * @param type - The download type (full or chapter)
    * @param chapter - Optional chapter number (required when type is 'chapter')
+   * @param log - Optional logger instance for structured logging
    * @returns The legacy file path
    * @private
+   * @throws {Error} When type is 'chapter' but no chapter parameter is provided
    */
-  private generateLegacyPath(slug: string, type: 'full' | 'chapter', chapter?: string): string {
+  private generateLegacyPath(
+    slug: string,
+    type: 'full' | 'chapter',
+    chapter?: string,
+    log?: ReturnType<typeof createRequestLogger>
+  ): string {
     if (type === 'full') {
-      return `/${slug}/audio/full-audiobook.mp3`;
+      const path = `/${slug}/audio/full-audiobook.mp3`;
+      log?.debug({
+        msg: 'Generated full audiobook path',
+        slug,
+        path,
+        action: 'downloadService.generateLegacyPath.full',
+      });
+      return path;
     } else {
       if (!chapter) {
+        log?.error({
+          msg: 'Missing chapter parameter for chapter download',
+          slug,
+          type,
+          action: 'downloadService.generateLegacyPath.error',
+        });
         throw new Error('Chapter parameter is required when type is "chapter"');
       }
 
       const paddedChapter = this.zeroPad(parseInt(chapter, 10), 2);
-      return `/${slug}/audio/book-${paddedChapter}.mp3`;
+      const path = `/${slug}/audio/book-${paddedChapter}.mp3`;
+      log?.debug({
+        msg: 'Generated chapter audiobook path',
+        slug,
+        chapter: paddedChapter,
+        path,
+        action: 'downloadService.generateLegacyPath.chapter',
+      });
+      return path;
     }
   }
 

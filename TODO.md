@@ -141,7 +141,7 @@
     1. Route handler logs events at specified levels in structured format (JSON).
     2. Logs include correlation ID and context as specified.
   - **Depends‑on:** [T009, T011]
-- [ ] **T013 · Feature · P2: implement structured logging in download service**
+- [x] **T013 · Feature · P2: implement structured logging in download service**
   - **Context:** PLAN.md > Logging & Observability > Service (`downloadService.ts`)
   - **Action:**
     1. Add structured logging to `services/downloadService.ts`.
