@@ -191,7 +191,7 @@
     1. Codebase is free of artifacts from the refactoring process.
     2. Linter and formatter checks pass.
   - **Depends‑on:** [T010]
-- [ ] **T019 · Refactor · P2: reduce route handler complexity**
+- [x] **T019 · Refactor · P2: reduce route handler complexity**
   - **Context:** Code quality and ESLint warnings
   - **Action:**
     1. Refactor the download API route handler to reduce complexity below the ESLint threshold.
