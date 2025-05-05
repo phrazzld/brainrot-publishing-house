@@ -2,8 +2,7 @@ import { NextResponse } from 'next/server';
 
 import { Logger } from '@/utils/logger';
 
-import { safeLog } from './errorHandlers';
-import { validateChapter, validateS3Config, validateSlug, validateType } from './validators';
+import { validateChapter, validateSlug, validateType } from './validators';
 
 /**
  * Interface for the parsed and validated request parameters
@@ -120,20 +119,7 @@ export function validateRequestParameters(
     return paramValidation;
   }
 
-  // Validate S3 endpoint configuration (try both standard and legacy env vars)
-  const s3Endpoint = process.env.SPACES_ENDPOINT || process.env.DO_SPACES_ENDPOINT;
-  const s3ConfigValidation = validateS3Config(s3Endpoint, log);
-  if (!s3ConfigValidation.isValid) {
-    safeLog(log, 'error', {
-      msg: 'S3 configuration validation failed',
-      error: s3ConfigValidation.error?.message,
-      correlationId,
-    });
-    return {
-      valid: false,
-      errorResponse: createErrorResponse(s3ConfigValidation, correlationId),
-    };
-  }
+  // No need to validate S3 configuration since we're using public URLs
 
   // All validations passed
   return paramValidation;

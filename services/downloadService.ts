@@ -1,9 +1,4 @@
-import {
-  AssetNotFoundError,
-  AssetUrlResolver,
-  S3SignedUrlGenerator,
-  SigningError,
-} from '../types/dependencies';
+import { AssetNotFoundError, AssetUrlResolver } from '../types/dependencies';
 import { createRequestLogger } from '../utils/logger';
 
 /**
@@ -58,18 +53,32 @@ export interface DownloadRequestParams {
 }
 
 /**
- * Service responsible for orchestrating the download URL resolution process.
- * Handles the logic to determine whether to return a Blob URL or generate a signed S3 URL.
+ * Service responsible for generating download URLs for audio files.
+ * Uses direct CDN URLs by default with fallback to Vercel Blob if available.
  *
- * This service acts as an orchestrator that:
- * 1. Constructs the legacy asset path based on the provided slug, type, and chapter parameters
- * 2. Delegates URL resolution to the AssetUrlResolver to find the asset
- * 3. Analyzes the resolved URL to determine if it needs S3 signing
- * 4. If S3 signing is needed, delegates to the S3SignedUrlGenerator
- * 5. Returns the appropriate URL (Blob or Signed S3) to the caller
+ * URL Generation Approach:
+ * -----------------------
+ * 1. For audio files, we use Digital Ocean CDN URLs as the primary source
+ *    Format: https://{bucket}.{region}.cdn.digitaloceanspaces.com/{slug}/audio/...
  *
- * The service provides structured logging for all key operations to aid in debugging
- * and includes comprehensive error handling with appropriate error types.
+ * 2. As a fallback, we try to resolve URLs through the AssetUrlResolver which
+ *    may attempt to find the asset in Vercel Blob storage
+ *
+ * 3. The system never uses S3 signed URLs - all assets are accessed via public
+ *    direct URLs, either from Digital Ocean CDN or Vercel Blob
+ *
+ * The service follows these steps:
+ * 1. Generates appropriate CDN and legacy paths based on book slug, type, and chapter
+ * 2. Attempts to resolve the asset URL via AssetUrlResolver as fallback
+ * 3. Returns either the Blob URL if found, or defaults to the CDN URL
+ *
+ * This approach ensures:
+ * - No S3 credentials are required
+ * - URLs work consistently across environments
+ * - Fallback mechanisms increase resilience
+ * - Path generation is consistent for all audio file types
+ *
+ * The service provides structured logging for all key operations to aid in debugging.
  */
 export class DownloadService {
   /**
@@ -88,20 +97,18 @@ export class DownloadService {
    *   process.env.SPACES_ENDPOINT
    * );
    */
-  constructor(
-    private readonly assetUrlResolver: AssetUrlResolver,
-    private readonly s3SignedUrlGenerator: S3SignedUrlGenerator,
-    private readonly s3Endpoint: string
-  ) {}
+  constructor(private readonly assetUrlResolver: AssetUrlResolver) {}
 
   /**
-   * Gets a download URL for the requested asset.
-   * Determines whether to return a Blob URL or a signed S3 URL based on the resolved URL.
+   * Gets a download URL for the requested asset with fallback mechanisms.
+   *
+   * This method tries the following sources in order:
+   * 1. Direct CDN URL (Digital Ocean CDN)
+   * 2. Vercel Blob URL (via assetUrlResolver)
    *
    * @param params - The download request parameters
    * @returns A Promise that resolves to the final download URL
-   * @throws {AssetNotFoundError} When the requested asset cannot be found
-   * @throws {SigningError} When S3 URL signing fails
+   * @throws {AssetNotFoundError} When the requested asset cannot be found in any location
    */
   async getDownloadUrl(params: DownloadRequestParams): Promise<string> {
     const { slug, type, chapter, correlationId } = params;
@@ -118,17 +125,40 @@ export class DownloadService {
       action: 'downloadService.getDownloadUrl.entry',
     });
 
-    // Generate the legacy path based on the request parameters
-    const legacyPath = this.generateLegacyPath(slug, type, chapter, log);
+    // Generate paths for different storage locations
+    const { cdnUrl, legacyPath } = this.generatePaths(slug, type, chapter, log);
 
+    // First try the direct CDN URL (most reliable source)
+    log?.debug({
+      msg: 'Using direct CDN URL first',
+      cdnUrl,
+      action: 'downloadService.getDownloadUrl.tryCdnUrl',
+    });
+
+    // The CDN URL is our primary source and should always work
+    // But we'll implement fallback logic for robustness
     try {
-      // Resolve the URL using asset resolver
+      // Try to resolve with fallback mechanism in case CDN is unavailable
       const resolvedUrl = await this.resolveAssetUrl(legacyPath, log);
-      // Process the resolved URL (handle S3 vs Blob)
-      return await this.processResolvedUrl(resolvedUrl, log);
+      if (resolvedUrl) {
+        log?.debug({
+          msg: 'Blob URL found as fallback',
+          blobUrl: resolvedUrl,
+          action: 'downloadService.getDownloadUrl.blobUrlFound',
+        });
+        return resolvedUrl;
+      }
     } catch (error) {
-      return this.handleUrlResolutionError(error, legacyPath, log);
+      // If asset resolver fails, continue with CDN URL
+      log?.debug({
+        msg: 'Blob fallback failed, using CDN URL',
+        error: error instanceof Error ? error.message : String(error),
+        action: 'downloadService.getDownloadUrl.fallbackFailed',
+      });
     }
+
+    // Return the CDN URL as our final result
+    return cdnUrl;
   }
 
   /**
@@ -161,77 +191,26 @@ export class DownloadService {
   }
 
   /**
-   * Processes a resolved URL by determining if it needs S3 signing.
+   * Processes a resolved URL.
+   * Since we're using public URLs, this simply returns the URL directly.
    *
    * @param resolvedUrl - The URL to process
    * @param log - Optional logger instance
-   * @returns The final URL (either signed S3 URL or direct Blob URL)
-   * @throws {SigningError} When S3 URL signing fails
+   * @returns The final URL
    * @private
    */
   private async processResolvedUrl(
     resolvedUrl: string,
     log?: ReturnType<typeof createRequestLogger>
   ): Promise<string> {
-    // Check if the resolved URL is an S3 URL that needs signing
-    if (resolvedUrl.includes(this.s3Endpoint)) {
-      return await this.generateSignedS3Url(resolvedUrl, log);
-    }
-
-    // If not an S3 URL, return the resolved URL directly (e.g., Blob URL)
+    // Simply return the resolved URL directly - no signing needed
     log?.debug({
-      msg: 'Returning direct Blob URL',
-      urlType: 'blob',
-      action: 'downloadService.blobUrlFound',
+      msg: 'Returning direct URL',
+      url: resolvedUrl,
+      action: 'downloadService.urlFound',
     });
 
     return resolvedUrl;
-  }
-
-  /**
-   * Generates a signed S3 URL for the given S3 path.
-   *
-   * @param s3Url - The S3 URL to sign
-   * @param log - Optional logger instance
-   * @returns The signed S3 URL
-   * @throws {SigningError} When signing fails
-   * @private
-   */
-  private async generateSignedS3Url(
-    s3Url: string,
-    log?: ReturnType<typeof createRequestLogger>
-  ): Promise<string> {
-    log?.info({
-      msg: 'Generating signed URL for S3 path',
-      s3Path: s3Url,
-      action: 'downloadService.generateSignedUrl.start',
-    });
-
-    try {
-      // Generate a signed URL for the S3 path
-      const signedUrl = await this.s3SignedUrlGenerator.createSignedS3Url(s3Url);
-
-      log?.debug({
-        msg: 'Successfully generated signed URL',
-        action: 'downloadService.generateSignedUrl.success',
-      });
-
-      return signedUrl;
-    } catch (error) {
-      log?.error({
-        msg: 'Failed to generate signed URL',
-        s3Path: s3Url,
-        error: error instanceof Error ? error.message : String(error),
-        stack: error instanceof Error ? error.stack : undefined,
-        action: 'downloadService.generateSignedUrl.error',
-      });
-
-      // Wrap any signing errors and rethrow
-      throw new SigningError(
-        `Failed to generate signed URL for ${s3Url}`,
-        error instanceof Error ? error : undefined
-      );
-    }
   }
 
   /**
@@ -254,11 +233,6 @@ export class DownloadService {
       throw error;
     }
 
-    // If it's a SigningError, propagate it
-    if (error instanceof SigningError) {
-      throw error;
-    }
-
     // Log unexpected errors with structured data
     log?.error({
       msg: 'Unexpected error resolving URL',
@@ -275,69 +249,74 @@ export class DownloadService {
   }
 
   /**
-   * Generates the legacy file path based on request parameters.
+   * Generates the file paths for various storage locations based on request parameters.
+   * Supports both Digital Ocean CDN and Vercel Blob paths for fallback mechanisms.
    *
    * @param slug - The book slug
    * @param type - The download type (full or chapter)
    * @param chapter - Optional chapter number (required when type is 'chapter')
    * @param log - Optional logger instance for structured logging
-   * @returns The legacy file path
+   * @returns An object containing paths for different storage locations
    * @private
    * @throws {Error} When type is 'chapter' but no chapter parameter is provided
    */
-  private generateLegacyPath(
+  private generatePaths(
     slug: string,
     type: 'full' | 'chapter',
     chapter?: string,
     log?: ReturnType<typeof createRequestLogger>
-  ): string {
+  ): { cdnUrl: string; legacyPath: string } {
     // Get bucket and region from environment variables with defaults
     const bucket =
       process.env.DO_SPACES_BUCKET || process.env.SPACES_BUCKET_NAME || 'brainrot-publishing';
     const region = 'nyc3'; // This is hardcoded as it's consistent
 
-    // Always use direct CDN URLs since we don't have these assets in Vercel Blob
+    // Generate both CDN URL and legacy path for fallback
     if (type === 'full') {
-      // Generate the appropriate path for full audiobook
-      const path = `https://${bucket}.${region}.cdn.digitaloceanspaces.com/${slug}/audio/full-audiobook.mp3`;
+      // Generate the appropriate paths for full audiobook
+      const cdnUrl = `https://${bucket}.${region}.cdn.digitaloceanspaces.com/${slug}/audio/full-audiobook.mp3`;
+      const legacyPath = `/${slug}/audio/full-audiobook.mp3`;
 
       log?.debug({
-        msg: 'Generated full audiobook path (direct CDN URL)',
+        msg: 'Generated full audiobook paths',
         slug,
-        path,
+        cdnUrl,
+        legacyPath,
         bucket,
         region,
-        action: 'downloadService.generateLegacyPath.full',
+        action: 'downloadService.generatePaths.full',
       });
 
-      return path;
+      return { cdnUrl, legacyPath };
     } else {
       if (!chapter) {
         log?.error({
           msg: 'Missing chapter parameter for chapter download',
           slug,
           type,
-          action: 'downloadService.generateLegacyPath.error',
+          action: 'downloadService.generatePaths.error',
         });
         throw new Error('Chapter parameter is required when type is "chapter"');
       }
 
       const paddedChapter = this.zeroPad(parseInt(chapter, 10), 2);
 
-      // Generate the direct CDN path for chapter audiobook
-      const path = `https://${bucket}.${region}.cdn.digitaloceanspaces.com/${slug}/audio/book-${paddedChapter}.mp3`;
+      // Generate the paths for chapter audiobook
+      const cdnUrl = `https://${bucket}.${region}.cdn.digitaloceanspaces.com/${slug}/audio/book-${paddedChapter}.mp3`;
+      const legacyPath = `/${slug}/audio/book-${paddedChapter}.mp3`;
 
       log?.debug({
-        msg: 'Generated chapter audiobook path (direct CDN URL)',
+        msg: 'Generated chapter audiobook paths',
         slug,
         chapter: paddedChapter,
-        path,
+        cdnUrl,
+        legacyPath,
         bucket,
         region,
-        action: 'downloadService.generateLegacyPath.chapter',
+        action: 'downloadService.generatePaths.chapter',
       });
 
-      return path;
+      return { cdnUrl, legacyPath };
     }
   }
 

@@ -209,3 +209,44 @@
   - **Done‑when:**
     1. All lint rules and tests (unit, integration, coverage) pass in local and CI environments.
   - **Depends‑on:** [T017, T010, T003, T006, T012, T013, T014, T015, T016]
+
+## Refactor Test Support (Current)
+
+- [x] **T020 · Test · P0: Fix API download tests**
+
+  - **Context:** Refactoring the download service to use CDN URLs instead of S3 signing
+  - **Action:**
+    1. Update `__tests__/api/download.test.ts` to reflect the new direct CDN URL approach
+    2. Update test mocks to match the simplified URL generation
+    3. Fix test cases for S3 signing (now returning CDN URLs)
+    4. Update error handling expectations
+  - **Done‑when:**
+    1. All tests in `__tests__/api/download.test.ts` pass
+    2. Tests verify CDN URL generation works correctly
+    3. Fallback mechanism is properly tested
+  - **Depends‑on:** none
+
+- [x] **T021 · Test · P0: Fix DownloadButton component tests**
+
+  - **Context:** Refactoring the download service to use CDN URLs instead of S3 signing
+  - **Action:**
+    1. Update `__tests__/components/DownloadButton.test.tsx` to work with new API response format
+    2. Fix mock expectations for API calls to match CDN URL format
+    3. Update tests for error handling to match new behavior
+  - **Done‑when:**
+    1. All tests in `__tests__/components/DownloadButton.test.tsx` pass
+    2. Component correctly handles the updated API response format
+    3. Error handling tests verify the component behaves correctly
+  - **Depends‑on:** [T020]
+
+- [x] **T022 · Test · P0: Verify all tests pass**
+  - **Context:** Ensuring refactoring work is ready to merge
+  - **Action:**
+    1. Run all tests with `npm run test`
+    2. Fix any remaining test failures
+    3. Run lint with `npm run lint` or `npm run lint:strict`
+  - **Done‑when:**
+    1. All tests pass successfully
+    2. All lint checks pass
+    3. Code is ready to be merged
+  - **Depends‑on:** [T020, T021]

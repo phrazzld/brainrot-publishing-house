@@ -1,16 +1,10 @@
 import React from 'react';
 
 import '@testing-library/jest-dom';
-import { fireEvent, screen, waitFor } from '@testing-library/react';
+import { fireEvent, waitFor } from '@testing-library/react';
 
-import * as blobUrlUtils from '../../utils/getBlobUrl';
 import DownloadButton from '../../components/DownloadButton';
 import { render } from '../utils/test-utils';
-
-// Mock the getBlobUrl utilities
-jest.mock('../../utils/getBlobUrl', () => ({
-  getAssetUrlWithFallback: jest.fn(),
-}));
 
 // Mock URL.createObjectURL
 URL.createObjectURL = jest.fn(() => 'mock-blob-url');
@@ -36,18 +30,52 @@ document.createElement = jest.fn().mockImplementation((tag) => {
 document.body.appendChild = mockAppendChild;
 document.body.removeChild = mockRemoveChild;
 
-// Mock fetch
-global.fetch = jest.fn();
+// Mock fetch - we need to mock both API calls
+// First call gets the URL, second call downloads the file
+global.fetch = jest.fn().mockImplementation((url: string) => {
+  if (url.includes('proxy=true')) {
+    // This is the proxied file download request
+    return Promise.resolve({
+      ok: true,
+      blob: jest.fn().mockResolvedValue(new Blob(['mock audio content'], { type: 'audio/mpeg' })),
+    });
+  } else {
+    // This is the initial API call to get URL
+    return Promise.resolve({
+      ok: true,
+      json: jest.fn().mockResolvedValue({
+        url: 'https://test-bucket.nyc3.cdn.digitaloceanspaces.com/hamlet/audio/full-audiobook.mp3',
+        isCdnUrl: true,
+        shouldProxy: true,
+      }),
+    });
+  }
+});
 
 describe('DownloadButton Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (blobUrlUtils.getAssetUrlWithFallback as jest.Mock).mockResolvedValue(
-      'https://mock-blob-url.com/audio.mp3'
-    );
-    (global.fetch as jest.Mock).mockResolvedValue({
-      ok: true,
-      blob: jest.fn().mockResolvedValue(new Blob(['mock audio content'], { type: 'audio/mpeg' })),
+    // Reset mock fetch implementation to our default implementation
+    (global.fetch as jest.Mock).mockImplementation((url: string) => {
+      if (url.includes('proxy=true')) {
+        // This is the proxied file download request
+        return Promise.resolve({
+          ok: true,
+          blob: jest
+            .fn()
+            .mockResolvedValue(new Blob(['mock audio content'], { type: 'audio/mpeg' })),
+        });
+      } else {
+        // This is the initial API call to get URL
+        return Promise.resolve({
+          ok: true,
+          json: jest.fn().mockResolvedValue({
+            url: 'https://test-bucket.nyc3.cdn.digitaloceanspaces.com/hamlet/audio/full-audiobook.mp3',
+            isCdnUrl: true,
+            shouldProxy: true,
+          }),
+        });
+      }
     });
   });
 
@@ -67,7 +95,7 @@ describe('DownloadButton Component', () => {
     expect(buttonText).toContain('download chapter 3');
   });
 
-  it('downloads a full audiobook from Blob storage', async () => {
+  it('downloads a full audiobook through the API proxy', async () => {
     const { container } = render(<DownloadButton slug="hamlet" type="full" />);
 
     // Use a direct selector
@@ -78,14 +106,19 @@ describe('DownloadButton Component', () => {
     const downloadingText = container.textContent?.includes('downloading...');
     expect(downloadingText).toBe(true);
 
-    // Check if getAssetUrlWithFallback was called with the correct path
-    expect(blobUrlUtils.getAssetUrlWithFallback).toHaveBeenCalledWith(
-      '/hamlet/audio/full-audiobook.mp3'
-    );
-
     await waitFor(() => {
-      // Check if fetch was called with the resolved URL
-      expect(global.fetch).toHaveBeenCalledWith('https://mock-blob-url.com/audio.mp3');
+      // Verify API calls
+      expect(global.fetch).toHaveBeenCalledTimes(2);
+
+      // Should first call the API to get URL info
+      expect((global.fetch as jest.Mock).mock.calls[0][0]).toContain(
+        '/api/download?slug=hamlet&type=full'
+      );
+
+      // Then should call the proxy endpoint
+      expect((global.fetch as jest.Mock).mock.calls[1][0]).toContain(
+        '/api/download?slug=hamlet&type=full&proxy=true'
+      );
 
       // Check if the download link was created and clicked
       expect(mockLink.download).toBe('hamlet.mp3');
@@ -98,25 +131,58 @@ describe('DownloadButton Component', () => {
     });
   });
 
-  it('downloads a chapter audiobook from Blob storage', async () => {
+  it('downloads a chapter audiobook through the API proxy', async () => {
+    // Mock the chapter-specific response
+    (global.fetch as jest.Mock).mockImplementation((url: string) => {
+      if (url.includes('proxy=true')) {
+        // This is the proxied file download request
+        return Promise.resolve({
+          ok: true,
+          blob: jest
+            .fn()
+            .mockResolvedValue(new Blob(['mock audio content'], { type: 'audio/mpeg' })),
+        });
+      } else {
+        // This is the initial API call to get URL
+        return Promise.resolve({
+          ok: true,
+          json: jest.fn().mockResolvedValue({
+            url: 'https://test-bucket.nyc3.cdn.digitaloceanspaces.com/hamlet/audio/book-03.mp3',
+            isCdnUrl: true,
+            shouldProxy: true,
+          }),
+        });
+      }
+    });
+
     const { container } = render(<DownloadButton slug="hamlet" type="chapter" chapter={3} />);
 
     // Use a direct selector
     const button = container.querySelector('button');
     fireEvent.click(button as HTMLButtonElement);
 
-    // Check if getAssetUrlWithFallback was called with the correct path
-    expect(blobUrlUtils.getAssetUrlWithFallback).toHaveBeenCalledWith('/hamlet/audio/book-03.mp3');
-
     await waitFor(() => {
+      // Verify API calls
+      expect(global.fetch).toHaveBeenCalledTimes(2);
+
+      // Should first call the API to get URL info
+      expect((global.fetch as jest.Mock).mock.calls[0][0]).toContain(
+        '/api/download?slug=hamlet&type=chapter&chapter=3'
+      );
+
+      // Then should call the proxy endpoint
+      expect((global.fetch as jest.Mock).mock.calls[1][0]).toContain(
+        '/api/download?slug=hamlet&type=chapter&chapter=3&proxy=true'
+      );
+
       // Check download filename
       expect(mockLink.download).toBe('hamlet-chapter-3.mp3');
     });
   });
 
-  it('shows an error message when download fails', async () => {
-    // Mock fetch to fail
-    (global.fetch as jest.Mock).mockRejectedValue(new Error('Network error'));
+  it('shows an error message when API call fails', async () => {
+    // Mock the first fetch (API call) to fail
+    (global.fetch as jest.Mock).mockRejectedValueOnce(new Error('Network error'));
 
     const { container } = render(<DownloadButton slug="hamlet" type="full" />);
 
@@ -125,15 +191,31 @@ describe('DownloadButton Component', () => {
     fireEvent.click(button as HTMLButtonElement);
 
     await waitFor(() => {
-      const errorMessage = container.textContent?.includes('failed to download. sry bestie.');
+      const errorMessage = container.textContent?.includes('Failed to download');
       expect(errorMessage).toBe(true);
     });
   });
 
   it('shows an error when file fetch returns not ok', async () => {
-    // Mock fetch to return not ok
-    (global.fetch as jest.Mock).mockResolvedValue({
-      ok: false,
+    // First call succeeds, proxy call fails
+    (global.fetch as jest.Mock).mockImplementation((url: string) => {
+      if (!url.includes('proxy=true')) {
+        // Initial API call succeeds
+        return Promise.resolve({
+          ok: true,
+          json: jest.fn().mockResolvedValue({
+            url: 'https://test-bucket.nyc3.cdn.digitaloceanspaces.com/hamlet/audio/full-audiobook.mp3',
+            isCdnUrl: true,
+            shouldProxy: true,
+          }),
+        });
+      } else {
+        // Proxy call fails
+        return Promise.resolve({
+          ok: false,
+          text: jest.fn().mockResolvedValue('File not found'),
+        });
+      }
     });
 
     const { container } = render(<DownloadButton slug="hamlet" type="full" />);
@@ -143,7 +225,7 @@ describe('DownloadButton Component', () => {
     fireEvent.click(button as HTMLButtonElement);
 
     await waitFor(() => {
-      const errorMessage = container.textContent?.includes('failed to download. sry bestie.');
+      const errorMessage = container.textContent?.includes('Failed to download');
       expect(errorMessage).toBe(true);
     });
   });

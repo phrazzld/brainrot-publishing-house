@@ -21,28 +21,8 @@ export interface AssetUrlResolver {
   getAssetUrlWithFallback(legacyPath: string): Promise<string>;
 }
 
-/**
- * Interface for generating signed URLs for S3-compatible storage services.
- * Used to create time-limited access URLs for protected assets in S3 buckets.
- *
- * Implementations of this interface handle the authentication and configuration needed
- * to communicate with S3-compatible storage services (AWS S3, DigitalOcean Spaces, etc.)
- * and generate signed URLs with appropriate expiry times for secure, temporary access.
- *
- * @interface
- */
-export interface S3SignedUrlGenerator {
-  /**
-   * Creates a signed URL for an S3 object path with limited-time access.
-   * The generated URL will include authentication parameters and an expiration timestamp
-   * that allows temporary access to the object without requiring permanent public access.
-   *
-   * @param path - The S3 object path to create a signed URL for (can be a full URL or a relative path)
-   * @returns A Promise that resolves to the signed URL string with a limited expiry time
-   * @throws {SigningError} When URL signing fails due to credentials, permissions, or service issues
-   */
-  createSignedS3Url(path: string): Promise<string>;
-}
+// Note: S3SignedUrlGenerator interface has been removed
+// as we are now using direct CDN URLs instead of signed URLs
 
 /**
  * Custom error thrown when an asset cannot be found in any storage location.
@@ -70,37 +50,5 @@ export class AssetNotFoundError extends Error {
   }
 }
 
-/**
- * Custom error thrown when generating a signed URL fails.
- * Used to clearly distinguish signing failures from other error types and preserve original error cause.
- *
- * This error is typically thrown when:
- * - AWS/S3 credentials are invalid or missing
- * - The AWS SDK encounters an error during signing
- * - The requested resource doesn't exist or is inaccessible
- * - Network issues prevent communication with the storage service
- *
- * The error includes an optional cause property that contains the original error
- * from the underlying API or SDK for detailed troubleshooting.
- */
-export class SigningError extends Error {
-  /**
-   * Creates a new SigningError instance.
-   *
-   * @param message - The error message describing the signing failure
-   * @param cause - Optional underlying error that caused the signing failure
-   * @example
-   * try {
-   *   // AWS SDK call that fails
-   * } catch (error) {
-   *   throw new SigningError('Failed to generate signed URL', error instanceof Error ? error : undefined);
-   * }
-   */
-  constructor(
-    message: string,
-    public readonly cause?: Error
-  ) {
-    super(message);
-    this.name = 'SigningError';
-  }
-}
+// Note: SigningError class has been removed
+// as we are now using direct CDN URLs instead of signed URLs

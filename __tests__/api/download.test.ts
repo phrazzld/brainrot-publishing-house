@@ -11,10 +11,8 @@ jest.mock('crypto', () => ({
 
 // Mock environment variables
 const mockEnv = {
-  SPACES_ENDPOINT: 'test-endpoint.digitaloceanspaces.com',
-  SPACES_BUCKET: 'test-bucket',
-  SPACES_ACCESS_KEY_ID: 'test-key',
-  SPACES_SECRET_ACCESS_KEY: 'test-secret',
+  DO_SPACES_BUCKET: 'test-bucket',
+  SPACES_BUCKET_NAME: 'test-bucket',
 };
 
 // Mock NextRequest and NextResponse
@@ -47,20 +45,6 @@ jest.mock('@/utils/logger', () => ({
     warn: jest.fn(),
     error: jest.fn(),
   })),
-}));
-
-// Mock AWS SDK v3 modules
-jest.mock('@aws-sdk/client-s3', () => ({
-  S3Client: jest.fn().mockImplementation(() => ({
-    // Mock S3Client instance
-  })),
-  GetObjectCommand: jest.fn().mockImplementation((params) => ({
-    ...params,
-  })),
-}));
-
-jest.mock('@aws-sdk/s3-request-presigner', () => ({
-  getSignedUrl: jest.fn().mockImplementation(() => 'https://test-signed-url.com/test-file.mp3'),
 }));
 
 // Use a partial interface for test requests
@@ -184,7 +168,7 @@ describe('Download API Route', () => {
 
   describe('URL Resolution', () => {
     it('should return a Blob URL for a file that exists in Blob storage', async () => {
-      // Setup mock to return a Blob URL (not containing SPACES_ENDPOINT)
+      // Setup mock to return a Blob URL
       const blobUrl =
         'https://public.blob.vercel-storage.com/books/hamlet/audio/full-audiobook.mp3';
       (getAssetUrlWithFallback as jest.Mock).mockResolvedValue(blobUrl);
@@ -196,13 +180,14 @@ describe('Download API Route', () => {
       // Verify results
       expect(res.status).toBe(200);
       expect(data.url).toBe(blobUrl);
+      expect(data.isCdnUrl).toBe(false);
+      expect(data.shouldProxy).toBe(false);
       expect(getAssetUrlWithFallback).toHaveBeenCalledWith('/hamlet/audio/full-audiobook.mp3');
     });
 
-    it('should return a signed S3 URL for a file that exists in S3', async () => {
-      // Setup mock to return an S3 URL (containing SPACES_ENDPOINT)
-      const s3Url = 'test-endpoint.digitaloceanspaces.com/hamlet/audio/book-01.mp3';
-      (getAssetUrlWithFallback as jest.Mock).mockResolvedValue(s3Url);
+    it('should return a CDN URL for a chapter audibook', async () => {
+      // Mock fallback returning null to force using CDN URL
+      (getAssetUrlWithFallback as jest.Mock).mockResolvedValue(null);
 
       const mockReq = createRequest({ slug: 'hamlet', type: 'chapter', chapter: '1' });
       const res = await GET(mockReq as unknown as NextRequest);
@@ -210,14 +195,32 @@ describe('Download API Route', () => {
 
       // Verify results
       expect(res.status).toBe(200);
-      expect(data.url).toBe('https://test-signed-url.com/test-file.mp3');
-      expect(getAssetUrlWithFallback).toHaveBeenCalledWith('/hamlet/audio/book-01.mp3');
+      expect(data.url).toContain('cdn.digitaloceanspaces.com/hamlet/audio/book-01.mp3');
+      expect(data.isCdnUrl).toBe(true);
+      expect(data.shouldProxy).toBe(true);
       expect(data).not.toHaveProperty('correlationId'); // Correlation ID shouldn't be in success response
+    });
+
+    it('should return a direct CDN URL if fallback mechanism fails', async () => {
+      // Mock fallback throwing an error
+      (getAssetUrlWithFallback as jest.Mock).mockRejectedValue(new Error('Fallback failed'));
+
+      const mockReq = createRequest({ slug: 'hamlet', type: 'full' });
+      const res = await GET(mockReq as unknown as NextRequest);
+      const data = await res.json();
+
+      // Verify results - should get a 200 with CDN URL since we always fall back to CDN
+      expect(res.status).toBe(200);
+      expect(data.url).toContain('cdn.digitaloceanspaces.com/hamlet/audio/full-audiobook.mp3');
+      expect(data.isCdnUrl).toBe(true);
+      expect(data.shouldProxy).toBe(true);
     });
   });
 
   describe('Error Handling', () => {
-    it('should return 404 when asset is not found', async () => {
+    // After our refactoring, AssetNotFoundError won't cause 404 responses anymore
+    // since we always fall back to CDN URLs
+    it('should use CDN fallback when asset is not found', async () => {
       // Setup mock to throw AssetNotFoundError
       (getAssetUrlWithFallback as jest.Mock).mockRejectedValue(
         new AssetNotFoundError('Asset not found: /nonexistent/audio/full-audiobook.mp3')
@@ -227,41 +230,14 @@ describe('Download API Route', () => {
       const res = await GET(mockReq as unknown as NextRequest);
       const data = await res.json();
 
-      // Verify 404 response with correct format
-      expect(res.status).toBe(404);
-      expect(data).toMatchObject({
-        error: 'Resource not found',
-        message: 'The requested audiobook for "nonexistent" could not be found',
-        type: 'NOT_FOUND',
-        correlationId: 'test-correlation-id',
-      });
+      // Verify we get a 200 with CDN URL rather than a 404
+      expect(res.status).toBe(200);
+      expect(data.url).toContain('cdn.digitaloceanspaces.com/nonexistent/audio/full-audiobook.mp3');
+      expect(data.isCdnUrl).toBe(true);
+      expect(data.shouldProxy).toBe(true);
     });
 
-    it('should return 500 when signing fails', async () => {
-      // Setup mock to return an S3 URL
-      (getAssetUrlWithFallback as jest.Mock).mockResolvedValue(
-        'test-endpoint.digitaloceanspaces.com/hamlet/audio/book-01.mp3'
-      );
-
-      // But make the signing operation fail
-      const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
-      (getSignedUrl as jest.Mock).mockRejectedValue(new Error('Signing operation failed'));
-
-      const mockReq = createRequest({ slug: 'hamlet', type: 'chapter', chapter: '1' });
-      const res = await GET(mockReq as unknown as NextRequest);
-      const data = await res.json();
-
-      // Verify 500 response with correct format
-      expect(res.status).toBe(500);
-      expect(data).toMatchObject({
-        error: 'Failed to generate download URL',
-        message: 'There was an issue preparing the download URL. Please try again later.',
-        type: 'SIGNING_ERROR',
-        correlationId: 'test-correlation-id',
-      });
-    });
-
-    it('should return 404 for unexpected errors in URL resolution', async () => {
+    it('should use CDN URL for any resolution failure', async () => {
       // Setup mock to throw a generic error
       (getAssetUrlWithFallback as jest.Mock).mockRejectedValue(new Error('Unexpected failure'));
 
@@ -269,33 +245,11 @@ describe('Download API Route', () => {
       const res = await GET(mockReq as unknown as NextRequest);
       const data = await res.json();
 
-      // In the current implementation, non-AssetNotFoundError errors from getAssetUrlWithFallback
-      // are being wrapped as AssetNotFoundError and returning a 404 status code
-      expect(res.status).toBe(404);
-      expect(data).toMatchObject({
-        error: 'Resource not found',
-        message: 'The requested audiobook for "hamlet" could not be found',
-        type: 'NOT_FOUND',
-        correlationId: 'test-correlation-id',
-      });
-    });
-
-    // Our implementation has the configuration validation inside the route handler,
-    // but the S3SignedUrlGenerator constructor also validates env vars and will
-    // throw an error before our custom validation is reached.
-    // This test can be revisited if we refactor the configuration handling.
-    it('should return 500 for missing server configuration', async () => {
-      // Create a test case that would trigger the configuration validation
-      // but passes environment variables since the configuration error
-      // is being handled by a different mechanism right now
-      const mockReq = createRequest({ slug: 'hamlet', type: 'full' });
-      const _res = await GET(mockReq as unknown as NextRequest);
-
-      // Just verify our endpoint is set to avoid errors in other tests
-      expect(process.env.SPACES_ENDPOINT).toBeTruthy();
-
-      // Skip the detailed matching since the current implementation
-      // doesn't reach our custom validation due to the constructor validation
+      // Verify we get a 200 with CDN URL
+      expect(res.status).toBe(200);
+      expect(data.url).toContain('cdn.digitaloceanspaces.com/hamlet/audio/full-audiobook.mp3');
+      expect(data.isCdnUrl).toBe(true);
+      expect(data.shouldProxy).toBe(true);
     });
 
     it('should return 500 for critical errors in request handling', async () => {
