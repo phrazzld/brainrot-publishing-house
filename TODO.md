@@ -281,7 +281,7 @@
     3. Component code is more readable and maintainable
   - **Depends‑on:** none
 
-- [ ] **T025 · Verify · P0: Ensure CI build passes with complexity fixes**
+- [x] **T025 · Verify · P0: Ensure CI build passes with complexity fixes**
   - **Context:** Verifying the CI build passes after fixing complexity issues
   - **Action:**
     1. Run local lint checks: `npm run lint:strict`
