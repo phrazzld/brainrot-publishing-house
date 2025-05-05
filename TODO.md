@@ -250,3 +250,45 @@
     2. All lint checks pass
     3. Code is ready to be merged
   - **Depends‑on:** [T020, T021]
+
+## CI Build Fixes
+
+- [x] **T023 · Refactor · P0: Fix route.ts GET function complexity**
+
+  - **Context:** CI build failing due to high complexity in app/api/download/route.ts
+  - **Action:**
+    1. Refactor the `GET` function to reduce its complexity from 18 to below 10
+    2. Extract URL parameter parsing into a dedicated function
+    3. Further modularize the error handling logic
+    4. Split the response generation into simpler functions
+  - **Done‑when:**
+    1. The `GET` function passes ESLint complexity check (complexity below 10)
+    2. All functionality remains intact and tests still pass
+    3. Code is more maintainable with smaller, focused functions
+  - **Depends‑on:** none
+
+- [ ] **T024 · Refactor · P0: Fix DownloadButton.tsx handleDownload complexity**
+
+  - **Context:** CI build failing due to high complexity in DownloadButton.tsx
+  - **Action:**
+    1. Refactor the `handleDownload` function to reduce its complexity from 11 to below 10
+    2. Extract error handling logic into a dedicated function
+    3. Create separate functions for the different download approaches (direct vs. proxy)
+    4. Simplify the response parsing logic
+  - **Done‑when:**
+    1. The `handleDownload` function passes ESLint complexity check (complexity below 10)
+    2. All functionality remains intact and tests still pass
+    3. Component code is more readable and maintainable
+  - **Depends‑on:** none
+
+- [ ] **T025 · Verify · P0: Ensure CI build passes with complexity fixes**
+  - **Context:** Verifying the CI build passes after fixing complexity issues
+  - **Action:**
+    1. Run local lint checks: `npm run lint:strict`
+    2. Run tests to verify functionality: `npm run test`
+    3. Push changes and verify CI build passes
+  - **Done‑when:**
+    1. Local lint checks pass with no complexity warnings
+    2. All tests pass locally
+    3. CI build passes on GitHub
+  - **Depends‑on:** [T023, T024]

@@ -32,6 +32,94 @@ import { createDownloadService } from './serviceFactory';
  * This approach ensures consistent downloads across all environments
  * without requiring environment-specific credentials or configurations.
  */
+
+/**
+ * Type definition for request context to simplify passing around common objects
+ */
+type RequestContext = {
+  correlationId: string;
+  log: ReturnType<typeof createRequestLogger>;
+  searchParams: URLSearchParams;
+};
+
+/**
+ * Type for validated parameters
+ */
+type ValidationResult = {
+  valid: boolean;
+  slug?: string;
+  type?: 'full' | 'chapter';
+  chapter?: string;
+  errorResponse?: NextResponse;
+};
+
+/**
+ * Initialize request processing by setting up logging and correlation ID
+ * @param req - The incoming request
+ * @returns Request context with correlationId, logger, and searchParams
+ */
+function initializeRequest(req: NextRequest): RequestContext {
+  const correlationId = randomUUID();
+  const log = createRequestLogger(correlationId);
+
+  // Log request received with structured data
+  safeLog(log, 'info', {
+    msg: 'Download API request received',
+    method: req.method,
+    url: req.url,
+    userAgent: req.headers.get('user-agent'),
+  });
+
+  const { searchParams } = new URL(req.url);
+
+  return { correlationId, log, searchParams };
+}
+
+/**
+ * Validate request parameters and return early if invalid
+ * @param context - Request context
+ * @returns Validation result and error response if invalid
+ */
+function validateRequest(context: RequestContext): ValidationResult {
+  const { searchParams, log, correlationId } = context;
+  return validateRequestParameters(searchParams, log, correlationId);
+}
+
+/**
+ * Create a direct download response (no proxy)
+ * @param url - The download URL
+ * @returns NextResponse with URL and metadata
+ */
+function createDirectDownloadResponse(url: string): NextResponse {
+  const isCdnUrl = url.includes('cdn.digitaloceanspaces.com');
+
+  return NextResponse.json(
+    {
+      url,
+      isCdnUrl,
+      shouldProxy: isCdnUrl, // Recommend proxy for CDN URLs which might have CORS issues
+    },
+    { status: 200 }
+  );
+}
+
+/**
+ * Create a filename for the download based on the validation parameters
+ * @param validatedSlug - The validated slug
+ * @param validatedType - The validated type (full or chapter)
+ * @param chapter - Optional chapter number
+ * @returns Formatted filename
+ */
+function createDownloadFilename(
+  validatedSlug: string,
+  validatedType: 'full' | 'chapter',
+  chapter?: string
+): string {
+  return validatedType === 'full'
+    ? `${validatedSlug}.mp3`
+    : `${validatedSlug}-chapter-${chapter}.mp3`;
+}
+
 /**
  * Handles the case when a proxy is requested
  *
@@ -75,6 +163,45 @@ async function handleProxyRequest(
 }
 
 /**
+ * Get the download URL from the service
+ * @param params - Download request parameters
+ * @param downloadService - The download service instance
+ * @param log - Logger instance
+ * @returns The generated URL and validated parameters
+ */
+async function getDownloadUrl(
+  params: {
+    slug: string;
+    type: 'full' | 'chapter';
+    chapter?: string;
+    correlationId: string;
+  },
+  downloadService: ReturnType<typeof createDownloadService>,
+  log: ReturnType<typeof createRequestLogger>
+) {
+  const { slug, type, chapter, correlationId } = params;
+
+  // Call the download service to get the URL
+  const url = await downloadService.getDownloadUrl({
+    slug,
+    type,
+    chapter,
+    correlationId,
+  });
+
+  // Log successful URL generation
+  safeLog(log, 'info', {
+    msg: 'Successfully generated download URL',
+    slug,
+    type,
+    chapter,
+    urlType: url.includes('cdn.digitaloceanspaces.com') ? 'cdn' : 'blob',
+  });
+
+  return { url, validatedSlug: slug, validatedType: type, chapter };
+}
+
+/**
  * Processes a valid download request
  *
  * @param validation - The validated request parameters
@@ -109,28 +236,19 @@ async function processDownloadRequest(
     const validatedSlug = validation.slug || '';
     const validatedType = validation.type || 'full';
 
-    // Call the download service to get the URL
-    const url = await downloadService.getDownloadUrl({
-      slug: validatedSlug,
-      type: validatedType,
-      chapter: validation.chapter,
-      correlationId,
-    });
-
-    // Log successful URL generation
-    safeLog(log, 'info', {
-      msg: 'Successfully generated download URL',
-      slug: validatedSlug,
-      type: validatedType,
-      chapter: validation.chapter,
-      urlType: url.includes('cdn.digitaloceanspaces.com') ? 'cdn' : 'blob',
-    });
+    const { url } = await getDownloadUrl(
+      {
+        slug: validatedSlug,
+        type: validatedType,
+        chapter: validation.chapter,
+        correlationId,
+      },
+      downloadService,
+      log
+    );
 
     // Create filename for download
-    const filename =
-      validatedType === 'full'
-        ? `${validatedSlug}.mp3`
-        : `${validatedSlug}-chapter-${validation.chapter}.mp3`;
+    const filename = createDownloadFilename(validatedSlug, validatedType, validation.chapter);
 
     // Determine if the fetch request has a 'proxy' parameter
     // If present, we'll stream the file directly from our API
@@ -150,20 +268,9 @@ async function processDownloadRequest(
     }
 
     // If no proxy requested, respond with the URL for client-side download
-    // Check if URL is a DigitalOcean CDN URL
-    const isCdnUrl = url.includes('cdn.digitaloceanspaces.com');
-
-    return NextResponse.json(
-      {
-        url,
-        isCdnUrl,
-        shouldProxy: isCdnUrl, // Recommend proxy for CDN URLs which might have CORS issues
-      },
-      { status: 200 }
-    );
+    return createDirectDownloadResponse(url);
   } catch (error) {
     // Map service errors to appropriate responses
-    // Use our validated variables from above
     const validatedSlug = validation.slug || '';
     const validatedType = validation.type || 'full';
 
@@ -184,34 +291,42 @@ async function processDownloadRequest(
  * Main API route handler for the download endpoint
  */
 export async function GET(req: NextRequest) {
-  // Generate a unique correlation ID for this request
-  const correlationId = randomUUID();
-
-  // Create a logger instance with the correlation ID
-  const log = createRequestLogger(correlationId);
-
-  // Log request received with structured data
-  safeLog(log, 'info', {
-    msg: 'Download API request received',
-    method: req.method,
-    url: req.url,
-    userAgent: req.headers.get('user-agent'),
-  });
-
   try {
-    // Get search parameters from the request URL
-    const { searchParams } = new URL(req.url);
+    // Initialize request handling with logging and correlation ID
+    const context = initializeRequest(req);
 
-    // Validate all request parameters
-    const validation = validateRequestParameters(searchParams, log, correlationId);
+    // Validate request parameters
+    const validation = validateRequest(context);
+
+    // Return error response if validation fails
     if (!validation.valid || !validation.slug || !validation.type) {
       return (
         validation.errorResponse || NextResponse.json({ error: 'Invalid request' }, { status: 400 })
       );
     }
 
-    return processDownloadRequest(validation, searchParams, correlationId, log);
+    // Process the download request
+    return processDownloadRequest(
+      validation,
+      context.searchParams,
+      context.correlationId,
+      context.log
+    );
   } catch (error) {
+    // For critical errors, create a correlation ID if we don't have one yet
+    // Define a type for errors that might contain a correlationId
+    type ErrorWithCorrelation = { correlationId?: string };
+
+    // Try to extract correlationId from the error or generate a new one
+    const correlationId =
+      typeof error === 'object' &&
+      error !== null &&
+      'correlationId' in (error as ErrorWithCorrelation)
+        ? (error as ErrorWithCorrelation).correlationId || randomUUID()
+        : randomUUID();
+
+    const log = createRequestLogger(correlationId);
+
     // Handle critical errors that occur during request processing
     return handleCriticalError(error, correlationId, log);
   }
