@@ -7,6 +7,105 @@ type DownloadButtonProps = {
   classNames?: string;
 };
 
+/**
+ * Creates URL parameters for download requests
+ */
+function createUrlParams(
+  slug: string,
+  type: string,
+  chapter?: number,
+  useProxy = false
+): URLSearchParams {
+  const params = new URLSearchParams({
+    slug,
+    type,
+    ...(chapter ? { chapter: String(chapter) } : {}),
+  });
+
+  if (useProxy) {
+    params.append('proxy', 'true');
+  }
+
+  return params;
+}
+
+/**
+ * Handles error responses from fetch operations
+ */
+async function handleErrorResponse(response: Response): Promise<string> {
+  const errorText = await response.text();
+  console.error(`[Download] API error (${response.status}):`, errorText);
+  let errorMessage = 'Error fetching download URL';
+
+  try {
+    const errorData = JSON.parse(errorText);
+    errorMessage = errorData.message || errorMessage;
+  } catch {
+    // If response isn't valid JSON, use the text directly
+    errorMessage = errorText || errorMessage;
+  }
+
+  return errorMessage;
+}
+
+/**
+ * Creates and triggers a download for a blob
+ */
+function triggerFileDownload(blob: Blob, fileName: string): void {
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = fileName;
+
+  // Auto-click the link to trigger a download
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+/**
+ * Fetches audio file through proxy and initiates the download
+ */
+async function downloadViaProxy(
+  slug: string,
+  type: 'full' | 'chapter',
+  chapter?: number
+): Promise<void> {
+  console.warn('[Download] Using proxy approach for audio downloads');
+
+  // Create proxy URL
+  const proxyParams = createUrlParams(slug, type, chapter, true);
+  const proxyUrl = `/api/download?${proxyParams.toString()}`;
+  console.warn(`[Download] Fetching audio file through proxy: ${proxyUrl}`);
+
+  // Fetch the file
+  const fileRes = await fetch(proxyUrl);
+
+  if (!fileRes.ok) {
+    const errorText = await fileRes.text();
+    console.error(`[Download] Proxy fetch error (${fileRes.status}):`, errorText);
+    throw new Error(`failed to download audio file (${fileRes.status})`);
+  }
+
+  console.warn('[Download] Successfully fetched audio file through proxy, creating blob...');
+  const blob = await fileRes.blob();
+
+  // Create the filename
+  const fileName = type === 'full' ? `${slug}.mp3` : `${slug}-chapter-${chapter}.mp3`;
+
+  // Trigger the download
+  triggerFileDownload(blob, fileName);
+}
+
+/**
+ * Sets a user-friendly error message based on the error object
+ */
+function handleDownloadError(err: unknown, setError: (msg: string) => void): void {
+  console.error('[Download] Error details:', err);
+
+  const errorMessage = err instanceof Error ? err.message : 'unknown error';
+  setError(`Failed to download. Please try again. (${errorMessage})`);
+}
+
 export default function DownloadButton({ slug, type, chapter, classNames }: DownloadButtonProps) {
   const [isDownloading, setIsDownloading] = useState(false);
   const [error, setError] = useState('');
@@ -16,79 +115,24 @@ export default function DownloadButton({ slug, type, chapter, classNames }: Down
     setError('');
 
     try {
-      // Use the API route instead of directly accessing Blob storage from the client
-      const params = new URLSearchParams({
-        slug,
-        type,
-        ...(chapter ? { chapter: String(chapter) } : {}),
-      });
-
+      // Initial API call to get download URL
+      const params = createUrlParams(slug, type, chapter);
       const apiUrl = `/api/download?${params.toString()}`;
-
-      // Fetch the download URL from our API
       const response = await fetch(apiUrl);
 
+      // Handle API response errors
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error(`[Download] API error (${response.status}):`, errorText);
-        let errorMessage = 'Error fetching download URL';
-
-        try {
-          const errorData = JSON.parse(errorText);
-          errorMessage = errorData.message || errorMessage;
-        } catch {
-          // If response isn't valid JSON, use the text directly
-          errorMessage = errorText || errorMessage;
-        }
-
+        const errorMessage = await handleErrorResponse(response);
         throw new Error(errorMessage);
       }
 
-      // We don't need the response data as we're always using the proxy approach
-      await response.json(); // Just to ensure we read the response body
+      // Just read the response to ensure we consume the body
+      await response.json();
 
-      // Always use the proxy approach for consistency across all environments
-      console.warn(`[Download] Using proxy approach for audio downloads`);
-
-      // Create a proxy URL by adding the proxy parameter
-      const proxyParams = new URLSearchParams({
-        slug,
-        type,
-        ...(chapter ? { chapter: String(chapter) } : {}),
-        proxy: 'true',
-      });
-
-      const proxyUrl = `/api/download?${proxyParams.toString()}`;
-      console.warn(`[Download] Fetching audio file through proxy: ${proxyUrl}`);
-
-      // Fetch directly from our API endpoint which will proxy the file
-      const fileRes = await fetch(proxyUrl);
-
-      if (!fileRes.ok) {
-        console.error(`[Download] Proxy fetch error (${fileRes.status}):`, await fileRes.text());
-        throw new Error(`failed to download audio file (${fileRes.status})`);
-      }
-
-      console.warn(`[Download] Successfully fetched audio file through proxy, creating blob...`);
-      const blob = await fileRes.blob();
-
-      // Create a local URL for that blob
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = type === 'full' ? `${slug}.mp3` : `${slug}-chapter-${chapter}.mp3`;
-
-      // Auto-click the link to trigger a download
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      // Download the file via proxy
+      await downloadViaProxy(slug, type, chapter);
     } catch (err) {
-      // Log the detailed error for debugging
-      console.error('[Download] Error details:', err);
-
-      // Set user-friendly error message
-      setError(
-        `Failed to download. Please try again. (${err instanceof Error ? err.message : 'unknown error'})`
-      );
+      handleDownloadError(err, setError);
     } finally {
       setIsDownloading(false);
     }
@@ -111,5 +155,3 @@ export default function DownloadButton({ slug, type, chapter, classNames }: Down
     </div>
   );
 }
-
-// We no longer need the zeroPad function as we're using the proxy approach

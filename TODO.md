@@ -267,7 +267,7 @@
     3. Code is more maintainable with smaller, focused functions
   - **Depends‑on:** none
 
-- [ ] **T024 · Refactor · P0: Fix DownloadButton.tsx handleDownload complexity**
+- [x] **T024 · Refactor · P0: Fix DownloadButton.tsx handleDownload complexity**
 
   - **Context:** CI build failing due to high complexity in DownloadButton.tsx
   - **Action:**
