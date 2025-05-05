@@ -176,12 +176,13 @@ async function getDownloadUrl(
     chapter?: string;
     correlationId: string;
   },
-  downloadService: ReturnType<typeof createDownloadService>,
+  downloadService: NonNullable<ReturnType<typeof createDownloadService>>,
   log: ReturnType<typeof createRequestLogger>
 ) {
   const { slug, type, chapter, correlationId } = params;
 
   // Call the download service to get the URL
+  // We're using NonNullable in the function parameter so we know it's not null
   const url = await downloadService.getDownloadUrl({
     slug,
     type,

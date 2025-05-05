@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-import { AssetNotFoundError, SigningError } from '@/types/dependencies';
+import { AssetNotFoundError } from '@/types/dependencies';
 import { Logger } from '@/utils/logger';
 
 /**
@@ -60,28 +60,7 @@ export function handleDownloadServiceError(
     );
   }
 
-  // Handle SigningError (500)
-  if (error instanceof SigningError) {
-    safeLog(log, 'error', {
-      msg: 'Failed to generate signed URL',
-      slug,
-      type,
-      chapter,
-      error: error.message,
-      stack: error.stack,
-      cause: error.cause,
-    });
-
-    return NextResponse.json(
-      {
-        error: 'Failed to generate download URL',
-        message: 'There was an issue preparing the download URL. Please try again later.',
-        type: 'SIGNING_ERROR',
-        correlationId,
-      },
-      { status: 500 }
-    );
-  }
+  // Note: SigningError handling has been removed as we're now using direct CDN URLs
 
   // Handle any other unexpected errors (500)
   safeLog(log, 'error', {
