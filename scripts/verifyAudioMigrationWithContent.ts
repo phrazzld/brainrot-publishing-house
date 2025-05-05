@@ -59,7 +59,7 @@ async function verifyAudioMigration(): Promise<void> {
 
       try {
         // Normalize the URL path
-        let audioPath = chapter.audioSrc;
+        const audioPath = chapter.audioSrc;
         let blobUrl = '';
 
         if (audioPath.startsWith('http')) {
