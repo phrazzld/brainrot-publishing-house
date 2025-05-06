@@ -41,9 +41,16 @@
     "migrate:source-text": "tsx scripts/migrateSourceTextFiles.ts",
     "migrate:source-text:dry": "tsx scripts/migrateSourceTextFiles.ts --dry-run",
     "verify:blob": "tsx scripts/verifyBlobStorage.ts",
+    "verify:cdn": "tsx scripts/verifyCdnUrls.ts",
+    "verify:cdn:md": "tsx scripts/verifyCdnUrls.ts --format=md --output=cdn-url-verification.md",
+    "verify:cdn:verbose": "tsx scripts/verifyCdnUrls.ts --verbose",
+    "verify:cdn:compare": "tsx scripts/verifyCdnUrls.ts --compare-file=cdn-url-verification.json",
     "cleanup:assets": "tsx scripts/cleanupLocalAssets.ts",
     "cleanup:assets:delete": "tsx scripts/cleanupLocalAssets.ts --delete",
     "setup:hooks": "bash scripts/setup-hooks.sh",
+    "reorganize:blob": "tsx scripts/reorganize-blob-paths.ts",
+    "reorganize:blob:dry": "tsx scripts/reorganize-blob-paths.ts --dry-run",
+    "reorganize:blob:verbose": "tsx scripts/reorganize-blob-paths.ts --verbose",
     "prepare": "husky"
   },
   "dependencies": {
@@ -100,8 +107,9 @@
     "puppeteer": "^24.7.2",
     "tailwindcss": "^3.4.17",
     "ts-jest": "^29.3.2",
+    "ts-node": "^10.9.2",
     "tsx": "^4.19.3",
-    "typescript": "^5"
+    "typescript": "^5.8.3"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

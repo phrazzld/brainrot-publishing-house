@@ -1,156 +1,179 @@
-# Audio Download Debugging Tasks
+# Complete Migration from Digital Ocean to Vercel Blob
 
-## Investigation Phase
+## Overview
 
-- [ ] **T001: Add detailed error logging to proxy download handler**
+This TODO list details the tasks required to fully migrate all asset management from Digital Ocean Spaces to Vercel Blob. Our verification has revealed path inconsistencies between the two systems and a complex dual-provider approach that's causing reliability issues. This migration will simplify our architecture, improve reliability, and reduce maintenance overhead.
 
-  - Add structured logging at each step in proxy download flow
-  - Capture full error details, response status, request params, and error stack traces
-  - Log CDN response body text (truncated) when errors occur
-  - Include conditional detailed error messages in non-production environments
-  - dependencies: none
+## Phase 1: Audit & Planning
 
-- [x] **T002: Fix missing error handling in primary fetch operation**
+- [x] **T001: Create Comprehensive Asset Inventory**
 
-  - Add try/catch around primary URL fetch in fetchWithFallback function
-  - Log detailed information about network errors during fetch
-  - Properly handle and propagate errors from both primary and fallback URLs
-  - dependencies: none
+  - ✅ Develop script to catalog all assets from both storage systems
+  - ✅ Map each asset to its expected location in translations data
+  - ✅ Identify missing/inconsistent assets or duplicate files
+  - ✅ Document current path patterns and inconsistencies
+  - ✅ Created `create-asset-inventory.ts` script
+  - Dependencies: none
 
-- [ ] **T003: Create CDN URL verification tool**
+- [x] **T002: Design Unified Blob Path Structure**
 
-  - Develop a script to test CDN URL generation across environments
-  - Verify URLs are correctly formatted with proper bucket and region
-  - Test accessibility with HEAD requests to check if URLs are reachable
-  - Compare URLs between local and preview environments
-  - dependencies: none
+  - ✅ Define clear, consistent path structure for all asset types (audio, text, images)
+  - ✅ Document path naming conventions and hierarchy
+  - ✅ Create migration mapping between current and new paths
+  - ✅ Address the "books/" prefix inconsistency
+  - ✅ Created `docs/UNIFIED_BLOB_PATH_STRUCTURE.md` with comprehensive design
+  - ✅ Implemented `utils/services/AssetPathService.ts` with full tests
+  - Dependencies: T001
 
-- [ ] **T004: Run URL verification and document findings**
+- [x] **T003: Define Asset Service API Contract**
+  - ✅ Design unified asset service interface that abstracts storage details
+  - ✅ Define required methods (getUrl, exists, fetch, etc.)
+  - ✅ Document all method signatures and return types
+  - ✅ Create TypeScript interfaces for service contracts
+  - ✅ Created `types/assets.ts` with full type definitions
+  - ✅ Created `docs/ASSET_SERVICE_DESIGN.md` with comprehensive design
+  - Dependencies: none
 
-  - Execute verification script in both local and preview environments
-  - Document differences in URL generation or accessibility
-  - Identify potential environment variable or configuration issues
-  - dependencies: [T003]
+## Phase 2: Asset Migration & Verification
 
-- [x] **T005: Add timeout handling to proxy fetches**
+- [x] **T004: Create Path Reorganization Tool for Vercel Blob**
 
-  - Implement AbortController with reasonable timeout for fetch requests
-  - Configure timeout via environment variables
-  - Handle aborted requests with specific error types
-  - dependencies: none
+  - ✅ Develop script to reorganize existing assets WITHIN Vercel Blob to follow the new path structure
+  - ✅ Use AssetPathService to map current Blob paths to new standardized paths
+  - ✅ Support dry-run mode to preview path changes without executing
+  - ✅ Include verification to ensure all assets remain accessible after reorganization
+  - ✅ Generate detailed HTML and JSON reports of path changes
+  - ✅ Focus on standardizing path structure, not migrating between systems
+  - ✅ Created `scripts/reorganize-blob-paths.ts` with path mapping and verification
+  - ✅ Added npm scripts: `reorganize:blob`, `reorganize:blob:dry`, `reorganize:blob:verbose`
+  - Dependencies: T001, T002
 
-- [ ] **T006: Review proxy implementation for streaming issues**
+- [ ] **T005: Migrate Text Assets to Vercel Blob**
 
-  - Examine stream processing for large files
-  - Check for proper error handling in the streaming process
-  - Verify content-type and header handling is correct
-  - dependencies: [T001]
+  - Transfer all text files to new Blob paths
+  - Verify file integrity and accessibility
+  - Create detailed report of migrated files
+  - Document any issues or missing files
+  - Dependencies: T004
 
-- [ ] **T007: Compare environments with test script**
-  - Create script to test both endpoints across environments
-  - Test URL generation endpoint (`/api/download`)
-  - Test proxy endpoint (`/api/download?proxy=true`)
-  - Document discrepancies between environments
-  - dependencies: none
+- [ ] **T006: Migrate Image Assets to Vercel Blob**
 
-## Fix Implementation
+  - Transfer all image files to new Blob paths
+  - Verify image integrity and accessibility
+  - Create detailed report of migrated files
+  - Document any issues or missing files
+  - Dependencies: T004
 
-- [ ] **T008: Fix CDN URL generation if issues found**
+- [ ] **T007: Migrate Audio Assets to Vercel Blob**
 
-  - Address any issues identified in URL verification (T004)
-  - Ensure bucket and region values are correctly set from environment variables
-  - Add validation for URL format before attempting fetch
-  - dependencies: [T004]
+  - Transfer all audio files to new Blob paths
+  - Verify audio file integrity and accessibility
+  - Create detailed report of migrated files
+  - Document any issues or missing files
+  - Dependencies: T004
 
-- [ ] **T009: Improve stream error handling in proxy**
+- [ ] **T008: Implement Asset Verification Tests**
+  - Create test suite for accessing all migrated assets
+  - Test direct URL access for each asset type
+  - Implement verification for file integrity and metadata
+  - Develop regression tests for future changes
+  - Dependencies: T005, T006, T007
 
-  - Add error event handlers for Response.body stream
-  - Implement proper stream cleanup on errors
-  - Return appropriate error responses when streaming fails
-  - dependencies: [T001], [T006]
+## Phase 3: Code Refactoring
 
-- [ ] **T010: Fix environment variables configuration**
+- [ ] **T009: Implement Unified Asset Service**
 
-  - Ensure all required variables are present in Vercel deployment
-  - Add validation of critical environment variables during service initialization
-  - Document required variables for proper download functionality
-  - dependencies: [T004], [T007]
+  - Create new service class implementing the designed interface
+  - Support only Vercel Blob as the storage backend
+  - Include detailed logging of all operations
+  - Add robust error handling and retry mechanisms
+  - Dependencies: T003, T008
 
-- [ ] **T011: Implement buffering for smaller files**
+- [ ] **T010: Refactor BlobPathService**
 
-  - Add logic to use arrayBuffer instead of streaming for files below threshold
-  - Configure size threshold via environment variable
-  - Add Content-Length header when using buffered approach
-  - dependencies: [T009]
+  - Update to ensure consistent path generation
+  - Remove legacy path conversion logic
+  - Simplify API to more clearly represent asset types
+  - Add tests for all methods
+  - Dependencies: T002
 
-- [ ] **T012: Enhance client-side error handling**
-  - Improve error display in DownloadButton component
-  - Add structured error objects with error codes and messages
-  - Provide more user-friendly error messages based on error type
-  - dependencies: none
+- [ ] **T011: Update Download API Routes**
 
-## Testing and Verification
+  - Modify API route to use the new unified asset service
+  - Remove all Digital Ocean and fallback logic
+  - Update error handling and response formats
+  - Add detailed logging for troubleshooting
+  - Dependencies: T009
 
-- [ ] **T013: Create proxy download test suite**
+- [ ] **T012: Update Proxy Download Handler**
 
-  - Implement tests for proxy functionality
-  - Test different error scenarios (network errors, timeouts)
-  - Test fallback mechanism from CDN to non-CDN URLs
-  - dependencies: [T002], [T005], [T009]
+  - Refactor proxy download to use unified asset service
+  - Simplify streaming logic without fallbacks
+  - Enhance error reporting for troubleshooting
+  - Add performance metrics for monitoring
+  - Dependencies: T009, T011
 
-- [ ] **T014: Implement end-to-end download tests**
+- [ ] **T013: Refactor Client-Side Components**
+  - Update DownloadButton component to use new API
+  - Modify any components that directly reference assets
+  - Improve error handling and user feedback
+  - Add loading states for better UX
+  - Dependencies: T011
 
-  - Create E2E tests for download flow
-  - Test both chapter and full book downloads
-  - Verify downloads work in CI environment
-  - dependencies: [T008], [T009], [T010]
+## Phase 4: Clean Up & Documentation
 
-- [ ] **T015: Create manual verification checklist**
-  - Define testing protocol for downloads
-  - Test across environments (local, preview, production)
-  - Test various book types and chapter configurations
-  - dependencies: [T008], [T009], [T010]
+- [ ] **T014: Remove Digital Ocean Dependencies**
 
-## Monitoring and Documentation
+  - Remove @aws-sdk/client-s3 dependency
+  - Delete unused S3/DO integration code
+  - Remove DO environment variables from .env files
+  - Update environment variable documentation
+  - Dependencies: T009, T011, T012, T013
 
-- [ ] **T016: Implement correlation IDs for request tracking**
+- [ ] **T015: Update Configuration Documentation**
 
-  - Generate unique ID on client for each download attempt
-  - Propagate ID to server-side logs
-  - Use ID to link client and server logs for each download
-  - dependencies: [T001]
+  - Create detailed documentation for Vercel Blob setup
+  - Document required environment variables
+  - Add troubleshooting guide for common issues
+  - Include links to Vercel Blob documentation
+  - Dependencies: T014
 
-- [ ] **T017: Set up monitoring for download success/failure rates**
+- [ ] **T016: Create Asset Management Guide**
 
-  - Track download initiation and completion events
-  - Configure monitoring to show success rates over time
-  - Create alerts for unusual error patterns
-  - dependencies: [T016]
+  - Document asset path structure and naming conventions
+  - Create guide for adding new assets to the system
+  - Document asset service API and usage patterns
+  - Include examples for common operations
+  - Dependencies: T009, T010, T015
 
-- [ ] **T018: Document download architecture and flow**
+- [ ] **T017: Implement Monitoring for Asset Access**
+  - Add structured logging for all asset operations
+  - Create dashboard for monitoring asset access patterns
+  - Set up alerts for failed access attempts
+  - Document monitoring approach
+  - Dependencies: T009
 
-  - Create diagrams showing download process
-  - Document proxy vs. direct approaches with tradeoffs
-  - Explain environment configuration requirements
-  - dependencies: [T015]
+## Phase 5: Testing & Verification
 
-- [ ] **T019: Create troubleshooting guide for download issues**
-  - Document common failure modes
-  - List debugging steps for each failure type
-  - Include references to logs and monitoring
-  - dependencies: [T018]
+- [ ] **T018: Run End-to-End Download Tests**
 
-## Future Improvements
+  - Test download functionality across environments
+  - Verify both direct and proxied downloads
+  - Test with various file sizes and types
+  - Document any issues or edge cases
+  - Dependencies: All code refactoring tasks
 
-- [ ] **T020: Research direct CDN download options**
+- [ ] **T019: Create Performance Baseline**
 
-  - Investigate configuring CORS headers on CDN
-  - Evaluate direct download approach with fallback to proxy
-  - Research CDN configuration options to eliminate proxy requirement
-  - dependencies: [T018]
+  - Measure and document download performance
+  - Establish baseline metrics for monitoring
+  - Identify any performance bottlenecks
+  - Compare with previous dual-provider approach
+  - Dependencies: T018
 
-- [ ] **T021: Design simplified download architecture**
-  - Evaluate eliminating two-step process
-  - Consider direct CDN access with proper CORS headers
-  - Propose more robust, simpler implementation
-  - dependencies: [T020]
+- [ ] **T020: Complete Final Verification**
+  - Verify all assets are accessible in production
+  - Check all references in translations data
+  - Ensure no regressions in functionality
+  - Create verification report
+  - Dependencies: T018, T019
