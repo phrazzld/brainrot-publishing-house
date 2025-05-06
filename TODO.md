@@ -1,294 +1,156 @@
-# Todo
+# Audio Download Debugging Tasks
 
-## Core Interfaces & Errors
+## Investigation Phase
 
-- [x] **T001 · Feature · P0: define shared interfaces and custom errors**
-  - **Context:** PLAN.md > Detailed Build Steps > 1. Define Interfaces & Errors
-  - **Action:**
-    1. Create/update `types/dependencies.ts` defining and exporting `AssetUrlResolver`, `S3SignedUrlGenerator`, `AssetNotFoundError`, and `SigningError`.
-    2. Add TSDoc comments explaining each interface and error class.
-  - **Done‑when:**
-    1. Interfaces and error classes are defined and exported in `types/dependencies.ts`.
-    2. Code compiles successfully.
-    3. TSDoc comments are present and accurate.
-  - **Depends‑on:** none
+- [ ] **T001: Add detailed error logging to proxy download handler**
 
-## S3 Signed URL Generation
+  - Add structured logging at each step in proxy download flow
+  - Capture full error details, response status, request params, and error stack traces
+  - Log CDN response body text (truncated) when errors occur
+  - Include conditional detailed error messages in non-production environments
+  - dependencies: none
 
-- [x] **T002 · Feature · P1: implement s3 signed url generator service**
-  - **Context:** PLAN.md > Detailed Build Steps > 2. Create S3 Generator Service
-  - **Action:**
-    1. Create `services/s3SignedUrlGenerator.ts` implementing `S3SignedUrlGenerator`.
-    2. Encapsulate AWS SDK v3 (`S3Client`, `getSignedUrl`) logic, loading credentials and config (bucket, region, endpoint, expiry) from `process.env`.
-    3. Implement error handling, wrapping SDK errors in `SigningError`.
-  - **Done‑when:**
-    1. Service correctly implements the `S3SignedUrlGenerator` interface.
-    2. Configuration is loaded securely via environment variables.
-    3. Service generates signed URLs or throws `SigningError`.
-  - **Depends‑on:** [T001]
-- [x] **T003 · Test · P1: unit test s3 signed url generator**
-  - **Context:** PLAN.md > Detailed Build Steps > 7. Write/Update Unit Tests (`s3SignedUrlGenerator.test.ts`)
-  - **Action:**
-    1. Create `__tests__/services/s3SignedUrlGenerator.test.ts`.
-    2. Mock AWS SDK v3 client (`S3Client`) and `getSignedUrl` command interaction.
-    3. Verify correct parameters (bucket, key, expiry) are passed to the SDK and `SigningError` is thrown on SDK failure.
-  - **Done‑when:**
-    1. Unit tests pass with >95% coverage for `s3SignedUrlGenerator.ts`.
-    2. AWS SDK interactions are mocked and verified for success and failure paths.
-  - **Depends‑on:** [T002]
+- [x] **T002: Fix missing error handling in primary fetch operation**
 
-## Download Service Logic
+  - Add try/catch around primary URL fetch in fetchWithFallback function
+  - Log detailed information about network errors during fetch
+  - Properly handle and propagate errors from both primary and fallback URLs
+  - dependencies: none
 
-- [x] **T004 · Feature · P1: define download service class structure and constructor**
-  - **Context:** PLAN.md > Detailed Build Steps > 3. Create Download Service & 4. Implement Service Constructor
-  - **Action:**
-    1. Create `services/downloadService.ts` defining `DownloadService` class and `DownloadRequestParams` type.
-    2. Implement constructor accepting `AssetUrlResolver`, `S3SignedUrlGenerator`, and `s3Endpoint: string` via dependency injection.
-  - **Done‑when:**
-    1. `DownloadService` class structure and constructor are defined.
-    2. Dependencies are correctly typed and accepted.
-    3. Code compiles successfully.
-  - **Depends‑on:** [T001]
-- [x] **T005 · Feature · P1: implement download service core logic**
-  - **Context:** PLAN.md > Detailed Build Steps > 5. Implement Service Logic
-  - **Action:**
-    1. Implement `async getDownloadUrl(params: DownloadRequestParams)`: construct `legacyPath`, call `assetUrlResolver.getAssetUrlWithFallback`.
-    2. Compare resolved URL with `s3Endpoint`; if match, call `s3SignedUrlGenerator.createSignedS3Url`; handle potential `SigningError`.
-    3. Handle `AssetNotFoundError` from resolver; return Blob URL or Signed S3 URL.
-  - **Done‑when:**
-    1. `getDownloadUrl` method correctly implements the orchestration logic.
-    2. Handles Blob URL case, S3 signing case, asset not found case, and signing error case.
-    3. Throws specified custom errors (`AssetNotFoundError`, `SigningError`).
-  - **Depends‑on:** [T004, T002]
-- [x] **T006 · Test · P1: unit test download service**
-  - **Context:** PLAN.md > Detailed Build Steps > 7. Write/Update Unit Tests (`downloadService.test.ts`)
-  - **Action:**
-    1. Create `__tests__/services/downloadService.test.ts`.
-    2. Create mock implementations for `AssetUrlResolver` and `S3SignedUrlGenerator`.
-    3. Test all logic branches: Blob found, S3 path found & signed, asset not found, signing error. Verify correct URL return or error thrown.
-  - **Done‑when:**
-    1. Unit tests pass with >95% coverage for `downloadService.ts`.
-    2. All logic paths specified in the plan are verified using mocked dependencies.
-  - **Depends‑on:** [T005]
+- [ ] **T003: Create CDN URL verification tool**
 
-## API Route Handler Refactoring
+  - Develop a script to test CDN URL generation across environments
+  - Verify URLs are correctly formatted with proper bucket and region
+  - Test accessibility with HEAD requests to check if URLs are reachable
+  - Compare URLs between local and preview environments
+  - dependencies: none
 
-- [x] **T007 · Refactor · P1: refactor download api route handler dependencies**
-  - **Context:** PLAN.md > Detailed Build Steps > 6. Refactor Route Handler (`route.ts`)
-  - **Action:**
-    1. Modify `app/api/download/route.ts`: remove inline S3 logic/imports, import `DownloadService`, real dependency implementations (`getAssetUrlWithFallback`, `RealS3SignedUrlGenerator`), and custom errors.
-    2. Instantiate `DownloadService` with real dependencies and injected `s3Endpoint` from `process.env`.
-  - **Done‑when:**
-    1. Route handler imports and instantiates the new service and its dependencies.
-    2. Old S3 logic and direct SDK usage are removed.
-    3. Code compiles.
-  - **Depends‑on:** [T005, T002]
-- [x] **T008 · Refactor · P1: implement input validation in route handler**
-  - **Context:** PLAN.md > Detailed Build Steps > 6. Refactor Route Handler (`route.ts`) & Security & Config
-  - **Action:**
-    1. In `app/api/download/route.ts` `GET` handler, implement strict validation for `slug`, `type`, and optional `chapter` query parameters.
-    2. Return `NextResponse` with status 400 and informative error message if validation fails.
-  - **Done‑when:**
-    1. Handler validates query parameters before processing.
-    2. Invalid requests result in a 400 response.
-  - **Depends‑on:** [T007]
-- [x] **T009 · Refactor · P1: implement service call and error mapping in route handler**
-  - **Context:** PLAN.md > Detailed Build Steps > 6. Refactor Route Handler (`route.ts`)
-  - **Action:**
-    1. In `app/api/download/route.ts` `GET` handler, wrap `downloadService.getDownloadUrl` call in a `try...catch`.
-    2. On success, return `NextResponse.json({ url })` with status 200.
-    3. In `catch`, map `AssetNotFoundError` -> 404, `SigningError` -> 500, other errors -> 500, returning appropriate `NextResponse`.
-  - **Done‑when:**
-    1. Handler correctly calls the service and returns 200 on success.
-    2. Service errors (`AssetNotFoundError`, `SigningError`) are mapped to correct HTTP status codes (404, 500).
-    3. Unexpected errors result in a generic 500 response.
-  - **Verification:**
-    1. Manually test with `curl` or similar: valid slug (Blob), valid slug (S3), invalid slug, slug causing signing error. Check status codes and bodies.
-  - **Depends‑on:** [T008]
+- [ ] **T004: Run URL verification and document findings**
 
-## Integration Testing
+  - Execute verification script in both local and preview environments
+  - Document differences in URL generation or accessibility
+  - Identify potential environment variable or configuration issues
+  - dependencies: [T003]
 
-- [x] **T010 · Test · P1: update download api integration tests**
-  - **Context:** PLAN.md > Detailed Build Steps > 8. Update Integration Tests (`download.test.ts`)
-  - **Action:**
-    1. Modify `__tests__/api/download.test.ts`: remove mocks for internal collaborators (`DownloadService`, `getAssetUrlWithFallback`).
-    2. Mock _only_ true external boundaries: AWS SDK interaction within `s3SignedUrlGenerator.ts` and Vercel Blob client calls within `utils/getBlobUrl.ts` (if applicable).
-    3. Verify handler correctly parses requests, uses the real service, and maps service responses/errors (200 Blob, 200 Signed S3, 400, 404, 500) to the correct `NextResponse`.
-  - **Done‑when:**
-    1. Integration tests pass, verifying the handler's interaction with the real service.
-    2. Mocks target only true external dependencies.
-    3. All specified response/error scenarios (200, 400, 404, 500) are covered.
-  - **Depends‑on:** [T009, T003, T006]
+- [ ] **T005: Add timeout handling to proxy fetches**
 
-## Logging & Observability
+  - Implement AbortController with reasonable timeout for fetch requests
+  - Configure timeout via environment variables
+  - Handle aborted requests with specific error types
+  - dependencies: none
 
-- [x] **T011 · Feature · P2: implement correlation id generation and propagation**
-  - **Context:** PLAN.md > Logging & Observability > Correlation ID
-  - **Action:**
-    1. In `app/api/download/route.ts`, generate a unique correlation ID (e.g., `crypto.randomUUID()`) per request.
-    2. Modify `DownloadService` (constructor or method) to accept the correlation ID.
-    3. Pass the correlation ID from the route handler to the `DownloadService`.
-  - **Done‑when:**
-    1. Correlation ID is generated in the route handler and passed to the service.
-    2. Service accepts and can potentially use the correlation ID.
-  - **Depends‑on:** [T009, T005]
-- [x] **T012 · Feature · P2: implement structured logging in route handler**
-  - **Context:** PLAN.md > Logging & Observability > Route Handler (`route.ts`)
-  - **Action:**
-    1. Add structured logging (e.g., Pino/Winston) to `app/api/download/route.ts`.
-    2. Log INFO for request received/success, WARN for 4xx errors, ERROR for 5xx errors, including correlation ID and key details.
-  - **Done‑when:**
-    1. Route handler logs events at specified levels in structured format (JSON).
-    2. Logs include correlation ID and context as specified.
-  - **Depends‑on:** [T009, T011]
-- [x] **T013 · Feature · P2: implement structured logging in download service**
-  - **Context:** PLAN.md > Logging & Observability > Service (`downloadService.ts`)
-  - **Action:**
-    1. Add structured logging to `services/downloadService.ts`.
-    2. Log DEBUG for entry/exit/key decisions, INFO for signing attempts, ERROR for thrown errors, including correlation ID.
-    3. Ensure logger instance is available (e.g., passed via constructor or context).
-  - **Done‑when:**
-    1. Download service logs events at specified levels in structured format (JSON).
-    2. Logs include correlation ID and context.
-  - **Depends‑on:** [T005, T011]
+- [ ] **T006: Review proxy implementation for streaming issues**
 
-## Security & Configuration
+  - Examine stream processing for large files
+  - Check for proper error handling in the streaming process
+  - Verify content-type and header handling is correct
+  - dependencies: [T001]
 
-- [x] **T014 · Chore · P1: verify secure configuration loading and usage**
-  - **Context:** PLAN.md > Security & Config
-  - **Action:**
-    1. Verify AWS credentials and S3 config are loaded exclusively via `process.env` in `s3SignedUrlGenerator.ts` (per T002).
-    2. Verify `s3Endpoint` is correctly loaded via `process.env` and injected into `DownloadService` in `route.ts` (per T007).
-    3. Verify input validation is implemented in `route.ts` (per T008).
-  - **Done‑when:**
-    1. Code review confirms secure handling of secrets and configuration.
-    2. Input validation logic is present and correct.
-  - **Depends‑on:** [T002, T008]
-- [x] **T015 · Chore · P2: verify signed url expiry configuration**
-  - **Context:** PLAN.md > Security & Config
-  - **Action:**
-    1. Confirm a reasonable signed URL expiry time (e.g., 5-15 minutes) is configured and loaded via `process.env` in `s3SignedUrlGenerator.ts`.
-  - **Done‑when:**
-    1. Signed URL expiry is configurable via environment variable and set to a reasonable default.
-  - **Depends‑on:** [T002]
+- [ ] **T007: Compare environments with test script**
+  - Create script to test both endpoints across environments
+  - Test URL generation endpoint (`/api/download`)
+  - Test proxy endpoint (`/api/download?proxy=true`)
+  - Document discrepancies between environments
+  - dependencies: none
 
-## Documentation & Cleanup
+## Fix Implementation
 
-- [x] **T016 · Chore · P2: add tsdoc comments to new/refactored code**
-  - **Context:** PLAN.md > Documentation > Code Self-Doc
-  - **Action:**
-    1. Add/update TSDoc comments for all exported interfaces, classes, methods, and errors in `types/dependencies.ts`, `services/s3SignedUrlGenerator.ts`, `services/downloadService.ts`.
-    2. Include `@param`, `@returns`, `@throws` clauses where applicable.
-  - **Done‑when:**
-    1. All new/modified public APIs have comprehensive TSDoc comments.
-  - **Depends‑on:** [T001, T002, T005]
-- [x] **T017 · Chore · P2: perform final code cleanup**
-  - **Context:** PLAN.md > Detailed Build Steps > 9. Code Cleanup
-  - **Action:**
-    1. Remove any unused imports, old mock functions, commented-out code related to the refactor.
-    2. Run `npm run lint:strict -- --fix` or formatter (`prettier`) to ensure consistency.
-  - **Done‑when:**
-    1. Codebase is free of artifacts from the refactoring process.
-    2. Linter and formatter checks pass.
-  - **Depends‑on:** [T010]
-- [x] **T019 · Refactor · P2: reduce route handler complexity**
-  - **Context:** Code quality and ESLint warnings
-  - **Action:**
-    1. Refactor the download API route handler to reduce complexity below the ESLint threshold.
-    2. Extract validation logic into separate helper functions.
-    3. Extract error handling logic into helper functions.
-  - **Done‑when:**
-    1. Route handler passes linting without warnings about complexity.
-    2. Functionality remains unchanged.
-  - **Depends‑on:** [T009]
-- [x] **T018 · Chore · P1: run final lint and test checks**
-  - **Context:** PLAN.md > Detailed Build Steps > 10. Run Checks
-  - **Action:**
-    1. Execute `npm run lint:strict` and `npm test` locally.
-    2. Fix any failures until both commands exit successfully.
-  - **Done‑when:**
-    1. All lint rules and tests (unit, integration, coverage) pass in local and CI environments.
-  - **Depends‑on:** [T017, T010, T003, T006, T012, T013, T014, T015, T016]
+- [ ] **T008: Fix CDN URL generation if issues found**
 
-## Refactor Test Support (Current)
+  - Address any issues identified in URL verification (T004)
+  - Ensure bucket and region values are correctly set from environment variables
+  - Add validation for URL format before attempting fetch
+  - dependencies: [T004]
 
-- [x] **T020 · Test · P0: Fix API download tests**
+- [ ] **T009: Improve stream error handling in proxy**
 
-  - **Context:** Refactoring the download service to use CDN URLs instead of S3 signing
-  - **Action:**
-    1. Update `__tests__/api/download.test.ts` to reflect the new direct CDN URL approach
-    2. Update test mocks to match the simplified URL generation
-    3. Fix test cases for S3 signing (now returning CDN URLs)
-    4. Update error handling expectations
-  - **Done‑when:**
-    1. All tests in `__tests__/api/download.test.ts` pass
-    2. Tests verify CDN URL generation works correctly
-    3. Fallback mechanism is properly tested
-  - **Depends‑on:** none
+  - Add error event handlers for Response.body stream
+  - Implement proper stream cleanup on errors
+  - Return appropriate error responses when streaming fails
+  - dependencies: [T001], [T006]
 
-- [x] **T021 · Test · P0: Fix DownloadButton component tests**
+- [ ] **T010: Fix environment variables configuration**
 
-  - **Context:** Refactoring the download service to use CDN URLs instead of S3 signing
-  - **Action:**
-    1. Update `__tests__/components/DownloadButton.test.tsx` to work with new API response format
-    2. Fix mock expectations for API calls to match CDN URL format
-    3. Update tests for error handling to match new behavior
-  - **Done‑when:**
-    1. All tests in `__tests__/components/DownloadButton.test.tsx` pass
-    2. Component correctly handles the updated API response format
-    3. Error handling tests verify the component behaves correctly
-  - **Depends‑on:** [T020]
+  - Ensure all required variables are present in Vercel deployment
+  - Add validation of critical environment variables during service initialization
+  - Document required variables for proper download functionality
+  - dependencies: [T004], [T007]
 
-- [x] **T022 · Test · P0: Verify all tests pass**
-  - **Context:** Ensuring refactoring work is ready to merge
-  - **Action:**
-    1. Run all tests with `npm run test`
-    2. Fix any remaining test failures
-    3. Run lint with `npm run lint` or `npm run lint:strict`
-  - **Done‑when:**
-    1. All tests pass successfully
-    2. All lint checks pass
-    3. Code is ready to be merged
-  - **Depends‑on:** [T020, T021]
+- [ ] **T011: Implement buffering for smaller files**
 
-## CI Build Fixes
+  - Add logic to use arrayBuffer instead of streaming for files below threshold
+  - Configure size threshold via environment variable
+  - Add Content-Length header when using buffered approach
+  - dependencies: [T009]
 
-- [x] **T023 · Refactor · P0: Fix route.ts GET function complexity**
+- [ ] **T012: Enhance client-side error handling**
+  - Improve error display in DownloadButton component
+  - Add structured error objects with error codes and messages
+  - Provide more user-friendly error messages based on error type
+  - dependencies: none
 
-  - **Context:** CI build failing due to high complexity in app/api/download/route.ts
-  - **Action:**
-    1. Refactor the `GET` function to reduce its complexity from 18 to below 10
-    2. Extract URL parameter parsing into a dedicated function
-    3. Further modularize the error handling logic
-    4. Split the response generation into simpler functions
-  - **Done‑when:**
-    1. The `GET` function passes ESLint complexity check (complexity below 10)
-    2. All functionality remains intact and tests still pass
-    3. Code is more maintainable with smaller, focused functions
-  - **Depends‑on:** none
+## Testing and Verification
 
-- [x] **T024 · Refactor · P0: Fix DownloadButton.tsx handleDownload complexity**
+- [ ] **T013: Create proxy download test suite**
 
-  - **Context:** CI build failing due to high complexity in DownloadButton.tsx
-  - **Action:**
-    1. Refactor the `handleDownload` function to reduce its complexity from 11 to below 10
-    2. Extract error handling logic into a dedicated function
-    3. Create separate functions for the different download approaches (direct vs. proxy)
-    4. Simplify the response parsing logic
-  - **Done‑when:**
-    1. The `handleDownload` function passes ESLint complexity check (complexity below 10)
-    2. All functionality remains intact and tests still pass
-    3. Component code is more readable and maintainable
-  - **Depends‑on:** none
+  - Implement tests for proxy functionality
+  - Test different error scenarios (network errors, timeouts)
+  - Test fallback mechanism from CDN to non-CDN URLs
+  - dependencies: [T002], [T005], [T009]
 
-- [x] **T025 · Verify · P0: Ensure CI build passes with complexity fixes**
-  - **Context:** Verifying the CI build passes after fixing complexity issues
-  - **Action:**
-    1. Run local lint checks: `npm run lint:strict`
-    2. Run tests to verify functionality: `npm run test`
-    3. Push changes and verify CI build passes
-  - **Done‑when:**
-    1. Local lint checks pass with no complexity warnings
-    2. All tests pass locally
-    3. CI build passes on GitHub
-  - **Depends‑on:** [T023, T024]
+- [ ] **T014: Implement end-to-end download tests**
+
+  - Create E2E tests for download flow
+  - Test both chapter and full book downloads
+  - Verify downloads work in CI environment
+  - dependencies: [T008], [T009], [T010]
+
+- [ ] **T015: Create manual verification checklist**
+  - Define testing protocol for downloads
+  - Test across environments (local, preview, production)
+  - Test various book types and chapter configurations
+  - dependencies: [T008], [T009], [T010]
+
+## Monitoring and Documentation
+
+- [ ] **T016: Implement correlation IDs for request tracking**
+
+  - Generate unique ID on client for each download attempt
+  - Propagate ID to server-side logs
+  - Use ID to link client and server logs for each download
+  - dependencies: [T001]
+
+- [ ] **T017: Set up monitoring for download success/failure rates**
+
+  - Track download initiation and completion events
+  - Configure monitoring to show success rates over time
+  - Create alerts for unusual error patterns
+  - dependencies: [T016]
+
+- [ ] **T018: Document download architecture and flow**
+
+  - Create diagrams showing download process
+  - Document proxy vs. direct approaches with tradeoffs
+  - Explain environment configuration requirements
+  - dependencies: [T015]
+
+- [ ] **T019: Create troubleshooting guide for download issues**
+  - Document common failure modes
+  - List debugging steps for each failure type
+  - Include references to logs and monitoring
+  - dependencies: [T018]
+
+## Future Improvements
+
+- [ ] **T020: Research direct CDN download options**
+
+  - Investigate configuring CORS headers on CDN
+  - Evaluate direct download approach with fallback to proxy
+  - Research CDN configuration options to eliminate proxy requirement
+  - dependencies: [T018]
+
+- [ ] **T021: Design simplified download architecture**
+  - Evaluate eliminating two-step process
+  - Consider direct CDN access with proper CORS headers
+  - Propose more robust, simpler implementation
+  - dependencies: [T020]
