@@ -61,16 +61,51 @@ type ValidationResult = {
 function initializeRequest(req: NextRequest): RequestContext {
   const correlationId = randomUUID();
   const log = createRequestLogger(correlationId);
+  const { searchParams, pathname } = new URL(req.url);
 
-  // Log request received with structured data
-  safeLog(log, 'info', {
-    msg: 'Download API request received',
-    method: req.method,
-    url: req.url,
-    userAgent: req.headers.get('user-agent'),
+  // Extract relevant headers for logging (skipping sensitive ones)
+  const headers: Record<string, string> = {};
+  const sensitiveHeaders = ['authorization', 'cookie', 'set-cookie'];
+
+  req.headers.forEach((value, key) => {
+    if (!sensitiveHeaders.includes(key.toLowerCase())) {
+      headers[key] = value;
+    }
   });
 
-  const { searchParams } = new URL(req.url);
+  // Extract request parameters for logging (skipping sensitive ones)
+  const params: Record<string, string> = {};
+  const sensitiveParams = ['auth', 'token', 'key', 'secret', 'password'];
+
+  searchParams.forEach((value, key) => {
+    if (!sensitiveParams.includes(key.toLowerCase())) {
+      params[key] = value;
+    }
+  });
+
+  // Log detailed request information
+  safeLog(log, 'info', {
+    msg: 'Download API request received',
+    correlationId,
+    method: req.method,
+    url: req.url,
+    pathname,
+    params,
+    isProxyRequest: searchParams.get('proxy') === 'true',
+    referer: req.headers.get('referer'),
+    userAgent: req.headers.get('user-agent'),
+    acceptHeaders: {
+      accept: req.headers.get('accept'),
+      acceptEncoding: req.headers.get('accept-encoding'),
+      acceptLanguage: req.headers.get('accept-language'),
+    },
+    origin: req.headers.get('origin'),
+    host: req.headers.get('host'),
+    contentType: req.headers.get('content-type'),
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development',
+    deployment: process.env.VERCEL_URL || 'local',
+  });
 
   return { correlationId, log, searchParams };
 }
@@ -127,38 +162,167 @@ function createDownloadFilename(
  * @param filename - The filename to use for the download
  * @param validation - The validated request parameters
  * @param log - Logger instance
+ * @param searchParams - The original search parameters from the request
  * @returns Response with the proxied file
+ */
+/**
+ * Handles proxy download requests with comprehensive context and error handling
+ *
+ * @param url URL to proxy
+ * @param filename Filename for the download
+ * @param validation Validated request parameters
+ * @param log Logger instance
+ * @param correlationId Request correlation ID for tracing
+ * @param searchParams Original search parameters
+ * @param headers Request headers for context
+ * @returns Promise resolving to NextResponse
  */
 async function handleProxyRequest(
   url: string,
   filename: string,
   validation: { slug: string; type: 'full' | 'chapter'; chapter?: string },
-  log: ReturnType<typeof createRequestLogger>
+  log: ReturnType<typeof createRequestLogger>,
+  correlationId: string,
+  searchParams?: URLSearchParams,
+  headers?: Record<string, string>
 ): Promise<NextResponse> {
-  // If proxy is requested, download the file and stream it to the client
-  safeLog(log, 'info', {
-    msg: 'Proxying download through API',
+  // Generate a unique operation ID for this proxy operation
+  // This is different from the correlation ID and specific to this proxy operation
+  const operationId = `px-${Date.now().toString(36)}-${Math.random().toString(36).substring(2, 5)}`;
+
+  // Convert search params to a record for logging, skipping sensitive ones
+  const requestParams: Record<string, string | string[]> = {};
+  const sensitiveParams = ['auth', 'token', 'key', 'secret', 'password', 'apikey', 'api_key'];
+
+  if (searchParams) {
+    searchParams.forEach((value, key) => {
+      if (!sensitiveParams.includes(key.toLowerCase())) {
+        requestParams[key] = value;
+      }
+    });
+  }
+
+  // Add request validation data to parameters with enhanced context
+  const allParams = {
+    ...requestParams,
     slug: validation.slug,
     type: validation.type,
     chapter: validation.chapter,
+    correlationId,
+    operationId,
+    environment: process.env.NODE_ENV || 'development',
+    deployment: process.env.VERCEL_URL || 'local',
+    timestamp: new Date().toISOString(),
+  };
+
+  // Gather client information for debugging
+  const clientInfo = {
+    userAgent: headers?.['user-agent'] || '',
+    referer: headers?.['referer'] || '',
+    origin: headers?.['origin'] || '',
+    accept: headers?.['accept'] || '',
+    acceptEncoding: headers?.['accept-encoding'] || '',
+    acceptLanguage: headers?.['accept-language'] || '',
+  };
+
+  // Determine client platform/browser for analytics
+  const isMobile =
+    clientInfo.userAgent.includes('Mobile') || clientInfo.userAgent.includes('Android');
+  const isIOS = clientInfo.userAgent.includes('iPhone') || clientInfo.userAgent.includes('iPad');
+  const isAndroid = clientInfo.userAgent.includes('Android');
+  const isSafari =
+    clientInfo.userAgent.includes('Safari') && !clientInfo.userAgent.includes('Chrome');
+  const isChrome = clientInfo.userAgent.includes('Chrome');
+  const isFirefox = clientInfo.userAgent.includes('Firefox');
+  const isEdge = clientInfo.userAgent.includes('Edg/');
+
+  // Log proxy request with detailed context
+  safeLog(log, 'info', {
+    msg: 'Proxying download through API',
+    correlationId,
+    operationId,
+    slug: validation.slug,
+    type: validation.type,
+    chapter: validation.chapter,
+    requestOrigin: process.env.VERCEL_URL || 'local',
+    requestParams,
+    requestUrl: url,
+    clientInfo,
+    clientClassification: {
+      isMobile,
+      isIOS,
+      isAndroid,
+      browser: isChrome
+        ? 'Chrome'
+        : isSafari
+          ? 'Safari'
+          : isFirefox
+            ? 'Firefox'
+            : isEdge
+              ? 'Edge'
+              : 'Other',
+    },
+    environment: process.env.NODE_ENV || 'development',
+    timestamp: new Date().toISOString(),
   });
 
   try {
-    return await proxyFileDownload(url, filename, log);
-  } catch (proxyError) {
-    safeLog(log, 'error', {
-      msg: 'Error while proxying file',
-      error: proxyError instanceof Error ? proxyError.message : String(proxyError),
-      stack: proxyError instanceof Error ? proxyError.stack : undefined,
+    // Start timing the operation
+    const proxyStartTime = Date.now();
+
+    // Pass all parameters to proxy download function (note: function signature updated to accept operationId)
+    const response = await proxyFileDownload(url, filename, log, allParams);
+
+    // Log successful proxy completion with timing
+    const proxyDuration = Date.now() - proxyStartTime;
+    safeLog(log, 'info', {
+      msg: 'Proxy download completed successfully',
+      correlationId,
+      operationId,
+      slug: validation.slug,
+      type: validation.type,
+      chapter: validation.chapter,
+      durationMs: proxyDuration,
+      timestamp: new Date().toISOString(),
     });
 
-    return NextResponse.json(
-      {
-        error: 'Proxy error',
-        message: 'Failed to proxy download through API',
-      },
-      { status: 500 }
-    );
+    return response;
+  } catch (proxyError) {
+    // Enhanced error logging with detailed context
+    safeLog(log, 'error', {
+      msg: 'Error while proxying file',
+      correlationId,
+      operationId,
+      slug: validation.slug,
+      type: validation.type,
+      chapter: validation.chapter,
+      error: proxyError instanceof Error ? proxyError.message : String(proxyError),
+      stack: proxyError instanceof Error ? proxyError.stack : undefined,
+      errorType: proxyError instanceof Error ? proxyError.constructor.name : typeof proxyError,
+      requestParams,
+      timestamp: new Date().toISOString(),
+      environment: process.env.NODE_ENV || 'development',
+    });
+
+    // Return environment-aware structured error response
+    const errorResponse = {
+      error: 'Proxy error',
+      message: 'Failed to proxy download through API',
+      correlationId,
+      operationId,
+    };
+
+    // Add detailed error information in non-production environments
+    if (process.env.NODE_ENV !== 'production') {
+      Object.assign(errorResponse, {
+        details: proxyError instanceof Error ? proxyError.message : String(proxyError),
+        errorType: proxyError instanceof Error ? proxyError.constructor.name : typeof proxyError,
+        stack: proxyError instanceof Error ? proxyError.stack : undefined,
+        timestamp: new Date().toISOString(),
+      });
+    }
+
+    return NextResponse.json(errorResponse, { status: 500 });
   }
 }
 
@@ -256,6 +420,17 @@ async function processDownloadRequest(
     const proxyRequested = searchParams.get('proxy') === 'true';
 
     if (proxyRequested) {
+      // Extract headers for additional context
+      const requestHeaders: Record<string, string> = {};
+      ['user-agent', 'referer', 'origin', 'accept', 'accept-encoding', 'accept-language'].forEach(
+        (header) => {
+          const value = req.headers.get(header);
+          if (value) {
+            requestHeaders[header] = value;
+          }
+        }
+      );
+
       return handleProxyRequest(
         url,
         filename,
@@ -264,7 +439,10 @@ async function processDownloadRequest(
           type: validatedType,
           chapter: validation.chapter,
         },
-        log
+        log,
+        correlationId,
+        searchParams,
+        requestHeaders
       );
     }
 

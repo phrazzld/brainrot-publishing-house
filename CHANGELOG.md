@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Unified Asset Service** - Implemented a new unified asset service (T009) that:
+  - Provides a single consistent interface for all asset operations
+  - Only uses Vercel Blob as the storage backend
+  - Includes comprehensive logging and error handling
+  - Features automatic retry mechanism for transient failures
+  - Comes with full test coverage
+
 ### Removed
 
 - **Translation functionality** - Removed the translation feature from the application. This includes:

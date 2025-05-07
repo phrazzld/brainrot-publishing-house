@@ -1,0 +1,1480 @@
+[
+  {
+    "slug": "the-iliad",
+    "type": "full",
+    "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/the-iliad/audio/full-audiobook.mp3",
+    "fallbackUrl": "https://brainrot-publishing.nyc3.digitaloceanspaces.com/the-iliad/audio/full-audiobook.mp3",
+    "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-iliad/audio/full-audiobook.mp3",
+    "exists": {
+      "cdn": true,
+      "fallback": true,
+      "blob": false
+    },
+    "statusCodes": {
+      "cdn": 200,
+      "fallback": 200,
+      "blob": null
+    },
+    "headers": {
+      "cdn": {
+        "accept-ranges": "bytes",
+        "cache-control": "max-age=3600",
+        "cf-cache-status": "MISS",
+        "cf-ray": "93b6fbe10b00afac-NRT",
+        "connection": "close",
+        "content-length": "223120711",
+        "content-type": "audio/mpeg",
+        "date": "Tue, 06 May 2025 08:07:26 GMT",
+        "etag": "\"876fda0ad3d57a4ba17519e2c78fc503\"",
+        "last-modified": "Wed, 22 Jan 2025 07:22:31 GMT",
+        "server": "cloudflare",
+        "set-cookie": "__cf_bm=uq7X6EuTO_YjD_D9lXeQ3270V9asz9nPyG8i86gEc.Q-1746518846-1.0.1.1-GiQlPbd134yshSsdVJeyrmuoIz6UD3aJ5N2BTzvLg2kp9_bEVbNjzRyHU6kvFNvV.vdhUezQsoOgTcrekHf211JhBodEJagzSbzU9O0JPEg; path=/; expires=Tue, 06-May-25 08:37:26 GMT; domain=.digitaloceanspaces.com; HttpOnly; Secure; SameSite=None",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method, Accept-Encoding",
+        "x-amz-request-id": "tx000000d3e95485a7b8fb1-006819c33d-2b91fde8-nyc3d",
+        "x-do-cdn-uuid": "37e922cc-f53c-4299-9abd-66ae0c8e10fd",
+        "x-rgw-object-type": "Normal"
+      },
+      "fallback": {
+        "accept-ranges": "bytes",
+        "connection": "close",
+        "content-length": "223120711",
+        "content-type": "audio/mpeg",
+        "date": "Tue, 06 May 2025 08:07:26 GMT",
+        "etag": "\"876fda0ad3d57a4ba17519e2c78fc503\"",
+        "last-modified": "Wed, 22 Jan 2025 07:22:31 GMT",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method",
+        "x-amz-request-id": "tx000006687e211abf7fef8-006819c33e-2b884c70-nyc3d",
+        "x-rgw-object-type": "Normal"
+      },
+      "blob": {}
+    },
+    "errors": {
+      "cdn": null,
+      "fallback": null,
+      "blob": null
+    },
+    "durations": {
+      "cdn": 561,
+      "fallback": 625,
+      "blob": null
+    },
+    "environment": "development"
+  },
+  {
+    "slug": "the-iliad",
+    "type": "chapter",
+    "chapter": "1",
+    "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/the-iliad/audio/book-01.mp3",
+    "fallbackUrl": "https://brainrot-publishing.nyc3.digitaloceanspaces.com/the-iliad/audio/book-01.mp3",
+    "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-iliad/audio/book-01.mp3",
+    "exists": {
+      "cdn": true,
+      "fallback": true,
+      "blob": false
+    },
+    "statusCodes": {
+      "cdn": 200,
+      "fallback": 200,
+      "blob": null
+    },
+    "headers": {
+      "cdn": {
+        "accept-ranges": "bytes",
+        "cache-control": "max-age=3600",
+        "cf-cache-status": "REVALIDATED",
+        "cf-ray": "93b6fbe10b72da78-NRT",
+        "connection": "close",
+        "content-length": "9696006",
+        "content-type": "audio/mpeg",
+        "date": "Tue, 06 May 2025 08:07:25 GMT",
+        "etag": "\"9e0203ffd453a4ceba63b73b6f81cd46\"",
+        "last-modified": "Fri, 10 Jan 2025 20:43:17 GMT",
+        "server": "cloudflare",
+        "set-cookie": "__cf_bm=8EUQIyjxx7fuAfHktVIC2kB3b0R1bJuUMxRoOSa2ju4-1746518845-1.0.1.1-lGu3kb0lsxLXYrKO.QrPDKX2mv.PADCnPKiPGm8auuxAbjxRsMINPhPOx.Ma895vWUu3qVj9HLjuNjgJbw7UYGXX0DA3kyhS8USLnbPwYBs; path=/; expires=Tue, 06-May-25 08:37:25 GMT; domain=.digitaloceanspaces.com; HttpOnly; Secure; SameSite=None",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method, Accept-Encoding",
+        "x-amz-meta-s3cmd-attrs": "atime:1736356951/ctime:1736356506/gid:20/gname:staff/md5:9e0203ffd453a4ceba63b73b6f81cd46/mode:33188/mtime:1736356506/uid:501/uname:phaedrus",
+        "x-amz-request-id": "tx00000c952767ce47b9620-00680de806-2bc25b7f-nyc3d",
+        "x-do-cdn-uuid": "37e922cc-f53c-4299-9abd-66ae0c8e10fd",
+        "x-rgw-object-type": "Normal"
+      },
+      "fallback": {
+        "accept-ranges": "bytes",
+        "connection": "close",
+        "content-length": "9696006",
+        "content-type": "audio/mpeg",
+        "date": "Tue, 06 May 2025 08:07:26 GMT",
+        "etag": "\"9e0203ffd453a4ceba63b73b6f81cd46\"",
+        "last-modified": "Fri, 10 Jan 2025 20:43:17 GMT",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method",
+        "x-amz-meta-s3cmd-attrs": "atime:1736356951/ctime:1736356506/gid:20/gname:staff/md5:9e0203ffd453a4ceba63b73b6f81cd46/mode:33188/mtime:1736356506/uid:501/uname:phaedrus",
+        "x-amz-request-id": "tx00000160d08298af1f0c3-006819c33e-2bc25b84-nyc3d",
+        "x-rgw-object-type": "Normal"
+      },
+      "blob": {}
+    },
+    "errors": {
+      "cdn": null,
+      "fallback": null,
+      "blob": null
+    },
+    "durations": {
+      "cdn": 432,
+      "fallback": 652,
+      "blob": null
+    },
+    "environment": "development"
+  },
+  {
+    "slug": "the-iliad",
+    "type": "chapter",
+    "chapter": "2",
+    "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/the-iliad/audio/book-02.mp3",
+    "fallbackUrl": "https://brainrot-publishing.nyc3.digitaloceanspaces.com/the-iliad/audio/book-02.mp3",
+    "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-iliad/audio/book-02.mp3",
+    "exists": {
+      "cdn": true,
+      "fallback": true,
+      "blob": false
+    },
+    "statusCodes": {
+      "cdn": 200,
+      "fallback": 200,
+      "blob": null
+    },
+    "headers": {
+      "cdn": {
+        "accept-ranges": "bytes",
+        "cache-control": "max-age=3600",
+        "cf-cache-status": "REVALIDATED",
+        "cf-ray": "93b6fbe10835b26f-NRT",
+        "connection": "close",
+        "content-length": "8763462",
+        "content-type": "audio/mpeg",
+        "date": "Tue, 06 May 2025 08:07:26 GMT",
+        "etag": "\"402ad1784a3d0962b3d61d42f1fc2551\"",
+        "last-modified": "Fri, 10 Jan 2025 20:43:17 GMT",
+        "server": "cloudflare",
+        "set-cookie": "__cf_bm=sVXee10SXiFLBzxg.0iAwwTHJaYeuh2M3ciUC.C1aIA-1746518846-1.0.1.1-64gez.tpJZmYvZlz_JoQOC8P7sK57DgnfD1hVmAU.iGozy.uaF7MsfR0_CKV92Ckp6BKyevq.0CsaPd1wEUX8iYv1erqEOMZWOXH52t3494; path=/; expires=Tue, 06-May-25 08:37:26 GMT; domain=.digitaloceanspaces.com; HttpOnly; Secure; SameSite=None",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method, Accept-Encoding",
+        "x-amz-meta-s3cmd-attrs": "atime:1736356951/ctime:1736356506/gid:20/gname:staff/md5:402ad1784a3d0962b3d61d42f1fc2551/mode:33188/mtime:1736356506/uid:501/uname:phaedrus",
+        "x-amz-request-id": "tx000001076e5ac19e5ba41-00680def0c-2b678ebc-nyc3d",
+        "x-do-cdn-uuid": "37e922cc-f53c-4299-9abd-66ae0c8e10fd",
+        "x-rgw-object-type": "Normal"
+      },
+      "fallback": {
+        "accept-ranges": "bytes",
+        "connection": "close",
+        "content-length": "8763462",
+        "content-type": "audio/mpeg",
+        "date": "Tue, 06 May 2025 08:07:26 GMT",
+        "etag": "\"402ad1784a3d0962b3d61d42f1fc2551\"",
+        "last-modified": "Fri, 10 Jan 2025 20:43:17 GMT",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method",
+        "x-amz-meta-s3cmd-attrs": "atime:1736356951/ctime:1736356506/gid:20/gname:staff/md5:402ad1784a3d0962b3d61d42f1fc2551/mode:33188/mtime:1736356506/uid:501/uname:phaedrus",
+        "x-amz-request-id": "tx00000d17366b498ed7501-006819c33e-2bc068d3-nyc3d",
+        "x-rgw-object-type": "Normal"
+      },
+      "blob": {}
+    },
+    "errors": {
+      "cdn": null,
+      "fallback": null,
+      "blob": null
+    },
+    "durations": {
+      "cdn": 520,
+      "fallback": 620,
+      "blob": null
+    },
+    "environment": "development"
+  },
+  {
+    "slug": "the-iliad",
+    "type": "chapter",
+    "chapter": "3",
+    "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/the-iliad/audio/book-03.mp3",
+    "fallbackUrl": "https://brainrot-publishing.nyc3.digitaloceanspaces.com/the-iliad/audio/book-03.mp3",
+    "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-iliad/audio/book-03.mp3",
+    "exists": {
+      "cdn": true,
+      "fallback": true,
+      "blob": false
+    },
+    "statusCodes": {
+      "cdn": 200,
+      "fallback": 200,
+      "blob": null
+    },
+    "headers": {
+      "cdn": {
+        "accept-ranges": "bytes",
+        "cache-control": "max-age=3600",
+        "cf-cache-status": "REVALIDATED",
+        "cf-ray": "93b6fbe10e75d74c-NRT",
+        "connection": "close",
+        "content-length": "12444295",
+        "content-type": "audio/mpeg",
+        "date": "Tue, 06 May 2025 08:07:26 GMT",
+        "etag": "\"da6cfd82013fe215f8eab598606c6021\"",
+        "last-modified": "Fri, 10 Jan 2025 20:43:17 GMT",
+        "server": "cloudflare",
+        "set-cookie": "__cf_bm=dSrk8FP4O8jd_Fw_BEMbRigh_1gxX9hVdeO.n1Aa9PA-1746518846-1.0.1.1-6TJWKxw4AsjVgGt1Bu8EJuBVeLkdDOhfT7sJe__MO5pyaUTbO2lcxwHiVXMMm2mFLCkXTIgRyU5ZWzyNs83qfiwsAcmwExaYNy5xODfCQVY; path=/; expires=Tue, 06-May-25 08:37:26 GMT; domain=.digitaloceanspaces.com; HttpOnly; Secure; SameSite=None",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method, Accept-Encoding",
+        "x-amz-meta-s3cmd-attrs": "atime:1736356951/ctime:1736356506/gid:20/gname:staff/md5:da6cfd82013fe215f8eab598606c6021/mode:33188/mtime:1736356506/uid:501/uname:phaedrus",
+        "x-amz-request-id": "tx00000487fa18bc49065c8-00680def0d-2b91fde8-nyc3d",
+        "x-do-cdn-uuid": "37e922cc-f53c-4299-9abd-66ae0c8e10fd",
+        "x-rgw-object-type": "Normal"
+      },
+      "fallback": {
+        "accept-ranges": "bytes",
+        "connection": "close",
+        "content-length": "12444295",
+        "content-type": "audio/mpeg",
+        "date": "Tue, 06 May 2025 08:07:26 GMT",
+        "etag": "\"da6cfd82013fe215f8eab598606c6021\"",
+        "last-modified": "Fri, 10 Jan 2025 20:43:17 GMT",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method",
+        "x-amz-meta-s3cmd-attrs": "atime:1736356951/ctime:1736356506/gid:20/gname:staff/md5:da6cfd82013fe215f8eab598606c6021/mode:33188/mtime:1736356506/uid:501/uname:phaedrus",
+        "x-amz-request-id": "tx000005ddffd4b415e4136-006819c33e-2b88a841-nyc3d",
+        "x-rgw-object-type": "Normal"
+      },
+      "blob": {}
+    },
+    "errors": {
+      "cdn": null,
+      "fallback": null,
+      "blob": null
+    },
+    "durations": {
+      "cdn": 514,
+      "fallback": 622,
+      "blob": null
+    },
+    "environment": "development"
+  },
+  {
+    "slug": "the-iliad",
+    "type": "chapter",
+    "chapter": "4",
+    "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/the-iliad/audio/book-04.mp3",
+    "fallbackUrl": "https://brainrot-publishing.nyc3.digitaloceanspaces.com/the-iliad/audio/book-04.mp3",
+    "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-iliad/audio/book-04.mp3",
+    "exists": {
+      "cdn": true,
+      "fallback": true,
+      "blob": false
+    },
+    "statusCodes": {
+      "cdn": 200,
+      "fallback": 200,
+      "blob": null
+    },
+    "headers": {
+      "cdn": {
+        "accept-ranges": "bytes",
+        "cache-control": "max-age=3600",
+        "cf-cache-status": "REVALIDATED",
+        "cf-ray": "93b6fbe10dd4d793-NRT",
+        "connection": "close",
+        "content-length": "7499192",
+        "content-type": "audio/mpeg",
+        "date": "Tue, 06 May 2025 08:07:26 GMT",
+        "etag": "\"b1891b130aa38b3189d062a90693b81d\"",
+        "last-modified": "Wed, 15 Jan 2025 19:42:11 GMT",
+        "server": "cloudflare",
+        "set-cookie": "__cf_bm=lFb374cnXf_GJf_5Z9m32OrbLGH5SAZX1mNg2Sy1EfQ-1746518846-1.0.1.1-FRbuPEhjQjW3k6m189quT8GPZDJXcWA54jNtGFZPRuAH8ed9KzzoX96SOv8jARM5uTarqpvTdnVd7wYN7f_c9EY3zVokyVaJehzit1vk0Fw; path=/; expires=Tue, 06-May-25 08:37:26 GMT; domain=.digitaloceanspaces.com; HttpOnly; Secure; SameSite=None",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method, Accept-Encoding",
+        "x-amz-request-id": "tx00000d8dc08c9481d15ad-006817770b-2b62ff4e-nyc3d",
+        "x-do-cdn-uuid": "37e922cc-f53c-4299-9abd-66ae0c8e10fd",
+        "x-rgw-object-type": "Normal"
+      },
+      "fallback": {
+        "accept-ranges": "bytes",
+        "connection": "close",
+        "content-length": "7499192",
+        "content-type": "audio/mpeg",
+        "date": "Tue, 06 May 2025 08:07:26 GMT",
+        "etag": "\"b1891b130aa38b3189d062a90693b81d\"",
+        "last-modified": "Wed, 15 Jan 2025 19:42:11 GMT",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method",
+        "x-amz-request-id": "tx000001cf3710b7137ef2b-006819c33e-2bc185b0-nyc3d",
+        "x-rgw-object-type": "Normal"
+      },
+      "blob": {}
+    },
+    "errors": {
+      "cdn": null,
+      "fallback": null,
+      "blob": null
+    },
+    "durations": {
+      "cdn": 999,
+      "fallback": 615,
+      "blob": null
+    },
+    "environment": "development"
+  },
+  {
+    "slug": "the-iliad",
+    "type": "chapter",
+    "chapter": "5",
+    "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/the-iliad/audio/book-05.mp3",
+    "fallbackUrl": "https://brainrot-publishing.nyc3.digitaloceanspaces.com/the-iliad/audio/book-05.mp3",
+    "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-iliad/audio/book-05.mp3",
+    "exists": {
+      "cdn": true,
+      "fallback": true,
+      "blob": false
+    },
+    "statusCodes": {
+      "cdn": 200,
+      "fallback": 200,
+      "blob": null
+    },
+    "headers": {
+      "cdn": {
+        "accept-ranges": "bytes",
+        "cache-control": "max-age=3600",
+        "cf-cache-status": "REVALIDATED",
+        "cf-ray": "93b6fbec8dfc25f0-NRT",
+        "connection": "close",
+        "content-length": "14461758",
+        "content-type": "application/octet-stream",
+        "date": "Tue, 06 May 2025 08:07:28 GMT",
+        "etag": "\"d4650831935041708eb0d831f9fceaa2\"",
+        "last-modified": "Fri, 10 Jan 2025 20:43:17 GMT",
+        "server": "cloudflare",
+        "set-cookie": "__cf_bm=xoe1WmviH4GOoRaeMgKl2g7WKA0yd3h88qROQo9qu_s-1746518848-1.0.1.1-6S39swKOUqz6rnbzMKfDYO7N2DZ77WTRVGrs3vvIV9UZXe_ZMvmrQDCnYEN9ZbC6wH8vhXlCeKeAqD900I4K4m_wWElgcVtufjQOWjsF7U0; path=/; expires=Tue, 06-May-25 08:37:28 GMT; domain=.digitaloceanspaces.com; HttpOnly; Secure; SameSite=None",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method, Accept-Encoding",
+        "x-amz-meta-s3cmd-attrs": "atime:1736356951/ctime:1736356506/gid:20/gname:staff/md5:d4650831935041708eb0d831f9fceaa2/mode:33188/mtime:1736356506/uid:501/uname:phaedrus",
+        "x-amz-request-id": "tx000006bddf4a9425ceabc-00680def0c-2b885477-nyc3d",
+        "x-do-cdn-uuid": "37e922cc-f53c-4299-9abd-66ae0c8e10fd",
+        "x-rgw-object-type": "Normal"
+      },
+      "fallback": {
+        "accept-ranges": "bytes",
+        "connection": "close",
+        "content-length": "14461758",
+        "content-type": "application/octet-stream",
+        "date": "Tue, 06 May 2025 08:07:28 GMT",
+        "etag": "\"d4650831935041708eb0d831f9fceaa2\"",
+        "last-modified": "Fri, 10 Jan 2025 20:43:17 GMT",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method",
+        "x-amz-meta-s3cmd-attrs": "atime:1736356951/ctime:1736356506/gid:20/gname:staff/md5:d4650831935041708eb0d831f9fceaa2/mode:33188/mtime:1736356506/uid:501/uname:phaedrus",
+        "x-amz-request-id": "tx00000492331ab26982e0b-006819c340-2bc25b7f-nyc3d",
+        "x-rgw-object-type": "Normal"
+      },
+      "blob": {}
+    },
+    "errors": {
+      "cdn": null,
+      "fallback": null,
+      "blob": null
+    },
+    "durations": {
+      "cdn": 994,
+      "fallback": 634,
+      "blob": null
+    },
+    "environment": "development"
+  },
+  {
+    "slug": "hamlet",
+    "type": "full",
+    "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/hamlet/audio/full-audiobook.mp3",
+    "fallbackUrl": "https://brainrot-publishing.nyc3.digitaloceanspaces.com/hamlet/audio/full-audiobook.mp3",
+    "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/hamlet/audio/full-audiobook.mp3",
+    "exists": {
+      "cdn": false,
+      "fallback": false,
+      "blob": false
+    },
+    "statusCodes": {
+      "cdn": 404,
+      "fallback": 404,
+      "blob": null
+    },
+    "headers": {
+      "cdn": {
+        "cache-control": "max-age=0",
+        "cf-cache-status": "MISS",
+        "cf-ray": "93b6fbec7c8feb7e-NRT",
+        "connection": "close",
+        "content-encoding": "gzip",
+        "content-type": "application/xml",
+        "date": "Tue, 06 May 2025 08:07:27 GMT",
+        "server": "cloudflare",
+        "set-cookie": "__cf_bm=UDkti74XpNo7q5F0hPeawKTcjkaVs3rjMsYw0YqOY9M-1746518847-1.0.1.1-qyJY8507wof9LXp6YPYDwvrSgu2P_LhRrgnOClJA9PRvMWxGX.1NIa7j20vot53yDy_gvE9J6kBucks24MYjTxlrwkP76kX_XW1i_OM7sPU; path=/; expires=Tue, 06-May-25 08:37:27 GMT; domain=.digitaloceanspaces.com; HttpOnly; Secure; SameSite=None",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method, Accept-Encoding",
+        "x-amz-request-id": "tx00000e69759401a6f4b29-006819c33f-2bc0f3b1-nyc3d",
+        "x-do-cdn-uuid": "37e922cc-f53c-4299-9abd-66ae0c8e10fd"
+      },
+      "fallback": {
+        "accept-ranges": "bytes",
+        "cache-control": "max-age=0",
+        "connection": "close",
+        "content-length": "251",
+        "content-type": "application/xml",
+        "date": "Tue, 06 May 2025 08:07:28 GMT",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method",
+        "x-amz-request-id": "tx000009c62759416a36661-006819c340-2b88a841-nyc3d"
+      },
+      "blob": {}
+    },
+    "errors": {
+      "cdn": null,
+      "fallback": null,
+      "blob": null
+    },
+    "durations": {
+      "cdn": 289,
+      "fallback": 606,
+      "blob": null
+    },
+    "environment": "development"
+  },
+  {
+    "slug": "hamlet",
+    "type": "chapter",
+    "chapter": "1",
+    "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/hamlet/audio/book-01.mp3",
+    "fallbackUrl": "https://brainrot-publishing.nyc3.digitaloceanspaces.com/hamlet/audio/book-01.mp3",
+    "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/hamlet/audio/book-01.mp3",
+    "exists": {
+      "cdn": false,
+      "fallback": false,
+      "blob": false
+    },
+    "statusCodes": {
+      "cdn": 404,
+      "fallback": 404,
+      "blob": null
+    },
+    "headers": {
+      "cdn": {
+        "cache-control": "max-age=0",
+        "cf-cache-status": "MISS",
+        "cf-ray": "93b6fbec7899e36e-NRT",
+        "connection": "close",
+        "content-encoding": "gzip",
+        "content-type": "application/xml",
+        "date": "Tue, 06 May 2025 08:07:27 GMT",
+        "server": "cloudflare",
+        "set-cookie": "__cf_bm=vmMaW8VX9MpJR1SYg.t0oz_UxonYKOZYk9cpPdqgd88-1746518847-1.0.1.1-z6YLEDPBYsxEyQ7gX8rZhE1Rg.9MtfQy_FN2bMZFlSrXEwlQwSkx44eXZJTPEhAdyu3CjRE_OP9WWFt0bFBqkWOeSVlSWGqu92ZV3yIiaLM; path=/; expires=Tue, 06-May-25 08:37:27 GMT; domain=.digitaloceanspaces.com; HttpOnly; Secure; SameSite=None",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method, Accept-Encoding",
+        "x-amz-request-id": "tx00000bc01d79ec9e17eff-006819c33f-2bc068d3-nyc3d",
+        "x-do-cdn-uuid": "37e922cc-f53c-4299-9abd-66ae0c8e10fd"
+      },
+      "fallback": {
+        "accept-ranges": "bytes",
+        "cache-control": "max-age=0",
+        "connection": "close",
+        "content-length": "251",
+        "content-type": "application/xml",
+        "date": "Tue, 06 May 2025 08:07:28 GMT",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method",
+        "x-amz-request-id": "tx0000039c858cb395a8be4-006819c340-2bc25b6b-nyc3d"
+      },
+      "blob": {}
+    },
+    "errors": {
+      "cdn": null,
+      "fallback": null,
+      "blob": null
+    },
+    "durations": {
+      "cdn": 444,
+      "fallback": 619,
+      "blob": null
+    },
+    "environment": "development"
+  },
+  {
+    "slug": "hamlet",
+    "type": "chapter",
+    "chapter": "2",
+    "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/hamlet/audio/book-02.mp3",
+    "fallbackUrl": "https://brainrot-publishing.nyc3.digitaloceanspaces.com/hamlet/audio/book-02.mp3",
+    "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/hamlet/audio/book-02.mp3",
+    "exists": {
+      "cdn": false,
+      "fallback": false,
+      "blob": false
+    },
+    "statusCodes": {
+      "cdn": 404,
+      "fallback": 404,
+      "blob": null
+    },
+    "headers": {
+      "cdn": {
+        "cache-control": "max-age=0",
+        "cf-cache-status": "MISS",
+        "cf-ray": "93b6fbec7902e370-NRT",
+        "connection": "close",
+        "content-encoding": "gzip",
+        "content-type": "application/xml",
+        "date": "Tue, 06 May 2025 08:07:27 GMT",
+        "server": "cloudflare",
+        "set-cookie": "__cf_bm=B0LAl70WY_M2hdE2HN6jxtkF.umhuzDLOsMv7ijZ4lA-1746518847-1.0.1.1-yNH0Qd8dhK9TmRVWiaCqWK0wd6sfoTfRgRmuH6GCSEK8UbdADUF2DoNBtftvkdZt2O94NcxwyKa_07ybvw.7x0HpFHx2.UE8rqYnegjpecw; path=/; expires=Tue, 06-May-25 08:37:27 GMT; domain=.digitaloceanspaces.com; HttpOnly; Secure; SameSite=None",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method, Accept-Encoding",
+        "x-amz-request-id": "tx00000e53096a39d24f2fc-006819c33f-2b6234f6-nyc3d",
+        "x-do-cdn-uuid": "37e922cc-f53c-4299-9abd-66ae0c8e10fd"
+      },
+      "fallback": {
+        "accept-ranges": "bytes",
+        "cache-control": "max-age=0",
+        "connection": "close",
+        "content-length": "251",
+        "content-type": "application/xml",
+        "date": "Tue, 06 May 2025 08:07:28 GMT",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method",
+        "x-amz-request-id": "tx00000192dbd00aef080c4-006819c340-2bc25b6b-nyc3d"
+      },
+      "blob": {}
+    },
+    "errors": {
+      "cdn": null,
+      "fallback": null,
+      "blob": null
+    },
+    "durations": {
+      "cdn": 294,
+      "fallback": 616,
+      "blob": null
+    },
+    "environment": "development"
+  },
+  {
+    "slug": "hamlet",
+    "type": "chapter",
+    "chapter": "3",
+    "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/hamlet/audio/book-03.mp3",
+    "fallbackUrl": "https://brainrot-publishing.nyc3.digitaloceanspaces.com/hamlet/audio/book-03.mp3",
+    "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/hamlet/audio/book-03.mp3",
+    "exists": {
+      "cdn": false,
+      "fallback": false,
+      "blob": false
+    },
+    "statusCodes": {
+      "cdn": 404,
+      "fallback": 404,
+      "blob": null
+    },
+    "headers": {
+      "cdn": {
+        "cache-control": "max-age=0",
+        "cf-cache-status": "MISS",
+        "cf-ray": "93b6fbec7b14eb76-NRT",
+        "connection": "close",
+        "content-encoding": "gzip",
+        "content-type": "application/xml",
+        "date": "Tue, 06 May 2025 08:07:27 GMT",
+        "server": "cloudflare",
+        "set-cookie": "__cf_bm=XMAMr8a.7a2qVNuup1r8R6LiZzEisOor0z4YwJbLfVU-1746518847-1.0.1.1-4fwl1YxvjVeyxou1UPZwNbWFfVqWlV_EoHFv8u2XbDrgCSVdOOosIWSqr5XZgQ1xkfqM.RVKKE6i7V.NUivVjAjqQkOhXGvLI3DVGCCYBZU; path=/; expires=Tue, 06-May-25 08:37:27 GMT; domain=.digitaloceanspaces.com; HttpOnly; Secure; SameSite=None",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method, Accept-Encoding",
+        "x-amz-request-id": "tx00000b167ea23f4dcdd91-006819c33f-2b884cbb-nyc3d",
+        "x-do-cdn-uuid": "37e922cc-f53c-4299-9abd-66ae0c8e10fd"
+      },
+      "fallback": {
+        "accept-ranges": "bytes",
+        "cache-control": "max-age=0",
+        "connection": "close",
+        "content-length": "251",
+        "content-type": "application/xml",
+        "date": "Tue, 06 May 2025 08:07:28 GMT",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method",
+        "x-amz-request-id": "tx000006ce58e11720fbd80-006819c340-2b88a841-nyc3d"
+      },
+      "blob": {}
+    },
+    "errors": {
+      "cdn": null,
+      "fallback": null,
+      "blob": null
+    },
+    "durations": {
+      "cdn": 401,
+      "fallback": 606,
+      "blob": null
+    },
+    "environment": "development"
+  },
+  {
+    "slug": "hamlet",
+    "type": "chapter",
+    "chapter": "4",
+    "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/hamlet/audio/book-04.mp3",
+    "fallbackUrl": "https://brainrot-publishing.nyc3.digitaloceanspaces.com/hamlet/audio/book-04.mp3",
+    "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/hamlet/audio/book-04.mp3",
+    "exists": {
+      "cdn": false,
+      "fallback": false,
+      "blob": false
+    },
+    "statusCodes": {
+      "cdn": 404,
+      "fallback": 404,
+      "blob": null
+    },
+    "headers": {
+      "cdn": {
+        "cache-control": "max-age=0",
+        "cf-cache-status": "MISS",
+        "cf-ray": "93b6fbf83bdfb00c-NRT",
+        "connection": "close",
+        "content-encoding": "gzip",
+        "content-type": "application/xml",
+        "date": "Tue, 06 May 2025 08:07:30 GMT",
+        "server": "cloudflare",
+        "set-cookie": "__cf_bm=lWPx80QKiDmtqGJmUecMX9FvEYuXwGZfZnu2BPUhlBY-1746518850-1.0.1.1-P5k9VDukz72tSQr0Zm4Sc4UZX1O0VXS2yq7XBtJapxtNkUU8a0I9YQZyPvQ9Y9H0Iu4UFN0xQhVPKAte7dqs_eoNU8dezBAyDPHr8QSZicE; path=/; expires=Tue, 06-May-25 08:37:30 GMT; domain=.digitaloceanspaces.com; HttpOnly; Secure; SameSite=None",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method, Accept-Encoding",
+        "x-amz-request-id": "tx00000f15554b06d049633-006819c342-2bc185b0-nyc3d",
+        "x-do-cdn-uuid": "37e922cc-f53c-4299-9abd-66ae0c8e10fd"
+      },
+      "fallback": {
+        "accept-ranges": "bytes",
+        "cache-control": "max-age=0",
+        "connection": "close",
+        "content-length": "251",
+        "content-type": "application/xml",
+        "date": "Tue, 06 May 2025 08:07:30 GMT",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method",
+        "x-amz-request-id": "tx00000984b03f468b7a9ee-006819c342-2b91fde8-nyc3d"
+      },
+      "blob": {}
+    },
+    "errors": {
+      "cdn": null,
+      "fallback": null,
+      "blob": null
+    },
+    "durations": {
+      "cdn": 943,
+      "fallback": 601,
+      "blob": null
+    },
+    "environment": "development"
+  },
+  {
+    "slug": "hamlet",
+    "type": "chapter",
+    "chapter": "5",
+    "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/hamlet/audio/book-05.mp3",
+    "fallbackUrl": "https://brainrot-publishing.nyc3.digitaloceanspaces.com/hamlet/audio/book-05.mp3",
+    "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/hamlet/audio/book-05.mp3",
+    "exists": {
+      "cdn": false,
+      "fallback": false,
+      "blob": false
+    },
+    "statusCodes": {
+      "cdn": 404,
+      "fallback": 404,
+      "blob": null
+    },
+    "headers": {
+      "cdn": {
+        "cache-control": "max-age=0",
+        "cf-cache-status": "MISS",
+        "cf-ray": "93b6fbf83b366861-NRT",
+        "connection": "close",
+        "content-encoding": "gzip",
+        "content-type": "application/xml",
+        "date": "Tue, 06 May 2025 08:07:29 GMT",
+        "server": "cloudflare",
+        "set-cookie": "__cf_bm=offfrQzAvvX2nDRXITcdxELg6yFGQrbFfMxezHEwnsQ-1746518849-1.0.1.1-MugMIw.jKdOhI.An3qGTmm_sQCbxUsna9_KKpdWYTvoVOyzo0kH7jr8gH4FRqTYpqITvKK4e82.kqHunJ9zaLg51Kd_l8iA0DXCfy_FrFU8; path=/; expires=Tue, 06-May-25 08:37:29 GMT; domain=.digitaloceanspaces.com; HttpOnly; Secure; SameSite=None",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method, Accept-Encoding",
+        "x-amz-request-id": "tx000004c07d689fd0df679-006819c341-2bc25b7f-nyc3d",
+        "x-do-cdn-uuid": "37e922cc-f53c-4299-9abd-66ae0c8e10fd"
+      },
+      "fallback": {
+        "accept-ranges": "bytes",
+        "cache-control": "max-age=0",
+        "connection": "close",
+        "content-length": "251",
+        "content-type": "application/xml",
+        "date": "Tue, 06 May 2025 08:07:30 GMT",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method",
+        "x-amz-request-id": "tx00000022cb3f0810058e6-006819c342-2b886db3-nyc3d"
+      },
+      "blob": {}
+    },
+    "errors": {
+      "cdn": null,
+      "fallback": null,
+      "blob": null
+    },
+    "durations": {
+      "cdn": 479,
+      "fallback": 642,
+      "blob": null
+    },
+    "environment": "development"
+  },
+  {
+    "slug": "the-odyssey",
+    "type": "full",
+    "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/the-odyssey/audio/full-audiobook.mp3",
+    "fallbackUrl": "https://brainrot-publishing.nyc3.digitaloceanspaces.com/the-odyssey/audio/full-audiobook.mp3",
+    "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-odyssey/audio/full-audiobook.mp3",
+    "exists": {
+      "cdn": true,
+      "fallback": true,
+      "blob": false
+    },
+    "statusCodes": {
+      "cdn": 200,
+      "fallback": 200,
+      "blob": null
+    },
+    "headers": {
+      "cdn": {
+        "accept-ranges": "bytes",
+        "cache-control": "max-age=3600",
+        "cf-cache-status": "MISS",
+        "cf-ray": "93b6fbf82b75ec0c-NRT",
+        "connection": "close",
+        "content-length": "186394327",
+        "content-type": "audio/mpeg",
+        "date": "Tue, 06 May 2025 08:07:29 GMT",
+        "etag": "\"dfce250c2747d45684f0d8e360fd325a\"",
+        "last-modified": "Wed, 22 Jan 2025 15:25:31 GMT",
+        "server": "cloudflare",
+        "set-cookie": "__cf_bm=LOhT.A2K6SEWLDzDRmawYhUmwdsDjXNWLVEZrjZPvMM-1746518849-1.0.1.1-jycy9jV3jq8DExLcgLvwdAhI.Jz5l1TxC5NvDsX9jPkJCNs1n8TKEyMzWqvWKnh2JiPLSZK79I3iJynbvy7aNejDqHdjmBw7enluKRikzaQ; path=/; expires=Tue, 06-May-25 08:37:29 GMT; domain=.digitaloceanspaces.com; HttpOnly; Secure; SameSite=None",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method, Accept-Encoding",
+        "x-amz-request-id": "tx0000048e5269654fd3ab9-006819c341-2b910262-nyc3d",
+        "x-do-cdn-uuid": "37e922cc-f53c-4299-9abd-66ae0c8e10fd",
+        "x-rgw-object-type": "Normal"
+      },
+      "fallback": {
+        "accept-ranges": "bytes",
+        "connection": "close",
+        "content-length": "186394327",
+        "content-type": "audio/mpeg",
+        "date": "Tue, 06 May 2025 08:07:30 GMT",
+        "etag": "\"dfce250c2747d45684f0d8e360fd325a\"",
+        "last-modified": "Wed, 22 Jan 2025 15:25:31 GMT",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method",
+        "x-amz-request-id": "tx0000005e58296262ac90e-006819c342-2b886db3-nyc3d",
+        "x-rgw-object-type": "Normal"
+      },
+      "blob": {}
+    },
+    "errors": {
+      "cdn": null,
+      "fallback": null,
+      "blob": null
+    },
+    "durations": {
+      "cdn": 310,
+      "fallback": 640,
+      "blob": null
+    },
+    "environment": "development"
+  },
+  {
+    "slug": "the-odyssey",
+    "type": "chapter",
+    "chapter": "1",
+    "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/the-odyssey/audio/book-01.mp3",
+    "fallbackUrl": "https://brainrot-publishing.nyc3.digitaloceanspaces.com/the-odyssey/audio/book-01.mp3",
+    "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-odyssey/audio/book-01.mp3",
+    "exists": {
+      "cdn": true,
+      "fallback": true,
+      "blob": false
+    },
+    "statusCodes": {
+      "cdn": 200,
+      "fallback": 200,
+      "blob": null
+    },
+    "headers": {
+      "cdn": {
+        "accept-ranges": "bytes",
+        "cache-control": "max-age=3600",
+        "cf-cache-status": "REVALIDATED",
+        "cf-ray": "93b6fbf83b18d5c1-NRT",
+        "connection": "close",
+        "content-length": "7313815",
+        "content-type": "audio/mpeg",
+        "date": "Tue, 06 May 2025 08:07:29 GMT",
+        "etag": "\"9b8f0daac30b7b6a6c6ae06a8e83ab5c\"",
+        "last-modified": "Fri, 10 Jan 2025 20:43:21 GMT",
+        "server": "cloudflare",
+        "set-cookie": "__cf_bm=riB9zsHekto01YKXh_efvHPzNmsQisfPaRRIlZuhY.o-1746518849-1.0.1.1-5ThxNHGSIPwShs9e.oIJNd0IG4OKltWx23ysqDQLlmeAZN4spjM0EyUjOiYnlx22ohYuN8VmjPy.9jHCNPa2YCz7KW5CCw92P1oEXx2W_rc; path=/; expires=Tue, 06-May-25 08:37:29 GMT; domain=.digitaloceanspaces.com; HttpOnly; Secure; SameSite=None",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method, Accept-Encoding",
+        "x-amz-meta-s3cmd-attrs": "atime:1736360081/ctime:1736356508/gid:20/gname:staff/md5:9b8f0daac30b7b6a6c6ae06a8e83ab5c/mode:33188/mtime:1736356508/uid:501/uname:phaedrus",
+        "x-amz-request-id": "tx00000a70155aa753bbb47-00680df080-2b884c70-nyc3d",
+        "x-do-cdn-uuid": "37e922cc-f53c-4299-9abd-66ae0c8e10fd",
+        "x-rgw-object-type": "Normal"
+      },
+      "fallback": {
+        "accept-ranges": "bytes",
+        "connection": "close",
+        "content-length": "7313815",
+        "content-type": "audio/mpeg",
+        "date": "Tue, 06 May 2025 08:07:30 GMT",
+        "etag": "\"9b8f0daac30b7b6a6c6ae06a8e83ab5c\"",
+        "last-modified": "Fri, 10 Jan 2025 20:43:21 GMT",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method",
+        "x-amz-meta-s3cmd-attrs": "atime:1736360081/ctime:1736356508/gid:20/gname:staff/md5:9b8f0daac30b7b6a6c6ae06a8e83ab5c/mode:33188/mtime:1736356508/uid:501/uname:phaedrus",
+        "x-amz-request-id": "tx00000b6fb561e01bb078d-006819c342-2b678ebc-nyc3d",
+        "x-rgw-object-type": "Normal"
+      },
+      "blob": {}
+    },
+    "errors": {
+      "cdn": null,
+      "fallback": null,
+      "blob": null
+    },
+    "durations": {
+      "cdn": 479,
+      "fallback": 635,
+      "blob": null
+    },
+    "environment": "development"
+  },
+  {
+    "slug": "the-odyssey",
+    "type": "chapter",
+    "chapter": "2",
+    "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/the-odyssey/audio/book-02.mp3",
+    "fallbackUrl": "https://brainrot-publishing.nyc3.digitaloceanspaces.com/the-odyssey/audio/book-02.mp3",
+    "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-odyssey/audio/book-02.mp3",
+    "exists": {
+      "cdn": true,
+      "fallback": true,
+      "blob": false
+    },
+    "statusCodes": {
+      "cdn": 200,
+      "fallback": 200,
+      "blob": null
+    },
+    "headers": {
+      "cdn": {
+        "accept-ranges": "bytes",
+        "cache-control": "max-age=3600",
+        "cf-cache-status": "REVALIDATED",
+        "cf-ray": "93b6fbf83f01afc1-NRT",
+        "connection": "close",
+        "content-length": "7628416",
+        "content-type": "audio/mpeg",
+        "date": "Tue, 06 May 2025 08:07:29 GMT",
+        "etag": "\"51c634e42155d04d79ad832fe870fe86\"",
+        "last-modified": "Fri, 10 Jan 2025 20:43:21 GMT",
+        "server": "cloudflare",
+        "set-cookie": "__cf_bm=W9XzhgLdTCDzIsL7.ipszdTaieZGhQoRpnW4YSw46ao-1746518849-1.0.1.1-nXjztgZiHFNMCvYXLNutYaMSuhfyHN6v8m2gik7l7ysNKYQxJ29Bxvc6L8WgvrpQ4IM5IH7chqcqaAwCdmGhv9pGw8lUWz9LxWfnIh6cW7E; path=/; expires=Tue, 06-May-25 08:37:29 GMT; domain=.digitaloceanspaces.com; HttpOnly; Secure; SameSite=None",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method, Accept-Encoding",
+        "x-amz-meta-s3cmd-attrs": "atime:1736360081/ctime:1736356508/gid:20/gname:staff/md5:51c634e42155d04d79ad832fe870fe86/mode:33188/mtime:1736356508/uid:501/uname:phaedrus",
+        "x-amz-request-id": "tx000007af1110d656a9cc0-006817770a-2bc25b84-nyc3d",
+        "x-do-cdn-uuid": "37e922cc-f53c-4299-9abd-66ae0c8e10fd",
+        "x-rgw-object-type": "Normal"
+      },
+      "fallback": {
+        "accept-ranges": "bytes",
+        "connection": "close",
+        "content-length": "7628416",
+        "content-type": "audio/mpeg",
+        "date": "Tue, 06 May 2025 08:07:30 GMT",
+        "etag": "\"51c634e42155d04d79ad832fe870fe86\"",
+        "last-modified": "Fri, 10 Jan 2025 20:43:21 GMT",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method",
+        "x-amz-meta-s3cmd-attrs": "atime:1736360081/ctime:1736356508/gid:20/gname:staff/md5:51c634e42155d04d79ad832fe870fe86/mode:33188/mtime:1736356508/uid:501/uname:phaedrus",
+        "x-amz-request-id": "tx00000c75e298cd07e4519-006819c342-2bc25b6b-nyc3d",
+        "x-rgw-object-type": "Normal"
+      },
+      "blob": {}
+    },
+    "errors": {
+      "cdn": null,
+      "fallback": null,
+      "blob": null
+    },
+    "durations": {
+      "cdn": 307,
+      "fallback": 611,
+      "blob": null
+    },
+    "environment": "development"
+  },
+  {
+    "slug": "the-odyssey",
+    "type": "chapter",
+    "chapter": "3",
+    "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/the-odyssey/audio/book-03.mp3",
+    "fallbackUrl": "https://brainrot-publishing.nyc3.digitaloceanspaces.com/the-odyssey/audio/book-03.mp3",
+    "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-odyssey/audio/book-03.mp3",
+    "exists": {
+      "cdn": true,
+      "fallback": true,
+      "blob": false
+    },
+    "statusCodes": {
+      "cdn": 200,
+      "fallback": 200,
+      "blob": null
+    },
+    "headers": {
+      "cdn": {
+        "accept-ranges": "bytes",
+        "cache-control": "max-age=3600",
+        "cf-cache-status": "REVALIDATED",
+        "cf-ray": "93b6fc033b47688e-NRT",
+        "connection": "close",
+        "content-length": "8746744",
+        "content-type": "audio/mpeg",
+        "date": "Tue, 06 May 2025 08:07:31 GMT",
+        "etag": "\"00f2e1b47d6c1d78568171bb4143de53\"",
+        "last-modified": "Fri, 10 Jan 2025 20:43:21 GMT",
+        "server": "cloudflare",
+        "set-cookie": "__cf_bm=ERw6bGVNLSp0U3_p9ssrCBR7DyEtMaUtQVMhkiiyv8Q-1746518851-1.0.1.1-qJpOeeaMPQ66yCF7QLCB6n_3ZSQUWl1x3KQquufM_CAeBWQ1pjsu1gV.Bf8o06yzJ.SPJfjzHBLYcNjgqAIt1JS8hALS3D1mhLcijY_2RhA; path=/; expires=Tue, 06-May-25 08:37:31 GMT; domain=.digitaloceanspaces.com; HttpOnly; Secure; SameSite=None",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method, Accept-Encoding",
+        "x-amz-meta-s3cmd-attrs": "atime:1736360081/ctime:1736356508/gid:20/gname:staff/md5:00f2e1b47d6c1d78568171bb4143de53/mode:33188/mtime:1736356508/uid:501/uname:phaedrus",
+        "x-amz-request-id": "tx000004c74f10bf128267d-00680df097-2b6827e6-nyc3d",
+        "x-do-cdn-uuid": "37e922cc-f53c-4299-9abd-66ae0c8e10fd",
+        "x-rgw-object-type": "Normal"
+      },
+      "fallback": {
+        "accept-ranges": "bytes",
+        "connection": "close",
+        "content-length": "8746744",
+        "content-type": "audio/mpeg",
+        "date": "Tue, 06 May 2025 08:07:31 GMT",
+        "etag": "\"00f2e1b47d6c1d78568171bb4143de53\"",
+        "last-modified": "Fri, 10 Jan 2025 20:43:21 GMT",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method",
+        "x-amz-meta-s3cmd-attrs": "atime:1736360081/ctime:1736356508/gid:20/gname:staff/md5:00f2e1b47d6c1d78568171bb4143de53/mode:33188/mtime:1736356508/uid:501/uname:phaedrus",
+        "x-amz-request-id": "tx000004454087f40a4be64-006819c343-2b6827e6-nyc3d",
+        "x-rgw-object-type": "Normal"
+      },
+      "blob": {}
+    },
+    "errors": {
+      "cdn": null,
+      "fallback": null,
+      "blob": null
+    },
+    "durations": {
+      "cdn": 477,
+      "fallback": 621,
+      "blob": null
+    },
+    "environment": "development"
+  },
+  {
+    "slug": "the-odyssey",
+    "type": "chapter",
+    "chapter": "4",
+    "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/the-odyssey/audio/book-04.mp3",
+    "fallbackUrl": "https://brainrot-publishing.nyc3.digitaloceanspaces.com/the-odyssey/audio/book-04.mp3",
+    "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-odyssey/audio/book-04.mp3",
+    "exists": {
+      "cdn": true,
+      "fallback": true,
+      "blob": false
+    },
+    "statusCodes": {
+      "cdn": 200,
+      "fallback": 200,
+      "blob": null
+    },
+    "headers": {
+      "cdn": {
+        "accept-ranges": "bytes",
+        "cache-control": "max-age=3600",
+        "cf-cache-status": "REVALIDATED",
+        "cf-ray": "93b6fc033b11218e-NRT",
+        "connection": "close",
+        "content-length": "8482767",
+        "content-type": "audio/mpeg",
+        "date": "Tue, 06 May 2025 08:07:31 GMT",
+        "etag": "\"73b748a776e3dba31a5d4735aba3f12e\"",
+        "last-modified": "Fri, 10 Jan 2025 20:43:21 GMT",
+        "server": "cloudflare",
+        "set-cookie": "__cf_bm=Iza.mhne8ncw5oL08lVSgzGOPYT4sugwy0oi.kMornc-1746518851-1.0.1.1-BRVXmuZO2FjCuPpsxnPjgDjxWPOIxF5FF_JTnUXGEQeQo4izrNkQPaCKMGdIeC.5T7Ejq7dnffrOszpy_wu52zfmJwjHS36IzekxkBf1l6o; path=/; expires=Tue, 06-May-25 08:37:31 GMT; domain=.digitaloceanspaces.com; HttpOnly; Secure; SameSite=None",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method, Accept-Encoding",
+        "x-amz-meta-s3cmd-attrs": "atime:1736360082/ctime:1736356508/gid:20/gname:staff/md5:73b748a776e3dba31a5d4735aba3f12e/mode:33188/mtime:1736356508/uid:501/uname:phaedrus",
+        "x-amz-request-id": "tx0000064511c948113ef91-006817770b-2bc25b6b-nyc3d",
+        "x-do-cdn-uuid": "37e922cc-f53c-4299-9abd-66ae0c8e10fd",
+        "x-rgw-object-type": "Normal"
+      },
+      "fallback": {
+        "accept-ranges": "bytes",
+        "connection": "close",
+        "content-length": "8482767",
+        "content-type": "audio/mpeg",
+        "date": "Tue, 06 May 2025 08:07:32 GMT",
+        "etag": "\"73b748a776e3dba31a5d4735aba3f12e\"",
+        "last-modified": "Fri, 10 Jan 2025 20:43:21 GMT",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method",
+        "x-amz-meta-s3cmd-attrs": "atime:1736360082/ctime:1736356508/gid:20/gname:staff/md5:73b748a776e3dba31a5d4735aba3f12e/mode:33188/mtime:1736356508/uid:501/uname:phaedrus",
+        "x-amz-request-id": "tx00000019e3d00f0f526f3-006819c344-2b6234f6-nyc3d",
+        "x-rgw-object-type": "Normal"
+      },
+      "blob": {}
+    },
+    "errors": {
+      "cdn": null,
+      "fallback": null,
+      "blob": null
+    },
+    "durations": {
+      "cdn": 653,
+      "fallback": 616,
+      "blob": null
+    },
+    "environment": "development"
+  },
+  {
+    "slug": "the-odyssey",
+    "type": "chapter",
+    "chapter": "5",
+    "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/the-odyssey/audio/book-05.mp3",
+    "fallbackUrl": "https://brainrot-publishing.nyc3.digitaloceanspaces.com/the-odyssey/audio/book-05.mp3",
+    "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-odyssey/audio/book-05.mp3",
+    "exists": {
+      "cdn": true,
+      "fallback": true,
+      "blob": false
+    },
+    "statusCodes": {
+      "cdn": 200,
+      "fallback": 200,
+      "blob": null
+    },
+    "headers": {
+      "cdn": {
+        "accept-ranges": "bytes",
+        "cache-control": "max-age=3600",
+        "cf-cache-status": "REVALIDATED",
+        "cf-ray": "93b6fc033a5bdfe1-NRT",
+        "connection": "close",
+        "content-length": "3654295",
+        "content-type": "audio/mpeg",
+        "date": "Tue, 06 May 2025 08:07:31 GMT",
+        "etag": "\"0b3decb1e968c2ebba9e967f97b27e45\"",
+        "last-modified": "Fri, 10 Jan 2025 20:43:21 GMT",
+        "server": "cloudflare",
+        "set-cookie": "__cf_bm=F4hVVC5dOwxvia8I4cZZJMYyLyuMvItFp_LXYkJIAqo-1746518851-1.0.1.1-6xIhOsKACo3rc4pnL3L8nhTlDfz_RQepSedxOUPwno7y8Gs3ZetMJx3434tLhYjdM3wXMiP7Z3foVLsxpLbQ2hRmEDaOhbmwVCR.nTK6UAA; path=/; expires=Tue, 06-May-25 08:37:31 GMT; domain=.digitaloceanspaces.com; HttpOnly; Secure; SameSite=None",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method, Accept-Encoding",
+        "x-amz-meta-s3cmd-attrs": "atime:1736360082/ctime:1736356508/gid:20/gname:staff/md5:0b3decb1e968c2ebba9e967f97b27e45/mode:33188/mtime:1736356508/uid:501/uname:phaedrus",
+        "x-amz-request-id": "tx00000ed072aafaeedea7e-00680df0aa-2b884c70-nyc3d",
+        "x-do-cdn-uuid": "37e922cc-f53c-4299-9abd-66ae0c8e10fd",
+        "x-rgw-object-type": "Normal"
+      },
+      "fallback": {
+        "accept-ranges": "bytes",
+        "connection": "close",
+        "content-length": "3654295",
+        "content-type": "audio/mpeg",
+        "date": "Tue, 06 May 2025 08:07:31 GMT",
+        "etag": "\"0b3decb1e968c2ebba9e967f97b27e45\"",
+        "last-modified": "Fri, 10 Jan 2025 20:43:21 GMT",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method",
+        "x-amz-meta-s3cmd-attrs": "atime:1736360082/ctime:1736356508/gid:20/gname:staff/md5:0b3decb1e968c2ebba9e967f97b27e45/mode:33188/mtime:1736356508/uid:501/uname:phaedrus",
+        "x-amz-request-id": "tx00000c721fd74f4897f91-006819c343-2bc068d3-nyc3d",
+        "x-rgw-object-type": "Normal"
+      },
+      "blob": {}
+    },
+    "errors": {
+      "cdn": null,
+      "fallback": null,
+      "blob": null
+    },
+    "durations": {
+      "cdn": 495,
+      "fallback": 592,
+      "blob": null
+    },
+    "environment": "development"
+  },
+  {
+    "slug": "the-republic",
+    "type": "full",
+    "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/the-republic/audio/full-audiobook.mp3",
+    "fallbackUrl": "https://brainrot-publishing.nyc3.digitaloceanspaces.com/the-republic/audio/full-audiobook.mp3",
+    "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-republic/audio/full-audiobook.mp3",
+    "exists": {
+      "cdn": false,
+      "fallback": false,
+      "blob": false
+    },
+    "statusCodes": {
+      "cdn": 404,
+      "fallback": 404,
+      "blob": null
+    },
+    "headers": {
+      "cdn": {
+        "cache-control": "max-age=0",
+        "cf-cache-status": "MISS",
+        "cf-ray": "93b6fc034c03ca1f-NRT",
+        "connection": "close",
+        "content-encoding": "gzip",
+        "content-type": "application/xml",
+        "date": "Tue, 06 May 2025 08:07:31 GMT",
+        "server": "cloudflare",
+        "set-cookie": "__cf_bm=r3Rj9iB5pKjfAlQVfAFZx4p_TO3.FCsgjkjajSc4oVI-1746518851-1.0.1.1-_uatGthd6z.Ejfczpb064Y5_yrRIHr8iBlA9I5x_Hb6uPuW1jpIAkiYgJEaN8vwMyLSQr_XgozGcmatEAwF7H73u2hlaEs90hc2hQoY64eQ; path=/; expires=Tue, 06-May-25 08:37:31 GMT; domain=.digitaloceanspaces.com; HttpOnly; Secure; SameSite=None",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method, Accept-Encoding",
+        "x-amz-request-id": "tx00000a76665114953a2cf-006819c343-2b88a841-nyc3d",
+        "x-do-cdn-uuid": "37e922cc-f53c-4299-9abd-66ae0c8e10fd"
+      },
+      "fallback": {
+        "accept-ranges": "bytes",
+        "cache-control": "max-age=0",
+        "connection": "close",
+        "content-length": "251",
+        "content-type": "application/xml",
+        "date": "Tue, 06 May 2025 08:07:31 GMT",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method",
+        "x-amz-request-id": "tx0000083a95decba077e74-006819c343-2b884c70-nyc3d"
+      },
+      "blob": {}
+    },
+    "errors": {
+      "cdn": null,
+      "fallback": null,
+      "blob": null
+    },
+    "durations": {
+      "cdn": 303,
+      "fallback": 608,
+      "blob": null
+    },
+    "environment": "development"
+  },
+  {
+    "slug": "the-republic",
+    "type": "chapter",
+    "chapter": "1",
+    "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/the-republic/audio/book-01.mp3",
+    "fallbackUrl": "https://brainrot-publishing.nyc3.digitaloceanspaces.com/the-republic/audio/book-01.mp3",
+    "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-republic/audio/book-01.mp3",
+    "exists": {
+      "cdn": false,
+      "fallback": false,
+      "blob": false
+    },
+    "statusCodes": {
+      "cdn": 404,
+      "fallback": 404,
+      "blob": null
+    },
+    "headers": {
+      "cdn": {
+        "cache-control": "max-age=0",
+        "cf-cache-status": "MISS",
+        "cf-ray": "93b6fc0338ab2605-NRT",
+        "connection": "close",
+        "content-encoding": "gzip",
+        "content-type": "application/xml",
+        "date": "Tue, 06 May 2025 08:07:31 GMT",
+        "server": "cloudflare",
+        "set-cookie": "__cf_bm=ArXGTwEbw0_Zlq7Ig1FhknBNe3GFSgR4W5kgdhZI.kk-1746518851-1.0.1.1-HsSAD6tWFey27LVcOiPMUY0tQ9n4_qAgO5Q82OlwogVqjZQ4nimgXT_7TckrQJ_GPeN6sA4U28pvUuEZ90vbb2bWDCSNowO1DFj0H2UN.jM; path=/; expires=Tue, 06-May-25 08:37:31 GMT; domain=.digitaloceanspaces.com; HttpOnly; Secure; SameSite=None",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method, Accept-Encoding",
+        "x-amz-request-id": "tx0000079301faca820738f-006819c343-2bc25b84-nyc3d",
+        "x-do-cdn-uuid": "37e922cc-f53c-4299-9abd-66ae0c8e10fd"
+      },
+      "fallback": {
+        "accept-ranges": "bytes",
+        "cache-control": "max-age=0",
+        "connection": "close",
+        "content-length": "251",
+        "content-type": "application/xml",
+        "date": "Tue, 06 May 2025 08:07:31 GMT",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method",
+        "x-amz-request-id": "tx00000dee38197d917b30d-006819c343-2b92d82b-nyc3d"
+      },
+      "blob": {}
+    },
+    "errors": {
+      "cdn": null,
+      "fallback": null,
+      "blob": null
+    },
+    "durations": {
+      "cdn": 458,
+      "fallback": 629,
+      "blob": null
+    },
+    "environment": "development"
+  },
+  {
+    "slug": "the-republic",
+    "type": "chapter",
+    "chapter": "2",
+    "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/the-republic/audio/book-02.mp3",
+    "fallbackUrl": "https://brainrot-publishing.nyc3.digitaloceanspaces.com/the-republic/audio/book-02.mp3",
+    "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-republic/audio/book-02.mp3",
+    "exists": {
+      "cdn": false,
+      "fallback": false,
+      "blob": false
+    },
+    "statusCodes": {
+      "cdn": 404,
+      "fallback": 404,
+      "blob": null
+    },
+    "headers": {
+      "cdn": {
+        "cache-control": "max-age=0",
+        "cf-cache-status": "MISS",
+        "cf-ray": "93b6fc0f0d2e7966-NRT",
+        "connection": "close",
+        "content-encoding": "gzip",
+        "content-type": "application/xml",
+        "date": "Tue, 06 May 2025 08:07:33 GMT",
+        "server": "cloudflare",
+        "set-cookie": "__cf_bm=.FrwY1UQNma5eJv8NiVNvsSQlvoUcM8FFgHjE4RM.w8-1746518853-1.0.1.1-cXIMP9q4xQhddZlD3QsZOnShan5AKzbO0ctBGP5xUdkkE61rnDTQcjaYWdrUvjUpkfXwekGARD9lejyLXq5YC5bKjt.Q6ZBCbn.P.2hgJjM; path=/; expires=Tue, 06-May-25 08:37:33 GMT; domain=.digitaloceanspaces.com; HttpOnly; Secure; SameSite=None",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method, Accept-Encoding",
+        "x-amz-request-id": "tx00000f88a766e32a49884-006819c345-2bc25b7f-nyc3d",
+        "x-do-cdn-uuid": "37e922cc-f53c-4299-9abd-66ae0c8e10fd"
+      },
+      "fallback": {
+        "accept-ranges": "bytes",
+        "cache-control": "max-age=0",
+        "connection": "close",
+        "content-length": "251",
+        "content-type": "application/xml",
+        "date": "Tue, 06 May 2025 08:07:34 GMT",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method",
+        "x-amz-request-id": "tx000000a55873740ea8725-006819c346-2bc0f3b1-nyc3d"
+      },
+      "blob": {}
+    },
+    "errors": {
+      "cdn": null,
+      "fallback": null,
+      "blob": null
+    },
+    "durations": {
+      "cdn": 967,
+      "fallback": 602,
+      "blob": null
+    },
+    "environment": "development"
+  },
+  {
+    "slug": "the-republic",
+    "type": "chapter",
+    "chapter": "3",
+    "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/the-republic/audio/book-03.mp3",
+    "fallbackUrl": "https://brainrot-publishing.nyc3.digitaloceanspaces.com/the-republic/audio/book-03.mp3",
+    "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-republic/audio/book-03.mp3",
+    "exists": {
+      "cdn": false,
+      "fallback": false,
+      "blob": false
+    },
+    "statusCodes": {
+      "cdn": 404,
+      "fallback": 404,
+      "blob": null
+    },
+    "headers": {
+      "cdn": {
+        "cache-control": "max-age=0",
+        "cf-cache-status": "MISS",
+        "cf-ray": "93b6fc0ef9b180fb-NRT",
+        "connection": "close",
+        "content-encoding": "gzip",
+        "content-type": "application/xml",
+        "date": "Tue, 06 May 2025 08:07:33 GMT",
+        "server": "cloudflare",
+        "set-cookie": "__cf_bm=LmRWtTo5ngjMAuc1jQEorPBKJW8w.E7aLGGR4glXiT4-1746518853-1.0.1.1-stbj83J3J2wuV9TljeosIrXRGnKSWDi2kNKn69DSjCivlvx_BYd21vP1s6bkCqs8rG9U.VdEJHHta21XfBOcWqkFjwVMg2_N9b_nkpnx7IQ; path=/; expires=Tue, 06-May-25 08:37:33 GMT; domain=.digitaloceanspaces.com; HttpOnly; Secure; SameSite=None",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method, Accept-Encoding",
+        "x-amz-request-id": "tx00000316861c4b2348646-006819c345-2b678ebc-nyc3d",
+        "x-do-cdn-uuid": "37e922cc-f53c-4299-9abd-66ae0c8e10fd"
+      },
+      "fallback": {
+        "accept-ranges": "bytes",
+        "cache-control": "max-age=0",
+        "connection": "close",
+        "content-length": "251",
+        "content-type": "application/xml",
+        "date": "Tue, 06 May 2025 08:07:33 GMT",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method",
+        "x-amz-request-id": "tx0000042a31a8939bb118c-006819c345-2bc25b6b-nyc3d"
+      },
+      "blob": {}
+    },
+    "errors": {
+      "cdn": null,
+      "fallback": null,
+      "blob": null
+    },
+    "durations": {
+      "cdn": 289,
+      "fallback": 614,
+      "blob": null
+    },
+    "environment": "development"
+  },
+  {
+    "slug": "the-republic",
+    "type": "chapter",
+    "chapter": "4",
+    "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/the-republic/audio/book-04.mp3",
+    "fallbackUrl": "https://brainrot-publishing.nyc3.digitaloceanspaces.com/the-republic/audio/book-04.mp3",
+    "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-republic/audio/book-04.mp3",
+    "exists": {
+      "cdn": false,
+      "fallback": false,
+      "blob": false
+    },
+    "statusCodes": {
+      "cdn": 404,
+      "fallback": 404,
+      "blob": null
+    },
+    "headers": {
+      "cdn": {
+        "cache-control": "max-age=0",
+        "cf-cache-status": "MISS",
+        "cf-ray": "93b6fc0f0913d530-NRT",
+        "connection": "close",
+        "content-encoding": "gzip",
+        "content-type": "application/xml",
+        "date": "Tue, 06 May 2025 08:07:33 GMT",
+        "server": "cloudflare",
+        "set-cookie": "__cf_bm=yyO2VZlgNrbgqCW8Nw29ePomCjLxcDHEKu9gJUGSnxk-1746518853-1.0.1.1-d6N6r80cXNGfqZ5YXVV29Tv22hy_yaQNXygvbhqsMTMfZg0gVYCv5GGvLd3Rl03hKWDKCYMIytOUGyMTeEugl8hOmPtzy_pPe0eagwVzIQ0; path=/; expires=Tue, 06-May-25 08:37:33 GMT; domain=.digitaloceanspaces.com; HttpOnly; Secure; SameSite=None",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method, Accept-Encoding",
+        "x-amz-request-id": "tx000008bb6a473d8f54062-006819c345-2bc25b7f-nyc3d",
+        "x-do-cdn-uuid": "37e922cc-f53c-4299-9abd-66ae0c8e10fd"
+      },
+      "fallback": {
+        "accept-ranges": "bytes",
+        "cache-control": "max-age=0",
+        "connection": "close",
+        "content-length": "251",
+        "content-type": "application/xml",
+        "date": "Tue, 06 May 2025 08:07:33 GMT",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method",
+        "x-amz-request-id": "tx00000c9ebf5b09cf1b620-006819c345-2bc25b84-nyc3d"
+      },
+      "blob": {}
+    },
+    "errors": {
+      "cdn": null,
+      "fallback": null,
+      "blob": null
+    },
+    "durations": {
+      "cdn": 301,
+      "fallback": 602,
+      "blob": null
+    },
+    "environment": "development"
+  },
+  {
+    "slug": "the-republic",
+    "type": "chapter",
+    "chapter": "5",
+    "cdnUrl": "https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com/the-republic/audio/book-05.mp3",
+    "fallbackUrl": "https://brainrot-publishing.nyc3.digitaloceanspaces.com/the-republic/audio/book-05.mp3",
+    "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/books/the-republic/audio/book-05.mp3",
+    "exists": {
+      "cdn": false,
+      "fallback": false,
+      "blob": false
+    },
+    "statusCodes": {
+      "cdn": 404,
+      "fallback": 404,
+      "blob": null
+    },
+    "headers": {
+      "cdn": {
+        "cache-control": "max-age=0",
+        "cf-cache-status": "MISS",
+        "cf-ray": "93b6fc0eff73d759-NRT",
+        "connection": "close",
+        "content-encoding": "gzip",
+        "content-type": "application/xml",
+        "date": "Tue, 06 May 2025 08:07:33 GMT",
+        "server": "cloudflare",
+        "set-cookie": "__cf_bm=2qa43vGtcLo7U3M0ByVZEX2L5V7oCvPKoED3D.8Es_M-1746518853-1.0.1.1-ny2qA2oo3OU0K9jzl2bR2qQlj9o_S8mkLcIod2H7Z_XCwaNu8He1pJ3ueIETt0_5SHu8EnIMXMUodf6ZBbDxn9khR2xV_CTSfIwEYX83wPc; path=/; expires=Tue, 06-May-25 08:37:33 GMT; domain=.digitaloceanspaces.com; HttpOnly; Secure; SameSite=None",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method, Accept-Encoding",
+        "x-amz-request-id": "tx0000016edfc79e8fdc26f-006819c345-2b885477-nyc3d",
+        "x-do-cdn-uuid": "37e922cc-f53c-4299-9abd-66ae0c8e10fd"
+      },
+      "fallback": {
+        "accept-ranges": "bytes",
+        "cache-control": "max-age=0",
+        "connection": "close",
+        "content-length": "251",
+        "content-type": "application/xml",
+        "date": "Tue, 06 May 2025 08:07:33 GMT",
+        "strict-transport-security": "max-age=15552000; includeSubDomains; preload",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method",
+        "x-amz-request-id": "tx000009f0ce22d11791857-006819c345-2b884919-nyc3d"
+      },
+      "blob": {}
+    },
+    "errors": {
+      "cdn": null,
+      "fallback": null,
+      "blob": null
+    },
+    "durations": {
+      "cdn": 434,
+      "fallback": 592,
+      "blob": null
+    },
+    "environment": "development"
+  }
+]
