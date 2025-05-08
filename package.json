@@ -62,6 +62,8 @@
     "plan:reorganization:verbose": "tsx scripts/generateReorganizationPlan.ts --verbose",
     "test:e2e:downloads": "tsx scripts/verify-end-to-end-downloads.ts",
     "test:e2e:downloads:production": "tsx scripts/verify-end-to-end-downloads.ts --env=production",
+    "benchmark:downloads": "tsx scripts/benchmark-downloads.ts",
+    "benchmark:downloads:production": "tsx scripts/benchmark-downloads.ts --env=production",
     "prepare": "husky"
   },
   "dependencies": {
