@@ -66,6 +66,8 @@ export class VercelBlobAssetService implements AssetService {
     const operation = 'getAssetUrl';
     const path = this.pathService.getAssetPath(assetType, bookSlug, assetName);
     const cacheBusting = options?.cacheBusting ?? this.config.defaultCacheBusting;
+    const startTime = performance.now();
+    const requestId = crypto.randomUUID();
 
     this.logger.info({
       message: `Generating URL for asset`,
@@ -75,19 +77,34 @@ export class VercelBlobAssetService implements AssetService {
       assetName,
       path,
       cacheBusting,
+      requestId,
+      context: 'asset_monitoring',
+      action: 'url_generation_start',
+      timestamp: new Date().toISOString(),
     });
 
     try {
       // Verify the asset exists, but don't fail if it doesn't
       // Just log a warning
+      let assetExists = false;
+      let assetSize = 0;
+      let assetContentType = '';
+
       try {
-        await head(this.getFullPath(path));
+        const headResult = await head(this.getFullPath(path));
+        assetExists = true;
+        assetSize = headResult.contentLength;
+        assetContentType = headResult.contentType;
       } catch (error) {
         this.logger.warn({
           message: `Asset existence check failed, still returning URL`,
           operation,
           path,
           error: this.formatError(error),
+          requestId,
+          context: 'asset_monitoring',
+          action: 'asset_existence_check_failed',
+          timestamp: new Date().toISOString(),
         });
       }
 
@@ -104,16 +121,32 @@ export class VercelBlobAssetService implements AssetService {
         url = url.includes('?') ? `${url}&${cacheBuster}` : `${url}?${cacheBuster}`;
       }
 
+      const endTime = performance.now();
+      const duration = endTime - startTime;
+
       this.logger.info({
         message: `Asset URL generated successfully`,
         operation,
         url,
         path,
+        requestId,
+        context: 'asset_monitoring',
+        action: 'url_generation_complete',
+        timestamp: new Date().toISOString(),
+        metrics: {
+          duration_ms: duration,
+          asset_exists: assetExists,
+          asset_size_bytes: assetSize,
+          content_type: assetContentType,
+        },
       });
 
       return url;
     } catch (error) {
       // Log and rethrow as AssetError
+      const endTime = performance.now();
+      const duration = endTime - startTime;
+
       this.logger.error({
         message: `Failed to generate asset URL`,
         operation,
@@ -121,6 +154,14 @@ export class VercelBlobAssetService implements AssetService {
         bookSlug,
         assetName,
         error: this.formatError(error),
+        requestId,
+        context: 'asset_monitoring',
+        action: 'url_generation_error',
+        timestamp: new Date().toISOString(),
+        metrics: {
+          duration_ms: duration,
+          error_type: error instanceof Error ? error.name : 'Unknown',
+        },
       });
 
       throw this.createAssetError(
@@ -191,6 +232,9 @@ export class VercelBlobAssetService implements AssetService {
   ): Promise<ArrayBuffer> {
     const operation = 'fetchAsset';
     const path = this.pathService.getAssetPath(assetType, bookSlug, assetName);
+    const startTime = performance.now();
+    const requestId = crypto.randomUUID();
+    const userAgent = typeof navigator !== 'undefined' ? navigator.userAgent : 'server';
 
     this.logger.info({
       message: `Fetching asset content`,
@@ -199,6 +243,14 @@ export class VercelBlobAssetService implements AssetService {
       bookSlug,
       assetName,
       path,
+      requestId,
+      context: 'asset_monitoring',
+      action: 'asset_fetch_start',
+      timestamp: new Date().toISOString(),
+      client_info: {
+        user_agent: userAgent,
+        timestamp: new Date().toISOString(),
+      },
     });
 
     try {
@@ -207,28 +259,70 @@ export class VercelBlobAssetService implements AssetService {
       // Use fetch with retries
       let attempts = 0;
       const maxAttempts = DEFAULT_RETRY_ATTEMPTS;
+      const attemptTimings: number[] = [];
 
       while (attempts < maxAttempts) {
+        const attemptStartTime = performance.now();
         try {
           attempts++;
           const response = await fetch(url);
 
+          // Capture response timing
+          const responseTime = performance.now() - attemptStartTime;
+          attemptTimings.push(responseTime);
+
           if (!response.ok) {
+            const errorType = this.mapHttpStatusToErrorType(response.status);
+
+            this.logger.warn({
+              message: `Fetch attempt ${attempts} failed with HTTP ${response.status}`,
+              operation,
+              path,
+              requestId,
+              context: 'asset_monitoring',
+              action: 'asset_fetch_http_error',
+              timestamp: new Date().toISOString(),
+              metrics: {
+                attempt: attempts,
+                max_attempts: maxAttempts,
+                response_time_ms: responseTime,
+                http_status: response.status,
+                error_type: errorType,
+              },
+            });
+
             throw this.createAssetError(
               `Failed to fetch asset: HTTP ${response.status} ${response.statusText}`,
-              this.mapHttpStatusToErrorType(response.status),
+              errorType,
               operation,
               { statusCode: response.status, assetPath: path }
             );
           }
 
           const content = await response.arrayBuffer();
+          const endTime = performance.now();
+          const totalDuration = endTime - startTime;
 
           this.logger.info({
             message: `Successfully fetched asset content`,
             operation,
             path,
             contentLength: content.byteLength,
+            requestId,
+            context: 'asset_monitoring',
+            action: 'asset_fetch_success',
+            timestamp: new Date().toISOString(),
+            metrics: {
+              total_duration_ms: totalDuration,
+              content_size_bytes: content.byteLength,
+              attempts: attempts,
+              content_type: response.headers.get('content-type'),
+              attempt_timings_ms: attemptTimings,
+              caching: {
+                cache_hit: response.headers.get('x-vercel-cache') === 'HIT',
+                cache_control: response.headers.get('cache-control'),
+              },
+            },
           });
 
           return content;
@@ -239,17 +333,31 @@ export class VercelBlobAssetService implements AssetService {
           }
 
           // Otherwise log and retry
+          const attemptDuration = performance.now() - attemptStartTime;
+          attemptTimings.push(attemptDuration);
+
+          const backoffDelay = BASE_RETRY_DELAY * Math.pow(2, attempts - 1);
+
           this.logger.warn({
             message: `Fetch attempt ${attempts} failed, retrying...`,
             operation,
             path,
             error: this.formatError(error),
+            requestId,
+            context: 'asset_monitoring',
+            action: 'asset_fetch_retry',
+            timestamp: new Date().toISOString(),
+            metrics: {
+              attempt: attempts,
+              max_attempts: maxAttempts,
+              attempt_duration_ms: attemptDuration,
+              backoff_delay_ms: backoffDelay,
+              error_type: error instanceof Error ? error.name : 'Unknown',
+            },
           });
 
           // Exponential backoff
-          await new Promise((resolve) =>
-            setTimeout(resolve, BASE_RETRY_DELAY * Math.pow(2, attempts - 1))
-          );
+          await new Promise((resolve) => setTimeout(resolve, backoffDelay));
         }
       }
 
@@ -257,11 +365,28 @@ export class VercelBlobAssetService implements AssetService {
       throw new Error('Failed to fetch asset after all retry attempts');
     } catch (error) {
       // Log and rethrow as AssetError if it's not already
+      const endTime = performance.now();
+      const totalDuration = endTime - startTime;
+
       this.logger.error({
         message: `Failed to fetch asset content`,
         operation,
         path,
         error: this.formatError(error),
+        requestId,
+        context: 'asset_monitoring',
+        action: 'asset_fetch_failure',
+        timestamp: new Date().toISOString(),
+        metrics: {
+          total_duration_ms: totalDuration,
+          error_type:
+            error instanceof AssetError
+              ? error.type
+              : error instanceof Error
+                ? error.name
+                : 'Unknown',
+          error_message: error instanceof Error ? error.message : String(error),
+        },
       });
 
       if (error instanceof AssetError) {
