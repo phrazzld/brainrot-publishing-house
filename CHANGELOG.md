@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Asset Management Guide** - Created comprehensive documentation for:
+
+  - Path structure and naming conventions for all asset types
+  - Instructions for adding new assets to the system
+  - Complete Asset Service API reference with examples
+  - Common asset operations with code samples
+  - Error handling guidelines and best practices
+
 - **Comprehensive Configuration Documentation** - Created detailed documentation for:
 
   - Vercel Blob setup and configuration
