@@ -1,4 +1,5 @@
-import { AssetNotFoundError, AssetUrlResolver } from '../types/dependencies';
+import { AssetService, AssetType } from '../types/assets';
+import { AssetNotFoundError } from '../types/dependencies';
 import { createRequestLogger } from '../utils/logger';
 
 /**
@@ -54,31 +55,24 @@ export interface DownloadRequestParams {
 
 /**
  * Service responsible for generating download URLs for audio files.
- * Uses direct CDN URLs by default with fallback to Vercel Blob if available.
+ * Uses the unified AssetService for consistent asset handling.
  *
  * URL Generation Approach:
  * -----------------------
- * 1. For audio files, we use Digital Ocean CDN URLs as the primary source
- *    Format: https://{bucket}.{region}.cdn.digitaloceanspaces.com/{slug}/audio/...
- *
- * 2. As a fallback, we try to resolve URLs through the AssetUrlResolver which
- *    may attempt to find the asset in Vercel Blob storage
- *
- * 3. The system never uses S3 signed URLs - all assets are accessed via public
- *    direct URLs, either from Digital Ocean CDN or Vercel Blob
- *
- * The service follows these steps:
- * 1. Generates appropriate CDN and legacy paths based on book slug, type, and chapter
- * 2. Attempts to resolve the asset URL via AssetUrlResolver as fallback
- * 3. Returns either the Blob URL if found, or defaults to the CDN URL
+ * The service uses the unified AssetService to generate URLs for audio assets.
+ * This provides a consistent interface for all asset operations and handles
+ * retry logic, error handling, and logging internally.
  *
  * This approach ensures:
- * - No S3 credentials are required
- * - URLs work consistently across environments
- * - Fallback mechanisms increase resilience
- * - Path generation is consistent for all audio file types
+ * - Consistent URL generation across all asset types
+ * - Robust error handling with retry logic
+ * - Detailed structured logging
+ * - No dependence on specific storage backends (like Digital Ocean)
  *
- * The service provides structured logging for all key operations to aid in debugging.
+ * The service follows these steps:
+ * 1. Determines the appropriate asset name based on download type and chapter
+ * 2. Uses the AssetService to generate a URL for the asset
+ * 3. Returns the URL directly to the caller
  */
 export class DownloadService {
   /**
@@ -87,28 +81,30 @@ export class DownloadService {
    * This constructor follows the Dependency Inversion Principle by accepting interfaces
    * rather than concrete implementations, which improves testability and flexibility.
    *
-   * @param assetUrlResolver - Service that resolves asset URLs with fallback logic
-   * @param s3SignedUrlGenerator - Service that generates signed URLs for S3 objects
-   * @param s3Endpoint - The S3 endpoint URL used to determine if URL signing is needed
+   * @param assetService - Unified service for asset operations
    * @example
    * const downloadService = new DownloadService(
-   *   assetUrlResolver,
-   *   createS3SignedUrlGenerator(),
-   *   process.env.SPACES_ENDPOINT
+   *   createAssetService({ correlationId: 'abcd-1234' })
    * );
    */
-  constructor(private readonly assetUrlResolver: AssetUrlResolver) {}
+  constructor(private readonly assetService: AssetService) {}
 
   /**
-   * Gets a download URL for the requested asset with fallback mechanisms.
+   * Returns the asset service instance used by this download service
+   * This is used by the proxy handler for direct asset access
    *
-   * This method tries the following sources in order:
-   * 1. Direct CDN URL (Digital Ocean CDN)
-   * 2. Vercel Blob URL (via assetUrlResolver)
+   * @returns The AssetService instance
+   */
+  getAssetService(): AssetService {
+    return this.assetService;
+  }
+
+  /**
+   * Gets a download URL for the requested asset
    *
    * @param params - The download request parameters
-   * @returns A Promise that resolves to the final download URL
-   * @throws {AssetNotFoundError} When the requested asset cannot be found in any location
+   * @returns A Promise that resolves to the asset URL
+   * @throws {AssetNotFoundError} When the requested asset cannot be found
    */
   async getDownloadUrl(params: DownloadRequestParams): Promise<string> {
     const { slug, type, chapter, correlationId } = params;
@@ -125,198 +121,55 @@ export class DownloadService {
       action: 'downloadService.getDownloadUrl.entry',
     });
 
-    // Generate paths for different storage locations
-    const { cdnUrl, legacyPath } = this.generatePaths(slug, type, chapter, log);
-
-    // First try the direct CDN URL (most reliable source)
-    log?.debug({
-      msg: 'Using direct CDN URL first',
-      cdnUrl,
-      action: 'downloadService.getDownloadUrl.tryCdnUrl',
-    });
-
-    // The CDN URL is our primary source and should always work
-    // But we'll implement fallback logic for robustness
-    try {
-      // Try to resolve with fallback mechanism in case CDN is unavailable
-      const resolvedUrl = await this.resolveAssetUrl(legacyPath, log);
-      if (resolvedUrl) {
-        log?.debug({
-          msg: 'Blob URL found as fallback',
-          blobUrl: resolvedUrl,
-          action: 'downloadService.getDownloadUrl.blobUrlFound',
-        });
-        return resolvedUrl;
-      }
-    } catch (error) {
-      // If asset resolver fails, continue with CDN URL
-      log?.debug({
-        msg: 'Blob fallback failed, using CDN URL',
-        error: error instanceof Error ? error.message : String(error),
-        action: 'downloadService.getDownloadUrl.fallbackFailed',
-      });
-    }
-
-    // Return the CDN URL as our final result
-    return cdnUrl;
-  }
-
-  /**
-   * Resolves an asset URL using the asset resolver service.
-   *
-   * @param legacyPath - The legacy path to resolve
-   * @param log - Optional logger instance
-   * @returns The resolved URL
-   * @throws {AssetNotFoundError} When the asset cannot be found
-   * @private
-   */
-  private async resolveAssetUrl(
-    legacyPath: string,
-    log?: ReturnType<typeof createRequestLogger>
-  ): Promise<string> {
-    // Attempt to get the asset URL with fallback mechanism
-    const resolvedUrl = await this.assetUrlResolver.getAssetUrlWithFallback(legacyPath);
-
-    // If no URL was resolved, throw an AssetNotFoundError
-    if (!resolvedUrl) {
-      log?.warn({
-        msg: 'Asset not found',
-        legacyPath,
-        action: 'downloadService.assetNotFound',
-      });
-      throw new AssetNotFoundError(`Asset not found: ${legacyPath}`);
-    }
-
-    return resolvedUrl;
-  }
-
-  /**
-   * Processes a resolved URL.
-   * Since we're using public URLs, this simply returns the URL directly.
-   *
-   * @param resolvedUrl - The URL to process
-   * @param log - Optional logger instance
-   * @returns The final URL
-   * @private
-   */
-  private async processResolvedUrl(
-    resolvedUrl: string,
-    log?: ReturnType<typeof createRequestLogger>
-  ): Promise<string> {
-    // Simply return the resolved URL directly - no signing needed
-    log?.debug({
-      msg: 'Returning direct URL',
-      url: resolvedUrl,
-      action: 'downloadService.urlFound',
-    });
-
-    return resolvedUrl;
-  }
-
-  /**
-   * Handles errors that occur during URL resolution.
-   *
-   * @param error - The error that occurred
-   * @param legacyPath - The legacy path being processed
-   * @param log - Optional logger instance
-   * @returns Never returns as it always throws an error
-   * @throws {AssetNotFoundError|SigningError} The appropriate error type
-   * @private
-   */
-  private handleUrlResolutionError(
-    error: unknown,
-    legacyPath: string,
-    log?: ReturnType<typeof createRequestLogger>
-  ): never {
-    // If the resolver already threw an AssetNotFoundError, propagate it
-    if (error instanceof AssetNotFoundError) {
-      throw error;
-    }
-
-    // Log unexpected errors with structured data
-    log?.error({
-      msg: 'Unexpected error resolving URL',
-      legacyPath,
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-      action: 'downloadService.unexpectedError',
-    });
-
-    // Otherwise, wrap in a new AssetNotFoundError
-    throw new AssetNotFoundError(
-      `Failed to resolve URL for ${legacyPath}: ${error instanceof Error ? error.message : String(error)}`
-    );
-  }
-
-  /**
-   * Generates the file paths for various storage locations based on request parameters.
-   * Supports both Digital Ocean CDN and Vercel Blob paths for fallback mechanisms.
-   *
-   * @param slug - The book slug
-   * @param type - The download type (full or chapter)
-   * @param chapter - Optional chapter number (required when type is 'chapter')
-   * @param log - Optional logger instance for structured logging
-   * @returns An object containing paths for different storage locations
-   * @private
-   * @throws {Error} When type is 'chapter' but no chapter parameter is provided
-   */
-  private generatePaths(
-    slug: string,
-    type: 'full' | 'chapter',
-    chapter?: string,
-    log?: ReturnType<typeof createRequestLogger>
-  ): { cdnUrl: string; legacyPath: string } {
-    // Get bucket and region from environment variables with defaults
-    const bucket =
-      process.env.DO_SPACES_BUCKET || process.env.SPACES_BUCKET_NAME || 'brainrot-publishing';
-    const region = 'nyc3'; // This is hardcoded as it's consistent
-
-    // Generate both CDN URL and legacy path for fallback
+    // Generate the appropriate asset name based on type and chapter
+    let assetName: string;
     if (type === 'full') {
-      // Generate the appropriate paths for full audiobook
-      const cdnUrl = `https://${bucket}.${region}.cdn.digitaloceanspaces.com/${slug}/audio/full-audiobook.mp3`;
-      const legacyPath = `/${slug}/audio/full-audiobook.mp3`;
-
-      log?.debug({
-        msg: 'Generated full audiobook paths',
-        slug,
-        cdnUrl,
-        legacyPath,
-        bucket,
-        region,
-        action: 'downloadService.generatePaths.full',
-      });
-
-      return { cdnUrl, legacyPath };
+      assetName = 'full-audiobook.mp3';
     } else {
       if (!chapter) {
         log?.error({
           msg: 'Missing chapter parameter for chapter download',
           slug,
           type,
-          action: 'downloadService.generatePaths.error',
+          action: 'downloadService.getDownloadUrl.error',
         });
         throw new Error('Chapter parameter is required when type is "chapter"');
       }
 
+      // Format chapter number with leading zeros
       const paddedChapter = this.zeroPad(parseInt(chapter, 10), 2);
+      assetName = `chapter-${paddedChapter}.mp3`;
+    }
 
-      // Generate the paths for chapter audiobook
-      const cdnUrl = `https://${bucket}.${region}.cdn.digitaloceanspaces.com/${slug}/audio/book-${paddedChapter}.mp3`;
-      const legacyPath = `/${slug}/audio/book-${paddedChapter}.mp3`;
+    try {
+      // Get URL from the AssetService
+      const url = await this.assetService.getAssetUrl(AssetType.AUDIO, slug, assetName);
 
-      log?.debug({
-        msg: 'Generated chapter audiobook paths',
+      log?.info({
+        msg: 'Successfully generated download URL',
         slug,
-        chapter: paddedChapter,
-        cdnUrl,
-        legacyPath,
-        bucket,
-        region,
-        action: 'downloadService.generatePaths.chapter',
+        type,
+        chapter,
+        assetName,
+        action: 'downloadService.getDownloadUrl.success',
       });
 
-      return { cdnUrl, legacyPath };
+      return url;
+    } catch (error) {
+      // Log error and rethrow as AssetNotFoundError
+      log?.error({
+        msg: 'Failed to get asset URL',
+        slug,
+        type,
+        chapter,
+        assetName,
+        error: error instanceof Error ? error.message : String(error),
+        action: 'downloadService.getDownloadUrl.error',
+      });
+
+      throw new AssetNotFoundError(
+        `Failed to get URL for ${slug}/${type}/${chapter || ''}: ${error instanceof Error ? error.message : String(error)}`
+      );
     }
   }
 

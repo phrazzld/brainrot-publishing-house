@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 
+import { AssetError, AssetErrorType, AssetType } from '@/types/assets';
+import { AssetService } from '@/types/assets';
 import { Logger } from '@/utils/logger';
 
 import { safeLog } from './errorHandlers';
@@ -64,7 +66,7 @@ function sanitizeUrlForLogging(url: string): string {
     }
 
     return safeUrl;
-  } catch (error) {
+  } catch {
     // If URL parsing fails, redact the whole thing to be safe
     return '[unparseable-url]';
   }
@@ -119,663 +121,6 @@ async function fetchWithTimeout(
     }
     throw error;
   }
-}
-
-/**
- * Creates a fallback URL from a CDN URL
- * @param cdnUrl Original CDN URL
- * @returns Fallback non-CDN URL
- */
-function createFallbackUrl(cdnUrl: string): string {
-  return cdnUrl.replace('.cdn.digitaloceanspaces.com', '.digitaloceanspaces.com');
-}
-
-/**
- * Checks if a URL is a CDN URL that should have a fallback
- * @param url URL to check
- * @returns True if URL is a CDN URL that should have a fallback
- */
-function isCdnUrlWithFallback(url: string): boolean {
-  return url.includes('.cdn.digitaloceanspaces.com');
-}
-
-/**
- * Creates an error response for timeout errors
- * @param error Timeout error
- * @returns Response with appropriate error details
- */
-function createTimeoutErrorResponse(error: TimeoutError): Response {
-  return new Response(
-    JSON.stringify({
-      error: 'Request timeout',
-      message: error.message,
-    }),
-    {
-      status: 504, // Gateway Timeout
-      headers: { 'Content-Type': 'application/json' },
-    }
-  );
-}
-
-/**
- * Creates an error response for network errors
- * @param error Network error
- * @returns Response with appropriate error details
- */
-function createNetworkErrorResponse(error: Error | unknown): Response {
-  return new Response(
-    JSON.stringify({
-      error: 'Failed to fetch resource',
-      message: error instanceof Error ? error.message : 'Network error',
-    }),
-    {
-      status: 502,
-      headers: { 'Content-Type': 'application/json' },
-    }
-  );
-}
-
-/**
- * Handle a fetch error from the primary URL
- * Enhanced with detailed error categorization and operation ID for log correlation
- *
- * @param primaryUrl The original URL that failed
- * @param primaryError The error that occurred
- * @param log Logger instance
- * @param opId Optional operation ID for log correlation
- * @returns Response from fallback or error response
- */
-async function handlePrimaryFetchError(
-  primaryUrl: string,
-  primaryError: unknown,
-  log: Logger,
-  opId?: string
-): Promise<Response> {
-  const safeUrl = sanitizeUrlForLogging(primaryUrl);
-  const isCdn = isCdnUrlWithFallback(primaryUrl);
-  const errorTime = Date.now();
-
-  // Specific handling for timeout errors
-  if (primaryError instanceof TimeoutError) {
-    safeLog(log, 'error', {
-      msg: 'Timeout fetching from primary URL',
-      opId,
-      url: safeUrl,
-      timeoutMs: FETCH_TIMEOUT_MS,
-      error: primaryError.message,
-      errorType: 'TimeoutError',
-      serverType: isCdn ? 'CDN' : 'Standard',
-      errorCategory: 'Timeout',
-      errorTime: new Date(errorTime).toISOString(),
-      environment: process.env.NODE_ENV || 'development',
-      timestamp: new Date().toISOString(),
-    });
-
-    // For CDN URLs that time out, try fallback URL
-    if (isCdn) {
-      const fallbackUrl = createFallbackUrl(primaryUrl);
-      const safeFallbackUrl = sanitizeUrlForLogging(fallbackUrl);
-
-      safeLog(log, 'info', {
-        msg: 'Primary URL fetch timed out, trying fallback URL',
-        opId,
-        primaryUrl: safeUrl,
-        fallbackUrl: safeFallbackUrl,
-        timeoutMs: FETCH_TIMEOUT_MS,
-        isCdnUrl: true,
-        timeoutError: primaryError.message,
-        fallbackStrategy: 'non-CDN direct URL',
-        recoveryAttempt: true,
-        timestamp: new Date().toISOString(),
-      });
-
-      return tryFallbackFetch(fallbackUrl, log, opId);
-    }
-
-    // Return enhanced timeout error response with operation ID
-    return createProxyErrorResponse(
-      504, // Gateway Timeout
-      `Request timed out after ${FETCH_TIMEOUT_MS}ms`,
-      JSON.stringify({
-        error: primaryError.message,
-        url: safeUrl,
-        timeoutMs: FETCH_TIMEOUT_MS,
-        opId,
-      }),
-      opId
-    );
-  }
-
-  // Enhanced error categorization and logging for non-timeout errors
-  const errorType =
-    primaryError instanceof Error ? primaryError.constructor.name : typeof primaryError;
-  const errorMessage = primaryError instanceof Error ? primaryError.message : String(primaryError);
-  const errorStack = primaryError instanceof Error ? primaryError.stack : undefined;
-
-  // Categorize error for better debugging and analysis
-  const isNetworkError =
-    errorMessage.includes('network') ||
-    errorMessage.includes('ENOTFOUND') ||
-    errorMessage.includes('ECONNREFUSED');
-  const isDnsError = errorMessage.includes('ENOTFOUND');
-  const isConnectionError =
-    errorMessage.includes('ECONNREFUSED') || errorMessage.includes('ETIMEDOUT');
-  const isTlsError =
-    errorMessage.includes('SSL') ||
-    errorMessage.includes('TLS') ||
-    errorMessage.includes('certificate');
-  const isAbortError = errorType === 'AbortError' || errorMessage.includes('abort');
-
-  // Determine error category for analytics
-  let errorCategory = 'Unknown';
-  if (isNetworkError) errorCategory = 'Network';
-  if (isDnsError) errorCategory = 'DNS';
-  if (isConnectionError) errorCategory = 'Connection';
-  if (isTlsError) errorCategory = 'TLS/SSL';
-  if (isAbortError) errorCategory = 'Abort';
-
-  safeLog(log, 'error', {
-    msg: 'Error fetching from primary URL',
-    opId,
-    url: safeUrl,
-    error: errorMessage,
-    errorType,
-    stack: errorStack,
-    isCdnUrl: isCdn,
-    serverType: isCdn ? 'CDN' : 'Standard',
-    errorCategory,
-    errorClassification: {
-      isNetworkError,
-      isDnsError,
-      isConnectionError,
-      isTlsError,
-      isAbortError,
-    },
-    environment: process.env.NODE_ENV || 'development',
-    errorTime: new Date(errorTime).toISOString(),
-    timestamp: new Date().toISOString(),
-  });
-
-  // For CDN URLs, try fallback URL with enhanced context
-  if (isCdn) {
-    const fallbackUrl = createFallbackUrl(primaryUrl);
-    const safeFallbackUrl = sanitizeUrlForLogging(fallbackUrl);
-
-    safeLog(log, 'info', {
-      msg: 'Primary URL fetch failed with network error, trying fallback URL',
-      opId,
-      primaryUrl: safeUrl,
-      fallbackUrl: safeFallbackUrl,
-      error: errorMessage,
-      errorType,
-      errorCategory,
-      fallbackStrategy: 'non-CDN direct URL',
-      recoveryAttempt: true,
-      environment: process.env.NODE_ENV || 'development',
-      timestamp: new Date().toISOString(),
-    });
-
-    return tryFallbackFetch(fallbackUrl, log, opId);
-  }
-
-  // For non-CDN URLs or if fallback is not applicable, return a proper error Response with operation ID
-  return createProxyErrorResponse(
-    502, // Bad Gateway
-    'Failed to fetch resource',
-    JSON.stringify({
-      error: primaryError instanceof Error ? primaryError.message : String(primaryError),
-      url: safeUrl,
-      errorType,
-      errorCategory,
-      opId,
-    }),
-    opId
-  );
-}
-
-/**
- * Attempts to fetch a file from a URL with fallback handling
- * Enhanced with detailed timing metrics, performance indicators, and comprehensive logging
- *
- * @param primaryUrl The primary URL to fetch from
- * @param log Logger instance
- * @param opId Optional operation ID for log correlation
- * @returns Response object from successful fetch
- */
-export async function fetchWithFallback(
-  primaryUrl: string,
-  log: Logger,
-  opId?: string
-): Promise<Response> {
-  let fileResponse: Response;
-
-  // Performance metrics tracking
-  const metrics = {
-    fetchStartTime: Date.now(),
-    dnsLookupStartTime: 0,
-    connectionStartTime: 0,
-    tlsHandshakeStartTime: 0,
-    requestSentTime: 0,
-    firstByteTime: 0,
-    downloadEndTime: 0,
-    totalDuration: 0,
-    fallbackStartTime: 0,
-    fallbackDuration: 0,
-    attemptCount: 1,
-  };
-
-  const safeUrl = sanitizeUrlForLogging(primaryUrl);
-  const isCdn = isCdnUrlWithFallback(primaryUrl);
-
-  // Try to fetch the file from primary URL with proper error handling including timeout
-  try {
-    // Log start of fetch with detailed context
-    safeLog(log, 'debug', {
-      msg: 'Attempting to fetch file from primary URL',
-      opId,
-      url: safeUrl,
-      timeoutMs: FETCH_TIMEOUT_MS,
-      isCdnUrl: isCdn,
-      timestamp: new Date().toISOString(),
-      fetchTimestamp: metrics.fetchStartTime,
-      method: 'GET',
-      headers: {
-        Accept: '*/*',
-        'User-Agent': `Brainrot-Publishing-House/${process.env.NEXT_PUBLIC_APP_VERSION || 'dev'} (${process.env.NODE_ENV})`,
-      },
-    });
-
-    // Use fetchWithTimeout instead of fetch to add timeout handling
-    fileResponse = await fetchWithTimeout(primaryUrl);
-
-    // Calculate fetch duration and update metrics
-    metrics.downloadEndTime = Date.now();
-    metrics.totalDuration = metrics.downloadEndTime - metrics.fetchStartTime;
-
-    // Extract and log detailed performance metrics from response
-    const responseHeadersReceived =
-      metrics.downloadEndTime - (metrics.firstByteTime || metrics.fetchStartTime);
-    const serverProcessingTime = fileResponse.headers.get('x-processing-time')
-      ? parseInt(fileResponse.headers.get('x-processing-time') || '0', 10)
-      : undefined;
-
-    // Analyze cache status
-    const cacheStatus = {
-      status: fileResponse.headers.get('x-cache') || 'UNKNOWN',
-      hit: fileResponse.headers.get('x-cache')?.includes('HIT') || false,
-      age: fileResponse.headers.get('age')
-        ? parseInt(fileResponse.headers.get('age') || '0', 10)
-        : undefined,
-      ttl: undefined as number | undefined,
-    };
-
-    // Try to extract TTL from cache-control header
-    const cacheControl = fileResponse.headers.get('cache-control');
-    if (cacheControl && cacheControl.includes('max-age=')) {
-      const match = cacheControl.match(/max-age=(\d+)/);
-      if (match && match[1]) {
-        cacheStatus.ttl = parseInt(match[1], 10);
-      }
-    }
-
-    // Log detailed information about the response with enhanced performance metrics
-    safeLog(log, 'debug', {
-      msg: 'Primary URL fetch completed',
-      opId,
-      url: safeUrl,
-      status: fileResponse.status,
-      statusText: fileResponse.statusText,
-      timing: {
-        totalDurationMs: metrics.totalDuration,
-        responseHeadersReceivedMs: responseHeadersReceived,
-        serverProcessingTimeMs: serverProcessingTime,
-      },
-      performance: {
-        isSlowRequest: metrics.totalDuration > 2000, // Flag slow requests
-        estimatedBandwidthKBps: fileResponse.headers.get('content-length')
-          ? parseInt(fileResponse.headers.get('content-length') || '0', 10) / metrics.totalDuration
-          : undefined,
-      },
-      contentType: fileResponse.headers.get('content-type'),
-      contentLength: fileResponse.headers.get('content-length')
-        ? parseInt(fileResponse.headers.get('content-length') || '0', 10)
-        : undefined,
-      server: fileResponse.headers.get('server'),
-      cacheControl: fileResponse.headers.get('cache-control'),
-      cache: cacheStatus,
-      environment: process.env.NODE_ENV || 'development',
-      timestamp: new Date().toISOString(),
-    });
-  } catch (primaryError) {
-    // Log the fetch failure with enhanced error metrics
-    metrics.downloadEndTime = Date.now();
-    metrics.totalDuration = metrics.downloadEndTime - metrics.fetchStartTime;
-
-    safeLog(log, 'debug', {
-      msg: 'Primary URL fetch failed',
-      opId,
-      url: safeUrl,
-      timing: {
-        totalDurationMs: metrics.totalDuration,
-        elapsedBeforeErrorMs: metrics.totalDuration,
-      },
-      errorType:
-        primaryError instanceof Error ? primaryError.constructor.name : typeof primaryError,
-      errorMessage: primaryError instanceof Error ? primaryError.message : String(primaryError),
-      isTimeoutError: primaryError instanceof TimeoutError,
-      isNetworkError:
-        primaryError instanceof Error &&
-        (primaryError.message.includes('network') ||
-          primaryError.message.includes('fetch') ||
-          primaryError.message.includes('ENOTFOUND') ||
-          primaryError.message.includes('ECONNREFUSED')),
-      environment: process.env.NODE_ENV || 'development',
-      timestamp: new Date().toISOString(),
-    });
-
-    return handlePrimaryFetchError(primaryUrl, primaryError, log, opId);
-  }
-
-  // If the primary CDN URL returns a non-OK response, try a fallback
-  if (!fileResponse.ok && isCdnUrlWithFallback(primaryUrl)) {
-    const fallbackUrl = createFallbackUrl(primaryUrl);
-    const safeFallbackUrl = sanitizeUrlForLogging(fallbackUrl);
-    metrics.fallbackStartTime = Date.now();
-    metrics.attemptCount++;
-
-    // Log detailed failure info and fallback attempt
-    safeLog(log, 'info', {
-      msg: 'Primary URL failed with status error, trying fallback URL',
-      opId,
-      primaryUrl: safeUrl,
-      fallbackUrl: safeFallbackUrl,
-      primaryStatus: fileResponse.status,
-      primaryStatusText: fileResponse.statusText,
-      primaryTiming: {
-        durationMs: metrics.totalDuration,
-      },
-      errorHeaders: {
-        server: fileResponse.headers.get('server'),
-        contentType: fileResponse.headers.get('content-type'),
-        contentLength: fileResponse.headers.get('content-length'),
-        errorCode:
-          fileResponse.headers.get('x-error-code') || fileResponse.headers.get('x-amzn-errortype'),
-      },
-      isCdn,
-      attemptCount: metrics.attemptCount,
-      environment: process.env.NODE_ENV || 'development',
-      timestamp: new Date().toISOString(),
-    });
-
-    // Try the fallback URL with the operation ID for correlation
-    const fallbackResponse = await tryFallbackFetch(fallbackUrl, log, opId);
-    metrics.fallbackDuration = Date.now() - metrics.fallbackStartTime;
-
-    // If fallback succeeds where primary failed, return the fallback response
-    if (fallbackResponse.ok) {
-      safeLog(log, 'info', {
-        msg: 'Fallback URL succeeded where primary failed',
-        opId,
-        primaryUrl: safeUrl,
-        fallbackUrl: safeFallbackUrl,
-        primaryStatus: fileResponse.status,
-        fallbackStatus: fallbackResponse.status,
-        timing: {
-          primaryDurationMs: metrics.totalDuration,
-          fallbackDurationMs: metrics.fallbackDuration,
-          totalDurationMs: metrics.totalDuration + metrics.fallbackDuration,
-        },
-        attemptCount: metrics.attemptCount,
-        performance: {
-          fallbackFasterThanPrimary: metrics.fallbackDuration < metrics.totalDuration,
-          speedupPercentage: Math.round(
-            ((metrics.totalDuration - metrics.fallbackDuration) / metrics.totalDuration) * 100
-          ),
-        },
-        timestamp: new Date().toISOString(),
-      });
-
-      return fallbackResponse;
-    } else {
-      // Both primary and fallback failed - log comprehensive error details
-      safeLog(log, 'error', {
-        msg: 'Both primary and fallback URLs failed',
-        opId,
-        primaryUrl: safeUrl,
-        fallbackUrl: safeFallbackUrl,
-        primaryStatus: fileResponse.status,
-        fallbackStatus: fallbackResponse.status,
-        timing: {
-          primaryDurationMs: metrics.totalDuration,
-          fallbackDurationMs: metrics.fallbackDuration,
-          totalDurationMs: metrics.totalDuration + metrics.fallbackDuration,
-        },
-        attemptCount: metrics.attemptCount,
-        errorSources: ['primary', 'fallback'],
-        isCdn,
-        environment: process.env.NODE_ENV || 'development',
-        timestamp: new Date().toISOString(),
-      });
-    }
-  }
-
-  return fileResponse;
-}
-
-/**
- * Helper function to handle fallback URL fetching with proper error handling including timeouts
- * Enhanced with detailed metrics and operation ID for log correlation
- *
- * @param fallbackUrl The fallback URL to fetch from
- * @param log Logger instance
- * @param opId Optional operation ID for log correlation
- * @returns Response object from fallback fetch attempt
- */
-async function tryFallbackFetch(
-  fallbackUrl: string,
-  log: Logger,
-  opId?: string
-): Promise<Response> {
-  const safeUrl = sanitizeUrlForLogging(fallbackUrl);
-  const fetchStartTime = Date.now();
-
-  try {
-    // Log that we're attempting to fetch from fallback with enhanced context
-    safeLog(log, 'debug', {
-      msg: 'Attempting to fetch from fallback URL',
-      opId,
-      url: safeUrl,
-      timeoutMs: FETCH_TIMEOUT_MS,
-      fetchAttemptType: 'fallback',
-      timestamp: new Date().toISOString(),
-      fetchTimestamp: fetchStartTime,
-      method: 'GET',
-      headers: {
-        Accept: '*/*',
-        'User-Agent': `Brainrot-Publishing-House/${process.env.NEXT_PUBLIC_APP_VERSION || 'dev'} (${process.env.NODE_ENV})`,
-      },
-    });
-
-    // Use fetchWithTimeout instead of fetch for timeout handling
-    const fallbackResponse = await fetchWithTimeout(fallbackUrl);
-
-    const fetchDuration = Date.now() - fetchStartTime;
-
-    // Process cache information for performance analysis
-    const cacheStatus = {
-      status: fallbackResponse.headers.get('x-cache') || 'UNKNOWN',
-      hit: fallbackResponse.headers.get('x-cache')?.includes('HIT') || false,
-      age: fallbackResponse.headers.get('age')
-        ? parseInt(fallbackResponse.headers.get('age') || '0', 10)
-        : undefined,
-      ttl: undefined as number | undefined,
-    };
-
-    // Try to extract TTL from cache-control header
-    const cacheControl = fallbackResponse.headers.get('cache-control');
-    if (cacheControl && cacheControl.includes('max-age=')) {
-      const match = cacheControl.match(/max-age=(\d+)/);
-      if (match && match[1]) {
-        cacheStatus.ttl = parseInt(match[1], 10);
-      }
-    }
-
-    // Log the result of the fallback attempt with enhanced metrics
-    if (fallbackResponse.ok) {
-      safeLog(log, 'info', {
-        msg: 'Fallback URL fetch succeeded',
-        opId,
-        url: safeUrl,
-        status: fallbackResponse.status,
-        statusText: fallbackResponse.statusText,
-        timing: {
-          totalDurationMs: fetchDuration,
-        },
-        performance: {
-          isSlowRequest: fetchDuration > 2000,
-          estimatedBandwidthKBps: fallbackResponse.headers.get('content-length')
-            ? parseInt(fallbackResponse.headers.get('content-length') || '0', 10) / fetchDuration
-            : undefined,
-        },
-        contentType: fallbackResponse.headers.get('content-type'),
-        contentLength: fallbackResponse.headers.get('content-length')
-          ? parseInt(fallbackResponse.headers.get('content-length') || '0', 10)
-          : undefined,
-        server: fallbackResponse.headers.get('server'),
-        cache: cacheStatus,
-        environment: process.env.NODE_ENV || 'development',
-        timestamp: new Date().toISOString(),
-      });
-    } else {
-      // Detailed error logging for non-OK responses
-      const errorHeaders: Record<string, string> = {};
-
-      // Extract all error-related headers
-      ['x-request-id', 'x-error-code', 'x-amzn-errortype', 'x-amz-request-id'].forEach((header) => {
-        const value = fallbackResponse.headers.get(header);
-        if (value) {
-          errorHeaders[header] = value;
-        }
-      });
-
-      safeLog(log, 'warn', {
-        msg: 'Fallback URL returned error status',
-        opId,
-        url: safeUrl,
-        status: fallbackResponse.status,
-        statusText: fallbackResponse.statusText,
-        timing: {
-          totalDurationMs: fetchDuration,
-        },
-        contentType: fallbackResponse.headers.get('content-type'),
-        contentLength: fallbackResponse.headers.get('content-length'),
-        server: fallbackResponse.headers.get('server'),
-        errorInfo: {
-          requestId: fallbackResponse.headers.get('x-request-id'),
-          errorCode:
-            fallbackResponse.headers.get('x-error-code') ||
-            fallbackResponse.headers.get('x-amzn-errortype'),
-          allErrorHeaders: errorHeaders,
-          isAccessDenied: fallbackResponse.status === 403,
-          isNotFound: fallbackResponse.status === 404,
-          isServerError: fallbackResponse.status >= 500,
-        },
-        environment: process.env.NODE_ENV || 'development',
-        timestamp: new Date().toISOString(),
-      });
-    }
-
-    return fallbackResponse;
-  } catch (fallbackError) {
-    const fetchDuration = Date.now() - fetchStartTime;
-
-    // Special handling for timeout errors with enhanced context
-    if (fallbackError instanceof TimeoutError) {
-      safeLog(log, 'error', {
-        msg: 'Timeout fetching from fallback URL',
-        opId,
-        url: safeUrl,
-        timeoutMs: FETCH_TIMEOUT_MS,
-        timing: {
-          durationMs: fetchDuration,
-          elapsedBeforeTimeoutMs: fetchDuration,
-        },
-        error: fallbackError.message,
-        errorType: 'TimeoutError',
-        fallbackAttempt: true,
-        environment: process.env.NODE_ENV || 'development',
-        timestamp: new Date().toISOString(),
-      });
-
-      // Return enhanced timeout error response with operation ID
-      return createProxyErrorResponse(
-        504, // Gateway Timeout
-        `Fallback URL request timed out after ${FETCH_TIMEOUT_MS}ms`,
-        JSON.stringify({
-          error: fallbackError.message,
-          url: safeUrl,
-          timeoutMs: FETCH_TIMEOUT_MS,
-          opId,
-          isFallback: true,
-        }),
-        opId
-      );
-    }
-
-    // Log detailed information about other fallback errors with enhanced context
-    safeLog(log, 'error', {
-      msg: 'Error fetching from fallback URL',
-      opId,
-      url: safeUrl,
-      timing: {
-        durationMs: fetchDuration,
-        elapsedBeforeErrorMs: fetchDuration,
-      },
-      error: fallbackError instanceof Error ? fallbackError.message : String(fallbackError),
-      stack: fallbackError instanceof Error ? fallbackError.stack : undefined,
-      errorType:
-        fallbackError instanceof Error ? fallbackError.constructor.name : typeof fallbackError,
-      fallbackAttempt: true,
-      isNetworkError:
-        fallbackError instanceof Error &&
-        (fallbackError.message.includes('network') ||
-          fallbackError.message.includes('fetch') ||
-          fallbackError.message.includes('ENOTFOUND') ||
-          fallbackError.message.includes('ECONNREFUSED')),
-      isDnsError: fallbackError instanceof Error && fallbackError.message.includes('ENOTFOUND'),
-      isConnectionError:
-        fallbackError instanceof Error &&
-        (fallbackError.message.includes('ECONNREFUSED') ||
-          fallbackError.message.includes('ETIMEDOUT')),
-      environment: process.env.NODE_ENV || 'development',
-      timestamp: new Date().toISOString(),
-    });
-
-    // Return a proper error Response with operation ID
-    return createProxyErrorResponse(
-      502, // Bad Gateway
-      'Failed to fetch from fallback URL',
-      JSON.stringify({
-        error: fallbackError instanceof Error ? fallbackError.message : String(fallbackError),
-        url: safeUrl,
-        errorType:
-          fallbackError instanceof Error ? fallbackError.constructor.name : typeof fallbackError,
-        isFallback: true,
-        opId,
-      }),
-      opId
-    );
-  }
-}
-
-/**
- * Creates appropriate headers for file download
- */
-export function createDownloadHeaders(contentType: string, filename: string): Headers {
-  const headers = new Headers();
-  headers.set('Content-Type', contentType);
-  headers.set('Content-Disposition', `attachment; filename="${filename}"`);
-  return headers;
 }
 
 /**
@@ -1040,8 +385,396 @@ async function extractErrorDetails(
 }
 
 /**
+ * Creates appropriate headers for file download
+ */
+export function createDownloadHeaders(contentType: string, filename: string): Headers {
+  const headers = new Headers();
+  headers.set('Content-Type', contentType);
+  headers.set('Content-Disposition', `attachment; filename="${filename}"`);
+  return headers;
+}
+
+/**
  * Handles proxying of file downloads through the API
- * With improved error handling for network errors, timeouts, and other exceptions
+ * Uses the unified asset service for consistent asset handling
+ *
+ * @param assetType Type of asset (audio, text, image)
+ * @param bookSlug Book identifier
+ * @param assetName Name of the specific asset
+ * @param filename Filename for the download
+ * @param log Logger instance
+ * @param assetService Asset service for retrieving assets
+ * @param requestParams Additional request parameters for context
+ * @returns Promise resolving to NextResponse
+ */
+export async function proxyAssetDownload(
+  assetType: AssetType,
+  bookSlug: string,
+  assetName: string,
+  filename: string,
+  log: Logger,
+  assetService: AssetService,
+  requestParams?: Record<string, string | string[]>
+): Promise<NextResponse> {
+  // Create a unique operation ID for correlating logs within this request
+  const opId = Date.now().toString(36) + Math.random().toString(36).substring(2, 7);
+  const operation = 'proxyAssetDownload';
+
+  try {
+    // Step 1: Log detailed information about the proxy request
+    safeLog(log, 'info', {
+      msg: 'Proxy download request received',
+      opId,
+      operation,
+      assetType,
+      bookSlug,
+      assetName,
+      filename,
+      requestParams,
+      timestamp: new Date().toISOString(),
+      environment: process.env.NODE_ENV || 'development',
+    });
+
+    // Step 2: Get the asset URL from the asset service
+    safeLog(log, 'debug', {
+      msg: 'Fetching asset URL',
+      opId,
+      operation,
+      assetType,
+      bookSlug,
+      assetName,
+    });
+
+    let assetUrl: string;
+    try {
+      // Get URL from the AssetService
+      assetUrl = await assetService.getAssetUrl(assetType, bookSlug, assetName);
+
+      safeLog(log, 'debug', {
+        msg: 'Asset URL retrieved successfully',
+        opId,
+        operation,
+        assetUrl: sanitizeUrlForLogging(assetUrl),
+      });
+    } catch (assetError) {
+      // Handle AssetError specifically
+      if (assetError instanceof AssetError) {
+        safeLog(log, 'error', {
+          msg: 'Failed to get asset URL',
+          opId,
+          operation,
+          assetType,
+          bookSlug,
+          assetName,
+          errorType: assetError.type,
+          errorMessage: assetError.message,
+          statusCode: assetError.statusCode,
+          assetPath: assetError.assetPath,
+        });
+
+        // Map AssetError to appropriate HTTP response
+        const status =
+          assetError.statusCode || assetError.type === AssetErrorType.NOT_FOUND
+            ? 404
+            : assetError.type === AssetErrorType.UNAUTHORIZED
+              ? 401
+              : assetError.type === AssetErrorType.FORBIDDEN
+                ? 403
+                : assetError.type === AssetErrorType.VALIDATION_ERROR
+                  ? 400
+                  : 500;
+
+        const errorMessage =
+          assetError.type === AssetErrorType.NOT_FOUND
+            ? `Asset not found: ${assetError.assetPath || `${assetType}/${bookSlug}/${assetName}`}`
+            : assetError.message;
+
+        return createProxyErrorResponse(
+          status,
+          errorMessage,
+          JSON.stringify({
+            errorType: assetError.type,
+            assetPath: assetError.assetPath,
+            operation: assetError.operation,
+            opId,
+            assetType,
+            bookSlug,
+            assetName,
+          }),
+          opId
+        );
+      }
+
+      // Handle other errors
+      safeLog(log, 'error', {
+        msg: 'Unexpected error getting asset URL',
+        opId,
+        operation,
+        assetType,
+        bookSlug,
+        assetName,
+        error: assetError instanceof Error ? assetError.message : String(assetError),
+        stack: assetError instanceof Error ? assetError.stack : undefined,
+      });
+
+      return createProxyErrorResponse(
+        500,
+        'Failed to retrieve asset URL',
+        JSON.stringify({
+          error: assetError instanceof Error ? assetError.message : String(assetError),
+          assetType,
+          bookSlug,
+          assetName,
+          opId,
+        }),
+        opId
+      );
+    }
+
+    // Step 3: Perform the fetch with timeout handling
+    safeLog(log, 'debug', {
+      msg: 'Initiating fetch operation for asset download',
+      opId,
+      operation,
+      assetUrl: sanitizeUrlForLogging(assetUrl),
+      timeoutMs: FETCH_TIMEOUT_MS,
+    });
+
+    // Performance metrics tracking
+    const metrics = {
+      fetchStartTime: Date.now(),
+      downloadEndTime: 0,
+      totalDuration: 0,
+    };
+
+    let fileResponse: Response;
+    try {
+      // Use fetchWithTimeout to handle timeouts
+      fileResponse = await fetchWithTimeout(
+        assetUrl,
+        {
+          headers: {
+            Accept: '*/*',
+            'User-Agent': `Brainrot-Publishing-House/${process.env.NEXT_PUBLIC_APP_VERSION || 'dev'} (${process.env.NODE_ENV})`,
+          },
+        },
+        FETCH_TIMEOUT_MS
+      );
+
+      // Calculate fetch duration
+      metrics.downloadEndTime = Date.now();
+      metrics.totalDuration = metrics.downloadEndTime - metrics.fetchStartTime;
+
+      safeLog(log, 'debug', {
+        msg: 'Asset fetch completed',
+        opId,
+        operation,
+        assetUrl: sanitizeUrlForLogging(assetUrl),
+        status: fileResponse.status,
+        statusText: fileResponse.statusText,
+        successful: fileResponse.ok,
+        durationMs: metrics.totalDuration,
+        contentType: fileResponse.headers.get('content-type'),
+        contentLength: fileResponse.headers.get('content-length'),
+        performance: {
+          isSlowRequest: metrics.totalDuration > 2000,
+          durationMs: metrics.totalDuration,
+        },
+      });
+    } catch (fetchError) {
+      // Calculate duration even for errors
+      metrics.downloadEndTime = Date.now();
+      metrics.totalDuration = metrics.downloadEndTime - metrics.fetchStartTime;
+
+      // Special handling for timeout errors
+      if (fetchError instanceof TimeoutError) {
+        safeLog(log, 'error', {
+          msg: 'Timeout fetching asset',
+          opId,
+          operation,
+          assetUrl: sanitizeUrlForLogging(assetUrl),
+          timeoutMs: FETCH_TIMEOUT_MS,
+          durationMs: metrics.totalDuration,
+          error: fetchError.message,
+        });
+
+        return createProxyErrorResponse(
+          504, // Gateway Timeout
+          `Asset download timed out after ${FETCH_TIMEOUT_MS}ms`,
+          JSON.stringify({
+            error: fetchError.message,
+            assetUrl: sanitizeUrlForLogging(assetUrl),
+            timeoutMs: FETCH_TIMEOUT_MS,
+            assetType,
+            bookSlug,
+            assetName,
+            opId,
+          }),
+          opId
+        );
+      }
+
+      // Handle other fetch errors
+      safeLog(log, 'error', {
+        msg: 'Error fetching asset',
+        opId,
+        operation,
+        assetUrl: sanitizeUrlForLogging(assetUrl),
+        error: fetchError instanceof Error ? fetchError.message : String(fetchError),
+        stack: fetchError instanceof Error ? fetchError.stack : undefined,
+        durationMs: metrics.totalDuration,
+      });
+
+      return createProxyErrorResponse(
+        502, // Bad Gateway
+        'Failed to fetch asset from storage',
+        JSON.stringify({
+          error: fetchError instanceof Error ? fetchError.message : String(fetchError),
+          assetUrl: sanitizeUrlForLogging(assetUrl),
+          assetType,
+          bookSlug,
+          assetName,
+          opId,
+        }),
+        opId
+      );
+    }
+
+    // Step 4: Handle error responses from the fetch
+    if (!fileResponse.ok) {
+      // Extract error details from the response
+      const errorDetails = await extractErrorDetails(fileResponse, log, opId);
+
+      safeLog(log, 'error', {
+        msg: 'Failed to fetch asset with error status',
+        opId,
+        operation,
+        assetUrl: sanitizeUrlForLogging(assetUrl),
+        status: fileResponse.status,
+        statusText: fileResponse.statusText,
+        errorDetails,
+        durationMs: metrics.totalDuration,
+      });
+
+      // Collect headers for debugging (excluding sensitive ones)
+      const responseHeaders: Record<string, string> = {};
+      fileResponse.headers.forEach((value, key) => {
+        if (!['authorization', 'cookie', 'set-cookie'].includes(key.toLowerCase())) {
+          responseHeaders[key] = value;
+        }
+      });
+
+      return createProxyErrorResponse(
+        fileResponse.status === 404 ? 404 : 502,
+        `Failed to fetch asset (${fileResponse.status})`,
+        JSON.stringify({
+          errorDetails,
+          status: fileResponse.status,
+          statusText: fileResponse.statusText,
+          headers: responseHeaders,
+          assetType,
+          bookSlug,
+          assetName,
+          opId,
+        }),
+        opId
+      );
+    }
+
+    // Step 5: Handle successful responses
+    // Get content type from response
+    const contentType = fileResponse.headers.get('content-type') || 'audio/mpeg';
+    const contentLength = fileResponse.headers.get('content-length');
+
+    // Create headers for the download
+    const headers = createDownloadHeaders(contentType, filename);
+
+    // Add content length if available
+    if (contentLength) {
+      headers.set('Content-Length', contentLength);
+    }
+
+    // Step 6: Log successful proxy setup
+    safeLog(log, 'info', {
+      msg: 'Successfully set up asset proxy',
+      opId,
+      operation,
+      assetType,
+      bookSlug,
+      assetName,
+      filename,
+      contentType,
+      contentLength: contentLength ? parseInt(contentLength, 10) : undefined,
+      durationMs: metrics.totalDuration,
+      performance: {
+        isSlowRequest: metrics.totalDuration > 2000,
+        durationMs: metrics.totalDuration,
+      },
+      timestamp: new Date().toISOString(),
+    });
+
+    // Step 7: Stream the response to the client
+    safeLog(log, 'debug', {
+      msg: 'Beginning to stream asset to client',
+      opId,
+      operation,
+      contentType,
+      responseBodyType: fileResponse.body ? 'ReadableStream' : 'null',
+    });
+
+    // Return the file stream
+    return new NextResponse(fileResponse.body, {
+      status: 200,
+      headers,
+    });
+  } catch (error) {
+    // Step 8: Handle unexpected errors
+    safeLog(log, 'error', {
+      msg: 'Unexpected error in proxy download process',
+      opId,
+      operation,
+      assetType,
+      bookSlug,
+      assetName,
+      filename,
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+      errorType: error instanceof Error ? error.constructor.name : typeof error,
+      requestParams,
+      environment: process.env.NODE_ENV || 'development',
+      timestamp: new Date().toISOString(),
+    });
+
+    // Enhanced error response with detailed information in non-production environments
+    const errorDetails =
+      error instanceof Error
+        ? {
+            message: error.message,
+            name: error.name,
+            stack: process.env.NODE_ENV !== 'production' ? error.stack : undefined,
+            assetType,
+            bookSlug,
+            assetName,
+            filename,
+          }
+        : String(error);
+
+    return createProxyErrorResponse(
+      500,
+      'Failed to proxy asset download',
+      process.env.NODE_ENV !== 'production'
+        ? JSON.stringify(errorDetails)
+        : error instanceof Error
+          ? error.message
+          : String(error),
+      opId
+    );
+  }
+}
+
+/**
+ * Legacy handler for proxying file downloads through the API
+ * @deprecated Use proxyAssetDownload instead
  */
 export async function proxyFileDownload(
   url: string,
@@ -1052,11 +785,18 @@ export async function proxyFileDownload(
   // Create a unique operation ID for correlating logs within this request
   const opId = Date.now().toString(36) + Math.random().toString(36).substring(2, 7);
 
+  safeLog(log, 'warn', {
+    msg: 'Using deprecated proxyFileDownload function',
+    opId,
+    url: sanitizeUrlForLogging(url),
+    timestamp: new Date().toISOString(),
+  });
+
   try {
     // Step 1: Log detailed information about the proxy request
     const sanitizedUrl = sanitizeUrlForLogging(url);
     safeLog(log, 'info', {
-      msg: 'Proxy download request received',
+      msg: 'Legacy proxy download request received',
       opId,
       url: sanitizedUrl,
       filename,
@@ -1065,23 +805,12 @@ export async function proxyFileDownload(
       environment: process.env.NODE_ENV || 'development',
     });
 
-    // Step 2: Log fetch attempt with additional context
-    safeLog(log, 'debug', {
-      msg: 'Initiating fetch operation for proxy download',
-      opId,
-      url: sanitizedUrl,
-      cdnUrl: url.includes('.cdn.digitaloceanspaces.com'),
-      timeoutMs: FETCH_TIMEOUT_MS,
-      userAgent:
-        process.env.NODE_ENV === 'development' ? 'Server (Development)' : 'Server (Production)',
-    });
-
-    // Step 3: Perform the fetch with fallback
+    // Step 2: Perform the fetch
     const startTime = Date.now();
-    const fileResponse = await fetchWithFallback(url, log);
+    const fileResponse = await fetchWithTimeout(url);
     const fetchDuration = Date.now() - startTime;
 
-    // Step 4: Log response metrics
+    // Step 3: Log response metrics
     safeLog(log, 'debug', {
       msg: 'Fetch completed',
       opId,
@@ -1094,10 +823,10 @@ export async function proxyFileDownload(
       contentLength: fileResponse.headers.get('content-length'),
     });
 
-    // Step 5: Handle error responses
+    // Step 4: Handle error responses
     if (!fileResponse.ok) {
       // Extract error details from the response body if possible
-      const errorDetails = await extractErrorDetails(fileResponse, log);
+      const errorDetails = await extractErrorDetails(fileResponse, log, opId);
 
       safeLog(log, 'error', {
         msg: 'Failed to fetch file for proxying',
@@ -1109,11 +838,6 @@ export async function proxyFileDownload(
         durationMs: fetchDuration,
         requestParams,
       });
-
-      // Get details about the CDN/server that generated the error
-      const server = fileResponse.headers.get('server');
-      const cfRay = fileResponse.headers.get('cf-ray'); // Cloudflare specific
-      const xServedBy = fileResponse.headers.get('x-served-by');
 
       // Collect all headers for debugging (excluding sensitive ones)
       const responseHeaders: Record<string, string> = {};
@@ -1128,9 +852,6 @@ export async function proxyFileDownload(
         `Failed to fetch file (${fileResponse.status})`,
         JSON.stringify({
           errorDetails,
-          server,
-          cfRay,
-          xServedBy,
           status: fileResponse.status,
           statusText: fileResponse.statusText,
           headers: responseHeaders,
@@ -1140,7 +861,7 @@ export async function proxyFileDownload(
       );
     }
 
-    // Step 6: Handle successful responses
+    // Step 5: Handle successful responses
     // Get content type from response
     const contentType = fileResponse.headers.get('content-type') || 'audio/mpeg';
     const contentLength = fileResponse.headers.get('content-length');
@@ -1153,7 +874,7 @@ export async function proxyFileDownload(
       headers.set('Content-Length', contentLength);
     }
 
-    // Step 7: Log successful proxy setup with detailed metrics
+    // Step 6: Log successful proxy setup
     safeLog(log, 'info', {
       msg: 'Successfully set up file proxy',
       opId,
@@ -1162,11 +883,10 @@ export async function proxyFileDownload(
       contentType,
       contentLength: contentLength ? parseInt(contentLength, 10) : undefined,
       durationMs: fetchDuration,
-      cacheHit: fileResponse.headers.get('x-cache') === 'HIT',
       timestamp: new Date().toISOString(),
     });
 
-    // Step 8: Start streaming the response
+    // Step 7: Stream the response
     safeLog(log, 'debug', {
       msg: 'Beginning to stream response to client',
       opId,
@@ -1180,7 +900,7 @@ export async function proxyFileDownload(
       headers,
     });
   } catch (error) {
-    // Step 9: Handle exceptions during proxy process
+    // Step 8: Handle exceptions during proxy process
 
     // Special handling for timeout errors
     if (error instanceof TimeoutError) {

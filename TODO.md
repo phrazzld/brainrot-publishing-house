@@ -104,45 +104,51 @@ This TODO list details the tasks required to fully migrate all asset management 
   - ✅ Added AssetServiceFactory for dependency injection and configuration
   - Dependencies: T003, T008
 
-- [ ] **T010: Refactor BlobPathService**
+- [x] **T010: Refactor BlobPathService**
 
-  - Update to ensure consistent path generation
-  - Remove legacy path conversion logic
-  - Simplify API to more clearly represent asset types
-  - Add tests for all methods
+  - ✅ Updated to ensure consistent path generation through AssetPathService
+  - ✅ Simplified implementation by delegating to AssetPathService
+  - ✅ Maintained backward compatibility for existing code
+  - ✅ Added appropriate deprecation notices to encourage migration
+  - ✅ Added comprehensive tests for all methods
   - Dependencies: T002
 
-- [ ] **T011: Update Download API Routes**
+- [x] **T011: Update Download API Routes**
 
-  - Modify API route to use the new unified asset service
-  - Remove all Digital Ocean and fallback logic
-  - Update error handling and response formats
-  - Add detailed logging for troubleshooting
+  - ✅ Modified API route to use the new unified asset service
+  - ✅ Removed all Digital Ocean and fallback logic
+  - ✅ Updated error handling to use AssetError types
+  - ✅ Added detailed logging for troubleshooting
+  - ✅ Updated tests to verify new functionality
   - Dependencies: T009
 
-- [ ] **T012: Update Proxy Download Handler**
+- [x] **T012: Update Proxy Download Handler**
 
-  - Refactor proxy download to use unified asset service
-  - Simplify streaming logic without fallbacks
-  - Enhance error reporting for troubleshooting
-  - Add performance metrics for monitoring
+  - ✅ Refactor proxy download to use unified asset service
+  - ✅ Simplify streaming logic without fallbacks
+  - ✅ Enhance error reporting for troubleshooting
+  - ✅ Add performance metrics for monitoring
+  - ✅ Added new proxyAssetDownload function with comprehensive tests
+  - ✅ Maintained backward compatibility with legacy proxyFileDownload
   - Dependencies: T009, T011
 
-- [ ] **T013: Refactor Client-Side Components**
-  - Update DownloadButton component to use new API
-  - Modify any components that directly reference assets
-  - Improve error handling and user feedback
-  - Add loading states for better UX
+- [x] **T013: Refactor Client-Side Components**
+  - ✅ Updated DownloadButton component to use new unified asset service API
+  - ✅ Updated error handling with improved error message extraction
+  - ✅ Modified to always use proxy downloading for consistency
+  - ✅ Fixed class name handling for empty classNames
+  - ✅ Updated tests to match new implementation
   - Dependencies: T011
 
 ## Phase 4: Clean Up & Documentation
 
-- [ ] **T014: Remove Digital Ocean Dependencies**
+- [x] **T014: Remove Digital Ocean Dependencies**
 
-  - Remove @aws-sdk/client-s3 dependency
-  - Delete unused S3/DO integration code
-  - Remove DO environment variables from .env files
-  - Update environment variable documentation
+  - ✅ Removed @aws-sdk/client-s3 and @aws-sdk/s3-request-presigner dependencies
+  - ✅ Removed aws-sdk dependency
+  - ✅ Deprecated unused S3/DO integration code by renaming files
+  - ✅ Documented deprecated DO environment variables
+  - ✅ Created comprehensive environment variable documentation
   - Dependencies: T009, T011, T012, T013
 
 - [ ] **T015: Update Configuration Documentation**
@@ -187,8 +193,20 @@ This TODO list details the tasks required to fully migrate all asset management 
   - Dependencies: T018
 
 - [ ] **T020: Complete Final Verification**
+
   - Verify all assets are accessible in production
   - Check all references in translations data
   - Ensure no regressions in functionality
   - Create verification report
   - Dependencies: T018, T019
+
+- [ ] **T021: COMPLEX - Create and implement standardized file naming convention**
+  - Audit current file naming practices across ALL asset types (critical)
+  - Resolve inconsistencies between implementation ("chapter-XX.mp3") and tests ("book-XX.mp3")
+  - Define explicit rules for each asset type (audio, text, images)
+  - Create standardized rules for numeric components (padding, formatting)
+  - Update AssetPathService to enforce these standards
+  - Document migration plan for non-compliant legacy assets
+  - Create a path validator to catch non-compliant paths
+  - Update all tests to use standardized file naming
+  - Dependencies: T009, T010, T016

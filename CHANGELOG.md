@@ -10,11 +10,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **Unified Asset Service** - Implemented a new unified asset service (T009) that:
+
   - Provides a single consistent interface for all asset operations
   - Only uses Vercel Blob as the storage backend
   - Includes comprehensive logging and error handling
   - Features automatic retry mechanism for transient failures
   - Comes with full test coverage
+
+- **Refactored BlobPathService** (T010) - Improved path handling:
+
+  - Delegated path generation to AssetPathService
+  - Maintained backward compatibility for existing code
+  - Added deprecation notices to encourage migration
+  - Eliminated redundant path generation logic
+  - Improved test coverage
+
+- **Updated Download API Routes** (T011) - Enhanced download functionality:
+
+  - Modified to use the new unified asset service for all asset operations
+  - Implemented more robust error handling with proper status codes
+  - Removed all Digital Ocean and fallback logic
+  - Added comprehensive structured logging for troubleshooting
+  - Updated tests to verify new functionality
+
+- **Updated Proxy Download Handler** (T012) - Refactored file proxying:
+  - Added new proxyAssetDownload function using the unified asset service
+  - Simplified streaming logic by removing all Digital Ocean fallbacks
+  - Enhanced error reporting with detailed asset context
+  - Added comprehensive performance metrics and logging
+  - Created a complete test suite for proxy functionality
+  - Maintained backward compatibility with legacy download endpoint
 
 ### Removed
 

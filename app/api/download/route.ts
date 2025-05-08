@@ -5,7 +5,7 @@ import { randomUUID } from 'crypto';
 import { createRequestLogger } from '@/utils/logger';
 
 import { handleCriticalError, handleDownloadServiceError, safeLog } from './errorHandlers';
-import { proxyFileDownload } from './proxyService';
+import { proxyAssetDownload } from './proxyService';
 import { validateRequestParameters } from './requestValidation';
 import { createDownloadService } from './serviceFactory';
 
@@ -16,14 +16,14 @@ import { createDownloadService } from './serviceFactory';
  * This API route follows these principles:
  *
  * 1. URL Generation:
- *    - Uses direct CDN URLs for Digital Ocean Spaces as the primary source
- *    - Falls back to Vercel Blob URLs when available
- *    - No S3 signing or credentials required
+ *    - Uses unified AssetService for consistent URL generation
+ *    - Provides standardized path structure via AssetPathService
+ *    - Includes robust retry logic and error handling
  *
  * 2. Download Methods:
  *    - Direct client-side download: Returns URL for client to fetch directly
  *    - API proxy: Downloads file server-side and streams to client
- *      (used to avoid CORS issues with certain storage providers)
+ *      (to avoid CORS issues if needed)
  *
  * 3. Response Formats:
  *    - Without proxy: Returns JSON with download URL and metadata
@@ -40,6 +40,7 @@ type RequestContext = {
   correlationId: string;
   log: ReturnType<typeof createRequestLogger>;
   searchParams: URLSearchParams;
+  headers: Headers;
 };
 
 /**
@@ -107,7 +108,7 @@ function initializeRequest(req: NextRequest): RequestContext {
     deployment: process.env.VERCEL_URL || 'local',
   });
 
-  return { correlationId, log, searchParams };
+  return { correlationId, log, searchParams, headers: req.headers };
 }
 
 /**
@@ -126,13 +127,11 @@ function validateRequest(context: RequestContext): ValidationResult {
  * @returns NextResponse with URL and metadata
  */
 function createDirectDownloadResponse(url: string): NextResponse {
-  const isCdnUrl = url.includes('cdn.digitaloceanspaces.com');
-
   return NextResponse.json(
     {
       url,
-      isCdnUrl,
-      shouldProxy: isCdnUrl, // Recommend proxy for CDN URLs which might have CORS issues
+      isCdnUrl: false, // No longer using CDN URLs
+      shouldProxy: false, // No need to proxy Vercel Blob URLs
     },
     { status: 200 }
   );
@@ -155,16 +154,6 @@ function createDownloadFilename(
     : `${validatedSlug}-chapter-${chapter}.mp3`;
 }
 
-/**
- * Handles the case when a proxy is requested
- *
- * @param url - The URL to proxy
- * @param filename - The filename to use for the download
- * @param validation - The validated request parameters
- * @param log - Logger instance
- * @param searchParams - The original search parameters from the request
- * @returns Response with the proxied file
- */
 /**
  * Handles proxy download requests with comprehensive context and error handling
  *
@@ -203,7 +192,8 @@ async function handleProxyRequest(
   }
 
   // Add request validation data to parameters with enhanced context
-  const allParams = {
+  // (This information is used for logging and debugging)
+  const _allParams = {
     ...requestParams,
     slug: validation.slug,
     type: validation.type,
@@ -270,8 +260,55 @@ async function handleProxyRequest(
     // Start timing the operation
     const proxyStartTime = Date.now();
 
-    // Pass all parameters to proxy download function (note: function signature updated to accept operationId)
-    const response = await proxyFileDownload(url, filename, log, allParams);
+    // Create the download service with the correlation ID - needed for AssetService
+    const downloadService = createDownloadService(log, correlationId);
+    if (!downloadService) {
+      return NextResponse.json(
+        {
+          error: 'Internal server error',
+          message: 'Service initialization failed. Please try again later.',
+          type: 'SERVICE_ERROR',
+          correlationId,
+        },
+        { status: 500 }
+      );
+    }
+
+    // Get the AssetService from the download service
+    const assetService = downloadService.getAssetService();
+
+    // Create asset name based on type and chapter
+    let assetName: string;
+    if (validation.type === 'full') {
+      assetName = 'full-audiobook.mp3';
+    } else {
+      if (!validation.chapter) {
+        return NextResponse.json(
+          {
+            error: 'Invalid request',
+            message: 'Chapter parameter is required when type is "chapter"',
+            correlationId,
+          },
+          { status: 400 }
+        );
+      }
+
+      // Format chapter with leading zeros (similar to downloadService implementation)
+      const paddedChapter = String(parseInt(validation.chapter, 10)).padStart(2, '0');
+      assetName = `chapter-${paddedChapter}.mp3`;
+    }
+
+    // Use the new proxyAssetDownload function
+    const response = await proxyAssetDownload(
+      // Always audio for download API
+      'audio',
+      validation.slug,
+      assetName,
+      filename,
+      log,
+      assetService,
+      requestParams
+    );
 
     // Log successful proxy completion with timing
     const proxyDuration = Date.now() - proxyStartTime;
@@ -360,7 +397,6 @@ async function getDownloadUrl(
     slug,
     type,
     chapter,
-    urlType: url.includes('cdn.digitaloceanspaces.com') ? 'cdn' : 'blob',
   });
 
   return { url, validatedSlug: slug, validatedType: type, chapter };
@@ -370,19 +406,17 @@ async function getDownloadUrl(
  * Processes a valid download request
  *
  * @param validation - The validated request parameters
- * @param searchParams - The search parameters from the request
- * @param correlationId - The correlation ID for the request
- * @param log - Logger instance
+ * @param context - Request context with search params, headers, etc.
  * @returns Response with the download URL or proxied file
  */
 async function processDownloadRequest(
   validation: { valid: boolean; slug?: string; type?: 'full' | 'chapter'; chapter?: string },
-  searchParams: URLSearchParams,
-  correlationId: string,
-  log: ReturnType<typeof createRequestLogger>
+  context: RequestContext
 ): Promise<NextResponse> {
-  // Create the download service
-  const downloadService = createDownloadService(log);
+  const { searchParams, correlationId, log, headers } = context;
+
+  // Create the download service with the correlation ID
+  const downloadService = createDownloadService(log, correlationId);
   if (!downloadService) {
     return NextResponse.json(
       {
@@ -424,7 +458,7 @@ async function processDownloadRequest(
       const requestHeaders: Record<string, string> = {};
       ['user-agent', 'referer', 'origin', 'accept', 'accept-encoding', 'accept-language'].forEach(
         (header) => {
-          const value = req.headers.get(header);
+          const value = headers.get(header);
           if (value) {
             requestHeaders[header] = value;
           }
@@ -485,12 +519,7 @@ export async function GET(req: NextRequest) {
     }
 
     // Process the download request
-    return processDownloadRequest(
-      validation,
-      context.searchParams,
-      context.correlationId,
-      context.log
-    );
+    return processDownloadRequest(validation, context);
   } catch (error) {
     // For critical errors, create a correlation ID if we don't have one yet
     // Define a type for errors that might contain a correlationId
