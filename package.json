@@ -38,6 +38,9 @@
     "migrate:chapter-images:dry": "tsx scripts/migrateBookChapterImages.ts --dry-run",
     "migrate:brainrot-text": "tsx scripts/migrateBrainrotTextFiles.ts",
     "migrate:brainrot-text:dry": "tsx scripts/migrateBrainrotTextFiles.ts --dry-run",
+    "validate:asset-names": "tsx scripts/validateAssetNames.ts",
+    "validate:asset-names:fix": "tsx scripts/validateAssetNames.ts --fix",
+    "validate:asset-names:verbose": "tsx scripts/validateAssetNames.ts --verbose",
     "migrate:source-text": "tsx scripts/migrateSourceTextFiles.ts",
     "migrate:source-text:dry": "tsx scripts/migrateSourceTextFiles.ts --dry-run",
     "verify:blob": "tsx scripts/verifyBlobStorage.ts",
@@ -64,6 +67,8 @@
     "test:e2e:downloads:production": "tsx scripts/verify-end-to-end-downloads.ts --env=production",
     "benchmark:downloads": "tsx scripts/benchmark-downloads.ts",
     "benchmark:downloads:production": "tsx scripts/benchmark-downloads.ts --env=production",
+    "verify:migration": "tsx scripts/verify-migration-completion.ts",
+    "verify:migration:production": "tsx scripts/verify-migration-completion.ts --env=production",
     "prepare": "husky"
   },
   "dependencies": {
@@ -123,7 +128,7 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "eslint --fix",
+      "eslint --fix --max-warnings=100",
       "prettier --write"
     ],
     "*.{json,css}": [

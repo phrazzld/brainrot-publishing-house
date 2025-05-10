@@ -9,15 +9,12 @@
 import fs from 'fs';
 import path from 'path';
 
-import { createLogger } from '../utils/logger';
+import { logger as _logger, createRequestLogger } from '../utils/logger';
 import { AssetPathService } from '../utils/services/AssetPathService';
 import { blobService } from '../utils/services/BlobService';
 
 // Configure logger
-const logger = createLogger({
-  level: 'info',
-  prefix: 'audio-audit',
-});
+const auditLogger = createRequestLogger('audio-audit');
 
 // Initialize services
 const assetPathService = new AssetPathService();
@@ -105,7 +102,8 @@ function parseArgs(): AuditOptions {
  * Print help information
  */
 function printHelp(): void {
-  logger.info(`
+  auditLogger.info({
+    msg: `
 Audio Asset Audit Tool
 
 This script audits the current state of audio assets in Vercel Blob storage,
@@ -116,7 +114,8 @@ Options:
   --output, -o           Directory for reports (default: ./audio-assets-audit)
   --verbose, -v          Enable verbose logging
   --help, -h             Show this help message
-  `);
+  `,
+  });
 }
 
 /**
@@ -125,16 +124,16 @@ Options:
 function createOutputDirectory(dirPath: string): void {
   if (!fs.existsSync(dirPath)) {
     fs.mkdirSync(dirPath, { recursive: true });
-    logger.info(`Created output directory: ${dirPath}`);
+    auditLogger.info({ msg: `Created output directory: ${dirPath}` });
   }
 }
 
 /**
  * Save report to file
  */
-function saveReport(filePath: string, content: Record<string, unknown>): void {
+function saveReport(filePath: string, content: unknown): void {
   fs.writeFileSync(filePath, JSON.stringify(content, null, 2));
-  logger.info(`Saved report to ${filePath}`);
+  auditLogger.info({ msg: `Saved report to ${filePath}` });
 }
 
 /**
@@ -153,7 +152,7 @@ async function listAllBlobs() {
     allBlobs.push(...result.blobs);
     cursor = result.cursor;
 
-    logger.info(`Listed ${allBlobs.length} blobs so far...`);
+    auditLogger.info({ msg: `Listed ${allBlobs.length} blobs so far...` });
   } while (cursor);
 
   return allBlobs;
@@ -162,14 +161,15 @@ async function listAllBlobs() {
 /**
  * Determine if a path is an audio asset
  */
-function isAudioAsset(path: string, contentType: string): boolean {
-  // Check if this is an audio asset based on path pattern, extension, or content type
-  const isAudioContentType =
-    contentType.startsWith('audio/') || contentType === 'application/octet-stream'; // Sometimes audio files are mislabeled
-
+function isAudioAsset(path: string, contentType: string = ''): boolean {
+  // Check if this is an audio asset based on path pattern or extension
   const hasAudioExtension = /\.(mp3|wav|ogg|m4a|flac)$/i.test(path);
-
   const isInAudioPath = path.includes('/audio/') || path.includes('/assets/audio/');
+
+  // Content type check is optional since Vercel Blob API doesn't return it
+  const isAudioContentType = contentType
+    ? contentType.startsWith('audio/') || contentType === 'application/octet-stream'
+    : false;
 
   return isAudioContentType || hasAudioExtension || isInAudioPath;
 }
@@ -202,7 +202,7 @@ function getAudioType(path: string): 'chapter' | 'full' | 'unknown' {
  * Process a single blob and create an asset info object
  */
 function processAudioBlob(
-  blob: { pathname: string; url: string; size: number; contentType: string },
+  blob: { pathname: string; url: string; size: number; downloadUrl?: string; uploadedAt?: Date },
   bookSlugs: Set<string>,
   pathIssues: Record<string, string[]>
 ): AudioAssetInfo {
@@ -244,7 +244,7 @@ function processAudioBlob(
     path: blob.pathname,
     url: blob.url,
     size: blob.size,
-    contentType: blob.contentType,
+    contentType: 'audio/mpeg', // Default for MP3 files
     bookSlug,
     isStandardized: isStandardizedPath(blob.pathname),
     standardizedPath,
@@ -364,16 +364,16 @@ function categorizeAssets(
  * Audit audio assets in Vercel Blob storage
  */
 async function auditAudioAssets(options: AuditOptions): Promise<AuditResults> {
-  logger.info('Starting audio asset audit...');
+  auditLogger.info({ msg: 'Starting audio asset audit...' });
 
   // List all blobs
-  logger.info('Listing all assets in Vercel Blob...');
+  auditLogger.info({ msg: 'Listing all assets in Vercel Blob...' });
   const allBlobs = await listAllBlobs();
-  logger.info(`Found ${allBlobs.length} total assets`);
+  auditLogger.info({ msg: `Found ${allBlobs.length} total assets` });
 
   // Filter for audio assets
-  const audioBlobs = allBlobs.filter((blob) => isAudioAsset(blob.pathname, blob.contentType));
-  logger.info(`Found ${audioBlobs.length} audio assets`);
+  const audioBlobs = allBlobs.filter((blob) => isAudioAsset(blob.pathname || '', ''));
+  auditLogger.info({ msg: `Found ${audioBlobs.length} audio assets` });
 
   // Analyze each audio asset
   const audioAssets: AudioAssetInfo[] = [];
@@ -391,11 +391,11 @@ async function auditAudioAssets(options: AuditOptions): Promise<AuditResults> {
     audioAssets.push(assetInfo);
 
     if (options.verbose) {
-      logger.info(
-        `${assetInfo.isStandardized ? '✓' : '✗'} ${assetInfo.path} ${
+      auditLogger.info({
+        msg: `${assetInfo.isStandardized ? '✓' : '✗'} ${assetInfo.path} ${
           assetInfo.needsReorganization ? `-> ${assetInfo.standardizedPath}` : ''
-        }`
-      );
+        }`,
+      });
     }
   }
 
@@ -654,18 +654,15 @@ async function main(): Promise<void> {
     // Parse command line arguments
     const options = parseArgs();
 
-    // Set log level
-    if (options.verbose) {
-      logger.level = 'debug';
-    }
+    // We don't need to set log level for this simplified implementation
 
-    logger.info('Audio Asset Audit Tool');
+    auditLogger.info({ msg: 'Audio Asset Audit Tool' });
 
     // Create output directory
     createOutputDirectory(options.outputDir);
 
     // Run the audit
-    logger.info('Analyzing audio assets...');
+    auditLogger.info({ msg: 'Analyzing audio assets...' });
     const results = await auditAudioAssets(options);
 
     // Save results to file
@@ -676,10 +673,11 @@ async function main(): Promise<void> {
     const htmlReport = createHtmlReport(results);
     const htmlPath = path.join(options.outputDir, 'audio-assets-audit.html');
     fs.writeFileSync(htmlPath, htmlReport);
-    logger.info(`Saved HTML report to ${htmlPath}`);
+    auditLogger.info({ msg: `Saved HTML report to ${htmlPath}` });
 
     // Print summary
-    logger.info(`
+    auditLogger.info({
+      msg: `
 Summary:
   Total assets: ${results.totalAssets}
   Audio assets: ${results.audioAssets}
@@ -692,9 +690,10 @@ Summary:
   }%
   
 Reports saved to: ${options.outputDir}
-    `);
+    `,
+    });
   } catch (error) {
-    logger.error('Error in audio asset audit:', error);
+    auditLogger.error({ msg: 'Error in audio asset audit', error: String(error) });
     process.exit(1);
   }
 }

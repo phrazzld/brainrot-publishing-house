@@ -50,31 +50,31 @@ All asset operations are logged with a consistent format that includes:
 
 The following action types are used in the logs:
 
-| Action | Description |
-|--------|-------------|
-| `url_generation_start` | Start of asset URL generation |
-| `url_generation_complete` | Successful URL generation |
-| `url_generation_error` | Error during URL generation |
-| `asset_existence_check_failed` | Asset existence check failed |
-| `asset_fetch_start` | Start of asset content fetch |
-| `asset_fetch_success` | Successful asset fetch |
-| `asset_fetch_http_error` | HTTP error during asset fetch |
-| `asset_fetch_retry` | Retry attempt for asset fetch |
-| `asset_fetch_failure` | Final failure of asset fetch |
+| Action                         | Description                   |
+| ------------------------------ | ----------------------------- |
+| `url_generation_start`         | Start of asset URL generation |
+| `url_generation_complete`      | Successful URL generation     |
+| `url_generation_error`         | Error during URL generation   |
+| `asset_existence_check_failed` | Asset existence check failed  |
+| `asset_fetch_start`            | Start of asset content fetch  |
+| `asset_fetch_success`          | Successful asset fetch        |
+| `asset_fetch_http_error`       | HTTP error during asset fetch |
+| `asset_fetch_retry`            | Retry attempt for asset fetch |
+| `asset_fetch_failure`          | Final failure of asset fetch  |
 
 ### 2.3 Metric Types
 
 The following metrics are collected:
 
-| Metric | Description |
-|--------|-------------|
-| `duration_ms` | Time taken for the operation in milliseconds |
-| `content_size_bytes` | Size of the asset in bytes |
-| `attempts` | Number of retry attempts |
-| `error_type` | Type of error encountered |
-| `content_type` | MIME type of the asset |
-| `cache_hit` | Whether the request hit the cache |
-| `asset_exists` | Whether the asset exists in storage |
+| Metric               | Description                                  |
+| -------------------- | -------------------------------------------- |
+| `duration_ms`        | Time taken for the operation in milliseconds |
+| `content_size_bytes` | Size of the asset in bytes                   |
+| `attempts`           | Number of retry attempts                     |
+| `error_type`         | Type of error encountered                    |
+| `content_type`       | MIME type of the asset                       |
+| `cache_hit`          | Whether the request hit the cache            |
+| `asset_exists`       | Whether the asset exists in storage          |
 
 ## 3. Dashboard Configuration
 
@@ -118,15 +118,15 @@ Automated alerts are configured to notify you of asset access issues. Alerts are
 
 The following alert rules are configured:
 
-| Alert | Description | Threshold | Severity |
-|-------|-------------|-----------|----------|
-| High Asset Error Rate | Alerts when error rate exceeds threshold | 5% | Critical |
-| Slow Asset Response Time | Alerts when response time is slow | 2000ms (P95) | Warning |
-| Asset Not Found Spike | Alerts on spike in 'not found' errors | 2x increase | Warning |
-| Low Cache Hit Ratio | Alerts when cache hit ratio is low | Below 70% | Info |
-| Repeated Asset Fetch Retries | Alerts on multiple retry attempts | >10 in 5min | Warning |
-| Critical Asset Access Failure | Alerts on failures for critical assets | >5 in 5min | Critical |
-| Sudden Traffic Increase | Alerts on traffic spikes | 3x increase | Info |
+| Alert                         | Description                              | Threshold    | Severity |
+| ----------------------------- | ---------------------------------------- | ------------ | -------- |
+| High Asset Error Rate         | Alerts when error rate exceeds threshold | 5%           | Critical |
+| Slow Asset Response Time      | Alerts when response time is slow        | 2000ms (P95) | Warning  |
+| Asset Not Found Spike         | Alerts on spike in 'not found' errors    | 2x increase  | Warning  |
+| Low Cache Hit Ratio           | Alerts when cache hit ratio is low       | Below 70%    | Info     |
+| Repeated Asset Fetch Retries  | Alerts on multiple retry attempts        | >10 in 5min  | Warning  |
+| Critical Asset Access Failure | Alerts on failures for critical assets   | >5 in 5min   | Critical |
+| Sudden Traffic Increase       | Alerts on traffic spikes                 | 3x increase  | Info     |
 
 ### 4.2 Alert Configuration
 
@@ -141,6 +141,7 @@ alertmanager-cli import /monitoring/asset-alerts.json
 ```
 
 3. Configure notification channels with appropriate credentials:
+
    - Slack webhook URL
    - Email recipients
    - PagerDuty integration key

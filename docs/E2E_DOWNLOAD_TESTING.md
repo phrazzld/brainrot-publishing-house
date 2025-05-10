@@ -62,6 +62,7 @@ After running the tests, two report files are generated in the `test-reports` di
 2. JSON Report: Machine-readable data for CI/CD integration
 
 Example:
+
 ```
 test-reports/download-e2e-local-2023-10-15T12-34-56-789Z.html
 test-reports/download-e2e-local-2023-10-15T12-34-56-789Z.json

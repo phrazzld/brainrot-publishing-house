@@ -7,6 +7,7 @@ This guide provides comprehensive documentation for setting up and configuring V
 [Vercel Blob](https://vercel.com/docs/storage/vercel-blob) is a storage solution optimized for storing and serving unstructured data like images, audio files, and text files. Our application uses Vercel Blob as the exclusive storage backend for all assets after migration from Digital Ocean Spaces.
 
 Key benefits of Vercel Blob:
+
 - Global edge distribution for low-latency access
 - Built-in content delivery network (CDN)
 - Simple API with Next.js integration
@@ -29,10 +30,10 @@ To enable Vercel Blob for your project:
 
 After enabling Blob storage, you'll need to configure the following environment variables:
 
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `BLOB_READ_WRITE_TOKEN` | Token for read/write access to Blob storage | Yes |
-| `NEXT_PUBLIC_BLOB_BASE_URL` | Public URL for accessing Blob assets | Yes |
+| Variable                    | Description                                 | Required |
+| --------------------------- | ------------------------------------------- | -------- |
+| `BLOB_READ_WRITE_TOKEN`     | Token for read/write access to Blob storage | Yes      |
+| `NEXT_PUBLIC_BLOB_BASE_URL` | Public URL for accessing Blob assets        | Yes      |
 
 #### For Local Development
 
@@ -73,7 +74,7 @@ const url = await assetService.getAssetUrl({
   assetType: 'audio',
   bookSlug: 'hamlet',
   chapter: '01',
-  variant: 'chapter'
+  variant: 'chapter',
 });
 ```
 
@@ -81,11 +82,11 @@ const url = await assetService.getAssetUrl({
 
 The asset service provides the following methods:
 
-| Method | Description |
-|--------|-------------|
-| `getAssetUrl` | Get a URL for accessing an asset |
-| `checkAssetExists` | Check if an asset exists in Blob storage |
-| `fetchAssetContent` | Fetch the content of an asset |
+| Method               | Description                                          |
+| -------------------- | ---------------------------------------------------- |
+| `getAssetUrl`        | Get a URL for accessing an asset                     |
+| `checkAssetExists`   | Check if an asset exists in Blob storage             |
+| `fetchAssetContent`  | Fetch the content of an asset                        |
 | `streamAssetContent` | Stream the content of an asset (useful for proxying) |
 
 ## 4. Asset Path Structure
@@ -93,11 +94,13 @@ The asset service provides the following methods:
 All assets in Vercel Blob follow a consistent path structure defined in `UNIFIED_BLOB_PATH_STRUCTURE.md`.
 
 The general format is:
+
 ```
 assets/{assetType}/{bookSlug}/{specificPath}
 ```
 
 For example:
+
 - Audio: `assets/audio/hamlet/chapter-01.mp3`
 - Images: `assets/images/hamlet/cover.jpg`
 - Text: `assets/text/hamlet/full-text.txt`
@@ -141,6 +144,7 @@ npx tsx scripts/verifyBlobStorage.ts
 ```
 
 This script will:
+
 - Verify that your environment variables are correctly set
 - Test uploading a small file to Blob storage
 - Test fetching the file from Blob storage
@@ -154,6 +158,7 @@ The asset service includes comprehensive logging for all operations. Look for lo
 - `context: "VercelBlobAssetService"`
 
 These logs include:
+
 - Operation type (get, check, fetch, stream)
 - Asset path and URL
 - Performance metrics

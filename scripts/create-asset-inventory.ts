@@ -32,6 +32,7 @@ import fs from 'fs/promises';
 import path from 'path';
 
 import translations from '../translations';
+import logger from '../utils/logger';
 
 // Load environment variables
 dotenv.config({ path: '.env.local' });
@@ -56,50 +57,56 @@ interface InventoryOptions {
   verifyAll: boolean;
 }
 
+interface AssetStorageInfo {
+  exists: boolean;
+  path?: string;
+  size?: number;
+  lastModified?: Date;
+  contentType?: string;
+  error?: string;
+}
+
+interface AssetTranslationInfo {
+  referenced: boolean;
+  path?: string;
+  usageInfo?: string;
+}
+
 interface Asset {
   type: AssetType;
   bookSlug: string;
   assetName: string;
-  digitalOcean: {
-    exists: boolean;
-    path?: string;
-    size?: number;
-    lastModified?: Date;
-    contentType?: string;
-    error?: string;
-  };
-  vercelBlob: {
-    exists: boolean;
-    path?: string;
-    size?: number;
-    lastModified?: Date;
-    contentType?: string;
-    error?: string;
-  };
-  translations: {
-    referenced: boolean;
-    path?: string;
-    usageInfo?: string;
-  };
+  digitalOcean: AssetStorageInfo;
+  vercelBlob: AssetStorageInfo;
+  translations: AssetTranslationInfo;
   issues: string[];
+}
+
+interface BookIssueCount {
+  missingAssets: number;
+  inconsistentPaths: number;
+  duplicateAssets: number;
+  other: number;
+}
+
+interface AssetCount {
+  audio: number;
+  text: number;
+  image: number;
+  total: number;
+}
+
+interface StorageStats {
+  totalSize: number;
+  totalCount: number;
 }
 
 interface BookInventory {
   slug: string;
   title: string;
-  assetCount: {
-    audio: number;
-    text: number;
-    image: number;
-    total: number;
-  };
+  assetCount: AssetCount;
   assets: Asset[];
-  issues: {
-    missingAssets: number;
-    inconsistentPaths: number;
-    duplicateAssets: number;
-    other: number;
-  };
+  issues: BookIssueCount;
 }
 
 interface InventoryReport {
@@ -109,22 +116,12 @@ interface InventoryReport {
     totalBooks: number;
     totalAssets: number;
     assetsByType: Record<AssetType, number>;
-    issueCount: {
-      missingAssets: number;
-      inconsistentPaths: number;
-      duplicateAssets: number;
-      other: number;
+    issueCount: BookIssueCount & {
       total: number;
     };
     storageStats: {
-      digitalOcean: {
-        totalSize: number;
-        totalCount: number;
-      };
-      vercelBlob: {
-        totalSize: number;
-        totalCount: number;
-      };
+      digitalOcean: StorageStats;
+      vercelBlob: StorageStats;
     };
   };
   pathPatterns: {
@@ -132,6 +129,23 @@ interface InventoryReport {
     vercelBlob: string[];
   };
   books: BookInventory[];
+}
+
+// Helper interfaces to reduce function parameter counts
+interface ProcessObjectsContext {
+  book: Record<string, unknown>;
+  bookInventory: BookInventory;
+  referencedAssets: Map<string, { type: AssetType; path: string; info: string }>;
+  options: InventoryOptions;
+  report: InventoryReport;
+}
+
+interface ProcessBookContext {
+  book: Record<string, unknown>;
+  doObjectsByBook: Map<string, Record<string, unknown>[]>;
+  blobObjectsByBook: Map<string, Record<string, unknown>[]>;
+  options: InventoryOptions;
+  report: InventoryReport;
 }
 
 // S3 Client for Digital Ocean
@@ -177,7 +191,7 @@ function parseArguments(): InventoryOptions {
  * Print help information
  */
 function printHelp(): void {
-  console.log(`
+  const helpText = `
 Asset Inventory Creation Script
 
 This script creates a comprehensive inventory of all assets from both
@@ -195,7 +209,10 @@ Options:
   --check-content      Verify actual content of assets (slower)
   --verify-all         Verify all assets exist (slower)
   --help               Show this help message
-`);
+`;
+
+  // Use console.error for help text as this is intentional CLI output
+  console.error(helpText);
 }
 
 /**
@@ -259,6 +276,7 @@ async function listDigitalOceanObjects(prefix?: string): Promise<Record<string, 
     try {
       const response = await client.send(command);
       if (response.Contents) {
+        // @ts-expect-error: AWS SDK types are not fully compatible with TypeScript's strictness
         objects.push(...response.Contents);
       }
       continuationToken = response.NextContinuationToken;
@@ -307,6 +325,7 @@ async function listVercelBlobObjects(prefix?: string): Promise<Record<string, un
   do {
     try {
       const result = await list({ prefix, cursor });
+      // @ts-expect-error: Vercel Blob types are not fully compatible with TypeScript's strictness
       objects.push(...result.blobs);
       cursor = result.cursor;
     } catch (error) {
@@ -339,26 +358,37 @@ async function getVercelBlobObjectMetadata(url: string): Promise<{
 }
 
 /**
+ * Check if path matches audio patterns
+ */
+function isAudioAsset(path: string): boolean {
+  return path.includes('/audio/') || path.endsWith('.mp3');
+}
+
+/**
+ * Check if path matches text patterns
+ */
+function isTextAsset(path: string): boolean {
+  const textExtensions = ['.txt', '.html', '.md'];
+  return path.includes('/text/') || textExtensions.some((ext) => path.endsWith(ext));
+}
+
+/**
+ * Check if path matches image patterns
+ */
+function isImageAsset(path: string): boolean {
+  const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.svg'];
+  return path.includes('/images/') || imageExtensions.some((ext) => path.endsWith(ext));
+}
+
+/**
  * Extract asset type from path
  */
 function getAssetTypeFromPath(path: string): AssetType {
-  if (path.includes('/audio/') || path.endsWith('.mp3')) {
+  if (isAudioAsset(path)) {
     return 'audio';
-  } else if (
-    path.includes('/text/') ||
-    path.endsWith('.txt') ||
-    path.endsWith('.html') ||
-    path.endsWith('.md')
-  ) {
+  } else if (isTextAsset(path)) {
     return 'text';
-  } else if (
-    path.includes('/images/') ||
-    path.endsWith('.jpg') ||
-    path.endsWith('.jpeg') ||
-    path.endsWith('.png') ||
-    path.endsWith('.gif') ||
-    path.endsWith('.svg')
-  ) {
+  } else if (isImageAsset(path)) {
     return 'image';
   }
   return 'text'; // Default
@@ -391,28 +421,14 @@ function getAssetNameFromPath(path: string): string {
 }
 
 /**
- * Create the asset inventory report
+ * Initialize inventory report structure
  */
-async function createAssetInventory(options: InventoryOptions): Promise<InventoryReport> {
-  // eslint-disable-next-line no-console
-  console.log('Creating comprehensive asset inventory...');
-  const startTime = Date.now();
-
-  // Get all books to process
-  const booksToProcess =
-    options.bookSlugs.length > 0
-      ? translations.filter((book) => options.bookSlugs.includes(book.slug))
-      : translations;
-
-  // eslint-disable-next-line no-console
-  console.log(`Processing ${booksToProcess.length} books for asset inventory`);
-
-  // Initialize the report
-  const report: InventoryReport = {
+function initializeInventoryReport(options: InventoryOptions, bookCount: number): InventoryReport {
+  return {
     timestamp: new Date().toISOString(),
     options,
     summary: {
-      totalBooks: booksToProcess.length,
+      totalBooks: bookCount,
       totalAssets: 0,
       assetsByType: {
         audio: 0,
@@ -443,416 +459,671 @@ async function createAssetInventory(options: InventoryOptions): Promise<Inventor
     },
     books: [],
   };
+}
 
-  // Fetch all objects from both storage systems
-  // eslint-disable-next-line no-console
-  console.log('Fetching objects from Digital Ocean Spaces...');
-  const doObjects = await listDigitalOceanObjects();
-  // eslint-disable-next-line no-console
-  console.log(`Found ${doObjects.length} objects in Digital Ocean Spaces`);
+/**
+ * Group objects by book slug
+ */
+function groupObjectsByBook(
+  objects: Record<string, unknown>[],
+  isDigitalOcean: boolean
+): {
+  objectsByBook: Map<string, Record<string, unknown>[]>;
+  pathPatterns: Set<string>;
+} {
+  const objectsByBook = new Map<string, Record<string, unknown>[]>();
+  const pathPatterns = new Set<string>();
 
-  // eslint-disable-next-line no-console
-  console.log('Fetching objects from Vercel Blob...');
-  const blobObjects = await listVercelBlobObjects();
-  // eslint-disable-next-line no-console
-  console.log(`Found ${blobObjects.length} objects in Vercel Blob`);
-
-  // Group objects by book
-
-  const doObjectsByBook = new Map<string, Record<string, unknown>[]>();
-
-  const blobObjectsByBook = new Map<string, Record<string, unknown>[]>();
-  const pathPatternsDO = new Set<string>();
-  const pathPatternsBlob = new Set<string>();
-
-  // Process Digital Ocean objects
-  for (const obj of doObjects) {
-    const key = obj.Key;
+  for (const obj of objects) {
+    const key = isDigitalOcean ? (obj.Key as string) : (obj.pathname as string);
     const bookSlug = getBookSlugFromPath(key);
     if (bookSlug) {
-      if (!doObjectsByBook.has(bookSlug)) {
-        doObjectsByBook.set(bookSlug, []);
+      if (!objectsByBook.has(bookSlug)) {
+        objectsByBook.set(bookSlug, []);
       }
-      doObjectsByBook.get(bookSlug)?.push(obj);
+      objectsByBook.get(bookSlug)?.push(obj);
 
       // Extract path pattern
       const pattern = key.replace(bookSlug, '{slug}').replace(/\/[^/]+\.\w+$/, '/{file}');
-      pathPatternsDO.add(pattern);
+      pathPatterns.add(pattern);
     }
   }
 
-  // Process Vercel Blob objects
-  for (const obj of blobObjects) {
-    const pathname = obj.pathname;
-    const bookSlug = getBookSlugFromPath(pathname);
-    if (bookSlug) {
-      if (!blobObjectsByBook.has(bookSlug)) {
-        blobObjectsByBook.set(bookSlug, []);
+  return { objectsByBook, pathPatterns };
+}
+
+/**
+ * Collect audio assets from a book's chapters
+ */
+function collectChapterAudioAssets(
+  chapters: Array<{ audioSrc?: string; title: string }>,
+  referencedAssets: Map<string, { type: AssetType; path: string; info: string }>
+): void {
+  for (const chapter of chapters) {
+    if (chapter.audioSrc) {
+      const assetName = getAssetNameFromPath(chapter.audioSrc);
+      referencedAssets.set(`audio:${assetName}`, {
+        type: 'audio',
+        path: chapter.audioSrc,
+        info: `Chapter: ${chapter.title}`,
+      });
+    }
+  }
+}
+
+/**
+ * Collect full audiobook asset
+ */
+function collectFullAudioAsset(
+  fullAudioSrc: string,
+  referencedAssets: Map<string, { type: AssetType; path: string; info: string }>
+): void {
+  const assetName = getAssetNameFromPath(fullAudioSrc);
+  referencedAssets.set(`audio:${assetName}`, {
+    type: 'audio',
+    path: fullAudioSrc,
+    info: 'Full audiobook',
+  });
+}
+
+/**
+ * Collect cover image asset
+ */
+function collectCoverImageAsset(
+  coverImage: string,
+  referencedAssets: Map<string, { type: AssetType; path: string; info: string }>
+): void {
+  const assetName = getAssetNameFromPath(coverImage);
+  referencedAssets.set(`image:${assetName}`, {
+    type: 'image',
+    path: coverImage,
+    info: 'Cover image',
+  });
+}
+
+/**
+ * Collect full text asset
+ */
+function collectFullTextAsset(
+  fullText: string,
+  referencedAssets: Map<string, { type: AssetType; path: string; info: string }>
+): void {
+  referencedAssets.set(`text:fulltext.txt`, {
+    type: 'text',
+    path: fullText,
+    info: 'Full text',
+  });
+}
+
+/**
+ * Collect chapter image assets
+ */
+function collectChapterImageAssets(
+  chapters: Array<{ image?: string; title: string }>,
+  referencedAssets: Map<string, { type: AssetType; path: string; info: string }>
+): void {
+  for (const chapter of chapters) {
+    if (chapter.image) {
+      const assetName = getAssetNameFromPath(chapter.image);
+      referencedAssets.set(`image:${assetName}`, {
+        type: 'image',
+        path: chapter.image,
+        info: `Chapter image: ${chapter.title}`,
+      });
+    }
+  }
+}
+
+/**
+ * Collect all audio assets from a book
+ */
+function collectAudioAssets(
+  typedBook: {
+    chapters?: Array<{ audioSrc?: string; title: string; image?: string }>;
+    fullAudioSrc?: string;
+  },
+  referencedAssets: Map<string, { type: AssetType; path: string; info: string }>
+): void {
+  // Chapters audio
+  if (typedBook.chapters) {
+    collectChapterAudioAssets(typedBook.chapters, referencedAssets);
+  }
+
+  // Full audiobook
+  if (typedBook.fullAudioSrc) {
+    collectFullAudioAsset(typedBook.fullAudioSrc, referencedAssets);
+  }
+}
+
+/**
+ * Collect all image assets from a book
+ */
+function collectImageAssets(
+  typedBook: {
+    chapters?: Array<{ image?: string; title: string }>;
+    coverImage?: string;
+  },
+  referencedAssets: Map<string, { type: AssetType; path: string; info: string }>
+): void {
+  // Cover image
+  if (typedBook.coverImage) {
+    collectCoverImageAsset(typedBook.coverImage, referencedAssets);
+  }
+
+  // Chapter images
+  if (typedBook.chapters) {
+    collectChapterImageAssets(typedBook.chapters, referencedAssets);
+  }
+}
+
+/**
+ * Collect referenced assets from a book's translations data
+ */
+function collectReferencedAssets(
+  book: Record<string, unknown>,
+  options: InventoryOptions
+): Map<string, { type: AssetType; path: string; info: string }> {
+  const referencedAssets = new Map<string, { type: AssetType; path: string; info: string }>();
+
+  // Extract typed book properties
+  const typedBook = book as {
+    chapters?: Array<{ audioSrc?: string; title: string; image?: string }>;
+    fullAudioSrc?: string;
+    coverImage?: string;
+    fullText?: string;
+    slug: string;
+  };
+
+  // Audio assets
+  if (options.assetTypes.includes('audio')) {
+    collectAudioAssets(typedBook, referencedAssets);
+  }
+
+  // Image assets
+  if (options.assetTypes.includes('image')) {
+    collectImageAssets(typedBook, referencedAssets);
+  }
+
+  // Text content
+  if (typedBook.fullText && options.assetTypes.includes('text')) {
+    collectFullTextAsset(typedBook.fullText, referencedAssets);
+  }
+
+  return referencedAssets;
+}
+
+/**
+ * Process a single Digital Ocean object
+ */
+async function processDigitalOceanObject(
+  obj: Record<string, unknown>,
+  context: ProcessObjectsContext,
+  doObjectMetadata: boolean
+): Promise<void> {
+  const { book, bookInventory, referencedAssets, options, report } = context;
+
+  const assetName = getAssetNameFromPath(obj.Key as string);
+  const assetType = getAssetTypeFromPath(obj.Key as string);
+
+  // Skip asset types not in options
+  if (!options.assetTypes.includes(assetType)) return;
+
+  const key = `${assetType}:${assetName}`;
+  let asset = bookInventory.assets.find((a) => a.type === assetType && a.assetName === assetName);
+
+  if (!asset) {
+    asset = {
+      type: assetType,
+      bookSlug: book.slug,
+      assetName,
+      digitalOcean: {
+        exists: true,
+        path: obj.Key as string,
+        size: obj.Size as number,
+        lastModified: obj.LastModified as Date,
+      },
+      vercelBlob: {
+        exists: false,
+      },
+      translations: {
+        referenced: referencedAssets.has(key),
+        path: referencedAssets.get(key)?.path,
+        usageInfo: referencedAssets.get(key)?.info,
+      },
+      issues: [],
+    };
+    bookInventory.assets.push(asset);
+    bookInventory.assetCount[assetType]++;
+    bookInventory.assetCount.total++;
+  } else {
+    asset.digitalOcean = {
+      exists: true,
+      path: obj.Key as string,
+      size: obj.Size as number,
+      lastModified: obj.LastModified as Date,
+    };
+  }
+
+  // Get full metadata if needed
+  if (doObjectMetadata) {
+    try {
+      const metadata = await getDigitalOceanObjectMetadata(obj.Key as string);
+      asset.digitalOcean.size = metadata.size;
+      asset.digitalOcean.lastModified = metadata.lastModified;
+      asset.digitalOcean.contentType = metadata.contentType;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      asset.digitalOcean.error = errorMessage;
+      asset.issues.push(`Digital Ocean error: ${errorMessage}`);
+      bookInventory.issues.other++;
+    }
+  }
+
+  // Update storage stats
+  report.summary.storageStats.digitalOcean.totalCount++;
+  report.summary.storageStats.digitalOcean.totalSize += (obj.Size as number) || 0;
+}
+
+/**
+ * Process Digital Ocean objects for a book
+ */
+async function processDigitalOceanObjects(
+  context: ProcessObjectsContext,
+  doBookObjects: Record<string, unknown>[]
+): Promise<void> {
+  const { options } = context;
+  const doObjectMetadata = options.verifyAll || options.checkContent;
+
+  // Process each object
+  const processPromises = doBookObjects.map((obj) =>
+    processDigitalOceanObject(obj, context, doObjectMetadata)
+  );
+
+  await Promise.all(processPromises);
+}
+
+/**
+ * Process a single Vercel Blob object
+ */
+async function processVercelBlobObject(
+  obj: Record<string, unknown>,
+  context: ProcessObjectsContext,
+  getBlobMetadata: boolean
+): Promise<void> {
+  const { book, bookInventory, referencedAssets, options, report } = context;
+
+  const assetName = getAssetNameFromPath(obj.pathname as string);
+  const assetType = getAssetTypeFromPath(obj.pathname as string);
+
+  // Skip asset types not in options
+  if (!options.assetTypes.includes(assetType)) return;
+
+  const key = `${assetType}:${assetName}`;
+  let asset = bookInventory.assets.find((a) => a.type === assetType && a.assetName === assetName);
+
+  if (!asset) {
+    asset = {
+      type: assetType,
+      bookSlug: book.slug,
+      assetName,
+      digitalOcean: {
+        exists: false,
+      },
+      vercelBlob: {
+        exists: true,
+        path: obj.pathname as string,
+        size: obj.size as number,
+        lastModified: new Date(obj.uploadedAt as string),
+      },
+      translations: {
+        referenced: referencedAssets.has(key),
+        path: referencedAssets.get(key)?.path,
+        usageInfo: referencedAssets.get(key)?.info,
+      },
+      issues: [],
+    };
+    bookInventory.assets.push(asset);
+    bookInventory.assetCount[assetType]++;
+    bookInventory.assetCount.total++;
+  } else {
+    asset.vercelBlob = {
+      exists: true,
+      path: obj.pathname as string,
+      size: obj.size as number,
+      lastModified: new Date(obj.uploadedAt as string),
+    };
+  }
+
+  // Get full metadata if needed
+  if (getBlobMetadata) {
+    try {
+      const metadata = await getVercelBlobObjectMetadata(obj.url as string);
+      asset.vercelBlob.size = metadata.size;
+      asset.vercelBlob.lastModified = metadata.lastModified;
+      asset.vercelBlob.contentType = metadata.contentType;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      asset.vercelBlob.error = errorMessage;
+      asset.issues.push(`Vercel Blob error: ${errorMessage}`);
+      bookInventory.issues.other++;
+    }
+  }
+
+  // Update storage stats
+  report.summary.storageStats.vercelBlob.totalCount++;
+  report.summary.storageStats.vercelBlob.totalSize += (obj.size as number) || 0;
+}
+
+/**
+ * Process Vercel Blob objects for a book
+ */
+async function processVercelBlobObjects(
+  context: ProcessObjectsContext,
+  blobBookObjects: Record<string, unknown>[]
+): Promise<void> {
+  const { options } = context;
+  const getBlobMetadata = options.verifyAll || options.checkContent;
+
+  // Process each object in parallel
+  const processPromises = blobBookObjects.map((obj) =>
+    processVercelBlobObject(obj, context, getBlobMetadata)
+  );
+
+  await Promise.all(processPromises);
+}
+
+/**
+ * Process missing assets referenced in translations
+ */
+function processMissingReferencedAssets(
+  book: Record<string, unknown>,
+  bookInventory: BookInventory,
+  referencedAssets: Map<string, { type: AssetType; path: string; info: string }>
+): void {
+  for (const [_key, assetRef] of referencedAssets.entries()) {
+    const assetName = getAssetNameFromPath(assetRef.path);
+    const assetType = assetRef.type;
+
+    // Check if asset already exists in our inventory
+    const asset = bookInventory.assets.find(
+      (a) => a.type === assetType && a.assetName === assetName
+    );
+
+    if (!asset) {
+      // Asset referenced but not found in any storage
+      const newAsset = {
+        type: assetType,
+        bookSlug: book.slug,
+        assetName,
+        digitalOcean: {
+          exists: false,
+        },
+        vercelBlob: {
+          exists: false,
+        },
+        translations: {
+          referenced: true,
+          path: assetRef.path,
+          usageInfo: assetRef.info,
+        },
+        issues: ['Referenced in translations but not found in any storage'],
+      };
+      bookInventory.assets.push(newAsset);
+      bookInventory.assetCount[assetType]++;
+      bookInventory.assetCount.total++;
+      bookInventory.issues.missingAssets++;
+    }
+  }
+}
+
+/**
+ * Identify issues for assets in a book
+ */
+function identifyAssetIssues(bookInventory: BookInventory): void {
+  // Identify issues for each asset
+  for (const asset of bookInventory.assets) {
+    identifySingleAssetIssues(asset, bookInventory);
+  }
+
+  // Check for duplicate assets (same type/name but different paths)
+  identifyDuplicateAssets(bookInventory);
+}
+
+/**
+ * Check if asset is missing from all storage systems
+ */
+function checkMissingAsset(asset: Asset, bookInventory: BookInventory): void {
+  if (!asset.digitalOcean.exists && !asset.vercelBlob.exists && asset.translations.referenced) {
+    asset.issues.push('Asset is referenced but missing from all storage systems');
+    bookInventory.issues.missingAssets++;
+  }
+}
+
+/**
+ * Check for inconsistent paths between storage systems
+ */
+function checkInconsistentPaths(asset: Asset, bookInventory: BookInventory): void {
+  if (
+    asset.digitalOcean.exists &&
+    asset.vercelBlob.exists &&
+    asset.digitalOcean.path &&
+    asset.vercelBlob.path
+  ) {
+    const doPath = asset.digitalOcean.path;
+    const blobPath = asset.vercelBlob.path;
+
+    // If paths have completely different structures
+    if (
+      doPath.split('/').length !== blobPath.split('/').length ||
+      !doPath.endsWith(asset.assetName) ||
+      !blobPath.endsWith(asset.assetName)
+    ) {
+      asset.issues.push('Inconsistent paths between storage systems');
+      bookInventory.issues.inconsistentPaths++;
+    }
+  }
+}
+
+/**
+ * Check for size mismatches between storage systems
+ */
+function checkSizeMismatch(asset: Asset, bookInventory: BookInventory): void {
+  if (
+    asset.digitalOcean.exists &&
+    asset.vercelBlob.exists &&
+    asset.digitalOcean.size &&
+    asset.vercelBlob.size &&
+    Math.abs(asset.digitalOcean.size - asset.vercelBlob.size) > 100 // Allow small differences
+  ) {
+    asset.issues.push(
+      `Size mismatch: DO (${formatSize(asset.digitalOcean.size)}) vs Blob (${formatSize(
+        asset.vercelBlob.size
+      )})`
+    );
+    bookInventory.issues.other++;
+  }
+}
+
+/**
+ * Check if asset is unreferenced in translations
+ */
+function checkUnreferencedAsset(asset: Asset): void {
+  if (!asset.translations.referenced) {
+    asset.issues.push('Asset exists in storage but is not referenced in translations');
+  }
+}
+
+/**
+ * Identify issues for a single asset
+ */
+function identifySingleAssetIssues(asset: Asset, bookInventory: BookInventory): void {
+  // Run a series of checks
+  checkMissingAsset(asset, bookInventory);
+  checkInconsistentPaths(asset, bookInventory);
+  checkSizeMismatch(asset, bookInventory);
+  checkUnreferencedAsset(asset);
+}
+
+/**
+ * Identify duplicate assets in a book
+ */
+function identifyDuplicateAssets(bookInventory: BookInventory): void {
+  const assetCounts = new Map<string, number>();
+  for (const asset of bookInventory.assets) {
+    const key = `${asset.type}:${asset.assetName}`;
+    const count = assetCounts.get(key) || 0;
+    assetCounts.set(key, count + 1);
+  }
+
+  for (const [key, count] of assetCounts.entries()) {
+    if (count > 1) {
+      const [type, name] = key.split(':');
+      const assets = bookInventory.assets.filter((a) => a.type === type && a.assetName === name);
+      for (const asset of assets) {
+        asset.issues.push(`Duplicate asset found (${count} instances)`);
+        bookInventory.issues.duplicateAssets++;
       }
-      blobObjectsByBook.get(bookSlug)?.push(obj);
-
-      // Extract path pattern
-      const pattern = pathname.replace(bookSlug, '{slug}').replace(/\/[^/]+\.\w+$/, '/{file}');
-      pathPatternsBlob.add(pattern);
     }
   }
+}
+
+/**
+ * Process a single book and add it to the inventory
+ */
+async function processBook(context: ProcessBookContext): Promise<BookInventory> {
+  const { book, doObjectsByBook, blobObjectsByBook, options, report } = context;
+
+  if (options.verbose) {
+    logger.info({ msg: `Processing book: ${book.slug} (${book.title})` });
+  }
+
+  const bookInventory: BookInventory = {
+    slug: book.slug,
+    title: book.title,
+    assetCount: {
+      audio: 0,
+      text: 0,
+      image: 0,
+      total: 0,
+    },
+    assets: [],
+    issues: {
+      missingAssets: 0,
+      inconsistentPaths: 0,
+      duplicateAssets: 0,
+      other: 0,
+    },
+  };
+
+  // Get book objects
+  const doBookObjects = doObjectsByBook.get(book.slug) || [];
+  const blobBookObjects = blobObjectsByBook.get(book.slug) || [];
+
+  if (options.verbose) {
+    logger.info({
+      msg: `Found ${doBookObjects.length} Digital Ocean objects and ${blobBookObjects.length} Vercel Blob objects`,
+      book: book.slug,
+    });
+  }
+
+  // Collect assets from translations
+  const referencedAssets = collectReferencedAssets(book, options);
+
+  // Create processing context for this book
+  const processingContext: ProcessObjectsContext = {
+    book,
+    bookInventory,
+    referencedAssets,
+    options,
+    report,
+  };
+
+  // Process objects from both storage systems
+  await Promise.all([
+    processDigitalOceanObjects(processingContext, doBookObjects),
+    processVercelBlobObjects(processingContext, blobBookObjects),
+  ]);
+
+  // Add assets referenced in translations but not found in storage
+  processMissingReferencedAssets(book, bookInventory, referencedAssets);
+
+  // Identify issues for assets
+  identifyAssetIssues(bookInventory);
+
+  // Update summary counts
+  updateReportSummary(report, bookInventory);
+
+  return bookInventory;
+}
+
+/**
+ * Update report summary with book inventory data
+ */
+function updateReportSummary(report: InventoryReport, bookInventory: BookInventory): void {
+  report.summary.assetsByType.audio += bookInventory.assetCount.audio;
+  report.summary.assetsByType.text += bookInventory.assetCount.text;
+  report.summary.assetsByType.image += bookInventory.assetCount.image;
+  report.summary.totalAssets += bookInventory.assetCount.total;
+  report.summary.issueCount.missingAssets += bookInventory.issues.missingAssets;
+  report.summary.issueCount.inconsistentPaths += bookInventory.issues.inconsistentPaths;
+  report.summary.issueCount.duplicateAssets += bookInventory.issues.duplicateAssets;
+  report.summary.issueCount.other += bookInventory.issues.other;
+}
+
+/**
+ * Create the asset inventory report
+ */
+async function createAssetInventory(options: InventoryOptions): Promise<InventoryReport> {
+  logger.info({ msg: 'Creating comprehensive asset inventory...' });
+  const startTime = Date.now();
+
+  // Get all books to process
+  const booksToProcess =
+    options.bookSlugs.length > 0
+      ? translations.filter((book) => options.bookSlugs.includes(book.slug))
+      : translations;
+
+  logger.info({ msg: `Processing ${booksToProcess.length} books for asset inventory` });
+
+  // Initialize the report
+  const report = initializeInventoryReport(options, booksToProcess.length);
+
+  // Fetch all objects from both storage systems
+  logger.info({ msg: 'Fetching objects from Digital Ocean Spaces...' });
+  const doObjects = await listDigitalOceanObjects();
+  logger.info({ msg: `Found ${doObjects.length} objects in Digital Ocean Spaces` });
+
+  logger.info({ msg: 'Fetching objects from Vercel Blob...' });
+  const blobObjects = await listVercelBlobObjects();
+  logger.info({ msg: `Found ${blobObjects.length} objects in Vercel Blob` });
+
+  // Group objects by book and extract path patterns
+  const { objectsByBook: doObjectsByBook, pathPatterns: pathPatternsDO } = groupObjectsByBook(
+    doObjects,
+    true
+  );
+  const { objectsByBook: blobObjectsByBook, pathPatterns: pathPatternsBlob } = groupObjectsByBook(
+    blobObjects,
+    false
+  );
 
   // Add path patterns to report
   report.pathPatterns.digitalOcean = Array.from(pathPatternsDO);
   report.pathPatterns.vercelBlob = Array.from(pathPatternsBlob);
 
   // Process each book
+  // We process books serially to avoid overwhelming the system
   for (const book of booksToProcess) {
-    if (options.verbose) {
-      console.log(`\nProcessing book: ${book.slug} (${book.title})`);
-    }
-
-    const bookInventory: BookInventory = {
-      slug: book.slug,
-      title: book.title,
-      assetCount: {
-        audio: 0,
-        text: 0,
-        image: 0,
-        total: 0,
-      },
-      assets: [],
-      issues: {
-        missingAssets: 0,
-        inconsistentPaths: 0,
-        duplicateAssets: 0,
-        other: 0,
-      },
+    const context: ProcessBookContext = {
+      book,
+      doObjectsByBook,
+      blobObjectsByBook,
+      options,
+      report,
     };
 
-    // Get book objects
-    const doBookObjects = doObjectsByBook.get(book.slug) || [];
-    const blobBookObjects = blobObjectsByBook.get(book.slug) || [];
-
-    if (options.verbose) {
-      console.log(
-        `  Found ${doBookObjects.length} Digital Ocean objects and ${blobBookObjects.length} Vercel Blob objects`
-      );
-    }
-
-    // Collect assets from translations
-    const referencedAssets: Map<string, { type: AssetType; path: string; info: string }> =
-      new Map();
-
-    // Chapters for audio
-    if (book.chapters && options.assetTypes.includes('audio')) {
-      for (const chapter of book.chapters) {
-        if (chapter.audioSrc) {
-          const assetName = getAssetNameFromPath(chapter.audioSrc);
-          const key = `audio:${assetName}`;
-          referencedAssets.set(key, {
-            type: 'audio',
-            path: chapter.audioSrc,
-            info: `Chapter: ${chapter.title}`,
-          });
-        }
-      }
-    }
-
-    // Full audiobook
-    if (book.fullAudioSrc && options.assetTypes.includes('audio')) {
-      const assetName = getAssetNameFromPath(book.fullAudioSrc);
-      const key = `audio:${assetName}`;
-      referencedAssets.set(key, {
-        type: 'audio',
-        path: book.fullAudioSrc,
-        info: 'Full audiobook',
-      });
-    }
-
-    // Cover image
-    if (book.coverImage && options.assetTypes.includes('image')) {
-      const assetName = getAssetNameFromPath(book.coverImage);
-      const key = `image:${assetName}`;
-      referencedAssets.set(key, {
-        type: 'image',
-        path: book.coverImage,
-        info: 'Cover image',
-      });
-    }
-
-    // Text content
-    if (book.fullText && options.assetTypes.includes('text')) {
-      const assetName = 'fulltext.txt';
-      const key = `text:${assetName}`;
-      referencedAssets.set(key, {
-        type: 'text',
-        path: book.fullText,
-        info: 'Full text',
-      });
-    }
-
-    // Chapter images
-    if (book.chapters && options.assetTypes.includes('image')) {
-      for (const chapter of book.chapters) {
-        if (chapter.image) {
-          const assetName = getAssetNameFromPath(chapter.image);
-          const key = `image:${assetName}`;
-          referencedAssets.set(key, {
-            type: 'image',
-            path: chapter.image,
-            info: `Chapter image: ${chapter.title}`,
-          });
-        }
-      }
-    }
-
-    // Collect assets from Digital Ocean
-    for (const obj of doBookObjects) {
-      const assetName = getAssetNameFromPath(obj.Key);
-      const assetType = getAssetTypeFromPath(obj.Key);
-
-      // Skip asset types not in options
-      if (!options.assetTypes.includes(assetType)) continue;
-
-      const key = `${assetType}:${assetName}`;
-      let asset = bookInventory.assets.find(
-        (a) => a.type === assetType && a.assetName === assetName
-      );
-
-      if (!asset) {
-        asset = {
-          type: assetType,
-          bookSlug: book.slug,
-          assetName,
-          digitalOcean: {
-            exists: true,
-            path: obj.Key,
-            size: obj.Size,
-            lastModified: obj.LastModified,
-          },
-          vercelBlob: {
-            exists: false,
-          },
-          translations: {
-            referenced: referencedAssets.has(key),
-            path: referencedAssets.get(key)?.path,
-            usageInfo: referencedAssets.get(key)?.info,
-          },
-          issues: [],
-        };
-        bookInventory.assets.push(asset);
-        bookInventory.assetCount[assetType]++;
-        bookInventory.assetCount.total++;
-      } else {
-        asset.digitalOcean = {
-          exists: true,
-          path: obj.Key,
-          size: obj.Size,
-          lastModified: obj.LastModified,
-        };
-      }
-
-      // Get full metadata if needed
-      if (options.verifyAll || options.checkContent) {
-        try {
-          const metadata = await getDigitalOceanObjectMetadata(obj.Key);
-          asset.digitalOcean.size = metadata.size;
-          asset.digitalOcean.lastModified = metadata.lastModified;
-          asset.digitalOcean.contentType = metadata.contentType;
-        } catch (error) {
-          const errorMessage = error instanceof Error ? error.message : String(error);
-          asset.digitalOcean.error = errorMessage;
-          asset.issues.push(`Digital Ocean error: ${errorMessage}`);
-          bookInventory.issues.other++;
-        }
-      }
-
-      // Update storage stats
-      report.summary.storageStats.digitalOcean.totalCount++;
-      report.summary.storageStats.digitalOcean.totalSize += obj.Size || 0;
-    }
-
-    // Collect assets from Vercel Blob
-    for (const obj of blobBookObjects) {
-      const assetName = getAssetNameFromPath(obj.pathname);
-      const assetType = getAssetTypeFromPath(obj.pathname);
-
-      // Skip asset types not in options
-      if (!options.assetTypes.includes(assetType)) continue;
-
-      const key = `${assetType}:${assetName}`;
-      let asset = bookInventory.assets.find(
-        (a) => a.type === assetType && a.assetName === assetName
-      );
-
-      if (!asset) {
-        asset = {
-          type: assetType,
-          bookSlug: book.slug,
-          assetName,
-          digitalOcean: {
-            exists: false,
-          },
-          vercelBlob: {
-            exists: true,
-            path: obj.pathname,
-            size: obj.size,
-            lastModified: new Date(obj.uploadedAt),
-          },
-          translations: {
-            referenced: referencedAssets.has(key),
-            path: referencedAssets.get(key)?.path,
-            usageInfo: referencedAssets.get(key)?.info,
-          },
-          issues: [],
-        };
-        bookInventory.assets.push(asset);
-        bookInventory.assetCount[assetType]++;
-        bookInventory.assetCount.total++;
-      } else {
-        asset.vercelBlob = {
-          exists: true,
-          path: obj.pathname,
-          size: obj.size,
-          lastModified: new Date(obj.uploadedAt),
-        };
-      }
-
-      // Get full metadata if needed
-      if (options.verifyAll || options.checkContent) {
-        try {
-          const metadata = await getVercelBlobObjectMetadata(obj.url);
-          asset.vercelBlob.size = metadata.size;
-          asset.vercelBlob.lastModified = metadata.lastModified;
-          asset.vercelBlob.contentType = metadata.contentType;
-        } catch (error) {
-          const errorMessage = error instanceof Error ? error.message : String(error);
-          asset.vercelBlob.error = errorMessage;
-          asset.issues.push(`Vercel Blob error: ${errorMessage}`);
-          bookInventory.issues.other++;
-        }
-      }
-
-      // Update storage stats
-      report.summary.storageStats.vercelBlob.totalCount++;
-      report.summary.storageStats.vercelBlob.totalSize += obj.size || 0;
-    }
-
-    // Add assets referenced in translations but not found in storage
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    for (const [key, assetRef] of referencedAssets.entries()) {
-      const assetName = getAssetNameFromPath(assetRef.path);
-      const assetType = assetRef.type;
-
-      // Check if asset already exists in our inventory
-      let asset = bookInventory.assets.find(
-        (a) => a.type === assetType && a.assetName === assetName
-      );
-
-      if (!asset) {
-        // Asset referenced but not found in any storage
-        asset = {
-          type: assetType,
-          bookSlug: book.slug,
-          assetName,
-          digitalOcean: {
-            exists: false,
-          },
-          vercelBlob: {
-            exists: false,
-          },
-          translations: {
-            referenced: true,
-            path: assetRef.path,
-            usageInfo: assetRef.info,
-          },
-          issues: ['Referenced in translations but not found in any storage'],
-        };
-        bookInventory.assets.push(asset);
-        bookInventory.assetCount[assetType]++;
-        bookInventory.assetCount.total++;
-        bookInventory.issues.missingAssets++;
-      }
-    }
-
-    // Identify issues for each asset
-    for (const asset of bookInventory.assets) {
-      // Missing asset
-      if (!asset.digitalOcean.exists && !asset.vercelBlob.exists && asset.translations.referenced) {
-        asset.issues.push('Asset is referenced but missing from all storage systems');
-        bookInventory.issues.missingAssets++;
-      }
-
-      // Inconsistent paths
-      if (
-        asset.digitalOcean.exists &&
-        asset.vercelBlob.exists &&
-        asset.digitalOcean.path &&
-        asset.vercelBlob.path
-      ) {
-        const doPath = asset.digitalOcean.path;
-        const blobPath = asset.vercelBlob.path;
-
-        // If paths have completely different structures
-        if (
-          doPath.split('/').length !== blobPath.split('/').length ||
-          !doPath.endsWith(asset.assetName) ||
-          !blobPath.endsWith(asset.assetName)
-        ) {
-          asset.issues.push('Inconsistent paths between storage systems');
-          bookInventory.issues.inconsistentPaths++;
-        }
-      }
-
-      // Size mismatch
-      if (
-        asset.digitalOcean.exists &&
-        asset.vercelBlob.exists &&
-        asset.digitalOcean.size &&
-        asset.vercelBlob.size &&
-        Math.abs(asset.digitalOcean.size - asset.vercelBlob.size) > 100 // Allow small differences
-      ) {
-        asset.issues.push(
-          `Size mismatch: DO (${formatSize(asset.digitalOcean.size)}) vs Blob (${formatSize(
-            asset.vercelBlob.size
-          )})`
-        );
-        bookInventory.issues.other++;
-      }
-
-      // Unreferenced asset
-      if (!asset.translations.referenced) {
-        asset.issues.push('Asset exists in storage but is not referenced in translations');
-      }
-    }
-
-    // Check for duplicate assets (same type/name but different paths)
-    const assetCounts = new Map<string, number>();
-    for (const asset of bookInventory.assets) {
-      const key = `${asset.type}:${asset.assetName}`;
-      const count = assetCounts.get(key) || 0;
-      assetCounts.set(key, count + 1);
-    }
-
-    for (const [key, count] of assetCounts.entries()) {
-      if (count > 1) {
-        const [type, name] = key.split(':');
-        const assets = bookInventory.assets.filter((a) => a.type === type && a.assetName === name);
-        for (const asset of assets) {
-          asset.issues.push(`Duplicate asset found (${count} instances)`);
-          bookInventory.issues.duplicateAssets++;
-        }
-      }
-    }
-
-    // Add book to report
+    const bookInventory = await processBook(context);
     report.books.push(bookInventory);
-
-    // Update summary counts
-    report.summary.assetsByType.audio += bookInventory.assetCount.audio;
-    report.summary.assetsByType.text += bookInventory.assetCount.text;
-    report.summary.assetsByType.image += bookInventory.assetCount.image;
-    report.summary.totalAssets += bookInventory.assetCount.total;
-    report.summary.issueCount.missingAssets += bookInventory.issues.missingAssets;
-    report.summary.issueCount.inconsistentPaths += bookInventory.issues.inconsistentPaths;
-    report.summary.issueCount.duplicateAssets += bookInventory.issues.duplicateAssets;
-    report.summary.issueCount.other += bookInventory.issues.other;
   }
 
   // Calculate total issues
@@ -864,115 +1135,170 @@ async function createAssetInventory(options: InventoryOptions): Promise<Inventor
 
   const endTime = Date.now();
   const duration = (endTime - startTime) / 1000;
-  console.log(`\nInventory creation completed in ${duration.toFixed(2)} seconds`);
+  logger.info({ msg: `Inventory creation completed in ${duration.toFixed(2)} seconds` });
 
   return report;
 }
 
 /**
- * Generate a markdown report
+ * Generate a detailed markdown report with recommendations
  */
 async function generateMarkdownReport(report: InventoryReport, outputPath: string): Promise<void> {
-  const lines = [
-    '# Asset Inventory Report',
-    '',
-    `Generated: ${report.timestamp}`,
-    '',
-    '## Summary',
-    '',
-    `- **Total Books**: ${report.summary.totalBooks}`,
-    `- **Total Assets**: ${report.summary.totalAssets}`,
-    `  - Audio: ${report.summary.assetsByType.audio}`,
-    `  - Text: ${report.summary.assetsByType.text}`,
-    `  - Images: ${report.summary.assetsByType.image}`,
-    '',
-    '## Storage Statistics',
-    '',
-    '### Digital Ocean Spaces',
-    '',
-    `- **Total Objects**: ${report.summary.storageStats.digitalOcean.totalCount}`,
-    `- **Total Size**: ${formatSize(report.summary.storageStats.digitalOcean.totalSize)}`,
-    '',
-    '### Vercel Blob',
-    '',
-    `- **Total Objects**: ${report.summary.storageStats.vercelBlob.totalCount}`,
-    `- **Total Size**: ${formatSize(report.summary.storageStats.vercelBlob.totalSize)}`,
-    '',
-    '## Issues',
-    '',
-    `- **Total Issues**: ${report.summary.issueCount.total}`,
-    `  - Missing Assets: ${report.summary.issueCount.missingAssets}`,
-    `  - Inconsistent Paths: ${report.summary.issueCount.inconsistentPaths}`,
-    `  - Duplicate Assets: ${report.summary.issueCount.duplicateAssets}`,
-    `  - Other Issues: ${report.summary.issueCount.other}`,
-    '',
-    '## Path Patterns',
-    '',
-    '### Digital Ocean Spaces',
-    '',
-  ];
+  const generateSummarySection = (report: InventoryReport): string[] => {
+    return [
+      '# Asset Inventory Report',
+      '',
+      `Generated: ${report.timestamp}`,
+      '',
+      '## Summary',
+      '',
+      `- **Total Books**: ${report.summary.totalBooks}`,
+      `- **Total Assets**: ${report.summary.totalAssets}`,
+      `  - Audio: ${report.summary.assetsByType.audio}`,
+      `  - Text: ${report.summary.assetsByType.text}`,
+      `  - Images: ${report.summary.assetsByType.image}`,
+      '',
+    ];
+  };
 
-  // Add DO path patterns
-  for (const pattern of report.pathPatterns.digitalOcean) {
-    lines.push(`- \`${pattern}\``);
+  const generateStorageSection = (report: InventoryReport): string[] => {
+    return [
+      '## Storage Statistics',
+      '',
+      '### Digital Ocean Spaces',
+      '',
+      `- **Total Objects**: ${report.summary.storageStats.digitalOcean.totalCount}`,
+      `- **Total Size**: ${formatSize(report.summary.storageStats.digitalOcean.totalSize)}`,
+      '',
+      '### Vercel Blob',
+      '',
+      `- **Total Objects**: ${report.summary.storageStats.vercelBlob.totalCount}`,
+      `- **Total Size**: ${formatSize(report.summary.storageStats.vercelBlob.totalSize)}`,
+      '',
+    ];
+  };
+
+  const generateIssuesSection = (report: InventoryReport): string[] => {
+    return [
+      '## Issues',
+      '',
+      `- **Total Issues**: ${report.summary.issueCount.total}`,
+      `  - Missing Assets: ${report.summary.issueCount.missingAssets}`,
+      `  - Inconsistent Paths: ${report.summary.issueCount.inconsistentPaths}`,
+      `  - Duplicate Assets: ${report.summary.issueCount.duplicateAssets}`,
+      `  - Other Issues: ${report.summary.issueCount.other}`,
+      '',
+    ];
+  };
+
+  const generatePathPatternsSection = (report: InventoryReport): string[] => {
+    const lines = ['## Path Patterns', '', '### Digital Ocean Spaces', ''];
+
+    // Add DO path patterns
+    for (const pattern of report.pathPatterns.digitalOcean) {
+      lines.push(`- \`${pattern}\``);
+    }
+
+    lines.push('', '### Vercel Blob', '');
+
+    // Add Blob path patterns
+    for (const pattern of report.pathPatterns.vercelBlob) {
+      lines.push(`- \`${pattern}\``);
+    }
+
+    lines.push('');
+    return lines;
+  };
+
+  /**
+   * Generate detailed issue list for assets with issues
+   */
+  function generateDetailedIssues(assetsWithIssues: Asset[]): string[] {
+    const lines: string[] = ['##### Detailed Issues', ''];
+
+    for (const asset of assetsWithIssues) {
+      lines.push(`- **${asset.type}/${asset.assetName}**:`);
+
+      // Add all issues for this asset
+      asset.issues.forEach((issue) => {
+        lines.push(`  - ${issue}`);
+      });
+
+      lines.push('');
+    }
+
+    return lines;
   }
 
-  lines.push('', '### Vercel Blob', '');
+  /**
+   * Generate issue summary for a book
+   */
+  function generateBookIssuesSummary(book: BookInventory): string[] {
+    const lines: string[] = ['#### Issues', ''];
 
-  // Add Blob path patterns
-  for (const pattern of report.pathPatterns.vercelBlob) {
-    lines.push(`- \`${pattern}\``);
-  }
-
-  lines.push('', '## Books', '');
-
-  // Add book summaries
-  for (const book of report.books) {
-    lines.push(`### ${book.title} (${book.slug})`, '');
-    lines.push(`- **Total Assets**: ${book.assetCount.total}`);
-    lines.push(`  - Audio: ${book.assetCount.audio}`);
-    lines.push(`  - Text: ${book.assetCount.text}`);
-    lines.push(`  - Images: ${book.assetCount.image}`);
+    lines.push(`- Missing Assets: ${book.issues.missingAssets}`);
+    lines.push(`- Inconsistent Paths: ${book.issues.inconsistentPaths}`);
+    lines.push(`- Duplicate Assets: ${book.issues.duplicateAssets}`);
+    lines.push(`- Other Issues: ${book.issues.other}`);
     lines.push('');
 
-    if (
-      book.issues.missingAssets ||
-      book.issues.inconsistentPaths ||
-      book.issues.duplicateAssets ||
-      book.issues.other
-    ) {
-      lines.push('#### Issues', '');
-      lines.push(`- Missing Assets: ${book.issues.missingAssets}`);
-      lines.push(`- Inconsistent Paths: ${book.issues.inconsistentPaths}`);
-      lines.push(`- Duplicate Assets: ${book.issues.duplicateAssets}`);
-      lines.push(`- Other Issues: ${book.issues.other}`);
-      lines.push('');
-
-      // Add detailed issues
-      const assetsWithIssues = book.assets.filter((asset) => asset.issues.length > 0);
-      if (assetsWithIssues.length > 0) {
-        lines.push('##### Detailed Issues', '');
-        for (const asset of assetsWithIssues) {
-          lines.push(`- **${asset.type}/${asset.assetName}**:`);
-          for (const issue of asset.issues) {
-            lines.push(`  - ${issue}`);
-          }
-          lines.push('');
-        }
-      }
+    // Add detailed issues if any assets have issues
+    const assetsWithIssues = book.assets.filter((asset) => asset.issues.length > 0);
+    if (assetsWithIssues.length > 0) {
+      lines.push(...generateDetailedIssues(assetsWithIssues));
     }
+
+    return lines;
   }
 
-  lines.push(
-    '',
-    '## Recommendations',
-    '',
-    '1. **Missing Assets**: Upload any referenced assets missing from storage',
-    '2. **Inconsistent Paths**: Standardize path structure across storage systems',
-    '3. **Duplicate Assets**: Consolidate duplicate assets to single instances',
-    '4. **Path Structure**: Adopt a consistent path structure for all asset types',
-    ''
-  );
+  const generateBookDetailsSection = (report: InventoryReport): string[] => {
+    const lines = ['## Books', ''];
+
+    // Add book summaries
+    for (const book of report.books) {
+      lines.push(`### ${book.title} (${book.slug})`, '');
+      lines.push(`- **Total Assets**: ${book.assetCount.total}`);
+      lines.push(`  - Audio: ${book.assetCount.audio}`);
+      lines.push(`  - Text: ${book.assetCount.text}`);
+      lines.push(`  - Images: ${book.assetCount.image}`);
+      lines.push('');
+
+      // Add issues if any exist
+      const hasIssues =
+        book.issues.missingAssets ||
+        book.issues.inconsistentPaths ||
+        book.issues.duplicateAssets ||
+        book.issues.other;
+
+      if (hasIssues) {
+        lines.push(...generateBookIssuesSummary(book));
+      }
+    }
+
+    return lines;
+  };
+
+  const generateRecommendationsSection = (): string[] => {
+    return [
+      '## Recommendations',
+      '',
+      '1. **Missing Assets**: Upload any referenced assets missing from storage',
+      '2. **Inconsistent Paths**: Standardize path structure across storage systems',
+      '3. **Duplicate Assets**: Consolidate duplicate assets to single instances',
+      '4. **Path Structure**: Adopt a consistent path structure for all asset types',
+      '',
+    ];
+  };
+
+  // Generate all sections
+  const lines = [
+    ...generateSummarySection(report),
+    ...generateStorageSection(report),
+    ...generateIssuesSection(report),
+    ...generatePathPatternsSection(report),
+    ...generateBookDetailsSection(report),
+    ...generateRecommendationsSection(),
+  ];
 
   await fs.writeFile(outputPath, lines.join('\n'), 'utf8');
 }
@@ -990,16 +1316,46 @@ async function saveInventoryReport(report: InventoryReport, outputPath: string):
 
     // Write the JSON report
     await fs.writeFile(outputPath, JSON.stringify(report, null, 2), 'utf8');
-    console.log(`Inventory report saved to ${outputPath}`);
+    logger.info({ msg: `Inventory report saved to ${outputPath}` });
 
     // Generate a markdown report
     const mdPath = outputPath.replace(/\.json$/, '.md');
     await generateMarkdownReport(report, mdPath);
-    console.log(`Markdown report saved to ${mdPath}`);
+    logger.info({ msg: `Markdown report saved to ${mdPath}` });
   } catch (error) {
-    console.error('Error saving inventory report:', error);
+    logger.error({ msg: 'Error saving inventory report', error });
     throw error;
   }
+}
+
+/**
+ * Print inventory summary to console
+ */
+function printInventorySummary(report: InventoryReport): void {
+  // Use console.error for CLI output as this is intentional output to the user
+  console.error('\nAsset Inventory Summary:');
+  console.error(`Books Processed: ${report.summary.totalBooks}`);
+  console.error(`Total Assets: ${report.summary.totalAssets}`);
+  console.error(`  - Audio: ${report.summary.assetsByType.audio}`);
+  console.error(`  - Text: ${report.summary.assetsByType.text}`);
+  console.error(`  - Images: ${report.summary.assetsByType.image}`);
+  console.error('\nStorage Statistics:');
+  console.error(
+    `Digital Ocean: ${report.summary.storageStats.digitalOcean.totalCount} objects (${formatSize(
+      report.summary.storageStats.digitalOcean.totalSize
+    )})`
+  );
+  console.error(
+    `Vercel Blob: ${report.summary.storageStats.vercelBlob.totalCount} objects (${formatSize(
+      report.summary.storageStats.vercelBlob.totalSize
+    )})`
+  );
+  console.error('\nIssues Detected:');
+  console.error(`Total Issues: ${report.summary.issueCount.total}`);
+  console.error(`  - Missing Assets: ${report.summary.issueCount.missingAssets}`);
+  console.error(`  - Inconsistent Paths: ${report.summary.issueCount.inconsistentPaths}`);
+  console.error(`  - Duplicate Assets: ${report.summary.issueCount.duplicateAssets}`);
+  console.error(`  - Other Issues: ${report.summary.issueCount.other}`);
 }
 
 /**
@@ -1013,36 +1369,22 @@ async function main(): Promise<void> {
     // Create the asset inventory
     const report = await createAssetInventory(options);
 
-    // Print summary
-    console.log('\nAsset Inventory Summary:');
-    console.log(`Books Processed: ${report.summary.totalBooks}`);
-    console.log(`Total Assets: ${report.summary.totalAssets}`);
-    console.log(`  - Audio: ${report.summary.assetsByType.audio}`);
-    console.log(`  - Text: ${report.summary.assetsByType.text}`);
-    console.log(`  - Images: ${report.summary.assetsByType.image}`);
-    console.log('\nStorage Statistics:');
-    console.log(
-      `Digital Ocean: ${report.summary.storageStats.digitalOcean.totalCount} objects (${formatSize(
-        report.summary.storageStats.digitalOcean.totalSize
-      )})`
-    );
-    console.log(
-      `Vercel Blob: ${report.summary.storageStats.vercelBlob.totalCount} objects (${formatSize(
-        report.summary.storageStats.vercelBlob.totalSize
-      )})`
-    );
-    console.log('\nIssues Detected:');
-    console.log(`Total Issues: ${report.summary.issueCount.total}`);
-    console.log(`  - Missing Assets: ${report.summary.issueCount.missingAssets}`);
-    console.log(`  - Inconsistent Paths: ${report.summary.issueCount.inconsistentPaths}`);
-    console.log(`  - Duplicate Assets: ${report.summary.issueCount.duplicateAssets}`);
-    console.log(`  - Other Issues: ${report.summary.issueCount.other}`);
+    // Print summary to console (expected CLI output)
+    printInventorySummary(report);
 
     // Save the report
     await saveInventoryReport(report, options.outputPath);
 
-    console.log('\nInventory creation completed successfully!');
+    // Log to structured logging system
+    logger.info({ msg: 'Inventory creation completed successfully' });
+
+    // CLI output for user
+    console.error('\nInventory creation completed successfully!');
   } catch (error) {
+    // Log to structured logging system
+    logger.error({ msg: 'Error creating asset inventory', error });
+
+    // CLI output for user
     console.error('Error creating asset inventory:', error);
     process.exit(1);
   }

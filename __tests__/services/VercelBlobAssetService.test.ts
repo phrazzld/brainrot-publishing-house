@@ -217,12 +217,12 @@ describe('VercelBlobAssetService', () => {
   describe('uploadAsset', () => {
     it('should upload text content successfully', async () => {
       const content = 'This is text content';
-      const result = await service.uploadAsset(
-        AssetType.TEXT,
-        'the-odyssey',
-        'chapter-01.txt',
-        content
-      );
+      const result = await service.uploadAsset({
+        assetType: AssetType.TEXT,
+        bookSlug: 'the-odyssey',
+        assetName: 'chapter-01.txt',
+        content,
+      });
 
       expect(put).toHaveBeenCalled();
       expect(result).toEqual(
@@ -238,13 +238,13 @@ describe('VercelBlobAssetService', () => {
 
     it('should upload blob content successfully', async () => {
       const content = new Blob(['binary content'], { type: 'application/octet-stream' });
-      const result = await service.uploadAsset(
-        AssetType.AUDIO,
-        'hamlet',
-        'chapter-02.mp3',
+      const result = await service.uploadAsset({
+        assetType: AssetType.AUDIO,
+        bookSlug: 'hamlet',
+        assetName: 'chapter-02.mp3',
         content,
-        { contentType: 'audio/mpeg' }
-      );
+        options: { contentType: 'audio/mpeg' },
+      });
 
       expect(put).toHaveBeenCalled();
       expect(result).toEqual(
@@ -262,7 +262,12 @@ describe('VercelBlobAssetService', () => {
       put.mockRejectedValueOnce(new Error('Upload failed'));
 
       try {
-        await service.uploadAsset(AssetType.TEXT, 'the-odyssey', 'chapter-01.txt', 'content');
+        await service.uploadAsset({
+          assetType: AssetType.TEXT,
+          bookSlug: 'the-odyssey',
+          assetName: 'chapter-01.txt',
+          content: 'content',
+        });
         fail('Should have thrown an error');
       } catch (error) {
         expect(error).toBeDefined();

@@ -44,9 +44,9 @@ global.fetch = jest.fn().mockImplementation((url: string) => {
     return Promise.resolve({
       ok: true,
       json: jest.fn().mockResolvedValue({
-        url: 'https://test-bucket.nyc3.cdn.digitaloceanspaces.com/hamlet/audio/full-audiobook.mp3',
-        isCdnUrl: true,
-        shouldProxy: true,
+        url: 'https://vercel-blob.vercel.app/hamlet/audio/chapter-01.mp3',
+        isCdnUrl: false,
+        shouldProxy: false,
       }),
     });
   }
@@ -70,9 +70,9 @@ describe('DownloadButton Component', () => {
         return Promise.resolve({
           ok: true,
           json: jest.fn().mockResolvedValue({
-            url: 'https://test-bucket.nyc3.cdn.digitaloceanspaces.com/hamlet/audio/full-audiobook.mp3',
-            isCdnUrl: true,
-            shouldProxy: true,
+            url: 'https://vercel-blob.vercel.app/hamlet/audio/chapter-01.mp3',
+            isCdnUrl: false,
+            shouldProxy: false,
           }),
         });
       }
@@ -147,9 +147,9 @@ describe('DownloadButton Component', () => {
         return Promise.resolve({
           ok: true,
           json: jest.fn().mockResolvedValue({
-            url: 'https://test-bucket.nyc3.cdn.digitaloceanspaces.com/hamlet/audio/book-03.mp3',
-            isCdnUrl: true,
-            shouldProxy: true,
+            url: 'https://vercel-blob.vercel.app/hamlet/audio/chapter-03.mp3',
+            isCdnUrl: false,
+            shouldProxy: false,
           }),
         });
       }
@@ -204,9 +204,9 @@ describe('DownloadButton Component', () => {
         return Promise.resolve({
           ok: true,
           json: jest.fn().mockResolvedValue({
-            url: 'https://test-bucket.nyc3.cdn.digitaloceanspaces.com/hamlet/audio/full-audiobook.mp3',
-            isCdnUrl: true,
-            shouldProxy: true,
+            url: 'https://vercel-blob.vercel.app/hamlet/audio/chapter-01.mp3',
+            isCdnUrl: false,
+            shouldProxy: false,
           }),
         });
       } else {
@@ -226,6 +226,33 @@ describe('DownloadButton Component', () => {
 
     await waitFor(() => {
       const errorMessage = container.textContent?.includes('Failed to download');
+      expect(errorMessage).toBe(true);
+    });
+  });
+
+  it('handles error responses with error field', async () => {
+    // Mock API call to return an error response
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      ok: false,
+      text: jest.fn().mockResolvedValue(
+        JSON.stringify({
+          error: 'Resource not found',
+          message: 'The requested audio file does not exist',
+          code: 'NotFound.404',
+        })
+      ),
+    });
+
+    const { container } = render(<DownloadButton slug="nonexistent" type="full" />);
+
+    // Use a direct selector
+    const button = container.querySelector('button');
+    fireEvent.click(button as HTMLButtonElement);
+
+    await waitFor(() => {
+      const errorMessage = container.textContent?.includes(
+        'The requested audio file does not exist'
+      );
       expect(errorMessage).toBe(true);
     });
   });

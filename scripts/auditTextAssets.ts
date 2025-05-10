@@ -8,15 +8,12 @@
 import fs from 'fs';
 import path from 'path';
 
-import { createLogger } from '../utils/logger';
+import { createRequestLogger } from '../utils/logger';
 import { AssetPathService } from '../utils/services/AssetPathService';
 import { blobService } from '../utils/services/BlobService';
 
 // Configure logger
-const logger = createLogger({
-  level: 'info',
-  prefix: 'text-audit',
-});
+const auditLogger = createRequestLogger('text-audit');
 
 // Initialize services
 const assetPathService = new AssetPathService();
@@ -30,7 +27,7 @@ interface TextAssetInfo {
   path: string;
   url: string;
   size: number;
-  contentType: string;
+  contentType?: string;
   bookSlug: string | null;
   isStandardized: boolean;
   standardizedPath: string;
@@ -96,7 +93,8 @@ function parseArgs(): AuditOptions {
  * Print help information
  */
 function printHelp(): void {
-  logger.info(`
+  auditLogger.info({
+    msg: `
 Text Asset Audit Tool
 
 This script audits the current state of text assets in Vercel Blob storage,
@@ -107,7 +105,8 @@ Options:
   --output, -o           Directory for reports (default: ./text-assets-audit)
   --verbose, -v          Enable verbose logging
   --help, -h             Show this help message
-  `);
+  `,
+  });
 }
 
 /**
@@ -116,16 +115,16 @@ Options:
 function createOutputDirectory(dirPath: string): void {
   if (!fs.existsSync(dirPath)) {
     fs.mkdirSync(dirPath, { recursive: true });
-    logger.info(`Created output directory: ${dirPath}`);
+    auditLogger.info({ msg: `Created output directory: ${dirPath}` });
   }
 }
 
 /**
  * Save report to file
  */
-function saveReport(filePath: string, content: Record<string, unknown>): void {
+function saveReport(filePath: string, content: unknown): void {
   fs.writeFileSync(filePath, JSON.stringify(content, null, 2));
-  logger.info(`Saved report to ${filePath}`);
+  auditLogger.info({ msg: `Saved report to ${filePath}` });
 }
 
 /**
@@ -144,7 +143,7 @@ async function listAllBlobs() {
     allBlobs.push(...result.blobs);
     cursor = result.cursor;
 
-    logger.info(`Listed ${allBlobs.length} blobs so far...`);
+    auditLogger.info({ msg: `Listed ${allBlobs.length} blobs so far...` });
   } while (cursor);
 
   return allBlobs;
@@ -189,7 +188,7 @@ function getTextType(path: string): 'source' | 'brainrot' | 'unknown' {
  * Process a single blob and create an asset info object
  */
 function processTextBlob(
-  blob: { pathname: string; url: string; size: number; contentType: string },
+  blob: { pathname: string; url: string; size: number; contentType?: string },
   bookSlugs: Set<string>,
   pathIssues: Record<string, string[]>
 ): TextAssetInfo {
@@ -313,16 +312,16 @@ function categorizeAssetsByBook(
  * Audit text assets in Vercel Blob storage
  */
 async function auditTextAssets(options: AuditOptions): Promise<AuditResults> {
-  logger.info('Starting text asset audit...');
+  auditLogger.info({ msg: 'Starting text asset audit...' });
 
   // List all blobs
-  logger.info('Listing all assets in Vercel Blob...');
+  auditLogger.info({ msg: 'Listing all assets in Vercel Blob...' });
   const allBlobs = await listAllBlobs();
-  logger.info(`Found ${allBlobs.length} total assets`);
+  auditLogger.info({ msg: `Found ${allBlobs.length} total assets` });
 
   // Filter for text assets
   const textBlobs = allBlobs.filter((blob) => isTextAsset(blob.pathname));
-  logger.info(`Found ${textBlobs.length} text assets`);
+  auditLogger.info({ msg: `Found ${textBlobs.length} text assets` });
 
   // Analyze each text asset
   const textAssets: TextAssetInfo[] = [];
@@ -340,11 +339,11 @@ async function auditTextAssets(options: AuditOptions): Promise<AuditResults> {
     textAssets.push(assetInfo);
 
     if (options.verbose) {
-      logger.info(
-        `${assetInfo.isStandardized ? '✓' : '✗'} ${assetInfo.path} ${
+      auditLogger.info({
+        msg: `${assetInfo.isStandardized ? '✓' : '✗'} ${assetInfo.path} ${
           assetInfo.needsReorganization ? `-> ${assetInfo.standardizedPath}` : ''
-        }`
-      );
+        }`,
+      });
     }
   }
 
@@ -564,18 +563,15 @@ async function main(): Promise<void> {
     // Parse command line arguments
     const options = parseArgs();
 
-    // Set log level
-    if (options.verbose) {
-      logger.level = 'debug';
-    }
+    // Verbose mode is already in options.verbose
 
-    logger.info('Text Asset Audit Tool');
+    auditLogger.info({ msg: 'Text Asset Audit Tool' });
 
     // Create output directory
     createOutputDirectory(options.outputDir);
 
     // Run the audit
-    logger.info('Analyzing text assets...');
+    auditLogger.info({ msg: 'Analyzing text assets...' });
     const results = await auditTextAssets(options);
 
     // Save results to file
@@ -586,23 +582,29 @@ async function main(): Promise<void> {
     const htmlReport = createHtmlReport(results);
     const htmlPath = path.join(options.outputDir, 'text-assets-audit.html');
     fs.writeFileSync(htmlPath, htmlReport);
-    logger.info(`Saved HTML report to ${htmlPath}`);
+    auditLogger.info({ msg: `Saved HTML report to ${htmlPath}` });
 
     // Print summary
-    logger.info(`
-Summary:
-  Total assets: ${results.totalAssets}
-  Text assets: ${results.textAssets}
-  Standardized: ${results.standardizedAssets}
-  Non-standardized: ${results.nonStandardizedAssets}
-  Standardization rate: ${
-    results.textAssets > 0 ? Math.round((results.standardizedAssets / results.textAssets) * 100) : 0
-  }%
-  
-Reports saved to: ${options.outputDir}
-    `);
+    auditLogger.info({
+      msg: 'Audit summary',
+      summary: {
+        totalAssets: results.totalAssets,
+        textAssets: results.textAssets,
+        standardizedAssets: results.standardizedAssets,
+        nonStandardizedAssets: results.nonStandardizedAssets,
+        standardizationRate:
+          results.textAssets > 0
+            ? Math.round((results.standardizedAssets / results.textAssets) * 100)
+            : 0,
+        reportsDir: options.outputDir,
+      },
+    });
   } catch (error) {
-    logger.error('Error in text asset audit:', error);
+    auditLogger.error({
+      msg: 'Error in text asset audit',
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
     process.exit(1);
   }
 }

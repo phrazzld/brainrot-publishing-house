@@ -9,15 +9,12 @@
 import fs from 'fs';
 import path from 'path';
 
-import { createLogger } from '../utils/logger';
+import { createRequestLogger } from '../utils/logger';
 import { AssetPathService } from '../utils/services/AssetPathService';
 import { blobService } from '../utils/services/BlobService';
 
 // Configure logger
-const logger = createLogger({
-  level: 'info',
-  prefix: 'image-audit',
-});
+const auditLogger = createRequestLogger('image-audit');
 
 // Initialize services
 const assetPathService = new AssetPathService();
@@ -31,7 +28,7 @@ interface ImageAssetInfo {
   path: string;
   url: string;
   size: number;
-  contentType: string;
+  contentType?: string;
   bookSlug: string | null;
   isStandardized: boolean;
   standardizedPath: string;
@@ -105,7 +102,8 @@ function parseArgs(): AuditOptions {
  * Print help information
  */
 function printHelp(): void {
-  logger.info(`
+  auditLogger.info({
+    msg: `
 Image Asset Audit Tool
 
 This script audits the current state of image assets in Vercel Blob storage,
@@ -116,7 +114,8 @@ Options:
   --output, -o           Directory for reports (default: ./image-assets-audit)
   --verbose, -v          Enable verbose logging
   --help, -h             Show this help message
-  `);
+  `,
+  });
 }
 
 /**
@@ -125,16 +124,16 @@ Options:
 function createOutputDirectory(dirPath: string): void {
   if (!fs.existsSync(dirPath)) {
     fs.mkdirSync(dirPath, { recursive: true });
-    logger.info(`Created output directory: ${dirPath}`);
+    auditLogger.info({ msg: `Created output directory: ${dirPath}` });
   }
 }
 
 /**
  * Save report to file
  */
-function saveReport(filePath: string, content: Record<string, unknown>): void {
+function saveReport(filePath: string, content: unknown): void {
   fs.writeFileSync(filePath, JSON.stringify(content, null, 2));
-  logger.info(`Saved report to ${filePath}`);
+  auditLogger.info({ msg: `Saved report to ${filePath}` });
 }
 
 /**
@@ -153,7 +152,7 @@ async function listAllBlobs() {
     allBlobs.push(...result.blobs);
     cursor = result.cursor;
 
-    logger.info(`Listed ${allBlobs.length} blobs so far...`);
+    auditLogger.info({ msg: `Listed ${allBlobs.length} blobs so far...` });
   } while (cursor);
 
   return allBlobs;
@@ -162,9 +161,9 @@ async function listAllBlobs() {
 /**
  * Determine if a path is an image asset
  */
-function isImageAsset(path: string, contentType: string): boolean {
+function isImageAsset(path: string, contentType?: string): boolean {
   // Check if this is an image asset based on path pattern or content type
-  const isImageContentType = contentType.startsWith('image/');
+  const isImageContentType = contentType ? contentType.startsWith('image/') : false;
   const hasImageExtension = /\.(jpg|jpeg|png|gif|webp|svg|avif)$/i.test(path);
   const isInImagePath =
     path.includes('/images/') ||
@@ -211,7 +210,7 @@ function getImageType(path: string): 'cover' | 'chapter' | 'shared' | 'site' | '
  * Process a single blob and create an asset info object
  */
 function processImageBlob(
-  blob: { pathname: string; url: string; size: number; contentType: string },
+  blob: { pathname: string; url: string; size: number; contentType?: string },
   bookSlugs: Set<string>,
   pathIssues: Record<string, string[]>
 ): ImageAssetInfo {
@@ -388,16 +387,16 @@ function categorizeImageAssets(
  * Audit image assets in Vercel Blob storage
  */
 async function auditImageAssets(options: AuditOptions): Promise<AuditResults> {
-  logger.info('Starting image asset audit...');
+  auditLogger.info({ msg: 'Starting image asset audit...' });
 
   // List all blobs
-  logger.info('Listing all assets in Vercel Blob...');
+  auditLogger.info({ msg: 'Listing all assets in Vercel Blob...' });
   const allBlobs = await listAllBlobs();
-  logger.info(`Found ${allBlobs.length} total assets`);
+  auditLogger.info({ msg: `Found ${allBlobs.length} total assets` });
 
   // Filter for image assets
-  const imageBlobs = allBlobs.filter((blob) => isImageAsset(blob.pathname, blob.contentType));
-  logger.info(`Found ${imageBlobs.length} image assets`);
+  const imageBlobs = allBlobs.filter((blob) => isImageAsset(blob.pathname));
+  auditLogger.info({ msg: `Found ${imageBlobs.length} image assets` });
 
   // Initialize data
   const imageAssets: ImageAssetInfo[] = [];
@@ -415,11 +414,11 @@ async function auditImageAssets(options: AuditOptions): Promise<AuditResults> {
     imageAssets.push(assetInfo);
 
     if (options.verbose) {
-      logger.info(
-        `${assetInfo.isStandardized ? '✓' : '✗'} ${assetInfo.path} ${
+      auditLogger.info({
+        msg: `${assetInfo.isStandardized ? '✓' : '✗'} ${assetInfo.path} ${
           assetInfo.needsReorganization ? `-> ${assetInfo.standardizedPath}` : ''
-        }`
-      );
+        }`,
+      });
     }
   }
 
@@ -680,18 +679,15 @@ async function main(): Promise<void> {
     // Parse command line arguments
     const options = parseArgs();
 
-    // Set log level
-    if (options.verbose) {
-      logger.level = 'debug';
-    }
+    // Verbose mode is already in options.verbose
 
-    logger.info('Image Asset Audit Tool');
+    auditLogger.info({ msg: 'Image Asset Audit Tool' });
 
     // Create output directory
     createOutputDirectory(options.outputDir);
 
     // Run the audit
-    logger.info('Analyzing image assets...');
+    auditLogger.info({ msg: 'Analyzing image assets...' });
     const results = await auditImageAssets(options);
 
     // Save results to file
@@ -702,25 +698,29 @@ async function main(): Promise<void> {
     const htmlReport = createHtmlReport(results);
     const htmlPath = path.join(options.outputDir, 'image-assets-audit.html');
     fs.writeFileSync(htmlPath, htmlReport);
-    logger.info(`Saved HTML report to ${htmlPath}`);
+    auditLogger.info({ msg: `Saved HTML report to ${htmlPath}` });
 
     // Print summary
-    logger.info(`
-Summary:
-  Total assets: ${results.totalAssets}
-  Image assets: ${results.imageAssets}
-  Standardized: ${results.standardizedAssets}
-  Non-standardized: ${results.nonStandardizedAssets}
-  Standardization rate: ${
-    results.imageAssets > 0
-      ? Math.round((results.standardizedAssets / results.imageAssets) * 100)
-      : 0
-  }%
-  
-Reports saved to: ${options.outputDir}
-    `);
+    auditLogger.info({
+      msg: 'Audit summary',
+      summary: {
+        totalAssets: results.totalAssets,
+        imageAssets: results.imageAssets,
+        standardizedAssets: results.standardizedAssets,
+        nonStandardizedAssets: results.nonStandardizedAssets,
+        standardizationRate:
+          results.imageAssets > 0
+            ? Math.round((results.standardizedAssets / results.imageAssets) * 100)
+            : 0,
+        reportsDir: options.outputDir,
+      },
+    });
   } catch (error) {
-    logger.error('Error in image asset audit:', error);
+    auditLogger.error({
+      msg: 'Error in image asset audit',
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
     process.exit(1);
   }
 }

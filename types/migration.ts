@@ -406,18 +406,19 @@ export interface AssetDestinationAdapter {
 
   /**
    * Upload an asset
-   * @param path Destination path
-   * @param content Asset content
-   * @param options Upload options
+   * @param context Object containing upload parameters:
+   * - path: Destination path
+   * - content: Asset content
+   * - options: Upload options
    */
-  uploadAsset(
-    path: string,
-    content: ArrayBuffer,
+  uploadAsset(context: {
+    path: string;
+    content: ArrayBuffer;
     options?: {
       contentType?: string;
       metadata?: Record<string, string>;
-    }
-  ): Promise<{
+    };
+  }): Promise<{
     path: string;
     url: string;
     size: number;

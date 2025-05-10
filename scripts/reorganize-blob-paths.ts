@@ -5,20 +5,26 @@
  * It uses the AssetPathService to map current paths to the new standardized format,
  * and supports dry-run mode to preview changes without executing them.
  */
-import { type ListBlobResultBlob, del, list, put } from '@vercel/blob';
+import { del, list, put } from '@vercel/blob';
 import { createHash } from 'crypto';
 import fs from 'fs';
 import path from 'path';
 
 import { AssetType } from '../types/assets';
-import { createLogger } from '../utils/logger';
+import { createRequestLogger } from '../utils/logger';
 import { AssetPathService } from '../utils/services/AssetPathService';
 
+// Define an interface for blob results with the fields we use
+interface ExtendedBlobResult {
+  pathname: string;
+  url: string;
+  size: number;
+  contentType: string;
+  uploadedAt: string;
+}
+
 // Configure logger
-const logger = createLogger({
-  level: 'info',
-  prefix: 'blob-reorganize',
-});
+const blobLogger = createRequestLogger('blob-reorganize');
 
 // Initialize AssetPathService
 const assetPathService = new AssetPathService();
@@ -126,7 +132,8 @@ function parseArgs(): CliOptions {
  * Print help information
  */
 function printHelp(): void {
-  logger.info(`
+  blobLogger.info({
+    message: `
 Blob Path Reorganization Tool
 
 This script reorganizes assets within Vercel Blob to follow the new unified path structure.
@@ -139,7 +146,8 @@ Options:
   --verbose, -v          Enable verbose logging
   --skip-verification, -s Skip verification after reorganization
   --help, -h             Show this help message
-  `);
+  `,
+  });
 }
 
 /**
@@ -148,7 +156,7 @@ Options:
 function createOutputDirectory(dirPath: string): void {
   if (!fs.existsSync(dirPath)) {
     fs.mkdirSync(dirPath, { recursive: true });
-    logger.info(`Created output directory: ${dirPath}`);
+    blobLogger.info({ message: `Created output directory: ${dirPath}` });
   }
 }
 
@@ -157,7 +165,7 @@ function createOutputDirectory(dirPath: string): void {
  */
 function saveReport(filePath: string, content: Record<string, unknown>): void {
   fs.writeFileSync(filePath, JSON.stringify(content, null, 2));
-  logger.info(`Saved report to ${filePath}`);
+  blobLogger.info({ message: `Saved report to ${filePath}` });
 }
 
 /**
@@ -166,8 +174,8 @@ function saveReport(filePath: string, content: Record<string, unknown>): void {
 async function listAllBlobs(options: {
   prefix?: string;
   limit?: number;
-}): Promise<ListBlobResultBlob[]> {
-  const allBlobs: ListBlobResultBlob[] = [];
+}): Promise<ExtendedBlobResult[]> {
+  const allBlobs: ExtendedBlobResult[] = [];
   let cursor: string | undefined;
 
   do {
@@ -177,10 +185,28 @@ async function listAllBlobs(options: {
       cursor,
     });
 
-    allBlobs.push(...result.blobs);
+    // Map the API result to our extended type
+    const extendedBlobs = result.blobs.map((blob) => {
+      // Use type assertion to work around the type definition issue
+      const anyBlob = blob as Record<string, unknown>;
+      return {
+        pathname: blob.pathname,
+        url: blob.url,
+        size: blob.size,
+        contentType: anyBlob.contentType || 'application/octet-stream', // Provide a default
+        uploadedAt:
+          typeof blob.uploadedAt === 'string'
+            ? blob.uploadedAt
+            : blob.uploadedAt
+              ? new Date(blob.uploadedAt).toISOString()
+              : new Date().toISOString(),
+      };
+    });
+
+    allBlobs.push(...extendedBlobs);
     cursor = result.cursor;
 
-    logger.info(`Listed ${allBlobs.length} blobs so far...`);
+    blobLogger.info({ message: `Listed ${allBlobs.length} blobs so far...` });
 
     if (options.limit && allBlobs.length >= options.limit) {
       allBlobs.splice(options.limit);
@@ -231,7 +257,7 @@ function getAssetTypeAndSlug(path: string): {
 /**
  * Map current paths to new paths using the AssetPathService
  */
-function mapPaths(blobs: ListBlobResultBlob[]): PathMapping[] {
+function mapPaths(blobs: ExtendedBlobResult[]): PathMapping[] {
   const mappings: PathMapping[] = [];
 
   for (const blob of blobs) {
@@ -241,7 +267,7 @@ function mapPaths(blobs: ListBlobResultBlob[]): PathMapping[] {
 
       // Skip if we couldn't determine the asset type
       if (!assetType) {
-        logger.warn(`Skipping blob with unrecognized path pattern: ${path}`);
+        blobLogger.warn({ message: `Skipping blob with unrecognized path pattern: ${path}` });
         continue;
       }
 
@@ -250,7 +276,7 @@ function mapPaths(blobs: ListBlobResultBlob[]): PathMapping[] {
 
       // Skip if the path doesn't change
       if (newPath === path) {
-        logger.debug(`Path already in correct format, skipping: ${path}`);
+        blobLogger.debug({ message: `Path already in correct format, skipping: ${path}` });
         continue;
       }
 
@@ -264,7 +290,7 @@ function mapPaths(blobs: ListBlobResultBlob[]): PathMapping[] {
         url: blob.url,
       });
     } catch (error) {
-      logger.error(`Error mapping path for blob ${blob.pathname}:`, error);
+      blobLogger.error({ message: `Error mapping path for blob ${blob.pathname}:`, error });
     }
   }
 
@@ -290,7 +316,9 @@ async function computeContentHash(url: string): Promise<string> {
 async function moveBlob(mapping: PathMapping, options: CliOptions): Promise<boolean> {
   try {
     if (options.dryRun) {
-      logger.info(`[DRY RUN] Would move: ${mapping.originalPath} -> ${mapping.newPath}`);
+      blobLogger.info({
+        message: `[DRY RUN] Would move: ${mapping.originalPath} -> ${mapping.newPath}`,
+      });
       return true;
     }
 
@@ -306,7 +334,7 @@ async function moveBlob(mapping: PathMapping, options: CliOptions): Promise<bool
     const originalHash = createHash('sha256').update(Buffer.from(content)).digest('hex');
 
     // Upload to the new path
-    logger.info(`Moving blob: ${mapping.originalPath} -> ${mapping.newPath}`);
+    blobLogger.info({ message: `Moving blob: ${mapping.originalPath} -> ${mapping.newPath}` });
     const result = await put(mapping.newPath, new Blob([content], { type: mapping.contentType }), {
       access: 'public',
       contentType: mapping.contentType,
@@ -323,10 +351,12 @@ async function moveBlob(mapping: PathMapping, options: CliOptions): Promise<bool
     // Delete the original blob
     await del(mapping.url);
 
-    logger.info(`Successfully moved: ${mapping.originalPath} -> ${mapping.newPath}`);
+    blobLogger.info({
+      message: `Successfully moved: ${mapping.originalPath} -> ${mapping.newPath}`,
+    });
     return true;
   } catch (error) {
-    logger.error(`Error moving blob ${mapping.originalPath}:`, error);
+    blobLogger.error({ message: `Error moving blob ${mapping.originalPath}:`, error });
     return false;
   }
 }
@@ -399,7 +429,9 @@ async function reorganizeBlobs(
 
     // Log progress
     if (stats.processedAssets % 10 === 0 || stats.processedAssets === stats.totalAssets) {
-      logger.info(`Progress: ${stats.processedAssets}/${stats.totalAssets} assets processed`);
+      blobLogger.info({
+        message: `Progress: ${stats.processedAssets}/${stats.totalAssets} assets processed`,
+      });
     }
   }
 
@@ -576,51 +608,54 @@ async function main(): Promise<void> {
 
     // Set log level
     if (options.verbose) {
-      logger.level = 'debug';
+      // We can't directly set the log level with our custom logger interface
     }
 
-    logger.info('Blob Path Reorganization Tool');
-    logger.info(`Mode: ${options.dryRun ? 'Dry Run' : 'Execution'}`);
+    blobLogger.info({ message: 'Blob Path Reorganization Tool' });
+    blobLogger.info({ message: `Mode: ${options.dryRun ? 'Dry Run' : 'Execution'}` });
 
     // Create output directory
     createOutputDirectory(options.outputDir);
 
     // List all blobs
-    logger.info('Listing blobs...');
+    blobLogger.info({ message: 'Listing blobs...' });
     const blobs = await listAllBlobs({
       prefix: options.prefix,
       limit: options.limit,
     });
-    logger.info(`Found ${blobs.length} blobs`);
+    blobLogger.info({ message: `Found ${blobs.length} blobs` });
 
     // Map paths
-    logger.info('Mapping paths...');
+    blobLogger.info({ message: 'Mapping paths...' });
     const mappings = mapPaths(blobs);
-    logger.info(`Generated ${mappings.length} path mappings`);
+    blobLogger.info({ message: `Generated ${mappings.length} path mappings` });
 
     // Save mappings to file
     const mappingsPath = path.join(options.outputDir, 'path-mappings.json');
-    saveReport(mappingsPath, mappings);
+    saveReport(mappingsPath, { mappings } as Record<string, unknown>);
 
     // Reorganize blobs
-    logger.info('Reorganizing blobs...');
+    blobLogger.info({ message: 'Reorganizing blobs...' });
     const stats = await reorganizeBlobs(mappings, options);
-    logger.info(`Reorganization complete: ${stats.movedAssets}/${stats.totalAssets} assets moved`);
+    blobLogger.info({
+      message: `Reorganization complete: ${stats.movedAssets}/${stats.totalAssets} assets moved`,
+    });
 
     // Save stats to file
     const statsPath = path.join(options.outputDir, 'reorganization-stats.json');
-    saveReport(statsPath, stats);
+    saveReport(statsPath, stats as unknown as Record<string, unknown>);
 
     // Create HTML report
     const htmlReport = createHtmlReport(stats, mappings, options);
     const htmlPath = path.join(options.outputDir, 'reorganization-report.html');
     fs.writeFileSync(htmlPath, htmlReport);
-    logger.info(`Saved HTML report to ${htmlPath}`);
+    blobLogger.info({ message: `Saved HTML report to ${htmlPath}` });
 
-    logger.info('Blob path reorganization complete!');
+    blobLogger.info({ message: 'Blob path reorganization complete!' });
 
     // Print summary
-    logger.info(`
+    blobLogger.info({
+      message: `
 Summary:
   Total assets: ${stats.totalAssets}
   Processed: ${stats.processedAssets}
@@ -630,9 +665,10 @@ Summary:
 Reports saved to: ${options.outputDir}
   
 ${options.dryRun ? 'This was a dry run. No changes were made.' : ''}
-    `);
+    `,
+    });
   } catch (error) {
-    logger.error('Error in blob path reorganization:', error);
+    blobLogger.error({ message: 'Error in blob path reorganization:', error });
     process.exit(1);
   }
 }

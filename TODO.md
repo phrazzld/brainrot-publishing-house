@@ -4,6 +4,72 @@
 
 This TODO list details the tasks required to fully migrate all asset management from Digital Ocean Spaces to Vercel Blob. Our verification has revealed path inconsistencies between the two systems and a complex dual-provider approach that's causing reliability issues. This migration will simplify our architecture, improve reliability, and reduce maintenance overhead.
 
+## Technical Debt & Code Quality
+
+- [ ] **T022: Fix ESLint errors across the codebase**
+  - [ ] Address unused variables by properly prefixing with underscore (_)
+      - [ ] Fix 'planLogger' in generateReorganizationPlan.ts
+      - [ ] Fix 'options' unused parameter in generateReorganizationPlan.ts
+      - [ ] Fix 'container' in SimpleTestComponent.test.tsx
+      - [ ] Fix 'translations' in reading-room-blob.test.tsx
+      - [ ] Fix unused imports in test files (path, fs, fileURLToPath)
+  - [ ] Fix duplicate else-if conditions in generateReorganizationPlan.ts (line 225)
+  - [ ] Remove `any` types and replace with proper TypeScript types
+      - [ ] Fix in migrateAudioFilesWithContent.test.ts
+      - [ ] Fix in migrateRemainingAssets.test.ts
+      - [ ] Fix in downloadFromSpaces.test.ts
+      - [ ] Fix in getBlobUrl.test.ts
+  - [ ] Fix `no-require-imports` in .prettierrc.cjs
+  - [ ] Remove non-null assertions and implement proper null checking (verifyDigitalOceanAccess.ts)
+  - [ ] Fix module variable assignment issues in test files
+      - [ ] Fix in migrateAudioFilesWithContent.test.ts
+      - [ ] Fix in migrateRemainingAssets.test.ts
+  - Dependencies: none
+
+- [ ] **T023: Refactor complex functions for maintainability**
+  - [ ] Reduce complexity of functions exceeding the limit of 10:
+      - [ ] verifyCdnUrls.ts: verifyUrl (complexity: 24)
+      - [ ] verifyCdnUrls.ts: parseCommandLineArgs (complexity: 31)
+      - [ ] verifyCdnUrls.ts: formatResultsAsMarkdown (complexity: 20)
+      - [ ] verifyCdnUrls.ts: formatComparisonReport (complexity: 34)
+      - [ ] app/api/download/errorHandlers.ts: handleDownloadServiceError (complexity: 14)
+      - [ ] app/api/download/proxyService.ts: createProxyErrorResponse (complexity: 24)
+      - [ ] app/api/download/proxyService.ts: extractErrorDetails (complexity: 23)
+      - [ ] app/api/download/proxyService.ts: proxyAssetDownload (complexity: 35)
+      - [ ] reorganize-blob-paths.ts: parseArgs (complexity: 16)
+      - [ ] generateReorganizationPlan.ts: generateReorganizationPlan (complexity: 18)
+      - [ ] utils/getBlobUrl.ts: generateBlobUrl (complexity: 14)
+      - [ ] utils/getBlobUrl.ts: assetExistsInBlobStorage (complexity: 16)
+      - [ ] services/downloadService.ts: getDownloadUrl (complexity: 12)
+      - [ ] utils/validators/AssetNameValidator.ts: validateTextAssetName (complexity: 12)
+  - [ ] Break down large files exceeding the 500 line limit:
+      - [ ] reorganize-blob-paths.ts (516 lines)
+      - [ ] translations/index.ts (949 lines)
+      - [ ] app/api/download/proxyService.ts (too many lines)
+  - [ ] Reduce parameter count for functions with too many parameters:
+      - [ ] app/api/download/proxyService.ts: proxyAssetDownload (7 parameters)
+  - [ ] Split large functions into smaller, more focused functions:
+      - [ ] app/api/download/proxyService.ts: proxyAssetDownload (308 lines)
+  - Dependencies: none
+
+- [ ] **T024: Remove console statements and implement proper logging**
+  - [ ] Replace console.log statements with logger.info across the codebase:
+      - [ ] scripts/test-path-migration.ts (36+ console statements)
+      - [ ] scripts/validateAssetNames.ts
+      - [ ] scripts/verifyCdnUrls.ts (25+ console statements)
+      - [ ] scripts/verifyDigitalOceanAccess.ts (15+ console statements)
+      - [ ] utils/getBlobUrl.ts (9+ console statements)
+  - [ ] Ensure scripts use structured logging with proper context
+      - [ ] Update all scripts to use the standard logger with proper context
+      - [ ] Ensure all error handling includes proper context objects
+  - [ ] Standardize error logging approach across all utilities
+      - [ ] Create consistent error logging pattern with structured metadata
+      - [ ] Include correlation IDs for tracking related log entries
+  - [ ] Develop script to automatically detect and replace console statements
+      - [ ] Create a tool to refactor console.log to logger.info with proper context
+      - [ ] Run across entire codebase with --fix flag
+  - Dependencies: none
+
 ## Phase 1: Audit & Planning
 
 - [x] **T001: Create Comprehensive Asset Inventory**
@@ -132,6 +198,16 @@ This TODO list details the tasks required to fully migrate all asset management 
   - ✅ Maintained backward compatibility with legacy proxyFileDownload
   - Dependencies: T009, T011
 
+- [x] **T021A: Refactor Download Service**
+
+  - ✅ Integrated unified asset service with consistent error handling
+  - ✅ Added robust proxy mechanism for serving files through the API
+  - ✅ Implemented comprehensive logging for performance monitoring
+  - ✅ Enhanced error responses with detailed context and proper status codes
+  - ✅ Improved URL generation with standardized path structure
+  - ✅ Added complete test suite for direct and proxied downloads
+  - Dependencies: T009, T011, T012
+
 - [x] **T013: Refactor Client-Side Components**
   - ✅ Updated DownloadButton component to use new unified asset service API
   - ✅ Updated error handling with improved error message extraction
@@ -195,21 +271,26 @@ This TODO list details the tasks required to fully migrate all asset management 
   - ✅ Created PERFORMANCE_BASELINE.md with detailed analysis and monitoring recommendations
   - Dependencies: T018
 
-- [ ] **T020: Complete Final Verification**
+- [x] **T020: Complete Final Verification**
 
-  - Verify all assets are accessible in production
-  - Check all references in translations data
-  - Ensure no regressions in functionality
-  - Create verification report
+  - ✅ Verified all assets are accessible in production
+  - ✅ Checked all references in translations data
+  - ✅ Ensured no regressions in functionality
+  - ✅ Created comprehensive verification report
+  - ✅ Added verification script with detailed reporting
+  - ✅ Documented results in FINAL_VERIFICATION_REPORT.md
   - Dependencies: T018, T019
 
-- [ ] **T021: COMPLEX - Create and implement standardized file naming convention**
-  - Audit current file naming practices across ALL asset types (critical)
-  - Resolve inconsistencies between implementation ("chapter-XX.mp3") and tests ("book-XX.mp3")
-  - Define explicit rules for each asset type (audio, text, images)
-  - Create standardized rules for numeric components (padding, formatting)
-  - Update AssetPathService to enforce these standards
-  - Document migration plan for non-compliant legacy assets
-  - Create a path validator to catch non-compliant paths
-  - Update all tests to use standardized file naming
+- [x] **T021: COMPLEX - Create and implement standardized file naming convention**
+  - ✅ Audited current file naming practices across ALL asset types
+  - ✅ Resolved inconsistencies between implementation ("chapter-XX.mp3") and tests ("book-XX.mp3")
+  - ✅ Defined explicit rules for each asset type (audio, text, images)
+  - ✅ Created standardized rules for numeric components (zero-padding to 2 digits)
+  - ✅ Updated AssetPathService to enforce these standards and use the validator
+  - ✅ Documented migration plan for non-compliant legacy assets
+  - ✅ Created AssetNameValidator utility to catch non-compliant paths
+  - ✅ Created AssetNameMigration utility for converting legacy names
+  - ✅ Created validateAssetNames.ts script for scanning assets
+  - ✅ Documented conventions in ASSET_NAMING_CONVENTIONS.md
+  - ✅ Updated all tests to use standardized file naming
   - Dependencies: T009, T010, T016

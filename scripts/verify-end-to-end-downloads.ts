@@ -62,7 +62,7 @@ function getEnvironment(): string {
   }
 
   if (!TEST_ENVIRONMENTS.includes(env)) {
-    logger.warn(`Invalid environment: ${env}, defaulting to local`);
+    logger.warn({ message: `Invalid environment: ${env}, defaulting to local` });
     env = 'local';
   }
 
@@ -268,19 +268,19 @@ async function testBookDownloads(
 
   // Test API endpoint for full audiobook if available
   if (book.hasFullAudiobook) {
-    logger.info(`Testing full audiobook API endpoint for ${book.slug}`);
+    logger.info({ message: `Testing full audiobook API endpoint for ${book.slug}` });
     results.push(await testApiEndpoint(baseUrl, book.slug, 'full'));
 
-    logger.info(`Testing full audiobook proxy endpoint for ${book.slug}`);
+    logger.info({ message: `Testing full audiobook proxy endpoint for ${book.slug}` });
     results.push(await testProxyEndpoint(baseUrl, book.slug, 'full'));
   }
 
   // Test API endpoint for each chapter
   for (const chapter of book.chapters) {
-    logger.info(`Testing chapter ${chapter} API endpoint for ${book.slug}`);
+    logger.info({ message: `Testing chapter ${chapter} API endpoint for ${book.slug}` });
     results.push(await testApiEndpoint(baseUrl, book.slug, 'chapter', chapter));
 
-    logger.info(`Testing chapter ${chapter} proxy endpoint for ${book.slug}`);
+    logger.info({ message: `Testing chapter ${chapter} proxy endpoint for ${book.slug}` });
     results.push(await testProxyEndpoint(baseUrl, book.slug, 'chapter', chapter));
   }
 
@@ -383,7 +383,7 @@ async function runTests() {
   const environment = getEnvironment();
   const baseUrl = BASE_URLS[environment as keyof typeof BASE_URLS];
 
-  logger.info(`Running download E2E tests in ${environment} environment (${baseUrl})`);
+  logger.info({ message: `Running download E2E tests in ${environment} environment (${baseUrl})` });
 
   const testSuite: TestSuite = {
     environment,
@@ -398,7 +398,7 @@ async function runTests() {
 
   // Run tests for each book
   for (const book of TEST_BOOKS) {
-    logger.info(`Testing downloads for book: ${book.slug}`);
+    logger.info({ message: `Testing downloads for book: ${book.slug}` });
     const bookResults = await testBookDownloads(baseUrl, book);
     testSuite.results.push(...bookResults);
   }
@@ -425,10 +425,10 @@ async function runTests() {
 
   // Log results
   const successRate = (testSuite.successful / testSuite.totalTests) * 100;
-  logger.info(
-    `Tests completed: ${testSuite.totalTests} total, ${testSuite.successful} passed, ${testSuite.failed} failed (${successRate.toFixed(2)}% success rate)`
-  );
-  logger.info(`Reports saved to ${htmlPath} and ${jsonPath}`);
+  logger.info({
+    message: `Tests completed: ${testSuite.totalTests} total, ${testSuite.successful} passed, ${testSuite.failed} failed (${successRate.toFixed(2)}% success rate)`,
+  });
+  logger.info({ message: `Reports saved to ${htmlPath} and ${jsonPath}` });
 
   // Log some colored summary to the console
   // Using console.warn is allowed by the linting rules
@@ -452,6 +452,6 @@ async function runTests() {
 
 // Execute the tests
 runTests().catch((error) => {
-  logger.error('Fatal error running tests:', error);
+  logger.error({ message: 'Fatal error running tests:', error });
   process.exit(1);
 });

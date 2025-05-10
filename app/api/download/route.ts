@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { randomUUID } from 'crypto';
 
+import { AssetType } from '@/types/assets';
 import { createRequestLogger } from '@/utils/logger';
 
 import { handleCriticalError, handleDownloadServiceError, safeLog } from './errorHandlers';
@@ -155,31 +156,26 @@ function createDownloadFilename(
 }
 
 /**
- * Handles proxy download requests with comprehensive context and error handling
- *
- * @param url URL to proxy
- * @param filename Filename for the download
- * @param validation Validated request parameters
- * @param log Logger instance
- * @param correlationId Request correlation ID for tracing
- * @param searchParams Original search parameters
- * @param headers Request headers for context
- * @returns Promise resolving to NextResponse
+ * Type for proxy request context combining all parameters needed
  */
-async function handleProxyRequest(
-  url: string,
-  filename: string,
-  validation: { slug: string; type: 'full' | 'chapter'; chapter?: string },
-  log: ReturnType<typeof createRequestLogger>,
-  correlationId: string,
-  searchParams?: URLSearchParams,
-  headers?: Record<string, string>
-): Promise<NextResponse> {
-  // Generate a unique operation ID for this proxy operation
-  // This is different from the correlation ID and specific to this proxy operation
-  const operationId = `px-${Date.now().toString(36)}-${Math.random().toString(36).substring(2, 5)}`;
+type ProxyRequestContext = {
+  url: string;
+  filename: string;
+  validation: {
+    slug: string;
+    type: 'full' | 'chapter';
+    chapter?: string;
+  };
+  log: ReturnType<typeof createRequestLogger>;
+  correlationId: string;
+  searchParams?: URLSearchParams;
+  headers?: Record<string, string>;
+};
 
-  // Convert search params to a record for logging, skipping sensitive ones
+/**
+ * Extract and return parameters for logging, filtering sensitive ones
+ */
+function extractRequestParams(searchParams?: URLSearchParams): Record<string, string | string[]> {
   const requestParams: Record<string, string | string[]> = {};
   const sensitiveParams = ['auth', 'token', 'key', 'secret', 'password', 'apikey', 'api_key'];
 
@@ -191,42 +187,108 @@ async function handleProxyRequest(
     });
   }
 
-  // Add request validation data to parameters with enhanced context
-  // (This information is used for logging and debugging)
-  const _allParams = {
-    ...requestParams,
-    slug: validation.slug,
-    type: validation.type,
-    chapter: validation.chapter,
-    correlationId,
-    operationId,
-    environment: process.env.NODE_ENV || 'development',
-    deployment: process.env.VERCEL_URL || 'local',
-    timestamp: new Date().toISOString(),
-  };
+  return requestParams;
+}
 
-  // Gather client information for debugging
-  const clientInfo = {
-    userAgent: headers?.['user-agent'] || '',
-    referer: headers?.['referer'] || '',
-    origin: headers?.['origin'] || '',
-    accept: headers?.['accept'] || '',
-    acceptEncoding: headers?.['accept-encoding'] || '',
-    acceptLanguage: headers?.['accept-language'] || '',
+// Define types for client information
+type ClientInfo = {
+  userAgent: string;
+  referer: string;
+  origin: string;
+  accept: string;
+  acceptEncoding: string;
+  acceptLanguage: string;
+};
+
+type ClientClassification = {
+  isMobile: boolean;
+  isIOS: boolean;
+  isAndroid: boolean;
+  browser: string;
+};
+
+/**
+ * Get header value safely
+ */
+function getHeaderValue(headers: Record<string, string> | undefined, key: string): string {
+  return headers?.[key] || '';
+}
+
+/**
+ * Extract basic client information from headers
+ */
+function extractClientInfo(headers?: Record<string, string>): ClientInfo {
+  return {
+    userAgent: getHeaderValue(headers, 'user-agent'),
+    referer: getHeaderValue(headers, 'referer'),
+    origin: getHeaderValue(headers, 'origin'),
+    accept: getHeaderValue(headers, 'accept'),
+    acceptEncoding: getHeaderValue(headers, 'accept-encoding'),
+    acceptLanguage: getHeaderValue(headers, 'accept-language'),
   };
+}
+
+/**
+ * Determine browser type from user agent
+ */
+function determineBrowser(userAgent: string): string {
+  if (userAgent.includes('Chrome')) return 'Chrome';
+  if (userAgent.includes('Safari') && !userAgent.includes('Chrome')) return 'Safari';
+  if (userAgent.includes('Firefox')) return 'Firefox';
+  if (userAgent.includes('Edg/')) return 'Edge';
+  return 'Other';
+}
+
+/**
+ * Analyze client information from headers
+ */
+function analyzeClientInfo(headers?: Record<string, string>): {
+  clientInfo: ClientInfo;
+  clientClassification: ClientClassification;
+} {
+  const clientInfo = extractClientInfo(headers);
+  const { userAgent } = clientInfo;
 
   // Determine client platform/browser for analytics
-  const isMobile =
-    clientInfo.userAgent.includes('Mobile') || clientInfo.userAgent.includes('Android');
-  const isIOS = clientInfo.userAgent.includes('iPhone') || clientInfo.userAgent.includes('iPad');
-  const isAndroid = clientInfo.userAgent.includes('Android');
-  const isSafari =
-    clientInfo.userAgent.includes('Safari') && !clientInfo.userAgent.includes('Chrome');
-  const isChrome = clientInfo.userAgent.includes('Chrome');
-  const isFirefox = clientInfo.userAgent.includes('Firefox');
-  const isEdge = clientInfo.userAgent.includes('Edg/');
+  const isMobile = userAgent.includes('Mobile') || userAgent.includes('Android');
+  const isIOS = userAgent.includes('iPhone') || userAgent.includes('iPad');
+  const isAndroid = userAgent.includes('Android');
+  const browser = determineBrowser(userAgent);
 
-  // Log proxy request with detailed context
+  return {
+    clientInfo,
+    clientClassification: {
+      isMobile,
+      isIOS,
+      isAndroid,
+      browser,
+    },
+  };
+}
+
+/**
+ * Type for proxy logging context
+ */
+type ProxyLogContext = {
+  log: ReturnType<typeof createRequestLogger>;
+  correlationId: string;
+  operationId: string;
+  validation: { slug: string; type: 'full' | 'chapter'; chapter?: string };
+  requestDetails: {
+    params: Record<string, string | string[]>;
+    url: string;
+    clientInfo: ClientInfo;
+    clientClassification: ClientClassification;
+  };
+};
+
+/**
+ * Log proxy request details
+ */
+function logProxyRequest(context: ProxyLogContext): void {
+  const { log, correlationId, operationId, validation, requestDetails } = context;
+  const { params, url, clientInfo, clientClassification } = requestDetails;
+
   safeLog(log, 'info', {
     msg: 'Proxying download through API',
     correlationId,
@@ -235,34 +297,138 @@ async function handleProxyRequest(
     type: validation.type,
     chapter: validation.chapter,
     requestOrigin: process.env.VERCEL_URL || 'local',
-    requestParams,
+    requestParams: params,
     requestUrl: url,
     clientInfo,
-    clientClassification: {
-      isMobile,
-      isIOS,
-      isAndroid,
-      browser: isChrome
-        ? 'Chrome'
-        : isSafari
-          ? 'Safari'
-          : isFirefox
-            ? 'Firefox'
-            : isEdge
-              ? 'Edge'
-              : 'Other',
-    },
+    clientClassification,
     environment: process.env.NODE_ENV || 'development',
     timestamp: new Date().toISOString(),
+  });
+}
+
+/**
+ * Generate asset name based on download type and chapter
+ */
+function generateAssetName(
+  validation: { type: 'full' | 'chapter'; chapter?: string },
+  correlationId: string
+): { assetName: string; error?: NextResponse } {
+  if (validation.type === 'full') {
+    return { assetName: 'full-audiobook.mp3' };
+  }
+
+  if (!validation.chapter) {
+    const error = NextResponse.json(
+      {
+        error: 'Invalid request',
+        message: 'Chapter parameter is required when type is "chapter"',
+        correlationId,
+      },
+      { status: 400 }
+    );
+    return { assetName: '', error };
+  }
+
+  // Format chapter with leading zeros
+  const paddedChapter = String(parseInt(validation.chapter, 10)).padStart(2, '0');
+  return { assetName: `chapter-${paddedChapter}.mp3` };
+}
+
+/**
+ * Generate operation ID for proxy tracking
+ */
+function generateOperationId(): string {
+  return `px-${Date.now().toString(36)}-${Math.random().toString(36).substring(2, 5)}`;
+}
+
+/**
+ * Format error response for proxy errors
+ */
+function formatErrorResponse(
+  proxyError: unknown,
+  correlationId: string,
+  operationId: string
+): Record<string, unknown> {
+  const errorResponse = {
+    error: 'Proxy error',
+    message: 'Failed to proxy download through API',
+    correlationId,
+    operationId,
+  };
+
+  // Add detailed error information in non-production environments
+  if (process.env.NODE_ENV !== 'production') {
+    Object.assign(errorResponse, {
+      details: proxyError instanceof Error ? proxyError.message : String(proxyError),
+      errorType: proxyError instanceof Error ? proxyError.constructor.name : typeof proxyError,
+      stack: proxyError instanceof Error ? proxyError.stack : undefined,
+      timestamp: new Date().toISOString(),
+    });
+  }
+
+  return errorResponse;
+}
+
+// Import AssetService type if needed, or create a placeholder for it
+type AssetService = ReturnType<
+  NonNullable<ReturnType<typeof createDownloadService>>['getAssetService']
+>;
+
+/**
+ * Initialize a proxy download service and get asset service
+ */
+function initializeProxyServices(
+  log: ReturnType<typeof createRequestLogger>,
+  correlationId: string
+): {
+  downloadService: ReturnType<typeof createDownloadService>;
+  assetService: AssetService;
+} | null {
+  const downloadService = createDownloadService(log, correlationId);
+  if (!downloadService) {
+    return null;
+  }
+
+  return {
+    downloadService,
+    assetService: downloadService.getAssetService(),
+  };
+}
+
+/**
+ * Handle proxy download requests with comprehensive context and error handling
+ */
+async function handleProxyRequest(context: ProxyRequestContext): Promise<NextResponse> {
+  const { url, filename, validation, log, correlationId, searchParams, headers } = context;
+
+  // Generate a unique operation ID for this proxy operation
+  const operationId = generateOperationId();
+
+  // Extract request parameters and client information
+  const requestParams = extractRequestParams(searchParams);
+  const { clientInfo, clientClassification } = analyzeClientInfo(headers);
+
+  // Log proxy request
+  logProxyRequest({
+    log,
+    correlationId,
+    operationId,
+    validation,
+    requestDetails: {
+      params: requestParams,
+      url,
+      clientInfo,
+      clientClassification,
+    },
   });
 
   try {
     // Start timing the operation
     const proxyStartTime = Date.now();
 
-    // Create the download service with the correlation ID - needed for AssetService
-    const downloadService = createDownloadService(log, correlationId);
-    if (!downloadService) {
+    // Initialize services
+    const services = initializeProxyServices(log, correlationId);
+    if (!services) {
       return NextResponse.json(
         {
           error: 'Internal server error',
@@ -274,39 +440,18 @@ async function handleProxyRequest(
       );
     }
 
-    // Get the AssetService from the download service
-    const assetService = downloadService.getAssetService();
+    // Generate asset name based on validation parameters
+    const { assetName, error } = generateAssetName(validation, correlationId);
+    if (error) return error;
 
-    // Create asset name based on type and chapter
-    let assetName: string;
-    if (validation.type === 'full') {
-      assetName = 'full-audiobook.mp3';
-    } else {
-      if (!validation.chapter) {
-        return NextResponse.json(
-          {
-            error: 'Invalid request',
-            message: 'Chapter parameter is required when type is "chapter"',
-            correlationId,
-          },
-          { status: 400 }
-        );
-      }
-
-      // Format chapter with leading zeros (similar to downloadService implementation)
-      const paddedChapter = String(parseInt(validation.chapter, 10)).padStart(2, '0');
-      assetName = `chapter-${paddedChapter}.mp3`;
-    }
-
-    // Use the new proxyAssetDownload function
+    // Use the proxyAssetDownload function
     const response = await proxyAssetDownload(
-      // Always audio for download API
-      'audio',
+      AssetType.AUDIO,
       validation.slug,
       assetName,
       filename,
       log,
-      assetService,
+      services.assetService,
       requestParams
     );
 
@@ -342,23 +487,7 @@ async function handleProxyRequest(
     });
 
     // Return environment-aware structured error response
-    const errorResponse = {
-      error: 'Proxy error',
-      message: 'Failed to proxy download through API',
-      correlationId,
-      operationId,
-    };
-
-    // Add detailed error information in non-production environments
-    if (process.env.NODE_ENV !== 'production') {
-      Object.assign(errorResponse, {
-        details: proxyError instanceof Error ? proxyError.message : String(proxyError),
-        errorType: proxyError instanceof Error ? proxyError.constructor.name : typeof proxyError,
-        stack: proxyError instanceof Error ? proxyError.stack : undefined,
-        timestamp: new Date().toISOString(),
-      });
-    }
-
+    const errorResponse = formatErrorResponse(proxyError, correlationId, operationId);
     return NextResponse.json(errorResponse, { status: 500 });
   }
 }
@@ -465,10 +594,10 @@ async function processDownloadRequest(
         }
       );
 
-      return handleProxyRequest(
+      return handleProxyRequest({
         url,
         filename,
-        {
+        validation: {
           slug: validatedSlug,
           type: validatedType,
           chapter: validation.chapter,
@@ -476,8 +605,8 @@ async function processDownloadRequest(
         log,
         correlationId,
         searchParams,
-        requestHeaders
-      );
+        headers: requestHeaders,
+      });
     }
 
     // If no proxy requested, respond with the URL for client-side download

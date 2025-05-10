@@ -9,13 +9,10 @@ import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 
-import { createLogger } from '../utils/logger';
+import logger, { createRequestLogger } from '../utils/logger';
 
-// Configure logger
-const logger = createLogger({
-  level: 'info',
-  prefix: 'reorg-plan',
-});
+// Configure logger for the reorganization planning process
+const _planLogger = createRequestLogger('reorg-plan');
 
 interface PlanOptions {
   outputDir: string;
@@ -67,7 +64,8 @@ function parseArgs(): PlanOptions {
  * Print help information
  */
 function printHelp(): void {
-  logger.info(`
+  logger.info({
+    message: `
 Asset Reorganization Plan Generator
 
 This script runs all audit tools and generates a comprehensive
@@ -79,7 +77,8 @@ Options:
   --verbose, -v          Enable verbose logging
   --skip-audits, -s      Skip running audit tools (use existing reports)
   --help, -h             Show this help message
-  `);
+  `,
+  });
 }
 
 /**
@@ -88,7 +87,7 @@ Options:
 function createOutputDirectory(dirPath: string): void {
   if (!fs.existsSync(dirPath)) {
     fs.mkdirSync(dirPath, { recursive: true });
-    logger.info(`Created output directory: ${dirPath}`);
+    logger.info({ message: `Created output directory: ${dirPath}` });
   }
 }
 
@@ -96,49 +95,61 @@ function createOutputDirectory(dirPath: string): void {
  * Run all asset audit tools
  */
 async function runAuditTools(verbose: boolean): Promise<void> {
-  logger.info('Running asset audit tools...');
+  logger.info({ message: 'Running asset audit tools...' });
 
   const verboseFlag = verbose ? ' --verbose' : '';
 
   try {
-    logger.info('Running text asset audit...');
+    logger.info({ message: 'Running text asset audit...' });
     execSync(`npx tsx scripts/auditTextAssets.ts${verboseFlag}`, { stdio: 'inherit' });
 
-    logger.info('Running image asset audit...');
+    logger.info({ message: 'Running image asset audit...' });
     execSync(`npx tsx scripts/auditImageAssets.ts${verboseFlag}`, { stdio: 'inherit' });
 
-    logger.info('Running audio asset audit...');
+    logger.info({ message: 'Running audio asset audit...' });
     execSync(`npx tsx scripts/auditAudioAssets.ts${verboseFlag}`, { stdio: 'inherit' });
 
-    logger.info('All audit tools completed successfully');
+    logger.info({ message: 'All audit tools completed successfully' });
   } catch (error) {
-    logger.error('Error running audit tools:', error);
+    logger.error({ message: 'Error running audit tools', error });
     throw new Error('Failed to run audit tools');
   }
+}
+
+interface AuditReport {
+  totalAssets: number;
+  textAssets: number;
+  imageAssets: number;
+  audioAssets: number;
+  standardizedAssets: number;
+  nonStandardizedAssets: number;
+  pathIssues: {
+    nonStandardPath: string[];
+  };
 }
 
 /**
  * Read audit reports
  */
 function readAuditReports(): {
-  text: Record<string, unknown>;
-  image: Record<string, unknown>;
-  audio: Record<string, unknown>;
+  text: AuditReport;
+  image: AuditReport;
+  audio: AuditReport;
 } {
   try {
     const textReport = JSON.parse(
       fs.readFileSync(path.join('./text-assets-audit', 'text-assets-audit.json'), 'utf8')
-    );
+    ) as AuditReport;
     const imageReport = JSON.parse(
       fs.readFileSync(path.join('./image-assets-audit', 'image-assets-audit.json'), 'utf8')
-    );
+    ) as AuditReport;
     const audioReport = JSON.parse(
       fs.readFileSync(path.join('./audio-assets-audit', 'audio-assets-audit.json'), 'utf8')
-    );
+    ) as AuditReport;
 
     return { text: textReport, image: imageReport, audio: audioReport };
   } catch (error) {
-    logger.error('Error reading audit reports:', error);
+    logger.error({ message: 'Error reading audit reports', error });
     throw new Error('Failed to read audit reports, please run audit tools first');
   }
 }
@@ -148,11 +159,11 @@ function readAuditReports(): {
  */
 function generateReorganizationPlan(
   reports: {
-    text: Record<string, unknown>;
-    image: Record<string, unknown>;
-    audio: Record<string, unknown>;
+    text: AuditReport;
+    image: AuditReport;
+    audio: AuditReport;
   },
-  options: PlanOptions
+  _options: PlanOptions
 ): string {
   // Calculate total metrics
   const totalAssets = reports.text.totalAssets; // This should be the same in all reports
@@ -211,7 +222,7 @@ function generateReorganizationPlan(
         commands.push(createCommand('images'));
       } else if (path.includes('/site-assets/')) {
         commands.push(createCommand('site-assets'));
-      } else if (path.includes('/books/') && path.includes('/images/')) {
+      } else if (path.includes('/books/')) {
         commands.push(createCommand('books'));
       }
     }
@@ -286,7 +297,7 @@ Detailed audit reports are available at:
  */
 function saveReport(filePath: string, content: string): void {
   fs.writeFileSync(filePath, content);
-  logger.info(`Saved reorganization plan to ${filePath}`);
+  logger.info({ message: `Saved reorganization plan to ${filePath}` });
 }
 
 /**
@@ -297,12 +308,10 @@ async function main(): Promise<void> {
     // Parse command line arguments
     const options = parseArgs();
 
-    // Set log level
-    if (options.verbose) {
-      logger.level = 'debug';
-    }
+    // Set log level if in server environment
+    // We can't directly set the log level with our custom logger interface
 
-    logger.info('Asset Reorganization Plan Generator');
+    logger.info({ message: 'Asset Reorganization Plan Generator' });
 
     // Create output directory
     createOutputDirectory(options.outputDir);
@@ -311,7 +320,7 @@ async function main(): Promise<void> {
     if (options.runAudits) {
       await runAuditTools(options.verbose);
     } else {
-      logger.info('Skipping audit tools, using existing reports');
+      logger.info({ message: 'Skipping audit tools, using existing reports' });
     }
 
     // Read audit reports
@@ -324,13 +333,15 @@ async function main(): Promise<void> {
     const planPath = path.join(options.outputDir, 'reorganization-plan.md');
     saveReport(planPath, plan);
 
-    logger.info(`
+    logger.info({
+      message: `
 Asset Reorganization Plan generated successfully!
  
 Open the plan at: ${planPath}
-    `);
+    `,
+    });
   } catch (error) {
-    logger.error('Error generating reorganization plan:', error);
+    logger.error({ message: 'Error generating reorganization plan', error });
     process.exit(1);
   }
 }

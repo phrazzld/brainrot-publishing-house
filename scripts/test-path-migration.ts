@@ -5,7 +5,7 @@
  * unified structure and printing the results. It helps verify the consistency and
  * correctness of path conversion for various asset types.
  */
-import { AssetType } from '../types/assets';
+import { AssetType as _AssetType } from '../types/assets';
 import { AssetPathService } from '../utils/services/AssetPathService';
 
 const assetPathService = new AssetPathService();
@@ -107,23 +107,23 @@ const sampleAssets = [
   {
     type: 'Audio Chapter',
     legacyPath: 'the-iliad/audio/01.mp3',
-    extractedSlug: null,
-    newPath: null,
-    directGeneration: null,
+    extractedSlug: null as string | null,
+    newPath: null as string | null,
+    directGeneration: null as string | null,
   },
   {
     type: 'Brainrot Text',
     legacyPath: 'books/hamlet/text/brainrot/03.txt',
-    extractedSlug: null,
-    newPath: null,
-    directGeneration: null,
+    extractedSlug: null as string | null,
+    newPath: null as string | null,
+    directGeneration: null as string | null,
   },
   {
     type: 'Book Image',
     legacyPath: 'books/the-odyssey/images/cover.jpg',
-    extractedSlug: null,
-    newPath: null,
-    directGeneration: null,
+    extractedSlug: null as string | null,
+    newPath: null as string | null,
+    directGeneration: null as string | null,
   },
 ];
 

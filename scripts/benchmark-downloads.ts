@@ -7,11 +7,14 @@ import path from 'path';
 import { performance } from 'perf_hooks';
 import { setTimeout as sleep } from 'timers/promises';
 
-import { logger } from '../utils/logger';
+import { createRequestLogger } from '../utils/logger';
 import { generateHtmlReport } from './benchmark-report-generator';
 
 // Configuration
 const TEST_ENVIRONMENTS = ['local', 'development', 'staging', 'production'];
+// Create benchmark logger
+const benchmarkLogger = createRequestLogger('benchmark');
+
 const BASE_URLS = {
   local: 'http://localhost:3000',
   development: process.env.DEV_URL || 'https://dev.example.com',
@@ -23,7 +26,12 @@ const BASE_URLS = {
 export const CONCURRENCY_LEVELS = [1, 5, 10];
 
 // Test books with varied file sizes
-const BENCHMARK_BOOKS = [
+const BENCHMARK_BOOKS: Array<{
+  slug: string;
+  category: 'small' | 'medium' | 'large';
+  hasFullAudiobook: boolean;
+  chapters: number[];
+}> = [
   // Small audiobooks (chapters < 5MB)
   { slug: 'hamlet', category: 'small', hasFullAudiobook: true, chapters: [1, 2, 3] },
 
@@ -96,7 +104,9 @@ function getArgs(): { environment: string; concurrencyLevels: number[] } {
   }
 
   if (!TEST_ENVIRONMENTS.includes(env)) {
-    logger.warn(`Invalid environment: ${env}, defaulting to local`);
+    benchmarkLogger.warn({
+      msg: `Invalid environment: ${env}, defaulting to local`,
+    });
     env = 'local';
   }
 
@@ -115,7 +125,7 @@ function getArgs(): { environment: string; concurrencyLevels: number[] } {
       }
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (_) {
-      logger.warn(`Invalid concurrency value: ${concurrencyArg}, using defaults`);
+      benchmarkLogger.warn({ msg: `Invalid concurrency value: ${concurrencyArg}, using defaults` });
     }
   }
 
@@ -416,9 +426,11 @@ async function benchmarkProxyEndpoint(params: ProxyEndpointParams): Promise<Benc
 /**
  * Run concurrent tests for a given benchmark function
  */
-async function runConcurrentTests<
-  T extends (params: Record<string, unknown>) => Promise<BenchmarkResult>,
->(benchmarkFn: T, concurrencyLevel: number, args: Parameters<T>[]): Promise<BenchmarkResult[]> {
+async function runConcurrentTests(
+  benchmarkFn: (params: unknown) => Promise<BenchmarkResult>,
+  concurrencyLevel: number,
+  args: unknown[]
+): Promise<BenchmarkResult[]> {
   const results: BenchmarkResult[] = [];
 
   // Process in batches of concurrencyLevel
@@ -426,7 +438,7 @@ async function runConcurrentTests<
     const batch = args.slice(i, i + concurrencyLevel);
 
     // Run the batch concurrently
-    const batchPromises = batch.map((argSet) => benchmarkFn(...argSet));
+    const batchPromises = batch.map((argSet) => benchmarkFn(argSet));
     const batchResults = await Promise.all(batchPromises);
 
     results.push(...batchResults);
@@ -496,7 +508,9 @@ async function benchmarkBook(
   }
 
   // Run API tests with specified concurrency
-  logger.info(`Running API tests for ${book.slug} with concurrency ${concurrencyLevel}`);
+  benchmarkLogger.info({
+    msg: `Running API tests for ${book.slug} with concurrency ${concurrencyLevel}`,
+  });
   const apiResults = await runConcurrentTests(
     benchmarkApiEndpoint,
     concurrencyLevel,
@@ -545,7 +559,9 @@ async function benchmarkBook(
   }
 
   // Run proxy tests with specified concurrency
-  logger.info(`Running proxy tests for ${book.slug} with concurrency ${concurrencyLevel}`);
+  benchmarkLogger.info({
+    msg: `Running proxy tests for ${book.slug} with concurrency ${concurrencyLevel}`,
+  });
   const proxyResults = await runConcurrentTests(
     benchmarkProxyEndpoint,
     concurrencyLevel,
@@ -668,15 +684,19 @@ async function runBenchmarks() {
     results: [],
   };
 
-  logger.info(`Running download benchmarks in ${environment} environment (${baseUrl})`);
-  logger.info(`Testing with concurrency levels: ${concurrencyLevels.join(', ')}`);
+  benchmarkLogger.info({
+    msg: `Running download benchmarks in ${environment} environment (${baseUrl})`,
+  });
+  benchmarkLogger.info({ msg: `Testing with concurrency levels: ${concurrencyLevels.join(', ')}` });
 
   // Run benchmarks for each book and concurrency level
   for (const level of concurrencyLevels) {
-    logger.info(`===== Testing with concurrency level: ${level} =====`);
+    benchmarkLogger.info({ msg: `===== Testing with concurrency level: ${level} =====` });
 
     for (const book of BENCHMARK_BOOKS) {
-      logger.info(`Benchmarking downloads for book: ${book.slug} (${book.category})`);
+      benchmarkLogger.info({
+        msg: `Benchmarking downloads for book: ${book.slug} (${book.category})`,
+      });
       const bookResults = await benchmarkBook(baseUrl, book, level);
       benchmarkSuite.results.push(...bookResults);
     }
@@ -717,10 +737,10 @@ async function runBenchmarks() {
 
   // Log results
   const successRate = (benchmarkSuite.successful / benchmarkSuite.totalTests) * 100;
-  logger.info(
-    `Benchmarks completed: ${benchmarkSuite.totalTests} total, ${benchmarkSuite.successful} passed, ${benchmarkSuite.failed} failed (${successRate.toFixed(2)}% success rate)`
-  );
-  logger.info(`Reports saved to ${htmlPath} and ${jsonPath}`);
+  benchmarkLogger.info({
+    msg: `Benchmarks completed: ${benchmarkSuite.totalTests} total, ${benchmarkSuite.successful} passed, ${benchmarkSuite.failed} failed (${successRate.toFixed(2)}% success rate)`,
+  });
+  benchmarkLogger.info({ msg: `Reports saved to ${htmlPath} and ${jsonPath}` });
 
   // Log some colored summary to the console
   console.warn('\n=======================================');
@@ -756,6 +776,10 @@ async function runBenchmarks() {
 
 // Execute the benchmarks
 runBenchmarks().catch((error) => {
-  logger.error('Fatal error running benchmarks:', error);
+  benchmarkLogger.error({
+    msg: 'Fatal error running benchmarks',
+    error: error instanceof Error ? error.message : String(error),
+    stack: error instanceof Error ? error.stack : undefined,
+  });
   process.exit(1);
 });

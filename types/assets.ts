@@ -313,20 +313,21 @@ export interface AssetService {
 
   /**
    * Upload an asset
-   * @param assetType Type of asset
-   * @param bookSlug Book identifier
-   * @param assetName Name of the specific asset
-   * @param content Asset content
-   * @param options Upload options
+   * @param context Object containing upload parameters:
+   * - assetType: Type of asset
+   * - bookSlug: Book identifier
+   * - assetName: Name of the specific asset
+   * - content: Asset content
+   * - options: Upload options
    * @returns Promise resolving when upload completes
    */
-  uploadAsset(
-    assetType: AssetType,
-    bookSlug: string,
-    assetName: string,
-    content: Blob | ArrayBuffer | string,
-    options?: UploadOptions
-  ): Promise<AssetUploadResult>;
+  uploadAsset(context: {
+    assetType: AssetType;
+    bookSlug: string;
+    assetName: string;
+    content: Blob | ArrayBuffer | string;
+    options?: UploadOptions;
+  }): Promise<AssetUploadResult>;
 
   /**
    * Delete an asset

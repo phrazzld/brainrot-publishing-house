@@ -71,7 +71,7 @@ export class VercelBlobSourceAdapter implements AssetSourceAdapter {
     hasMore: boolean;
   }> {
     try {
-      logger.debug(`Listing Vercel Blob assets with prefix: ${prefix || 'none'}`);
+      logger.debug({ message: `Listing Vercel Blob assets with prefix: ${prefix || 'none'}` });
 
       const response = await list({
         prefix,
@@ -80,15 +80,18 @@ export class VercelBlobSourceAdapter implements AssetSourceAdapter {
       });
 
       // Map the response to our standardized format
-      const assets = response.blobs.map((blob: ListBlobResultBlob) => ({
-        path: blob.pathname,
-        size: blob.size,
-        contentType: blob.contentType,
-        lastModified: new Date(blob.uploadedAt),
-        // Vercel Blob doesn't expose metadata in list results
-      }));
+      const assets = response.blobs.map((blob: ListBlobResultBlob) => {
+        // Extract additional properties that might not be in type definition
+        return {
+          path: blob.pathname,
+          size: blob.size,
+          contentType: (blob as { contentType?: string }).contentType || 'application/octet-stream',
+          lastModified: new Date(blob.uploadedAt),
+          // Vercel Blob doesn't expose metadata in list results
+        };
+      });
 
-      logger.debug(`Listed ${assets.length} Vercel Blob assets`);
+      logger.debug({ message: `Listed ${assets.length} Vercel Blob assets` });
 
       return {
         assets,
@@ -96,7 +99,7 @@ export class VercelBlobSourceAdapter implements AssetSourceAdapter {
         hasMore: assets.length > 0 && !!response.cursor,
       };
     } catch (error) {
-      logger.error('Error listing assets from Vercel Blob:', error);
+      logger.error({ message: 'Error listing assets from Vercel Blob', error });
       throw new Error(
         `Failed to list assets from Vercel Blob: ${error instanceof Error ? error.message : String(error)}`
       );
@@ -115,7 +118,7 @@ export class VercelBlobSourceAdapter implements AssetSourceAdapter {
     metadata?: Record<string, string>;
   }> {
     try {
-      logger.debug(`Fetching Vercel Blob asset: ${path}`);
+      logger.debug({ message: `Fetching Vercel Blob asset: ${path}` });
 
       // Construct the URL for the asset
       const url = VercelBlobUtils.getUrlForPath(path);
@@ -135,7 +138,7 @@ export class VercelBlobSourceAdapter implements AssetSourceAdapter {
       // Get content type from the response
       const contentType = response.headers.get('content-type') || undefined;
 
-      logger.debug(`Successfully fetched Vercel Blob asset: ${path}`);
+      logger.debug({ message: `Successfully fetched Vercel Blob asset: ${path}` });
 
       return {
         content,
@@ -144,7 +147,7 @@ export class VercelBlobSourceAdapter implements AssetSourceAdapter {
         // Metadata not available from fetch API
       };
     } catch (error) {
-      logger.error(`Error fetching asset from Vercel Blob (${path}):`, error);
+      logger.error({ message: `Error fetching asset from Vercel Blob (${path})`, error });
       throw new Error(
         `Failed to fetch asset from Vercel Blob: ${error instanceof Error ? error.message : String(error)}`
       );
@@ -158,24 +161,24 @@ export class VercelBlobSourceAdapter implements AssetSourceAdapter {
    */
   public async assetExists(path: string): Promise<boolean> {
     try {
-      logger.debug(`Checking if Vercel Blob asset exists: ${path}`);
+      logger.debug({ message: `Checking if Vercel Blob asset exists: ${path}` });
 
       // Construct the URL for the asset
       const url = VercelBlobUtils.getUrlForPath(path);
 
       // Use the head function to check if the asset exists
-      const result = await head(url);
+      await head(url);
 
-      logger.debug(`Vercel Blob asset exists: ${path}`);
+      logger.debug({ message: `Vercel Blob asset exists: ${path}` });
       return true;
     } catch (error) {
       // If a 404 error is thrown, the asset doesn't exist
       if (error instanceof Error && error.message.includes('404')) {
-        logger.debug(`Vercel Blob asset does not exist: ${path}`);
+        logger.debug({ message: `Vercel Blob asset does not exist: ${path}` });
         return false;
       }
 
-      logger.error(`Error checking if Vercel Blob asset exists (${path}):`, error);
+      logger.error({ message: `Error checking if Vercel Blob asset exists (${path})`, error });
       throw new Error(
         `Failed to check if asset exists in Vercel Blob: ${error instanceof Error ? error.message : String(error)}`
       );
@@ -195,7 +198,7 @@ export class VercelBlobSourceAdapter implements AssetSourceAdapter {
     metadata?: Record<string, string>;
   } | null> {
     try {
-      logger.debug(`Getting Vercel Blob asset info: ${path}`);
+      logger.debug({ message: `Getting Vercel Blob asset info: ${path}` });
 
       // Construct the URL for the asset
       const url = VercelBlobUtils.getUrlForPath(path);
@@ -203,7 +206,7 @@ export class VercelBlobSourceAdapter implements AssetSourceAdapter {
       // Use the head function to get asset info
       const info = await head(url);
 
-      logger.debug(`Retrieved Vercel Blob asset info: ${path}`);
+      logger.debug({ message: `Retrieved Vercel Blob asset info: ${path}` });
 
       return {
         path,
@@ -215,11 +218,11 @@ export class VercelBlobSourceAdapter implements AssetSourceAdapter {
     } catch (error) {
       // If a 404 error is thrown, the asset doesn't exist
       if (error instanceof Error && error.message.includes('404')) {
-        logger.debug(`Vercel Blob asset does not exist: ${path}`);
+        logger.debug({ message: `Vercel Blob asset does not exist: ${path}` });
         return null;
       }
 
-      logger.error(`Error getting Vercel Blob asset info (${path}):`, error);
+      logger.error({ message: `Error getting Vercel Blob asset info (${path})`, error });
       throw new Error(
         `Failed to get asset info from Vercel Blob: ${error instanceof Error ? error.message : String(error)}`
       );
@@ -240,21 +243,27 @@ export class VercelBlobDestinationAdapter implements AssetDestinationAdapter {
    * @param options Upload options
    * @returns Promise resolving to information about the uploaded asset
    */
-  public async uploadAsset(
-    path: string,
-    content: ArrayBuffer,
+  /**
+   * Upload an asset to Vercel Blob
+   * @param context Object containing upload parameters
+   * @returns Promise resolving to information about the uploaded asset
+   */
+  public async uploadAsset(context: {
+    path: string;
+    content: ArrayBuffer;
     options?: {
       contentType?: string;
       metadata?: Record<string, string>;
-    }
-  ): Promise<{
+    };
+  }): Promise<{
     path: string;
     url: string;
     size: number;
     contentType?: string;
   }> {
+    const { path, content, options } = context;
     try {
-      logger.debug(`Uploading asset to Vercel Blob: ${path}`);
+      logger.debug({ message: `Uploading asset to Vercel Blob: ${path}` });
 
       // Create a blob from the content
       const blob = new Blob([content], {
@@ -268,16 +277,18 @@ export class VercelBlobDestinationAdapter implements AssetDestinationAdapter {
         // Metadata is not supported by Vercel Blob
       });
 
-      logger.debug(`Successfully uploaded asset to Vercel Blob: ${path}`);
+      logger.debug({ message: `Successfully uploaded asset to Vercel Blob: ${path}` });
 
+      // Calculate size from the original blob since result.size may not be available
+      const size = blob.size;
       return {
         path,
         url: result.url,
-        size: result.size,
+        size,
         contentType: options?.contentType,
       };
     } catch (error) {
-      logger.error(`Error uploading asset to Vercel Blob (${path}):`, error);
+      logger.error({ message: `Error uploading asset to Vercel Blob (${path})`, error });
       throw new Error(
         `Failed to upload asset to Vercel Blob: ${error instanceof Error ? error.message : String(error)}`
       );
@@ -291,7 +302,7 @@ export class VercelBlobDestinationAdapter implements AssetDestinationAdapter {
    */
   public async assetExists(path: string): Promise<boolean> {
     try {
-      logger.debug(`Checking if Vercel Blob asset exists: ${path}`);
+      logger.debug({ message: `Checking if Vercel Blob asset exists: ${path}` });
 
       // Construct the URL for the asset
       const url = VercelBlobUtils.getUrlForPath(path);
@@ -299,16 +310,16 @@ export class VercelBlobDestinationAdapter implements AssetDestinationAdapter {
       // Use the head function to check if the asset exists
       await head(url);
 
-      logger.debug(`Vercel Blob asset exists: ${path}`);
+      logger.debug({ message: `Vercel Blob asset exists: ${path}` });
       return true;
     } catch (error) {
       // If a 404 error is thrown, the asset doesn't exist
       if (error instanceof Error && error.message.includes('404')) {
-        logger.debug(`Vercel Blob asset does not exist: ${path}`);
+        logger.debug({ message: `Vercel Blob asset does not exist: ${path}` });
         return false;
       }
 
-      logger.error(`Error checking if Vercel Blob asset exists (${path}):`, error);
+      logger.error({ message: `Error checking if Vercel Blob asset exists (${path})`, error });
       throw new Error(
         `Failed to check if asset exists in Vercel Blob: ${error instanceof Error ? error.message : String(error)}`
       );
@@ -328,7 +339,7 @@ export class VercelBlobDestinationAdapter implements AssetDestinationAdapter {
     metadata?: Record<string, string>;
   } | null> {
     try {
-      logger.debug(`Getting Vercel Blob asset info: ${path}`);
+      logger.debug({ message: `Getting Vercel Blob asset info: ${path}` });
 
       // Construct the URL for the asset
       const url = VercelBlobUtils.getUrlForPath(path);
@@ -336,7 +347,7 @@ export class VercelBlobDestinationAdapter implements AssetDestinationAdapter {
       // Use the head function to get asset info
       const info = await head(url);
 
-      logger.debug(`Retrieved Vercel Blob asset info: ${path}`);
+      logger.debug({ message: `Retrieved Vercel Blob asset info: ${path}` });
 
       return {
         path,
@@ -348,11 +359,11 @@ export class VercelBlobDestinationAdapter implements AssetDestinationAdapter {
     } catch (error) {
       // If a 404 error is thrown, the asset doesn't exist
       if (error instanceof Error && error.message.includes('404')) {
-        logger.debug(`Vercel Blob asset does not exist: ${path}`);
+        logger.debug({ message: `Vercel Blob asset does not exist: ${path}` });
         return null;
       }
 
-      logger.error(`Error getting Vercel Blob asset info (${path}):`, error);
+      logger.error({ message: `Error getting Vercel Blob asset info (${path})`, error });
       throw new Error(
         `Failed to get asset info from Vercel Blob: ${error instanceof Error ? error.message : String(error)}`
       );

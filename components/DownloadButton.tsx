@@ -39,7 +39,7 @@ async function handleErrorResponse(response: Response): Promise<string> {
 
   try {
     const errorData = JSON.parse(errorText);
-    errorMessage = errorData.message || errorMessage;
+    errorMessage = errorData.message || errorData.error || errorMessage;
   } catch {
     // If response isn't valid JSON, use the text directly
     errorMessage = errorText || errorMessage;
@@ -126,10 +126,7 @@ export default function DownloadButton({ slug, type, chapter, classNames }: Down
         throw new Error(errorMessage);
       }
 
-      // Just read the response to ensure we consume the body
-      await response.json();
-
-      // Download the file via proxy
+      // Always download using proxy now
       await downloadViaProxy(slug, type, chapter);
     } catch (err) {
       handleDownloadError(err, setError);
@@ -141,7 +138,7 @@ export default function DownloadButton({ slug, type, chapter, classNames }: Down
   return (
     <div>
       <button
-        className={`btn btn-primary ${classNames}`}
+        className={`btn btn-primary ${classNames || ''}`}
         disabled={isDownloading}
         onClick={handleDownload}
       >

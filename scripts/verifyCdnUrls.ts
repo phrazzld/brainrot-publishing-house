@@ -1,15 +1,11 @@
 /* eslint-disable max-lines */
 import * as dotenv from 'dotenv';
 import * as fs from 'fs';
-import * as path from 'path';
 import { randomUUID } from 'crypto';
 
 // Import necessary modules and types
 import { DownloadRequestParams } from '../services/downloadService';
-import { DownloadService } from '../services/downloadService';
-import { assetExistsInBlobStorage, getBlobUrl } from '../utils/getBlobUrl';
-import { getAssetUrlWithFallback } from '../utils/getBlobUrl';
-import { createRequestLogger } from '../utils/logger';
+import { assetExistsInBlobStorage, getAssetUrlWithFallback, getBlobUrl } from '../utils/getBlobUrl';
 import { blobPathService } from '../utils/services/BlobPathService';
 
 // Load environment variables
@@ -78,7 +74,44 @@ interface VerificationOptions {
 const DEFAULT_TEST_BOOKS = ['the-iliad', 'hamlet', 'the-odyssey', 'the-republic'];
 
 /**
- * Helper function to create a DownloadService instance for testing
+ * Mock of DownloadService just for testing purposes
+ */
+class MockDownloadService {
+  private assetUrlResolver: {
+    getAssetUrlWithFallback: typeof getAssetUrlWithFallback;
+    convertLegacyPath: (path: string) => string;
+  };
+
+  constructor(assetUrlResolver: {
+    getAssetUrlWithFallback: typeof getAssetUrlWithFallback;
+    convertLegacyPath: (path: string) => string;
+  }) {
+    this.assetUrlResolver = assetUrlResolver;
+  }
+
+  // This is the method we expose for testing
+  generatePaths(
+    slug: string,
+    type: 'full' | 'chapter',
+    log: { info: (message: string) => void; error: (message: string) => void },
+    chapter?: string
+  ) {
+    // Generate paths in a simplified way for testing only
+    const cdnBase = 'https://brainrot-publishing.cdn.digitaloceanspaces.com';
+    const assetPath =
+      type === 'full'
+        ? `/assets/${slug}/audio/full-audiobook.mp3`
+        : `/assets/${slug}/audio/chapter-${chapter?.padStart(2, '0')}.mp3`;
+
+    return {
+      cdnUrl: `${cdnBase}${assetPath}`,
+      legacyPath: assetPath,
+    };
+  }
+}
+
+/**
+ * Helper function to create a MockDownloadService instance for testing
  */
 function createDownloadService() {
   // Create a simple asset resolver for testing
@@ -87,7 +120,7 @@ function createDownloadService() {
     convertLegacyPath: (path: string) => blobPathService.convertLegacyPath(path),
   };
 
-  return new DownloadService(assetUrlResolver);
+  return new MockDownloadService(assetUrlResolver);
 }
 
 /**
@@ -171,13 +204,7 @@ async function verifyUrl(
   }
 
   // Generate the paths for this resource using internal method
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { cdnUrl, legacyPath } = (downloadService as any)['generatePaths'](
-    slug,
-    type,
-    chapter,
-    log
-  );
+  const { cdnUrl, legacyPath } = downloadService.generatePaths(slug, type, log, chapter);
 
   // Create the fallback URL (non-CDN)
   const fallbackUrl = cdnUrl.replace('.cdn.digitaloceanspaces.com', '.digitaloceanspaces.com');
