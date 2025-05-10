@@ -28,8 +28,7 @@ describe('downloadFromSpaces', () => {
       arrayBuffer: jest.fn().mockResolvedValue(mockArrayBuffer),
     });
 
-    // Use the standardized path format
-    const standardPath = assetPathService.getAudioPath('the-iliad', '1');
+    // Define the legacy path - we don't need standard path here
     const legacyPath = 'the-iliad/audio/book-01.mp3';
 
     // We're still testing with legacy paths since downloadFromSpaces works with DO paths
@@ -116,9 +115,9 @@ describe('downloadFromSpaces', () => {
     });
 
     // Reduce timeout and retry delay for test
-    jest.spyOn(global, 'setTimeout').mockImplementation((callback: any) => {
+    jest.spyOn(global, 'setTimeout').mockImplementation((callback: () => void) => {
       callback();
-      return 1 as any;
+      return 1 as unknown as NodeJS.Timeout;
     });
 
     // Call the function
@@ -138,9 +137,9 @@ describe('downloadFromSpaces', () => {
     mockFetch.mockRejectedValue(new Error('Network error'));
 
     // Reduce timeout and retry delay for test
-    jest.spyOn(global, 'setTimeout').mockImplementation((callback: any) => {
+    jest.spyOn(global, 'setTimeout').mockImplementation((callback: () => void) => {
       callback();
-      return 1 as any;
+      return 1 as unknown as NodeJS.Timeout;
     });
 
     // Call the function

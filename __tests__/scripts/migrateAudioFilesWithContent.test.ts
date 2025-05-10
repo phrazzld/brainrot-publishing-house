@@ -1,8 +1,6 @@
 // Import necessary modules for testing
 import { jest } from '@jest/globals';
 import fs from 'fs/promises';
-import path from 'path';
-import { fileURLToPath } from 'url';
 
 // Mock dependencies
 jest.mock('fs/promises');
@@ -99,8 +97,35 @@ jest.mock('../../translations/index', () => ({
 const scriptPath = '../../scripts/migrateAudioFilesWithContent.ts';
 
 // Dynamically require to access the exported classes/functions for testing
-let AudioFilesMigrator: any;
-let parseArgs: any;
+// Define appropriate types for these imports
+interface AudioFilesMigratorClass {
+  new (options: {
+    dryRun: boolean;
+    books: string[];
+    force: boolean;
+    retries: number;
+    concurrency: number;
+    logFile: string;
+    verbose: boolean;
+  }): {
+    run: () => Promise<{ skipped: number; successful: number; failed: number }>;
+  };
+}
+
+interface ParseArgsFn {
+  (args: string[]): {
+    dryRun: boolean;
+    books: string[];
+    force: boolean;
+    retries: number;
+    concurrency: number;
+    logFile: string;
+    verbose: boolean;
+  };
+}
+
+let AudioFilesMigrator: AudioFilesMigratorClass;
+let _parseArgs: ParseArgsFn; // Prefixed with underscore as it's unused
 
 // Setup to load the script
 beforeAll(async () => {
@@ -108,12 +133,12 @@ beforeAll(async () => {
   (fs.writeFile as jest.Mock).mockResolvedValue(undefined);
 
   // Import the script dynamically to test its functions
-  const module = await import(scriptPath);
+  const importedModule = await import(scriptPath);
 
   // Assuming AudioFilesMigrator and parseArgs are exported or can be extracted
   // This is for illustration - adjust based on how your script is structured
-  AudioFilesMigrator = module.AudioFilesMigrator;
-  parseArgs = module.parseArgs;
+  AudioFilesMigrator = importedModule.AudioFilesMigrator;
+  _parseArgs = importedModule.parseArgs;
 
   // If they're not exported, you'll need to test the script's behavior through its side effects
 });
@@ -138,7 +163,7 @@ describe('migrateAudioFilesWithContent script', () => {
       // Mock exit to prevent actual exit
       const mockExit = jest
         .spyOn(process, 'exit')
-        .mockImplementation((code?: number) => undefined as never);
+        .mockImplementation((_code?: number) => undefined as never);
 
       // Run the main function
       await main();

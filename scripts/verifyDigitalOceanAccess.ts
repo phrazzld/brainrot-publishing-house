@@ -19,7 +19,6 @@
 // Load environment variables
 import * as dotenv from 'dotenv';
 import { GetObjectCommand, ListObjectsV2Command, S3Client } from '@aws-sdk/client-s3';
-import { existsSync } from 'fs';
 import fs from 'fs/promises';
 import path from 'path';
 import { Readable } from 'stream';
@@ -204,9 +203,12 @@ function printObjectsSummary(objects: { key: string; size: number }[]) {
       types.set(ext, { count: 0, totalSize: 0 });
     }
 
-    const typeInfo = types.get(ext)!;
-    typeInfo.count++;
-    typeInfo.totalSize += obj.size;
+    // We know this exists because we just set it if it didn't exist
+    const typeInfo = types.get(ext);
+    if (typeInfo) {
+      typeInfo.count++;
+      typeInfo.totalSize += obj.size;
+    }
   }
 
   // Print summary

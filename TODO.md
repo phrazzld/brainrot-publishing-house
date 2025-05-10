@@ -6,24 +6,24 @@ This TODO list details the tasks required to fully migrate all asset management 
 
 ## Technical Debt & Code Quality
 
-- [ ] **T022: Fix ESLint errors across the codebase**
-  - [ ] Address unused variables by properly prefixing with underscore (_)
-      - [ ] Fix 'planLogger' in generateReorganizationPlan.ts
-      - [ ] Fix 'options' unused parameter in generateReorganizationPlan.ts
-      - [ ] Fix 'container' in SimpleTestComponent.test.tsx
-      - [ ] Fix 'translations' in reading-room-blob.test.tsx
-      - [ ] Fix unused imports in test files (path, fs, fileURLToPath)
-  - [ ] Fix duplicate else-if conditions in generateReorganizationPlan.ts (line 225)
-  - [ ] Remove `any` types and replace with proper TypeScript types
-      - [ ] Fix in migrateAudioFilesWithContent.test.ts
-      - [ ] Fix in migrateRemainingAssets.test.ts
-      - [ ] Fix in downloadFromSpaces.test.ts
-      - [ ] Fix in getBlobUrl.test.ts
-  - [ ] Fix `no-require-imports` in .prettierrc.cjs
-  - [ ] Remove non-null assertions and implement proper null checking (verifyDigitalOceanAccess.ts)
-  - [ ] Fix module variable assignment issues in test files
-      - [ ] Fix in migrateAudioFilesWithContent.test.ts
-      - [ ] Fix in migrateRemainingAssets.test.ts
+- [x] **T022: Fix ESLint errors across the codebase**
+  - [x] Address unused variables by properly prefixing with underscore (_)
+      - [x] Fix 'planLogger' in generateReorganizationPlan.ts
+      - [x] Fix 'options' unused parameter in generateReorganizationPlan.ts
+      - [x] Fix 'container' in SimpleTestComponent.test.tsx
+      - [x] Fix 'translations' in reading-room-blob.test.tsx
+      - [x] Fix unused imports in test files (path, fs, fileURLToPath)
+  - [x] Fix duplicate else-if conditions in generateReorganizationPlan.ts (line 225)
+  - [x] Remove `any` types and replace with proper TypeScript types
+      - [x] Fix in migrateAudioFilesWithContent.test.ts
+      - [x] Fix in migrateRemainingAssets.test.ts
+      - [x] Fix in downloadFromSpaces.test.ts
+      - [x] Fix in getBlobUrl.test.ts
+  - [x] Fix `no-require-imports` in .prettierrc.cjs
+  - [x] Remove non-null assertions and implement proper null checking (verifyDigitalOceanAccess.ts)
+  - [x] Fix module variable assignment issues in test files
+      - [x] Fix in migrateAudioFilesWithContent.test.ts
+      - [x] Fix in migrateRemainingAssets.test.ts
   - Dependencies: none
 
 - [ ] **T023: Refactor complex functions for maintainability**

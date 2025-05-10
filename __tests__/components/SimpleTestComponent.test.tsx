@@ -9,7 +9,8 @@ import { render } from '../utils/test-utils';
 describe('SimpleTestComponent', () => {
   // Basic rendering test
   it('renders with default props', () => {
-    const { container } = render(<SimpleTestComponent />);
+    // Render the component without using the returned container object
+    render(<SimpleTestComponent />);
 
     // Check if component rendered correctly
     expect(screen.getByTestId('simple-test-container')).toBeInTheDocument();

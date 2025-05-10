@@ -218,6 +218,7 @@ function generateReorganizationPlan(
 
     // Add specific commands for any legacy patterns found
     for (const path of reports.image.pathIssues.nonStandardPath) {
+      // Check for specific patterns and add appropriate commands
       if (path.includes('/images/')) {
         commands.push(createCommand('images'));
       } else if (path.includes('/site-assets/')) {
