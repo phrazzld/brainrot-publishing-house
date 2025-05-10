@@ -1,6 +1,4 @@
 import { jest } from '@jest/globals';
-import fs from 'fs';
-import path from 'path';
 
 // Mock dependencies
 jest.mock('@vercel/blob', () => ({
@@ -121,15 +119,41 @@ global.fetch = jest.fn().mockImplementation((url) => {
 });
 
 // Mock File constructor
-global.File = jest.fn().mockImplementation((parts, filename, options) => ({
+interface MockFileParams {
+  name: string;
+  type: string;
+  size: number;
+}
+
+global.File = jest.fn().mockImplementation((
+  parts: Array<string | ArrayBuffer>, 
+  filename: string, 
+  options?: { type: string }
+): MockFileParams => ({
   name: filename,
   type: options?.type || 'application/octet-stream',
-  size: parts[0].length || parts[0].byteLength || 12345,
-})) as any;
+  size: parts[0] instanceof ArrayBuffer ? parts[0].byteLength : 
+        typeof parts[0] === 'string' ? parts[0].length : 12345,
+})) as unknown as typeof File;
 
 // Import the script (only after mocks are set up)
 // We'll use dynamic import to ensure mocks are applied first
-let migrateRemainingAssets: any;
+// Define more specific type
+interface MigrateRemainingAssetsFn {
+  (options: {
+    dryRun?: boolean;
+    books?: string[];
+    force?: boolean;
+    verbose?: boolean;
+    outputPath?: string;
+  }): Promise<{
+    skipped: number;
+    successful: number;
+    failed: number;
+  }>;
+}
+
+let _migrateRemainingAssets: MigrateRemainingAssetsFn; // Prefixed with underscore as it's unused
 
 describe('migrateRemainingAssets', () => {
   beforeAll(async () => {
@@ -138,10 +162,10 @@ describe('migrateRemainingAssets', () => {
 
     try {
       // We need to mock the module before requiring it
-      const module = await import('../../scripts/migrateRemainingAssets');
+      const importedModule = await import('../../scripts/migrateRemainingAssets');
       // Extract the functions we want to test - in a real implementation
       // you would export these functions from the module
-      migrateRemainingAssets = module.default;
+      _migrateRemainingAssets = importedModule.default;
     } catch (error) {
       console.error('Error importing module:', error);
     }

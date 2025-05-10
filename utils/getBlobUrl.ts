@@ -118,7 +118,7 @@ export function getAssetUrl(
  */
 export async function assetExistsInBlobStorage(
   legacyPath: string,
-  options: Omit<BlobUrlOptions, 'useBlobStorage' | 'noCache'> = {},
+  _options: Omit<BlobUrlOptions, 'useBlobStorage' | 'noCache'> = {},
   useCache: boolean = true
 ): Promise<boolean> {
   // Check existence cache if enabled

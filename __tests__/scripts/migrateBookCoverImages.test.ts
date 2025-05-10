@@ -1,7 +1,8 @@
-import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import fs from 'fs/promises';
 import path from 'path';
-import { fileURLToPath } from 'url';
+
+// Unused import: import { fileURLToPath } from 'url';
 
 import translations from '../../translations';
 import { BlobPathService } from '../../utils/services/BlobPathService';
@@ -90,7 +91,7 @@ class MigrationLog {
       await fs.access(this.logFile);
       const data = await fs.readFile(this.logFile, 'utf8');
       this.log = JSON.parse(data);
-    } catch (error) {
+    } catch {
       // File doesn't exist or is invalid, start with empty log
       this.log = {};
     }
@@ -135,6 +136,106 @@ class CoverImageMigrationService {
     });
   }
 
+  /**
+   * Creates a dry run result for a book without actually uploading anything
+   */
+  private createDryRunResult(book: (typeof translations)[0]): BookMigrationResult {
+    const originalPath = book.coverImage;
+    const blobPath = this.blobPathService.convertLegacyPath(originalPath);
+    const blobUrl = this.blobService.getUrlForPath(blobPath);
+
+    return {
+      status: 'skipped',
+      originalPath,
+      blobPath,
+      blobUrl,
+    };
+  }
+
+  /**
+   * Handles a migration failure by creating a failure result
+   */
+  private handleMigrationFailure(
+    book: (typeof translations)[0],
+    error: unknown
+  ): BookMigrationResult {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+
+    return {
+      status: 'failed',
+      originalPath: book.coverImage,
+      blobPath: '',
+      blobUrl: '',
+      error: errorMessage,
+    };
+  }
+
+  /**
+   * Updates migration statistics based on a result
+   */
+  private updateMigrationStats(
+    result: MigrationResult,
+    bookSlug: string,
+    migrationResult: BookMigrationResult
+  ): void {
+    // Update statistics
+    if (migrationResult.status === 'success') {
+      result.migrated++;
+    } else if (migrationResult.status === 'skipped') {
+      result.skipped++;
+    } else {
+      result.failed++;
+    }
+
+    // Store result
+    result.books[bookSlug] = migrationResult;
+    this.migrationLog.add(bookSlug, migrationResult);
+  }
+
+  /**
+   * Process a single book migration
+   */
+  private async processBookMigration(
+    book: (typeof translations)[0],
+    options: MigrationOptions,
+    result: MigrationResult
+  ): Promise<void> {
+    // Skip if already migrated and not forced
+    if (this.migrationLog.has(book.slug) && !options.force && !options.dryRun) {
+      result.skipped++;
+      const logEntry = this.migrationLog.get(book.slug);
+      if (logEntry) {
+        result.books[book.slug] = logEntry;
+      }
+      return;
+    }
+
+    try {
+      // Skip actual upload in dry run mode
+      if (options.dryRun) {
+        const migrationResult = this.createDryRunResult(book);
+        result.skipped++;
+        result.books[book.slug] = migrationResult;
+        return;
+      }
+
+      // Perform actual migration
+      const migrationResult = await this.migrateBookCover(book);
+      this.updateMigrationStats(result, book.slug, migrationResult);
+    } catch (error: unknown) {
+      const failedResult = this.handleMigrationFailure(book, error);
+      result.failed++;
+      result.books[book.slug] = failedResult;
+      this.migrationLog.add(book.slug, failedResult);
+    }
+  }
+
+  /**
+   * Migrate all book cover images
+   *
+   * @param options Migration options
+   * @returns Migration results
+   */
   public async migrateAll(options: MigrationOptions = {}): Promise<MigrationResult> {
     const result: MigrationResult = {
       total: 0,
@@ -156,63 +257,7 @@ class CoverImageMigrationService {
 
     // Migrate each book cover
     for (const book of books) {
-      // Skip if already migrated and not forced
-      if (this.migrationLog.has(book.slug) && !options.force && !options.dryRun) {
-        result.skipped++;
-        result.books[book.slug] = this.migrationLog.get(book.slug)!;
-        continue;
-      }
-
-      try {
-        // Skip actual upload in dry run mode
-        if (options.dryRun) {
-          const originalPath = book.coverImage;
-          const blobPath = this.blobPathService.convertLegacyPath(originalPath);
-          const blobUrl = this.blobService.getUrlForPath(blobPath);
-
-          const migrationResult: BookMigrationResult = {
-            status: 'skipped',
-            originalPath,
-            blobPath,
-            blobUrl,
-          };
-
-          result.skipped++;
-          result.books[book.slug] = migrationResult;
-          continue;
-        }
-
-        // Perform actual migration
-        const migrationResult = await this.migrateBookCover(book);
-
-        // Update statistics
-        if (migrationResult.status === 'success') {
-          result.migrated++;
-        } else if (migrationResult.status === 'skipped') {
-          result.skipped++;
-        } else {
-          result.failed++;
-        }
-
-        // Store result
-        result.books[book.slug] = migrationResult;
-        this.migrationLog.add(book.slug, migrationResult);
-      } catch (error: unknown) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
-
-        // Record failure
-        const failedResult: BookMigrationResult = {
-          status: 'failed',
-          originalPath: book.coverImage,
-          blobPath: '',
-          blobUrl: '',
-          error: errorMessage,
-        };
-
-        result.failed++;
-        result.books[book.slug] = failedResult;
-        this.migrationLog.add(book.slug, failedResult);
-      }
+      await this.processBookMigration(book, options, result);
     }
 
     // Save migration log
@@ -268,7 +313,7 @@ class CoverImageMigrationService {
       // Get file info to verify it exists
       const fileInfo = await this.blobService.getFileInfo(blobUrl);
       return fileInfo.size > 0;
-    } catch (error) {
+    } catch {
       return false;
     }
   }

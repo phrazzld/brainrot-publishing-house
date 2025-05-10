@@ -7,7 +7,6 @@ import '@testing-library/jest-dom';
 
 // Import the component after setting up mocks
 import ReadingRoom from '../../app/reading-room/[slug]/page';
-import translations from '../../translations';
 import { fetchTextWithFallback } from '../../utils/getBlobUrl';
 import { act, render, screen, waitFor } from '../utils/test-utils';
 

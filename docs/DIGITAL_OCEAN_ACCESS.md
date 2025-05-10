@@ -11,6 +11,7 @@ DO_SPACES_ACCESS_KEY=your_access_key
 DO_SPACES_SECRET_KEY=your_secret_key
 DO_SPACES_ENDPOINT=nyc3.digitaloceanspaces.com
 DO_SPACES_BUCKET=brainrot-publishing
+DO_SPACES_EXPIRY_SECONDS=900  # Optional: Default is 900 (15 minutes), maximum is 604800 (7 days)
 ```
 
 ## Audio File Structure
@@ -28,7 +29,9 @@ When working with Digital Ocean Spaces, configure the AWS SDK v3 as follows:
 
 ```typescript
 import { S3Client } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
+// Create the S3 client
 const client = new S3Client({
   region: 'nyc3',
   endpoint: 'https://nyc3.digitaloceanspaces.com',
@@ -37,7 +40,31 @@ const client = new S3Client({
     secretAccessKey: process.env.DO_SPACES_SECRET_KEY,
   },
 });
+
+// Generate a signed URL with the configured expiry time
+const expirySeconds = process.env.DO_SPACES_EXPIRY_SECONDS
+  ? parseInt(process.env.DO_SPACES_EXPIRY_SECONDS, 10)
+  : 900; // Default 15 minutes
+
+const command = new GetObjectCommand({
+  Bucket: process.env.DO_SPACES_BUCKET,
+  Key: 'path/to/file.mp3',
+});
+
+const signedUrl = await getSignedUrl(client, command, {
+  expiresIn: expirySeconds,
+});
 ```
+
+### Signed URL Expiry Time
+
+The expiry time for signed URLs can be configured via the `DO_SPACES_EXPIRY_SECONDS` environment variable.
+
+- **Default value**: 900 seconds (15 minutes)
+- **Maximum value**: 604800 seconds (7 days) - AWS SDK's maximum allowed value
+- **Recommended range**: 5-15 minutes for balancing security and user experience
+
+If not set or if an invalid value is provided, the system will fall back to the default of 15 minutes. For security reasons, setting an expiry time longer than 7 days will automatically cap it at 7 days.
 
 ## Verifying Access
 

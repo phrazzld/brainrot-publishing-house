@@ -1,0 +1,190 @@
+{
+  "alerts": {
+    "version": "1.0.0",
+    "description": "Alerts for monitoring asset access failures and performance issues",
+    "rules": [
+      {
+        "id": "high-error-rate",
+        "name": "High Asset Error Rate",
+        "description": "Alerts when the error rate for asset access exceeds threshold",
+        "query": {
+          "metrics": ["error_rate"],
+          "filter": {
+            "context": "asset_monitoring"
+          },
+          "timeRange": "5m",
+          "aggregation": "avg"
+        },
+        "condition": {
+          "type": "threshold",
+          "operator": ">",
+          "value": 0.05
+        },
+        "severity": "critical",
+        "throttle": "15m",
+        "notifications": ["slack", "email"],
+        "message": "High asset error rate detected ({{value}}), exceeding the threshold of 5%. Please investigate immediately."
+      },
+      {
+        "id": "slow-asset-response",
+        "name": "Slow Asset Response Time",
+        "description": "Alerts when asset response time exceeds threshold",
+        "query": {
+          "metrics": ["metrics.total_duration_ms"],
+          "filter": {
+            "context": "asset_monitoring",
+            "action": ["asset_fetch_success", "url_generation_complete"]
+          },
+          "timeRange": "5m",
+          "aggregation": "p95"
+        },
+        "condition": {
+          "type": "threshold",
+          "operator": ">",
+          "value": 2000
+        },
+        "severity": "warning",
+        "throttle": "30m",
+        "notifications": ["slack"],
+        "message": "95th percentile asset response time ({{value}}ms) is above the threshold of 2000ms."
+      },
+      {
+        "id": "asset-not-found-spike",
+        "name": "Spike in Asset Not Found Errors",
+        "description": "Alerts when there is a spike in 'not found' errors",
+        "query": {
+          "metrics": ["count"],
+          "filter": {
+            "context": "asset_monitoring",
+            "metrics.error_type": "not_found"
+          },
+          "timeRange": "5m"
+        },
+        "condition": {
+          "type": "relative",
+          "operator": ">",
+          "value": 2,
+          "compareWith": {
+            "timeRange": "15m",
+            "offset": "15m"
+          }
+        },
+        "severity": "warning",
+        "throttle": "15m",
+        "notifications": ["slack"],
+        "message": "Detected a {{value}}x increase in 'asset not found' errors compared to the previous period."
+      },
+      {
+        "id": "low-cache-hit-ratio",
+        "name": "Low Cache Hit Ratio",
+        "description": "Alerts when the cache hit ratio falls below threshold",
+        "query": {
+          "metrics": ["cache_hit_ratio"],
+          "filter": {
+            "context": "asset_monitoring",
+            "action": "asset_fetch_success"
+          },
+          "timeRange": "15m"
+        },
+        "condition": {
+          "type": "threshold",
+          "operator": "<",
+          "value": 0.7
+        },
+        "severity": "info",
+        "throttle": "1h",
+        "notifications": ["slack"],
+        "message": "Cache hit ratio ({{value}}) is below the expected threshold of 70%."
+      },
+      {
+        "id": "repeated-asset-fetch-retries",
+        "name": "Repeated Asset Fetch Retries",
+        "description": "Alerts when assets require multiple retry attempts",
+        "query": {
+          "metrics": ["count"],
+          "filter": {
+            "context": "asset_monitoring",
+            "action": "asset_fetch_retry",
+            "metrics.attempt": {
+              "operator": ">=",
+              "value": 2
+            }
+          },
+          "timeRange": "5m"
+        },
+        "condition": {
+          "type": "threshold",
+          "operator": ">",
+          "value": 10
+        },
+        "severity": "warning",
+        "throttle": "30m",
+        "notifications": ["slack"],
+        "message": "Detected {{value}} assets requiring multiple retry attempts in the last 5 minutes."
+      },
+      {
+        "id": "critical-asset-failure",
+        "name": "Critical Asset Access Failure",
+        "description": "Alerts when there are failures accessing critical assets",
+        "query": {
+          "metrics": ["count"],
+          "filter": {
+            "context": "asset_monitoring",
+            "action": "asset_fetch_failure",
+            "assetType": ["audio", "text"]
+          },
+          "timeRange": "5m"
+        },
+        "condition": {
+          "type": "threshold",
+          "operator": ">",
+          "value": 5
+        },
+        "severity": "critical",
+        "throttle": "15m",
+        "notifications": ["slack", "email", "pager"],
+        "message": "Detected {{value}} failures accessing critical assets (audio/text) in the last 5 minutes."
+      },
+      {
+        "id": "sudden-traffic-increase",
+        "name": "Sudden Asset Traffic Increase",
+        "description": "Alerts when there is a significant increase in asset traffic",
+        "query": {
+          "metrics": ["count"],
+          "filter": {
+            "context": "asset_monitoring"
+          },
+          "timeRange": "5m"
+        },
+        "condition": {
+          "type": "relative",
+          "operator": ">",
+          "value": 3,
+          "compareWith": {
+            "timeRange": "15m",
+            "offset": "15m"
+          }
+        },
+        "severity": "info",
+        "throttle": "30m",
+        "notifications": ["slack"],
+        "message": "Detected a {{value}}x increase in asset access traffic compared to the previous period."
+      }
+    ],
+    "notification_channels": {
+      "slack": {
+        "type": "slack",
+        "webhook_url": "{{SLACK_WEBHOOK_URL}}",
+        "channel": "#asset-monitoring-alerts"
+      },
+      "email": {
+        "type": "email",
+        "recipients": ["devops@brainrotpublishing.com", "assets@brainrotpublishing.com"]
+      },
+      "pager": {
+        "type": "pagerduty",
+        "integration_key": "{{PAGERDUTY_INTEGRATION_KEY}}"
+      }
+    }
+  }
+}

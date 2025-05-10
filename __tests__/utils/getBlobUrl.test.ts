@@ -36,11 +36,13 @@ describe('Blob URL Utilities', () => {
       path.replace(/^\/assets\//, 'books/').replace(/^\//, '')
     );
 
-    // Mock implementation for getUrlForPath
-    (blobService.getUrlForPath as jest.Mock).mockImplementation((path: string, options?: any) => {
-      const baseUrl = options?.baseUrl || 'https://public.blob.vercel-storage.com';
-      return `${baseUrl}/${path}`;
-    });
+    // Mock implementation for getUrlForPath with proper typing
+    (blobService.getUrlForPath as jest.Mock).mockImplementation(
+      (path: string, options?: { baseUrl?: string; noCache?: boolean }) => {
+        const baseUrl = options?.baseUrl || 'https://public.blob.vercel-storage.com';
+        return `${baseUrl}/${path}`;
+      }
+    );
 
     // Set default environment variables
     process.env.NODE_ENV = 'production';

@@ -28,7 +28,8 @@
           "warn",
           { "max": 500, "skipBlankLines": true, "skipComments": true }
         ],
-        "@typescript-eslint/no-require-imports": "off"
+        "@typescript-eslint/no-require-imports": "off",
+        "max-nested-callbacks": ["warn", 6]
       }
     }
   ],
