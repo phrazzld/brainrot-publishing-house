@@ -124,20 +124,27 @@ async function fetchWithTimeout(
 }
 
 /**
+ * Configuration for creating proxy error responses
+ */
+type ProxyErrorConfig = {
+  /** HTTP status code */
+  status: number;
+  /** User-facing error message */
+  errorMessage: string;
+  /** Optional technical error details (only included in non-production) */
+  details?: string;
+  /** Optional operation ID for log correlation */
+  operationId?: string;
+};
+
+/**
  * Creates an error response for proxy download failures with environment-aware error details
  *
- * @param status HTTP status code
- * @param errorMessage User-facing error message
- * @param details Optional technical error details (only included in non-production)
- * @param operationId Optional operation ID for log correlation
+ * @param config Configuration object containing all parameters
  * @returns NextResponse with appropriate error information based on environment
  */
-function createProxyErrorResponse(
-  status: number,
-  errorMessage: string,
-  details?: string,
-  operationId?: string
-): NextResponse {
+function createProxyErrorResponse(config: ProxyErrorConfig): NextResponse {
+  const { status, errorMessage, details, operationId } = config;
   // Determine error type based on status code
   let errorType = 'Processing error';
   let errorCategory = 'Unknown';
@@ -230,19 +237,26 @@ function createProxyErrorResponse(
 }
 
 /**
+ * Configuration for extracting error details
+ */
+type ErrorDetailsConfig = {
+  /** The response to extract error details from */
+  response: Response;
+  /** Logger instance */
+  log: Logger;
+  /** Optional operation ID for correlation */
+  opId?: string;
+};
+
+/**
  * Extracts comprehensive error details from a Response object
  * This enhanced version includes more context and structured data
  *
- * @param response The response to extract error details from
- * @param log Logger instance
- * @param opId Optional operation ID for correlation
+ * @param config Configuration object containing all parameters
  * @returns Promise resolving to extracted error details or empty string
  */
-async function extractErrorDetails(
-  response: Response,
-  log: Logger,
-  opId?: string
-): Promise<string> {
+async function extractErrorDetails(config: ErrorDetailsConfig): Promise<string> {
+  const { response, log, opId } = config;
   try {
     // Clone the response to allow multiple reads
     const clonedResponse = response.clone();
@@ -395,35 +409,42 @@ export function createDownloadHeaders(contentType: string, filename: string): He
 }
 
 /**
+ * Configuration for proxying asset downloads
+ */
+export type ProxyAssetConfig = {
+  /** Type of asset (audio, text, image) */
+  assetType: AssetType;
+  /** Book identifier */
+  bookSlug: string;
+  /** Name of the specific asset */
+  assetName: string;
+  /** Filename for the download */
+  filename: string;
+  /** Logger instance */
+  log: Logger;
+  /** Asset service for retrieving assets */
+  assetService: AssetService;
+  /** Additional request parameters for context */
+  requestParams?: Record<string, string | string[]>;
+};
+
+/**
  * Handles proxying of file downloads through the API
  * Uses the unified asset service for consistent asset handling
  *
- * @param assetType Type of asset (audio, text, image)
- * @param bookSlug Book identifier
- * @param assetName Name of the specific asset
- * @param filename Filename for the download
- * @param log Logger instance
- * @param assetService Asset service for retrieving assets
- * @param requestParams Additional request parameters for context
+ * @param config Configuration object containing all parameters
  * @returns Promise resolving to NextResponse
  */
-export async function proxyAssetDownload(
-  assetType: AssetType,
-  bookSlug: string,
-  assetName: string,
-  filename: string,
-  log: Logger,
-  assetService: AssetService,
-  requestParams?: Record<string, string | string[]>
-): Promise<NextResponse> {
+export async function proxyAssetDownload(config: ProxyAssetConfig): Promise<NextResponse> {
+  const { assetType, bookSlug, assetName, filename, log, assetService, requestParams } = config;
   // Create a unique operation ID for correlating logs within this request
   const opId = Date.now().toString(36) + Math.random().toString(36).substring(2, 7);
   const operation = 'proxyAssetDownload';
 
   try {
     // Step 1: Log detailed information about the proxy request
-    safeLog(log, 'info', {
-      msg: 'Proxy download request received',
+    logProxyRequest({
+      log,
       opId,
       operation,
       assetType,
@@ -431,13 +452,36 @@ export async function proxyAssetDownload(
       assetName,
       filename,
       requestParams,
-      timestamp: new Date().toISOString(),
-      environment: process.env.NODE_ENV || 'development',
     });
 
     // Step 2: Get the asset URL from the asset service
-    safeLog(log, 'debug', {
-      msg: 'Fetching asset URL',
+    let assetUrl: string;
+    try {
+      assetUrl = await getAssetUrlWithLogging({
+        log,
+        opId,
+        operation,
+        assetService,
+        assetType,
+        bookSlug,
+        assetName,
+      });
+    } catch (assetError) {
+      return handleAssetUrlError({
+        assetError,
+        log,
+        opId,
+        operation,
+        assetType,
+        bookSlug,
+        assetName,
+      });
+    }
+
+    // Step 3: Perform the fetch with timeout handling
+    const fetchResult = await fetchAssetWithLogging({
+      assetUrl,
+      log,
       opId,
       operation,
       assetType,
@@ -445,163 +489,462 @@ export async function proxyAssetDownload(
       assetName,
     });
 
-    let assetUrl: string;
-    try {
-      // Get URL from the AssetService
-      assetUrl = await assetService.getAssetUrl(assetType, bookSlug, assetName);
+    // If fetch resulted in an error response, return early
+    if ('error' in fetchResult) {
+      return fetchResult.error;
+    }
 
-      safeLog(log, 'debug', {
-        msg: 'Asset URL retrieved successfully',
+    const { fileResponse, metrics } = fetchResult;
+
+    // Step 4: Handle error responses from the fetch
+    if (!fileResponse.ok) {
+      return handleErrorResponse({
+        fileResponse,
+        log,
         opId,
         operation,
-        assetUrl: sanitizeUrlForLogging(assetUrl),
-      });
-    } catch (assetError) {
-      // Handle AssetError specifically
-      if (assetError instanceof AssetError) {
-        safeLog(log, 'error', {
-          msg: 'Failed to get asset URL',
-          opId,
-          operation,
-          assetType,
-          bookSlug,
-          assetName,
-          errorType: assetError.type,
-          errorMessage: assetError.message,
-          statusCode: assetError.statusCode,
-          assetPath: assetError.assetPath,
-        });
-
-        // Map AssetError to appropriate HTTP response
-        const status =
-          assetError.statusCode || assetError.type === AssetErrorType.NOT_FOUND
-            ? 404
-            : assetError.type === AssetErrorType.UNAUTHORIZED
-              ? 401
-              : assetError.type === AssetErrorType.FORBIDDEN
-                ? 403
-                : assetError.type === AssetErrorType.VALIDATION_ERROR
-                  ? 400
-                  : 500;
-
-        const errorMessage =
-          assetError.type === AssetErrorType.NOT_FOUND
-            ? `Asset not found: ${assetError.assetPath || `${assetType}/${bookSlug}/${assetName}`}`
-            : assetError.message;
-
-        return createProxyErrorResponse(
-          status,
-          errorMessage,
-          JSON.stringify({
-            errorType: assetError.type,
-            assetPath: assetError.assetPath,
-            operation: assetError.operation,
-            opId,
-            assetType,
-            bookSlug,
-            assetName,
-          }),
-          opId
-        );
-      }
-
-      // Handle other errors
-      safeLog(log, 'error', {
-        msg: 'Unexpected error getting asset URL',
-        opId,
-        operation,
+        assetUrl,
         assetType,
         bookSlug,
         assetName,
-        error: assetError instanceof Error ? assetError.message : String(assetError),
-        stack: assetError instanceof Error ? assetError.stack : undefined,
+        metrics,
       });
+    }
 
-      return createProxyErrorResponse(
-        500,
-        'Failed to retrieve asset URL',
-        JSON.stringify({
-          error: assetError instanceof Error ? assetError.message : String(assetError),
+    // Step 5: Create and return the successful response
+    return createSuccessResponse({
+      fileResponse,
+      filename,
+      log,
+      opId,
+      operation,
+      assetType,
+      bookSlug,
+      assetName,
+      metrics,
+    });
+  } catch (error) {
+    // Step 8: Handle unexpected errors
+    return handleUnexpectedProxyError({
+      error,
+      log,
+      opId,
+      operation,
+      assetType,
+      bookSlug,
+      assetName,
+      filename,
+      requestParams,
+    });
+  }
+}
+
+/**
+ * Parameters for handling unexpected proxy errors
+ */
+type HandleUnexpectedProxyErrorParams = {
+  error: unknown;
+  log: Logger;
+  opId: string;
+  operation: string;
+  assetType: AssetType;
+  bookSlug: string;
+  assetName: string;
+  filename: string;
+  requestParams?: Record<string, string | string[]>;
+};
+
+/**
+ * Handles unexpected errors in the proxy download process
+ */
+function handleUnexpectedProxyError(params: HandleUnexpectedProxyErrorParams): NextResponse {
+  const { error, log, opId, operation, assetType, bookSlug, assetName, filename, requestParams } =
+    params;
+
+  safeLog(log, 'error', {
+    msg: 'Unexpected error in proxy download process',
+    opId,
+    operation,
+    assetType,
+    bookSlug,
+    assetName,
+    filename,
+    error: error instanceof Error ? error.message : String(error),
+    stack: error instanceof Error ? error.stack : undefined,
+    errorType: error instanceof Error ? error.constructor.name : typeof error,
+    requestParams,
+    environment: process.env.NODE_ENV || 'development',
+    timestamp: new Date().toISOString(),
+  });
+
+  // Enhanced error response with detailed information in non-production environments
+  const errorDetails =
+    error instanceof Error
+      ? {
+          message: error.message,
+          name: error.name,
+          stack: process.env.NODE_ENV !== 'production' ? error.stack : undefined,
           assetType,
           bookSlug,
           assetName,
-          opId,
-        }),
-        opId
-      );
-    }
+          filename,
+        }
+      : String(error);
 
-    // Step 3: Perform the fetch with timeout handling
+  return createProxyErrorResponse({
+    status: 500,
+    errorMessage: 'Failed to proxy asset download',
+    details:
+      process.env.NODE_ENV !== 'production'
+        ? JSON.stringify(errorDetails)
+        : error instanceof Error
+          ? error.message
+          : String(error),
+    operationId: opId,
+  });
+}
+
+/**
+ * Log details about the proxy download request
+ */
+type LogProxyRequestParams = {
+  log: Logger;
+  opId: string;
+  operation: string;
+  assetType: AssetType;
+  bookSlug: string;
+  assetName: string;
+  filename: string;
+  requestParams?: Record<string, string | string[]>;
+};
+
+/**
+ * Logs detailed information about a proxy request
+ */
+function logProxyRequest(params: LogProxyRequestParams): void {
+  const { log, opId, operation, assetType, bookSlug, assetName, filename, requestParams } = params;
+
+  safeLog(log, 'info', {
+    msg: 'Proxy download request received',
+    opId,
+    operation,
+    assetType,
+    bookSlug,
+    assetName,
+    filename,
+    requestParams,
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development',
+  });
+}
+
+/**
+ * Parameters for getting an asset URL with logging
+ */
+type GetAssetUrlParams = {
+  log: Logger;
+  opId: string;
+  operation: string;
+  assetService: AssetService;
+  assetType: AssetType;
+  bookSlug: string;
+  assetName: string;
+};
+
+/**
+ * Gets an asset URL from the asset service with logging
+ */
+async function getAssetUrlWithLogging(params: GetAssetUrlParams): Promise<string> {
+  const { log, opId, operation, assetService, assetType, bookSlug, assetName } = params;
+
+  safeLog(log, 'debug', {
+    msg: 'Fetching asset URL',
+    opId,
+    operation,
+    assetType,
+    bookSlug,
+    assetName,
+  });
+
+  // Get URL from the AssetService
+  const assetUrl = await assetService.getAssetUrl(assetType, bookSlug, assetName);
+
+  safeLog(log, 'debug', {
+    msg: 'Asset URL retrieved successfully',
+    opId,
+    operation,
+    assetUrl: sanitizeUrlForLogging(assetUrl),
+  });
+
+  return assetUrl;
+}
+
+/**
+ * Parameters for handling asset URL errors
+ */
+type HandleAssetUrlErrorParams = {
+  assetError: unknown;
+  log: Logger;
+  opId: string;
+  operation: string;
+  assetType: AssetType;
+  bookSlug: string;
+  assetName: string;
+};
+
+/**
+ * Parameters for fetching an asset with logging
+ */
+type FetchAssetParams = {
+  assetUrl: string;
+  log: Logger;
+  opId: string;
+  operation: string;
+  assetType: AssetType;
+  bookSlug: string;
+  assetName: string;
+};
+
+/**
+ * Result of a successful fetch operation
+ */
+type FetchSuccessResult = {
+  fileResponse: Response;
+  metrics: {
+    fetchStartTime: number;
+    downloadEndTime: number;
+    totalDuration: number;
+  };
+};
+
+/**
+ * Result of a failed fetch operation
+ */
+type FetchErrorResult = {
+  error: NextResponse;
+};
+
+/**
+ * Combined result type for fetch operations
+ */
+type FetchResult = FetchSuccessResult | FetchErrorResult;
+
+/**
+ * Parameters for creating a success response
+ */
+type CreateSuccessResponseParams = {
+  fileResponse: Response;
+  filename: string;
+  log: Logger;
+  opId: string;
+  operation: string;
+  assetType: AssetType;
+  bookSlug: string;
+  assetName: string;
+  metrics: {
+    totalDuration: number;
+  };
+};
+
+/**
+ * Creates a success response for a file download
+ */
+function createSuccessResponse(params: CreateSuccessResponseParams): NextResponse {
+  const { fileResponse, filename, log, opId, operation, assetType, bookSlug, assetName, metrics } =
+    params;
+
+  // Get content type from response
+  const contentType = fileResponse.headers.get('content-type') || 'audio/mpeg';
+  const contentLength = fileResponse.headers.get('content-length');
+
+  // Create headers for the download
+  const headers = createDownloadHeaders(contentType, filename);
+
+  // Add content length if available
+  if (contentLength) {
+    headers.set('Content-Length', contentLength);
+  }
+
+  // Log successful proxy setup
+  safeLog(log, 'info', {
+    msg: 'Successfully set up asset proxy',
+    opId,
+    operation,
+    assetType,
+    bookSlug,
+    assetName,
+    filename,
+    contentType,
+    contentLength: contentLength ? parseInt(contentLength, 10) : undefined,
+    durationMs: metrics.totalDuration,
+    performance: {
+      isSlowRequest: metrics.totalDuration > 2000,
+      durationMs: metrics.totalDuration,
+    },
+    timestamp: new Date().toISOString(),
+  });
+
+  // Log starting to stream the response
+  safeLog(log, 'debug', {
+    msg: 'Beginning to stream asset to client',
+    opId,
+    operation,
+    contentType,
+    responseBodyType: fileResponse.body ? 'ReadableStream' : 'null',
+  });
+
+  // Return the file stream
+  return new NextResponse(fileResponse.body, {
+    status: 200,
+    headers,
+  });
+}
+
+/**
+ * Parameters for handling error responses
+ */
+type HandleErrorResponseParams = {
+  fileResponse: Response;
+  log: Logger;
+  opId: string;
+  operation: string;
+  assetUrl: string;
+  assetType: AssetType;
+  bookSlug: string;
+  assetName: string;
+  metrics: {
+    totalDuration: number;
+  };
+};
+
+/**
+ * Handles error responses from the fetch operation
+ */
+async function handleErrorResponse(params: HandleErrorResponseParams): Promise<NextResponse> {
+  const { fileResponse, log, opId, operation, assetUrl, assetType, bookSlug, assetName, metrics } =
+    params;
+
+  // Extract error details from the response
+  const errorDetails = await extractErrorDetails({
+    response: fileResponse,
+    log,
+    opId,
+  });
+
+  safeLog(log, 'error', {
+    msg: 'Failed to fetch asset with error status',
+    opId,
+    operation,
+    assetUrl: sanitizeUrlForLogging(assetUrl),
+    status: fileResponse.status,
+    statusText: fileResponse.statusText,
+    errorDetails,
+    durationMs: metrics.totalDuration,
+  });
+
+  // Collect headers for debugging (excluding sensitive ones)
+  const responseHeaders: Record<string, string> = {};
+  fileResponse.headers.forEach((value, key) => {
+    if (!['authorization', 'cookie', 'set-cookie'].includes(key.toLowerCase())) {
+      responseHeaders[key] = value;
+    }
+  });
+
+  return createProxyErrorResponse({
+    status: fileResponse.status === 404 ? 404 : 502,
+    errorMessage: `Failed to fetch asset (${fileResponse.status})`,
+    details: JSON.stringify({
+      errorDetails,
+      status: fileResponse.status,
+      statusText: fileResponse.statusText,
+      headers: responseHeaders,
+      assetType,
+      bookSlug,
+      assetName,
+      opId,
+    }),
+    operationId: opId,
+  });
+}
+
+/**
+ * Fetches an asset with timeout handling and comprehensive logging
+ */
+async function fetchAssetWithLogging(params: FetchAssetParams): Promise<FetchResult> {
+  const { assetUrl, log, opId, operation, assetType, bookSlug, assetName } = params;
+
+  safeLog(log, 'debug', {
+    msg: 'Initiating fetch operation for asset download',
+    opId,
+    operation,
+    assetUrl: sanitizeUrlForLogging(assetUrl),
+    timeoutMs: FETCH_TIMEOUT_MS,
+  });
+
+  // Performance metrics tracking
+  const metrics = {
+    fetchStartTime: Date.now(),
+    downloadEndTime: 0,
+    totalDuration: 0,
+  };
+
+  try {
+    // Use fetchWithTimeout to handle timeouts
+    const fileResponse = await fetchWithTimeout(
+      assetUrl,
+      {
+        headers: {
+          Accept: '*/*',
+          'User-Agent': `Brainrot-Publishing-House/${process.env.NEXT_PUBLIC_APP_VERSION || 'dev'} (${process.env.NODE_ENV})`,
+        },
+      },
+      FETCH_TIMEOUT_MS
+    );
+
+    // Calculate fetch duration
+    metrics.downloadEndTime = Date.now();
+    metrics.totalDuration = metrics.downloadEndTime - metrics.fetchStartTime;
+
     safeLog(log, 'debug', {
-      msg: 'Initiating fetch operation for asset download',
+      msg: 'Asset fetch completed',
       opId,
       operation,
       assetUrl: sanitizeUrlForLogging(assetUrl),
-      timeoutMs: FETCH_TIMEOUT_MS,
+      status: fileResponse.status,
+      statusText: fileResponse.statusText,
+      successful: fileResponse.ok,
+      durationMs: metrics.totalDuration,
+      contentType: fileResponse.headers.get('content-type'),
+      contentLength: fileResponse.headers.get('content-length'),
+      performance: {
+        isSlowRequest: metrics.totalDuration > 2000,
+        durationMs: metrics.totalDuration,
+      },
     });
 
-    // Performance metrics tracking
-    const metrics = {
-      fetchStartTime: Date.now(),
-      downloadEndTime: 0,
-      totalDuration: 0,
-    };
+    return { fileResponse, metrics };
+  } catch (fetchError) {
+    // Calculate duration even for errors
+    metrics.downloadEndTime = Date.now();
+    metrics.totalDuration = metrics.downloadEndTime - metrics.fetchStartTime;
 
-    let fileResponse: Response;
-    try {
-      // Use fetchWithTimeout to handle timeouts
-      fileResponse = await fetchWithTimeout(
-        assetUrl,
-        {
-          headers: {
-            Accept: '*/*',
-            'User-Agent': `Brainrot-Publishing-House/${process.env.NEXT_PUBLIC_APP_VERSION || 'dev'} (${process.env.NODE_ENV})`,
-          },
-        },
-        FETCH_TIMEOUT_MS
-      );
-
-      // Calculate fetch duration
-      metrics.downloadEndTime = Date.now();
-      metrics.totalDuration = metrics.downloadEndTime - metrics.fetchStartTime;
-
-      safeLog(log, 'debug', {
-        msg: 'Asset fetch completed',
+    // Special handling for timeout errors
+    if (fetchError instanceof TimeoutError) {
+      safeLog(log, 'error', {
+        msg: 'Timeout fetching asset',
         opId,
         operation,
         assetUrl: sanitizeUrlForLogging(assetUrl),
-        status: fileResponse.status,
-        statusText: fileResponse.statusText,
-        successful: fileResponse.ok,
+        timeoutMs: FETCH_TIMEOUT_MS,
         durationMs: metrics.totalDuration,
-        contentType: fileResponse.headers.get('content-type'),
-        contentLength: fileResponse.headers.get('content-length'),
-        performance: {
-          isSlowRequest: metrics.totalDuration > 2000,
-          durationMs: metrics.totalDuration,
-        },
+        error: fetchError.message,
       });
-    } catch (fetchError) {
-      // Calculate duration even for errors
-      metrics.downloadEndTime = Date.now();
-      metrics.totalDuration = metrics.downloadEndTime - metrics.fetchStartTime;
 
-      // Special handling for timeout errors
-      if (fetchError instanceof TimeoutError) {
-        safeLog(log, 'error', {
-          msg: 'Timeout fetching asset',
-          opId,
-          operation,
-          assetUrl: sanitizeUrlForLogging(assetUrl),
-          timeoutMs: FETCH_TIMEOUT_MS,
-          durationMs: metrics.totalDuration,
-          error: fetchError.message,
-        });
-
-        return createProxyErrorResponse(
-          504, // Gateway Timeout
-          `Asset download timed out after ${FETCH_TIMEOUT_MS}ms`,
-          JSON.stringify({
+      return {
+        error: createProxyErrorResponse({
+          status: 504, // Gateway Timeout
+          errorMessage: `Asset download timed out after ${FETCH_TIMEOUT_MS}ms`,
+          details: JSON.stringify({
             error: fetchError.message,
             assetUrl: sanitizeUrlForLogging(assetUrl),
             timeoutMs: FETCH_TIMEOUT_MS,
@@ -610,25 +953,27 @@ export async function proxyAssetDownload(
             assetName,
             opId,
           }),
-          opId
-        );
-      }
+          operationId: opId,
+        }),
+      };
+    }
 
-      // Handle other fetch errors
-      safeLog(log, 'error', {
-        msg: 'Error fetching asset',
-        opId,
-        operation,
-        assetUrl: sanitizeUrlForLogging(assetUrl),
-        error: fetchError instanceof Error ? fetchError.message : String(fetchError),
-        stack: fetchError instanceof Error ? fetchError.stack : undefined,
-        durationMs: metrics.totalDuration,
-      });
+    // Handle other fetch errors
+    safeLog(log, 'error', {
+      msg: 'Error fetching asset',
+      opId,
+      operation,
+      assetUrl: sanitizeUrlForLogging(assetUrl),
+      error: fetchError instanceof Error ? fetchError.message : String(fetchError),
+      stack: fetchError instanceof Error ? fetchError.stack : undefined,
+      durationMs: metrics.totalDuration,
+    });
 
-      return createProxyErrorResponse(
-        502, // Bad Gateway
-        'Failed to fetch asset from storage',
-        JSON.stringify({
+    return {
+      error: createProxyErrorResponse({
+        status: 502, // Bad Gateway
+        errorMessage: 'Failed to fetch asset from storage',
+        details: JSON.stringify({
           error: fetchError instanceof Error ? fetchError.message : String(fetchError),
           assetUrl: sanitizeUrlForLogging(assetUrl),
           assetType,
@@ -636,152 +981,112 @@ export async function proxyAssetDownload(
           assetName,
           opId,
         }),
-        opId
-      );
-    }
-
-    // Step 4: Handle error responses from the fetch
-    if (!fileResponse.ok) {
-      // Extract error details from the response
-      const errorDetails = await extractErrorDetails(fileResponse, log, opId);
-
-      safeLog(log, 'error', {
-        msg: 'Failed to fetch asset with error status',
-        opId,
-        operation,
-        assetUrl: sanitizeUrlForLogging(assetUrl),
-        status: fileResponse.status,
-        statusText: fileResponse.statusText,
-        errorDetails,
-        durationMs: metrics.totalDuration,
-      });
-
-      // Collect headers for debugging (excluding sensitive ones)
-      const responseHeaders: Record<string, string> = {};
-      fileResponse.headers.forEach((value, key) => {
-        if (!['authorization', 'cookie', 'set-cookie'].includes(key.toLowerCase())) {
-          responseHeaders[key] = value;
-        }
-      });
-
-      return createProxyErrorResponse(
-        fileResponse.status === 404 ? 404 : 502,
-        `Failed to fetch asset (${fileResponse.status})`,
-        JSON.stringify({
-          errorDetails,
-          status: fileResponse.status,
-          statusText: fileResponse.statusText,
-          headers: responseHeaders,
-          assetType,
-          bookSlug,
-          assetName,
-          opId,
-        }),
-        opId
-      );
-    }
-
-    // Step 5: Handle successful responses
-    // Get content type from response
-    const contentType = fileResponse.headers.get('content-type') || 'audio/mpeg';
-    const contentLength = fileResponse.headers.get('content-length');
-
-    // Create headers for the download
-    const headers = createDownloadHeaders(contentType, filename);
-
-    // Add content length if available
-    if (contentLength) {
-      headers.set('Content-Length', contentLength);
-    }
-
-    // Step 6: Log successful proxy setup
-    safeLog(log, 'info', {
-      msg: 'Successfully set up asset proxy',
-      opId,
-      operation,
-      assetType,
-      bookSlug,
-      assetName,
-      filename,
-      contentType,
-      contentLength: contentLength ? parseInt(contentLength, 10) : undefined,
-      durationMs: metrics.totalDuration,
-      performance: {
-        isSlowRequest: metrics.totalDuration > 2000,
-        durationMs: metrics.totalDuration,
-      },
-      timestamp: new Date().toISOString(),
-    });
-
-    // Step 7: Stream the response to the client
-    safeLog(log, 'debug', {
-      msg: 'Beginning to stream asset to client',
-      opId,
-      operation,
-      contentType,
-      responseBodyType: fileResponse.body ? 'ReadableStream' : 'null',
-    });
-
-    // Return the file stream
-    return new NextResponse(fileResponse.body, {
-      status: 200,
-      headers,
-    });
-  } catch (error) {
-    // Step 8: Handle unexpected errors
-    safeLog(log, 'error', {
-      msg: 'Unexpected error in proxy download process',
-      opId,
-      operation,
-      assetType,
-      bookSlug,
-      assetName,
-      filename,
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-      errorType: error instanceof Error ? error.constructor.name : typeof error,
-      requestParams,
-      environment: process.env.NODE_ENV || 'development',
-      timestamp: new Date().toISOString(),
-    });
-
-    // Enhanced error response with detailed information in non-production environments
-    const errorDetails =
-      error instanceof Error
-        ? {
-            message: error.message,
-            name: error.name,
-            stack: process.env.NODE_ENV !== 'production' ? error.stack : undefined,
-            assetType,
-            bookSlug,
-            assetName,
-            filename,
-          }
-        : String(error);
-
-    return createProxyErrorResponse(
-      500,
-      'Failed to proxy asset download',
-      process.env.NODE_ENV !== 'production'
-        ? JSON.stringify(errorDetails)
-        : error instanceof Error
-          ? error.message
-          : String(error),
-      opId
-    );
+        operationId: opId,
+      }),
+    };
   }
 }
+
+/**
+ * Handles errors that occur when retrieving asset URLs
+ */
+function handleAssetUrlError(params: HandleAssetUrlErrorParams): NextResponse {
+  const { assetError, log, opId, operation, assetType, bookSlug, assetName } = params;
+
+  // Handle AssetError specifically
+  if (assetError instanceof AssetError) {
+    safeLog(log, 'error', {
+      msg: 'Failed to get asset URL',
+      opId,
+      operation,
+      assetType,
+      bookSlug,
+      assetName,
+      errorType: assetError.type,
+      errorMessage: assetError.message,
+      statusCode: assetError.statusCode,
+      assetPath: assetError.assetPath,
+    });
+
+    // Map AssetError to appropriate HTTP response
+    const status =
+      assetError.statusCode || assetError.type === AssetErrorType.NOT_FOUND
+        ? 404
+        : assetError.type === AssetErrorType.UNAUTHORIZED
+          ? 401
+          : assetError.type === AssetErrorType.FORBIDDEN
+            ? 403
+            : assetError.type === AssetErrorType.VALIDATION_ERROR
+              ? 400
+              : 500;
+
+    const errorMessage =
+      assetError.type === AssetErrorType.NOT_FOUND
+        ? `Asset not found: ${assetError.assetPath || `${assetType}/${bookSlug}/${assetName}`}`
+        : assetError.message;
+
+    return createProxyErrorResponse({
+      status,
+      errorMessage,
+      details: JSON.stringify({
+        errorType: assetError.type,
+        assetPath: assetError.assetPath,
+        operation: assetError.operation,
+        opId,
+        assetType,
+        bookSlug,
+        assetName,
+      }),
+      operationId: opId,
+    });
+  }
+
+  // Handle other errors
+  safeLog(log, 'error', {
+    msg: 'Unexpected error getting asset URL',
+    opId,
+    operation,
+    assetType,
+    bookSlug,
+    assetName,
+    error: assetError instanceof Error ? assetError.message : String(assetError),
+    stack: assetError instanceof Error ? assetError.stack : undefined,
+  });
+
+  return createProxyErrorResponse({
+    status: 500,
+    errorMessage: 'Failed to retrieve asset URL',
+    details: JSON.stringify({
+      error: assetError instanceof Error ? assetError.message : String(assetError),
+      assetType,
+      bookSlug,
+      assetName,
+      opId,
+    }),
+    operationId: opId,
+  });
+}
+
+/**
+ * Configuration for legacy proxy file downloads
+ */
+export type ProxyFileConfig = {
+  /** URL to the file */
+  url: string;
+  /** Filename for the download */
+  filename: string;
+  /** Logger instance */
+  log: Logger;
+  /** Additional request parameters for context */
+  requestParams?: Record<string, string | string[]>;
+};
 
 /**
  * Legacy handler for proxying file downloads through the API
  * @deprecated Use proxyAssetDownload instead
  */
-export async function proxyFileDownload(
-  url: string,
-  filename: string,
-  log: Logger,
-  requestParams?: Record<string, string | string[]>
-): Promise<NextResponse> {
+export async function proxyFileDownload(config: ProxyFileConfig): Promise<NextResponse> {
+  const { url, filename, log, requestParams } = config;
   // Create a unique operation ID for correlating logs within this request
   const opId = Date.now().toString(36) + Math.random().toString(36).substring(2, 7);
 
@@ -826,7 +1131,11 @@ export async function proxyFileDownload(
     // Step 4: Handle error responses
     if (!fileResponse.ok) {
       // Extract error details from the response body if possible
-      const errorDetails = await extractErrorDetails(fileResponse, log, opId);
+      const errorDetails = await extractErrorDetails({
+        response: fileResponse,
+        log,
+        opId,
+      });
 
       safeLog(log, 'error', {
         msg: 'Failed to fetch file for proxying',
@@ -847,18 +1156,18 @@ export async function proxyFileDownload(
         }
       });
 
-      return createProxyErrorResponse(
-        502,
-        `Failed to fetch file (${fileResponse.status})`,
-        JSON.stringify({
+      return createProxyErrorResponse({
+        status: 502,
+        errorMessage: `Failed to fetch file (${fileResponse.status})`,
+        details: JSON.stringify({
           errorDetails,
           status: fileResponse.status,
           statusText: fileResponse.statusText,
           headers: responseHeaders,
           opId,
         }),
-        opId
-      );
+        operationId: opId,
+      });
     }
 
     // Step 5: Handle successful responses
@@ -915,17 +1224,17 @@ export async function proxyFileDownload(
         timestamp: new Date().toISOString(),
       });
 
-      return createProxyErrorResponse(
-        504, // Gateway Timeout
-        `Proxy download timed out after ${FETCH_TIMEOUT_MS}ms`,
-        JSON.stringify({
+      return createProxyErrorResponse({
+        status: 504, // Gateway Timeout
+        errorMessage: `Proxy download timed out after ${FETCH_TIMEOUT_MS}ms`,
+        details: JSON.stringify({
           error: error.message,
           url: sanitizeUrlForLogging(url),
           timeoutMs: FETCH_TIMEOUT_MS,
           opId,
         }),
-        opId
-      );
+        operationId: opId,
+      });
     }
 
     // Detailed logging for all other errors
@@ -954,15 +1263,16 @@ export async function proxyFileDownload(
           }
         : String(error);
 
-    return createProxyErrorResponse(
-      500,
-      'Failed to proxy download through API',
-      process.env.NODE_ENV !== 'production'
-        ? JSON.stringify(errorDetails)
-        : error instanceof Error
-          ? error.message
-          : String(error),
-      opId
-    );
+    return createProxyErrorResponse({
+      status: 500,
+      errorMessage: 'Failed to proxy download through API',
+      details:
+        process.env.NODE_ENV !== 'production'
+          ? JSON.stringify(errorDetails)
+          : error instanceof Error
+            ? error.message
+            : String(error),
+      operationId: opId,
+    });
   }
 }

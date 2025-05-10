@@ -444,16 +444,16 @@ async function handleProxyRequest(context: ProxyRequestContext): Promise<NextRes
     const { assetName, error } = generateAssetName(validation, correlationId);
     if (error) return error;
 
-    // Use the proxyAssetDownload function
-    const response = await proxyAssetDownload(
-      AssetType.AUDIO,
-      validation.slug,
+    // Use the proxyAssetDownload function with the config object
+    const response = await proxyAssetDownload({
+      assetType: AssetType.AUDIO,
+      bookSlug: validation.slug,
       assetName,
       filename,
       log,
-      services.assetService,
-      requestParams
-    );
+      assetService: services.assetService,
+      requestParams,
+    });
 
     // Log successful proxy completion with timing
     const proxyDuration = Date.now() - proxyStartTime;

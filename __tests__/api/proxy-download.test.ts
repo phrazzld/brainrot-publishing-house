@@ -149,16 +149,16 @@ describe('Proxy Download Service', () => {
       const logger = createRequestLogger('test-correlation-id');
       const assetService = new MockAssetService();
 
-      // Call the proxy function
-      const response = await proxyAssetDownload(
-        AssetType.AUDIO,
-        'test-book',
-        'chapter-01.mp3',
-        'test-book-chapter-01.mp3',
-        logger,
+      // Call the proxy function with config object
+      const response = await proxyAssetDownload({
+        assetType: AssetType.AUDIO,
+        bookSlug: 'test-book',
+        assetName: 'chapter-01.mp3',
+        filename: 'test-book-chapter-01.mp3',
+        log: logger,
         assetService,
-        { test: 'param' }
-      );
+        requestParams: { test: 'param' },
+      });
 
       // Verify the response
       expect(response).toBeDefined();
@@ -184,16 +184,16 @@ describe('Proxy Download Service', () => {
         errorType: AssetErrorType.NOT_FOUND,
       });
 
-      // Call the proxy function
-      const response = await proxyAssetDownload(
-        AssetType.AUDIO,
-        'test-book',
-        'chapter-01.mp3',
-        'test-book-chapter-01.mp3',
-        logger,
+      // Call the proxy function with config object
+      const response = await proxyAssetDownload({
+        assetType: AssetType.AUDIO,
+        bookSlug: 'test-book',
+        assetName: 'chapter-01.mp3',
+        filename: 'test-book-chapter-01.mp3',
+        log: logger,
         assetService,
-        { test: 'param' }
-      );
+        requestParams: { test: 'param' },
+      });
 
       // Verify 404 response
       expect(response).toBeDefined();
@@ -211,16 +211,16 @@ describe('Proxy Download Service', () => {
         errorType: AssetErrorType.UNAUTHORIZED,
       });
 
-      // Call the proxy function
-      const response = await proxyAssetDownload(
-        AssetType.AUDIO,
-        'test-book',
-        'chapter-01.mp3',
-        'test-book-chapter-01.mp3',
-        logger,
+      // Call the proxy function with config object
+      const response = await proxyAssetDownload({
+        assetType: AssetType.AUDIO,
+        bookSlug: 'test-book',
+        assetName: 'chapter-01.mp3',
+        filename: 'test-book-chapter-01.mp3',
+        log: logger,
         assetService,
-        { test: 'param' }
-      );
+        requestParams: { test: 'param' },
+      });
 
       // Verify 401 response
       expect(response).toBeDefined();
@@ -238,16 +238,16 @@ describe('Proxy Download Service', () => {
       // Mock fetch to throw network error
       mockFetch.mockRejectedValue(new Error('Network error'));
 
-      // Call the proxy function
-      const response = await proxyAssetDownload(
-        AssetType.AUDIO,
-        'test-book',
-        'chapter-01.mp3',
-        'test-book-chapter-01.mp3',
-        logger,
+      // Call the proxy function with config object
+      const response = await proxyAssetDownload({
+        assetType: AssetType.AUDIO,
+        bookSlug: 'test-book',
+        assetName: 'chapter-01.mp3',
+        filename: 'test-book-chapter-01.mp3',
+        log: logger,
         assetService,
-        { test: 'param' }
-      );
+        requestParams: { test: 'param' },
+      });
 
       // Verify 502 response
       expect(response).toBeDefined();
@@ -274,16 +274,16 @@ describe('Proxy Download Service', () => {
         body: createMockStream(),
       });
 
-      // Call the proxy function
-      const response = await proxyAssetDownload(
-        AssetType.AUDIO,
-        'test-book',
-        'chapter-01.mp3',
-        'test-book-chapter-01.mp3',
-        logger,
+      // Call the proxy function with config object
+      const response = await proxyAssetDownload({
+        assetType: AssetType.AUDIO,
+        bookSlug: 'test-book',
+        assetName: 'chapter-01.mp3',
+        filename: 'test-book-chapter-01.mp3',
+        log: logger,
         assetService,
-        { test: 'param' }
-      );
+        requestParams: { test: 'param' },
+      });
 
       // Verify error response
       expect(response).toBeDefined();
@@ -321,15 +321,15 @@ describe('Proxy Download Service', () => {
         body: createMockStream(),
       });
 
-      // Call the proxy function
-      const response = await proxyAssetDownload(
-        AssetType.AUDIO,
-        'test-book',
-        'chapter-01.mp3',
-        'custom-download-name.mp3',
-        logger,
-        assetService
-      );
+      // Call the proxy function with config object
+      const response = await proxyAssetDownload({
+        assetType: AssetType.AUDIO,
+        bookSlug: 'test-book',
+        assetName: 'chapter-01.mp3',
+        filename: 'custom-download-name.mp3',
+        log: logger,
+        assetService,
+      });
 
       // Verify headers in the response
       expect(response).toBeDefined();

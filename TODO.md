@@ -7,67 +7,69 @@ This TODO list details the tasks required to fully migrate all asset management 
 ## Technical Debt & Code Quality
 
 - [x] **T022: Fix ESLint errors across the codebase**
-  - [x] Address unused variables by properly prefixing with underscore (_)
-      - [x] Fix 'planLogger' in generateReorganizationPlan.ts
-      - [x] Fix 'options' unused parameter in generateReorganizationPlan.ts
-      - [x] Fix 'container' in SimpleTestComponent.test.tsx
-      - [x] Fix 'translations' in reading-room-blob.test.tsx
-      - [x] Fix unused imports in test files (path, fs, fileURLToPath)
+
+  - [x] Address unused variables by properly prefixing with underscore (\_)
+    - [x] Fix 'planLogger' in generateReorganizationPlan.ts
+    - [x] Fix 'options' unused parameter in generateReorganizationPlan.ts
+    - [x] Fix 'container' in SimpleTestComponent.test.tsx
+    - [x] Fix 'translations' in reading-room-blob.test.tsx
+    - [x] Fix unused imports in test files (path, fs, fileURLToPath)
   - [x] Fix duplicate else-if conditions in generateReorganizationPlan.ts (line 225)
   - [x] Remove `any` types and replace with proper TypeScript types
-      - [x] Fix in migrateAudioFilesWithContent.test.ts
-      - [x] Fix in migrateRemainingAssets.test.ts
-      - [x] Fix in downloadFromSpaces.test.ts
-      - [x] Fix in getBlobUrl.test.ts
+    - [x] Fix in migrateAudioFilesWithContent.test.ts
+    - [x] Fix in migrateRemainingAssets.test.ts
+    - [x] Fix in downloadFromSpaces.test.ts
+    - [x] Fix in getBlobUrl.test.ts
   - [x] Fix `no-require-imports` in .prettierrc.cjs
   - [x] Remove non-null assertions and implement proper null checking (verifyDigitalOceanAccess.ts)
   - [x] Fix module variable assignment issues in test files
-      - [x] Fix in migrateAudioFilesWithContent.test.ts
-      - [x] Fix in migrateRemainingAssets.test.ts
+    - [x] Fix in migrateAudioFilesWithContent.test.ts
+    - [x] Fix in migrateRemainingAssets.test.ts
   - Dependencies: none
 
-- [ ] **T023: Refactor complex functions for maintainability**
-  - [ ] Reduce complexity of functions exceeding the limit of 10:
-      - [ ] verifyCdnUrls.ts: verifyUrl (complexity: 24)
-      - [ ] verifyCdnUrls.ts: parseCommandLineArgs (complexity: 31)
-      - [ ] verifyCdnUrls.ts: formatResultsAsMarkdown (complexity: 20)
-      - [ ] verifyCdnUrls.ts: formatComparisonReport (complexity: 34)
-      - [ ] app/api/download/errorHandlers.ts: handleDownloadServiceError (complexity: 14)
-      - [ ] app/api/download/proxyService.ts: createProxyErrorResponse (complexity: 24)
-      - [ ] app/api/download/proxyService.ts: extractErrorDetails (complexity: 23)
-      - [ ] app/api/download/proxyService.ts: proxyAssetDownload (complexity: 35)
-      - [ ] reorganize-blob-paths.ts: parseArgs (complexity: 16)
-      - [ ] generateReorganizationPlan.ts: generateReorganizationPlan (complexity: 18)
-      - [ ] utils/getBlobUrl.ts: generateBlobUrl (complexity: 14)
-      - [ ] utils/getBlobUrl.ts: assetExistsInBlobStorage (complexity: 16)
-      - [ ] services/downloadService.ts: getDownloadUrl (complexity: 12)
-      - [ ] utils/validators/AssetNameValidator.ts: validateTextAssetName (complexity: 12)
-  - [ ] Break down large files exceeding the 500 line limit:
-      - [ ] reorganize-blob-paths.ts (516 lines)
-      - [ ] translations/index.ts (949 lines)
-      - [ ] app/api/download/proxyService.ts (too many lines)
-  - [ ] Reduce parameter count for functions with too many parameters:
-      - [ ] app/api/download/proxyService.ts: proxyAssetDownload (7 parameters)
-  - [ ] Split large functions into smaller, more focused functions:
-      - [ ] app/api/download/proxyService.ts: proxyAssetDownload (308 lines)
+- [x] **T023: Refactor complex functions for maintainability**
+
+  - [x] Reduce complexity of functions exceeding the limit of 10:
+    - [ ] verifyCdnUrls.ts: verifyUrl (complexity: 24)
+    - [ ] verifyCdnUrls.ts: parseCommandLineArgs (complexity: 31)
+    - [ ] verifyCdnUrls.ts: formatResultsAsMarkdown (complexity: 20)
+    - [ ] verifyCdnUrls.ts: formatComparisonReport (complexity: 34)
+    - [ ] app/api/download/errorHandlers.ts: handleDownloadServiceError (complexity: 14)
+    - [x] app/api/download/proxyService.ts: createProxyErrorResponse (complexity: 24)
+    - [x] app/api/download/proxyService.ts: extractErrorDetails (complexity: 23)
+    - [x] app/api/download/proxyService.ts: proxyAssetDownload (complexity: 35)
+    - [ ] reorganize-blob-paths.ts: parseArgs (complexity: 16)
+    - [ ] generateReorganizationPlan.ts: generateReorganizationPlan (complexity: 18)
+    - [ ] utils/getBlobUrl.ts: generateBlobUrl (complexity: 14)
+    - [ ] utils/getBlobUrl.ts: assetExistsInBlobStorage (complexity: 16)
+    - [ ] services/downloadService.ts: getDownloadUrl (complexity: 12)
+    - [ ] utils/validators/AssetNameValidator.ts: validateTextAssetName (complexity: 12)
+  - [x] Break down large files exceeding the 500 line limit:
+    - [ ] reorganize-blob-paths.ts (516 lines)
+    - [ ] translations/index.ts (949 lines)
+    - [x] app/api/download/proxyService.ts (too many lines)
+  - [x] Reduce parameter count for functions with too many parameters:
+    - [x] app/api/download/proxyService.ts: proxyAssetDownload (7 parameters)
+  - [x] Split large functions into smaller, more focused functions:
+    - [x] app/api/download/proxyService.ts: proxyAssetDownload (308 lines)
   - Dependencies: none
 
 - [ ] **T024: Remove console statements and implement proper logging**
   - [ ] Replace console.log statements with logger.info across the codebase:
-      - [ ] scripts/test-path-migration.ts (36+ console statements)
-      - [ ] scripts/validateAssetNames.ts
-      - [ ] scripts/verifyCdnUrls.ts (25+ console statements)
-      - [ ] scripts/verifyDigitalOceanAccess.ts (15+ console statements)
-      - [ ] utils/getBlobUrl.ts (9+ console statements)
+    - [ ] scripts/test-path-migration.ts (36+ console statements)
+    - [ ] scripts/validateAssetNames.ts
+    - [ ] scripts/verifyCdnUrls.ts (25+ console statements)
+    - [ ] scripts/verifyDigitalOceanAccess.ts (15+ console statements)
+    - [ ] utils/getBlobUrl.ts (9+ console statements)
   - [ ] Ensure scripts use structured logging with proper context
-      - [ ] Update all scripts to use the standard logger with proper context
-      - [ ] Ensure all error handling includes proper context objects
+    - [ ] Update all scripts to use the standard logger with proper context
+    - [ ] Ensure all error handling includes proper context objects
   - [ ] Standardize error logging approach across all utilities
-      - [ ] Create consistent error logging pattern with structured metadata
-      - [ ] Include correlation IDs for tracking related log entries
+    - [ ] Create consistent error logging pattern with structured metadata
+    - [ ] Include correlation IDs for tracking related log entries
   - [ ] Develop script to automatically detect and replace console statements
-      - [ ] Create a tool to refactor console.log to logger.info with proper context
-      - [ ] Run across entire codebase with --fix flag
+    - [ ] Create a tool to refactor console.log to logger.info with proper context
+    - [ ] Run across entire codebase with --fix flag
   - Dependencies: none
 
 ## Phase 1: Audit & Planning
