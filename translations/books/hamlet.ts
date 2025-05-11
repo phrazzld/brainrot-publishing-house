@@ -1,0 +1,44 @@
+/**
+ * Translation data for Hamlet
+ */
+import { getAssetUrl } from '../../utils';
+import { Translation } from '../types';
+import { USE_BLOB_STORAGE, getDirectAudioUrl } from '../utils';
+
+const hamlet: Translation = {
+  slug: 'hamlet',
+  title: 'hamlet',
+  shortDescription:
+    "hamlet mad pressed, dad ghost drops the worst dm of all time, uncle sus af. whole kingdom in shambles cuz bro won't touch grass.",
+  coverImage: getAssetUrl('/assets/hamlet/images/hamlet-07.png', USE_BLOB_STORAGE),
+  status: 'available',
+  chapters: [
+    {
+      title: 'act i',
+      text: getAssetUrl('/assets/hamlet/text/brainrot/act-i.txt', USE_BLOB_STORAGE),
+      audioSrc: getDirectAudioUrl('hamlet', 'act-i'),
+    },
+    {
+      title: 'act ii',
+      text: getAssetUrl('/assets/hamlet/text/brainrot/act-ii.txt', USE_BLOB_STORAGE),
+      audioSrc: null,
+    },
+    {
+      title: 'act iii',
+      text: getAssetUrl('/assets/hamlet/text/brainrot/act-iii.txt', USE_BLOB_STORAGE),
+      audioSrc: null,
+    },
+    {
+      title: 'act iv',
+      text: getAssetUrl('/assets/hamlet/text/brainrot/act-iv.txt', USE_BLOB_STORAGE),
+      audioSrc: null,
+    },
+    {
+      title: 'act v',
+      text: getAssetUrl('/assets/hamlet/text/brainrot/act-v.txt', USE_BLOB_STORAGE),
+      audioSrc: null,
+    },
+  ],
+};
+
+export default hamlet;
