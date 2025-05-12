@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 
 import { AssetError, AssetErrorType, AssetType } from '@/types/assets';
-import { AssetService } from '@/types/assets';
+// Import type only for documentation purposes, not used in implementation
+import type { AssetService as _AssetService } from '@/types/assets';
 import { Logger } from '@/utils/logger';
 
 import { safeLog } from './errorHandlers';
@@ -647,7 +648,9 @@ type GetAssetUrlParams = {
   log: Logger;
   opId: string;
   operation: string;
-  assetService: AssetService;
+  assetService: {
+    getAssetUrl: (assetType: AssetType, bookSlug: string, assetName: string) => Promise<string>;
+  };
   assetType: AssetType;
   bookSlug: string;
   assetName: string;
