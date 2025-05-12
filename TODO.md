@@ -27,6 +27,24 @@ This TODO list details the tasks required to fully migrate all asset management 
     - [x] Fix in migrateRemainingAssets.test.ts
   - Dependencies: none
 
+- [ ] **T025: Fix TypeScript errors across the codebase**
+
+  - [ ] Fix type errors in services/ directory:
+    - [ ] Fix signature mismatch in downloadService.ts:generatePaths with Logger vs info/error functions
+    - [ ] Fix incompatible logger type passing in downloadService.ts:getFallbackCdnUrl (lines ~294, ~332)
+  - [ ] Fix type errors in test files:
+    - [ ] Fix type errors in **tests**/api/proxy-download.test.ts
+    - [ ] Fix type errors in **tests**/components/reading-room-blob.test.tsx
+    - [ ] Fix type errors in **tests**/hooks/useChapterNavigation.test.ts
+    - [ ] Fix type errors in **tests**/scripts/cleanupLocalAssets.test.ts
+    - [ ] Fix type errors in **tests**/scripts/migrateAudioFilesWithContent.test.ts
+    - [ ] Fix type errors in **tests**/scripts/migrateBookCoverImages.test.ts
+  - [ ] Fix logger call errors in scripts and utilities:
+    - [ ] Fix logger call parameter count errors in scripts/verifyDigitalOceanAccess.ts
+    - [ ] Fix logger call parameter count errors in utils/getBlobUrl.ts
+  - [ ] Fix type error in utils/services/VercelBlobAssetService.ts involving ListBlobResultBlob
+  - Dependencies: none
+
 - [x] **T023: Refactor complex functions for maintainability**
 
   - [x] Reduce complexity of functions exceeding the limit of 10:

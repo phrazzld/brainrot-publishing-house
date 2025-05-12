@@ -130,14 +130,18 @@ export class DownloadService {
    *
    * @param slug - The book slug
    * @param type - The download type (full or chapter)
-   * @param log - Optional logger for error recording
+   * @param log - Logger for error recording
    * @param chapter - Optional chapter identifier
    * @returns Object containing generated paths
    */
   generatePaths(
     slug: string,
     type: 'full' | 'chapter',
-    log: { info: (message: string) => void; error: (message: string) => void },
+    // Create a simple adapter interface that can handle both string-based and object-based loggers
+    log: {
+      info: (messageOrObj: string | Record<string, unknown>) => void;
+      error: (messageOrObj: string | Record<string, unknown>) => void;
+    },
     chapter?: string
   ) {
     // Generate paths in a simplified way for testing only

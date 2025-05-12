@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-echo "Running pre-push type checking..."
+echo "Running pre-push type checking with strict enforcement..."
 npm run tsc
