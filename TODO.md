@@ -29,9 +29,9 @@ This TODO list details the tasks required to fully migrate all asset management 
 
 - [ ] **T025: Fix TypeScript errors across the codebase**
 
-  - [ ] Fix type errors in services/ directory:
-    - [ ] Fix signature mismatch in downloadService.ts:generatePaths with Logger vs info/error functions
-    - [ ] Fix incompatible logger type passing in downloadService.ts:getFallbackCdnUrl (lines ~294, ~332)
+  - [x] Fix type errors in services/ directory:
+    - [x] Fix signature mismatch in downloadService.ts:generatePaths with Logger vs info/error functions
+    - [x] Fix incompatible logger type passing in downloadService.ts:getFallbackCdnUrl (lines ~294, ~332)
   - [ ] Fix type errors in test files:
     - [ ] Fix type errors in **tests**/api/proxy-download.test.ts
     - [ ] Fix type errors in **tests**/components/reading-room-blob.test.tsx

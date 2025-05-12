@@ -294,8 +294,26 @@ export class DownloadService {
     chapter?: string,
     log?: Logger
   ): string {
+    // Create a compatible logger adapter for the generatePaths method
+    const logAdapter = {
+      info: (messageOrObj: string | Record<string, unknown>) => {
+        if (typeof messageOrObj === 'string') {
+          log?.info({ msg: messageOrObj });
+        } else {
+          log?.info(messageOrObj);
+        }
+      },
+      error: (messageOrObj: string | Record<string, unknown>) => {
+        if (typeof messageOrObj === 'string') {
+          log?.error({ msg: messageOrObj });
+        } else {
+          log?.error(messageOrObj);
+        }
+      },
+    };
+
     // Generate paths to get the CDN URL
-    const { cdnUrl } = this.generatePaths(slug, type, log ?? console, chapter);
+    const { cdnUrl } = this.generatePaths(slug, type, logAdapter, chapter);
 
     // Log fallback
     log?.info({
@@ -332,8 +350,26 @@ export class DownloadService {
     // Validate request parameters
     this.validateRequestParams(params, log);
 
+    // Create a compatible logger adapter for the generatePaths method
+    const logAdapter = {
+      info: (messageOrObj: string | Record<string, unknown>) => {
+        if (typeof messageOrObj === 'string') {
+          log?.info({ msg: messageOrObj });
+        } else {
+          log?.info(messageOrObj);
+        }
+      },
+      error: (messageOrObj: string | Record<string, unknown>) => {
+        if (typeof messageOrObj === 'string') {
+          log?.error({ msg: messageOrObj });
+        } else {
+          log?.error(messageOrObj);
+        }
+      },
+    };
+
     // Generate asset path
-    const { legacyPath } = this.generatePaths(slug, type, log ?? console, chapter);
+    const { legacyPath } = this.generatePaths(slug, type, logAdapter, chapter);
 
     // Try to get URL from asset service
     const url = await this.tryGetAssetUrl(legacyPath, params, log);
