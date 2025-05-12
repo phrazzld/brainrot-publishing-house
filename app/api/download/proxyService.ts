@@ -422,8 +422,10 @@ export type ProxyAssetConfig = {
   filename: string;
   /** Logger instance */
   log: Logger;
-  /** Asset service for retrieving assets */
-  assetService: AssetService;
+  /** Asset URL resolver for retrieving asset URLs */
+  assetService: {
+    getAssetUrl: (assetType: AssetType, bookSlug: string, assetName: string) => Promise<string>;
+  };
   /** Additional request parameters for context */
   requestParams?: Record<string, string | string[]>;
 };

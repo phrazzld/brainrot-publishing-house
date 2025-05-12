@@ -69,6 +69,7 @@
     "benchmark:downloads:production": "tsx scripts/benchmark-downloads.ts --env=production",
     "verify:migration": "tsx scripts/verify-migration-completion.ts",
     "verify:migration:production": "tsx scripts/verify-migration-completion.ts --env=production",
+    "tsc": "tsc --noEmit",
     "prepare": "husky"
   },
   "dependencies": {
