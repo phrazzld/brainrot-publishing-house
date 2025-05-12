@@ -7,11 +7,6 @@ From the local `.env.local` file, the following environment variables are config
 ```
 BLOB_READ_WRITE_TOKEN="vercel_blob_rw_82QOs1wlXBD4IQ1g_oedCHZ1wGaVFkBEcFW8OfVL0G9Hb51"
 NEXT_PUBLIC_BLOB_BASE_URL=https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com
-SPACES_BUCKET_NAME=brainrot-publishing
-DO_SPACES_ACCESS_KEY=DO00YBMJYBZNPYHLA9EL
-DO_SPACES_SECRET_KEY=BMhC2gQ2iEhFgjECDl92nbcINT/Y8jXoyRtnIOxagjU
-DO_SPACES_BUCKET=brainrot-publishing
-DO_SPACES_ENDPOINT=nyc3.digitaloceanspaces.com
 ```
 
 ## Environment Variable Usage Analysis
@@ -23,16 +18,6 @@ DO_SPACES_ENDPOINT=nyc3.digitaloceanspaces.com
 | `BLOB_READ_WRITE_TOKEN`     | Authentication with Vercel Blob | Appears to be correctly set, but might differ in preview environment          |
 | `NEXT_PUBLIC_BLOB_BASE_URL` | Base URL for Blob storage       | Correctly set to tenant-specific URL, used in client-side code                |
 | `NEXT_PUBLIC_BLOB_DEV_URL`  | Optional development URL        | Not set, which means `NEXT_PUBLIC_BLOB_BASE_URL` is used for all environments |
-
-### DigitalOcean Spaces Configuration
-
-| Variable               | Usage                                  | Analysis                                                 |
-| ---------------------- | -------------------------------------- | -------------------------------------------------------- |
-| `SPACES_BUCKET_NAME`   | Bucket name for DigitalOcean Spaces    | Duplicate of `DO_SPACES_BUCKET`, potential for confusion |
-| `DO_SPACES_BUCKET`     | Bucket name for DigitalOcean Spaces    | Same value as `SPACES_BUCKET_NAME`                       |
-| `DO_SPACES_ACCESS_KEY` | Authentication for DigitalOcean Spaces | Appears to be correctly set                              |
-| `DO_SPACES_SECRET_KEY` | Authentication for DigitalOcean Spaces | Appears to be correctly set                              |
-| `DO_SPACES_ENDPOINT`   | Endpoint for DigitalOcean Spaces       | Correctly set to nyc3 region                             |
 
 ### Missing Variables
 
@@ -65,38 +50,28 @@ blobBaseUrl =
 
 ## Variable Inconsistency Analysis
 
-1. **Duplicate Bucket Name Variables**:
-
-   - Both `SPACES_BUCKET_NAME` and `DO_SPACES_BUCKET` are used in different parts of the code
-   - These could be set to different values in the preview environment, causing inconsistency
-
-2. **Missing Environment-Specific Configuration**:
+1. **Missing Environment-Specific Configuration**:
 
    - No `NEXT_PUBLIC_BLOB_DEV_URL` is set, which means development and production use the same URL
    - No environment-specific path prefixes are defined
 
-3. **Path Construction Variables**:
+2. **Path Construction Variables**:
    - No variables control the path structure for different asset types
    - This leads to hardcoded prefixes like "books/" in the path construction logic
 
 ## Recommendations for Environment Variables
 
-1. **Standardize Bucket Name Variable**:
-
-   - Choose either `SPACES_BUCKET_NAME` or `DO_SPACES_BUCKET` and use it consistently
-   - Update all code to reference only the chosen variable
-
-2. **Add Path Structure Variables**:
+1. **Add Path Structure Variables**:
 
    - Add `BLOB_AUDIOBOOK_PREFIX` to control the prefix for audiobook paths
    - Add `USE_DIRECT_AUDIO_PATHS=true|false` to toggle between path formats
 
-3. **Add Environment Validation**:
+2. **Add Environment Validation**:
 
    - Implement validation for critical environment variables at application startup
    - Log clear error messages when required variables are missing
 
-4. **Document Required Variables**:
+3. **Document Required Variables**:
    - Create a comprehensive list of all required environment variables
    - Include example values and descriptions
    - Document which variables are required in which environments
@@ -111,12 +86,6 @@ NEXT_PUBLIC_BLOB_BASE_URL=https://xyz.public.blob.vercel-storage.com
 # Path Structure Configuration
 BLOB_AUDIOBOOK_PREFIX="books/"  # Use empty string if no prefix is needed
 USE_DIRECT_AUDIO_PATHS=true     # Set to false if paths should include prefix
-
-# DigitalOcean Spaces Configuration
-DO_SPACES_BUCKET=brainrot-publishing  # Standardize on DO_SPACES_BUCKET
-DO_SPACES_ACCESS_KEY=access_key
-DO_SPACES_SECRET_KEY=secret_key
-DO_SPACES_ENDPOINT=nyc3.digitaloceanspaces.com
 ```
 
 ## Environment-Specific Configurations

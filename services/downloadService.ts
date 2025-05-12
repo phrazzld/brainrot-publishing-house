@@ -69,12 +69,6 @@ export interface DownloadRequestParams {
  * - Consistent URL generation across all asset types
  * - Robust error handling with retry logic
  * - Detailed structured logging
- * - No dependence on specific storage backends (like Digital Ocean)
- *
- * The service follows these steps:
- * 1. Determines the appropriate asset name based on download type and chapter
- * 2. Uses the AssetService to generate a URL for the asset
- * 3. Returns the URL directly to the caller
  */
 export class DownloadService {
   /**
@@ -125,47 +119,6 @@ export class DownloadService {
   }
 
   /**
-   * Generates paths for the requested asset type
-   * Used for internal testing and verification
-   *
-   * @param slug - The book slug
-   * @param type - The download type (full or chapter)
-   * @param log - Logger for error recording
-   * @param chapter - Optional chapter identifier
-   * @returns Object containing generated paths
-   */
-  generatePaths(
-    slug: string,
-    type: 'full' | 'chapter',
-    // Create a simple adapter interface that can handle both string-based and object-based loggers
-    log: {
-      info: (messageOrObj: string | Record<string, unknown>) => void;
-      error: (messageOrObj: string | Record<string, unknown>) => void;
-    },
-    chapter?: string
-  ) {
-    // Generate paths in a simplified way for testing only
-    const cdnBase = 'https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com';
-
-    // Match the expected path formats from the tests
-    const legacyPath =
-      type === 'full'
-        ? `/${slug}/audio/full-audiobook.mp3`
-        : `/${slug}/audio/book-${chapter?.padStart(2, '0')}.mp3`;
-
-    // For CDN URLs, use the format without the /assets prefix
-    const cdnPath =
-      type === 'full'
-        ? `/${slug}/audio/full-audiobook.mp3`
-        : `/${slug}/audio/book-${chapter?.padStart(2, '0')}.mp3`;
-
-    return {
-      cdnUrl: `${cdnBase}${cdnPath}`,
-      legacyPath: legacyPath,
-    };
-  }
-
-  /**
    * Generates the appropriate asset name based on the download type and chapter.
    *
    * @param type - The type of download (full or chapter)
@@ -182,150 +135,6 @@ export class DownloadService {
     const chapterStr = chapter || '';
     const paddedChapter = this.zeroPad(parseInt(chapterStr, 10), 2);
     return `chapter-${paddedChapter}.mp3`;
-  }
-
-  /**
-   * Logs successful URL generation with appropriate context.
-   *
-   * @param log - Optional logger
-   * @param params - The download request parameters
-   * @param assetName - The generated asset name
-   */
-  private logRequestSuccess(
-    log: Logger | undefined,
-    params: DownloadRequestParams,
-    assetName: string
-  ): void {
-    const { slug, type, chapter } = params;
-
-    log?.info({
-      msg: 'Successfully generated download URL',
-      slug,
-      type,
-      chapter,
-      assetName,
-      action: 'downloadService.getDownloadUrl.success',
-    });
-  }
-
-  /**
-   * Logs errors during URL generation with appropriate context.
-   *
-   * @param log - Optional logger
-   * @param params - The download request parameters
-   * @param assetName - The generated asset name
-   * @param error - The error that occurred
-   */
-  private logRequestError(
-    log: Logger | undefined,
-    params: DownloadRequestParams,
-    assetName: string,
-    error: unknown
-  ): void {
-    const { slug, type, chapter } = params;
-
-    log?.error({
-      msg: 'Failed to get asset URL',
-      slug,
-      type,
-      chapter,
-      assetName,
-      error: error instanceof Error ? error.message : String(error),
-      action: 'downloadService.getDownloadUrl.error',
-    });
-  }
-
-  /**
-   * Attempts to get an asset URL from the resolver
-   *
-   * @param legacyPath - The legacy path to resolve
-   * @param params - The download request parameters for logging
-   * @param log - Optional logger for recording status
-   * @returns The resolved URL or null if not found
-   */
-  private async tryGetAssetUrl(
-    legacyPath: string,
-    params: DownloadRequestParams,
-    log?: Logger
-  ): Promise<string | null> {
-    try {
-      // Try to get URL with fallback
-      const url = await this.assetService.getAssetUrlWithFallback(legacyPath);
-
-      // If we get a valid URL, log and return it
-      if (url && url.trim() !== '') {
-        log?.info({
-          msg: 'Successfully generated download URL',
-          ...params,
-          url,
-          action: 'downloadService.getDownloadUrl.success',
-        });
-        return url;
-      }
-
-      // Return null if URL is empty
-      return null;
-    } catch (error) {
-      // Log error
-      log?.error({
-        msg: 'Error getting asset URL, will use fallback',
-        ...params,
-        error: error instanceof Error ? error.message : String(error),
-        action: 'downloadService.getDownloadUrl.error',
-      });
-
-      // Return null to trigger fallback
-      return null;
-    }
-  }
-
-  /**
-   * Gets a fallback CDN URL
-   *
-   * @param slug - The book slug
-   * @param type - The download type
-   * @param chapter - Optional chapter number
-   * @param log - Optional logger
-   * @returns The CDN URL
-   */
-  private getFallbackCdnUrl(
-    slug: string,
-    type: 'full' | 'chapter',
-    chapter?: string,
-    log?: Logger
-  ): string {
-    // Create a compatible logger adapter for the generatePaths method
-    const logAdapter = {
-      info: (messageOrObj: string | Record<string, unknown>) => {
-        if (typeof messageOrObj === 'string') {
-          log?.info({ msg: messageOrObj });
-        } else {
-          log?.info(messageOrObj);
-        }
-      },
-      error: (messageOrObj: string | Record<string, unknown>) => {
-        if (typeof messageOrObj === 'string') {
-          log?.error({ msg: messageOrObj });
-        } else {
-          log?.error(messageOrObj);
-        }
-      },
-    };
-
-    // Generate paths to get the CDN URL
-    const { cdnUrl } = this.generatePaths(slug, type, logAdapter, chapter);
-
-    // Log fallback
-    log?.info({
-      msg: 'Using CDN fallback URL',
-      slug,
-      type,
-      chapter,
-      url: cdnUrl,
-      action: 'downloadService.getDownloadUrl.fallback',
-    });
-
-    return cdnUrl;
   }
 
   /**
@@ -350,32 +159,40 @@ export class DownloadService {
     // Validate request parameters
     this.validateRequestParams(params, log);
 
-    // Create a compatible logger adapter for the generatePaths method
-    const logAdapter = {
-      info: (messageOrObj: string | Record<string, unknown>) => {
-        if (typeof messageOrObj === 'string') {
-          log?.info({ msg: messageOrObj });
-        } else {
-          log?.info(messageOrObj);
-        }
-      },
-      error: (messageOrObj: string | Record<string, unknown>) => {
-        if (typeof messageOrObj === 'string') {
-          log?.error({ msg: messageOrObj });
-        } else {
-          log?.error(messageOrObj);
-        }
-      },
-    };
+    // Generate asset name
+    const assetName = this.generateAssetName(type, chapter);
 
-    // Generate asset path
-    const { legacyPath } = this.generatePaths(slug, type, logAdapter, chapter);
+    try {
+      // Get URL from asset service
+      const url = await this.assetService.getAssetUrl('audio', slug, assetName);
 
-    // Try to get URL from asset service
-    const url = await this.tryGetAssetUrl(legacyPath, params, log);
+      // Log success
+      log?.info({
+        msg: 'Successfully generated download URL',
+        slug,
+        type,
+        chapter,
+        assetName,
+        url,
+        action: 'downloadService.getDownloadUrl.success',
+      });
 
-    // If we got a valid URL, return it; otherwise use fallback
-    return url || this.getFallbackCdnUrl(slug, type, chapter, log);
+      return url;
+    } catch (error) {
+      // Log error
+      log?.error({
+        msg: 'Failed to get asset URL',
+        slug,
+        type,
+        chapter,
+        assetName,
+        error: error instanceof Error ? error.message : String(error),
+        action: 'downloadService.getDownloadUrl.error',
+      });
+
+      // Re-throw the error to be handled by the caller
+      throw error;
+    }
   }
 
   /**

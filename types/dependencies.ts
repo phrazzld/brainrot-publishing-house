@@ -1,24 +1,22 @@
 /**
- * Interface for resolving asset URLs with fallback mechanisms.
- * Used to obtain the primary asset URL which could be from Blob storage or a legacy S3 path.
+ * Interface for resolving asset URLs.
+ * Used to obtain asset URLs from Vercel Blob storage.
  *
- * Implementations of this interface should handle the logic of trying multiple storage locations
- * and determine the most appropriate URL to return based on asset availability and configuration.
  * This abstraction allows the application to be agnostic about the specific storage implementation.
  *
  * @interface
  */
 export interface AssetUrlResolver {
   /**
-   * Retrieves an asset URL with fallback logic if the primary source is unavailable.
-   * This method attempts to locate an asset in the primary storage location (e.g., Blob storage),
-   * and if not found, falls back to alternative storage locations (e.g., S3, local filesystem).
+   * Retrieves an asset URL from Vercel Blob storage.
    *
-   * @param legacyPath - The legacy path of the asset to resolve (typically a relative path like '/book-slug/audio/file.mp3')
+   * @param assetType - The type of asset (e.g., 'audio', 'image', 'text')
+   * @param bookSlug - The slug identifier for the book
+   * @param assetName - The name of the asset file
    * @returns A Promise that resolves to the asset URL string which can be used for direct access or download
-   * @throws {AssetNotFoundError} When the asset cannot be found in any storage location
+   * @throws {AssetNotFoundError} When the asset cannot be found in storage
    */
-  getAssetUrlWithFallback(legacyPath: string): Promise<string>;
+  getAssetUrl(assetType: string, bookSlug: string, assetName: string): Promise<string>;
 }
 
 // Note: S3SignedUrlGenerator interface has been removed

@@ -315,3 +315,13 @@ This TODO list details the tasks required to fully migrate all asset management 
   - ✅ Documented conventions in ASSET_NAMING_CONVENTIONS.md
   - ✅ Updated all tests to use standardized file naming
   - Dependencies: T009, T010, T016
+  
+- [x] **T026: Remove All Digital Ocean Code and Dependencies**
+  - [x] Remove deprecated files (DigitalOceanSourceAdapter.ts.deprecated, downloadFromSpaces.ts.deprecated)
+  - [x] Delete Digital Ocean verification script (verifyDigitalOceanAccess.ts)
+  - [x] Remove all references to Digital Ocean environment variables
+  - [x] Verify AWS S3 dependencies are removed
+  - [x] Update downloadService.ts to remove all Digital Ocean fallback logic
+  - [x] Update tests that rely on Digital Ocean code or assumptions
+  - [x] Update documentation to remove all Digital Ocean references
+  - Dependencies: T014, T020
