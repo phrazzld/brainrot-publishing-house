@@ -40,8 +40,9 @@ This TODO list details the tasks required to fully migrate all asset management 
     - [ ] Fix type errors in **tests**/scripts/migrateAudioFilesWithContent.test.ts
     - [ ] Fix type errors in **tests**/scripts/migrateBookCoverImages.test.ts
   - [ ] Fix logger call errors in scripts and utilities:
-    - [ ] Fix logger call parameter count errors in scripts/verifyDigitalOceanAccess.ts
-    - [ ] Fix logger call parameter count errors in utils/getBlobUrl.ts
+    - [x] Fix logger call parameter count errors in scripts/verifyDigitalOceanAccess.ts (update 2-parameter calls to single parameter with msg field)
+    - [ ] Fix logger call parameter count errors in scripts/verifyCdnUrls.ts (update 2-parameter calls to single parameter with msg field)
+    - [ ] Fix logger call parameter count errors in utils/getBlobUrl.ts (update 2-parameter calls to single parameter with msg field)
   - [ ] Fix type error in utils/services/VercelBlobAssetService.ts involving ListBlobResultBlob
   - Dependencies: none
 
