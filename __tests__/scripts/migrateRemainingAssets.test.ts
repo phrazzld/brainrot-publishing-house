@@ -125,16 +125,22 @@ interface MockFileParams {
   size: number;
 }
 
-global.File = jest.fn().mockImplementation((
-  parts: Array<string | ArrayBuffer>, 
-  filename: string, 
-  options?: { type: string }
-): MockFileParams => ({
-  name: filename,
-  type: options?.type || 'application/octet-stream',
-  size: parts[0] instanceof ArrayBuffer ? parts[0].byteLength : 
-        typeof parts[0] === 'string' ? parts[0].length : 12345,
-})) as unknown as typeof File;
+global.File = jest.fn().mockImplementation(
+  (
+    parts: Array<string | ArrayBuffer>,
+    filename: string,
+    options?: { type: string }
+  ): MockFileParams => ({
+    name: filename,
+    type: options?.type || 'application/octet-stream',
+    size:
+      parts[0] instanceof ArrayBuffer
+        ? parts[0].byteLength
+        : typeof parts[0] === 'string'
+          ? parts[0].length
+          : 12345,
+  })
+) as unknown as typeof File;
 
 // Import the script (only after mocks are set up)
 // We'll use dynamic import to ensure mocks are applied first

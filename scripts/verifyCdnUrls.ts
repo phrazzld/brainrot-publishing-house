@@ -6,7 +6,10 @@ import { randomUUID } from 'crypto';
 // Import necessary modules and types
 import { DownloadRequestParams } from '../services/downloadService';
 import { assetExistsInBlobStorage, getAssetUrlWithFallback, getBlobUrl } from '../utils/getBlobUrl';
+import { createRequestLogger, logger } from '../utils/logger';
 import { blobPathService } from '../utils/services/BlobPathService';
+
+const moduleLogger = logger.child({ module: 'verifyCdnUrls' });
 
 // Load environment variables
 dotenv.config({ path: '.env.local' });
@@ -180,28 +183,24 @@ async function checkUrlAccessibility(
 }
 
 /**
- * Generates and validates a CDN URL for the given parameters
+ * Generates resource paths (CDN, fallback, blob) for a given asset
  * @param params Download request parameters
- * @param options Verification options
- * @returns Promise resolving to verification result
+ * @param log Logger instance
+ * @param verbose Whether to log verbose information
+ * @returns Object containing generated URLs and paths
  */
-async function verifyUrl(
+function generateResourcePaths(
   params: DownloadRequestParams,
-  options: VerificationOptions
-): Promise<UrlVerificationResult> {
+  log: ReturnType<typeof createRequestLogger>,
+  verbose: boolean
+): {
+  cdnUrl: string;
+  fallbackUrl: string;
+  blobUrl?: string;
+  legacyPath: string;
+} {
   const { slug, type, chapter } = params;
-  const { verbose, timeoutMs, headOnly, checkCdn, checkFallback, checkBlob } = options;
-
-  // Create a DownloadService instance
   const downloadService = createDownloadService();
-
-  // Create a logger with a correlation ID
-  const correlationId = randomUUID();
-  const log = createRequestLogger(correlationId);
-
-  if (verbose) {
-    console.log(`Verifying URLs for ${slug}, type=${type}, chapter=${chapter || 'N/A'}`);
-  }
 
   // Generate the paths for this resource using internal method
   const { cdnUrl, legacyPath } = downloadService.generatePaths(slug, type, log, chapter);
@@ -215,12 +214,39 @@ async function verifyUrl(
     blobUrl = getBlobUrl(legacyPath);
   } catch (error) {
     if (verbose) {
-      console.warn(`Failed to generate Blob URL for ${legacyPath}:`, error);
+      moduleLogger.warn(
+        { error: error instanceof Error ? error.message : String(error), legacyPath },
+        `Failed to generate Blob URL`
+      );
     }
   }
 
-  // Initialize result structure
-  const result: UrlVerificationResult = {
+  return {
+    cdnUrl,
+    fallbackUrl,
+    blobUrl,
+    legacyPath,
+  };
+}
+
+/**
+ * Initializes the verification result structure
+ * @param params Asset parameters
+ * @param urls URLs for the asset
+ * @returns Initialized result structure
+ */
+function initializeVerificationResult(
+  params: DownloadRequestParams,
+  urls: {
+    cdnUrl: string;
+    fallbackUrl: string;
+    blobUrl?: string;
+  }
+): UrlVerificationResult {
+  const { slug, type, chapter } = params;
+  const { cdnUrl, fallbackUrl, blobUrl } = urls;
+
+  return {
     slug,
     type,
     chapter,
@@ -254,90 +280,147 @@ async function verifyUrl(
     },
     environment: process.env.NODE_ENV || 'development',
   };
+}
 
-  // Check CDN URL accessibility
-  if (checkCdn) {
-    if (verbose) {
-      console.log(`Checking CDN URL: ${cdnUrl}`);
-    }
+/**
+ * Checks CDN URL accessibility and updates the result
+ * @param cdnUrl URL to check
+ * @param timeoutMs Timeout in milliseconds
+ * @param verbose Whether to log verbose information
+ * @returns Object with CDN check results
+ */
+async function checkCdnAccessibility(
+  cdnUrl: string,
+  timeoutMs: number,
+  verbose: boolean
+): Promise<{
+  exists: boolean;
+  statusCode: number | null;
+  headers: Record<string, string>;
+  error: string | null;
+  duration: number;
+}> {
+  if (verbose) {
+    moduleLogger.info({ cdnUrl }, `Checking CDN URL`);
+  }
 
-    const cdnCheck = await checkUrlAccessibility(cdnUrl, timeoutMs);
+  const cdnCheck = await checkUrlAccessibility(cdnUrl, timeoutMs);
 
-    result.exists.cdn = cdnCheck.exists;
-    result.statusCodes.cdn = cdnCheck.statusCode;
-    result.headers.cdn = cdnCheck.headers;
-    result.errors.cdn = cdnCheck.error;
-    result.durations.cdn = cdnCheck.duration;
-
-    if (verbose) {
-      if (cdnCheck.exists) {
-        console.log(
-          `✅ CDN URL accessible, status: ${cdnCheck.statusCode}, took ${cdnCheck.duration}ms`
-        );
-      } else {
-        console.log(`❌ CDN URL not accessible, error: ${cdnCheck.error}`);
-      }
+  if (verbose) {
+    if (cdnCheck.exists) {
+      moduleLogger.info(
+        { statusCode: cdnCheck.statusCode, duration: cdnCheck.duration },
+        `CDN URL accessible`
+      );
+    } else {
+      moduleLogger.warn({ error: cdnCheck.error }, `CDN URL not accessible`);
     }
   }
 
-  // Check fallback URL accessibility
-  if (checkFallback) {
-    if (verbose) {
-      console.log(`Checking fallback URL: ${fallbackUrl}`);
-    }
+  return cdnCheck;
+}
 
-    const fallbackCheck = await checkUrlAccessibility(fallbackUrl, timeoutMs);
+/**
+ * Checks fallback URL accessibility and updates the result
+ * @param fallbackUrl URL to check
+ * @param timeoutMs Timeout in milliseconds
+ * @param verbose Whether to log verbose information
+ * @returns Object with fallback check results
+ */
+async function checkFallbackAccessibility(
+  fallbackUrl: string,
+  timeoutMs: number,
+  verbose: boolean
+): Promise<{
+  exists: boolean;
+  statusCode: number | null;
+  headers: Record<string, string>;
+  error: string | null;
+  duration: number;
+}> {
+  if (verbose) {
+    moduleLogger.info({ fallbackUrl }, `Checking fallback URL`);
+  }
 
-    result.exists.fallback = fallbackCheck.exists;
-    result.statusCodes.fallback = fallbackCheck.statusCode;
-    result.headers.fallback = fallbackCheck.headers;
-    result.errors.fallback = fallbackCheck.error;
-    result.durations.fallback = fallbackCheck.duration;
+  const fallbackCheck = await checkUrlAccessibility(fallbackUrl, timeoutMs);
 
-    if (verbose) {
-      if (fallbackCheck.exists) {
-        console.log(
-          `✅ Fallback URL accessible, status: ${fallbackCheck.statusCode}, took ${fallbackCheck.duration}ms`
-        );
-      } else {
-        console.log(`❌ Fallback URL not accessible, error: ${fallbackCheck.error}`);
-      }
+  if (verbose) {
+    if (fallbackCheck.exists) {
+      moduleLogger.info(
+        { statusCode: fallbackCheck.statusCode, duration: fallbackCheck.duration },
+        `Fallback URL accessible`
+      );
+    } else {
+      moduleLogger.warn({ error: fallbackCheck.error }, `Fallback URL not accessible`);
     }
   }
 
-  // Check Blob URL accessibility
-  if (checkBlob && blobUrl) {
-    if (verbose) {
-      console.log(`Checking Blob URL: ${blobUrl}`);
+  return fallbackCheck;
+}
+
+/**
+ * Checks Blob storage accessibility and updates the result
+ * @param legacyPath Legacy asset path
+ * @param blobUrl Generated Blob URL
+ * @param timeoutMs Timeout in milliseconds
+ * @param headOnly Whether to only check existence (not content)
+ * @param verbose Whether to log verbose information
+ * @returns Object with blob check results
+ */
+async function checkBlobAccessibility(
+  legacyPath: string,
+  blobUrl: string | undefined,
+  timeoutMs: number,
+  headOnly: boolean,
+  verbose: boolean
+): Promise<{
+  exists: boolean;
+  statusCode: number | null;
+  headers: Record<string, string>;
+  error: string | null;
+  duration: number | null;
+}> {
+  const result = {
+    exists: false,
+    statusCode: null as number | null,
+    headers: {} as Record<string, string>,
+    error: null as string | null,
+    duration: null as number | null,
+  };
+
+  if (!blobUrl) {
+    return result;
+  }
+
+  if (verbose) {
+    moduleLogger.info({ blobUrl }, `Checking Blob URL`);
+  }
+
+  try {
+    const blobExists = await assetExistsInBlobStorage(legacyPath, {}, false);
+    result.exists = blobExists;
+
+    if (blobExists && !headOnly) {
+      const blobCheck = await checkUrlAccessibility(blobUrl, timeoutMs);
+      result.statusCode = blobCheck.statusCode;
+      result.headers = blobCheck.headers;
+      result.error = blobCheck.error;
+      result.duration = blobCheck.duration;
     }
 
-    try {
-      const blobExists = await assetExistsInBlobStorage(legacyPath, {}, false);
-      result.exists.blob = blobExists;
-
-      if (blobExists && !headOnly) {
-        const blobCheck = await checkUrlAccessibility(blobUrl, timeoutMs);
-
-        result.statusCodes.blob = blobCheck.statusCode;
-        result.headers.blob = blobCheck.headers;
-        result.errors.blob = blobCheck.error;
-        result.durations.blob = blobCheck.duration;
+    if (verbose) {
+      if (result.exists) {
+        moduleLogger.info(`Blob storage has the asset`);
+      } else {
+        moduleLogger.warn(`Asset not found in Blob storage`);
       }
+    }
+  } catch (error) {
+    result.exists = false;
+    result.error = error instanceof Error ? error.message : String(error);
 
-      if (verbose) {
-        if (result.exists.blob) {
-          console.log(`✅ Blob storage has the asset`);
-        } else {
-          console.log(`❌ Asset not found in Blob storage`);
-        }
-      }
-    } catch (error) {
-      result.exists.blob = false;
-      result.errors.blob = error instanceof Error ? error.message : String(error);
-
-      if (verbose) {
-        console.log(`❌ Error checking Blob URL: ${result.errors.blob}`);
-      }
+    if (verbose) {
+      moduleLogger.error({ error: result.error }, `Error checking Blob URL`);
     }
   }
 
@@ -345,12 +428,88 @@ async function verifyUrl(
 }
 
 /**
- * Processes command line arguments
- * @returns Parsed verification options
+ * Updates verification result with check results
+ * @param result Result object to update
+ * @param checkType Type of check (cdn, fallback, blob)
+ * @param checkResult Check results
  */
-function parseCommandLineArgs(): VerificationOptions {
-  const args = process.argv.slice(2);
-  const options: VerificationOptions = {
+function updateResultWithCheckResults(
+  result: UrlVerificationResult,
+  checkType: 'cdn' | 'fallback' | 'blob',
+  checkResult: {
+    exists: boolean;
+    statusCode: number | null;
+    headers: Record<string, string>;
+    error: string | null;
+    duration: number | null;
+  }
+): void {
+  result.exists[checkType] = checkResult.exists;
+  result.statusCodes[checkType] = checkResult.statusCode;
+  result.headers[checkType] = checkResult.headers;
+  result.errors[checkType] = checkResult.error;
+  result.durations[checkType] = checkResult.duration;
+}
+
+/**
+ * Generates and validates a CDN URL for the given parameters
+ * @param params Download request parameters
+ * @param options Verification options
+ * @returns Promise resolving to verification result
+ */
+async function verifyUrl(
+  params: DownloadRequestParams,
+  options: VerificationOptions
+): Promise<UrlVerificationResult> {
+  const { verbose, timeoutMs, headOnly, checkCdn, checkFallback, checkBlob } = options;
+
+  // Create a logger with a correlation ID
+  const correlationId = randomUUID();
+  const log = createRequestLogger(correlationId);
+
+  if (verbose) {
+    moduleLogger.info(
+      { slug: params.slug, type: params.type, chapter: params.chapter || 'N/A' },
+      `Verifying URLs`
+    );
+  }
+
+  // Generate paths for this resource
+  const paths = generateResourcePaths(params, log, verbose);
+
+  // Initialize the result structure
+  const result = initializeVerificationResult(params, paths);
+
+  // Perform the checks based on options
+  if (checkCdn) {
+    const cdnCheck = await checkCdnAccessibility(paths.cdnUrl, timeoutMs, verbose);
+    updateResultWithCheckResults(result, 'cdn', cdnCheck);
+  }
+
+  if (checkFallback) {
+    const fallbackCheck = await checkFallbackAccessibility(paths.fallbackUrl, timeoutMs, verbose);
+    updateResultWithCheckResults(result, 'fallback', fallbackCheck);
+  }
+
+  if (checkBlob) {
+    const blobCheck = await checkBlobAccessibility(
+      paths.legacyPath,
+      paths.blobUrl,
+      timeoutMs,
+      headOnly,
+      verbose
+    );
+    updateResultWithCheckResults(result, 'blob', blobCheck);
+  }
+
+  return result;
+}
+
+/**
+ * Creates default options for verification
+ */
+function createDefaultOptions(): VerificationOptions {
+  return {
     books: [],
     outputFile: 'cdn-url-verification.json',
     format: 'json',
@@ -365,46 +524,180 @@ function parseCommandLineArgs(): VerificationOptions {
     maxConcurrent: 5,
     headOnly: true,
   };
+}
 
-  for (let i = 0; i < args.length; i++) {
-    const arg = args[i];
-
-    // Parse known options
-    if (arg === '--books' && i + 1 < args.length) {
-      options.books = args[++i].split(',');
-    } else if (arg === '--output' && i + 1 < args.length) {
-      options.outputFile = args[++i];
-    } else if (arg === '--format' && i + 1 < args.length) {
-      const format = args[++i];
-      if (format === 'json' || format === 'md') {
-        options.format = format;
-      } else {
-        console.warn(`Unknown format: ${format}, using 'json'`);
-      }
-    } else if (arg === '--verbose') {
-      options.verbose = true;
-    } else if (arg === '--timeout' && i + 1 < args.length) {
-      options.timeoutMs = parseInt(args[++i], 10) || 10000;
-    } else if (arg === '--no-cdn') {
-      options.checkCdn = false;
-    } else if (arg === '--no-fallback') {
-      options.checkFallback = false;
-    } else if (arg === '--no-blob') {
-      options.checkBlob = false;
-    } else if (arg === '--compare-env' && i + 1 < args.length) {
-      options.compareEnv = args[++i];
-    } else if (arg === '--compare-file' && i + 1 < args.length) {
-      options.compareFile = args[++i];
-    } else if (arg === '--concurrent' && i + 1 < args.length) {
-      options.maxConcurrent = parseInt(args[++i], 10) || 5;
-    } else if (arg === '--full-check') {
-      options.headOnly = false;
-    } else if (arg === '--help') {
-      printHelp();
-      process.exit(0);
-    }
+/**
+ * Processes a simple boolean flag option
+ * @param arg Current argument
+ * @param flag Flag to check for
+ * @param options Options object to update
+ * @param value Value to set if flag matches
+ * @returns True if flag was handled
+ */
+function parseFlag(
+  arg: string,
+  flag: string,
+  options: VerificationOptions,
+  key: keyof VerificationOptions,
+  value: boolean
+): boolean {
+  if (arg === flag) {
+    options[key] = value as unknown;
+    return true;
   }
+  return false;
+}
 
+/**
+ * Processes an option with a value parameter
+ * @param args Arguments array
+ * @param index Current index
+ * @param flag Flag to check for
+ * @param options Options object to update
+ * @param key Key to update in options
+ * @param transform Optional transform function
+ * @returns New index position or -1 if not handled
+ */
+function parseOptionWithValue(
+  args: string[],
+  index: number,
+  flag: string,
+  options: VerificationOptions,
+  key: keyof VerificationOptions,
+  transform?: (value: string) => unknown
+): number {
+  if (args[index] === flag && index + 1 < args.length) {
+    const value = args[index + 1];
+    options[key] = transform ? transform(value) : (value as unknown);
+    return index + 1;
+  }
+  return -1;
+}
+
+/**
+ * Processes output-related command line options
+ * @param args Command line arguments
+ * @param index Current index
+ * @param options Options object to update
+ * @returns New index position or original if not handled
+ */
+function parseOutputOptions(args: string[], index: number, options: VerificationOptions): number {
+  // Handle --output option
+  const outputIdx = parseOptionWithValue(args, index, '--output', options, 'outputFile');
+  if (outputIdx > -1) return outputIdx;
+
+  // Handle --format option
+  const formatIdx = parseOptionWithValue(args, index, '--format', options, 'format', (value) => {
+    if (value === 'json' || value === 'md') {
+      return value;
+    } else {
+      moduleLogger.warn({ format: value }, `Unknown format, using 'json'`);
+      return 'json';
+    }
+  });
+  if (formatIdx > -1) return formatIdx;
+
+  return index;
+}
+
+/**
+ * Processes check-related command line options
+ * @param args Command line arguments
+ * @param index Current index
+ * @param options Options object to update
+ * @returns New index position or original if not handled
+ */
+function parseCheckOptions(args: string[], index: number, options: VerificationOptions): number {
+  const arg = args[index];
+
+  // Handle boolean flags for disabling checks
+  if (parseFlag(arg, '--no-cdn', options, 'checkCdn', false)) return index;
+  if (parseFlag(arg, '--no-fallback', options, 'checkFallback', false)) return index;
+  if (parseFlag(arg, '--no-blob', options, 'checkBlob', false)) return index;
+  if (parseFlag(arg, '--full-check', options, 'headOnly', false)) return index;
+
+  return index;
+}
+
+/**
+ * Processes comparison-related command line options
+ * @param args Command line arguments
+ * @param index Current index
+ * @param options Options object to update
+ * @returns New index position or original if not handled
+ */
+function parseCompareOptions(args: string[], index: number, options: VerificationOptions): number {
+  // Handle --compare-env option
+  const envIdx = parseOptionWithValue(args, index, '--compare-env', options, 'compareEnv');
+  if (envIdx > -1) return envIdx;
+
+  // Handle --compare-file option
+  const fileIdx = parseOptionWithValue(args, index, '--compare-file', options, 'compareFile');
+  if (fileIdx > -1) return fileIdx;
+
+  return index;
+}
+
+/**
+ * Processes performance-related command line options
+ * @param args Command line arguments
+ * @param index Current index
+ * @param options Options object to update
+ * @returns New index position or original if not handled
+ */
+function parsePerformanceOptions(
+  args: string[],
+  index: number,
+  options: VerificationOptions
+): number {
+  // Handle --timeout option
+  const timeoutIdx = parseOptionWithValue(
+    args,
+    index,
+    '--timeout',
+    options,
+    'timeoutMs',
+    (value) => parseInt(value, 10) || 10000
+  );
+  if (timeoutIdx > -1) return timeoutIdx;
+
+  // Handle --concurrent option
+  const concurrentIdx = parseOptionWithValue(
+    args,
+    index,
+    '--concurrent',
+    options,
+    'maxConcurrent',
+    (value) => parseInt(value, 10) || 5
+  );
+  if (concurrentIdx > -1) return concurrentIdx;
+
+  return index;
+}
+
+/**
+ * Processes book-related command line options
+ * @param args Command line arguments
+ * @param index Current index
+ * @param options Options object to update
+ * @returns New index position or original if not handled
+ */
+function parseBooksOption(args: string[], index: number, options: VerificationOptions): number {
+  // Handle --books option
+  const booksIdx = parseOptionWithValue(args, index, '--books', options, 'books', (value) =>
+    value.split(',')
+  );
+  if (booksIdx > -1) return booksIdx;
+
+  return index;
+}
+
+/**
+ * Finalizes options after parsing
+ * @param options The parsed options to finalize
+ * @returns Finalized options
+ */
+function finalizeOptions(options: VerificationOptions): VerificationOptions {
   // Use default books if none specified
   if (options.books.length === 0) {
     options.books = DEFAULT_TEST_BOOKS;
@@ -422,10 +715,72 @@ function parseCommandLineArgs(): VerificationOptions {
 }
 
 /**
+ * Processes command line arguments
+ * @returns Parsed verification options
+ */
+function parseCommandLineArgs(): VerificationOptions {
+  const args = process.argv.slice(2);
+  const options = createDefaultOptions();
+
+  for (let i = 0; i < args.length; i++) {
+    const arg = args[i];
+
+    // Handle help flag immediately
+    if (arg === '--help') {
+      printHelp();
+      process.exit(0);
+    }
+
+    // Handle verbose flag
+    if (parseFlag(arg, '--verbose', options, 'verbose', true)) {
+      continue;
+    }
+
+    // Try option parsers and update index if handled
+    const newIndex = parseBooksOption(args, i, options);
+    if (newIndex > i) {
+      i = newIndex;
+      continue;
+    }
+
+    const outputIndex = parseOutputOptions(args, i, options);
+    if (outputIndex > i) {
+      i = outputIndex;
+      continue;
+    }
+
+    const checkIndex = parseCheckOptions(args, i, options);
+    if (checkIndex > i) {
+      i = checkIndex;
+      continue;
+    }
+
+    const compareIndex = parseCompareOptions(args, i, options);
+    if (compareIndex > i) {
+      i = compareIndex;
+      continue;
+    }
+
+    const perfIndex = parsePerformanceOptions(args, i, options);
+    if (perfIndex > i) {
+      i = perfIndex;
+      continue;
+    }
+
+    // If we get here, it's an unknown argument
+    moduleLogger.warn({ argument: arg }, 'Unknown command line argument');
+  }
+
+  return finalizeOptions(options);
+}
+
+/**
  * Prints help information
  */
 function printHelp() {
-  console.log(`
+  moduleLogger.info({
+    topic: 'help',
+    message: `
 CDN URL Verification Script
 
 Usage: npx tsx scripts/verifyCdnUrls.ts [options]
@@ -454,7 +809,8 @@ Examples:
 
   # Compare with production environment
   npx tsx scripts/verifyCdnUrls.ts --compare-env=production
-`);
+`,
+  });
 }
 
 /**
@@ -489,30 +845,69 @@ function generateTestCases(books: string[]): DownloadRequestParams[] {
 }
 
 /**
- * Formats verification results as markdown
+ * Calculates summary statistics for verification results
  * @param results Verification results
- * @returns Markdown representation of results
+ * @returns Object with calculated statistics
  */
-function formatResultsAsMarkdown(results: UrlVerificationResult[]): string {
-  // Count successful and failed URLs
+function calculateSummaryStats(results: UrlVerificationResult[]): {
+  totalTests: number;
+  cdnSuccesses: number;
+  fallbackSuccesses: number;
+  blobSuccesses: number;
+  cdnSuccessPercentage: number;
+  fallbackSuccessPercentage: number;
+  blobSuccessPercentage: number;
+} {
   const totalTests = results.length;
   const cdnSuccesses = results.filter((r) => r.exists.cdn).length;
   const fallbackSuccesses = results.filter((r) => r.exists.fallback).length;
   const blobSuccesses = results.filter((r) => r.exists.blob).length;
 
-  // Generate markdown
+  return {
+    totalTests,
+    cdnSuccesses,
+    fallbackSuccesses,
+    blobSuccesses,
+    cdnSuccessPercentage: totalTests > 0 ? Math.round((cdnSuccesses / totalTests) * 100) : 0,
+    fallbackSuccessPercentage:
+      totalTests > 0 ? Math.round((fallbackSuccesses / totalTests) * 100) : 0,
+    blobSuccessPercentage: totalTests > 0 ? Math.round((blobSuccesses / totalTests) * 100) : 0,
+  };
+}
+
+/**
+ * Generates report header and summary section
+ * @param results Verification results
+ * @param stats Summary statistics
+ * @returns Markdown header and summary
+ */
+function generateReportHeader(
+  results: UrlVerificationResult[],
+  stats: ReturnType<typeof calculateSummaryStats>
+): string {
   let markdown = `# CDN URL Verification Report\n\n`;
   markdown += `*Generated on ${new Date().toISOString()}*\n\n`;
 
   markdown += `## Summary\n\n`;
   markdown += `- **Environment**: ${results[0]?.environment || 'unknown'}\n`;
-  markdown += `- **Total tests**: ${totalTests}\n`;
-  markdown += `- **CDN URLs**: ${cdnSuccesses}/${totalTests} accessible (${Math.round((cdnSuccesses / totalTests) * 100)}%)\n`;
-  markdown += `- **Fallback URLs**: ${fallbackSuccesses}/${totalTests} accessible (${Math.round((fallbackSuccesses / totalTests) * 100)}%)\n`;
-  markdown += `- **Blob Storage**: ${blobSuccesses}/${totalTests} available (${Math.round((blobSuccesses / totalTests) * 100)}%)\n\n`;
+  markdown += `- **Total tests**: ${stats.totalTests}\n`;
+  markdown += `- **CDN URLs**: ${stats.cdnSuccesses}/${stats.totalTests} accessible (${stats.cdnSuccessPercentage}%)\n`;
+  markdown += `- **Fallback URLs**: ${stats.fallbackSuccesses}/${stats.totalTests} accessible (${stats.fallbackSuccessPercentage}%)\n`;
+  markdown += `- **Blob Storage**: ${stats.blobSuccesses}/${stats.totalTests} available (${stats.blobSuccessPercentage}%)\n\n`;
 
-  // Group results by book
+  return markdown;
+}
+
+/**
+ * Groups results by book slug
+ * @param results Verification results
+ * @returns Object with results grouped by book
+ */
+function groupResultsByBook(
+  results: UrlVerificationResult[]
+): Record<string, UrlVerificationResult[]> {
   const bookGroups: Record<string, UrlVerificationResult[]> = {};
+
   for (const result of results) {
     if (!bookGroups[result.slug]) {
       bookGroups[result.slug] = [];
@@ -520,41 +915,78 @@ function formatResultsAsMarkdown(results: UrlVerificationResult[]): string {
     bookGroups[result.slug].push(result);
   }
 
-  // Add table for each book
-  for (const [book, bookResults] of Object.entries(bookGroups)) {
-    markdown += `## ${book}\n\n`;
-    markdown += `| Type | Chapter | CDN | Fallback | Blob | CDN Status | Fallback Status | Notes |\n`;
-    markdown += `| ---- | ------- | --- | -------- | ---- | ---------- | --------------- | ----- |\n`;
+  return bookGroups;
+}
 
-    for (const result of bookResults) {
-      const cdnStatus = result.exists.cdn ? '✅' : '❌';
-      const fallbackStatus = result.exists.fallback ? '✅' : '❌';
-      const blobStatus = result.exists.blob ? '✅' : '❌';
+/**
+ * Formats a status code with duration
+ * @param statusCode Status code (or null)
+ * @param duration Duration in ms (or null)
+ * @returns Formatted status code string
+ */
+function formatStatusCode(statusCode: number | null, duration: number | null): string {
+  return statusCode === null ? 'N/A' : `${statusCode} (${duration}ms)`;
+}
 
-      // Format status codes
-      const cdnStatusCode =
-        result.statusCodes.cdn === null
-          ? 'N/A'
-          : `${result.statusCodes.cdn} (${result.durations.cdn}ms)`;
+/**
+ * Generates notes from error messages
+ * @param result Verification result
+ * @returns Notes string
+ */
+function generateErrorNotes(result: UrlVerificationResult): string {
+  let notes = '';
+  if (result.errors.cdn) notes += `CDN: ${result.errors.cdn} `;
+  if (result.errors.fallback) notes += `Fallback: ${result.errors.fallback} `;
+  if (result.errors.blob) notes += `Blob: ${result.errors.blob}`;
+  return notes;
+}
 
-      const fallbackStatusCode =
-        result.statusCodes.fallback === null
-          ? 'N/A'
-          : `${result.statusCodes.fallback} (${result.durations.fallback}ms)`;
+/**
+ * Generates a table row for a result
+ * @param result Verification result
+ * @returns Markdown table row
+ */
+function generateResultTableRow(result: UrlVerificationResult): string {
+  const cdnStatus = result.exists.cdn ? '✅' : '❌';
+  const fallbackStatus = result.exists.fallback ? '✅' : '❌';
+  const blobStatus = result.exists.blob ? '✅' : '❌';
 
-      // Generate notes based on errors
-      let notes = '';
-      if (result.errors.cdn) notes += `CDN: ${result.errors.cdn} `;
-      if (result.errors.fallback) notes += `Fallback: ${result.errors.fallback} `;
-      if (result.errors.blob) notes += `Blob: ${result.errors.blob}`;
+  const cdnStatusCode = formatStatusCode(result.statusCodes.cdn, result.durations.cdn);
+  const fallbackStatusCode = formatStatusCode(
+    result.statusCodes.fallback,
+    result.durations.fallback
+  );
 
-      markdown += `| ${result.type} | ${result.chapter || 'N/A'} | ${cdnStatus} | ${fallbackStatus} | ${blobStatus} | ${cdnStatusCode} | ${fallbackStatusCode} | ${notes} |\n`;
-    }
+  const notes = generateErrorNotes(result);
 
-    markdown += `\n`;
+  return `| ${result.type} | ${result.chapter || 'N/A'} | ${cdnStatus} | ${fallbackStatus} | ${blobStatus} | ${cdnStatusCode} | ${fallbackStatusCode} | ${notes} |\n`;
+}
+
+/**
+ * Generates a book section with results table
+ * @param book Book slug
+ * @param bookResults Results for the book
+ * @returns Markdown section
+ */
+function generateBookSection(book: string, bookResults: UrlVerificationResult[]): string {
+  let markdown = `## ${book}\n\n`;
+  markdown += `| Type | Chapter | CDN | Fallback | Blob | CDN Status | Fallback Status | Notes |\n`;
+  markdown += `| ---- | ------- | --- | -------- | ---- | ---------- | --------------- | ----- |\n`;
+
+  for (const result of bookResults) {
+    markdown += generateResultTableRow(result);
   }
 
-  markdown += `## Configurations\n\n`;
+  markdown += `\n`;
+  return markdown;
+}
+
+/**
+ * Generates configuration section
+ * @returns Markdown configuration section
+ */
+function generateConfigSection(): string {
+  let markdown = `## Configurations\n\n`;
   markdown += `- **Bucket**: ${process.env.DO_SPACES_BUCKET || process.env.SPACES_BUCKET_NAME || 'brainrot-publishing'}\n`;
   markdown += `- **Region**: nyc3 (hardcoded)\n`;
   markdown += `- **Blob Base URL**: ${process.env.NEXT_PUBLIC_BLOB_BASE_URL || 'Not configured'}\n`;
@@ -564,9 +996,382 @@ function formatResultsAsMarkdown(results: UrlVerificationResult[]): string {
 }
 
 /**
+ * Formats verification results as markdown
+ * @param results Verification results
+ * @returns Markdown representation of results
+ */
+function formatResultsAsMarkdown(results: UrlVerificationResult[]): string {
+  // Calculate statistics for the summary
+  const stats = calculateSummaryStats(results);
+
+  // Generate the header and summary section
+  let markdown = generateReportHeader(results, stats);
+
+  // Group results by book
+  const bookGroups = groupResultsByBook(results);
+
+  // Generate a section for each book
+  for (const [book, bookResults] of Object.entries(bookGroups)) {
+    markdown += generateBookSection(book, bookResults);
+  }
+
+  // Add configuration section
+  markdown += generateConfigSection();
+
+  return markdown;
+}
+
+/**
+ * Creates a unique key for a verification result
+ * @param result The verification result
+ * @returns A unique key
+ */
+function createResultKey(result: UrlVerificationResult): string {
+  return `${result.slug}-${result.type}-${result.chapter || 'full'}`;
+}
+
+/**
+ * Creates maps for quick lookup of results
+ * @param currentResults Current verification results
+ * @param previousResults Previous verification results
+ * @returns Maps for current and previous results
+ */
+function createComparisonMaps(
+  currentResults: UrlVerificationResult[],
+  previousResults: UrlVerificationResult[]
+): {
+  currentMap: Map<string, UrlVerificationResult>;
+  previousMap: Map<string, UrlVerificationResult>;
+} {
+  const currentMap = new Map<string, UrlVerificationResult>();
+  const previousMap = new Map<string, UrlVerificationResult>();
+
+  for (const result of currentResults) {
+    currentMap.set(createResultKey(result), result);
+  }
+
+  for (const result of previousResults) {
+    previousMap.set(createResultKey(result), result);
+  }
+
+  return { currentMap, previousMap };
+}
+
+/**
+ * Type definition for a difference object
+ */
+interface DifferenceItem {
+  slug: string;
+  type: string;
+  chapter?: string;
+  field: string;
+  current: string;
+  previous: string;
+}
+
+/**
+ * Creates a difference object for a specific comparison
+ * @param currentResult Current result
+ * @param previousResult Previous result
+ * @param field Field being compared
+ * @param current Current value as string
+ * @param previous Previous value as string
+ * @returns Difference object
+ */
+function createDifference(
+  currentResult: UrlVerificationResult,
+  previousResult: UrlVerificationResult,
+  field: string,
+  current: string,
+  previous: string
+): DifferenceItem {
+  return {
+    slug: currentResult.slug,
+    type: currentResult.type,
+    chapter: currentResult.chapter,
+    field,
+    current,
+    previous,
+  };
+}
+
+/**
+ * Compares CDN accessibility between results
+ */
+function compareCdnAccessibility(
+  currentResult: UrlVerificationResult,
+  previousResult: UrlVerificationResult
+): { isDifferent: boolean; difference?: DifferenceItem } {
+  if (currentResult.exists.cdn !== previousResult.exists.cdn) {
+    return {
+      isDifferent: true,
+      difference: createDifference(
+        currentResult,
+        previousResult,
+        'CDN Accessibility',
+        currentResult.exists.cdn ? 'Accessible' : 'Not accessible',
+        previousResult.exists.cdn ? 'Accessible' : 'Not accessible'
+      ),
+    };
+  }
+  return { isDifferent: false };
+}
+
+/**
+ * Compares fallback accessibility between results
+ */
+function compareFallbackAccessibility(
+  currentResult: UrlVerificationResult,
+  previousResult: UrlVerificationResult
+): { isDifferent: boolean; difference?: DifferenceItem } {
+  if (currentResult.exists.fallback !== previousResult.exists.fallback) {
+    return {
+      isDifferent: true,
+      difference: createDifference(
+        currentResult,
+        previousResult,
+        'Fallback Accessibility',
+        currentResult.exists.fallback ? 'Accessible' : 'Not accessible',
+        previousResult.exists.fallback ? 'Accessible' : 'Not accessible'
+      ),
+    };
+  }
+  return { isDifferent: false };
+}
+
+/**
+ * Compares blob availability between results
+ */
+function compareBlobAvailability(
+  currentResult: UrlVerificationResult,
+  previousResult: UrlVerificationResult
+): { isDifferent: boolean; difference?: DifferenceItem } {
+  if (currentResult.exists.blob !== previousResult.exists.blob) {
+    return {
+      isDifferent: true,
+      difference: createDifference(
+        currentResult,
+        previousResult,
+        'Blob Availability',
+        currentResult.exists.blob ? 'Available' : 'Not available',
+        previousResult.exists.blob ? 'Available' : 'Not available'
+      ),
+    };
+  }
+  return { isDifferent: false };
+}
+
+/**
+ * Compares CDN URL format between results
+ */
+function compareCdnUrlFormat(
+  currentResult: UrlVerificationResult,
+  previousResult: UrlVerificationResult
+): { isDifferent: boolean; difference?: DifferenceItem } {
+  if (currentResult.cdnUrl !== previousResult.cdnUrl) {
+    return {
+      isDifferent: true,
+      difference: createDifference(
+        currentResult,
+        previousResult,
+        'CDN URL Format',
+        currentResult.cdnUrl,
+        previousResult.cdnUrl
+      ),
+    };
+  }
+  return { isDifferent: false };
+}
+
+/**
+ * Compares fallback URL format between results
+ */
+function compareFallbackUrlFormat(
+  currentResult: UrlVerificationResult,
+  previousResult: UrlVerificationResult
+): { isDifferent: boolean; difference?: DifferenceItem } {
+  if (currentResult.fallbackUrl !== previousResult.fallbackUrl) {
+    return {
+      isDifferent: true,
+      difference: createDifference(
+        currentResult,
+        previousResult,
+        'Fallback URL Format',
+        currentResult.fallbackUrl,
+        previousResult.fallbackUrl
+      ),
+    };
+  }
+  return { isDifferent: false };
+}
+
+/**
+ * Compares blob URL format between results
+ */
+function compareBlobUrlFormat(
+  currentResult: UrlVerificationResult,
+  previousResult: UrlVerificationResult
+): { isDifferent: boolean; difference?: DifferenceItem } {
+  if (
+    currentResult.blobUrl &&
+    previousResult.blobUrl &&
+    currentResult.blobUrl !== previousResult.blobUrl
+  ) {
+    return {
+      isDifferent: true,
+      difference: createDifference(
+        currentResult,
+        previousResult,
+        'Blob URL Format',
+        currentResult.blobUrl,
+        previousResult.blobUrl
+      ),
+    };
+  }
+  return { isDifferent: false };
+}
+
+/**
+ * Finds all differences between current and previous results
+ * @param currentMap Map of current results
+ * @param previousMap Map of previous results
+ * @returns Array of differences
+ */
+function findDifferences(
+  currentMap: Map<string, UrlVerificationResult>,
+  previousMap: Map<string, UrlVerificationResult>
+): DifferenceItem[] {
+  const differences: DifferenceItem[] = [];
+
+  for (const [key, currentResult] of currentMap.entries()) {
+    const previousResult = previousMap.get(key);
+    if (!previousResult) continue;
+
+    // Compare all aspects and collect differences
+    const comparisonFunctions = [
+      compareCdnAccessibility,
+      compareFallbackAccessibility,
+      compareBlobAvailability,
+      compareCdnUrlFormat,
+      compareFallbackUrlFormat,
+      compareBlobUrlFormat,
+    ];
+
+    for (const compareFunc of comparisonFunctions) {
+      const { isDifferent, difference } = compareFunc(currentResult, previousResult);
+      if (isDifferent && difference) {
+        differences.push(difference);
+      }
+    }
+  }
+
+  return differences;
+}
+
+/**
+ * Truncates a URL for readability
+ * @param url URL to truncate
+ * @returns Truncated URL
+ */
+function truncateUrl(url: string): string {
+  if (url.length > 60) {
+    return url.substring(0, 57) + '...';
+  }
+  return url;
+}
+
+/**
+ * Generates the report header and summary
+ * @param differences Differences found
+ * @param currentEnv Current environment name
+ * @param compareEnv Comparison environment name
+ * @returns Markdown header and summary
+ */
+function generateComparisonHeader(
+  differences: DifferenceItem[],
+  currentEnv: string,
+  compareEnv: string
+): string {
+  let markdown = `# CDN URL Comparison Report\n\n`;
+  markdown += `*Generated on ${new Date().toISOString()}*\n\n`;
+
+  markdown += `## Comparison Summary\n\n`;
+  markdown += `- **Current Environment**: ${currentEnv}\n`;
+  markdown += `- **Compared Environment**: ${compareEnv}\n`;
+  markdown += `- **Total Differences Found**: ${differences.length}\n\n`;
+
+  return markdown;
+}
+
+/**
+ * Generates the differences table
+ * @param differences Differences found
+ * @param currentEnv Current environment name
+ * @param compareEnv Comparison environment name
+ * @returns Markdown table of differences
+ */
+function generateDifferencesTable(
+  differences: DifferenceItem[],
+  currentEnv: string,
+  compareEnv: string
+): string {
+  if (differences.length === 0) {
+    return `No differences found between environments.\n\n`;
+  }
+
+  let markdown = `## Differences\n\n`;
+  markdown += `| Book | Type | Chapter | Field | ${currentEnv} | ${compareEnv} |\n`;
+  markdown += `| ---- | ---- | ------- | ----- | ${'--'.repeat(currentEnv.length)} | ${'--'.repeat(compareEnv.length)} |\n`;
+
+  for (const diff of differences) {
+    const current = diff.field.includes('URL') ? truncateUrl(diff.current) : diff.current;
+    const previous = diff.field.includes('URL') ? truncateUrl(diff.previous) : diff.previous;
+
+    markdown += `| ${diff.slug} | ${diff.type} | ${diff.chapter || 'N/A'} | ${diff.field} | ${current} | ${previous} |\n`;
+  }
+
+  return markdown;
+}
+
+/**
+ * Generates the configuration section for current environment
+ * @param currentEnv Current environment name
+ * @returns Markdown configuration section
+ */
+function generateCurrentEnvConfig(currentEnv: string): string {
+  let markdown = `\n## Configurations\n\n`;
+  markdown += `### ${currentEnv}\n`;
+  markdown += `- **Bucket**: ${process.env.DO_SPACES_BUCKET || process.env.SPACES_BUCKET_NAME || 'brainrot-publishing'}\n`;
+  markdown += `- **Region**: nyc3 (hardcoded)\n`;
+  markdown += `- **Blob Base URL**: ${process.env.NEXT_PUBLIC_BLOB_BASE_URL || 'Not configured'}\n`;
+  markdown += `- **Blob Dev URL**: ${process.env.NEXT_PUBLIC_BLOB_DEV_URL || 'Not configured'}\n`;
+
+  return markdown;
+}
+
+/**
+ * Generates the configuration section for comparison environment
+ * @param compareEnv Comparison environment name
+ * @param previousResults Previous verification results
+ * @returns Markdown configuration section
+ */
+function generateCompareEnvConfig(
+  compareEnv: string,
+  previousResults: UrlVerificationResult[]
+): string {
+  let markdown = `\n### ${compareEnv}\n`;
+  markdown += `- **Bucket**: ${previousResults[0]?.cdnUrl.split('.')[0].replace('https://', '') || 'unknown'}\n`;
+  markdown += `- **Region**: ${previousResults[0]?.cdnUrl.split('.')[1] || 'unknown'}\n`;
+
+  return markdown;
+}
+
+/**
  * Formats verification results as a comparison report
  * @param currentResults Current verification results
  * @param previousResults Previous verification results for comparison
+ * @param currentEnv Current environment name
+ * @param compareEnv Comparison environment name
  * @returns Markdown comparison report
  */
 function formatComparisonReport(
@@ -576,152 +1381,20 @@ function formatComparisonReport(
   compareEnv: string
 ): string {
   // Create lookup maps for quick comparison
-  const currentMap = new Map<string, UrlVerificationResult>();
-  const previousMap = new Map<string, UrlVerificationResult>();
+  const { currentMap, previousMap } = createComparisonMaps(currentResults, previousResults);
 
-  for (const result of currentResults) {
-    const key = `${result.slug}-${result.type}-${result.chapter || 'full'}`;
-    currentMap.set(key, result);
-  }
+  // Find differences between results
+  const differences = findDifferences(currentMap, previousMap);
 
-  for (const result of previousResults) {
-    const key = `${result.slug}-${result.type}-${result.chapter || 'full'}`;
-    previousMap.set(key, result);
-  }
+  // Generate report header and summary
+  let markdown = generateComparisonHeader(differences, currentEnv, compareEnv);
 
-  // Find differences
-  const differences: Array<{
-    slug: string;
-    type: string;
-    chapter?: string;
-    field: string;
-    current: string;
-    previous: string;
-  }> = [];
+  // Generate differences table or no differences message
+  markdown += generateDifferencesTable(differences, currentEnv, compareEnv);
 
-  for (const [key, currentResult] of currentMap.entries()) {
-    const previousResult = previousMap.get(key);
-    if (!previousResult) continue;
-
-    // Compare CDN accessibility
-    if (currentResult.exists.cdn !== previousResult.exists.cdn) {
-      differences.push({
-        slug: currentResult.slug,
-        type: currentResult.type,
-        chapter: currentResult.chapter,
-        field: 'CDN Accessibility',
-        current: currentResult.exists.cdn ? 'Accessible' : 'Not accessible',
-        previous: previousResult.exists.cdn ? 'Accessible' : 'Not accessible',
-      });
-    }
-
-    // Compare fallback accessibility
-    if (currentResult.exists.fallback !== previousResult.exists.fallback) {
-      differences.push({
-        slug: currentResult.slug,
-        type: currentResult.type,
-        chapter: currentResult.chapter,
-        field: 'Fallback Accessibility',
-        current: currentResult.exists.fallback ? 'Accessible' : 'Not accessible',
-        previous: previousResult.exists.fallback ? 'Accessible' : 'Not accessible',
-      });
-    }
-
-    // Compare Blob availability
-    if (currentResult.exists.blob !== previousResult.exists.blob) {
-      differences.push({
-        slug: currentResult.slug,
-        type: currentResult.type,
-        chapter: currentResult.chapter,
-        field: 'Blob Availability',
-        current: currentResult.exists.blob ? 'Available' : 'Not available',
-        previous: previousResult.exists.blob ? 'Available' : 'Not available',
-      });
-    }
-
-    // Compare CDN URL format
-    if (currentResult.cdnUrl !== previousResult.cdnUrl) {
-      differences.push({
-        slug: currentResult.slug,
-        type: currentResult.type,
-        chapter: currentResult.chapter,
-        field: 'CDN URL Format',
-        current: currentResult.cdnUrl,
-        previous: previousResult.cdnUrl,
-      });
-    }
-
-    // Compare Fallback URL format
-    if (currentResult.fallbackUrl !== previousResult.fallbackUrl) {
-      differences.push({
-        slug: currentResult.slug,
-        type: currentResult.type,
-        chapter: currentResult.chapter,
-        field: 'Fallback URL Format',
-        current: currentResult.fallbackUrl,
-        previous: previousResult.fallbackUrl,
-      });
-    }
-
-    // Compare Blob URL format if both exist
-    if (
-      currentResult.blobUrl &&
-      previousResult.blobUrl &&
-      currentResult.blobUrl !== previousResult.blobUrl
-    ) {
-      differences.push({
-        slug: currentResult.slug,
-        type: currentResult.type,
-        chapter: currentResult.chapter,
-        field: 'Blob URL Format',
-        current: currentResult.blobUrl,
-        previous: previousResult.blobUrl,
-      });
-    }
-  }
-
-  // Generate markdown report
-  let markdown = `# CDN URL Comparison Report\n\n`;
-  markdown += `*Generated on ${new Date().toISOString()}*\n\n`;
-
-  markdown += `## Comparison Summary\n\n`;
-  markdown += `- **Current Environment**: ${currentEnv}\n`;
-  markdown += `- **Compared Environment**: ${compareEnv}\n`;
-  markdown += `- **Total Differences Found**: ${differences.length}\n\n`;
-
-  if (differences.length === 0) {
-    markdown += `No differences found between environments.\n\n`;
-  } else {
-    markdown += `## Differences\n\n`;
-    markdown += `| Book | Type | Chapter | Field | ${currentEnv} | ${compareEnv} |\n`;
-    markdown += `| ---- | ---- | ------- | ----- | ${'--'.repeat(currentEnv.length)} | ${'--'.repeat(compareEnv.length)} |\n`;
-
-    for (const diff of differences) {
-      // Truncate very long URLs for readability
-      const truncateUrl = (url: string) => {
-        if (url.length > 60) {
-          return url.substring(0, 57) + '...';
-        }
-        return url;
-      };
-
-      const current = diff.field.includes('URL') ? truncateUrl(diff.current) : diff.current;
-      const previous = diff.field.includes('URL') ? truncateUrl(diff.previous) : diff.previous;
-
-      markdown += `| ${diff.slug} | ${diff.type} | ${diff.chapter || 'N/A'} | ${diff.field} | ${current} | ${previous} |\n`;
-    }
-  }
-
-  markdown += `\n## Configurations\n\n`;
-  markdown += `### ${currentEnv}\n`;
-  markdown += `- **Bucket**: ${process.env.DO_SPACES_BUCKET || process.env.SPACES_BUCKET_NAME || 'brainrot-publishing'}\n`;
-  markdown += `- **Region**: nyc3 (hardcoded)\n`;
-  markdown += `- **Blob Base URL**: ${process.env.NEXT_PUBLIC_BLOB_BASE_URL || 'Not configured'}\n`;
-  markdown += `- **Blob Dev URL**: ${process.env.NEXT_PUBLIC_BLOB_DEV_URL || 'Not configured'}\n`;
-
-  markdown += `\n### ${compareEnv}\n`;
-  markdown += `- **Bucket**: ${previousResults[0]?.cdnUrl.split('.')[0].replace('https://', '') || 'unknown'}\n`;
-  markdown += `- **Region**: ${previousResults[0]?.cdnUrl.split('.')[1] || 'unknown'}\n`;
+  // Add configuration sections
+  markdown += generateCurrentEnvConfig(currentEnv);
+  markdown += generateCompareEnvConfig(compareEnv, previousResults);
 
   return markdown;
 }
@@ -744,7 +1417,12 @@ async function runVerificationTests(
     const batch = testCases.slice(i, i + maxConcurrent);
 
     if (verbose) {
-      console.log(
+      moduleLogger.info(
+        {
+          operation: 'process_batch',
+          batch: Math.floor(i / maxConcurrent) + 1,
+          totalBatches: Math.ceil(testCases.length / maxConcurrent),
+        },
         `Processing batch ${Math.floor(i / maxConcurrent) + 1}/${Math.ceil(testCases.length / maxConcurrent)}`
       );
     }
@@ -765,16 +1443,25 @@ async function main() {
   // Parse command line arguments
   const options = parseCommandLineArgs();
 
-  console.log(`🧪 CDN URL Verification Tool`);
-  console.log(`Environment: ${options.environment}`);
-  console.log(`Testing ${options.books.length} books with timeout ${options.timeoutMs}ms`);
+  moduleLogger.info({ operation: 'start' }, `🧪 CDN URL Verification Tool`);
+  moduleLogger.info(
+    { operation: 'environment', env: options.environment },
+    `Environment: ${options.environment}`
+  );
+  moduleLogger.info(
+    { operation: 'config', books: options.books.length, timeout: options.timeoutMs },
+    `Testing ${options.books.length} books with timeout ${options.timeoutMs}ms`
+  );
 
   // Generate test cases
   const testCases = generateTestCases(options.books);
-  console.log(`Generated ${testCases.length} test cases`);
+  moduleLogger.info(
+    { operation: 'test_cases', count: testCases.length },
+    `Generated ${testCases.length} test cases`
+  );
 
   // Run verification tests
-  console.log(`Running verification tests...`);
+  moduleLogger.info({ operation: 'run_tests' }, `Running verification tests...`);
   const results = await runVerificationTests(testCases, options);
 
   // Count successful and failed URLs
@@ -782,10 +1469,19 @@ async function main() {
   const fallbackSuccesses = results.filter((r) => r.exists.fallback).length;
   const blobSuccesses = results.filter((r) => r.exists.blob).length;
 
-  console.log(`✅ Tests completed successfully!`);
-  console.log(`- CDN URLs: ${cdnSuccesses}/${results.length} accessible`);
-  console.log(`- Fallback URLs: ${fallbackSuccesses}/${results.length} accessible`);
-  console.log(`- Blob Storage: ${blobSuccesses}/${results.length} available`);
+  moduleLogger.info({ operation: 'test_results' }, `✅ Tests completed successfully!`);
+  moduleLogger.info(
+    { operation: 'cdn_results', success: cdnSuccesses, total: results.length },
+    `- CDN URLs: ${cdnSuccesses}/${results.length} accessible`
+  );
+  moduleLogger.info(
+    { operation: 'fallback_results', success: fallbackSuccesses, total: results.length },
+    `- Fallback URLs: ${fallbackSuccesses}/${results.length} accessible`
+  );
+  moduleLogger.info(
+    { operation: 'blob_results', success: blobSuccesses, total: results.length },
+    `- Blob Storage: ${blobSuccesses}/${results.length} available`
+  );
 
   // Compare with previous results if requested
   let outputContent: string;
@@ -796,7 +1492,10 @@ async function main() {
         fs.readFileSync(options.compareFile, 'utf-8')
       ) as UrlVerificationResult[];
 
-      console.log(`Comparing with ${previousResults.length} results from ${options.compareFile}`);
+      moduleLogger.info(
+        { operation: 'comparison', count: previousResults.length, file: options.compareFile },
+        `Comparing with ${previousResults.length} results from ${options.compareFile}`
+      );
 
       // Generate comparison report
       outputContent = formatComparisonReport(
@@ -806,7 +1505,12 @@ async function main() {
         previousResults[0]?.environment || 'previous'
       );
     } catch (error) {
-      console.error(
+      moduleLogger.error(
+        {
+          operation: 'comparison_error',
+          file: options.compareFile,
+          error: error instanceof Error ? error.message : String(error),
+        },
         `Error reading comparison file: ${error instanceof Error ? error.message : String(error)}`
       );
       outputContent =
@@ -822,11 +1526,20 @@ async function main() {
 
   // Write output to file
   fs.writeFileSync(options.outputFile, outputContent);
-  console.log(`📝 Results written to ${options.outputFile}`);
+  moduleLogger.info(
+    { operation: 'output', file: options.outputFile },
+    `📝 Results written to ${options.outputFile}`
+  );
 }
 
 // Run the main function
 main().catch((error) => {
-  console.error('Error running verification tool:', error);
+  moduleLogger.error(
+    {
+      operation: 'fatal_error',
+      error: error instanceof Error ? error.message : String(error),
+    },
+    'Error running verification tool:'
+  );
   process.exit(1);
 });

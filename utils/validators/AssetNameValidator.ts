@@ -88,6 +88,106 @@ export class AssetNameValidator {
   }
 
   /**
+   * Validates if the asset name is a standard fulltext format
+   *
+   * @param assetName The asset name to check
+   * @returns The asset name if valid, null otherwise
+   */
+  private validateFulltextFormat(assetName: string): string | null {
+    const fulltextFormats = ['fulltext.txt', 'brainrot-fulltext.txt', 'source-fulltext.txt'];
+
+    return fulltextFormats.includes(assetName) ? assetName : null;
+  }
+
+  /**
+   * Validates if the asset name follows standard chapter format
+   *
+   * @param assetName The asset name to check
+   * @returns The asset name if valid, null otherwise
+   */
+  private validateChapterFormat(assetName: string): string | null {
+    // Standard chapter formats
+    const chapterPatterns = [
+      /^chapter-(\d{2})\.txt$/,
+      /^brainrot-chapter-(\d{2})\.txt$/,
+      /^source-chapter-(\d{2})\.txt$/,
+    ];
+
+    // Check against each pattern
+    for (const pattern of chapterPatterns) {
+      if (pattern.test(assetName)) {
+        return assetName;
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * Validates if the asset name is a source-custom format
+   *
+   * @param assetName The asset name to check
+   * @returns The asset name if valid, null otherwise
+   */
+  private validateSourceCustomFormat(assetName: string): string | null {
+    const sourceCustomRegex = /^source-(.+)\.txt$/;
+    return sourceCustomRegex.test(assetName) ? assetName : null;
+  }
+
+  /**
+   * Attempts to normalize legacy format asset names
+   *
+   * @param assetName The asset name to normalize
+   * @returns The normalized asset name if possible, null otherwise
+   */
+  private normalizeLegacyTextFormat(assetName: string): string | null {
+    // Define pattern to handler mappings
+    const legacyPatterns = [
+      {
+        // Legacy format: brainrot/X.txt
+        pattern: /^brainrot\/(\d+)\.txt$/,
+        handler: (matches: RegExpMatchArray) => {
+          const chapter = this.formatChapterNumber(matches[1]);
+          return `brainrot-chapter-${chapter}.txt`;
+        },
+      },
+      {
+        // Legacy format: source/X.txt
+        pattern: /^source\/(\d+)\.txt$/,
+        handler: (matches: RegExpMatchArray) => {
+          const chapter = this.formatChapterNumber(matches[1]);
+          return `source-chapter-${chapter}.txt`;
+        },
+      },
+      {
+        // Legacy format: source/{custom}.txt
+        pattern: /^source\/(.+)\.txt$/,
+        handler: (matches: RegExpMatchArray) => {
+          return `source-${matches[1]}.txt`;
+        },
+      },
+      {
+        // Legacy format: X.txt (just a number)
+        pattern: /^(\d+)\.txt$/,
+        handler: (matches: RegExpMatchArray) => {
+          const chapter = this.formatChapterNumber(matches[1]);
+          return `chapter-${chapter}.txt`;
+        },
+      },
+    ];
+
+    // Try each pattern and return the first match
+    for (const { pattern, handler } of legacyPatterns) {
+      const matches = assetName.match(pattern);
+      if (matches) {
+        return handler(matches);
+      }
+    }
+
+    return null;
+  }
+
+  /**
    * Validates text asset names
    * Valid formats:
    * - brainrot-fulltext.txt
@@ -102,70 +202,23 @@ export class AssetNameValidator {
    * @returns Standardized asset name
    */
   validateTextAssetName(assetName: string): string {
-    // Check for fulltext formats
-    if (
-      assetName === 'fulltext.txt' ||
-      assetName === 'brainrot-fulltext.txt' ||
-      assetName === 'source-fulltext.txt'
-    ) {
-      return assetName;
-    }
+    // Try standard formats first (fulltext)
+    const fulltextResult = this.validateFulltextFormat(assetName);
+    if (fulltextResult) return fulltextResult;
 
-    // Check for chapter-XX.txt format
-    const chapterRegex = /^chapter-(\d{2})\.txt$/;
-    if (chapterRegex.test(assetName)) {
-      return assetName;
-    }
+    // Try chapter formats
+    const chapterResult = this.validateChapterFormat(assetName);
+    if (chapterResult) return chapterResult;
 
-    // Check for brainrot-chapter-XX.txt format
-    const brainrotChapterRegex = /^brainrot-chapter-(\d{2})\.txt$/;
-    if (brainrotChapterRegex.test(assetName)) {
-      return assetName;
-    }
+    // Try source custom format
+    const sourceCustomResult = this.validateSourceCustomFormat(assetName);
+    if (sourceCustomResult) return sourceCustomResult;
 
-    // Check for source-chapter-XX.txt format
-    const sourceChapterRegex = /^source-chapter-(\d{2})\.txt$/;
-    if (sourceChapterRegex.test(assetName)) {
-      return assetName;
-    }
+    // Try to normalize from legacy formats as a last resort
+    const legacyResult = this.normalizeLegacyTextFormat(assetName);
+    if (legacyResult) return legacyResult;
 
-    // Check for source-{custom}.txt format
-    const sourceCustomRegex = /^source-(.+)\.txt$/;
-    if (sourceCustomRegex.test(assetName)) {
-      return assetName;
-    }
-
-    // Legacy format: brainrot/X.txt
-    const legacyBrainrotRegex = /^brainrot\/(\d+)\.txt$/;
-    const brainrotMatch = assetName.match(legacyBrainrotRegex);
-    if (brainrotMatch) {
-      const chapter = this.formatChapterNumber(brainrotMatch[1]);
-      return `brainrot-chapter-${chapter}.txt`;
-    }
-
-    // Legacy format: source/X.txt
-    const legacySourceRegex = /^source\/(\d+)\.txt$/;
-    const sourceMatch = assetName.match(legacySourceRegex);
-    if (sourceMatch) {
-      const chapter = this.formatChapterNumber(sourceMatch[1]);
-      return `source-chapter-${chapter}.txt`;
-    }
-
-    // Legacy format: source/{custom}.txt
-    const legacySourceCustomRegex = /^source\/(.+)\.txt$/;
-    const sourceCustomMatch = assetName.match(legacySourceCustomRegex);
-    if (sourceCustomMatch) {
-      return `source-${sourceCustomMatch[1]}.txt`;
-    }
-
-    // Legacy format: X.txt (just a number)
-    const numericRegex = /^(\d+)\.txt$/;
-    const numericMatch = assetName.match(numericRegex);
-    if (numericMatch) {
-      const chapter = this.formatChapterNumber(numericMatch[1]);
-      return `chapter-${chapter}.txt`;
-    }
-
+    // If we get here, the name is invalid
     throw new Error(
       `Invalid text asset name: "${assetName}". ` +
         'Should follow standard naming conventions for text assets.'

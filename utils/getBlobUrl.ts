@@ -1,6 +1,8 @@
+import { logger } from './logger';
 import { blobPathService } from './services/BlobPathService';
 import { blobService } from './services/BlobService';
 
+const moduleLogger = logger.child({ module: 'getBlobUrl' });
 // URL generation options interface
 export interface BlobUrlOptions {
   /** Base URL to use (overrides environment variables) */
@@ -20,6 +22,58 @@ const urlCache: Record<string, string> = {};
 const existenceCache: Record<string, boolean> = {};
 
 /**
+ * Determines if a path is in legacy format (starts with '/')
+ */
+function isLegacyPath(path: string): boolean {
+  return path.startsWith('/');
+}
+
+/**
+ * Converts a path to blob format if it's a legacy path
+ */
+function convertToBlobPath(path: string): string {
+  return isLegacyPath(path) ? blobPathService.convertLegacyPath(path) : path;
+}
+
+/**
+ * Generates a cache key for the URL cache
+ */
+function getCacheKey(
+  path: string,
+  baseUrl?: string,
+  environment?: string,
+  useBlobStorage = true
+): string {
+  return `${path}-${baseUrl}-${environment}-${useBlobStorage}`;
+}
+
+/**
+ * Retrieves a URL from the cache if available
+ * @returns The cached URL or null if not found
+ */
+function getCachedUrl(cacheKey: string): string | null {
+  return urlCache[cacheKey] || null;
+}
+
+/**
+ * Determines the appropriate base URL based on environment
+ */
+function determineBaseUrl(
+  environment: 'development' | 'production',
+  customBaseUrl?: string
+): string {
+  if (customBaseUrl) {
+    return customBaseUrl;
+  }
+
+  if (environment === 'development') {
+    return process.env.NEXT_PUBLIC_BLOB_DEV_URL || process.env.NEXT_PUBLIC_BLOB_BASE_URL || '';
+  }
+
+  return process.env.NEXT_PUBLIC_BLOB_BASE_URL || '';
+}
+
+/**
  * Generate a public URL for a Blob asset
  *
  * This is the primary function to use for generating Blob URLs.
@@ -30,7 +84,7 @@ const existenceCache: Record<string, boolean> = {};
  * @returns The public URL for the Blob asset
  */
 export function generateBlobUrl(path: string, options: BlobUrlOptions = {}): string {
-  // Default options
+  // Process options with defaults
   const {
     baseUrl,
     noCache = false,
@@ -38,33 +92,25 @@ export function generateBlobUrl(path: string, options: BlobUrlOptions = {}): str
     environment = process.env.NODE_ENV as 'development' | 'production',
   } = options;
 
-  // If not using Blob storage, return the path as is (for legacy paths)
-  if (!useBlobStorage && path.startsWith('/')) {
+  // Early return if not using Blob storage for legacy paths
+  if (!useBlobStorage && isLegacyPath(path)) {
     return path;
   }
 
-  // Check cache first if caching is enabled
-  const cacheKey = `${path}-${baseUrl}-${environment}-${useBlobStorage}`;
-  if (!noCache && urlCache[cacheKey]) {
-    return urlCache[cacheKey];
+  // Check cache if enabled
+  const cacheKey = getCacheKey(path, baseUrl, environment, useBlobStorage);
+  const cachedUrl = !noCache ? getCachedUrl(cacheKey) : null;
+  if (cachedUrl) {
+    return cachedUrl;
   }
 
-  // Determine if this is a legacy path that needs conversion
-  const isLegacyPath = path.startsWith('/');
+  // Convert path if needed
+  const blobPath = convertToBlobPath(path);
 
-  // Convert legacy path to blob path if needed
-  const blobPath = isLegacyPath ? blobPathService.convertLegacyPath(path) : path;
+  // Determine the base URL
+  const blobBaseUrl = determineBaseUrl(environment, baseUrl);
 
-  // Generate URL with the correct base URL for the environment
-  let blobBaseUrl = baseUrl;
-  if (!blobBaseUrl) {
-    blobBaseUrl =
-      environment === 'development'
-        ? process.env.NEXT_PUBLIC_BLOB_DEV_URL || process.env.NEXT_PUBLIC_BLOB_BASE_URL
-        : process.env.NEXT_PUBLIC_BLOB_BASE_URL;
-  }
-
-  // Get the full URL
+  // Generate the full URL
   const url = blobService.getUrlForPath(blobPath, { baseUrl: blobBaseUrl, noCache });
 
   // Cache the result if caching is enabled
@@ -109,6 +155,113 @@ export function getAssetUrl(
 }
 
 /**
+ * Check if asset existence is cached
+ */
+function getExistenceFromCache(path: string, useCache: boolean): boolean | null {
+  if (useCache && path in existenceCache) {
+    return existenceCache[path];
+  }
+  return null;
+}
+
+/**
+ * Store asset existence result in cache
+ */
+function cacheExistenceResult(path: string, exists: boolean, useCache: boolean): void {
+  if (useCache) {
+    existenceCache[path] = exists;
+  }
+}
+
+/**
+ * Normalize a Blob path to handle URL format discrepancies
+ */
+function normalizeBlobPath(path: string, baseUrl?: string): string {
+  // If this is not a URL or we don't have a base URL, just return the path
+  if (!path.startsWith('https://') || !baseUrl) {
+    return path;
+  }
+
+  // If the path contains the generic Vercel Blob URL but we have a specific one, replace it
+  if (
+    path.startsWith('https://public.blob.vercel-storage.com/') &&
+    baseUrl !== 'https://public.blob.vercel-storage.com'
+  ) {
+    const normalizedPath = path.replace('https://public.blob.vercel-storage.com/', baseUrl + '/');
+    moduleLogger.info(
+      {
+        originalPath: path,
+        normalizedPath,
+      },
+      `Normalized URL from ${path} to ${normalizedPath}`
+    );
+    return normalizedPath;
+  }
+
+  return path;
+}
+
+/**
+ * Check if a path is already verified as valid
+ */
+function isKnownValidPath(path: string, baseUrl?: string): boolean {
+  // We've already seen this path work in verification, so if it's the same URL, consider it valid
+  return Boolean(baseUrl && path.startsWith(baseUrl));
+}
+
+/**
+ * Extract blob path from URL or convert legacy path
+ */
+function extractBlobPath(path: string): string {
+  // Determine if this is already a full URL or a legacy path
+  const isAlreadyFullUrl = path.startsWith('http');
+
+  if (isAlreadyFullUrl) {
+    // If it's already a full URL, extract just the path part
+    const url = new URL(path);
+    return url.pathname.replace(/^\//, ''); // Remove leading slash
+  } else {
+    // If it's a legacy path, convert it to a blob path
+    return blobPathService.convertLegacyPath(path);
+  }
+}
+
+/**
+ * Perform asset existence check with logging
+ */
+async function checkAssetExistence(
+  path: string,
+  blobPath: string,
+  baseUrl?: string
+): Promise<boolean> {
+  // Direct URL check if it's a full blob URL
+  const isAlreadyFullUrl = path.startsWith('http');
+  const urlToCheck = isAlreadyFullUrl
+    ? path
+    : blobService.getUrlForPath(blobPath, { baseUrl, noCache: true });
+
+  // Log checking process
+  moduleLogger.info(
+    { operation: 'check_asset', normalizedPath: path },
+    `Checking if asset exists: ${path}`
+  );
+  moduleLogger.info({ operation: 'check_asset', blobPath }, `Blob path: ${blobPath}`);
+  moduleLogger.info({ operation: 'check_asset', urlToCheck }, `Full URL: ${urlToCheck}`);
+
+  // Get file info and determine existence
+  const fileInfo = await blobService.getFileInfo(urlToCheck);
+  const exists = fileInfo.size > 0;
+
+  // Log result
+  moduleLogger.info(
+    { operation: 'check_asset_result', exists, size: fileInfo.size },
+    `Asset exists: ${exists}, size: ${fileInfo.size}`
+  );
+
+  return exists;
+}
+
+/**
  * Check if an asset exists in Blob storage
  *
  * @param legacyPath The legacy path or URL
@@ -122,73 +275,44 @@ export async function assetExistsInBlobStorage(
   useCache: boolean = true
 ): Promise<boolean> {
   // Check existence cache if enabled
-  if (useCache && legacyPath in existenceCache) {
-    return existenceCache[legacyPath];
+  const cachedResult = getExistenceFromCache(legacyPath, useCache);
+  if (cachedResult !== null) {
+    return cachedResult;
   }
 
   try {
     const baseUrl = process.env.NEXT_PUBLIC_BLOB_BASE_URL;
 
-    // Handle URL normalization between formats
-    // This fixes the discrepancy between the URLs in translations and actual blob storage
-    let normalizedPath = legacyPath;
+    // Normalize path to handle URL discrepancies
+    const normalizedPath = normalizeBlobPath(legacyPath, baseUrl);
 
-    // If the path contains the generic Vercel Blob URL but we have a specific one, replace it
-    if (
-      baseUrl &&
-      legacyPath.startsWith('https://public.blob.vercel-storage.com/') &&
-      baseUrl !== 'https://public.blob.vercel-storage.com'
-    ) {
-      normalizedPath = legacyPath.replace('https://public.blob.vercel-storage.com/', baseUrl + '/');
-      console.log(`Normalized URL from ${legacyPath} to ${normalizedPath}`);
-    }
-
-    // We've already seen this path work in the verification process, so if
-    // it's the same URL, let's consider it valid without hitting the service
-    if (baseUrl && normalizedPath.startsWith(baseUrl)) {
-      if (useCache) {
-        existenceCache[legacyPath] = true;
-      }
+    // Check if path is already verified as valid
+    if (isKnownValidPath(normalizedPath, baseUrl)) {
+      cacheExistenceResult(legacyPath, true, useCache);
       return true;
     }
 
-    // Determine if this is already a full URL or a legacy path
-    const isAlreadyFullUrl = normalizedPath.startsWith('http');
+    // Extract blob path from URL or convert legacy path
+    const blobPath = extractBlobPath(normalizedPath);
 
-    let blobPath;
-    if (isAlreadyFullUrl) {
-      // If it's already a full URL, we need to extract just the path part
-      const url = new URL(normalizedPath);
-      blobPath = url.pathname.replace(/^\//, ''); // Remove leading slash
-    } else {
-      // If it's a legacy path, convert it to a blob path
-      blobPath = blobPathService.convertLegacyPath(normalizedPath);
-    }
-
-    // Direct URL check if it's a full blob URL
-    const urlToCheck = isAlreadyFullUrl
-      ? normalizedPath
-      : blobService.getUrlForPath(blobPath, { baseUrl, noCache: true });
-
-    console.log(`Checking if asset exists: ${normalizedPath}`);
-    console.log(`Blob path: ${blobPath}`);
-    console.log(`Full URL: ${urlToCheck}`);
-
-    const fileInfo = await blobService.getFileInfo(urlToCheck);
-    const exists = fileInfo.size > 0;
-    console.log(`Asset exists: ${exists}, size: ${fileInfo.size}`);
+    // Perform the existence check
+    const exists = await checkAssetExistence(normalizedPath, blobPath, baseUrl);
 
     // Cache the result if caching is enabled
-    if (useCache) {
-      existenceCache[legacyPath] = exists;
-    }
+    cacheExistenceResult(legacyPath, exists, useCache);
 
     return exists;
   } catch (error) {
-    console.log(`Error checking asset: ${legacyPath}`, error);
-    if (useCache) {
-      existenceCache[legacyPath] = false;
-    }
+    moduleLogger.error(
+      {
+        operation: 'check_asset_error',
+        legacyPath,
+        error: error instanceof Error ? error.message : String(error),
+      },
+      `Error checking asset: ${legacyPath}`
+    );
+
+    cacheExistenceResult(legacyPath, false, useCache);
     return false;
   }
 }
@@ -217,12 +341,25 @@ export async function getAssetUrlWithFallback(
       return getBlobUrl(legacyPath, options);
     } else {
       // If it doesn't exist in Blob, use the local path
-      console.info(`Asset not found in Blob storage, using local path: ${legacyPath}`);
+      moduleLogger.info(
+        {
+          operation: 'asset_fallback',
+          legacyPath,
+        },
+        `Asset not found in Blob storage, using local path: ${legacyPath}`
+      );
       return legacyPath;
     }
   } catch (error) {
     // On any error, fall back to the local path for safety
-    console.warn(`Error checking Blob storage, falling back to local path: ${legacyPath}`, error);
+    moduleLogger.warn(
+      {
+        operation: 'blob_storage_error',
+        legacyPath,
+        error: error instanceof Error ? error.message : String(error),
+      },
+      `Error checking Blob storage, falling back to local path: ${legacyPath}`
+    );
     return legacyPath;
   }
 }
@@ -252,23 +389,51 @@ export async function fetchTextWithFallback(
       baseUrl !== 'https://public.blob.vercel-storage.com'
     ) {
       normalizedPath = legacyPath.replace('https://public.blob.vercel-storage.com/', baseUrl + '/');
-      console.log(`Normalized text URL from ${legacyPath} to ${normalizedPath}`);
+      moduleLogger.info(
+        {
+          operation: 'normalize_text_url',
+          originalPath: legacyPath,
+          normalizedPath,
+        },
+        `Normalized text URL from ${legacyPath} to ${normalizedPath}`
+      );
     }
 
     // First try Blob storage with the normalized URL
     try {
       // If it's already a full URL after normalization, use it directly
       if (normalizedPath.startsWith('http')) {
-        console.log(`Fetching text from normalized URL: ${normalizedPath}`);
+        moduleLogger.info(
+          {
+            operation: 'fetch_text',
+            source: 'normalized_url',
+            url: normalizedPath,
+          },
+          `Fetching text from normalized URL: ${normalizedPath}`
+        );
         return await blobService.fetchText(normalizedPath);
       } else {
         // Otherwise generate a Blob URL
         const blobUrl = getBlobUrl(normalizedPath, options);
-        console.log(`Fetching text from generated URL: ${blobUrl}`);
+        moduleLogger.info(
+          {
+            operation: 'fetch_text',
+            source: 'blob_url',
+            url: blobUrl,
+          },
+          `Fetching text from generated URL: ${blobUrl}`
+        );
         return await blobService.fetchText(blobUrl);
       }
     } catch (blobError) {
-      console.warn(`Failed to fetch from Blob, trying local path: ${legacyPath}`, blobError);
+      moduleLogger.warn(
+        {
+          operation: 'fetch_text_fallback',
+          legacyPath,
+          error: blobError instanceof Error ? blobError.message : String(blobError),
+        },
+        `Failed to fetch from Blob, trying local path: ${legacyPath}`
+      );
 
       // If Blob fetch fails, try the local path
       const response = await fetch(legacyPath);
@@ -278,7 +443,15 @@ export async function fetchTextWithFallback(
       return await response.text();
     }
   } catch (error) {
-    console.error(`All fetch attempts failed for: ${legacyPath}`, error);
+    moduleLogger.error(
+      {
+        operation: 'fetch_text_failed',
+        legacyPath,
+        error: error instanceof Error ? error.message : String(error),
+      },
+      `All fetch attempts failed for: ${legacyPath}`
+    );
+
     throw new Error(
       `Failed to fetch text: ${error instanceof Error ? error.message : String(error)}`
     );

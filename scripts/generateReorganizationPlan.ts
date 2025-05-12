@@ -14,6 +14,30 @@ import logger, { createRequestLogger } from '../utils/logger';
 // Configure logger for the reorganization planning process
 const _planLogger = createRequestLogger('reorg-plan');
 
+// Type definitions for report collections and metrics
+interface ReportCollection {
+  text: AuditReport;
+  image: AuditReport;
+  audio: AuditReport;
+}
+
+interface AssetMetrics {
+  totalAssets: number;
+  totalTextAssets: number;
+  totalImageAssets: number;
+  totalAudioAssets: number;
+  standardizedTextAssets: number;
+  standardizedImageAssets: number;
+  standardizedAudioAssets: number;
+  nonStandardizedTextAssets: number;
+  nonStandardizedImageAssets: number;
+  nonStandardizedAudioAssets: number;
+  totalSpecificAssets: number;
+  totalStandardizedAssets: number;
+  totalNonStandardizedAssets: number;
+  overallStandardizationRate: number;
+}
+
 interface PlanOptions {
   outputDir: string;
   verbose: boolean;
@@ -155,18 +179,11 @@ function readAuditReports(): {
 }
 
 /**
- * Generate reorganization plan
+ * Calculate asset metrics from audit reports
  */
-function generateReorganizationPlan(
-  reports: {
-    text: AuditReport;
-    image: AuditReport;
-    audio: AuditReport;
-  },
-  _options: PlanOptions
-): string {
-  // Calculate total metrics
-  const totalAssets = reports.text.totalAssets; // This should be the same in all reports
+function calculateAssetMetrics(reports: ReportCollection): AssetMetrics {
+  // Extract base metrics from reports
+  const totalAssets = reports.text.totalAssets; // Should be the same in all reports
   const totalTextAssets = reports.text.textAssets;
   const totalImageAssets = reports.image.imageAssets;
   const totalAudioAssets = reports.audio.audioAssets;
@@ -179,7 +196,7 @@ function generateReorganizationPlan(
   const nonStandardizedImageAssets = reports.image.nonStandardizedAssets;
   const nonStandardizedAudioAssets = reports.audio.nonStandardizedAssets;
 
-  // Calculate overall stats
+  // Calculate derived metrics
   const totalSpecificAssets = totalTextAssets + totalImageAssets + totalAudioAssets;
   const totalStandardizedAssets =
     standardizedTextAssets + standardizedImageAssets + standardizedAudioAssets;
@@ -188,109 +205,197 @@ function generateReorganizationPlan(
   const overallStandardizationRate =
     totalSpecificAssets > 0 ? Math.round((totalStandardizedAssets / totalSpecificAssets) * 100) : 0;
 
-  // Generate reorganization commands
-  const createCommand = (prefix: string, verbose: boolean = false): string => {
-    return `npm run reorganize:blob -- --prefix="${prefix}"${verbose ? ' --verbose' : ''}`;
+  return {
+    totalAssets,
+    totalTextAssets,
+    totalImageAssets,
+    totalAudioAssets,
+    standardizedTextAssets,
+    standardizedImageAssets,
+    standardizedAudioAssets,
+    nonStandardizedTextAssets,
+    nonStandardizedImageAssets,
+    nonStandardizedAudioAssets,
+    totalSpecificAssets,
+    totalStandardizedAssets,
+    totalNonStandardizedAssets,
+    overallStandardizationRate,
   };
+}
 
-  // Build commands based on audit results
+/**
+ * Create a standardized command for the reorganization blob tool
+ */
+function createReorganizationCommand(prefix: string, verbose: boolean = false): string {
+  return `npm run reorganize:blob -- --prefix="${prefix}"${verbose ? ' --verbose' : ''}`;
+}
+
+/**
+ * Generate commands for text asset reorganization
+ */
+function generateTextAssetCommands(report: AuditReport): string[] {
   const commands: string[] = [];
 
-  // Text asset commands
-  if (nonStandardizedTextAssets > 0) {
-    commands.push(createCommand('assets/text'));
+  if (report.nonStandardizedAssets > 0) {
+    commands.push(createReorganizationCommand('assets/text'));
 
     // Add specific commands for any legacy patterns found
-    for (const path of reports.text.pathIssues.nonStandardPath) {
+    for (const path of report.pathIssues.nonStandardPath) {
       if (path.includes('/books/') && path.includes('/text/')) {
-        commands.push(createCommand('books'));
+        commands.push(createReorganizationCommand('books'));
       } else if (path.match(/^[^/]+\/text\//)) {
-        commands.push(createCommand('text'));
+        commands.push(createReorganizationCommand('text'));
       }
     }
   }
 
-  // Image asset commands
-  if (nonStandardizedImageAssets > 0) {
-    commands.push(createCommand('assets/image'));
-    commands.push(createCommand('assets/shared'));
-    commands.push(createCommand('assets/site'));
+  return commands;
+}
+
+/**
+ * Generate commands for image asset reorganization
+ */
+function generateImageAssetCommands(report: AuditReport): string[] {
+  const commands: string[] = [];
+
+  if (report.nonStandardizedAssets > 0) {
+    commands.push(createReorganizationCommand('assets/image'));
+    commands.push(createReorganizationCommand('assets/shared'));
+    commands.push(createReorganizationCommand('assets/site'));
 
     // Add specific commands for any legacy patterns found
-    for (const path of reports.image.pathIssues.nonStandardPath) {
-      // Check for specific patterns and add appropriate commands
+    for (const path of report.pathIssues.nonStandardPath) {
       if (path.includes('/images/')) {
-        commands.push(createCommand('images'));
+        commands.push(createReorganizationCommand('images'));
       } else if (path.includes('/site-assets/')) {
-        commands.push(createCommand('site-assets'));
+        commands.push(createReorganizationCommand('site-assets'));
       } else if (path.includes('/books/')) {
-        commands.push(createCommand('books'));
+        commands.push(createReorganizationCommand('books'));
       }
     }
   }
 
-  // Audio asset commands
-  if (nonStandardizedAudioAssets > 0) {
-    commands.push(createCommand('assets/audio'));
+  return commands;
+}
+
+/**
+ * Generate commands for audio asset reorganization
+ */
+function generateAudioAssetCommands(report: AuditReport): string[] {
+  const commands: string[] = [];
+
+  if (report.nonStandardizedAssets > 0) {
+    commands.push(createReorganizationCommand('assets/audio'));
 
     // Add specific commands for any legacy patterns found
-    for (const path of reports.audio.pathIssues.nonStandardPath) {
+    for (const path of report.pathIssues.nonStandardPath) {
       if (path.match(/^[^/]+\/audio\//)) {
-        commands.push(createCommand('audio'));
+        commands.push(createReorganizationCommand('audio'));
       } else if (path.includes('/books/') && path.includes('/audio/')) {
-        commands.push(createCommand('books'));
+        commands.push(createReorganizationCommand('books'));
       }
     }
   }
+
+  return commands;
+}
+
+/**
+ * Combine all asset commands and remove duplicates
+ */
+function generateAllReorganizationCommands(reports: ReportCollection): string[] {
+  const textCommands = generateTextAssetCommands(reports.text);
+  const imageCommands = generateImageAssetCommands(reports.image);
+  const audioCommands = generateAudioAssetCommands(reports.audio);
+
+  const allCommands = [...textCommands, ...imageCommands, ...audioCommands];
 
   // Remove duplicate commands
-  const uniqueCommands = [...new Set(commands)];
+  return [...new Set(allCommands)];
+}
 
-  // Create a reorganization plan
+/**
+ * Create the summary section of the plan
+ */
+function createPlanSummary(metrics: AssetMetrics, reports: ReportCollection): string {
   return `
-# Asset Reorganization Plan
-
-## Overview
-
-This plan outlines the steps needed to standardize asset paths in Vercel Blob storage.
-Based on the audit results, there are ${totalNonStandardizedAssets} assets that need to be reorganized.
-
 ## Summary
 
-- **Total Assets in Vercel Blob**: ${totalAssets}
-- **Assets Audited**: ${totalSpecificAssets}
-  - Text Assets: ${totalTextAssets} (${reports.text.standardizedAssets} standardized, ${reports.text.nonStandardizedAssets} non-standardized)
-  - Image Assets: ${totalImageAssets} (${reports.image.standardizedAssets} standardized, ${reports.image.nonStandardizedAssets} non-standardized)
-  - Audio Assets: ${totalAudioAssets} (${reports.audio.standardizedAssets} standardized, ${reports.audio.nonStandardizedAssets} non-standardized)
-- **Overall Standardization Rate**: ${overallStandardizationRate}%
+- **Total Assets in Vercel Blob**: ${metrics.totalAssets}
+- **Assets Audited**: ${metrics.totalSpecificAssets}
+  - Text Assets: ${metrics.totalTextAssets} (${reports.text.standardizedAssets} standardized, ${reports.text.nonStandardizedAssets} non-standardized)
+  - Image Assets: ${metrics.totalImageAssets} (${reports.image.standardizedAssets} standardized, ${reports.image.nonStandardizedAssets} non-standardized)
+  - Audio Assets: ${metrics.totalAudioAssets} (${reports.audio.standardizedAssets} standardized, ${reports.audio.nonStandardizedAssets} non-standardized)
+- **Overall Standardization Rate**: ${metrics.overallStandardizationRate}%`;
+}
 
+/**
+ * Create the commands section of the plan
+ */
+function createPlanCommands(commands: string[]): string {
+  return `
 ## Reorganization Steps
 
 The following commands should be run in order to standardize all asset paths:
 
 \`\`\`bash
 # First, run in dry-run mode to preview changes (recommended)
-${uniqueCommands.map((cmd) => `${cmd} --dry-run`).join('\n')}
+${commands.map((cmd) => `${cmd} --dry-run`).join('\n')}
 
 # Then run the actual reorganization commands
-${uniqueCommands.join('\n')}
-\`\`\`
+${commands.join('\n')}
+\`\`\``;
+}
 
+/**
+ * Create the verification section of the plan
+ */
+function createPlanVerification(): string {
+  return `
 ## Verification
 
 After running these commands, run the audit tools again to verify that all assets are standardized:
 
 \`\`\`bash
 npm run audit:all
-\`\`\`
+\`\`\``;
+}
 
+/**
+ * Create the detailed reports section of the plan
+ */
+function createPlanDetailedReports(): string {
+  return `
 ## Detailed Reports
 
 Detailed audit reports are available at:
 - Text Assets: ./text-assets-audit/text-assets-audit.html
 - Image Assets: ./image-assets-audit/image-assets-audit.html
-- Audio Assets: ./audio-assets-audit/audio-assets-audit.html
-`;
+- Audio Assets: ./audio-assets-audit/audio-assets-audit.html`;
+}
+
+/**
+ * Generate reorganization plan
+ */
+function generateReorganizationPlan(reports: ReportCollection, _options: PlanOptions): string {
+  // Calculate metrics
+  const metrics = calculateAssetMetrics(reports);
+
+  // Generate commands
+  const commands = generateAllReorganizationCommands(reports);
+
+  // Create the plan
+  return `
+# Asset Reorganization Plan
+
+## Overview
+
+This plan outlines the steps needed to standardize asset paths in Vercel Blob storage.
+Based on the audit results, there are ${metrics.totalNonStandardizedAssets} assets that need to be reorganized.
+${createPlanSummary(metrics, reports)}
+${createPlanCommands(commands)}
+${createPlanVerification()}
+${createPlanDetailedReports()}`;
 }
 
 /**

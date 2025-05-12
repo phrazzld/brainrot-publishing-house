@@ -21,11 +21,15 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import { AssetType } from '../types/assets';
+import { logger } from '../utils/logger';
 import { AssetNameMigration } from '../utils/migration/AssetNameMigration';
 import { blobService } from '../utils/services/BlobService';
 import { assetNameValidator } from '../utils/validators/AssetNameValidator';
 
 dotenv.config({ path: '.env.local' });
+
+// Create a scoped logger for this script
+const scriptLogger = logger.child({ module: 'validateAssetNames' });
 
 // Get this file's directory
 const __filename = fileURLToPath(import.meta.url);
@@ -34,8 +38,19 @@ const projectRoot = path.resolve(__dirname, '..');
 
 // IMPORTANT: Add Vercel Blob token check
 if (!process.env.BLOB_READ_WRITE_TOKEN) {
-  console.error('❌ BLOB_READ_WRITE_TOKEN environment variable is not set.');
-  console.error('Please set this variable in your .env.local file.');
+  scriptLogger.error(
+    {
+      error: 'missing_token',
+      token: 'BLOB_READ_WRITE_TOKEN',
+    },
+    '❌ BLOB_READ_WRITE_TOKEN environment variable is not set.'
+  );
+  scriptLogger.error(
+    {
+      suggestion: 'update_env_file',
+    },
+    'Please set this variable in your .env.local file.'
+  );
   process.exit(1);
 }
 
@@ -88,10 +103,14 @@ class AssetNameValidator {
    * Run the validation process
    */
   async run(): Promise<MigrationPlan> {
-    console.warn(
+    scriptLogger.info(
+      {
+        operation: 'start_validation',
+        withMigrationPlan: this.options.fix,
+        options: this.options,
+      },
       `\n🔍 Starting asset name validation ${this.options.fix ? '(with migration plan)' : ''}`
     );
-    console.warn(`Options: ${JSON.stringify(this.options, null, 2)}\n`);
 
     try {
       // Scan each asset type unless a specific type is specified
@@ -112,7 +131,13 @@ class AssetNameValidator {
 
       return plan;
     } catch (error) {
-      console.error('Validation failed:', error instanceof Error ? error.message : String(error));
+      scriptLogger.error(
+        {
+          operation: 'validation',
+          error: error instanceof Error ? error.message : String(error),
+        },
+        'Validation failed:'
+      );
       throw error;
     }
   }
@@ -153,9 +178,14 @@ class AssetNameValidator {
 
         this.log(`Processed ${count} ${assetType} assets so far...`);
       } catch (error) {
-        console.error(
-          `Error listing ${assetType} assets:`,
-          error instanceof Error ? error.message : String(error)
+        scriptLogger.error(
+          {
+            operation: 'list_assets',
+            assetType,
+            prefix,
+            error: error instanceof Error ? error.message : String(error),
+          },
+          `Error listing ${assetType} assets:`
         );
         break;
       }
@@ -278,13 +308,30 @@ class AssetNameValidator {
     // Save report
     const reportPath = path.join(projectRoot, 'asset-naming-report.json');
     await fs.writeFile(reportPath, reportJson, 'utf8');
-    console.warn(`\n💾 Validation report saved to ${reportPath}`);
+
+    scriptLogger.info(
+      {
+        operation: 'save_report',
+        reportPath,
+        reportSize: reportJson.length,
+      },
+      `\n💾 Validation report saved to ${reportPath}`
+    );
 
     // Save migration plan if requested
     if (this.options.fix && plan.toMigrate.length > 0) {
       const planPath = path.join(projectRoot, 'asset-naming-migration-plan.json');
       await fs.writeFile(planPath, migrationPlanJson, 'utf8');
-      console.warn(`💾 Migration plan saved to ${planPath}`);
+
+      scriptLogger.info(
+        {
+          operation: 'save_plan',
+          planPath,
+          planSize: migrationPlanJson.length,
+          itemCount: plan.toMigrate.length,
+        },
+        `💾 Migration plan saved to ${planPath}`
+      );
     }
   }
 
@@ -292,17 +339,46 @@ class AssetNameValidator {
    * Print migration summary
    */
   private printSummary(plan: MigrationPlan): void {
-    console.warn('\n📊 Asset Naming Validation Summary');
-    console.warn('----------------------------------');
-    console.warn(`Total assets: ${plan.total}`);
-    console.warn(
-      `Compliant   : ${plan.compliant} (${((plan.compliant / plan.total) * 100).toFixed(2)}%)`
-    );
-    console.warn(
-      `Non-compliant: ${plan.nonCompliant} (${((plan.nonCompliant / plan.total) * 100).toFixed(2)}%)`
+    const compliantPercentage = plan.total > 0 ? (plan.compliant / plan.total) * 100 : 0;
+    const nonCompliantPercentage = plan.total > 0 ? (plan.nonCompliant / plan.total) * 100 : 0;
+
+    scriptLogger.info(
+      {
+        section: 'summary',
+        title: 'Asset Naming Validation Summary',
+      },
+      '\n📊 Asset Naming Validation Summary'
     );
 
-    // Print non-compliant assets by type
+    scriptLogger.info({ section: 'summary' }, '----------------------------------');
+
+    scriptLogger.info(
+      {
+        section: 'summary',
+        totalAssets: plan.total,
+      },
+      `Total assets: ${plan.total}`
+    );
+
+    scriptLogger.info(
+      {
+        section: 'summary',
+        compliantAssets: plan.compliant,
+        percentage: compliantPercentage.toFixed(2),
+      },
+      `Compliant   : ${plan.compliant} (${compliantPercentage.toFixed(2)}%)`
+    );
+
+    scriptLogger.info(
+      {
+        section: 'summary',
+        nonCompliantAssets: plan.nonCompliant,
+        percentage: nonCompliantPercentage.toFixed(2),
+      },
+      `Non-compliant: ${plan.nonCompliant} (${nonCompliantPercentage.toFixed(2)}%)`
+    );
+
+    // Calculate non-compliant assets by type
     const nonCompliantByType = this.results
       .filter((r) => !r.isValid)
       .reduce(
@@ -313,18 +389,45 @@ class AssetNameValidator {
         {} as Record<string, number>
       );
 
-    console.warn('\nNon-compliant assets by type:');
+    scriptLogger.info({ section: 'summary' }, '\nNon-compliant assets by type:');
+
     for (const [type, count] of Object.entries(nonCompliantByType)) {
-      console.warn(`- ${type}: ${count}`);
+      scriptLogger.info(
+        {
+          section: 'summary',
+          assetType: type,
+          count,
+        },
+        `- ${type}: ${count}`
+      );
     }
 
     // Print migration plan summary
     if (this.options.fix) {
-      console.warn(`\nAssets that can be migrated: ${plan.toMigrate.length}`);
+      scriptLogger.info(
+        {
+          section: 'migration',
+          migrateableAssets: plan.toMigrate.length,
+        },
+        `\nAssets that can be migrated: ${plan.toMigrate.length}`
+      );
 
       if (plan.toMigrate.length > 0) {
-        console.warn('\nMigration plan generated. Run the migration with:');
-        console.warn('npx tsx scripts/migrateAssetNames.ts');
+        scriptLogger.info(
+          {
+            section: 'migration',
+            action: 'run_migration',
+          },
+          '\nMigration plan generated. Run the migration with:'
+        );
+
+        scriptLogger.info(
+          {
+            section: 'migration',
+            command: 'npx tsx scripts/migrateAssetNames.ts',
+          },
+          'npx tsx scripts/migrateAssetNames.ts'
+        );
       }
     }
   }
@@ -332,9 +435,15 @@ class AssetNameValidator {
   /**
    * Conditionally log messages based on verbose option
    */
-  private log(message: string): void {
+  private log(message: string, context: Record<string, unknown> = {}): void {
     if (this.options.verbose) {
-      console.log(message);
+      scriptLogger.debug(
+        {
+          ...context,
+          verbose: true,
+        },
+        message
+      );
     }
   }
 }
@@ -362,7 +471,12 @@ function parseArgs(): ValidatorOptions {
       if (Object.values(AssetType).includes(typeArg as AssetType)) {
         options.type = typeArg as AssetType;
       } else {
-        console.warn(
+        scriptLogger.warn(
+          {
+            argument: 'type',
+            value: typeArg,
+            validTypes: Object.values(AssetType),
+          },
           `Warning: Invalid asset type "${typeArg}". Valid types are: ${Object.values(AssetType).join(', ')}`
         );
       }
@@ -381,13 +495,25 @@ async function main(): Promise<void> {
     const validator = new AssetNameValidator(options);
     await validator.run();
 
-    console.warn('\n✅ Asset naming validation completed!');
+    scriptLogger.info(
+      {
+        operation: 'completion',
+        status: 'success',
+      },
+      '\n✅ Asset naming validation completed!'
+    );
+
     process.exit(0);
   } catch (error) {
-    console.error(
-      '\n❌ Asset naming validation failed:',
-      error instanceof Error ? error.message : String(error)
+    scriptLogger.error(
+      {
+        operation: 'completion',
+        status: 'failure',
+        error: error instanceof Error ? error.message : String(error),
+      },
+      '\n❌ Asset naming validation failed:'
     );
+
     process.exit(1);
   }
 }

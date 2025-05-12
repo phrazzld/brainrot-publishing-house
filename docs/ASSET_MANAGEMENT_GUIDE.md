@@ -109,7 +109,7 @@ async function uploadBookCover(bookSlug: string, coverImage: File) {
         createdBy: 'asset-management-tool',
         description: `Cover image for ${bookSlug}`,
       },
-    }
+    },
   });
 
   console.log(`Uploaded cover to ${result.url}`);
@@ -134,7 +134,7 @@ async function uploadChapterAudio(bookSlug: string, chapterNumber: number, audio
     content: audioFile,
     options: {
       contentType: 'audio/mpeg',
-    }
+    },
   });
 }
 
@@ -149,7 +149,7 @@ async function uploadFullAudiobook(bookSlug: string, audioFile: File) {
     content: audioFile,
     options: {
       contentType: 'audio/mpeg',
-    }
+    },
   });
 }
 ```
@@ -169,7 +169,7 @@ async function uploadBrainrotChapter(bookSlug: string, chapterNumber: number, te
     content: text,
     options: {
       contentType: 'text/plain',
-    }
+    },
   });
 }
 
@@ -184,7 +184,7 @@ async function uploadSourceText(bookSlug: string, text: string) {
     content: text,
     options: {
       contentType: 'text/plain',
-    }
+    },
   });
 }
 ```
@@ -204,7 +204,7 @@ async function uploadChapterImage(bookSlug: string, chapterNumber: number, image
     content: imageFile,
     options: {
       contentType: 'image/jpeg',
-    }
+    },
   });
 }
 ```
@@ -236,7 +236,7 @@ async function batchUploadChapterAudio(bookSlug: string, audioDir: string, chapt
       content,
       options: {
         contentType: 'audio/mpeg',
-      }
+      },
     });
 
     console.log(`Uploaded ${bookSlug} chapter ${paddedChapter}`);

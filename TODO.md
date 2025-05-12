@@ -27,7 +27,7 @@ This TODO list details the tasks required to fully migrate all asset management 
     - [x] Fix in migrateRemainingAssets.test.ts
   - Dependencies: none
 
-- [~] **T023: Refactor complex functions for maintainability**
+- [x] **T023: Refactor complex functions for maintainability**
 
   - [x] Reduce complexity of functions exceeding the limit of 10:
     - [x] verifyCdnUrls.ts: verifyUrl (complexity: 24)
@@ -46,7 +46,7 @@ This TODO list details the tasks required to fully migrate all asset management 
     - [x] utils/validators/AssetNameValidator.ts: validateTextAssetName (complexity: 12)
   - [x] Break down large files exceeding the 500 line limit:
     - [x] reorganize-blob-paths.ts (516 lines)
-    - [~] translations/index.ts (949 lines)
+    - [x] translations/index.ts (949 lines)
     - [x] app/api/download/proxyService.ts (too many lines)
   - [x] Reduce parameter count for functions with too many parameters:
     - [x] app/api/download/proxyService.ts: proxyAssetDownload (7 parameters)

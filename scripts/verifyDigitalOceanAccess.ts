@@ -23,6 +23,9 @@ import fs from 'fs/promises';
 import path from 'path';
 import { Readable } from 'stream';
 
+import { logger } from '../utils/logger';
+
+const _moduleLogger = logger.child({ module: 'verifyDigitalOceanAccess' });
 dotenv.config({ path: '.env.local' });
 
 // Constants
@@ -64,10 +67,15 @@ function createDigitalOceanClient(): S3Client {
     );
   }
 
-  console.log('Creating DigitalOcean S3 client with:');
-  console.log(`- Region: ${DO_REGION}`);
-  console.log(`- Endpoint: https://${DO_SPACES_ENDPOINT}`);
-  console.log(`- Bucket: ${DO_SPACES_BUCKET}`);
+  logger.info(
+    {
+      operation: 'create_client',
+      region: DO_REGION,
+      endpoint: `https://${DO_SPACES_ENDPOINT}`,
+      bucket: DO_SPACES_BUCKET,
+    },
+    'Creating DigitalOcean S3 client with:'
+  );
 
   return new S3Client({
     region: DO_REGION,
@@ -87,7 +95,13 @@ async function listObjects(
   prefix: string = ''
 ): Promise<{ key: string; size: number }[]> {
   try {
-    console.log(`Listing objects with prefix: ${prefix || '(root)'}`);
+    logger.info(
+      {
+        operation: 'list_objects',
+        prefix: prefix || '(root)',
+      },
+      `Listing objects with prefix: ${prefix || '(root)'}`
+    );
 
     const command = new ListObjectsV2Command({
       Bucket: DO_SPACES_BUCKET,
@@ -98,7 +112,13 @@ async function listObjects(
     const response = await client.send(command);
 
     if (!response.Contents || response.Contents.length === 0) {
-      console.log('No objects found.');
+      logger.info(
+        {
+          operation: 'list_objects_result',
+          count: 0,
+        },
+        'No objects found.'
+      );
       return [];
     }
 
@@ -107,7 +127,13 @@ async function listObjects(
       size: item.Size || 0,
     }));
   } catch (error) {
-    console.error('Error listing objects:', error);
+    logger.error(
+      {
+        operation: 'list_objects_error',
+        error: error instanceof Error ? error.message : String(error),
+      },
+      'Error listing objects:'
+    );
     throw error;
   }
 }
@@ -120,7 +146,13 @@ async function downloadObject(
   key: string
 ): Promise<{ content: Buffer; contentType: string; size: number }> {
   try {
-    console.log(`Downloading object: ${key}`);
+    logger.info(
+      {
+        operation: 'download_object',
+        key,
+      },
+      `Downloading object: ${key}`
+    );
 
     const command = new GetObjectCommand({
       Bucket: DO_SPACES_BUCKET,
@@ -152,7 +184,14 @@ async function downloadObject(
       size,
     };
   } catch (error) {
-    console.error(`Error downloading object: ${key}`, error);
+    logger.error(
+      {
+        operation: 'download_object_error',
+        key,
+        error: error instanceof Error ? error.message : String(error),
+      },
+      `Error downloading object: ${key}`
+    );
     throw error;
   }
 }
@@ -212,10 +251,24 @@ function printObjectsSummary(objects: { key: string; size: number }[]) {
   }
 
   // Print summary
-  console.log('\nObjects by type:');
+  logger.info(
+    {
+      operation: 'objects_summary',
+    },
+    'Objects by type:'
+  );
+
   for (const [ext, info] of types.entries()) {
     const sizeInMB = (info.totalSize / (1024 * 1024)).toFixed(2);
-    console.log(`- ${ext}: ${info.count} files, ${sizeInMB} MB total`);
+    logger.info(
+      {
+        operation: 'object_type',
+        extension: ext,
+        count: info.count,
+        size: `${sizeInMB} MB`,
+      },
+      `- ${ext}: ${info.count} files, ${sizeInMB} MB total`
+    );
   }
 }
 
@@ -227,26 +280,56 @@ async function main() {
   let success = false;
 
   try {
-    console.log('=== DigitalOcean Access Verification ===');
+    logger.info(
+      {
+        operation: 'start',
+      },
+      '=== DigitalOcean Access Verification ==='
+    );
 
     // Create client
     const client = createDigitalOceanClient();
-    console.log('✅ Successfully created DigitalOcean client');
+    logger.info(
+      {
+        operation: 'client_created',
+      },
+      '✅ Successfully created DigitalOcean client'
+    );
 
     // List objects
     const defaultPrefix = options.prefix || '';
     const objects = await listObjects(client, defaultPrefix);
-    console.log(`✅ Successfully listed ${objects.length} objects in the bucket`);
+    logger.info(
+      {
+        operation: 'list_complete',
+        count: objects.length,
+      },
+      `✅ Successfully listed ${objects.length} objects in the bucket`
+    );
 
     // Print summary of found objects
     printObjectsSummary(objects);
 
     // List all objects if requested
     if (options.listAll) {
-      console.log('\nAll objects:');
+      logger.info(
+        {
+          operation: 'list_all',
+        },
+        'All objects:'
+      );
+
       objects.forEach((obj, idx) => {
         const sizeInKB = (obj.size / 1024).toFixed(2);
-        console.log(`${idx + 1}. ${obj.key} (${sizeInKB} KB)`);
+        logger.info(
+          {
+            operation: 'object_detail',
+            index: idx + 1,
+            key: obj.key,
+            size: `${sizeInKB} KB`,
+          },
+          `${idx + 1}. ${obj.key} (${sizeInKB} KB)`
+        );
       });
     }
 
@@ -256,30 +339,80 @@ async function main() {
       const sampleKey = findSampleAudioFile(objects);
 
       if (!sampleKey) {
-        console.log('❌ No suitable audio files found for download test');
+        logger.warn(
+          {
+            operation: 'download_test',
+            status: 'failed',
+            reason: 'no_suitable_files',
+          },
+          '❌ No suitable audio files found for download test'
+        );
       } else {
-        console.log(`\nAttempting to download a sample file: ${sampleKey}`);
+        logger.info(
+          {
+            operation: 'download_test',
+            key: sampleKey,
+          },
+          `Attempting to download a sample file: ${sampleKey}`
+        );
 
         // Download the file
         const downloaded = await downloadObject(client, sampleKey);
-        console.log(`✅ Successfully downloaded ${downloaded.size} bytes`);
-        console.log(`- Content type: ${downloaded.contentType}`);
+        logger.info(
+          {
+            operation: 'download_complete',
+            size: downloaded.size,
+          },
+          `✅ Successfully downloaded ${downloaded.size} bytes`
+        );
+
+        logger.info(
+          {
+            operation: 'download_info',
+            contentType: downloaded.contentType,
+          },
+          `- Content type: ${downloaded.contentType}`
+        );
 
         // Save the file for verification
         const savedPath = await saveDownloadedFile(downloaded.content, sampleKey);
-        console.log(`✅ Sample file saved to: ${savedPath}`);
+        logger.info(
+          {
+            operation: 'file_saved',
+            path: savedPath,
+          },
+          `✅ Sample file saved to: ${savedPath}`
+        );
 
         // Print file info
         const sizeMB = (downloaded.size / (1024 * 1024)).toFixed(2);
-        console.log(`- File size: ${sizeMB} MB`);
+        logger.info(
+          {
+            operation: 'file_size',
+            size: `${sizeMB} MB`,
+          },
+          `- File size: ${sizeMB} MB`
+        );
       }
     }
 
-    console.log('\n✅ DigitalOcean access verification completed successfully!');
+    logger.info(
+      {
+        operation: 'completion',
+        status: 'success',
+      },
+      '✅ DigitalOcean access verification completed successfully!'
+    );
     success = true;
   } catch (error) {
-    console.error('\n❌ DigitalOcean access verification failed:');
-    console.error(error);
+    logger.error(
+      {
+        operation: 'completion',
+        status: 'failed',
+        error: error instanceof Error ? error.message : String(error),
+      },
+      '❌ DigitalOcean access verification failed:'
+    );
     success = false;
   }
 

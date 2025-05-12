@@ -7,7 +7,7 @@
  * 3. Provide clear, readable code that follows best practices
  */
 
-// Explicitly require the plugin in CJS format 
+// Explicitly require the plugin in CJS format
 const sortImports = require('@trivago/prettier-plugin-sort-imports');
 
 module.exports = {

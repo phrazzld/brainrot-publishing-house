@@ -6,9 +6,11 @@
  * correctness of path conversion for various asset types.
  */
 import { AssetType as _AssetType } from '../types/assets';
+import { logger } from '../utils/logger';
 import { AssetPathService } from '../utils/services/AssetPathService';
 
 const assetPathService = new AssetPathService();
+const scriptLogger = logger.child({ module: 'test-path-migration' });
 
 // Sample paths to test
 const testPaths = [
@@ -44,46 +46,146 @@ const testPaths = [
 ];
 
 // Test direct path generation
-console.log('\n=== Direct Path Generation ===\n');
+scriptLogger.info({ section: 'direct-path-generation' }, '=== Direct Path Generation ===');
 
-console.log('Audio Paths:');
-console.log(`Chapter 1: ${assetPathService.getAudioPath('the-iliad', 1)}`);
-console.log(`Chapter 10: ${assetPathService.getAudioPath('hamlet', 10)}`);
-console.log(`Full audiobook: ${assetPathService.getAudioPath('macbeth', 'full')}`);
+scriptLogger.info({ section: 'audio-paths' }, 'Audio Paths:');
+scriptLogger.info(
+  {
+    book: 'the-iliad',
+    chapter: 1,
+    path: assetPathService.getAudioPath('the-iliad', 1),
+  },
+  `Chapter 1: ${assetPathService.getAudioPath('the-iliad', 1)}`
+);
 
-console.log('\nBrainrot Text Paths:');
-console.log(`Chapter 2: ${assetPathService.getBrainrotTextPath('the-odyssey', 2)}`);
-console.log(`Full text: ${assetPathService.getBrainrotTextPath('othello', 'full')}`);
+scriptLogger.info(
+  {
+    book: 'hamlet',
+    chapter: 10,
+    path: assetPathService.getAudioPath('hamlet', 10),
+  },
+  `Chapter 10: ${assetPathService.getAudioPath('hamlet', 10)}`
+);
 
-console.log('\nSource Text Paths:');
-console.log(`Chapter 3: ${assetPathService.getSourceTextPath('king-lear', '3')}`);
-console.log(
+scriptLogger.info(
+  {
+    book: 'macbeth',
+    type: 'full',
+    path: assetPathService.getAudioPath('macbeth', 'full'),
+  },
+  `Full audiobook: ${assetPathService.getAudioPath('macbeth', 'full')}`
+);
+
+scriptLogger.info({ section: 'brainrot-text-paths' }, 'Brainrot Text Paths:');
+scriptLogger.info(
+  {
+    book: 'the-odyssey',
+    chapter: 2,
+    path: assetPathService.getBrainrotTextPath('the-odyssey', 2),
+  },
+  `Chapter 2: ${assetPathService.getBrainrotTextPath('the-odyssey', 2)}`
+);
+
+scriptLogger.info(
+  {
+    book: 'othello',
+    type: 'full',
+    path: assetPathService.getBrainrotTextPath('othello', 'full'),
+  },
+  `Full text: ${assetPathService.getBrainrotTextPath('othello', 'full')}`
+);
+
+scriptLogger.info({ section: 'source-text-paths' }, 'Source Text Paths:');
+scriptLogger.info(
+  {
+    book: 'king-lear',
+    chapter: '3',
+    path: assetPathService.getSourceTextPath('king-lear', '3'),
+  },
+  `Chapter 3: ${assetPathService.getSourceTextPath('king-lear', '3')}`
+);
+
+scriptLogger.info(
+  {
+    book: 'romeo-and-juliet',
+    type: 'introduction.txt',
+    path: assetPathService.getSourceTextPath('romeo-and-juliet', 'introduction.txt'),
+  },
   `Introduction: ${assetPathService.getSourceTextPath('romeo-and-juliet', 'introduction.txt')}`
 );
 
-console.log('\nBook Image Paths:');
-console.log(`Cover: ${assetPathService.getBookImagePath('hamlet', 'cover.jpg')}`);
-console.log(`Chapter image: ${assetPathService.getBookImagePath('macbeth', 'chapter-02.png')}`);
+scriptLogger.info({ section: 'book-image-paths' }, 'Book Image Paths:');
+scriptLogger.info(
+  {
+    book: 'hamlet',
+    image: 'cover.jpg',
+    path: assetPathService.getBookImagePath('hamlet', 'cover.jpg'),
+  },
+  `Cover: ${assetPathService.getBookImagePath('hamlet', 'cover.jpg')}`
+);
 
-console.log('\nShared Image Paths:');
-console.log(`Logo: ${assetPathService.getSharedImagePath('logo.png')}`);
-console.log(`Social icon: ${assetPathService.getSharedImagePath('twitter.svg', 'social')}`);
+scriptLogger.info(
+  {
+    book: 'macbeth',
+    image: 'chapter-02.png',
+    path: assetPathService.getBookImagePath('macbeth', 'chapter-02.png'),
+  },
+  `Chapter image: ${assetPathService.getBookImagePath('macbeth', 'chapter-02.png')}`
+);
 
-console.log('\nSite Asset Paths:');
-console.log(`Favicon: ${assetPathService.getSiteAssetPath('favicon.ico')}`);
-console.log(`Icon: ${assetPathService.getSiteAssetPath('download.svg', 'icons')}`);
+scriptLogger.info({ section: 'shared-image-paths' }, 'Shared Image Paths:');
+scriptLogger.info(
+  {
+    image: 'logo.png',
+    path: assetPathService.getSharedImagePath('logo.png'),
+  },
+  `Logo: ${assetPathService.getSharedImagePath('logo.png')}`
+);
+
+scriptLogger.info(
+  {
+    image: 'twitter.svg',
+    category: 'social',
+    path: assetPathService.getSharedImagePath('twitter.svg', 'social'),
+  },
+  `Social icon: ${assetPathService.getSharedImagePath('twitter.svg', 'social')}`
+);
+
+scriptLogger.info({ section: 'site-asset-paths' }, 'Site Asset Paths:');
+scriptLogger.info(
+  {
+    asset: 'favicon.ico',
+    path: assetPathService.getSiteAssetPath('favicon.ico'),
+  },
+  `Favicon: ${assetPathService.getSiteAssetPath('favicon.ico')}`
+);
+
+scriptLogger.info(
+  {
+    asset: 'download.svg',
+    category: 'icons',
+    path: assetPathService.getSiteAssetPath('download.svg', 'icons'),
+  },
+  `Icon: ${assetPathService.getSiteAssetPath('download.svg', 'icons')}`
+);
 
 // Test legacy path conversion
-console.log('\n\n=== Legacy Path Conversion ===\n');
+scriptLogger.info({ section: 'legacy-path-conversion' }, '=== Legacy Path Conversion ===');
 
-console.log('Before → After:');
+scriptLogger.info({ section: 'legacy-path-conversion' }, 'Before → After:');
 for (const path of testPaths) {
   const newPath = assetPathService.convertLegacyPath(path);
-  console.log(`${path.padEnd(45)} → ${newPath}`);
+  scriptLogger.info(
+    {
+      originalPath: path,
+      convertedPath: newPath,
+    },
+    `${path.padEnd(45)} → ${newPath}`
+  );
 }
 
 // Test book slug extraction
-console.log('\n\n=== Book Slug Extraction ===\n');
+scriptLogger.info({ section: 'book-slug-extraction' }, '=== Book Slug Extraction ===');
 
 const slugTestPaths = [
   'assets/audio/the-iliad/chapter-01.mp3',
@@ -94,14 +196,20 @@ const slugTestPaths = [
   'books/king-lear/text/brainrot/fulltext.txt',
 ];
 
-console.log('Path → Book Slug:');
+scriptLogger.info({ section: 'book-slug-extraction' }, 'Path → Book Slug:');
 for (const path of slugTestPaths) {
   const slug = assetPathService.getBookSlugFromPath(path);
-  console.log(`${path.padEnd(45)} → ${slug || 'null'}`);
+  scriptLogger.info(
+    {
+      path: path,
+      bookSlug: slug || 'null',
+    },
+    `${path.padEnd(45)} → ${slug || 'null'}`
+  );
 }
 
 // Demonstrate the full migration path for a sample asset
-console.log('\n\n=== Sample Migration Flow ===\n');
+scriptLogger.info({ section: 'sample-migration-flow' }, '=== Sample Migration Flow ===');
 
 const sampleAssets = [
   {
@@ -155,13 +263,30 @@ for (const asset of sampleAssets) {
 
 // Display the results
 for (const asset of sampleAssets) {
-  console.log(`Asset Type: ${asset.type}`);
-  console.log(`Legacy Path: ${asset.legacyPath}`);
-  console.log(`Extracted Slug: ${asset.extractedSlug}`);
-  console.log(`Converted Path: ${asset.newPath}`);
-  console.log(`Directly Generated: ${asset.directGeneration}`);
-  console.log(`Paths Match: ${asset.newPath === asset.directGeneration ? 'Yes ✓' : 'No ✗'}`);
-  console.log('');
+  scriptLogger.info(
+    {
+      section: 'sample-asset',
+      assetType: asset.type,
+      legacyPath: asset.legacyPath,
+      extractedSlug: asset.extractedSlug,
+      convertedPath: asset.newPath,
+      directlyGenerated: asset.directGeneration,
+      pathsMatch: asset.newPath === asset.directGeneration,
+    },
+    `Asset Type: ${asset.type}`
+  );
+
+  scriptLogger.info({ assetType: asset.type }, `Legacy Path: ${asset.legacyPath}`);
+  scriptLogger.info({ assetType: asset.type }, `Extracted Slug: ${asset.extractedSlug}`);
+  scriptLogger.info({ assetType: asset.type }, `Converted Path: ${asset.newPath}`);
+  scriptLogger.info({ assetType: asset.type }, `Directly Generated: ${asset.directGeneration}`);
+  scriptLogger.info(
+    {
+      assetType: asset.type,
+      pathsMatch: asset.newPath === asset.directGeneration,
+    },
+    `Paths Match: ${asset.newPath === asset.directGeneration ? 'Yes ✓' : 'No ✗'}`
+  );
 }
 
-console.log('Path migration testing complete.');
+scriptLogger.info({ section: 'completion' }, 'Path migration testing complete.');
