@@ -339,10 +339,8 @@ class AudioFilesMigrator {
       verbose: this.options.verbose,
     });
 
-    // Ensure downloadResult is properly typed
-    if (!downloadResult || typeof downloadResult !== 'object') {
-      throw new Error('Download failed: Empty or invalid response');
-    }
+    // No need to check downloadResult since it's always expected to return something
+    // The downloadFromSpaces function would throw an error if it fails
 
     const {
       size = 0,

@@ -145,8 +145,15 @@ function createMockStream(): ReadableStream {
     cancel: jest.fn().mockResolvedValue(undefined),
   };
 
-  // Create initial stream properties
-  const mockStream: Partial<ReadableStream> & Record<string, jest.Mock> = {
+  // Create initial stream properties with proper typing
+  const mockStream: Partial<ReadableStream> & {
+    getReader: jest.Mock;
+    pipeTo: jest.Mock;
+    cancel: jest.Mock;
+    pipeThrough?: jest.Mock;
+    tee?: jest.Mock;
+    locked: boolean;
+  } = {
     getReader: jest.fn().mockReturnValue(mockReader),
     pipeTo: jest.fn().mockReturnValue(Promise.resolve()),
     cancel: jest.fn().mockReturnValue(Promise.resolve()),
@@ -206,7 +213,9 @@ describe('Proxy Download Service', () => {
   });
 
   // Helper functions for test setup and assertions
-  function createDownloadConfig(overrides = {}) {
+  function createDownloadConfig(
+    overrides: { assetServiceOptions?: { shouldFail?: boolean; errorType?: AssetErrorType } } = {}
+  ) {
     const logger = createRequestLogger('test-correlation-id');
     const assetService = new MockAssetService(overrides.assetServiceOptions);
 
@@ -222,7 +231,9 @@ describe('Proxy Download Service', () => {
     };
   }
 
-  function mockSuccessfulFetch(options = {}) {
+  function mockSuccessfulFetch(
+    options: { headers?: Record<string, string>; extraProps?: Record<string, unknown> } = {}
+  ) {
     mockFetch.mockResolvedValue({
       ok: true,
       status: 200,
@@ -230,7 +241,7 @@ describe('Proxy Download Service', () => {
       headers: createMockHeaders({
         'content-type': 'audio/mpeg',
         'content-length': '1000000',
-        ...options.headers,
+        ...(options.headers || {}),
       }),
       body: createMockStream(),
       ...(options.extraProps || {}),
