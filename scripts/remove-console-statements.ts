@@ -68,13 +68,11 @@ function countConsoleStatements(): number {
     const output = execSync(cmd, { encoding: 'utf8' });
     return parseInt(output.trim(), 10);
   } catch (error) {
-    scriptLogger.error(
-      {
-        operation: 'count_statements',
-        error: error instanceof Error ? error.message : String(error),
-      },
-      'Error counting console statements:'
-    );
+    scriptLogger.error({
+      msg: 'Error counting console statements:',
+      operation: 'count_statements',
+      error: error instanceof Error ? error.message : String(error),
+    });
     return 0;
   }
 }
@@ -87,13 +85,11 @@ function findFilesWithConsoleStatements(basePath: string = '.'): string[] {
     const output = execSync(cmd, { encoding: 'utf8' });
     return output.split('\n').filter(Boolean);
   } catch (error) {
-    scriptLogger.error(
-      {
-        operation: 'find_files',
-        error: error instanceof Error ? error.message : String(error),
-      },
-      'Error finding files with console statements:'
-    );
+    scriptLogger.error({
+      msg: 'Error finding files with console statements:',
+      operation: 'find_files',
+      error: error instanceof Error ? error.message : String(error),
+    });
     return [];
   }
 }
@@ -188,8 +184,8 @@ function processFile(filePath: string, options: Options): FileEdit | null {
                   ? 'scriptLogger'
                   : 'moduleLogger'
                 : 'logger';
-              const contextObject = `{ operation: '${path.basename(filePath, path.extname(filePath))}' }`;
-              const replacement = `${indentation}${loggerName}.${loggerMethod}(${contextObject}, ${args})`;
+              const contextObject = `{ msg: ${args}, operation: '${path.basename(filePath, path.extname(filePath))}' }`;
+              const replacement = `${indentation}${loggerName}.${loggerMethod}(${contextObject})`;
 
               // Add to replacements list
               replacements.push({
@@ -270,28 +266,24 @@ function processFile(filePath: string, options: Options): FileEdit | null {
       (fileEdit.replacements.length > 0 || fileEdit.loggerImportAdded)
     ) {
       fs.writeFileSync(filePath, newContent, 'utf8');
-      scriptLogger.info(
-        {
-          operation: 'update_file',
-          filePath,
-          replacements: fileEdit.replacements.length,
-          loggerImportAdded: fileEdit.loggerImportAdded,
-          loggerInstanceAdded: fileEdit.loggerInstanceAdded,
-        },
-        `Updated ${filePath} with ${fileEdit.replacements.length} replacements`
-      );
+      scriptLogger.info({
+        msg: `Updated ${filePath} with ${fileEdit.replacements.length} replacements`,
+        operation: 'update_file',
+        filePath,
+        replacements: fileEdit.replacements.length,
+        loggerImportAdded: fileEdit.loggerImportAdded,
+        loggerInstanceAdded: fileEdit.loggerInstanceAdded,
+      });
     }
 
     return fileEdit.replacements.length > 0 ? fileEdit : null;
   } catch (error) {
-    scriptLogger.error(
-      {
-        operation: 'process_file',
-        filePath,
-        error: error instanceof Error ? error.message : String(error),
-      },
-      `Error processing file ${filePath}:`
-    );
+    scriptLogger.error({
+      msg: `Error processing file ${filePath}:`,
+      operation: 'process_file',
+      filePath,
+      error: error instanceof Error ? error.message : String(error),
+    });
     return null;
   }
 }
@@ -301,36 +293,30 @@ async function main() {
   // Parse command line options
   const options = parseArgs();
 
-  scriptLogger.info(
-    {
-      operation: 'start',
-      options,
-    },
-    `Starting console statement replacement with options: ${JSON.stringify(options)}`
-  );
+  scriptLogger.info({
+    msg: `Starting console statement replacement with options: ${JSON.stringify(options)}`,
+    operation: 'start',
+    options,
+  });
 
   // Define the base path for processing
   const basePath = options.path || '.';
 
   // Count console statements before processing
   const initialCount = countConsoleStatements();
-  scriptLogger.info(
-    {
-      operation: 'count_initial',
-      count: initialCount,
-    },
-    `Found ${initialCount} console statements in the codebase.`
-  );
+  scriptLogger.info({
+    msg: `Found ${initialCount} console statements in the codebase.`,
+    operation: 'count_initial',
+    count: initialCount,
+  });
 
   // Find files with console statements
   const files = findFilesWithConsoleStatements(basePath);
-  scriptLogger.info(
-    {
-      operation: 'found_files',
-      count: files.length,
-    },
-    `Found ${files.length} files with console statements.`
-  );
+  scriptLogger.info({
+    msg: `Found ${files.length} files with console statements.`,
+    operation: 'found_files',
+    count: files.length,
+  });
 
   // Process each file
   let _modifiedCount = 0;
@@ -343,30 +329,26 @@ async function main() {
       edits.push(fileEdit);
 
       if (options.verbose) {
-        scriptLogger.debug(
-          {
-            operation: 'file_details',
-            filePath: file,
-            replacements: fileEdit.replacements.length,
-            loggerImportAdded: fileEdit.loggerImportAdded,
-            loggerInstanceAdded: fileEdit.loggerInstanceAdded,
-          },
-          `File ${file}: ${fileEdit.replacements.length} replacements found`
-        );
+        scriptLogger.debug({
+          msg: `File ${file}: ${fileEdit.replacements.length} replacements found`,
+          operation: 'file_details',
+          filePath: file,
+          replacements: fileEdit.replacements.length,
+          loggerImportAdded: fileEdit.loggerImportAdded,
+          loggerInstanceAdded: fileEdit.loggerInstanceAdded,
+        });
 
         // Log detailed replacements if requested
         if (options.verbose) {
           for (const replacement of fileEdit.replacements) {
-            scriptLogger.debug(
-              {
-                operation: 'replacement_detail',
-                filePath: file,
-                line: replacement.line,
-                original: replacement.original.trim(),
-                replacement: replacement.replacement.trim(),
-              },
-              `Line ${replacement.line}: ${replacement.original.trim()} -> ${replacement.replacement.trim()}`
-            );
+            scriptLogger.debug({
+              msg: `Line ${replacement.line}: ${replacement.original.trim()} -> ${replacement.replacement.trim()}`,
+              operation: 'replacement_detail',
+              filePath: file,
+              line: replacement.line,
+              original: replacement.original.trim(),
+              replacement: replacement.replacement.trim(),
+            });
           }
         }
       }
@@ -399,57 +381,47 @@ Summary:
 - ${finalCount} console statements remain (may require manual intervention or more advanced patterns)
 `;
 
-  scriptLogger.info(
-    {
-      operation: 'summary',
-      replacedStatements: removedCount,
-      modifiedFiles: edits.length,
-      remainingStatements: finalCount,
-      mode: options.fix && !options.dryRun ? 'applied' : 'reported',
-    },
-    summary
-  );
+  scriptLogger.info({
+    msg: summary,
+    operation: 'summary',
+    replacedStatements: removedCount,
+    modifiedFiles: edits.length,
+    remainingStatements: finalCount,
+    mode: options.fix && !options.dryRun ? 'applied' : 'reported',
+  });
 
   // If statements remain, list the files
   if (finalCount > 0 && options.verbose) {
-    scriptLogger.debug(
-      {
-        operation: 'remaining_files',
-      },
-      'Files with remaining console statements:'
-    );
+    scriptLogger.debug({
+      msg: 'Files with remaining console statements:',
+      operation: 'remaining_files',
+    });
 
     const remainingFiles = findFilesWithConsoleStatements(basePath);
     for (const file of remainingFiles) {
-      scriptLogger.debug(
-        {
-          operation: 'remaining_file',
-          filePath: file,
-        },
-        `- ${file}`
-      );
+      scriptLogger.debug({
+        msg: `- ${file}`,
+        operation: 'remaining_file',
+        filePath: file,
+      });
     }
   }
 
   // Add usage hint if just reporting
   if (!options.fix) {
-    scriptLogger.info(
-      {
-        operation: 'usage_hint',
-      },
-      'Run with --fix to apply the changes. Add --dry-run to see what would change without modifying files.'
-    );
+    scriptLogger.info({
+      msg: 'Run with --fix to apply the changes. Add --dry-run to see what would change without modifying files.',
+      operation: 'usage_hint',
+    });
   }
 }
 
 // Run the script
 main().catch((error) => {
-  scriptLogger.error(
-    {
-      operation: 'fatal_error',
-      error: error instanceof Error ? error.message : String(error),
-    },
-    'Error running script:'
-  );
+  scriptLogger.error({
+    msg: 'Error running script:',
+    operation: 'fatal_error',
+    error: error instanceof Error ? error.message : String(error),
+  });
   process.exit(1);
 });

@@ -698,16 +698,19 @@ export class VercelBlobAssetService implements AssetService {
       });
 
       // Transform results to match AssetListResult
-      // TypeScript definition for ListBlobResultBlob doesn't include contentType and might have different property names
+      // Import ListBlobResult from @vercel/blob doesn't include contentType in its type definition
       const assets: AssetInfo[] = result.blobs.map((blob) => {
-        // Use type assertion with specific interface instead of any
-        const blobWithContentType = blob as {
+        // Define explicit interface for blob from Vercel Blob service
+        interface VercelBlobItem {
           pathname: string;
           url: string;
           size: number;
           uploadedAt: string;
           contentType?: string;
-        };
+        }
+
+        // Convert to unknown first, then to our interface to avoid direct type conversion errors
+        const blobWithContentType = blob as unknown as VercelBlobItem;
 
         return {
           name: blob.pathname.split('/').pop() || '',

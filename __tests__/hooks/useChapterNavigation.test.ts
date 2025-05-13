@@ -141,7 +141,7 @@ describe('useChapterNavigation', () => {
     expect(router.replace).toHaveBeenCalledWith('/reading-room/test-book?c=0&t=10');
 
     // Reset mock to check next call
-    router.replace.mockClear();
+    jest.mocked(router.replace).mockClear();
 
     // Try another timestamp update immediately - should be throttled
     act(() => {
@@ -178,7 +178,7 @@ describe('useChapterNavigation', () => {
       actions.updateTimestamp(10);
     });
 
-    router.replace.mockClear();
+    jest.mocked(router.replace).mockClear();
 
     // Try to update timestamp again - should be throttled
     act(() => {

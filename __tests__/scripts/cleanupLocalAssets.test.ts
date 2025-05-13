@@ -1,8 +1,13 @@
-import { jest } from '@jest/globals';
-import fs from 'fs';
-import path from 'path';
+// Use namespaced imports to avoid redeclaration conflicts
+import * as _fs from 'fs';
+import * as _path from 'path';
 
-import * as utils from '../../utils';
+import * as _utils from '../../utils';
+
+// Then use CommonJS require but assign to different variable names
+const fs = require('fs');
+const path = require('path');
+const utils = require('../../utils');
 
 // Use jest.requireActual to import our mock instead of the actual module
 // This avoids ESM-related issues with import.meta
@@ -34,7 +39,7 @@ describe('cleanupLocalAssets', () => {
     jest.clearAllMocks();
 
     // Mock utils.assetExistsInBlobStorage
-    (utils.assetExistsInBlobStorage as jest.Mock).mockImplementation(async (path: string) => {
+    jest.mocked(utils.assetExistsInBlobStorage).mockImplementation(async (path: string) => {
       // Return true for cover and text, false for audio to test both scenarios
       if (path.includes('audio')) {
         return false;
@@ -43,13 +48,13 @@ describe('cleanupLocalAssets', () => {
     });
 
     // Mock fs functions
-    (fs.existsSync as jest.Mock).mockReturnValue(true);
-    (fs.unlinkSync as jest.Mock).mockReturnValue(undefined);
-    (fs.mkdirSync as jest.Mock).mockReturnValue(undefined);
-    (fs.writeFileSync as jest.Mock).mockReturnValue(undefined);
+    jest.mocked(fs.existsSync).mockReturnValue(true);
+    jest.mocked(fs.unlinkSync).mockReturnValue(undefined);
+    jest.mocked(fs.mkdirSync).mockReturnValue(undefined);
+    jest.mocked(fs.writeFileSync).mockReturnValue(undefined);
 
     // Mock path functions
-    (path.join as jest.Mock).mockImplementation((...parts) => parts.join('/'));
+    jest.mocked(path.join).mockImplementation((...parts: string[]) => parts.join('/'));
   });
 
   it('should run in dry-run mode without deleting files', async () => {
@@ -77,6 +82,10 @@ describe('cleanupLocalAssets', () => {
     const report = await cleanupLocalAssets(false);
 
     // Check that the audio file (which doesn't exist in Blob) wasn't deleted
-    expect(report.bookResults[0].results.find((r) => r.type === 'audio')?.wasDeleted).toBe(false);
+    expect(
+      report.bookResults[0].results.find(
+        (r: { type: string; wasDeleted: boolean }) => r.type === 'audio'
+      )?.wasDeleted
+    ).toBe(false);
   });
 });

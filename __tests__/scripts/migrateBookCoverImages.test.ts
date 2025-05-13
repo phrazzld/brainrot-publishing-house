@@ -1,12 +1,14 @@
-import { beforeEach, describe, expect, it, jest } from '@jest/globals';
-import fs from 'fs/promises';
-import path from 'path';
-
-// Unused import: import { fileURLToPath } from 'url';
-
-import translations from '../../translations';
+// Import with proper typing
 import { BlobPathService } from '../../utils/services/BlobPathService';
 import { BlobService } from '../../utils/services/BlobService';
+
+// Use CommonJS require for compatibility with Jest
+// Explicitly type the requires to avoid TS errors
+const fs = require('fs/promises') as typeof import('fs/promises');
+const path = require('path') as typeof import('path');
+
+// Import local modules
+const translations = require('../../translations').default;
 
 // Mock the BlobService
 jest.mock('../../utils/services/BlobService', () => {
@@ -122,24 +124,25 @@ class CoverImageMigrationService {
   private migrationLog: MigrationLog;
 
   constructor(
-    private readonly blobService: BlobService,
-    private readonly blobPathService: BlobPathService,
+    private readonly blobService: unknown, // Use unknown for the mock service to avoid TypeScript issues
+    private readonly blobPathService: unknown, // Use unknown for the mock service to avoid TypeScript issues
     logFile: string = 'cover-images-migration.json'
   ) {
     this.migrationLog = new MigrationLog(logFile);
   }
 
   // Mock file creation for testing
-  private createMockFile(filePath: string): File {
-    return new File(['mock file content'], path.basename(filePath), {
-      type: 'image/png',
-    });
+  private createMockFile(_filePath: string): Blob {
+    // Create a mock blob for testing purposes
+    const buffer = Buffer.from('mock file content');
+    // Use type assertion to convert Buffer to Blob for test purposes
+    return buffer as unknown as Blob;
   }
 
   /**
    * Creates a dry run result for a book without actually uploading anything
    */
-  private createDryRunResult(book: (typeof translations)[0]): BookMigrationResult {
+  private createDryRunResult(book: { slug: string; coverImage: string }): BookMigrationResult {
     const originalPath = book.coverImage;
     const blobPath = this.blobPathService.convertLegacyPath(originalPath);
     const blobUrl = this.blobService.getUrlForPath(blobPath);
@@ -156,7 +159,7 @@ class CoverImageMigrationService {
    * Handles a migration failure by creating a failure result
    */
   private handleMigrationFailure(
-    book: (typeof translations)[0],
+    book: { slug: string; coverImage: string },
     error: unknown
   ): BookMigrationResult {
     const errorMessage = error instanceof Error ? error.message : String(error);
@@ -196,7 +199,7 @@ class CoverImageMigrationService {
    * Process a single book migration
    */
   private async processBookMigration(
-    book: (typeof translations)[0],
+    book: { slug: string; coverImage: string },
     options: MigrationOptions,
     result: MigrationResult
   ): Promise<void> {
@@ -250,7 +253,8 @@ class CoverImageMigrationService {
 
     // Get books with cover images
     const books = translations.filter(
-      (book) => book.coverImage && (!options.books || options.books.includes(book.slug))
+      (book: { slug: string; coverImage?: string }) =>
+        book.coverImage && (!options.books || options.books.includes(book.slug))
     );
 
     result.total = books.length;
@@ -268,7 +272,10 @@ class CoverImageMigrationService {
     return result;
   }
 
-  private async migrateBookCover(book: (typeof translations)[0]): Promise<BookMigrationResult> {
+  private async migrateBookCover(book: {
+    slug: string;
+    coverImage: string;
+  }): Promise<BookMigrationResult> {
     const originalPath = book.coverImage;
     const blobPath = this.blobPathService.convertLegacyPath(originalPath);
 
@@ -331,7 +338,7 @@ describe('CoverImageMigrationService', () => {
   });
 
   it('should list all cover images in translations', () => {
-    const booksWithCovers = translations.filter((book) => book.coverImage);
+    const booksWithCovers = translations.filter((book: { coverImage?: string }) => book.coverImage);
     expect(booksWithCovers.length).toBeGreaterThan(0);
   });
 
@@ -360,7 +367,9 @@ describe('CoverImageMigrationService', () => {
     expect(result.failed).toBe(0);
 
     // Check each book has a successful result
-    for (const book of translations.filter((b) => b.coverImage)) {
+    for (const book of translations.filter(
+      (b: { slug: string; coverImage?: string }) => b.coverImage
+    )) {
       expect(result.books[book.slug]).toBeDefined();
       expect(result.books[book.slug].status).toBe('success');
       expect(result.books[book.slug].blobPath).toBeDefined();
@@ -393,14 +402,16 @@ describe('CoverImageMigrationService', () => {
   });
 
   it('should handle errors during migration', async () => {
-    // Mock an error
-    jest
-      .spyOn(BlobService.prototype, 'uploadFile')
-      .mockRejectedValueOnce(new Error('Upload failed'));
+    // Override the uploadFile method for this test only
+    const originalUploadFile = BlobService.prototype.uploadFile;
+    BlobService.prototype.uploadFile = jest.fn().mockRejectedValueOnce(new Error('Upload failed'));
 
     const result = await migrationService.migrateAll({
       books: [translations[0].slug],
     });
+
+    // Restore the original method after the test
+    BlobService.prototype.uploadFile = originalUploadFile;
 
     expect(result.total).toBe(1);
     expect(result.failed).toBe(1);

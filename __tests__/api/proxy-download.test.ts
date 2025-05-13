@@ -18,12 +18,24 @@ jest.mock('@/utils/logger', () => ({
     info: jest.fn(),
     warn: jest.fn(),
     error: jest.fn(),
+    child: jest.fn().mockReturnValue({
+      debug: jest.fn(),
+      info: jest.fn(),
+      warn: jest.fn(),
+      error: jest.fn(),
+    }),
   })),
   logger: {
     debug: jest.fn(),
     info: jest.fn(),
     warn: jest.fn(),
     error: jest.fn(),
+    child: jest.fn().mockReturnValue({
+      debug: jest.fn(),
+      info: jest.fn(),
+      warn: jest.fn(),
+      error: jest.fn(),
+    }),
   },
 }));
 
@@ -43,9 +55,25 @@ const mockFetch = jest.fn();
 global.fetch = mockFetch;
 
 // Mock AbortController
-global.AbortController = class {
-  abort = jest.fn();
-  signal = {};
+global.AbortController = class MockAbortController {
+  signal: AbortSignal = {
+    aborted: false,
+    reason: undefined,
+    onabort: null,
+    throwIfAborted: jest.fn(),
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+    dispatchEvent: jest.fn().mockReturnValue(true),
+  } as unknown as AbortSignal;
+
+  abort = jest.fn(() => {
+    // Use type assertion with a more specific type
+    (this.signal as unknown as { aborted: boolean }).aborted = true;
+    (this.signal as unknown as { reason: Error }).reason = new DOMException(
+      'The operation was aborted',
+      'AbortError'
+    );
+  });
 } as unknown as typeof AbortController;
 
 // Mock setTimeout
@@ -59,16 +87,45 @@ jest.spyOn(global, 'clearTimeout').mockImplementation(() => {});
 
 // Mock NextResponse
 jest.mock('next/server', () => {
-  const mockNextResponse = jest.fn().mockImplementation((body, init) => ({
+  // Create a properly typed NextResponse mock
+  const mockNextResponse: {
+    (body: ReadableStream | null, init?: ResponseInit): Response;
+    json: (data: unknown, init?: ResponseInit) => Response;
+  } = jest.fn().mockImplementation((body: ReadableStream | null, init?: ResponseInit) => ({
     status: init?.status || 200,
+    statusText: init?.statusText || 'OK',
     headers: init?.headers || {},
     body,
+    ok: (init?.status || 200) >= 200 && (init?.status || 200) < 300,
+    type: 'basic',
+    url: '',
+    redirected: false,
+    bodyUsed: false,
+    clone: jest.fn().mockReturnThis(),
+    json: jest.fn().mockResolvedValue({}),
+    text: jest.fn().mockResolvedValue(''),
+    arrayBuffer: jest.fn().mockResolvedValue(new ArrayBuffer(0)),
+    blob: jest.fn().mockResolvedValue(new Blob()),
+    formData: jest.fn().mockResolvedValue(new FormData()),
   }));
 
-  mockNextResponse.json = jest.fn().mockImplementation((data, options) => ({
+  // Add static json method properly typed
+  mockNextResponse.json = jest.fn().mockImplementation((data: unknown, options?: ResponseInit) => ({
     status: options?.status || 200,
-    json: async () => data,
+    statusText: options?.statusText || 'OK',
     headers: options?.headers || {},
+    json: async () => data,
+    text: jest.fn().mockResolvedValue(JSON.stringify(data)),
+    ok: (options?.status || 200) >= 200 && (options?.status || 200) < 300,
+    body: null,
+    type: 'basic',
+    url: '',
+    redirected: false,
+    bodyUsed: false,
+    clone: jest.fn().mockReturnThis(),
+    arrayBuffer: jest.fn().mockResolvedValue(new ArrayBuffer(0)),
+    blob: jest.fn().mockResolvedValue(new Blob()),
+    formData: jest.fn().mockResolvedValue(new FormData()),
   }));
 
   return { NextResponse: mockNextResponse };
@@ -85,17 +142,31 @@ function createMockHeaders(headersObj: Record<string, string> = {}): Headers {
 
 // Helper to create mock readable stream
 function createMockStream(): ReadableStream {
-  // Mock a ReadableStream for Node.js test environment
-  return {
+  // Properly type the ReadableStream mock with required methods and properties
+  const mockStream: Partial<ReadableStream> & {
+    getReader: jest.Mock;
+    pipeTo: jest.Mock;
+    cancel: jest.Mock;
+    pipeThrough?: jest.Mock;
+    tee?: jest.Mock;
+  } = {
     getReader: jest.fn().mockReturnValue({
       read: jest.fn().mockResolvedValue({ done: true, value: undefined }),
       releaseLock: jest.fn(),
+      closed: Promise.resolve(undefined),
+      cancel: jest.fn().mockResolvedValue(undefined),
     }),
-    pipeTo: jest.fn(),
-    pipeThrough: jest.fn(),
-    cancel: jest.fn(),
+    pipeTo: jest.fn().mockReturnValue(Promise.resolve()),
+    cancel: jest.fn().mockReturnValue(Promise.resolve()),
     locked: false,
-  } as unknown as ReadableStream;
+  };
+
+  // Add methods that reference the mockStream itself (avoiding circular reference issues)
+  mockStream.pipeThrough = jest.fn().mockReturnValue(mockStream);
+  mockStream.tee = jest.fn().mockReturnValue([mockStream, mockStream]);
+
+  // Use type assertion to cast the mock to ReadableStream
+  return mockStream as unknown as ReadableStream;
 }
 
 // Mock AssetService implementation
@@ -303,11 +374,13 @@ describe('Proxy Download Service', () => {
 
       // Override the NextResponse mock for this specific test
       const mockNextResponse = require('next/server').NextResponse;
-      mockNextResponse.mockImplementationOnce((body, init) => ({
-        status: init?.status || 200,
-        headers: init?.headers || {},
-        body,
-      }));
+      mockNextResponse.mockImplementationOnce(
+        (body: ReadableStream | null, init: ResponseInit) => ({
+          status: init?.status || 200,
+          headers: init?.headers || {},
+          body,
+        })
+      );
 
       // Mock fetch to return a valid response with specific content type
       mockFetch.mockResolvedValue({

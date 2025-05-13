@@ -136,7 +136,8 @@ describe('Reading Room with Blob Storage', () => {
   });
 
   it('should change chapter when chapter index changes', async () => {
-    let rerenderFn;
+    // Define the rerender function with proper type
+    let rerenderFn: (ui: React.ReactElement) => void;
 
     await act(async () => {
       const { rerender } = render(<ReadingRoom />);
@@ -206,7 +207,8 @@ describe('Reading Room with Blob Storage', () => {
   });
 
   it('should handle changing to a chapter with audio', async () => {
-    let rerenderFn;
+    // Define the rerender function with proper type
+    let rerenderFn: (ui: React.ReactElement) => void;
 
     // Start with chapter 1 (has audio)
     await act(async () => {

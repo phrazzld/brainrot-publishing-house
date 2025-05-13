@@ -188,13 +188,11 @@ function normalizeBlobPath(path: string, baseUrl?: string): string {
     baseUrl !== 'https://public.blob.vercel-storage.com'
   ) {
     const normalizedPath = path.replace('https://public.blob.vercel-storage.com/', baseUrl + '/');
-    moduleLogger.info(
-      {
-        originalPath: path,
-        normalizedPath,
-      },
-      `Normalized URL from ${path} to ${normalizedPath}`
-    );
+    moduleLogger.info({
+      msg: `Normalized URL from ${path} to ${normalizedPath}`,
+      originalPath: path,
+      normalizedPath,
+    });
     return normalizedPath;
   }
 
@@ -241,22 +239,33 @@ async function checkAssetExistence(
     : blobService.getUrlForPath(blobPath, { baseUrl, noCache: true });
 
   // Log checking process
-  moduleLogger.info(
-    { operation: 'check_asset', normalizedPath: path },
-    `Checking if asset exists: ${path}`
-  );
-  moduleLogger.info({ operation: 'check_asset', blobPath }, `Blob path: ${blobPath}`);
-  moduleLogger.info({ operation: 'check_asset', urlToCheck }, `Full URL: ${urlToCheck}`);
+  moduleLogger.info({
+    msg: `Checking if asset exists: ${path}`,
+    operation: 'check_asset',
+    normalizedPath: path,
+  });
+  moduleLogger.info({
+    msg: `Blob path: ${blobPath}`,
+    operation: 'check_asset',
+    blobPath,
+  });
+  moduleLogger.info({
+    msg: `Full URL: ${urlToCheck}`,
+    operation: 'check_asset',
+    urlToCheck,
+  });
 
   // Get file info and determine existence
   const fileInfo = await blobService.getFileInfo(urlToCheck);
   const exists = fileInfo.size > 0;
 
   // Log result
-  moduleLogger.info(
-    { operation: 'check_asset_result', exists, size: fileInfo.size },
-    `Asset exists: ${exists}, size: ${fileInfo.size}`
-  );
+  moduleLogger.info({
+    msg: `Asset exists: ${exists}, size: ${fileInfo.size}`,
+    operation: 'check_asset_result',
+    exists,
+    size: fileInfo.size,
+  });
 
   return exists;
 }
@@ -303,14 +312,12 @@ export async function assetExistsInBlobStorage(
 
     return exists;
   } catch (error) {
-    moduleLogger.error(
-      {
-        operation: 'check_asset_error',
-        legacyPath,
-        error: error instanceof Error ? error.message : String(error),
-      },
-      `Error checking asset: ${legacyPath}`
-    );
+    moduleLogger.error({
+      msg: `Error checking asset: ${legacyPath}`,
+      operation: 'check_asset_error',
+      legacyPath,
+      error: error instanceof Error ? error.message : String(error),
+    });
 
     cacheExistenceResult(legacyPath, false, useCache);
     return false;
@@ -341,25 +348,21 @@ export async function getAssetUrlWithFallback(
       return getBlobUrl(legacyPath, options);
     } else {
       // If it doesn't exist in Blob, use the local path
-      moduleLogger.info(
-        {
-          operation: 'asset_fallback',
-          legacyPath,
-        },
-        `Asset not found in Blob storage, using local path: ${legacyPath}`
-      );
+      moduleLogger.info({
+        msg: `Asset not found in Blob storage, using local path: ${legacyPath}`,
+        operation: 'asset_fallback',
+        legacyPath,
+      });
       return legacyPath;
     }
   } catch (error) {
     // On any error, fall back to the local path for safety
-    moduleLogger.warn(
-      {
-        operation: 'blob_storage_error',
-        legacyPath,
-        error: error instanceof Error ? error.message : String(error),
-      },
-      `Error checking Blob storage, falling back to local path: ${legacyPath}`
-    );
+    moduleLogger.warn({
+      msg: `Error checking Blob storage, falling back to local path: ${legacyPath}`,
+      operation: 'blob_storage_error',
+      legacyPath,
+      error: error instanceof Error ? error.message : String(error),
+    });
     return legacyPath;
   }
 }
@@ -389,51 +392,43 @@ export async function fetchTextWithFallback(
       baseUrl !== 'https://public.blob.vercel-storage.com'
     ) {
       normalizedPath = legacyPath.replace('https://public.blob.vercel-storage.com/', baseUrl + '/');
-      moduleLogger.info(
-        {
-          operation: 'normalize_text_url',
-          originalPath: legacyPath,
-          normalizedPath,
-        },
-        `Normalized text URL from ${legacyPath} to ${normalizedPath}`
-      );
+      moduleLogger.info({
+        msg: `Normalized text URL from ${legacyPath} to ${normalizedPath}`,
+        operation: 'normalize_text_url',
+        originalPath: legacyPath,
+        normalizedPath,
+      });
     }
 
     // First try Blob storage with the normalized URL
     try {
       // If it's already a full URL after normalization, use it directly
       if (normalizedPath.startsWith('http')) {
-        moduleLogger.info(
-          {
-            operation: 'fetch_text',
-            source: 'normalized_url',
-            url: normalizedPath,
-          },
-          `Fetching text from normalized URL: ${normalizedPath}`
-        );
+        moduleLogger.info({
+          msg: `Fetching text from normalized URL: ${normalizedPath}`,
+          operation: 'fetch_text',
+          source: 'normalized_url',
+          url: normalizedPath,
+        });
         return await blobService.fetchText(normalizedPath);
       } else {
         // Otherwise generate a Blob URL
         const blobUrl = getBlobUrl(normalizedPath, options);
-        moduleLogger.info(
-          {
-            operation: 'fetch_text',
-            source: 'blob_url',
-            url: blobUrl,
-          },
-          `Fetching text from generated URL: ${blobUrl}`
-        );
+        moduleLogger.info({
+          msg: `Fetching text from generated URL: ${blobUrl}`,
+          operation: 'fetch_text',
+          source: 'blob_url',
+          url: blobUrl,
+        });
         return await blobService.fetchText(blobUrl);
       }
     } catch (blobError) {
-      moduleLogger.warn(
-        {
-          operation: 'fetch_text_fallback',
-          legacyPath,
-          error: blobError instanceof Error ? blobError.message : String(blobError),
-        },
-        `Failed to fetch from Blob, trying local path: ${legacyPath}`
-      );
+      moduleLogger.warn({
+        msg: `Failed to fetch from Blob, trying local path: ${legacyPath}`,
+        operation: 'fetch_text_fallback',
+        legacyPath,
+        error: blobError instanceof Error ? blobError.message : String(blobError),
+      });
 
       // If Blob fetch fails, try the local path
       const response = await fetch(legacyPath);
@@ -443,14 +438,12 @@ export async function fetchTextWithFallback(
       return await response.text();
     }
   } catch (error) {
-    moduleLogger.error(
-      {
-        operation: 'fetch_text_failed',
-        legacyPath,
-        error: error instanceof Error ? error.message : String(error),
-      },
-      `All fetch attempts failed for: ${legacyPath}`
-    );
+    moduleLogger.error({
+      msg: `All fetch attempts failed for: ${legacyPath}`,
+      operation: 'fetch_text_failed',
+      legacyPath,
+      error: error instanceof Error ? error.message : String(error),
+    });
 
     throw new Error(
       `Failed to fetch text: ${error instanceof Error ? error.message : String(error)}`

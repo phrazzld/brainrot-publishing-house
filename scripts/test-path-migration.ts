@@ -46,146 +46,118 @@ const testPaths = [
 ];
 
 // Test direct path generation
-scriptLogger.info({ section: 'direct-path-generation' }, '=== Direct Path Generation ===');
+scriptLogger.info({ msg: '=== Direct Path Generation ===', section: 'direct-path-generation' });
 
-scriptLogger.info({ section: 'audio-paths' }, 'Audio Paths:');
-scriptLogger.info(
-  {
-    book: 'the-iliad',
-    chapter: 1,
-    path: assetPathService.getAudioPath('the-iliad', 1),
-  },
-  `Chapter 1: ${assetPathService.getAudioPath('the-iliad', 1)}`
-);
+scriptLogger.info({ msg: 'Audio Paths:', section: 'audio-paths' });
+scriptLogger.info({
+  msg: `Chapter 1: ${assetPathService.getAudioPath('the-iliad', 1)}`,
+  book: 'the-iliad',
+  chapter: 1,
+  path: assetPathService.getAudioPath('the-iliad', 1),
+});
 
-scriptLogger.info(
-  {
-    book: 'hamlet',
-    chapter: 10,
-    path: assetPathService.getAudioPath('hamlet', 10),
-  },
-  `Chapter 10: ${assetPathService.getAudioPath('hamlet', 10)}`
-);
+scriptLogger.info({
+  msg: `Chapter 10: ${assetPathService.getAudioPath('hamlet', 10)}`,
+  book: 'hamlet',
+  chapter: 10,
+  path: assetPathService.getAudioPath('hamlet', 10),
+});
 
-scriptLogger.info(
-  {
-    book: 'macbeth',
-    type: 'full',
-    path: assetPathService.getAudioPath('macbeth', 'full'),
-  },
-  `Full audiobook: ${assetPathService.getAudioPath('macbeth', 'full')}`
-);
+scriptLogger.info({
+  msg: `Full audiobook: ${assetPathService.getAudioPath('macbeth', 'full')}`,
+  book: 'macbeth',
+  type: 'full',
+  path: assetPathService.getAudioPath('macbeth', 'full'),
+});
 
-scriptLogger.info({ section: 'brainrot-text-paths' }, 'Brainrot Text Paths:');
-scriptLogger.info(
-  {
-    book: 'the-odyssey',
-    chapter: 2,
-    path: assetPathService.getBrainrotTextPath('the-odyssey', 2),
-  },
-  `Chapter 2: ${assetPathService.getBrainrotTextPath('the-odyssey', 2)}`
-);
+scriptLogger.info({ msg: 'Brainrot Text Paths:', section: 'brainrot-text-paths' });
+scriptLogger.info({
+  msg: `Chapter 2: ${assetPathService.getBrainrotTextPath('the-odyssey', 2)}`,
+  book: 'the-odyssey',
+  chapter: 2,
+  path: assetPathService.getBrainrotTextPath('the-odyssey', 2),
+});
 
-scriptLogger.info(
-  {
-    book: 'othello',
-    type: 'full',
-    path: assetPathService.getBrainrotTextPath('othello', 'full'),
-  },
-  `Full text: ${assetPathService.getBrainrotTextPath('othello', 'full')}`
-);
+scriptLogger.info({
+  msg: `Full text: ${assetPathService.getBrainrotTextPath('othello', 'full')}`,
+  book: 'othello',
+  type: 'full',
+  path: assetPathService.getBrainrotTextPath('othello', 'full'),
+});
 
-scriptLogger.info({ section: 'source-text-paths' }, 'Source Text Paths:');
-scriptLogger.info(
-  {
-    book: 'king-lear',
-    chapter: '3',
-    path: assetPathService.getSourceTextPath('king-lear', '3'),
-  },
-  `Chapter 3: ${assetPathService.getSourceTextPath('king-lear', '3')}`
-);
+scriptLogger.info({ msg: 'Source Text Paths:', section: 'source-text-paths' });
+scriptLogger.info({
+  msg: `Chapter 3: ${assetPathService.getSourceTextPath('king-lear', '3')}`,
+  book: 'king-lear',
+  chapter: '3',
+  path: assetPathService.getSourceTextPath('king-lear', '3'),
+});
 
-scriptLogger.info(
-  {
-    book: 'romeo-and-juliet',
-    type: 'introduction.txt',
-    path: assetPathService.getSourceTextPath('romeo-and-juliet', 'introduction.txt'),
-  },
-  `Introduction: ${assetPathService.getSourceTextPath('romeo-and-juliet', 'introduction.txt')}`
-);
+scriptLogger.info({
+  msg: `Introduction: ${assetPathService.getSourceTextPath('romeo-and-juliet', 'introduction.txt')}`,
+  book: 'romeo-and-juliet',
+  type: 'introduction.txt',
+  path: assetPathService.getSourceTextPath('romeo-and-juliet', 'introduction.txt'),
+});
 
-scriptLogger.info({ section: 'book-image-paths' }, 'Book Image Paths:');
-scriptLogger.info(
-  {
-    book: 'hamlet',
-    image: 'cover.jpg',
-    path: assetPathService.getBookImagePath('hamlet', 'cover.jpg'),
-  },
-  `Cover: ${assetPathService.getBookImagePath('hamlet', 'cover.jpg')}`
-);
+scriptLogger.info({ msg: 'Book Image Paths:', section: 'book-image-paths' });
+scriptLogger.info({
+  msg: `Cover: ${assetPathService.getBookImagePath('hamlet', 'cover.jpg')}`,
+  book: 'hamlet',
+  image: 'cover.jpg',
+  path: assetPathService.getBookImagePath('hamlet', 'cover.jpg'),
+});
 
-scriptLogger.info(
-  {
-    book: 'macbeth',
-    image: 'chapter-02.png',
-    path: assetPathService.getBookImagePath('macbeth', 'chapter-02.png'),
-  },
-  `Chapter image: ${assetPathService.getBookImagePath('macbeth', 'chapter-02.png')}`
-);
+scriptLogger.info({
+  msg: `Chapter image: ${assetPathService.getBookImagePath('macbeth', 'chapter-02.png')}`,
+  book: 'macbeth',
+  image: 'chapter-02.png',
+  path: assetPathService.getBookImagePath('macbeth', 'chapter-02.png'),
+});
 
-scriptLogger.info({ section: 'shared-image-paths' }, 'Shared Image Paths:');
-scriptLogger.info(
-  {
-    image: 'logo.png',
-    path: assetPathService.getSharedImagePath('logo.png'),
-  },
-  `Logo: ${assetPathService.getSharedImagePath('logo.png')}`
-);
+scriptLogger.info({ msg: 'Shared Image Paths:', section: 'shared-image-paths' });
+scriptLogger.info({
+  msg: `Logo: ${assetPathService.getSharedImagePath('logo.png')}`,
+  image: 'logo.png',
+  path: assetPathService.getSharedImagePath('logo.png'),
+});
 
-scriptLogger.info(
-  {
-    image: 'twitter.svg',
-    category: 'social',
-    path: assetPathService.getSharedImagePath('twitter.svg', 'social'),
-  },
-  `Social icon: ${assetPathService.getSharedImagePath('twitter.svg', 'social')}`
-);
+scriptLogger.info({
+  msg: `Social icon: ${assetPathService.getSharedImagePath('twitter.svg', 'social')}`,
+  image: 'twitter.svg',
+  category: 'social',
+  path: assetPathService.getSharedImagePath('twitter.svg', 'social'),
+});
 
-scriptLogger.info({ section: 'site-asset-paths' }, 'Site Asset Paths:');
-scriptLogger.info(
-  {
-    asset: 'favicon.ico',
-    path: assetPathService.getSiteAssetPath('favicon.ico'),
-  },
-  `Favicon: ${assetPathService.getSiteAssetPath('favicon.ico')}`
-);
+scriptLogger.info({ msg: 'Site Asset Paths:', section: 'site-asset-paths' });
+scriptLogger.info({
+  msg: `Favicon: ${assetPathService.getSiteAssetPath('favicon.ico')}`,
+  asset: 'favicon.ico',
+  path: assetPathService.getSiteAssetPath('favicon.ico'),
+});
 
-scriptLogger.info(
-  {
-    asset: 'download.svg',
-    category: 'icons',
-    path: assetPathService.getSiteAssetPath('download.svg', 'icons'),
-  },
-  `Icon: ${assetPathService.getSiteAssetPath('download.svg', 'icons')}`
-);
+scriptLogger.info({
+  msg: `Icon: ${assetPathService.getSiteAssetPath('download.svg', 'icons')}`,
+  asset: 'download.svg',
+  category: 'icons',
+  path: assetPathService.getSiteAssetPath('download.svg', 'icons'),
+});
 
 // Test legacy path conversion
-scriptLogger.info({ section: 'legacy-path-conversion' }, '=== Legacy Path Conversion ===');
+scriptLogger.info({ msg: '=== Legacy Path Conversion ===', section: 'legacy-path-conversion' });
 
-scriptLogger.info({ section: 'legacy-path-conversion' }, 'Before → After:');
+scriptLogger.info({ msg: 'Before → After:', section: 'legacy-path-conversion' });
 for (const path of testPaths) {
   const newPath = assetPathService.convertLegacyPath(path);
-  scriptLogger.info(
-    {
-      originalPath: path,
-      convertedPath: newPath,
-    },
-    `${path.padEnd(45)} → ${newPath}`
-  );
+  scriptLogger.info({
+    msg: `${path.padEnd(45)} → ${newPath}`,
+    originalPath: path,
+    convertedPath: newPath,
+  });
 }
 
 // Test book slug extraction
-scriptLogger.info({ section: 'book-slug-extraction' }, '=== Book Slug Extraction ===');
+scriptLogger.info({ msg: '=== Book Slug Extraction ===', section: 'book-slug-extraction' });
 
 const slugTestPaths = [
   'assets/audio/the-iliad/chapter-01.mp3',
@@ -196,20 +168,18 @@ const slugTestPaths = [
   'books/king-lear/text/brainrot/fulltext.txt',
 ];
 
-scriptLogger.info({ section: 'book-slug-extraction' }, 'Path → Book Slug:');
+scriptLogger.info({ msg: 'Path → Book Slug:', section: 'book-slug-extraction' });
 for (const path of slugTestPaths) {
   const slug = assetPathService.getBookSlugFromPath(path);
-  scriptLogger.info(
-    {
-      path: path,
-      bookSlug: slug || 'null',
-    },
-    `${path.padEnd(45)} → ${slug || 'null'}`
-  );
+  scriptLogger.info({
+    msg: `${path.padEnd(45)} → ${slug || 'null'}`,
+    path: path,
+    bookSlug: slug || 'null',
+  });
 }
 
 // Demonstrate the full migration path for a sample asset
-scriptLogger.info({ section: 'sample-migration-flow' }, '=== Sample Migration Flow ===');
+scriptLogger.info({ msg: '=== Sample Migration Flow ===', section: 'sample-migration-flow' });
 
 const sampleAssets = [
   {
@@ -263,30 +233,29 @@ for (const asset of sampleAssets) {
 
 // Display the results
 for (const asset of sampleAssets) {
-  scriptLogger.info(
-    {
-      section: 'sample-asset',
-      assetType: asset.type,
-      legacyPath: asset.legacyPath,
-      extractedSlug: asset.extractedSlug,
-      convertedPath: asset.newPath,
-      directlyGenerated: asset.directGeneration,
-      pathsMatch: asset.newPath === asset.directGeneration,
-    },
-    `Asset Type: ${asset.type}`
-  );
+  scriptLogger.info({
+    msg: `Asset Type: ${asset.type}`,
+    section: 'sample-asset',
+    assetType: asset.type,
+    legacyPath: asset.legacyPath,
+    extractedSlug: asset.extractedSlug,
+    convertedPath: asset.newPath,
+    directlyGenerated: asset.directGeneration,
+    pathsMatch: asset.newPath === asset.directGeneration,
+  });
 
-  scriptLogger.info({ assetType: asset.type }, `Legacy Path: ${asset.legacyPath}`);
-  scriptLogger.info({ assetType: asset.type }, `Extracted Slug: ${asset.extractedSlug}`);
-  scriptLogger.info({ assetType: asset.type }, `Converted Path: ${asset.newPath}`);
-  scriptLogger.info({ assetType: asset.type }, `Directly Generated: ${asset.directGeneration}`);
-  scriptLogger.info(
-    {
-      assetType: asset.type,
-      pathsMatch: asset.newPath === asset.directGeneration,
-    },
-    `Paths Match: ${asset.newPath === asset.directGeneration ? 'Yes ✓' : 'No ✗'}`
-  );
+  scriptLogger.info({ msg: `Legacy Path: ${asset.legacyPath}`, assetType: asset.type });
+  scriptLogger.info({ msg: `Extracted Slug: ${asset.extractedSlug}`, assetType: asset.type });
+  scriptLogger.info({ msg: `Converted Path: ${asset.newPath}`, assetType: asset.type });
+  scriptLogger.info({
+    msg: `Directly Generated: ${asset.directGeneration}`,
+    assetType: asset.type,
+  });
+  scriptLogger.info({
+    msg: `Paths Match: ${asset.newPath === asset.directGeneration ? 'Yes ✓' : 'No ✗'}`,
+    assetType: asset.type,
+    pathsMatch: asset.newPath === asset.directGeneration,
+  });
 }
 
-scriptLogger.info({ section: 'completion' }, 'Path migration testing complete.');
+scriptLogger.info({ msg: 'Path migration testing complete.', section: 'completion' });

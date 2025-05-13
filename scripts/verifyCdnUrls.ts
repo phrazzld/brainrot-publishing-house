@@ -96,7 +96,7 @@ class MockDownloadService {
   generatePaths(
     slug: string,
     type: 'full' | 'chapter',
-    log: { info: (message: string) => void; error: (message: string) => void },
+    log: unknown, // We don't actually use the logger in this function
     chapter?: string
   ) {
     // Generate paths in a simplified way for testing only
@@ -214,10 +214,11 @@ function generateResourcePaths(
     blobUrl = getBlobUrl(legacyPath);
   } catch (error) {
     if (verbose) {
-      moduleLogger.warn(
-        { error: error instanceof Error ? error.message : String(error), legacyPath },
-        `Failed to generate Blob URL`
-      );
+      moduleLogger.warn({
+        msg: `Failed to generate Blob URL`,
+        error: error instanceof Error ? error.message : String(error),
+        legacyPath,
+      });
     }
   }
 
@@ -301,19 +302,26 @@ async function checkCdnAccessibility(
   duration: number;
 }> {
   if (verbose) {
-    moduleLogger.info({ cdnUrl }, `Checking CDN URL`);
+    moduleLogger.info({
+      msg: `Checking CDN URL`,
+      cdnUrl,
+    });
   }
 
   const cdnCheck = await checkUrlAccessibility(cdnUrl, timeoutMs);
 
   if (verbose) {
     if (cdnCheck.exists) {
-      moduleLogger.info(
-        { statusCode: cdnCheck.statusCode, duration: cdnCheck.duration },
-        `CDN URL accessible`
-      );
+      moduleLogger.info({
+        msg: `CDN URL accessible`,
+        statusCode: cdnCheck.statusCode,
+        duration: cdnCheck.duration,
+      });
     } else {
-      moduleLogger.warn({ error: cdnCheck.error }, `CDN URL not accessible`);
+      moduleLogger.warn({
+        msg: `CDN URL not accessible`,
+        error: cdnCheck.error,
+      });
     }
   }
 
@@ -339,19 +347,26 @@ async function checkFallbackAccessibility(
   duration: number;
 }> {
   if (verbose) {
-    moduleLogger.info({ fallbackUrl }, `Checking fallback URL`);
+    moduleLogger.info({
+      msg: `Checking fallback URL`,
+      fallbackUrl,
+    });
   }
 
   const fallbackCheck = await checkUrlAccessibility(fallbackUrl, timeoutMs);
 
   if (verbose) {
     if (fallbackCheck.exists) {
-      moduleLogger.info(
-        { statusCode: fallbackCheck.statusCode, duration: fallbackCheck.duration },
-        `Fallback URL accessible`
-      );
+      moduleLogger.info({
+        msg: `Fallback URL accessible`,
+        statusCode: fallbackCheck.statusCode,
+        duration: fallbackCheck.duration,
+      });
     } else {
-      moduleLogger.warn({ error: fallbackCheck.error }, `Fallback URL not accessible`);
+      moduleLogger.warn({
+        msg: `Fallback URL not accessible`,
+        error: fallbackCheck.error,
+      });
     }
   }
 
@@ -393,7 +408,10 @@ async function checkBlobAccessibility(
   }
 
   if (verbose) {
-    moduleLogger.info({ blobUrl }, `Checking Blob URL`);
+    moduleLogger.info({
+      msg: `Checking Blob URL`,
+      blobUrl,
+    });
   }
 
   try {
@@ -410,9 +428,13 @@ async function checkBlobAccessibility(
 
     if (verbose) {
       if (result.exists) {
-        moduleLogger.info(`Blob storage has the asset`);
+        moduleLogger.info({
+          msg: `Blob storage has the asset`,
+        });
       } else {
-        moduleLogger.warn(`Asset not found in Blob storage`);
+        moduleLogger.warn({
+          msg: `Asset not found in Blob storage`,
+        });
       }
     }
   } catch (error) {
@@ -420,7 +442,10 @@ async function checkBlobAccessibility(
     result.error = error instanceof Error ? error.message : String(error);
 
     if (verbose) {
-      moduleLogger.error({ error: result.error }, `Error checking Blob URL`);
+      moduleLogger.error({
+        msg: `Error checking Blob URL`,
+        error: result.error,
+      });
     }
   }
 
@@ -468,10 +493,12 @@ async function verifyUrl(
   const log = createRequestLogger(correlationId);
 
   if (verbose) {
-    moduleLogger.info(
-      { slug: params.slug, type: params.type, chapter: params.chapter || 'N/A' },
-      `Verifying URLs`
-    );
+    moduleLogger.info({
+      msg: `Verifying URLs`,
+      slug: params.slug,
+      type: params.type,
+      chapter: params.chapter || 'N/A',
+    });
   }
 
   // Generate paths for this resource
@@ -527,6 +554,17 @@ function createDefaultOptions(): VerificationOptions {
 }
 
 /**
+ * Helper function to safely assign values to VerificationOptions
+ */
+function assignOptionValue<K extends keyof VerificationOptions>(
+  options: VerificationOptions,
+  key: K,
+  value: VerificationOptions[K]
+): void {
+  options[key] = value;
+}
+
+/**
  * Processes a simple boolean flag option
  * @param arg Current argument
  * @param flag Flag to check for
@@ -542,7 +580,8 @@ function parseFlag(
   value: boolean
 ): boolean {
   if (arg === flag) {
-    options[key] = value as unknown;
+    // Use the helper function to assign the value
+    assignOptionValue(options, key, value);
     return true;
   }
   return false;
@@ -568,7 +607,13 @@ function parseOptionWithValue(
 ): number {
   if (args[index] === flag && index + 1 < args.length) {
     const value = args[index + 1];
-    options[key] = transform ? transform(value) : (value as unknown);
+
+    // Process the value with transform if provided
+    const processedValue = transform ? transform(value) : value;
+
+    // Type assertion using unknown as an intermediate step to avoid direct "as any" cast
+    assignOptionValue(options, key, processedValue as unknown as VerificationOptions[typeof key]);
+
     return index + 1;
   }
   return -1;
@@ -591,7 +636,10 @@ function parseOutputOptions(args: string[], index: number, options: Verification
     if (value === 'json' || value === 'md') {
       return value;
     } else {
-      moduleLogger.warn({ format: value }, `Unknown format, using 'json'`);
+      moduleLogger.warn({
+        msg: `Unknown format, using 'json'`,
+        format: value,
+      });
       return 'json';
     }
   });
@@ -768,7 +816,10 @@ function parseCommandLineArgs(): VerificationOptions {
     }
 
     // If we get here, it's an unknown argument
-    moduleLogger.warn({ argument: arg }, 'Unknown command line argument');
+    moduleLogger.warn({
+      msg: 'Unknown command line argument',
+      argument: arg,
+    });
   }
 
   return finalizeOptions(options);
@@ -779,8 +830,7 @@ function parseCommandLineArgs(): VerificationOptions {
  */
 function printHelp() {
   moduleLogger.info({
-    topic: 'help',
-    message: `
+    msg: `
 CDN URL Verification Script
 
 Usage: npx tsx scripts/verifyCdnUrls.ts [options]
@@ -810,6 +860,7 @@ Examples:
   # Compare with production environment
   npx tsx scripts/verifyCdnUrls.ts --compare-env=production
 `,
+    topic: 'help',
   });
 }
 
@@ -1243,7 +1294,8 @@ function findDifferences(
 ): DifferenceItem[] {
   const differences: DifferenceItem[] = [];
 
-  for (const [key, currentResult] of currentMap.entries()) {
+  // Use Array.from to convert Map entries to an array for better compatibility
+  for (const [key, currentResult] of Array.from(currentMap.entries())) {
     const previousResult = previousMap.get(key);
     if (!previousResult) continue;
 
@@ -1417,14 +1469,12 @@ async function runVerificationTests(
     const batch = testCases.slice(i, i + maxConcurrent);
 
     if (verbose) {
-      moduleLogger.info(
-        {
-          operation: 'process_batch',
-          batch: Math.floor(i / maxConcurrent) + 1,
-          totalBatches: Math.ceil(testCases.length / maxConcurrent),
-        },
-        `Processing batch ${Math.floor(i / maxConcurrent) + 1}/${Math.ceil(testCases.length / maxConcurrent)}`
-      );
+      moduleLogger.info({
+        msg: `Processing batch ${Math.floor(i / maxConcurrent) + 1}/${Math.ceil(testCases.length / maxConcurrent)}`,
+        operation: 'process_batch',
+        batch: Math.floor(i / maxConcurrent) + 1,
+        totalBatches: Math.ceil(testCases.length / maxConcurrent),
+      });
     }
 
     // Run batch in parallel
@@ -1443,25 +1493,35 @@ async function main() {
   // Parse command line arguments
   const options = parseCommandLineArgs();
 
-  moduleLogger.info({ operation: 'start' }, `🧪 CDN URL Verification Tool`);
-  moduleLogger.info(
-    { operation: 'environment', env: options.environment },
-    `Environment: ${options.environment}`
-  );
-  moduleLogger.info(
-    { operation: 'config', books: options.books.length, timeout: options.timeoutMs },
-    `Testing ${options.books.length} books with timeout ${options.timeoutMs}ms`
-  );
+  moduleLogger.info({
+    msg: `🧪 CDN URL Verification Tool`,
+    operation: 'start',
+  });
+  moduleLogger.info({
+    msg: `Environment: ${options.environment}`,
+    operation: 'environment',
+    env: options.environment,
+  });
+  moduleLogger.info({
+    msg: `Testing ${options.books.length} books with timeout ${options.timeoutMs}ms`,
+    operation: 'config',
+    books: options.books.length,
+    timeout: options.timeoutMs,
+  });
 
   // Generate test cases
   const testCases = generateTestCases(options.books);
-  moduleLogger.info(
-    { operation: 'test_cases', count: testCases.length },
-    `Generated ${testCases.length} test cases`
-  );
+  moduleLogger.info({
+    msg: `Generated ${testCases.length} test cases`,
+    operation: 'test_cases',
+    count: testCases.length,
+  });
 
   // Run verification tests
-  moduleLogger.info({ operation: 'run_tests' }, `Running verification tests...`);
+  moduleLogger.info({
+    msg: `Running verification tests...`,
+    operation: 'run_tests',
+  });
   const results = await runVerificationTests(testCases, options);
 
   // Count successful and failed URLs
@@ -1469,19 +1529,28 @@ async function main() {
   const fallbackSuccesses = results.filter((r) => r.exists.fallback).length;
   const blobSuccesses = results.filter((r) => r.exists.blob).length;
 
-  moduleLogger.info({ operation: 'test_results' }, `✅ Tests completed successfully!`);
-  moduleLogger.info(
-    { operation: 'cdn_results', success: cdnSuccesses, total: results.length },
-    `- CDN URLs: ${cdnSuccesses}/${results.length} accessible`
-  );
-  moduleLogger.info(
-    { operation: 'fallback_results', success: fallbackSuccesses, total: results.length },
-    `- Fallback URLs: ${fallbackSuccesses}/${results.length} accessible`
-  );
-  moduleLogger.info(
-    { operation: 'blob_results', success: blobSuccesses, total: results.length },
-    `- Blob Storage: ${blobSuccesses}/${results.length} available`
-  );
+  moduleLogger.info({
+    msg: `✅ Tests completed successfully!`,
+    operation: 'test_results',
+  });
+  moduleLogger.info({
+    msg: `- CDN URLs: ${cdnSuccesses}/${results.length} accessible`,
+    operation: 'cdn_results',
+    success: cdnSuccesses,
+    total: results.length,
+  });
+  moduleLogger.info({
+    msg: `- Fallback URLs: ${fallbackSuccesses}/${results.length} accessible`,
+    operation: 'fallback_results',
+    success: fallbackSuccesses,
+    total: results.length,
+  });
+  moduleLogger.info({
+    msg: `- Blob Storage: ${blobSuccesses}/${results.length} available`,
+    operation: 'blob_results',
+    success: blobSuccesses,
+    total: results.length,
+  });
 
   // Compare with previous results if requested
   let outputContent: string;
@@ -1492,10 +1561,12 @@ async function main() {
         fs.readFileSync(options.compareFile, 'utf-8')
       ) as UrlVerificationResult[];
 
-      moduleLogger.info(
-        { operation: 'comparison', count: previousResults.length, file: options.compareFile },
-        `Comparing with ${previousResults.length} results from ${options.compareFile}`
-      );
+      moduleLogger.info({
+        msg: `Comparing with ${previousResults.length} results from ${options.compareFile}`,
+        operation: 'comparison',
+        count: previousResults.length,
+        file: options.compareFile,
+      });
 
       // Generate comparison report
       outputContent = formatComparisonReport(
@@ -1505,14 +1576,12 @@ async function main() {
         previousResults[0]?.environment || 'previous'
       );
     } catch (error) {
-      moduleLogger.error(
-        {
-          operation: 'comparison_error',
-          file: options.compareFile,
-          error: error instanceof Error ? error.message : String(error),
-        },
-        `Error reading comparison file: ${error instanceof Error ? error.message : String(error)}`
-      );
+      moduleLogger.error({
+        msg: `Error reading comparison file: ${error instanceof Error ? error.message : String(error)}`,
+        operation: 'comparison_error',
+        file: options.compareFile,
+        error: error instanceof Error ? error.message : String(error),
+      });
       outputContent =
         options.format === 'md'
           ? formatResultsAsMarkdown(results)
@@ -1526,20 +1595,19 @@ async function main() {
 
   // Write output to file
   fs.writeFileSync(options.outputFile, outputContent);
-  moduleLogger.info(
-    { operation: 'output', file: options.outputFile },
-    `📝 Results written to ${options.outputFile}`
-  );
+  moduleLogger.info({
+    msg: `📝 Results written to ${options.outputFile}`,
+    operation: 'output',
+    file: options.outputFile,
+  });
 }
 
 // Run the main function
 main().catch((error) => {
-  moduleLogger.error(
-    {
-      operation: 'fatal_error',
-      error: error instanceof Error ? error.message : String(error),
-    },
-    'Error running verification tool:'
-  );
+  moduleLogger.error({
+    msg: 'Error running verification tool:',
+    operation: 'fatal_error',
+    error: error instanceof Error ? error.message : String(error),
+  });
   process.exit(1);
 });

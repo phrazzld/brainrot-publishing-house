@@ -38,19 +38,15 @@ const projectRoot = path.resolve(__dirname, '..');
 
 // IMPORTANT: Add Vercel Blob token check
 if (!process.env.BLOB_READ_WRITE_TOKEN) {
-  scriptLogger.error(
-    {
-      error: 'missing_token',
-      token: 'BLOB_READ_WRITE_TOKEN',
-    },
-    '❌ BLOB_READ_WRITE_TOKEN environment variable is not set.'
-  );
-  scriptLogger.error(
-    {
-      suggestion: 'update_env_file',
-    },
-    'Please set this variable in your .env.local file.'
-  );
+  scriptLogger.error({
+    msg: '❌ BLOB_READ_WRITE_TOKEN environment variable is not set.',
+    error: 'missing_token',
+    token: 'BLOB_READ_WRITE_TOKEN',
+  });
+  scriptLogger.error({
+    msg: 'Please set this variable in your .env.local file.',
+    suggestion: 'update_env_file',
+  });
   process.exit(1);
 }
 
@@ -103,14 +99,12 @@ class AssetNameValidator {
    * Run the validation process
    */
   async run(): Promise<MigrationPlan> {
-    scriptLogger.info(
-      {
-        operation: 'start_validation',
-        withMigrationPlan: this.options.fix,
-        options: this.options,
-      },
-      `\n🔍 Starting asset name validation ${this.options.fix ? '(with migration plan)' : ''}`
-    );
+    scriptLogger.info({
+      msg: `\n🔍 Starting asset name validation ${this.options.fix ? '(with migration plan)' : ''}`,
+      operation: 'start_validation',
+      withMigrationPlan: this.options.fix,
+      options: this.options,
+    });
 
     try {
       // Scan each asset type unless a specific type is specified
@@ -131,13 +125,11 @@ class AssetNameValidator {
 
       return plan;
     } catch (error) {
-      scriptLogger.error(
-        {
-          operation: 'validation',
-          error: error instanceof Error ? error.message : String(error),
-        },
-        'Validation failed:'
-      );
+      scriptLogger.error({
+        msg: 'Validation failed:',
+        operation: 'validation',
+        error: error instanceof Error ? error.message : String(error),
+      });
       throw error;
     }
   }
@@ -178,15 +170,13 @@ class AssetNameValidator {
 
         this.log(`Processed ${count} ${assetType} assets so far...`);
       } catch (error) {
-        scriptLogger.error(
-          {
-            operation: 'list_assets',
-            assetType,
-            prefix,
-            error: error instanceof Error ? error.message : String(error),
-          },
-          `Error listing ${assetType} assets:`
-        );
+        scriptLogger.error({
+          msg: `Error listing ${assetType} assets:`,
+          operation: 'list_assets',
+          assetType,
+          prefix,
+          error: error instanceof Error ? error.message : String(error),
+        });
         break;
       }
     }
@@ -309,29 +299,25 @@ class AssetNameValidator {
     const reportPath = path.join(projectRoot, 'asset-naming-report.json');
     await fs.writeFile(reportPath, reportJson, 'utf8');
 
-    scriptLogger.info(
-      {
-        operation: 'save_report',
-        reportPath,
-        reportSize: reportJson.length,
-      },
-      `\n💾 Validation report saved to ${reportPath}`
-    );
+    scriptLogger.info({
+      msg: `\n💾 Validation report saved to ${reportPath}`,
+      operation: 'save_report',
+      reportPath,
+      reportSize: reportJson.length,
+    });
 
     // Save migration plan if requested
     if (this.options.fix && plan.toMigrate.length > 0) {
       const planPath = path.join(projectRoot, 'asset-naming-migration-plan.json');
       await fs.writeFile(planPath, migrationPlanJson, 'utf8');
 
-      scriptLogger.info(
-        {
-          operation: 'save_plan',
-          planPath,
-          planSize: migrationPlanJson.length,
-          itemCount: plan.toMigrate.length,
-        },
-        `💾 Migration plan saved to ${planPath}`
-      );
+      scriptLogger.info({
+        msg: `💾 Migration plan saved to ${planPath}`,
+        operation: 'save_plan',
+        planPath,
+        planSize: migrationPlanJson.length,
+        itemCount: plan.toMigrate.length,
+      });
     }
   }
 
@@ -342,41 +328,36 @@ class AssetNameValidator {
     const compliantPercentage = plan.total > 0 ? (plan.compliant / plan.total) * 100 : 0;
     const nonCompliantPercentage = plan.total > 0 ? (plan.nonCompliant / plan.total) * 100 : 0;
 
-    scriptLogger.info(
-      {
-        section: 'summary',
-        title: 'Asset Naming Validation Summary',
-      },
-      '\n📊 Asset Naming Validation Summary'
-    );
+    scriptLogger.info({
+      msg: '\n📊 Asset Naming Validation Summary',
+      section: 'summary',
+      title: 'Asset Naming Validation Summary',
+    });
 
-    scriptLogger.info({ section: 'summary' }, '----------------------------------');
+    scriptLogger.info({
+      msg: '----------------------------------',
+      section: 'summary',
+    });
 
-    scriptLogger.info(
-      {
-        section: 'summary',
-        totalAssets: plan.total,
-      },
-      `Total assets: ${plan.total}`
-    );
+    scriptLogger.info({
+      msg: `Total assets: ${plan.total}`,
+      section: 'summary',
+      totalAssets: plan.total,
+    });
 
-    scriptLogger.info(
-      {
-        section: 'summary',
-        compliantAssets: plan.compliant,
-        percentage: compliantPercentage.toFixed(2),
-      },
-      `Compliant   : ${plan.compliant} (${compliantPercentage.toFixed(2)}%)`
-    );
+    scriptLogger.info({
+      msg: `Compliant   : ${plan.compliant} (${compliantPercentage.toFixed(2)}%)`,
+      section: 'summary',
+      compliantAssets: plan.compliant,
+      percentage: compliantPercentage.toFixed(2),
+    });
 
-    scriptLogger.info(
-      {
-        section: 'summary',
-        nonCompliantAssets: plan.nonCompliant,
-        percentage: nonCompliantPercentage.toFixed(2),
-      },
-      `Non-compliant: ${plan.nonCompliant} (${nonCompliantPercentage.toFixed(2)}%)`
-    );
+    scriptLogger.info({
+      msg: `Non-compliant: ${plan.nonCompliant} (${nonCompliantPercentage.toFixed(2)}%)`,
+      section: 'summary',
+      nonCompliantAssets: plan.nonCompliant,
+      percentage: nonCompliantPercentage.toFixed(2),
+    });
 
     // Calculate non-compliant assets by type
     const nonCompliantByType = this.results
@@ -389,45 +370,40 @@ class AssetNameValidator {
         {} as Record<string, number>
       );
 
-    scriptLogger.info({ section: 'summary' }, '\nNon-compliant assets by type:');
+    scriptLogger.info({
+      msg: '\nNon-compliant assets by type:',
+      section: 'summary',
+    });
 
     for (const [type, count] of Object.entries(nonCompliantByType)) {
-      scriptLogger.info(
-        {
-          section: 'summary',
-          assetType: type,
-          count,
-        },
-        `- ${type}: ${count}`
-      );
+      scriptLogger.info({
+        msg: `- ${type}: ${count}`,
+        section: 'summary',
+        assetType: type,
+        count,
+      });
     }
 
     // Print migration plan summary
     if (this.options.fix) {
-      scriptLogger.info(
-        {
-          section: 'migration',
-          migrateableAssets: plan.toMigrate.length,
-        },
-        `\nAssets that can be migrated: ${plan.toMigrate.length}`
-      );
+      scriptLogger.info({
+        msg: `\nAssets that can be migrated: ${plan.toMigrate.length}`,
+        section: 'migration',
+        migrateableAssets: plan.toMigrate.length,
+      });
 
       if (plan.toMigrate.length > 0) {
-        scriptLogger.info(
-          {
-            section: 'migration',
-            action: 'run_migration',
-          },
-          '\nMigration plan generated. Run the migration with:'
-        );
+        scriptLogger.info({
+          msg: '\nMigration plan generated. Run the migration with:',
+          section: 'migration',
+          action: 'run_migration',
+        });
 
-        scriptLogger.info(
-          {
-            section: 'migration',
-            command: 'npx tsx scripts/migrateAssetNames.ts',
-          },
-          'npx tsx scripts/migrateAssetNames.ts'
-        );
+        scriptLogger.info({
+          msg: 'npx tsx scripts/migrateAssetNames.ts',
+          section: 'migration',
+          command: 'npx tsx scripts/migrateAssetNames.ts',
+        });
       }
     }
   }
@@ -437,13 +413,11 @@ class AssetNameValidator {
    */
   private log(message: string, context: Record<string, unknown> = {}): void {
     if (this.options.verbose) {
-      scriptLogger.debug(
-        {
-          ...context,
-          verbose: true,
-        },
-        message
-      );
+      scriptLogger.debug({
+        msg: message,
+        ...context,
+        verbose: true,
+      });
     }
   }
 }
@@ -471,14 +445,12 @@ function parseArgs(): ValidatorOptions {
       if (Object.values(AssetType).includes(typeArg as AssetType)) {
         options.type = typeArg as AssetType;
       } else {
-        scriptLogger.warn(
-          {
-            argument: 'type',
-            value: typeArg,
-            validTypes: Object.values(AssetType),
-          },
-          `Warning: Invalid asset type "${typeArg}". Valid types are: ${Object.values(AssetType).join(', ')}`
-        );
+        scriptLogger.warn({
+          msg: `Warning: Invalid asset type "${typeArg}". Valid types are: ${Object.values(AssetType).join(', ')}`,
+          argument: 'type',
+          value: typeArg,
+          validTypes: Object.values(AssetType),
+        });
       }
     }
   }
@@ -495,24 +467,20 @@ async function main(): Promise<void> {
     const validator = new AssetNameValidator(options);
     await validator.run();
 
-    scriptLogger.info(
-      {
-        operation: 'completion',
-        status: 'success',
-      },
-      '\n✅ Asset naming validation completed!'
-    );
+    scriptLogger.info({
+      msg: '\n✅ Asset naming validation completed!',
+      operation: 'completion',
+      status: 'success',
+    });
 
     process.exit(0);
   } catch (error) {
-    scriptLogger.error(
-      {
-        operation: 'completion',
-        status: 'failure',
-        error: error instanceof Error ? error.message : String(error),
-      },
-      '\n❌ Asset naming validation failed:'
-    );
+    scriptLogger.error({
+      msg: '\n❌ Asset naming validation failed:',
+      operation: 'completion',
+      status: 'failure',
+      error: error instanceof Error ? error.message : String(error),
+    });
 
     process.exit(1);
   }

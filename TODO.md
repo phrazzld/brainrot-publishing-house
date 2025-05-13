@@ -27,23 +27,26 @@ This TODO list details the tasks required to fully migrate all asset management 
     - [x] Fix in migrateRemainingAssets.test.ts
   - Dependencies: none
 
-- [ ] **T025: Fix TypeScript errors across the codebase**
+- [x] **T025: Fix TypeScript errors across the codebase**
 
   - [x] Fix type errors in services/ directory:
     - [x] Fix signature mismatch in downloadService.ts:generatePaths with Logger vs info/error functions
     - [x] Fix incompatible logger type passing in downloadService.ts:getFallbackCdnUrl (lines ~294, ~332)
-  - [ ] Fix type errors in test files:
-    - [ ] Fix type errors in **tests**/api/proxy-download.test.ts
-    - [ ] Fix type errors in **tests**/components/reading-room-blob.test.tsx
-    - [ ] Fix type errors in **tests**/hooks/useChapterNavigation.test.ts
-    - [ ] Fix type errors in **tests**/scripts/cleanupLocalAssets.test.ts
-    - [ ] Fix type errors in **tests**/scripts/migrateAudioFilesWithContent.test.ts
-    - [ ] Fix type errors in **tests**/scripts/migrateBookCoverImages.test.ts
-  - [ ] Fix logger call errors in scripts and utilities:
+  - [x] Fix type errors in test files:
+    - [x] Fix type errors in **tests**/api/proxy-download.test.ts
+    - [x] Fix type errors in **tests**/components/reading-room-blob.test.tsx
+    - [x] Fix type errors in **tests**/hooks/useChapterNavigation.test.ts
+    - [x] Fix type errors in **tests**/scripts/cleanupLocalAssets.test.ts
+    - [x] Fix type errors in **tests**/scripts/migrateAudioFilesWithContent.test.ts
+    - [x] Fix type errors in **tests**/scripts/migrateBookCoverImages.test.ts
+  - [x] Fix logger call errors in scripts and utilities:
     - [x] Fix logger call parameter count errors in scripts/verifyDigitalOceanAccess.ts (update 2-parameter calls to single parameter with msg field)
-    - [ ] Fix logger call parameter count errors in scripts/verifyCdnUrls.ts (update 2-parameter calls to single parameter with msg field)
-    - [ ] Fix logger call parameter count errors in utils/getBlobUrl.ts (update 2-parameter calls to single parameter with msg field)
-  - [ ] Fix type error in utils/services/VercelBlobAssetService.ts involving ListBlobResultBlob
+    - [x] Fix logger call parameter count errors in scripts/verifyCdnUrls.ts (update 2-parameter calls to single parameter with msg field)
+    - [x] Fix logger call parameter count errors in utils/getBlobUrl.ts (update 2-parameter calls to single parameter with msg field)
+    - [x] Fix logger call parameter count errors in scripts/validateAssetNames.ts (update 2-parameter calls to single parameter with msg field)
+    - [x] Fix logger call parameter count errors in scripts/test-path-migration.ts (update 2-parameter calls to single parameter with msg field)
+    - [x] Fix logger call parameter count errors in scripts/remove-console-statements.ts (update 2-parameter calls to single parameter with msg field)
+  - [x] Fix type error in utils/services/VercelBlobAssetService.ts involving ListBlobResultBlob
   - Dependencies: none
 
 - [x] **T023: Refactor complex functions for maintainability**
@@ -315,7 +318,6 @@ This TODO list details the tasks required to fully migrate all asset management 
   - ✅ Documented conventions in ASSET_NAMING_CONVENTIONS.md
   - ✅ Updated all tests to use standardized file naming
   - Dependencies: T009, T010, T016
-  
 - [x] **T026: Remove All Digital Ocean Code and Dependencies**
   - [x] Remove deprecated files (DigitalOceanSourceAdapter.ts.deprecated, downloadFromSpaces.ts.deprecated)
   - [x] Delete Digital Ocean verification script (verifyDigitalOceanAccess.ts)
