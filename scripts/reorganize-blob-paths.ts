@@ -43,7 +43,7 @@ async function main(): Promise<void> {
 
     // Save mappings to file
     const mappingsPath = path.join(options.outputDir, 'path-mappings.json');
-    saveReport(mappingsPath, { mappings });
+    saveReport(mappingsPath, { mappings } as unknown as Record<string, unknown>);
 
     // Reorganize blobs
     logger.info({ msg: 'Reorganizing blobs...' });
@@ -54,7 +54,7 @@ async function main(): Promise<void> {
 
     // Save stats to file
     const statsPath = path.join(options.outputDir, 'reorganization-stats.json');
-    saveReport(statsPath, stats);
+    saveReport(statsPath, stats as unknown as Record<string, unknown>);
 
     // Create HTML report
     const htmlReport = createHtmlReport(stats, mappings, options);

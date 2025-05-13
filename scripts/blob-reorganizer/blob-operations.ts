@@ -68,13 +68,20 @@ export async function listAllBlobs(options: {
 
     // Map the API result to our extended type
     const extendedBlobs = result.blobs.map((blob) => {
-      // Use type assertion to work around the type definition issue
-      const anyBlob = blob as Record<string, unknown>;
+      // First convert to unknown, then to our custom structure to avoid type errors
+      const blobWithContentType = blob as unknown as {
+        pathname: string;
+        url: string;
+        size: number;
+        contentType?: string;
+        uploadedAt: string | Date;
+      };
+
       return {
         pathname: blob.pathname,
         url: blob.url,
         size: blob.size,
-        contentType: anyBlob.contentType || 'application/octet-stream', // Provide a default
+        contentType: blobWithContentType.contentType || 'application/octet-stream', // Provide a default
         uploadedAt:
           typeof blob.uploadedAt === 'string'
             ? blob.uploadedAt

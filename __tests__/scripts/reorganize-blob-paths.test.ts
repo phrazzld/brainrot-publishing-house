@@ -1,5 +1,6 @@
-const { AssetPathService } = require('../../utils/services/AssetPathService');
-const { AssetType } = require('../../types/assets');
+// Use TypeScript imports to ensure proper typing
+import { AssetType } from '../../types/assets';
+import { AssetPathService } from '../../utils/services/AssetPathService';
 
 // Mock modules that are used in the script
 jest.mock('@vercel/blob', () => ({

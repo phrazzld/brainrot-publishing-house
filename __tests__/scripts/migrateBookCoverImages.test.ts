@@ -124,8 +124,19 @@ class CoverImageMigrationService {
   private migrationLog: MigrationLog;
 
   constructor(
-    private readonly blobService: unknown, // Use unknown for the mock service to avoid TypeScript issues
-    private readonly blobPathService: unknown, // Use unknown for the mock service to avoid TypeScript issues
+    private readonly blobService: {
+      uploadFile: (
+        file: Blob,
+        options: { pathname: string; filename: string; access: string; cacheControl: string }
+      ) => Promise<{ url: string; size: number; uploadedAt: string }>;
+      getFileInfo: (
+        url: string
+      ) => Promise<{ size: number; uploadedAt: string; contentType: string }>;
+      getUrlForPath: (path: string) => string;
+    },
+    private readonly blobPathService: {
+      convertLegacyPath: (path: string) => string;
+    },
     logFile: string = 'cover-images-migration.json'
   ) {
     this.migrationLog = new MigrationLog(logFile);

@@ -6,16 +6,18 @@ jest.mock('@vercel/blob', () => ({
     url: 'https://example.com/mocked-blob-url',
     size: 12345,
     uploadedAt: new Date().toISOString(),
+    pathname: 'mocked-blob-path',
   }),
   head: jest.fn().mockResolvedValue({
     url: 'https://example.com/mocked-blob-url',
     size: 12345,
     uploadedAt: new Date().toISOString(),
+    pathname: 'mocked-blob-path',
   }),
 }));
 
 jest.mock('../../utils/getBlobUrl', () => ({
-  assetExistsInBlobStorage: jest.fn().mockImplementation((path) => {
+  assetExistsInBlobStorage: jest.fn().mockImplementation((path: string) => {
     // Simulate missing assets for specific paths for testing
     if (path.includes('missing')) {
       return Promise.resolve(false);
@@ -23,7 +25,7 @@ jest.mock('../../utils/getBlobUrl', () => ({
     return Promise.resolve(true);
   }),
   blobPathService: {
-    convertLegacyPath: jest.fn((path) => `converted/${path}`),
+    convertLegacyPath: jest.fn((path: string) => `converted/${path}`),
   },
 }));
 
@@ -100,8 +102,11 @@ jest.mock('fs', () => ({
   }),
 }));
 
+// Define fetch type
+type FetchFn = typeof global.fetch;
+
 // Mock global fetch
-global.fetch = jest.fn().mockImplementation((url) => {
+global.fetch = jest.fn().mockImplementation((url: string) => {
   if (url.includes('error')) {
     return Promise.reject(new Error('Network error'));
   }
@@ -116,7 +121,7 @@ global.fetch = jest.fn().mockImplementation((url) => {
     ]),
     arrayBuffer: () => Promise.resolve(new ArrayBuffer(12345)),
   });
-});
+}) as unknown as FetchFn;
 
 // Mock File constructor
 interface MockFileParams {
@@ -124,6 +129,9 @@ interface MockFileParams {
   type: string;
   size: number;
 }
+
+// Define mock file constructor functionality
+// No separate type needed
 
 global.File = jest.fn().mockImplementation(
   (
@@ -171,7 +179,12 @@ describe('migrateRemainingAssets', () => {
       const importedModule = await import('../../scripts/migrateRemainingAssets');
       // Extract the functions we want to test - in a real implementation
       // you would export these functions from the module
-      _migrateRemainingAssets = importedModule.default;
+      if ('default' in importedModule) {
+        _migrateRemainingAssets = importedModule.default as MigrateRemainingAssetsFn;
+      } else {
+        _migrateRemainingAssets = async () => ({ skipped: 0, successful: 0, failed: 0 });
+        console.error('Default export not found in module');
+      }
     } catch (error) {
       console.error('Error importing module:', error);
     }
@@ -187,9 +200,11 @@ describe('migrateRemainingAssets', () => {
     const { assetExistsInBlobStorage } = await import('../../utils/getBlobUrl');
 
     // Mock implementation to simulate specific missing assets
-    (assetExistsInBlobStorage as jest.Mock).mockImplementation((path: string) => {
-      return Promise.resolve(!path.includes('missing'));
-    });
+    (assetExistsInBlobStorage as jest.Mock<Promise<boolean>, [string]>).mockImplementation(
+      (path: string) => {
+        return Promise.resolve(!path.includes('missing'));
+      }
+    );
 
     // We would run the full migration with dry-run option
     // For this test, we'll just assert that assetExistsInBlobStorage is called
@@ -209,7 +224,12 @@ describe('migrateRemainingAssets', () => {
     const { blobService } = await import('../../utils/services/BlobService');
 
     // Mock a failure followed by success to test retry
-    (blobService.uploadFile as jest.Mock).mockRejectedValueOnce(new Error('Temporary error'));
+    (
+      blobService.uploadFile as jest.Mock<
+        Promise<{ url: string; size: number; uploadedAt: string }>,
+        [unknown, unknown]
+      >
+    ).mockRejectedValueOnce(new Error('Temporary error'));
 
     // In a real test, we'd verify that after a failure, it tries again
     // For this unit test, we'll just verify the mock was called multiple times
@@ -223,9 +243,13 @@ describe('migrateRemainingAssets', () => {
     expect(writeFile).toHaveBeenCalled();
 
     // Check that both JSON and markdown reports are generated
-    const writeFileCalls = (writeFile as jest.Mock).mock.calls;
-    const jsonReport = writeFileCalls.some((call) => call[0].includes('.json'));
-    const markdownReport = writeFileCalls.some((call) => call[0].includes('.md'));
+    const writeFileCalls = (writeFile as jest.Mock<Promise<void>, [string, string]>).mock.calls;
+    const jsonReport = writeFileCalls.some(
+      (call: unknown[]) => typeof call[0] === 'string' && call[0].includes('.json')
+    );
+    const markdownReport = writeFileCalls.some(
+      (call: unknown[]) => typeof call[0] === 'string' && call[0].includes('.md')
+    );
 
     expect(jsonReport).toBeTruthy();
     expect(markdownReport).toBeTruthy();

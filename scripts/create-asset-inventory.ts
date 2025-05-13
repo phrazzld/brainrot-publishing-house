@@ -674,7 +674,7 @@ async function processDigitalOceanObject(
   if (!asset) {
     asset = {
       type: assetType,
-      bookSlug: book.slug,
+      bookSlug: book.slug as string,
       assetName,
       digitalOcean: {
         exists: true,
@@ -764,7 +764,7 @@ async function processVercelBlobObject(
   if (!asset) {
     asset = {
       type: assetType,
-      bookSlug: book.slug,
+      bookSlug: book.slug as string,
       assetName,
       digitalOcean: {
         exists: false,
@@ -853,7 +853,7 @@ function processMissingReferencedAssets(
       // Asset referenced but not found in any storage
       const newAsset = {
         type: assetType,
-        bookSlug: book.slug,
+        bookSlug: book.slug as string,
         assetName,
         digitalOcean: {
           exists: false,

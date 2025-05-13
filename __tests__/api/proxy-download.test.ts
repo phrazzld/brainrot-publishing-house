@@ -85,50 +85,46 @@ jest.spyOn(global, 'setTimeout').mockImplementation((_fn) => {
 // Mock clearTimeout
 jest.spyOn(global, 'clearTimeout').mockImplementation(() => {});
 
+// Mock response creation helper functions
+const createMockResponseObject = (status = 200, statusText = 'OK', headers = {}) => ({
+  status,
+  statusText,
+  headers,
+  ok: status >= 200 && status < 300,
+  type: 'basic',
+  url: '',
+  redirected: false,
+  bodyUsed: false,
+  clone: jest.fn().mockReturnThis(),
+  json: jest.fn().mockResolvedValue({}),
+  text: jest.fn().mockResolvedValue(''),
+  arrayBuffer: jest.fn().mockResolvedValue(new ArrayBuffer(0)),
+  blob: jest.fn().mockResolvedValue(new Blob()),
+  formData: jest.fn().mockResolvedValue(new FormData()),
+});
+
 // Mock NextResponse
 jest.mock('next/server', () => {
-  // Create a properly typed NextResponse mock
-  const mockNextResponse: {
-    (body: ReadableStream | null, init?: ResponseInit): Response;
-    json: (data: unknown, init?: ResponseInit) => Response;
-  } = jest.fn().mockImplementation((body: ReadableStream | null, init?: ResponseInit) => ({
-    status: init?.status || 200,
-    statusText: init?.statusText || 'OK',
-    headers: init?.headers || {},
-    body,
-    ok: (init?.status || 200) >= 200 && (init?.status || 200) < 300,
-    type: 'basic',
-    url: '',
-    redirected: false,
-    bodyUsed: false,
-    clone: jest.fn().mockReturnThis(),
-    json: jest.fn().mockResolvedValue({}),
-    text: jest.fn().mockResolvedValue(''),
-    arrayBuffer: jest.fn().mockResolvedValue(new ArrayBuffer(0)),
-    blob: jest.fn().mockResolvedValue(new Blob()),
-    formData: jest.fn().mockResolvedValue(new FormData()),
-  }));
+  // Create a function that meets the requirements of NextResponse
+  const mockResponseFunction = jest
+    .fn()
+    .mockImplementation((body: ReadableStream | null, init?: ResponseInit) => ({
+      ...createMockResponseObject(init?.status, init?.statusText, init?.headers),
+      body,
+    }));
 
-  // Add static json method properly typed
-  mockNextResponse.json = jest.fn().mockImplementation((data: unknown, options?: ResponseInit) => ({
-    status: options?.status || 200,
-    statusText: options?.statusText || 'OK',
-    headers: options?.headers || {},
+  // Add the required static json method to the function object
+  const jsonMethod = jest.fn().mockImplementation((data: unknown, options?: ResponseInit) => ({
+    ...createMockResponseObject(options?.status, options?.statusText, options?.headers),
     json: async () => data,
     text: jest.fn().mockResolvedValue(JSON.stringify(data)),
-    ok: (options?.status || 200) >= 200 && (options?.status || 200) < 300,
     body: null,
-    type: 'basic',
-    url: '',
-    redirected: false,
-    bodyUsed: false,
-    clone: jest.fn().mockReturnThis(),
-    arrayBuffer: jest.fn().mockResolvedValue(new ArrayBuffer(0)),
-    blob: jest.fn().mockResolvedValue(new Blob()),
-    formData: jest.fn().mockResolvedValue(new FormData()),
   }));
 
-  return { NextResponse: mockNextResponse };
+  // Create the NextResponse object with both function behavior and json method
+  const NextResponse = Object.assign(mockResponseFunction, { json: jsonMethod });
+
+  return { NextResponse };
 });
 
 // Helper to create mock headers
@@ -142,30 +138,25 @@ function createMockHeaders(headersObj: Record<string, string> = {}): Headers {
 
 // Helper to create mock readable stream
 function createMockStream(): ReadableStream {
-  // Properly type the ReadableStream mock with required methods and properties
-  const mockStream: Partial<ReadableStream> & {
-    getReader: jest.Mock;
-    pipeTo: jest.Mock;
-    cancel: jest.Mock;
-    pipeThrough?: jest.Mock;
-    tee?: jest.Mock;
-  } = {
-    getReader: jest.fn().mockReturnValue({
-      read: jest.fn().mockResolvedValue({ done: true, value: undefined }),
-      releaseLock: jest.fn(),
-      closed: Promise.resolve(undefined),
-      cancel: jest.fn().mockResolvedValue(undefined),
-    }),
+  const mockReader = {
+    read: jest.fn().mockResolvedValue({ done: true, value: undefined }),
+    releaseLock: jest.fn(),
+    closed: Promise.resolve(undefined),
+    cancel: jest.fn().mockResolvedValue(undefined),
+  };
+
+  // Create initial stream properties
+  const mockStream: Partial<ReadableStream> & Record<string, jest.Mock> = {
+    getReader: jest.fn().mockReturnValue(mockReader),
     pipeTo: jest.fn().mockReturnValue(Promise.resolve()),
     cancel: jest.fn().mockReturnValue(Promise.resolve()),
     locked: false,
   };
 
-  // Add methods that reference the mockStream itself (avoiding circular reference issues)
+  // Add methods that reference the mockStream itself
   mockStream.pipeThrough = jest.fn().mockReturnValue(mockStream);
   mockStream.tee = jest.fn().mockReturnValue([mockStream, mockStream]);
 
-  // Use type assertion to cast the mock to ReadableStream
   return mockStream as unknown as ReadableStream;
 }
 
@@ -214,22 +205,66 @@ describe('Proxy Download Service', () => {
     });
   });
 
+  // Helper functions for test setup and assertions
+  function createDownloadConfig(overrides = {}) {
+    const logger = createRequestLogger('test-correlation-id');
+    const assetService = new MockAssetService(overrides.assetServiceOptions);
+
+    return {
+      assetType: AssetType.AUDIO,
+      bookSlug: 'test-book',
+      assetName: 'chapter-01.mp3',
+      filename: 'test-book-chapter-01.mp3',
+      log: logger,
+      assetService,
+      requestParams: { test: 'param' },
+      ...overrides,
+    };
+  }
+
+  function mockSuccessfulFetch(options = {}) {
+    mockFetch.mockResolvedValue({
+      ok: true,
+      status: 200,
+      statusText: 'OK',
+      headers: createMockHeaders({
+        'content-type': 'audio/mpeg',
+        'content-length': '1000000',
+        ...options.headers,
+      }),
+      body: createMockStream(),
+      ...(options.extraProps || {}),
+    });
+  }
+
+  function mockFailedFetch(
+    status = 403,
+    statusText = 'Forbidden',
+    contentType = 'application/json'
+  ) {
+    mockFetch.mockResolvedValue({
+      ok: false,
+      status,
+      statusText,
+      headers: createMockHeaders({
+        'content-type': contentType,
+      }),
+      text: jest.fn().mockResolvedValue(JSON.stringify({ error: 'Access denied' })),
+      clone: function () {
+        return this;
+      },
+      body: createMockStream(),
+    });
+  }
+
   describe('proxyAssetDownload', () => {
     it('should successfully proxy an asset download', async () => {
-      // Create mock dependencies
-      const logger = createRequestLogger('test-correlation-id');
-      const assetService = new MockAssetService();
+      // Setup test conditions
+      mockSuccessfulFetch();
+      const config = createDownloadConfig();
 
-      // Call the proxy function with config object
-      const response = await proxyAssetDownload({
-        assetType: AssetType.AUDIO,
-        bookSlug: 'test-book',
-        assetName: 'chapter-01.mp3',
-        filename: 'test-book-chapter-01.mp3',
-        log: logger,
-        assetService,
-        requestParams: { test: 'param' },
-      });
+      // Call the proxy function
+      const response = await proxyAssetDownload(config);
 
       // Verify the response
       expect(response).toBeDefined();
@@ -248,77 +283,48 @@ describe('Proxy Download Service', () => {
     });
 
     it('should handle AssetService errors', async () => {
-      // Create mock dependencies with failing asset service
-      const logger = createRequestLogger('test-correlation-id');
-      const assetService = new MockAssetService({
-        shouldFail: true,
-        errorType: AssetErrorType.NOT_FOUND,
+      // Setup test with failing asset service
+      const config = createDownloadConfig({
+        assetServiceOptions: {
+          shouldFail: true,
+          errorType: AssetErrorType.NOT_FOUND,
+        },
       });
 
-      // Call the proxy function with config object
-      const response = await proxyAssetDownload({
-        assetType: AssetType.AUDIO,
-        bookSlug: 'test-book',
-        assetName: 'chapter-01.mp3',
-        filename: 'test-book-chapter-01.mp3',
-        log: logger,
-        assetService,
-        requestParams: { test: 'param' },
-      });
+      // Call the proxy function
+      const response = await proxyAssetDownload(config);
 
       // Verify 404 response
       expect(response).toBeDefined();
       expect(response.status).toBe(404);
-
-      // Make sure fetch was not called (since asset URL retrieval failed)
       expect(mockFetch).not.toHaveBeenCalled();
     });
 
     it('should handle unauthorized access errors from AssetService', async () => {
-      // Create mock dependencies with unauthorized error
-      const logger = createRequestLogger('test-correlation-id');
-      const assetService = new MockAssetService({
-        shouldFail: true,
-        errorType: AssetErrorType.UNAUTHORIZED,
+      // Setup test with unauthorized error
+      const config = createDownloadConfig({
+        assetServiceOptions: {
+          shouldFail: true,
+          errorType: AssetErrorType.UNAUTHORIZED,
+        },
       });
 
-      // Call the proxy function with config object
-      const response = await proxyAssetDownload({
-        assetType: AssetType.AUDIO,
-        bookSlug: 'test-book',
-        assetName: 'chapter-01.mp3',
-        filename: 'test-book-chapter-01.mp3',
-        log: logger,
-        assetService,
-        requestParams: { test: 'param' },
-      });
+      // Call the proxy function
+      const response = await proxyAssetDownload(config);
 
       // Verify 401 response
       expect(response).toBeDefined();
       expect(response.status).toBe(401);
-
-      // Make sure fetch was not called (since asset URL retrieval failed)
       expect(mockFetch).not.toHaveBeenCalled();
     });
 
     it('should handle fetch errors', async () => {
-      // Create mock dependencies
-      const logger = createRequestLogger('test-correlation-id');
-      const assetService = new MockAssetService();
-
-      // Mock fetch to throw network error
+      // Setup test with network error
       mockFetch.mockRejectedValue(new Error('Network error'));
+      const config = createDownloadConfig();
 
-      // Call the proxy function with config object
-      const response = await proxyAssetDownload({
-        assetType: AssetType.AUDIO,
-        bookSlug: 'test-book',
-        assetName: 'chapter-01.mp3',
-        filename: 'test-book-chapter-01.mp3',
-        log: logger,
-        assetService,
-        requestParams: { test: 'param' },
-      });
+      // Call the proxy function
+      const response = await proxyAssetDownload(config);
 
       // Verify 502 response
       expect(response).toBeDefined();
@@ -326,35 +332,12 @@ describe('Proxy Download Service', () => {
     });
 
     it('should handle non-OK fetch responses', async () => {
-      // Create mock dependencies
-      const logger = createRequestLogger('test-correlation-id');
-      const assetService = new MockAssetService();
+      // Setup test with error response
+      mockFailedFetch();
+      const config = createDownloadConfig();
 
-      // Mock fetch to return error response
-      mockFetch.mockResolvedValue({
-        ok: false,
-        status: 403,
-        statusText: 'Forbidden',
-        headers: createMockHeaders({
-          'content-type': 'application/json',
-        }),
-        text: jest.fn().mockResolvedValue(JSON.stringify({ error: 'Access denied' })),
-        clone: function () {
-          return this;
-        },
-        body: createMockStream(),
-      });
-
-      // Call the proxy function with config object
-      const response = await proxyAssetDownload({
-        assetType: AssetType.AUDIO,
-        bookSlug: 'test-book',
-        assetName: 'chapter-01.mp3',
-        filename: 'test-book-chapter-01.mp3',
-        log: logger,
-        assetService,
-        requestParams: { test: 'param' },
-      });
+      // Call the proxy function
+      const response = await proxyAssetDownload(config);
 
       // Verify error response
       expect(response).toBeDefined();
@@ -362,17 +345,7 @@ describe('Proxy Download Service', () => {
     });
 
     it('should set proper download headers', async () => {
-      // Create mock dependencies
-      const logger = createRequestLogger('test-correlation-id');
-      const assetService = new MockAssetService();
-
-      // Create a Headers object that will be returned in the response
-      const responseHeaders = new Headers();
-      responseHeaders.set('Content-Type', 'audio/mpeg');
-      responseHeaders.set('Content-Disposition', 'attachment; filename="custom-download-name.mp3"');
-      responseHeaders.set('Content-Length', '5000000');
-
-      // Override the NextResponse mock for this specific test
+      // Setup NextResponse mock specifically for this test
       const mockNextResponse = require('next/server').NextResponse;
       mockNextResponse.mockImplementationOnce(
         (body: ReadableStream | null, init: ResponseInit) => ({
@@ -382,34 +355,25 @@ describe('Proxy Download Service', () => {
         })
       );
 
-      // Mock fetch to return a valid response with specific content type
-      mockFetch.mockResolvedValue({
-        ok: true,
-        status: 200,
-        statusText: 'OK',
-        headers: createMockHeaders({
+      // Setup successful fetch with specific headers
+      mockSuccessfulFetch({
+        headers: {
           'content-type': 'audio/mpeg',
           'content-length': '5000000',
-        }),
-        body: createMockStream(),
+        },
       });
 
-      // Call the proxy function with config object
-      const response = await proxyAssetDownload({
-        assetType: AssetType.AUDIO,
-        bookSlug: 'test-book',
-        assetName: 'chapter-01.mp3',
-        filename: 'custom-download-name.mp3',
-        log: logger,
-        assetService,
-      });
+      // Use a custom filename
+      const config = createDownloadConfig({ filename: 'custom-download-name.mp3' });
 
-      // Verify headers in the response
+      // Call the proxy function
+      const response = await proxyAssetDownload(config);
+
+      // Verify response
       expect(response).toBeDefined();
       expect(response.status).toBe(200);
 
-      // In a real environment, we'd check the headers, but in our mocked environment,
-      // we'll just verify that the response was created with the expected status
+      // Verify NextResponse was called correctly
       expect(mockNextResponse).toHaveBeenCalledWith(
         expect.anything(),
         expect.objectContaining({
