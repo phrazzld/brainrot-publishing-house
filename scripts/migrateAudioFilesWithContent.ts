@@ -334,23 +334,22 @@ class AudioFilesMigrator {
     this.log(`   ⬇️ Downloading from Digital Ocean Spaces: ${audioPath}`);
     const downloadStartTime = Date.now();
 
-    const downloadResult = await downloadFromSpaces(audioPath, {
+    // Get expected types from downloadFromSpaces result
+    const downloadResult = (await downloadFromSpaces(audioPath, {
       maxRetries: this.options.retries,
       verbose: this.options.verbose,
-    });
+    })) as unknown; // Cast to unknown first
 
-    // No need to check downloadResult since it's always expected to return something
-    // The downloadFromSpaces function would throw an error if it fails
-
-    const {
-      size = 0,
-      contentType = 'audio/mpeg',
-      content,
-    } = downloadResult as {
-      size: number;
-      contentType: string;
-      content: ArrayBuffer;
+    // Then cast to the expected type for safe type handling
+    const typedResult = {
+      size: 0,
+      contentType: 'audio/mpeg',
+      content: new ArrayBuffer(0),
+      ...((downloadResult as object) || {}),
     };
+
+    // Destructure with safe defaults
+    const { size = 0, contentType = 'audio/mpeg', content } = typedResult;
 
     const downloadDuration = Date.now() - downloadStartTime;
     this.log(`   ✅ Downloaded ${size} bytes (${contentType}) in ${downloadDuration}ms`);

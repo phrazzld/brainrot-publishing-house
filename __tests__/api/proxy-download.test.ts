@@ -214,7 +214,11 @@ describe('Proxy Download Service', () => {
 
   // Helper functions for test setup and assertions
   function createDownloadConfig(
-    overrides: { assetServiceOptions?: { shouldFail?: boolean; errorType?: AssetErrorType } } = {}
+    overrides: {
+      assetServiceOptions?: { shouldFail?: boolean; errorType?: AssetErrorType };
+      filename?: string;
+      [key: string]: unknown;
+    } = {}
   ) {
     const logger = createRequestLogger('test-correlation-id');
     const assetService = new MockAssetService(overrides.assetServiceOptions);
