@@ -32,6 +32,7 @@ import fs from 'fs/promises';
 import path from 'path';
 
 import translations from '../translations';
+import { Translation as ImportedTranslation } from '../translations/types';
 import logger from '../utils/logger';
 
 // Load environment variables
@@ -131,10 +132,8 @@ interface InventoryReport {
   books: BookInventory[];
 }
 
-// Define Translation interface for proper typing
-interface Translation {
-  slug: string;
-  title: string;
+// Define local Translation interface that extends the imported one
+interface Translation extends ImportedTranslation {
   [key: string]: unknown;
 }
 
