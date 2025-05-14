@@ -18,10 +18,9 @@
  *   --concurrency=5       Number of concurrent uploads (default: 5)
  */
 import * as dotenv from 'dotenv';
+import * as fs from 'fs/promises';
+import * as path from 'path';
 import { existsSync } from 'fs';
-import fs from 'fs/promises';
-import path from 'path';
-import { fileURLToPath } from 'url';
 
 import translations from '../translations';
 import { assetExistsInBlobStorage } from '../utils/getBlobUrl';
@@ -32,9 +31,8 @@ import { blobService } from '../utils/services/BlobService';
 dotenv.config({ path: '.env.local' });
 
 // Get the project root directory
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const projectRoot = path.resolve(__dirname, '..');
+// Use a more compatible approach for Node environments
+const projectRoot = path.resolve(process.cwd());
 
 // Define asset types
 type AssetType = 'cover' | 'chapter' | 'audio' | 'text' | 'all';

@@ -23,9 +23,8 @@ jest.mock('../../utils/services/BlobPathService', () => ({
 }));
 
 describe('Blob URL Utilities', () => {
-  const originalNodeEnv = process.env.NODE_ENV;
-  const originalBlobBaseUrl = process.env.NEXT_PUBLIC_BLOB_BASE_URL;
-  const originalBlobDevUrl = process.env.NEXT_PUBLIC_BLOB_DEV_URL;
+  // Store original env values to restore later
+  const originalEnv = { ...process.env };
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -44,17 +43,35 @@ describe('Blob URL Utilities', () => {
       }
     );
 
-    // Set default environment variables
-    process.env.NODE_ENV = 'production';
-    process.env.NEXT_PUBLIC_BLOB_BASE_URL = 'https://public.blob.vercel-storage.com';
-    process.env.NEXT_PUBLIC_BLOB_DEV_URL = 'https://dev.blob.vercel-storage.com';
+    // Set default environment variables using a type assertion to bypass readonly constraint
+    const env = process.env as unknown as Record<string, string>;
+    env.NODE_ENV = 'production';
+    env.NEXT_PUBLIC_BLOB_BASE_URL = 'https://public.blob.vercel-storage.com';
+    env.NEXT_PUBLIC_BLOB_DEV_URL = 'https://dev.blob.vercel-storage.com';
   });
 
   afterEach(() => {
-    // Restore environment variables
-    process.env.NODE_ENV = originalNodeEnv;
-    process.env.NEXT_PUBLIC_BLOB_BASE_URL = originalBlobBaseUrl;
-    process.env.NEXT_PUBLIC_BLOB_DEV_URL = originalBlobDevUrl;
+    // Restore environment variables using a type assertion to bypass readonly constraint
+    const env = process.env as unknown as Record<string, string>;
+
+    // Only restore what was originally set
+    if ('NODE_ENV' in originalEnv) {
+      env.NODE_ENV = originalEnv.NODE_ENV as string;
+    } else {
+      delete env.NODE_ENV;
+    }
+
+    if ('NEXT_PUBLIC_BLOB_BASE_URL' in originalEnv) {
+      env.NEXT_PUBLIC_BLOB_BASE_URL = originalEnv.NEXT_PUBLIC_BLOB_BASE_URL as string;
+    } else {
+      delete env.NEXT_PUBLIC_BLOB_BASE_URL;
+    }
+
+    if ('NEXT_PUBLIC_BLOB_DEV_URL' in originalEnv) {
+      env.NEXT_PUBLIC_BLOB_DEV_URL = originalEnv.NEXT_PUBLIC_BLOB_DEV_URL as string;
+    } else {
+      delete env.NEXT_PUBLIC_BLOB_DEV_URL;
+    }
   });
 
   describe('generateBlobUrl', () => {
@@ -86,7 +103,8 @@ describe('Blob URL Utilities', () => {
     });
 
     it('should use development URL when environment is development', () => {
-      process.env.NODE_ENV = 'development';
+      // Use type assertion to set readonly property
+      (process.env as unknown as Record<string, string>).NODE_ENV = 'development';
       const blobPath = 'books/hamlet/images/hamlet-01.png';
 
       generateBlobUrl(blobPath);

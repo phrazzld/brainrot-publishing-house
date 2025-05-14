@@ -49,6 +49,41 @@ This TODO list details the tasks required to fully migrate all asset management 
   - [x] Fix type error in utils/services/VercelBlobAssetService.ts involving ListBlobResultBlob
   - Dependencies: none
 
+- [x] **T027: Fix remaining TypeScript issues blocking push**
+
+  - [x] Fix complexity issues in specific files:
+    - [x] Fix complexity in scripts/migrateAudioFilesWithContent.ts processAudioFile method
+    - [x] Refactor **tests**/api/proxy-download.test.ts with helper functions
+  - [x] Fix TypeScript errors in our refactored files:
+    - [x] Fix void type conversion issue in migrateAudioFilesWithContent.ts downloadAudioFile
+    - [x] Fix indexable type issue in proxy-download.test.ts createDownloadConfig
+  - [x] Fix Blob vs File type incompatibility:
+    - [x] **tests**/scripts/migrateBookCoverImages.test.ts (line 345) - Type compatibility between BlobService and test mock
+  - [x] Fix migrateRemainingAssets.test.ts issues:
+    - [x] Fix 'put' mock types assigned to 'never'
+    - [x] Fix 'path' type being 'unknown'
+    - [x] Fix mock function parameter type mismatches
+    - [x] Fix generic Mock type argument usage
+  - [x] Fix import path issues:
+    - [x] **tests**/scripts/verifyCdnUrls.test.ts - TS5097 error on .ts extension
+  - [x] Fix missing module references:
+    - [x] **tests**/services/s3SignedUrlGenerator.test.ts - Cannot find module
+    - [x] **tests**/services/s3SignedUrlGenerator.test.ts - Missing 'SigningError' export
+  - [x] Fix type assignment issues in service tests:
+    - [x] **tests**/services/VercelBlobAssetService.test.ts - Type 'unknown' to File constructor
+  - [x] Fix property access on void types:
+    - [x] **tests**/utils/downloadFromSpaces.test.ts - Fix access to url, size, contentType on void
+  - [x] Fix read-only property assignments:
+    - [x] **tests**/utils/getBlobUrl.test.ts - Read-only NODE_ENV assignments
+  - [x] Fix variable redeclaration issues:
+    - [x] **tests**/utils/test-utils.tsx - Export conflicts for 'render' and 'act'
+  - [x] Fix unused directives:
+    - [x] **tests**/utils/validators/AssetNameValidator.test.ts - Unused '@ts-expect-error'
+  - [x] Fix parameter type issues in scripts:
+    - [x] scripts/benchmark-downloads.ts - Parameter type compatibility
+    - [x] scripts/create-asset-inventory.ts - 'unknown' to 'string' assignments
+  - Dependencies: none
+
 - [x] **T023: Refactor complex functions for maintainability**
 
   - [x] Reduce complexity of functions exceeding the limit of 10:

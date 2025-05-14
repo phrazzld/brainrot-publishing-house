@@ -1,6 +1,6 @@
-// Import with proper typing
-import { BlobPathService } from '../../utils/services/BlobPathService';
-import { BlobService } from '../../utils/services/BlobService';
+// Import with proper typing - using underscore to indicate unused type imports
+import type { BlobPathService as _BlobPathService } from '../../utils/services/BlobPathService';
+import type { BlobService as _IBlobService } from '../../utils/services/BlobService';
 
 // Use CommonJS require for compatibility with Jest
 // Explicitly type the requires to avoid TS errors
@@ -10,39 +10,30 @@ const path = require('path') as typeof import('path');
 // Import local modules
 const translations = require('../../translations').default;
 
-// Mock the BlobService
+// Create a mock class that implements our interface requirements
+class MockBlobService {
+  uploadFile = jest.fn().mockResolvedValue({
+    url: 'https://public.blob.vercel-storage.com/test-url',
+    size: 1024,
+    uploadedAt: new Date().toISOString(),
+  });
+
+  getFileInfo = jest.fn().mockResolvedValue({
+    size: 1024,
+    uploadedAt: new Date().toISOString(),
+    contentType: 'image/png',
+  });
+
+  getUrlForPath = jest
+    .fn()
+    .mockImplementation((path: string) => `https://public.blob.vercel-storage.com/${path}`);
+}
+
+// Mock the BlobService module
 jest.mock('../../utils/services/BlobService', () => {
   return {
-    BlobService: jest.fn().mockImplementation(() => ({
-      uploadFile: jest.fn().mockResolvedValue({
-        url: 'https://public.blob.vercel-storage.com/test-url',
-        size: 1024,
-        uploadedAt: new Date().toISOString(),
-      }),
-      getFileInfo: jest.fn().mockResolvedValue({
-        size: 1024,
-        uploadedAt: new Date().toISOString(),
-        contentType: 'image/png',
-      }),
-      getUrlForPath: jest
-        .fn()
-        .mockImplementation((path) => `https://public.blob.vercel-storage.com/${path}`),
-    })),
-    blobService: {
-      uploadFile: jest.fn().mockResolvedValue({
-        url: 'https://public.blob.vercel-storage.com/test-url',
-        size: 1024,
-        uploadedAt: new Date().toISOString(),
-      }),
-      getFileInfo: jest.fn().mockResolvedValue({
-        size: 1024,
-        uploadedAt: new Date().toISOString(),
-        contentType: 'image/png',
-      }),
-      getUrlForPath: jest
-        .fn()
-        .mockImplementation((path) => `https://public.blob.vercel-storage.com/${path}`),
-    },
+    BlobService: jest.fn().mockImplementation(() => new MockBlobService()),
+    blobService: new MockBlobService(),
   };
 });
 
@@ -341,6 +332,10 @@ describe('CoverImageMigrationService', () => {
   let migrationService: CoverImageMigrationService;
 
   beforeEach(() => {
+    // Import the mocked versions dynamically to get the mock implementations
+    const { BlobService } = jest.requireMock('../../utils/services/BlobService');
+    const { BlobPathService } = jest.requireActual('../../utils/services/BlobPathService');
+
     migrationService = new CoverImageMigrationService(
       new BlobService(),
       new BlobPathService(),
@@ -354,6 +349,7 @@ describe('CoverImageMigrationService', () => {
   });
 
   it('should correctly map paths using BlobPathService', () => {
+    const { BlobPathService } = jest.requireActual('../../utils/services/BlobPathService');
     const blobPathService = new BlobPathService();
     const examplePath = '/assets/hamlet/images/hamlet-07.png';
     const blobPath = blobPathService.convertLegacyPath(examplePath);
@@ -413,16 +409,21 @@ describe('CoverImageMigrationService', () => {
   });
 
   it('should handle errors during migration', async () => {
-    // Override the uploadFile method for this test only
-    const originalUploadFile = BlobService.prototype.uploadFile;
-    BlobService.prototype.uploadFile = jest.fn().mockRejectedValueOnce(new Error('Upload failed'));
+    // Get the mock BlobService implementation
+    const { BlobService } = jest.requireMock('../../utils/services/BlobService');
+
+    // Create mock instance
+    const mockInstance = new BlobService();
+    // We don't need to save the original implementation since we're using the mock directly
+
+    // Override the mock method for this test
+    mockInstance.uploadFile.mockRejectedValueOnce(new Error('Upload failed'));
 
     const result = await migrationService.migrateAll({
       books: [translations[0].slug],
     });
 
-    // Restore the original method after the test
-    BlobService.prototype.uploadFile = originalUploadFile;
+    // No need to restore as Jest will reset mocks between tests
 
     expect(result.total).toBe(1);
     expect(result.failed).toBe(1);
