@@ -3,9 +3,8 @@
 /**
  * Asset Inventory Creation Script
  *
- * This script creates a comprehensive inventory of all assets from both
- * Digital Ocean Spaces and Vercel Blob, mapping them to their expected
- * locations in translations data.
+ * This script creates a comprehensive inventory of all assets from Vercel Blob,
+ * mapping them to their expected locations in translations data.
  *
  * It identifies:
  * - Missing assets
@@ -25,7 +24,6 @@
  *   --verify-all         Verify all assets exist (slower)
  */
 import * as dotenv from 'dotenv';
-import { HeadObjectCommand, ListObjectsV2Command, S3Client } from '@aws-sdk/client-s3';
 import { head, list } from '@vercel/blob';
 import { existsSync } from 'fs';
 import fs from 'fs/promises';
@@ -40,9 +38,6 @@ dotenv.config({ path: '.env.local' });
 
 // Set constants
 const DEFAULT_OUTPUT = 'asset-inventory.json';
-const DO_REGION = 'nyc3';
-const DO_BUCKET = process.env.DO_SPACES_BUCKET || 'brainrot-publishing';
-const DO_SPACES_ENDPOINT = process.env.DO_SPACES_ENDPOINT || 'nyc3.digitaloceanspaces.com';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const VERCEL_BLOB_BASE_URL = process.env.NEXT_PUBLIC_BLOB_BASE_URL || '';
 
@@ -77,7 +72,6 @@ interface Asset {
   type: AssetType;
   bookSlug: string;
   assetName: string;
-  digitalOcean: AssetStorageInfo;
   vercelBlob: AssetStorageInfo;
   translations: AssetTranslationInfo;
   issues: string[];
@@ -121,12 +115,10 @@ interface InventoryReport {
       total: number;
     };
     storageStats: {
-      digitalOcean: StorageStats;
       vercelBlob: StorageStats;
     };
   };
   pathPatterns: {
-    digitalOcean: string[];
     vercelBlob: string[];
   };
   books: BookInventory[];
@@ -157,14 +149,12 @@ interface StorageObject {
 
 interface ProcessBookContext {
   book: Translation;
-  doObjectsByBook: Map<string, StorageObject[]>;
   blobObjectsByBook: Map<string, StorageObject[]>;
   options: InventoryOptions;
   report: InventoryReport;
 }
 
-// S3 Client for Digital Ocean
-let s3Client: S3Client | null = null;
+// No S3 client needed as we're only using Vercel Blob
 
 /**
  * Parse command line arguments
@@ -209,9 +199,8 @@ function printHelp(): void {
   const helpText = `
 Asset Inventory Creation Script
 
-This script creates a comprehensive inventory of all assets from both
-Digital Ocean Spaces and Vercel Blob, mapping them to their expected
-locations in translations data.
+This script creates a comprehensive inventory of all assets from Vercel Blob,
+mapping them to their expected locations in translations data.
 
 Usage:
   npx tsx scripts/create-asset-inventory.ts [options]
@@ -246,89 +235,16 @@ function formatSize(bytes: number): string {
 }
 
 /**
- * Initialize the S3 client for Digital Ocean
+ * No S3 client initialization needed
  */
-function initializeS3Client(): S3Client {
-  if (s3Client) return s3Client;
-
-  const accessKeyId = process.env.DO_SPACES_ACCESS_KEY;
-  const secretAccessKey = process.env.DO_SPACES_SECRET_KEY;
-
-  if (!accessKeyId || !secretAccessKey) {
-    throw new Error(
-      'Digital Ocean credentials not found. Set DO_SPACES_ACCESS_KEY and DO_SPACES_SECRET_KEY in .env.local'
-    );
-  }
-
-  s3Client = new S3Client({
-    region: DO_REGION,
-    endpoint: `https://${DO_SPACES_ENDPOINT}`,
-    credentials: {
-      accessKeyId,
-      secretAccessKey,
-    },
-  });
-
-  return s3Client;
-}
 
 /**
- * List objects in Digital Ocean Spaces
+ * List objects function removed as we only use Vercel Blob now
  */
-async function listDigitalOceanObjects(prefix?: string): Promise<Record<string, unknown>[]> {
-  const client = initializeS3Client();
-  const objects: Record<string, unknown>[] = [];
-  let continuationToken: string | undefined;
-
-  do {
-    const command = new ListObjectsV2Command({
-      Bucket: DO_BUCKET,
-      Prefix: prefix,
-      ContinuationToken: continuationToken,
-      MaxKeys: 1000,
-    });
-
-    try {
-      const response = await client.send(command);
-      if (response.Contents) {
-        // @ts-expect-error: AWS SDK types are not fully compatible with TypeScript's strictness
-        objects.push(...response.Contents);
-      }
-      continuationToken = response.NextContinuationToken;
-    } catch (error) {
-      console.error('Error listing objects from Digital Ocean:', error);
-      throw error;
-    }
-  } while (continuationToken);
-
-  return objects;
-}
 
 /**
- * Get an object's metadata from Digital Ocean Spaces
+ * Digital Ocean metadata function removed as we only use Vercel Blob now
  */
-async function getDigitalOceanObjectMetadata(key: string): Promise<{
-  size: number;
-  lastModified: Date;
-  contentType: string;
-}> {
-  const client = initializeS3Client();
-  const command = new HeadObjectCommand({
-    Bucket: DO_BUCKET,
-    Key: key,
-  });
-
-  try {
-    const response = await client.send(command);
-    return {
-      size: response.ContentLength || 0,
-      lastModified: response.LastModified || new Date(),
-      contentType: response.ContentType || 'application/octet-stream',
-    };
-  } catch (error) {
-    throw new Error(`Failed to get metadata for ${key}: ${error}`);
-  }
-}
 
 /**
  * List objects in Vercel Blob
@@ -458,10 +374,6 @@ function initializeInventoryReport(options: InventoryOptions, bookCount: number)
         total: 0,
       },
       storageStats: {
-        digitalOcean: {
-          totalSize: 0,
-          totalCount: 0,
-        },
         vercelBlob: {
           totalSize: 0,
           totalCount: 0,
@@ -469,7 +381,6 @@ function initializeInventoryReport(options: InventoryOptions, bookCount: number)
       },
     },
     pathPatterns: {
-      digitalOcean: [],
       vercelBlob: [],
     },
     books: [],
@@ -668,94 +579,12 @@ function collectReferencedAssets(
 }
 
 /**
- * Process a single Digital Ocean object
+ * Digital Ocean object processing removed as we only use Vercel Blob now
  */
-async function processDigitalOceanObject(
-  obj: Record<string, unknown>,
-  context: ProcessObjectsContext,
-  doObjectMetadata: boolean
-): Promise<void> {
-  const { book, bookInventory, referencedAssets, options, report } = context;
-
-  const assetName = getAssetNameFromPath(obj.Key as string);
-  const assetType = getAssetTypeFromPath(obj.Key as string);
-
-  // Skip asset types not in options
-  if (!options.assetTypes.includes(assetType)) return;
-
-  const key = `${assetType}:${assetName}`;
-  let asset = bookInventory.assets.find((a) => a.type === assetType && a.assetName === assetName);
-
-  if (!asset) {
-    asset = {
-      type: assetType,
-      bookSlug: book.slug as string,
-      assetName,
-      digitalOcean: {
-        exists: true,
-        path: obj.Key as string,
-        size: obj.Size as number,
-        lastModified: obj.LastModified as Date,
-      },
-      vercelBlob: {
-        exists: false,
-      },
-      translations: {
-        referenced: referencedAssets.has(key),
-        path: referencedAssets.get(key)?.path,
-        usageInfo: referencedAssets.get(key)?.info,
-      },
-      issues: [],
-    };
-    bookInventory.assets.push(asset);
-    bookInventory.assetCount[assetType]++;
-    bookInventory.assetCount.total++;
-  } else {
-    asset.digitalOcean = {
-      exists: true,
-      path: obj.Key as string,
-      size: obj.Size as number,
-      lastModified: obj.LastModified as Date,
-    };
-  }
-
-  // Get full metadata if needed
-  if (doObjectMetadata) {
-    try {
-      const metadata = await getDigitalOceanObjectMetadata(obj.Key as string);
-      asset.digitalOcean.size = metadata.size;
-      asset.digitalOcean.lastModified = metadata.lastModified;
-      asset.digitalOcean.contentType = metadata.contentType;
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      asset.digitalOcean.error = errorMessage;
-      asset.issues.push(`Digital Ocean error: ${errorMessage}`);
-      bookInventory.issues.other++;
-    }
-  }
-
-  // Update storage stats
-  report.summary.storageStats.digitalOcean.totalCount++;
-  report.summary.storageStats.digitalOcean.totalSize += (obj.Size as number) || 0;
-}
 
 /**
- * Process Digital Ocean objects for a book
+ * Digital Ocean objects processing removed as we only use Vercel Blob now
  */
-async function processDigitalOceanObjects(
-  context: ProcessObjectsContext,
-  doBookObjects: Record<string, unknown>[]
-): Promise<void> {
-  const { options } = context;
-  const doObjectMetadata = options.verifyAll || options.checkContent;
-
-  // Process each object
-  const processPromises = doBookObjects.map((obj) =>
-    processDigitalOceanObject(obj, context, doObjectMetadata)
-  );
-
-  await Promise.all(processPromises);
-}
 
 /**
  * Process a single Vercel Blob object
@@ -781,9 +610,6 @@ async function processVercelBlobObject(
       type: assetType,
       bookSlug: book.slug as string,
       assetName,
-      digitalOcean: {
-        exists: false,
-      },
       vercelBlob: {
         exists: true,
         path: obj.pathname as string,
@@ -870,9 +696,6 @@ function processMissingReferencedAssets(
         type: assetType,
         bookSlug: book.slug as string,
         assetName,
-        digitalOcean: {
-          exists: false,
-        },
         vercelBlob: {
           exists: false,
         },
@@ -881,7 +704,7 @@ function processMissingReferencedAssets(
           path: assetRef.path,
           usageInfo: assetRef.info,
         },
-        issues: ['Referenced in translations but not found in any storage'],
+        issues: ['Referenced in translations but not found in storage'],
       };
       bookInventory.assets.push(newAsset);
       bookInventory.assetCount[assetType]++;
@@ -908,8 +731,8 @@ function identifyAssetIssues(bookInventory: BookInventory): void {
  * Check if asset is missing from all storage systems
  */
 function checkMissingAsset(asset: Asset, bookInventory: BookInventory): void {
-  if (!asset.digitalOcean.exists && !asset.vercelBlob.exists && asset.translations.referenced) {
-    asset.issues.push('Asset is referenced but missing from all storage systems');
+  if (!asset.vercelBlob.exists && asset.translations.referenced) {
+    asset.issues.push('Asset is referenced but missing from storage');
     bookInventory.issues.missingAssets++;
   }
 }
@@ -917,46 +740,17 @@ function checkMissingAsset(asset: Asset, bookInventory: BookInventory): void {
 /**
  * Check for inconsistent paths between storage systems
  */
-function checkInconsistentPaths(asset: Asset, bookInventory: BookInventory): void {
-  if (
-    asset.digitalOcean.exists &&
-    asset.vercelBlob.exists &&
-    asset.digitalOcean.path &&
-    asset.vercelBlob.path
-  ) {
-    const doPath = asset.digitalOcean.path;
-    const blobPath = asset.vercelBlob.path;
-
-    // If paths have completely different structures
-    if (
-      doPath.split('/').length !== blobPath.split('/').length ||
-      !doPath.endsWith(asset.assetName) ||
-      !blobPath.endsWith(asset.assetName)
-    ) {
-      asset.issues.push('Inconsistent paths between storage systems');
-      bookInventory.issues.inconsistentPaths++;
-    }
-  }
+function checkInconsistentPaths(_asset: Asset, _bookInventory: BookInventory): void {
+  // No inconsistent paths check needed as we only use Vercel Blob now
+  return;
 }
 
 /**
  * Check for size mismatches between storage systems
  */
-function checkSizeMismatch(asset: Asset, bookInventory: BookInventory): void {
-  if (
-    asset.digitalOcean.exists &&
-    asset.vercelBlob.exists &&
-    asset.digitalOcean.size &&
-    asset.vercelBlob.size &&
-    Math.abs(asset.digitalOcean.size - asset.vercelBlob.size) > 100 // Allow small differences
-  ) {
-    asset.issues.push(
-      `Size mismatch: DO (${formatSize(asset.digitalOcean.size)}) vs Blob (${formatSize(
-        asset.vercelBlob.size
-      )})`
-    );
-    bookInventory.issues.other++;
-  }
+function checkSizeMismatch(_asset: Asset, _bookInventory: BookInventory): void {
+  // No size mismatch check needed as we only use Vercel Blob now
+  return;
 }
 
 /**
@@ -1006,7 +800,7 @@ function identifyDuplicateAssets(bookInventory: BookInventory): void {
  * Process a single book and add it to the inventory
  */
 async function processBook(context: ProcessBookContext): Promise<BookInventory> {
-  const { book, doObjectsByBook, blobObjectsByBook, options, report } = context;
+  const { book, blobObjectsByBook, options, report } = context;
 
   if (options.verbose) {
     logger.info({ msg: `Processing book: ${book.slug} (${book.title})` });
@@ -1031,12 +825,11 @@ async function processBook(context: ProcessBookContext): Promise<BookInventory> 
   };
 
   // Get book objects
-  const doBookObjects: StorageObject[] = doObjectsByBook.get(book.slug) || [];
   const blobBookObjects: StorageObject[] = blobObjectsByBook.get(book.slug) || [];
 
   if (options.verbose) {
     logger.info({
-      msg: `Found ${doBookObjects.length} Digital Ocean objects and ${blobBookObjects.length} Vercel Blob objects`,
+      msg: `Found ${blobBookObjects.length} Vercel Blob objects`,
       book: book.slug,
     });
   }
@@ -1053,11 +846,8 @@ async function processBook(context: ProcessBookContext): Promise<BookInventory> 
     report,
   };
 
-  // Process objects from both storage systems
-  await Promise.all([
-    processDigitalOceanObjects(processingContext, doBookObjects),
-    processVercelBlobObjects(processingContext, blobBookObjects),
-  ]);
+  // Process Vercel Blob objects
+  await processVercelBlobObjects(processingContext, blobBookObjects);
 
   // Add assets referenced in translations but not found in storage
   processMissingReferencedAssets(book, bookInventory, referencedAssets);
@@ -1103,27 +893,16 @@ async function createAssetInventory(options: InventoryOptions): Promise<Inventor
   // Initialize the report
   const report = initializeInventoryReport(options, booksToProcess.length);
 
-  // Fetch all objects from both storage systems
-  logger.info({ msg: 'Fetching objects from Digital Ocean Spaces...' });
-  const doObjects = await listDigitalOceanObjects();
-  logger.info({ msg: `Found ${doObjects.length} objects in Digital Ocean Spaces` });
-
+  // Fetch all objects from Vercel Blob storage
   logger.info({ msg: 'Fetching objects from Vercel Blob...' });
   const blobObjects = await listVercelBlobObjects();
   logger.info({ msg: `Found ${blobObjects.length} objects in Vercel Blob` });
 
   // Group objects by book and extract path patterns
-  const { objectsByBook: doObjectsByBook, pathPatterns: pathPatternsDO } = groupObjectsByBook(
-    doObjects,
-    true
-  );
-  const { objectsByBook: blobObjectsByBook, pathPatterns: pathPatternsBlob } = groupObjectsByBook(
-    blobObjects,
-    false
-  );
+  const { objectsByBook: blobObjectsByBook, pathPatterns: pathPatternsBlob } =
+    groupObjectsByBook(blobObjects);
 
   // Add path patterns to report
-  report.pathPatterns.digitalOcean = Array.from(pathPatternsDO);
   report.pathPatterns.vercelBlob = Array.from(pathPatternsBlob);
 
   // Process each book
@@ -1131,7 +910,6 @@ async function createAssetInventory(options: InventoryOptions): Promise<Inventor
   for (const book of booksToProcess) {
     const context: ProcessBookContext = {
       book,
-      doObjectsByBook: doObjectsByBook as Map<string, StorageObject[]>,
       blobObjectsByBook: blobObjectsByBook as Map<string, StorageObject[]>,
       options,
       report,
@@ -1180,11 +958,6 @@ async function generateMarkdownReport(report: InventoryReport, outputPath: strin
     return [
       '## Storage Statistics',
       '',
-      '### Digital Ocean Spaces',
-      '',
-      `- **Total Objects**: ${report.summary.storageStats.digitalOcean.totalCount}`,
-      `- **Total Size**: ${formatSize(report.summary.storageStats.digitalOcean.totalSize)}`,
-      '',
       '### Vercel Blob',
       '',
       `- **Total Objects**: ${report.summary.storageStats.vercelBlob.totalCount}`,
@@ -1207,14 +980,7 @@ async function generateMarkdownReport(report: InventoryReport, outputPath: strin
   };
 
   const generatePathPatternsSection = (report: InventoryReport): string[] => {
-    const lines = ['## Path Patterns', '', '### Digital Ocean Spaces', ''];
-
-    // Add DO path patterns
-    for (const pattern of report.pathPatterns.digitalOcean) {
-      lines.push(`- \`${pattern}\``);
-    }
-
-    lines.push('', '### Vercel Blob', '');
+    const lines = ['## Path Patterns', '', '### Vercel Blob', ''];
 
     // Add Blob path patterns
     for (const pattern of report.pathPatterns.vercelBlob) {
@@ -1298,9 +1064,8 @@ async function generateMarkdownReport(report: InventoryReport, outputPath: strin
       '## Recommendations',
       '',
       '1. **Missing Assets**: Upload any referenced assets missing from storage',
-      '2. **Inconsistent Paths**: Standardize path structure across storage systems',
-      '3. **Duplicate Assets**: Consolidate duplicate assets to single instances',
-      '4. **Path Structure**: Adopt a consistent path structure for all asset types',
+      '2. **Duplicate Assets**: Consolidate duplicate assets to single instances',
+      '3. **Path Structure**: Adopt a consistent path structure for all asset types',
       '',
     ];
   };
@@ -1355,11 +1120,6 @@ function printInventorySummary(report: InventoryReport): void {
   console.error(`  - Text: ${report.summary.assetsByType.text}`);
   console.error(`  - Images: ${report.summary.assetsByType.image}`);
   console.error('\nStorage Statistics:');
-  console.error(
-    `Digital Ocean: ${report.summary.storageStats.digitalOcean.totalCount} objects (${formatSize(
-      report.summary.storageStats.digitalOcean.totalSize
-    )})`
-  );
   console.error(
     `Vercel Blob: ${report.summary.storageStats.vercelBlob.totalCount} objects (${formatSize(
       report.summary.storageStats.vercelBlob.totalSize
