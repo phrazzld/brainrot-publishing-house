@@ -390,10 +390,7 @@ function initializeInventoryReport(options: InventoryOptions, bookCount: number)
 /**
  * Group objects by book slug
  */
-function groupObjectsByBook(
-  objects: Record<string, unknown>[],
-  isDigitalOcean: boolean
-): {
+function groupObjectsByBook(objects: Record<string, unknown>[]): {
   objectsByBook: Map<string, Record<string, unknown>[]>;
   pathPatterns: Set<string>;
 } {
@@ -401,7 +398,7 @@ function groupObjectsByBook(
   const pathPatterns = new Set<string>();
 
   for (const obj of objects) {
-    const key = isDigitalOcean ? (obj.Key as string) : (obj.pathname as string);
+    const key = obj.pathname as string;
     const bookSlug = getBookSlugFromPath(key);
     if (bookSlug) {
       if (!objectsByBook.has(bookSlug)) {
