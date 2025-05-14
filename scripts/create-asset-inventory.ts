@@ -131,19 +131,35 @@ interface InventoryReport {
   books: BookInventory[];
 }
 
+// Define Translation interface for proper typing
+interface Translation {
+  slug: string;
+  title: string;
+  [key: string]: unknown;
+}
+
 // Helper interfaces to reduce function parameter counts
 interface ProcessObjectsContext {
-  book: Record<string, unknown>;
+  book: Translation;
   bookInventory: BookInventory;
   referencedAssets: Map<string, { type: AssetType; path: string; info: string }>;
   options: InventoryOptions;
   report: InventoryReport;
 }
 
+interface StorageObject {
+  key?: string;
+  path?: string;
+  size?: number;
+  lastModified?: Date;
+  contentType?: string;
+  [key: string]: unknown;
+}
+
 interface ProcessBookContext {
-  book: Record<string, unknown>;
-  doObjectsByBook: Map<string, Record<string, unknown>[]>;
-  blobObjectsByBook: Map<string, Record<string, unknown>[]>;
+  book: Translation;
+  doObjectsByBook: Map<string, StorageObject[]>;
+  blobObjectsByBook: Map<string, StorageObject[]>;
   options: InventoryOptions;
   report: InventoryReport;
 }
@@ -1016,8 +1032,8 @@ async function processBook(context: ProcessBookContext): Promise<BookInventory> 
   };
 
   // Get book objects
-  const doBookObjects = doObjectsByBook.get(book.slug) || [];
-  const blobBookObjects = blobObjectsByBook.get(book.slug) || [];
+  const doBookObjects: StorageObject[] = doObjectsByBook.get(book.slug) || [];
+  const blobBookObjects: StorageObject[] = blobObjectsByBook.get(book.slug) || [];
 
   if (options.verbose) {
     logger.info({
@@ -1080,8 +1096,8 @@ async function createAssetInventory(options: InventoryOptions): Promise<Inventor
   // Get all books to process
   const booksToProcess =
     options.bookSlugs.length > 0
-      ? translations.filter((book) => options.bookSlugs.includes(book.slug))
-      : translations;
+      ? (translations.filter((book) => options.bookSlugs.includes(book.slug)) as Translation[])
+      : (translations as Translation[]);
 
   logger.info({ msg: `Processing ${booksToProcess.length} books for asset inventory` });
 
@@ -1116,8 +1132,8 @@ async function createAssetInventory(options: InventoryOptions): Promise<Inventor
   for (const book of booksToProcess) {
     const context: ProcessBookContext = {
       book,
-      doObjectsByBook,
-      blobObjectsByBook,
+      doObjectsByBook: doObjectsByBook as Map<string, StorageObject[]>,
+      blobObjectsByBook: blobObjectsByBook as Map<string, StorageObject[]>,
       options,
       report,
     };

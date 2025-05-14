@@ -425,11 +425,12 @@ async function benchmarkProxyEndpoint(params: ProxyEndpointParams): Promise<Benc
 
 /**
  * Run concurrent tests for a given benchmark function
+ * @template T The type of parameters the benchmark function accepts
  */
-async function runConcurrentTests(
-  benchmarkFn: (params: unknown) => Promise<BenchmarkResult>,
+async function runConcurrentTests<T>(
+  benchmarkFn: (params: T) => Promise<BenchmarkResult>,
   concurrencyLevel: number,
-  args: unknown[]
+  args: T[]
 ): Promise<BenchmarkResult[]> {
   const results: BenchmarkResult[] = [];
 
@@ -511,10 +512,10 @@ async function benchmarkBook(
   benchmarkLogger.info({
     msg: `Running API tests for ${book.slug} with concurrency ${concurrencyLevel}`,
   });
-  const apiResults = await runConcurrentTests(
+  const apiResults = await runConcurrentTests<ApiEndpointParams>(
     benchmarkApiEndpoint,
     concurrencyLevel,
-    apiTestConfigs
+    apiTestConfigs.map((params) => params[0])
   );
   results.push(...apiResults);
 
@@ -562,10 +563,10 @@ async function benchmarkBook(
   benchmarkLogger.info({
     msg: `Running proxy tests for ${book.slug} with concurrency ${concurrencyLevel}`,
   });
-  const proxyResults = await runConcurrentTests(
+  const proxyResults = await runConcurrentTests<ProxyEndpointParams>(
     benchmarkProxyEndpoint,
     concurrencyLevel,
-    proxyTestConfigs
+    proxyTestConfigs.map((params) => params[0])
   );
   results.push(...proxyResults);
 

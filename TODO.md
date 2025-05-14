@@ -49,7 +49,7 @@ This TODO list details the tasks required to fully migrate all asset management 
   - [x] Fix type error in utils/services/VercelBlobAssetService.ts involving ListBlobResultBlob
   - Dependencies: none
 
-- [x] **T027: Fix remaining TypeScript issues blocking push**
+- [x] **T027: Fix initial TypeScript issues blocking push**
 
   - [x] Fix complexity issues in specific files:
     - [x] Fix complexity in scripts/migrateAudioFilesWithContent.ts processAudioFile method
@@ -64,24 +64,29 @@ This TODO list details the tasks required to fully migrate all asset management 
     - [x] Fix 'path' type being 'unknown'
     - [x] Fix mock function parameter type mismatches
     - [x] Fix generic Mock type argument usage
-  - [x] Fix import path issues:
-    - [x] **tests**/scripts/verifyCdnUrls.test.ts - TS5097 error on .ts extension
-  - [x] Fix missing module references:
-    - [x] **tests**/services/s3SignedUrlGenerator.test.ts - Cannot find module
-    - [x] **tests**/services/s3SignedUrlGenerator.test.ts - Missing 'SigningError' export
-  - [x] Fix type assignment issues in service tests:
-    - [x] **tests**/services/VercelBlobAssetService.test.ts - Type 'unknown' to File constructor
   - [x] Fix property access on void types:
     - [x] **tests**/utils/downloadFromSpaces.test.ts - Fix access to url, size, contentType on void
   - [x] Fix read-only property assignments:
     - [x] **tests**/utils/getBlobUrl.test.ts - Read-only NODE_ENV assignments
+  - Dependencies: none
+
+- [x] **T028: Fix remaining TypeScript errors blocking push**
+
+  - [x] Fix import path issues:
+    - [x] **tests**/scripts/verifyCdnUrls.test.ts (line 20) - TS5097 error on .ts extension
+  - [x] Fix type assignment issues in service tests:
+    - [x] **tests**/services/VercelBlobAssetService.test.ts (line 48) - Type 'unknown' is not assignable to File constructor
   - [x] Fix variable redeclaration issues:
-    - [x] **tests**/utils/test-utils.tsx - Export conflicts for 'render' and 'act'
+    - [x] **tests**/utils/test-utils.tsx (lines 6, 26, 30) - Export conflicts for 'render' and 'act'
   - [x] Fix unused directives:
-    - [x] **tests**/utils/validators/AssetNameValidator.test.ts - Unused '@ts-expect-error'
+    - [x] **tests**/utils/validators/AssetNameValidator.test.ts (line 20) - Remove unused '@ts-expect-error' directive
   - [x] Fix parameter type issues in scripts:
-    - [x] scripts/benchmark-downloads.ts - Parameter type compatibility
-    - [x] scripts/create-asset-inventory.ts - 'unknown' to 'string' assignments
+    - [x] scripts/benchmark-downloads.ts (lines 515, 566) - Make parameter types compatible:
+      - Fix ApiEndpointParams and 'unknown' type incompatibility
+      - Fix ProxyEndpointParams and 'unknown' type incompatibility
+    - [x] scripts/create-asset-inventory.ts (lines 1001, 1002, 1019, 1020, 1118):
+      - Fix Type 'unknown' assignments to 'string'
+      - Fix Translation type not assignable to Record<string, unknown>
   - Dependencies: none
 
 - [x] **T023: Refactor complex functions for maintainability**

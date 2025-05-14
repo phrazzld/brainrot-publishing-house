@@ -45,25 +45,35 @@ jest.mock('@vercel/blob', () => ({
 }));
 
 // Mock File constructor for uploads
-global.File = class File {
+global.File = class MockFile {
   name: string;
   size: number;
   type: string;
+  lastModified: number;
+
   constructor(bits: BlobPart[], name: string, options?: FilePropertyBag) {
     this.name = name;
     this.type = options?.type || '';
     this.size = 0;
+    this.lastModified = options?.lastModified || Date.now();
   }
+
   text(): Promise<string> {
     return Promise.resolve('');
   }
+
   arrayBuffer(): Promise<ArrayBuffer> {
     return Promise.resolve(new ArrayBuffer(0));
   }
-  slice(): Blob {
+
+  slice(_start?: number, _end?: number, _contentType?: string): Blob {
     return new Blob();
   }
-} as unknown;
+
+  stream(): ReadableStream<Uint8Array> {
+    throw new Error('Not implemented in mock');
+  }
+} as unknown as typeof File;
 
 // Mock response objects
 const mockArrayBuffer = new ArrayBuffer(8);

@@ -16,10 +16,11 @@ describe('AssetNameValidator', () => {
     });
 
     test('should throw error for unsupported asset types', () => {
-      expect(() =>
-        // @ts-expect-error: Testing with invalid asset type
-        validator.validateAssetName('invalid' as AssetType, 'test.jpg')
-      ).toThrow('Unsupported asset type');
+      // Using type assertion to create an invalid type for testing
+      const invalidType = 'invalid' as unknown as AssetType;
+      expect(() => validator.validateAssetName(invalidType, 'test.jpg')).toThrow(
+        'Unsupported asset type'
+      );
     });
 
     test('should delegate to the correct validator based on asset type', () => {

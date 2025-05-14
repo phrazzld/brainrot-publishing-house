@@ -17,7 +17,7 @@ describe('CDN URL Verification Tool', () => {
     // This is a dynamic import test - it will fail if the file has syntax errors
     // or if the required exports don't exist
     expect(async () => {
-      const scriptModule = await import('../../scripts/verifyCdnUrls.ts');
+      const scriptModule = await import('../../scripts/verifyCdnUrls');
 
       // We don't export functions directly since it's a script, so this will be empty
       // but the test ensures the file can be imported without errors
