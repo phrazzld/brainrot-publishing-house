@@ -89,9 +89,9 @@ function parseArgs() {
  * List all audio files in Vercel Blob
  */
 async function listAudioFiles(): Promise<
-  Array<{ pathname: string; url: string; size: number; uploadedAt: string }>
+  Array<{ pathname: string; url: string; size: number; uploadedAt: Date }>
 > {
-  const audioFiles: Array<{ pathname: string; url: string; size: number; uploadedAt: string }> = [];
+  const audioFiles: Array<{ pathname: string; url: string; size: number; uploadedAt: Date }> = [];
   let cursor: string | undefined;
 
   try {
@@ -121,7 +121,7 @@ async function getFileInfo(blobInfo: {
   pathname: string;
   url: string;
   size: number;
-  uploadedAt: string;
+  uploadedAt: Date;
 }): Promise<AudioFileInfo> {
   try {
     const pathname = blobInfo.pathname;
@@ -137,7 +137,7 @@ async function getFileInfo(blobInfo: {
     return {
       pathname,
       size,
-      lastModified: new Date(uploadedAt),
+      lastModified: uploadedAt,
       contentType: 'audio/mpeg', // Assuming MP3 files
       exists: true,
       isPlaceholder: size < MIN_AUDIO_SIZE,
