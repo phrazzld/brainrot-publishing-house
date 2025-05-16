@@ -13,8 +13,23 @@ import {
 export class AssetPathService {
   private readonly validator: AssetNameValidator;
 
+  // Mapping of legacy book slugs to standardized slugs
+  private readonly BOOK_SLUG_MAPPING: Record<string, string> = {
+    'the-adventures-of-huckleberry-finn': 'huckleberry-finn',
+    'the-declaration-of-independence': 'the-declaration',
+  };
+
   constructor(validator?: AssetNameValidator) {
     this.validator = validator || defaultValidator;
+  }
+
+  /**
+   * Normalize a book slug from legacy to standardized format
+   * @param slug The book slug to normalize
+   * @returns The standardized book slug
+   */
+  private normalizeBookSlug(slug: string): string {
+    return this.BOOK_SLUG_MAPPING[slug] || slug;
   }
   /**
    * Generate a standardized asset path
@@ -323,18 +338,19 @@ export class AssetPathService {
    */
   private convertDirectPath(match: RegExpMatchArray): string {
     const [, bookSlug, assetType, remainder] = match;
+    const normalizedSlug = this.normalizeBookSlug(bookSlug);
 
     if (assetType === 'audio') {
       // Convert to new chapter format if needed
       if (remainder.match(/^\d+\.mp3$/)) {
         const chapter = remainder.replace(/\.mp3$/, '');
-        return `assets/audio/${bookSlug}/chapter-${this.padChapter(chapter)}.mp3`;
+        return `assets/audio/${normalizedSlug}/chapter-${this.padChapter(chapter)}.mp3`;
       }
-      return `assets/audio/${bookSlug}/${remainder}`;
+      return `assets/audio/${normalizedSlug}/${remainder}`;
     }
 
     // For other asset types
-    return `assets/${this.mapAssetType(assetType)}/${bookSlug}/${remainder}`;
+    return `assets/${this.mapAssetType(assetType)}/${normalizedSlug}/${remainder}`;
   }
 
   /**
@@ -349,15 +365,17 @@ export class AssetPathService {
     assetType: string,
     remainder: string
   ): string {
+    // Normalize the book slug
+    const normalizedSlug = this.normalizeBookSlug(bookSlug);
     switch (assetType) {
       case 'images':
-        return `assets/image/${bookSlug}/${remainder}`;
+        return `assets/image/${normalizedSlug}/${remainder}`;
       case 'audio':
-        return this.processAudioRemainder(bookSlug, remainder);
+        return this.processAudioRemainder(normalizedSlug, remainder);
       case 'text':
-        return this.processTextRemainder(bookSlug, remainder);
+        return this.processTextRemainder(normalizedSlug, remainder);
       default:
-        return `assets/${assetType}/${bookSlug}/${remainder}`;
+        return `assets/${assetType}/${normalizedSlug}/${remainder}`;
     }
   }
 
@@ -393,8 +411,26 @@ export class AssetPathService {
       if (filename === 'fulltext.txt') {
         assetName = 'brainrot-fulltext.txt';
       } else {
-        const chapter = filename.replace(/\.txt$/, '');
-        assetName = `brainrot-chapter-${this.validator.formatChapterNumber(chapter)}.txt`;
+        // Remove the .txt extension
+        const fileWithoutExt = filename.replace(/\.txt$/, '');
+
+        // Handle files that already have "chapter-" prefix
+        if (fileWithoutExt.startsWith('chapter-')) {
+          const chapterPart = fileWithoutExt.replace(/^chapter-/, '');
+          const formattedChapter = this.validator.formatChapterNumber(chapterPart);
+          assetName = `brainrot-chapter-${formattedChapter}.txt`;
+        }
+        // Handle act-based files (like Hamlet)
+        else if (fileWithoutExt.startsWith('act-')) {
+          const actPart = fileWithoutExt.replace(/^act-/, '');
+          const formattedAct = this.validator.formatChapterNumber(actPart);
+          assetName = `brainrot-act-${formattedAct}.txt`;
+        }
+        // Default case - assume the whole filename is the chapter identifier
+        else {
+          const formattedChapter = this.validator.formatChapterNumber(fileWithoutExt);
+          assetName = `brainrot-chapter-${formattedChapter}.txt`;
+        }
       }
     }
     // Handle source text

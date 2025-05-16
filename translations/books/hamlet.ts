@@ -15,27 +15,27 @@ const hamlet: Translation = {
   chapters: [
     {
       title: 'act i',
-      text: getAssetUrl('/assets/hamlet/text/brainrot/act-i.txt', USE_BLOB_STORAGE),
+      text: getAssetUrl('/assets/text/hamlet/brainrot-act-01.txt', USE_BLOB_STORAGE),
       audioSrc: getDirectAudioUrl('hamlet', 'act-i'),
     },
     {
       title: 'act ii',
-      text: getAssetUrl('/assets/hamlet/text/brainrot/act-ii.txt', USE_BLOB_STORAGE),
+      text: getAssetUrl('/assets/text/hamlet/brainrot-act-02.txt', USE_BLOB_STORAGE),
       audioSrc: null,
     },
     {
       title: 'act iii',
-      text: getAssetUrl('/assets/hamlet/text/brainrot/act-iii.txt', USE_BLOB_STORAGE),
+      text: getAssetUrl('/assets/text/hamlet/brainrot-act-03.txt', USE_BLOB_STORAGE),
       audioSrc: null,
     },
     {
       title: 'act iv',
-      text: getAssetUrl('/assets/hamlet/text/brainrot/act-iv.txt', USE_BLOB_STORAGE),
+      text: getAssetUrl('/assets/text/hamlet/brainrot-act-04.txt', USE_BLOB_STORAGE),
       audioSrc: null,
     },
     {
       title: 'act v',
-      text: getAssetUrl('/assets/hamlet/text/brainrot/act-v.txt', USE_BLOB_STORAGE),
+      text: getAssetUrl('/assets/text/hamlet/brainrot-act-05.txt', USE_BLOB_STORAGE),
       audioSrc: null,
     },
   ],

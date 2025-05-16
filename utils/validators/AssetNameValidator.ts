@@ -10,6 +10,54 @@ import { AssetType } from '@/types/assets';
  * Validates and enforces standard asset naming conventions
  */
 export class AssetNameValidator {
+  // Roman to Arabic numeral mapping
+  private readonly ROMAN_TO_ARABIC: Record<string, number> = {
+    i: 1,
+    ii: 2,
+    iii: 3,
+    iv: 4,
+    v: 5,
+    vi: 6,
+    vii: 7,
+    viii: 8,
+    ix: 9,
+    x: 10,
+    xi: 11,
+    xii: 12,
+    xiii: 13,
+    xiv: 14,
+    xv: 15,
+    xvi: 16,
+    xvii: 17,
+    xviii: 18,
+    xix: 19,
+    xx: 20,
+    xxi: 21,
+    xxii: 22,
+    xxiii: 23,
+    xxiv: 24,
+    xxv: 25,
+    xxvi: 26,
+    xxvii: 27,
+    xxviii: 28,
+    xxix: 29,
+    xxx: 30,
+    xxxi: 31,
+    xxxii: 32,
+    xxxiii: 33,
+    xxxiv: 34,
+    xxxv: 35,
+    xxxvi: 36,
+    xxxvii: 37,
+    xxxviii: 38,
+    xxxix: 39,
+    xl: 40,
+    xli: 41,
+    xlii: 42,
+    xliii: 43,
+    xliv: 44,
+    xlv: 45,
+  };
   /**
    * Validates and normalizes an asset name according to type-specific conventions
    * @param assetType The type of asset (audio, text, image)
@@ -284,14 +332,27 @@ export class AssetNameValidator {
    * @returns Formatted chapter string (e.g., "01", "02", etc.)
    */
   formatChapterNumber(chapter: string | number): string {
-    // If not a numeric string, return as is
-    if (typeof chapter === 'string' && !/^\d+$/.test(chapter)) {
+    // If it's a string that might be a Roman numeral
+    if (typeof chapter === 'string') {
+      // Check if it's already a numeric string
+      if (/^\d+$/.test(chapter)) {
+        const num = parseInt(chapter, 10);
+        return num.toString().padStart(2, '0');
+      }
+
+      // Check if it's a Roman numeral (lowercase)
+      const lowerChapter = chapter.toLowerCase();
+      if (this.ROMAN_TO_ARABIC[lowerChapter]) {
+        const num = this.ROMAN_TO_ARABIC[lowerChapter];
+        return num.toString().padStart(2, '0');
+      }
+
+      // If not a recognized format, return as is
       return chapter;
     }
 
-    // Convert to number and pad
-    const num = typeof chapter === 'string' ? parseInt(chapter, 10) : chapter;
-    return num.toString().padStart(2, '0');
+    // If it's a number, convert and pad
+    return chapter.toString().padStart(2, '0');
   }
 }
 

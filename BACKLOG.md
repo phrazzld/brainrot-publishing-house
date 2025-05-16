@@ -4,6 +4,8 @@ This backlog outlines planned work, balancing immediate needs, technical excelle
 
 ## High Priority
 
+- fix audio player waveform, enabling scrubbing
+
 ### Infrastructure: CI/CD, Quality Gates & Automation
 
 - **[Fix]**: Re-enable and Stabilize CI Quality Gates (Tests and Strict Linting)

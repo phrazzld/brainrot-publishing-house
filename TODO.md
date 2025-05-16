@@ -367,3 +367,49 @@ This TODO list details the tasks required to fully migrate all asset management 
   - [x] Update tests that rely on Digital Ocean code or assumptions
   - [x] Update documentation to remove all Digital Ocean references
   - Dependencies: T014, T020
+
+## Bug Fixes & Current Issues
+
+- [~] **T029: Fix text file loading issues (Huck Finn, Hamlet)**
+  - [ ] Investigate why text files aren't loading for Huck Finn and Hamlet
+  - [ ] Current paths in blob: books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-{number}.txt
+  - [ ] Current paths in blob: books/hamlet/text/brainrot/act-{number}.txt
+  - [ ] Expected paths: assets/text/huckleberry-finn/brainrot-chapter-{number}.txt
+  - [ ] Expected paths: assets/text/hamlet/brainrot-act-{number}.txt
+  - [ ] Copy text files to standardized locations to match app expectations
+  - [ ] Fix API path resolution to find existing text files
+  - Dependencies: T021
+
+- [ ] **T030: Migrate full audiobook files to standardized locations**
+  - [ ] Identify missing full audiobook files (The Iliad, The Odyssey, The Aeneid)
+  - [ ] Create/copy full audiobook files to: assets/audio/{book-slug}/full-audiobook.mp3
+  - [ ] Verify only The Declaration has a full audiobook currently
+  - [ ] Consider creating concatenated full audiobooks from chapters if originals don't exist
+  - Dependencies: T021
+
+- [ ] **T031: Fix explore page missing books and "coming soon" entries**
+  - [ ] Investigate why Declaration of Independence is missing from explore page
+  - [ ] The Declaration is commented out in translations/index.ts
+  - [ ] Add The Declaration back to active translations
+  - [ ] Consider adding "coming soon" entries for future books:
+    - Pride and Prejudice (has some text already)
+    - The Republic (has text already)
+    - Paradise Lost
+    - Meditations
+    - Divine Comedy series
+    - Bible sections
+    - Quran
+    - Shakespeare plays
+    - Gilgamesh
+    - Bhagavad Gita
+  - [ ] Implement status: 'coming soon' handling in explore page
+  - Dependencies: none
+
+- [ ] **T032: Standardize text file naming and paths**
+  - [ ] Fix naming inconsistencies:
+    - Huck Finn: "the-adventures-of-huckleberry-finn" vs "huckleberry-finn"
+    - Chapters: Roman numerals (chapter-i.txt) vs Arabic (chapter-01.txt)
+    - Different patterns: act-{number}.txt vs chapter-{number}.txt
+  - [ ] Create migration script to copy text files to standardized locations
+  - [ ] Update text loading logic to handle both old and new paths during transition
+  - Dependencies: T021, T029
