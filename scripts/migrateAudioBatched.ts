@@ -3,7 +3,7 @@
  * Batched Audio Migration Script
  *
  * This script migrates audio files in batches for better stability.
- * It downloads from the Digital Ocean CDN and uploads to Vercel Blob.
+ * It downloads from the source URL and uploads to Vercel Blob.
  *
  * Usage:
  *   npx tsx scripts/migrateAudioBatched.ts the-iliad 1-5
@@ -11,7 +11,6 @@
  *   npx tsx scripts/migrateAudioBatched.ts the-iliad all
  */
 import * as dotenv from 'dotenv';
-import fs from 'fs';
 import path from 'path';
 
 import { blobService } from '../utils/services/BlobService.js';
@@ -24,7 +23,7 @@ const range = process.argv[3] || 'all';
 
 if (!bookSlug) {
   console.error('ERROR: Book slug is required.');
-  console.log('Usage: npx tsx scripts/migrateAudioBatched.ts the-iliad 1-5');
+  console.error('Usage: npx tsx scripts/migrateAudioBatched.ts the-iliad 1-5');
   process.exit(1);
 }
 
@@ -43,85 +42,88 @@ if (range !== 'all') {
   }
 }
 
-console.log(`🎵 Starting batched audio migration`);
-console.log(`Book: ${bookSlug}`);
-console.log(`Range: ${range === 'all' ? 'All books' : `Books ${startBook}-${endBook}`}`);
+console.error(`🎵 Starting batched audio migration`);
+console.error(`Book: ${bookSlug}`);
+console.error(`Range: ${range === 'all' ? 'All books' : `Books ${startBook}-${endBook}`}`);
 
 async function migrateAudioFile(bookNumber: number): Promise<void> {
   const paddedNumber = String(bookNumber).padStart(2, '0');
   const fileName = `book-${paddedNumber}.mp3`;
 
-  console.log(`\n[Book ${paddedNumber}] Starting migration...`);
+  console.error(`\n[Book ${paddedNumber}] Starting migration...`);
 
   try {
     // Construct paths
-    const cdnBaseUrl = 'https://brainrot-publishing.nyc3.cdn.digitaloceanspaces.com';
-    const fullCdnUrl = `${cdnBaseUrl}/${bookSlug}/audio/${fileName}`;
-    const targetBlobPath = `${bookSlug}/audio/${fileName}`;
+    const blobBaseUrl =
+      process.env.NEXT_PUBLIC_BLOB_BASE_URL || 'https://public.blob.vercel-storage.com';
+    const fullSourceUrl = `${blobBaseUrl}/books/${bookSlug}/audio/${fileName}`;
+    const targetBlobPath = `books/${bookSlug}/audio/${fileName}`;
 
-    console.log(`Source URL: ${fullCdnUrl}`);
-    console.log(`Target Blob Path: ${targetBlobPath}`);
+    console.error(`Source URL: ${fullSourceUrl}`);
+    console.error(`Target Blob Path: ${targetBlobPath}`);
 
     // Check if blob already exists
     const blobUrl = blobService.getUrlForPath(targetBlobPath);
-    console.log(`Target Blob URL: ${blobUrl}`);
+    console.error(`Target Blob URL: ${blobUrl}`);
 
     let existingSize = 0;
 
     try {
       const fileInfo = await blobService.getFileInfo(blobUrl);
-      console.log(`Existing file info:`);
-      console.log(`Size: ${fileInfo.size} bytes (${(fileInfo.size / 1024 / 1024).toFixed(2)} MB)`);
-      console.log(`Content-Type: ${fileInfo.contentType}`);
+      console.error(`Existing file info:`);
+      console.error(
+        `Size: ${fileInfo.size} bytes (${(fileInfo.size / 1024 / 1024).toFixed(2)} MB)`
+      );
+      console.error(`Content-Type: ${fileInfo.contentType}`);
 
       existingSize = fileInfo.size;
 
       if (fileInfo.size > 1000000) {
         // > 1MB
-        console.log(`Large file already exists. Checking if it's a valid audio file...`);
+        console.error(`Large file already exists. Checking if it's a valid audio file...`);
 
         if (fileInfo.contentType?.startsWith('audio/')) {
-          console.log(`✅ Appears to be a valid audio file. Skipping upload.`);
+          console.error(`✅ Appears to be a valid audio file. Skipping upload.`);
           return;
         } else {
-          console.log(`⚠️ Large file exists but may not be valid audio. Will replace it.`);
+          console.error(`⚠️ Large file exists but may not be valid audio. Will replace it.`);
         }
       } else {
-        console.log(`⚠️ Small placeholder file exists. Will replace it.`);
+        console.error(`⚠️ Small placeholder file exists. Will replace it.`);
       }
-    } catch (error) {
-      console.log(`No existing file found. Will upload new file.`);
+    } catch {
+      console.error(`No existing file found. Will upload new file.`);
     }
 
-    // Test if the CDN file exists
-    console.log(`\nTesting if CDN file exists...`);
+    // Test if the source file exists
+    console.error(`\nTesting if source file exists...`);
     try {
-      const testResponse = await fetch(fullCdnUrl, { method: 'HEAD' });
+      const testResponse = await fetch(fullSourceUrl, { method: 'HEAD' });
       if (!testResponse.ok) {
-        console.log(`❌ CDN file not found (${testResponse.status}). Skipping.`);
+        console.error(`❌ Source file not found (${testResponse.status}). Skipping.`);
         return;
       }
 
       const contentLength = testResponse.headers.get('content-length');
-      console.log(`✅ CDN file exists. Content-Length: ${contentLength} bytes`);
+      console.error(`✅ Source file exists. Content-Length: ${contentLength} bytes`);
 
       // If we already have a file of the same size, skip it
       if (existingSize > 0 && contentLength && parseInt(contentLength, 10) === existingSize) {
-        console.log(`✅ Existing file size matches CDN file size. Skipping upload.`);
+        console.error(`✅ Existing file size matches source file size. Skipping upload.`);
         return;
       }
     } catch (error) {
-      console.log(
-        `❌ Error checking CDN file: ${error instanceof Error ? error.message : String(error)}`
+      console.error(
+        `❌ Error checking source file: ${error instanceof Error ? error.message : String(error)}`
       );
       return;
     }
 
-    // Download from CDN
-    console.log(`\n⬇️ Downloading from CDN: ${fullCdnUrl}`);
+    // Download from source
+    console.error(`\n⬇️ Downloading from source: ${fullSourceUrl}`);
     const downloadStartTime = Date.now();
 
-    const response = await fetch(fullCdnUrl);
+    const response = await fetch(fullSourceUrl);
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -131,7 +133,7 @@ async function migrateAudioFile(bookNumber: number): Promise<void> {
     const buffer = Buffer.from(arrayBuffer);
 
     const downloadDuration = Date.now() - downloadStartTime;
-    console.log(
+    console.error(
       `✅ Downloaded ${buffer.length} bytes (${(buffer.length / 1024 / 1024).toFixed(2)} MB) in ${(downloadDuration / 1000).toFixed(1)}s`
     );
 
@@ -139,7 +141,7 @@ async function migrateAudioFile(bookNumber: number): Promise<void> {
     const file = new File([buffer], fileName, { type: contentType });
 
     // Upload to Blob storage
-    console.log(`\n⬆️ Uploading to Vercel Blob: ${targetBlobPath}`);
+    console.error(`\n⬆️ Uploading to Vercel Blob: ${targetBlobPath}`);
     const uploadStartTime = Date.now();
 
     const uploadResult = await blobService.uploadFile(file, {
@@ -151,26 +153,26 @@ async function migrateAudioFile(bookNumber: number): Promise<void> {
     });
 
     const uploadDuration = Date.now() - uploadStartTime;
-    console.log(`✅ Uploaded to ${uploadResult.url} in ${(uploadDuration / 1000).toFixed(1)}s`);
+    console.error(`✅ Uploaded to ${uploadResult.url} in ${(uploadDuration / 1000).toFixed(1)}s`);
 
     // Verify the upload
-    console.log(`\n🔍 Verifying upload...`);
+    console.error(`\n🔍 Verifying upload...`);
     const verifyResult = await blobService.getFileInfo(uploadResult.url);
-    console.log(
+    console.error(
       `Size: ${verifyResult.size} bytes (${(verifyResult.size / 1024 / 1024).toFixed(2)} MB)`
     );
-    console.log(`Content-Type: ${verifyResult.contentType}`);
+    console.error(`Content-Type: ${verifyResult.contentType}`);
 
     if (verifyResult.size === buffer.length) {
-      console.log(`\n✅ Verification passed: Sizes match`);
+      console.error(`\n✅ Verification passed: Sizes match`);
     } else {
-      console.log(
+      console.error(
         `\n❌ Verification failed: Size mismatch (expected ${buffer.length}, got ${verifyResult.size})`
       );
     }
 
     // Success
-    console.log(`\n🎉 File migration completed successfully!`);
+    console.error(`\n🎉 File migration completed successfully!`);
   } catch (error) {
     console.error(`\n❌ Migration failed:`, error instanceof Error ? error.message : String(error));
   }
@@ -178,7 +180,7 @@ async function migrateAudioFile(bookNumber: number): Promise<void> {
 
 // Run the batch migration
 async function runBatchMigration(): Promise<void> {
-  console.log(`\nStarting batch migration for book numbers ${startBook} through ${endBook}`);
+  console.error(`\nStarting batch migration for book numbers ${startBook} through ${endBook}`);
 
   const results = {
     total: endBook - startBook + 1,
@@ -202,15 +204,15 @@ async function runBatchMigration(): Promise<void> {
   const endTime = Date.now();
   const duration = (endTime - startTime) / 1000;
 
-  console.log(`\n📊 Batch Migration Summary`);
-  console.log(`------------------`);
-  console.log(`Total files: ${results.total}`);
-  console.log(`Successful : ${results.successful}`);
-  console.log(`Failed     : ${results.failed}`);
-  console.log(`Skipped    : ${results.skipped}`);
-  console.log(`Duration   : ${duration.toFixed(1)} seconds`);
+  console.error(`\n📊 Batch Migration Summary`);
+  console.error(`------------------`);
+  console.error(`Total files: ${results.total}`);
+  console.error(`Successful : ${results.successful}`);
+  console.error(`Failed     : ${results.failed}`);
+  console.error(`Skipped    : ${results.skipped}`);
+  console.error(`Duration   : ${duration.toFixed(1)} seconds`);
 
-  console.log(`\n✅ Batch migration completed!`);
+  console.error(`\n✅ Batch migration completed!`);
 }
 
 // Run the migration

@@ -100,14 +100,16 @@ class MockDownloadService {
     chapter?: string
   ) {
     // Generate paths in a simplified way for testing only
-    const cdnBase = 'https://brainrot-publishing.cdn.digitaloceanspaces.com';
+    // Use Vercel Blob URL instead of Digital Ocean
+    const blobBase =
+      process.env.NEXT_PUBLIC_BLOB_BASE_URL || 'https://public.blob.vercel-storage.com';
     const assetPath =
       type === 'full'
-        ? `/assets/${slug}/audio/full-audiobook.mp3`
-        : `/assets/${slug}/audio/chapter-${chapter?.padStart(2, '0')}.mp3`;
+        ? `books/${slug}/audio/full-audiobook.mp3`
+        : `books/${slug}/audio/chapter-${chapter?.padStart(2, '0')}.mp3`;
 
     return {
-      cdnUrl: `${cdnBase}${assetPath}`,
+      cdnUrl: `${blobBase}/${assetPath}`,
       legacyPath: assetPath,
     };
   }
@@ -205,8 +207,8 @@ function generateResourcePaths(
   // Generate the paths for this resource using internal method
   const { cdnUrl, legacyPath } = downloadService.generatePaths(slug, type, log, chapter);
 
-  // Create the fallback URL (non-CDN)
-  const fallbackUrl = cdnUrl.replace('.cdn.digitaloceanspaces.com', '.digitaloceanspaces.com');
+  // Create the fallback URL (non-CDN) - for Vercel Blob we'll use the same URL for fallback
+  const fallbackUrl = cdnUrl; // Both URLs are the same with Vercel Blob
 
   // Try to get a blob URL if possible
   let blobUrl: string | undefined;
@@ -1038,8 +1040,6 @@ function generateBookSection(book: string, bookResults: UrlVerificationResult[])
  */
 function generateConfigSection(): string {
   let markdown = `## Configurations\n\n`;
-  markdown += `- **Bucket**: ${process.env.DO_SPACES_BUCKET || process.env.SPACES_BUCKET_NAME || 'brainrot-publishing'}\n`;
-  markdown += `- **Region**: nyc3 (hardcoded)\n`;
   markdown += `- **Blob Base URL**: ${process.env.NEXT_PUBLIC_BLOB_BASE_URL || 'Not configured'}\n`;
   markdown += `- **Blob Dev URL**: ${process.env.NEXT_PUBLIC_BLOB_DEV_URL || 'Not configured'}\n`;
 
@@ -1393,8 +1393,6 @@ function generateDifferencesTable(
 function generateCurrentEnvConfig(currentEnv: string): string {
   let markdown = `\n## Configurations\n\n`;
   markdown += `### ${currentEnv}\n`;
-  markdown += `- **Bucket**: ${process.env.DO_SPACES_BUCKET || process.env.SPACES_BUCKET_NAME || 'brainrot-publishing'}\n`;
-  markdown += `- **Region**: nyc3 (hardcoded)\n`;
   markdown += `- **Blob Base URL**: ${process.env.NEXT_PUBLIC_BLOB_BASE_URL || 'Not configured'}\n`;
   markdown += `- **Blob Dev URL**: ${process.env.NEXT_PUBLIC_BLOB_DEV_URL || 'Not configured'}\n`;
 
@@ -1412,8 +1410,9 @@ function generateCompareEnvConfig(
   previousResults: UrlVerificationResult[]
 ): string {
   let markdown = `\n### ${compareEnv}\n`;
-  markdown += `- **Bucket**: ${previousResults[0]?.cdnUrl.split('.')[0].replace('https://', '') || 'unknown'}\n`;
-  markdown += `- **Region**: ${previousResults[0]?.cdnUrl.split('.')[1] || 'unknown'}\n`;
+  // Extract the Blob URL base from the first result's URL if possible
+  const baseUrl = previousResults[0]?.cdnUrl.split('/books/')[0] || 'unknown';
+  markdown += `- **Blob Base URL**: ${baseUrl}\n`;
 
   return markdown;
 }

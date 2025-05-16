@@ -2,8 +2,9 @@
 /**
  * Enhanced Audio Files Migration Script with Validation
  *
- * This script properly migrates audio files from Digital Ocean Spaces to Vercel Blob storage,
- * with robust validation, progress tracking, and error handling.
+ * This script migrates audio files between different storage locations or verifies
+ * existing files with robust validation, progress tracking, and error handling.
+ * It now works exclusively with Vercel Blob storage.
  *
  * Usage:
  *   npx tsx scripts/migrateAudioFilesEnhanced.ts [options]
@@ -21,23 +22,18 @@
  */
 // Load environment variables
 import * as dotenv from 'dotenv';
-import { GetObjectCommand, ListObjectsV2Command, S3Client } from '@aws-sdk/client-s3';
 import { existsSync } from 'fs';
 import fs from 'fs/promises';
 import path from 'path';
-import { Readable } from 'stream';
+import readline from 'readline';
 
 import translations from '../translations';
+import { blobPathService } from '../utils/services/BlobPathService';
 import { blobService } from '../utils/services/BlobService';
 
 dotenv.config({ path: '.env.local' });
 
 // Constants
-const DO_REGION = 'nyc3';
-const DO_BUCKET = process.env.DO_SPACES_BUCKET || 'brainrot-publishing';
-const DO_SPACES_ENDPOINT = process.env.DO_SPACES_ENDPOINT || 'nyc3.digitaloceanspaces.com';
-const DO_BASE_URL = `https://${DO_BUCKET}.${DO_REGION}.digitaloceanspaces.com`;
-const DO_CDN_URL = `https://${DO_BUCKET}.${DO_REGION}.cdn.digitaloceanspaces.com`;
 const MIN_AUDIO_SIZE_KB = 100; // Minimum size in KB for a valid audio file
 const MP3_HEADER_MAGIC = Buffer.from([0xff, 0xfb]); // Common MP3 frame header start
 
@@ -55,12 +51,10 @@ interface MigrationOptions {
 }
 
 interface AudioFile {
-  key: string;
+  blobPath: string;
   bookSlug: string;
   chapterTitle?: string;
   size?: number;
-  cdnUrl: string;
-  blobPath: string;
   blobUrl: string;
 }
 
@@ -68,25 +62,18 @@ interface MigrationResult {
   status: 'success' | 'skipped' | 'failed';
   bookSlug: string;
   chapterTitle?: string;
-  key: string;
-  cdnUrl: string;
   blobPath: string;
   blobUrl: string;
-  downloadSize?: number;
-  uploadSize?: number;
   contentType?: string;
   error?: string;
   skipReason?: string;
-  downloadTime?: number;
-  uploadTime?: number;
   totalTime?: number;
   uploadedAt?: string;
   validated: boolean;
   validationInfo?: {
-    sizeMatch: boolean;
+    sizeValid: boolean;
     contentValidated: boolean;
-    expectedSize?: number;
-    actualSize?: number;
+    size?: number;
   };
 }
 
@@ -96,155 +83,12 @@ interface MigrationSummary {
   successful: number;
   skipped: number;
   failed: number;
-  totalDownloadSize: number; // in bytes
-  totalUploadSize: number; // in bytes
   totalDuration: number; // in milliseconds
   booksCovered: string[];
   validationSuccess: number;
   validationFailed: number;
   startTime: string;
   endTime: string;
-}
-
-interface DownloadOptions {
-  maxRetries?: number;
-  timeout?: number;
-  verbose?: boolean;
-}
-
-interface DownloadResult {
-  key: string;
-  content: Buffer;
-  size: number;
-  contentType: string;
-  timeTaken: number;
-}
-
-/**
- * Create a Digital Ocean S3 client
- */
-function createDigitalOceanClient(): S3Client {
-  const accessKeyId = process.env.DO_SPACES_ACCESS_KEY;
-  const secretAccessKey = process.env.DO_SPACES_SECRET_KEY;
-
-  if (!accessKeyId || !secretAccessKey) {
-    throw new Error(
-      'Digital Ocean credentials not found. Set DO_SPACES_ACCESS_KEY and DO_SPACES_SECRET_KEY in .env.local'
-    );
-  }
-
-  return new S3Client({
-    region: DO_REGION,
-    endpoint: `https://${DO_SPACES_ENDPOINT}`,
-    credentials: {
-      accessKeyId,
-      secretAccessKey,
-    },
-  });
-}
-
-/**
- * Download an audio file from Digital Ocean Spaces
- */
-async function downloadFromDigitalOcean(
-  client: S3Client,
-  key: string,
-  options: DownloadOptions = {}
-): Promise<DownloadResult> {
-  // Default options
-  const {
-    maxRetries = 3,
-    timeout = 300000, // 5 minutes default timeout for large files
-    verbose = false,
-  } = options;
-
-  let retries = 0;
-  let lastError: Error | null = null;
-
-  // Start timing
-  const startTime = Date.now();
-
-  if (verbose) {
-    console.log(`Downloading from Digital Ocean: ${key}`);
-  }
-
-  // Try downloading with retries
-  while (retries <= maxRetries) {
-    try {
-      const command = new GetObjectCommand({
-        Bucket: DO_BUCKET,
-        Key: key,
-      });
-
-      const response = await client.send(command);
-
-      if (!response.Body) {
-        throw new Error(`Empty body received for ${key}`);
-      }
-
-      const contentType = response.ContentType || 'audio/mpeg';
-      const expectedSize = response.ContentLength || 0;
-
-      // Convert stream to buffer
-      const stream = response.Body as Readable;
-      const chunks: Buffer[] = [];
-
-      for await (const chunk of stream) {
-        chunks.push(Buffer.from(chunk));
-      }
-
-      const content = Buffer.concat(chunks);
-
-      if (content.length !== expectedSize) {
-        throw new Error(
-          `Download size mismatch for ${key}: expected ${expectedSize}, got ${content.length}`
-        );
-      }
-
-      // Calculate time taken
-      const timeTaken = Date.now() - startTime;
-
-      if (verbose) {
-        console.log(`Download successful: ${key}`);
-        console.log(`Size: ${content.length} bytes, Content-Type: ${contentType}`);
-        console.log(`Time taken: ${timeTaken}ms`);
-      }
-
-      return {
-        key,
-        content,
-        size: content.length,
-        contentType,
-        timeTaken,
-      };
-    } catch (error) {
-      lastError = error instanceof Error ? error : new Error(String(error));
-      retries++;
-
-      if (verbose) {
-        console.warn(`Download attempt ${retries} failed: ${lastError.message}`);
-      }
-
-      // If we've used all retries, throw the error
-      if (retries > maxRetries) {
-        throw new Error(
-          `Failed to download ${key} after ${maxRetries} attempts: ${lastError.message}`
-        );
-      }
-
-      // Exponential backoff
-      const delay = Math.min(1000 * Math.pow(2, retries - 1), 30000);
-
-      if (verbose) {
-        console.log(`Retrying in ${delay}ms...`);
-      }
-
-      await new Promise((resolve) => setTimeout(resolve, delay));
-    }
-  }
-
-  // This should never be reached due to the throw in the retry loop
-  throw lastError || new Error(`Failed to download ${key} for unknown reason`);
 }
 
 /**
@@ -263,6 +107,9 @@ function verifyAudioContent(buffer: Buffer): boolean {
 
 /**
  * Parse command-line arguments
+ *
+ * This function has high complexity due to parsing many different command line args
+ * eslint-disable-next-line complexity
  */
 function parseArgs(): MigrationOptions {
   const options: MigrationOptions = {
@@ -276,9 +123,8 @@ function parseArgs(): MigrationOptions {
     sizeThreshold: MIN_AUDIO_SIZE_KB,
   };
 
-  for (let i = 2; i < process.argv.length; i++) {
-    const arg = process.argv[i];
-
+  const args = process.argv.slice(2);
+  for (const arg of args) {
     if (arg === '--dry-run') {
       options.dryRun = true;
     } else if (arg.startsWith('--books=')) {
@@ -311,7 +157,6 @@ function createInterface(): NodeJS.ReadableStream & {
   question(query: string, callback: (answer: string) => void): void;
   close(): void;
 } {
-  const readline = require('readline');
   return readline.createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -334,10 +179,9 @@ function formatSize(bytes: number): string {
 }
 
 /**
- * Main class for enhanced audio file migration
+ * Main class for enhanced audio file migration and validation
  */
 class EnhancedAudioMigrator {
-  private client: S3Client;
   private results: MigrationResult[] = [];
   private activePromises: Promise<void>[] = [];
   private semaphoreValue: number;
@@ -347,7 +191,6 @@ class EnhancedAudioMigrator {
   private audioFiles: AudioFile[] = [];
 
   constructor(private readonly options: MigrationOptions) {
-    this.client = createDigitalOceanClient();
     this.semaphoreValue = options.concurrency;
   }
 
@@ -356,8 +199,8 @@ class EnhancedAudioMigrator {
    */
   public async run(): Promise<MigrationSummary> {
     this.startTime = new Date();
-    console.log(
-      `\n🎵 Starting enhanced audio files migration ${this.options.dryRun ? '(DRY RUN)' : ''}`
+    console.error(
+      `\n🎵 Starting enhanced audio files validation ${this.options.dryRun ? '(DRY RUN)' : ''}`
     );
 
     try {
@@ -365,18 +208,18 @@ class EnhancedAudioMigrator {
       const booksToProcess =
         this.options.books.length > 0 ? this.options.books : translations.map((book) => book.slug);
 
-      console.log(`Processing books: ${booksToProcess.join(', ')}`);
+      console.error(`Processing books: ${booksToProcess.join(', ')}`);
 
       // Gather all audio files to process
       await this.gatherAudioFiles(booksToProcess);
 
       // Process each audio file with concurrency
       this.totalFiles = this.audioFiles.length;
-      console.log(`Found ${this.totalFiles} audio files to process`);
+      console.error(`Found ${this.totalFiles} audio files to process`);
 
       // Confirm operation before beginning
       if (!this.options.dryRun && !(await this.confirmOperation())) {
-        console.log('Operation cancelled by user');
+        console.error('Operation cancelled by user');
         process.exit(0);
       }
 
@@ -392,7 +235,7 @@ class EnhancedAudioMigrator {
 
         const promise = this.processAudioFile(audioFile)
           .catch((error) => {
-            console.error(`Error processing ${audioFile.key}:`, error);
+            console.error(`Error processing ${audioFile.blobPath}:`, error);
           })
           .finally(() => {
             this.semaphoreValue++;
@@ -406,7 +249,7 @@ class EnhancedAudioMigrator {
 
       // Wait for all remaining operations
       if (this.activePromises.length > 0) {
-        console.log(`Waiting for ${this.activePromises.length} remaining operations...`);
+        console.error(`Waiting for ${this.activePromises.length} remaining operations...`);
         await Promise.all(this.activePromises);
       }
 
@@ -444,13 +287,13 @@ class EnhancedAudioMigrator {
   private async gatherAudioFiles(booksToProcess: string[]): Promise<void> {
     // If inventory path is provided, load from there
     if (this.options.inventoryPath && existsSync(this.options.inventoryPath)) {
-      console.log(`Loading audio inventory from ${this.options.inventoryPath}...`);
+      console.error(`Loading audio inventory from ${this.options.inventoryPath}...`);
       await this.loadAudioFilesFromInventory();
       return;
     }
 
-    // Otherwise build list from translations
-    console.log('Building audio files list from translations...');
+    // Otherwise build list from translations and check Vercel Blob
+    console.error('Building audio files list from translations...');
     for (const bookSlug of booksToProcess) {
       const book = translations.find((t) => t.slug === bookSlug);
 
@@ -460,7 +303,7 @@ class EnhancedAudioMigrator {
       }
 
       if (!book.chapters) {
-        console.log(`No chapters found for book: ${bookSlug}`);
+        console.error(`No chapters found for book: ${bookSlug}`);
         continue;
       }
 
@@ -469,21 +312,15 @@ class EnhancedAudioMigrator {
 
         // Extract the file name
         const fileName = path.basename(chapter.audioSrc);
-        // Construct the S3 key
-        const key = `${bookSlug}/audio/${fileName}`;
-        // Construct CDN URL
-        const cdnUrl = `${DO_CDN_URL}/${key}`;
-        // Construct blob path
-        const blobPath = `${bookSlug}/audio/${fileName}`;
+        // Construct the Blob path using BlobPathService
+        const blobPath = blobPathService.getAudioPath(bookSlug, fileName.replace(/\.mp3$/, ''));
         // Get URL for verification and uploading
         const blobUrl = blobService.getUrlForPath(blobPath);
 
         this.audioFiles.push({
-          key,
+          blobPath,
           bookSlug,
           chapterTitle: chapter.title,
-          cdnUrl,
-          blobPath,
           blobUrl,
         });
       }
@@ -492,6 +329,9 @@ class EnhancedAudioMigrator {
 
   /**
    * Load audio files from an existing inventory JSON file
+   *
+   * This method is complex due to parsing JSON data
+   * eslint-disable-next-line complexity
    */
   private async loadAudioFilesFromInventory(): Promise<void> {
     if (!this.options.inventoryPath) return;
@@ -500,12 +340,14 @@ class EnhancedAudioMigrator {
       const inventoryData = await fs.readFile(this.options.inventoryPath, 'utf8');
       const inventory = JSON.parse(inventoryData);
 
-      // Check if this is the expected format (from createAudioInventory.ts)
+      // Check if this is the expected format
       if (inventory.books && Array.isArray(inventory.books)) {
         // Filter to only include books specified in options.books if any
         const booksToInclude =
           this.options.books.length > 0
-            ? inventory.books.filter((b: any) => this.options.books.includes(b.slug))
+            ? inventory.books.filter((b: Record<string, unknown>) =>
+                this.options.books.includes(b.slug as string)
+              )
             : inventory.books;
 
         for (const book of booksToInclude) {
@@ -518,26 +360,23 @@ class EnhancedAudioMigrator {
             // Skip non-existent files
             if (!file.exists) continue;
 
-            const fileName = path.basename(file.key);
-            const blobPath = `${book.slug}/audio/${fileName}`;
-            const blobUrl = blobService.getUrlForPath(blobPath);
-
-            this.audioFiles.push({
-              key: file.key,
-              bookSlug: book.slug,
-              chapterTitle: file.chapterTitle,
-              size: file.size,
-              cdnUrl: file.cdnUrl,
-              blobPath,
-              blobUrl,
-            });
+            // Use the blobUrl directly from the inventory if available
+            if (file.blobUrl) {
+              this.audioFiles.push({
+                blobPath: file.blobPath || `books/${book.slug}/audio/${path.basename(file.key)}`,
+                bookSlug: book.slug,
+                chapterTitle: file.chapterTitle,
+                size: file.size,
+                blobUrl: file.blobUrl,
+              });
+            }
           }
         }
       } else {
         throw new Error('Invalid inventory format');
       }
 
-      console.log(`Loaded ${this.audioFiles.length} audio files from inventory`);
+      console.error(`Loaded ${this.audioFiles.length} audio files from inventory`);
     } catch (error) {
       console.error('Error loading inventory:', error);
       throw new Error(
@@ -548,19 +387,20 @@ class EnhancedAudioMigrator {
 
   /**
    * Process a single audio file
+   *
+   * This is a complex method that handles file validation
+   * eslint-disable-next-line complexity
    */
   private async processAudioFile(audioFile: AudioFile): Promise<void> {
     const operationStartTime = Date.now();
-    const { key, bookSlug, chapterTitle, blobPath, blobUrl, cdnUrl } = audioFile;
+    const { blobPath, bookSlug, chapterTitle, blobUrl } = audioFile;
 
-    this.log(`\nProcessing: ${key} -> ${blobPath}`);
+    this.log(`\nProcessing: ${blobPath}`);
 
     const result: MigrationResult = {
       status: 'failed',
       bookSlug,
       chapterTitle,
-      key,
-      cdnUrl,
       blobPath,
       blobUrl,
       totalTime: 0,
@@ -568,40 +408,40 @@ class EnhancedAudioMigrator {
     };
 
     try {
-      // Check if file already exists in Blob storage
+      // Check if file exists in Blob storage
       let exists = false;
-      let existingSize = 0;
+      let fileSize = 0;
 
       try {
         const fileInfo = await blobService.getFileInfo(blobUrl);
-        existingSize = fileInfo?.size || 0;
+        fileSize = fileInfo?.size || 0;
 
         // Consider it exists only if it's a real file (not a tiny placeholder)
         exists = fileInfo && fileInfo.size > this.options.sizeThreshold * 1024;
 
         if (exists) {
-          this.log(`File already exists in Blob storage (${formatSize(fileInfo.size)})`);
-        } else if (existingSize > 0) {
-          this.log(`Small placeholder file exists (${formatSize(existingSize)}) - will replace`);
+          this.log(`File exists in Blob storage (${formatSize(fileInfo.size)})`);
+        } else if (fileSize > 0) {
+          this.log(`Small placeholder file exists (${formatSize(fileSize)}) - will replace`);
         }
-      } catch (error) {
-        // File doesn't exist, we'll upload it
+      } catch {
+        // File doesn't exist, skip or validate
         exists = false;
       }
 
-      // Skip if already exists and not forced
-      if (exists && !this.options.force) {
-        this.log(`Skipping (already exists as real audio file)`);
+      // Skip if doesn't exist and not in force mode
+      if (!exists && !this.options.force) {
+        this.log(`Skipping (file doesn't exist)`);
 
         result.status = 'skipped';
-        result.skipReason = 'already exists';
+        result.skipReason = "file doesn't exist";
         this.results.push(result);
         return;
       }
 
       // In dry run mode, simulate the operation
       if (this.options.dryRun) {
-        this.log(`DRY RUN: Would download and upload ${key}`);
+        this.log(`DRY RUN: Would validate ${blobPath}`);
 
         result.status = 'skipped';
         result.skipReason = 'dry run';
@@ -609,85 +449,58 @@ class EnhancedAudioMigrator {
         return;
       }
 
-      // Download the audio file from Digital Ocean
-      this.log(`Downloading from Digital Ocean: ${key}`);
-      const downloadStartTime = Date.now();
+      // Validate the file content
+      if (exists) {
+        this.log(`Validating file content: ${blobPath}`);
 
-      const downloadResult = await downloadFromDigitalOcean(this.client, key, {
-        maxRetries: this.options.retries,
-        verbose: this.options.verbose,
-      });
+        // Fetch the file content
+        const response = await fetch(blobUrl);
 
-      const downloadDuration = Date.now() - downloadStartTime;
-      this.log(
-        `Downloaded ${formatSize(downloadResult.size)} (${downloadResult.contentType}) in ${downloadDuration}ms`
-      );
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
 
-      result.downloadSize = downloadResult.size;
-      result.contentType = downloadResult.contentType;
-      result.downloadTime = downloadDuration;
+        const contentType = response.headers.get('content-type') || 'audio/mpeg';
+        const buffer = await response.arrayBuffer();
+        const content = Buffer.from(buffer);
 
-      // Verify audio content
-      const contentValid = verifyAudioContent(downloadResult.content);
-      if (!contentValid) {
-        this.log(`WARNING: Content validation failed - file doesn't appear to be valid MP3`);
+        // Verify the content is valid audio
+        const contentValid = verifyAudioContent(content);
+
+        if (!contentValid) {
+          this.log(`WARNING: Content validation failed - file doesn't appear to be valid MP3`);
+        } else {
+          this.log(`Content validation passed - file appears to be valid MP3`);
+        }
+
+        // Record validation information
+        result.validated = true;
+        result.validationInfo = {
+          sizeValid: fileSize > this.options.sizeThreshold * 1024,
+          contentValidated: contentValid,
+          size: fileSize,
+        };
+
+        // Mark as success if validation passed
+        result.status = result.validationInfo.sizeValid && contentValid ? 'success' : 'failed';
+        result.contentType = contentType;
+        result.totalTime = Date.now() - operationStartTime;
+
+        if (result.status === 'success') {
+          this.log(`Successfully validated audio file in ${result.totalTime}ms`);
+        } else {
+          if (!result.validationInfo.sizeValid) {
+            result.error = `Size validation failed: file too small (${formatSize(fileSize)})`;
+          } else {
+            result.error = `Content validation failed: not a valid MP3 file`;
+          }
+          this.log(`Validation failed: ${result.error}`);
+        }
       } else {
-        this.log(`Content validation passed - file appears to be valid MP3`);
-      }
-
-      // Create a File object from the downloaded buffer
-      const file = new File([downloadResult.content], path.basename(blobPath), {
-        type: downloadResult.contentType,
-      });
-
-      // Upload to Vercel Blob storage
-      this.log(`Uploading to Vercel Blob: ${blobPath}`);
-      const uploadStartTime = Date.now();
-
-      const uploadResult = await blobService.uploadFile(file, {
-        pathname: path.dirname(blobPath),
-        filename: path.basename(blobPath),
-        access: 'public',
-        contentType: downloadResult.contentType,
-        addRandomSuffix: false,
-      });
-
-      const uploadDuration = Date.now() - uploadStartTime;
-      this.log(`Uploaded to ${uploadResult.url} in ${uploadDuration}ms`);
-
-      // Verify the upload
-      const verifyResult = await blobService.getFileInfo(uploadResult.url);
-      const sizeMatch = verifyResult.size === downloadResult.size;
-
-      if (!sizeMatch) {
-        this.log(
-          `WARNING: Upload verification failed - size mismatch (expected ${downloadResult.size}, got ${verifyResult.size})`
-        );
-      } else {
-        this.log(`Upload verification passed - size matches`);
-      }
-
-      // Record validation information
-      result.validated = true;
-      result.validationInfo = {
-        sizeMatch,
-        contentValidated: contentValid,
-        expectedSize: downloadResult.size,
-        actualSize: verifyResult.size,
-      };
-
-      // Mark as success only if validation passed
-      result.status = sizeMatch ? 'success' : 'failed';
-      result.uploadSize = downloadResult.size; // Use download size instead of upload size
-      result.uploadTime = uploadDuration;
-      result.uploadedAt = new Date().toISOString();
-      result.totalTime = Date.now() - operationStartTime;
-
-      if (result.status === 'success') {
-        this.log(`Successfully migrated audio file in ${result.totalTime}ms`);
-      } else {
-        result.error = `Validation failed: size mismatch (expected ${downloadResult.size}, got ${verifyResult.size})`;
-        this.log(`Migration failed: ${result.error}`);
+        result.status = 'skipped';
+        result.skipReason = "file doesn't exist and not in force mode";
+        result.validated = false;
+        this.log(`Skipping (file doesn't exist and not in force mode)`);
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
@@ -711,7 +524,7 @@ class EnhancedAudioMigrator {
     const rl = createInterface();
 
     return new Promise((resolve) => {
-      rl.question(`About to migrate ${this.totalFiles} audio files. Proceed? (y/N) `, (answer) => {
+      rl.question(`About to validate ${this.totalFiles} audio files. Proceed? (y/N) `, (answer) => {
         rl.close();
         resolve(answer.toLowerCase() === 'y');
       });
@@ -728,17 +541,15 @@ class EnhancedAudioMigrator {
     const skipped = this.results.filter((r) => r.status === 'skipped').length;
     const failed = this.results.filter((r) => r.status === 'failed').length;
 
-    const totalDownloadSize = this.results.reduce((total, r) => total + (r.downloadSize || 0), 0);
-    const totalUploadSize = this.results.reduce((total, r) => total + (r.uploadSize || 0), 0);
     const totalDuration = endTime.getTime() - this.startTime.getTime();
 
     const booksCovered = [...new Set(this.results.map((r) => r.bookSlug))];
 
     const validationSuccess = this.results.filter(
-      (r) => r.validated && r.validationInfo?.sizeMatch
+      (r) => r.validated && r.validationInfo?.sizeValid && r.validationInfo?.contentValidated
     ).length;
     const validationFailed = this.results.filter(
-      (r) => r.validated && !r.validationInfo?.sizeMatch
+      (r) => r.validated && (!r.validationInfo?.sizeValid || !r.validationInfo?.contentValidated)
     ).length;
 
     return {
@@ -747,8 +558,6 @@ class EnhancedAudioMigrator {
       successful,
       skipped,
       failed,
-      totalDownloadSize,
-      totalUploadSize,
       totalDuration,
       booksCovered,
       validationSuccess,
@@ -759,36 +568,120 @@ class EnhancedAudioMigrator {
   }
 
   /**
+   * Save a human-readable Markdown report
+   *
+   * This method is complex due to report generation format
+   * eslint-disable-next-line complexity
+   */
+  private async saveMarkdownReport(summary: MigrationSummary, filePath: string): Promise<void> {
+    const lines = [
+      '# Enhanced Audio Validation Report',
+      '',
+      `Generated: ${new Date().toISOString()}`,
+      '',
+      '## Summary',
+      '',
+      `- **Total files**: ${summary.total}`,
+      `- **Successful**: ${summary.successful}`,
+      `- **Skipped**: ${summary.skipped}`,
+      `- **Failed**: ${summary.failed}`,
+      '',
+      '### Validation',
+      '',
+      `- **Success**: ${summary.validationSuccess}`,
+      `- **Failed**: ${summary.validationFailed}`,
+      '',
+      '### Performance Statistics',
+      '',
+      `- **Total duration**: ${(summary.totalDuration / (1000 * 60)).toFixed(2)} minutes`,
+      '',
+      '### Books Covered',
+      '',
+      ...summary.booksCovered.map((book) => `- ${book}`),
+      '',
+    ];
+
+    // Add book-by-book breakdown
+    lines.push('## Book-by-Book Breakdown', '');
+
+    for (const bookSlug of summary.booksCovered) {
+      const bookResults = this.results.filter((r) => r.bookSlug === bookSlug);
+      const bookSuccess = bookResults.filter((r) => r.status === 'success').length;
+      const bookSkipped = bookResults.filter((r) => r.status === 'skipped').length;
+      const bookFailed = bookResults.filter((r) => r.status === 'failed').length;
+      const bookTotal = bookResults.length;
+
+      // Skip books with no files
+      if (bookTotal === 0) continue;
+
+      lines.push(`### ${bookSlug}`, '');
+      lines.push(`- **Total**: ${bookTotal}`);
+      lines.push(`- **Success**: ${bookSuccess}`);
+      lines.push(`- **Skipped**: ${bookSkipped}`);
+      lines.push(`- **Failed**: ${bookFailed}`);
+      lines.push('');
+
+      if (bookFailed > 0) {
+        lines.push('#### Failed Files', '');
+
+        for (const result of bookResults.filter((r) => r.status === 'failed')) {
+          lines.push(`- **${result.blobPath}**: ${result.error}`);
+        }
+
+        lines.push('');
+      }
+    }
+
+    // Add detailed logs for failures
+    if (summary.failed > 0) {
+      lines.push('## Detailed Failure Logs', '');
+
+      for (const result of this.results.filter((r) => r.status === 'failed')) {
+        lines.push(`### ${result.bookSlug} / ${result.blobPath}`, '');
+        lines.push(`- **Status**: ${result.status}`);
+        lines.push(`- **Error**: ${result.error}`);
+
+        if (result.validated) {
+          lines.push(`- **Size Valid**: ${result.validationInfo?.sizeValid}`);
+          lines.push(`- **Content Valid**: ${result.validationInfo?.contentValidated}`);
+          if (result.validationInfo?.size) {
+            lines.push(`- **Size**: ${formatSize(result.validationInfo.size)}`);
+          }
+        }
+
+        lines.push('');
+      }
+    }
+
+    await fs.writeFile(filePath, lines.join('\n'), 'utf8');
+  }
+
+  /**
    * Print migration summary
    */
   private printSummary(summary: MigrationSummary): void {
-    console.log('\n\n📊 Migration Summary');
-    console.log('------------------');
-    console.log(`Total files: ${summary.total}`);
-    console.log(`Successful : ${summary.successful}`);
-    console.log(`Skipped    : ${summary.skipped}`);
-    console.log(`Failed     : ${summary.failed}`);
+    console.error('\n\n📊 Validation Summary');
+    console.error('------------------');
+    console.error(`Total files: ${summary.total}`);
+    console.error(`Successful : ${summary.successful}`);
+    console.error(`Skipped    : ${summary.skipped}`);
+    console.error(`Failed     : ${summary.failed}`);
 
-    console.log('\nValidation:');
-    console.log(`Success    : ${summary.validationSuccess}`);
-    console.log(`Failed     : ${summary.validationFailed}`);
+    console.error('\nValidation:');
+    console.error(`Success    : ${summary.validationSuccess}`);
+    console.error(`Failed     : ${summary.validationFailed}`);
 
-    const downloadSizeMB = (summary.totalDownloadSize / (1024 * 1024)).toFixed(2);
-    const uploadSizeMB = (summary.totalUploadSize / (1024 * 1024)).toFixed(2);
     const durationMin = (summary.totalDuration / (1000 * 60)).toFixed(2);
+    console.error(`\nTotal duration  : ${durationMin} minutes`);
 
-    console.log(`\nTotal downloaded: ${downloadSizeMB} MB`);
-    console.log(`Total uploaded  : ${uploadSizeMB} MB`);
-    console.log(`Total duration  : ${durationMin} minutes`);
-
-    console.log(`\nBooks covered: ${summary.booksCovered.join(', ')}`);
+    console.error(`\nBooks covered: ${summary.booksCovered.join(', ')}`);
 
     if (summary.failed > 0) {
-      console.log('\n❌ Failed Files:');
+      console.error('\n❌ Failed Files:');
       this.results
         .filter((r) => r.status === 'failed')
         .forEach((r) => {
-          console.log(`   - ${r.bookSlug} / ${r.key}: ${r.error}`);
+          console.error(`   - ${r.bookSlug} / ${r.blobPath}: ${r.error}`);
         });
     }
   }
@@ -808,97 +701,12 @@ class EnhancedAudioMigrator {
       : path.join(process.cwd(), this.options.logFile);
 
     await fs.writeFile(outputPath, JSON.stringify(output, null, 2), 'utf8');
-    console.log(`\n💾 Results saved to ${outputPath}`);
+    console.error(`\n💾 Results saved to ${outputPath}`);
 
     // Also save a human-readable report
     const reportPath = outputPath.replace(/\.json$/, '.md');
     await this.saveMarkdownReport(summary, reportPath);
-    console.log(`📝 Report saved to ${reportPath}`);
-  }
-
-  /**
-   * Save a human-readable Markdown report
-   */
-  private async saveMarkdownReport(summary: MigrationSummary, filePath: string): Promise<void> {
-    const lines = [
-      '# Enhanced Audio Migration Report',
-      '',
-      `Generated: ${new Date().toISOString()}`,
-      '',
-      '## Summary',
-      '',
-      `- **Total files**: ${summary.total}`,
-      `- **Successful**: ${summary.successful}`,
-      `- **Skipped**: ${summary.skipped}`,
-      `- **Failed**: ${summary.failed}`,
-      '',
-      '### Validation',
-      '',
-      `- **Success**: ${summary.validationSuccess}`,
-      `- **Failed**: ${summary.validationFailed}`,
-      '',
-      '### Transfer Statistics',
-      '',
-      `- **Total downloaded**: ${(summary.totalDownloadSize / (1024 * 1024)).toFixed(2)} MB`,
-      `- **Total uploaded**: ${(summary.totalUploadSize / (1024 * 1024)).toFixed(2)} MB`,
-      `- **Total duration**: ${(summary.totalDuration / (1000 * 60)).toFixed(2)} minutes`,
-      '',
-      '### Books Covered',
-      '',
-      ...summary.booksCovered.map((book) => `- ${book}`),
-      '',
-    ];
-
-    // Add book-by-book breakdown
-    lines.push('## Book-by-Book Breakdown', '');
-
-    for (const bookSlug of summary.booksCovered) {
-      const bookResults = this.results.filter((r) => r.bookSlug === bookSlug);
-      const bookSuccess = bookResults.filter((r) => r.status === 'success').length;
-      const bookSkipped = bookResults.filter((r) => r.status === 'skipped').length;
-      const bookFailed = bookResults.filter((r) => r.status === 'failed').length;
-      const bookTotal = bookResults.length;
-
-      lines.push(`### ${bookSlug}`, '');
-      lines.push(`- **Total**: ${bookTotal}`);
-      lines.push(`- **Success**: ${bookSuccess}`);
-      lines.push(`- **Skipped**: ${bookSkipped}`);
-      lines.push(`- **Failed**: ${bookFailed}`);
-      lines.push('');
-
-      if (bookFailed > 0) {
-        lines.push('#### Failed Files', '');
-
-        for (const result of bookResults.filter((r) => r.status === 'failed')) {
-          lines.push(`- **${result.key}**: ${result.error}`);
-        }
-
-        lines.push('');
-      }
-    }
-
-    // Add detailed logs for failures
-    if (summary.failed > 0) {
-      lines.push('## Detailed Failure Logs', '');
-
-      for (const result of this.results.filter((r) => r.status === 'failed')) {
-        lines.push(`### ${result.bookSlug} / ${result.key}`, '');
-        lines.push(`- **Status**: ${result.status}`);
-        lines.push(`- **Error**: ${result.error}`);
-
-        if (result.validated) {
-          lines.push(`- **Size Match**: ${result.validationInfo?.sizeMatch}`);
-          lines.push(
-            `- **Expected Size**: ${formatSize(result.validationInfo?.expectedSize || 0)}`
-          );
-          lines.push(`- **Actual Size**: ${formatSize(result.validationInfo?.actualSize || 0)}`);
-        }
-
-        lines.push('');
-      }
-    }
-
-    await fs.writeFile(filePath, lines.join('\n'), 'utf8');
+    console.error(`📝 Report saved to ${reportPath}`);
   }
 
   /**
@@ -906,7 +714,7 @@ class EnhancedAudioMigrator {
    */
   private log(message: string): void {
     if (this.options.verbose) {
-      console.log(message);
+      console.error(message);
     }
   }
 }
@@ -920,11 +728,11 @@ async function main(): Promise<void> {
     const migrator = new EnhancedAudioMigrator(options);
     await migrator.run();
 
-    console.log('\n✅ Enhanced audio migration completed successfully!');
+    console.error('\n✅ Enhanced audio validation completed successfully!');
     process.exit(0);
   } catch (error) {
     console.error(
-      '\n❌ Enhanced audio migration failed:',
+      '\n❌ Enhanced audio validation failed:',
       error instanceof Error ? error.message : String(error)
     );
     process.exit(1);
