@@ -153,10 +153,7 @@ function parseArgs(): MigrationOptions {
 /**
  * Create a readline interface for user confirmation
  */
-function createInterface(): NodeJS.ReadableStream & {
-  question(query: string, callback: (answer: string) => void): void;
-  close(): void;
-} {
+function createInterface(): readline.Interface {
   return readline.createInterface({
     input: process.stdin,
     output: process.stdout,

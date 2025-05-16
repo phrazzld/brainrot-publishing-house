@@ -88,8 +88,10 @@ function parseArgs() {
 /**
  * List all audio files in Vercel Blob
  */
-async function listAudioFiles(): Promise<Record<string, unknown>[]> {
-  const audioFiles: Record<string, unknown>[] = [];
+async function listAudioFiles(): Promise<
+  Array<{ pathname: string; url: string; size: number; uploadedAt: string }>
+> {
+  const audioFiles: Array<{ pathname: string; url: string; size: number; uploadedAt: string }> = [];
   let cursor: string | undefined;
 
   try {
@@ -115,12 +117,17 @@ async function listAudioFiles(): Promise<Record<string, unknown>[]> {
 /**
  * Get detailed information about a file
  */
-async function getFileInfo(blobInfo: Record<string, unknown>): Promise<AudioFileInfo> {
+async function getFileInfo(blobInfo: {
+  pathname: string;
+  url: string;
+  size: number;
+  uploadedAt: string;
+}): Promise<AudioFileInfo> {
   try {
-    const pathname = blobInfo.pathname as string;
-    const url = blobInfo.url as string;
-    const size = blobInfo.size as number;
-    const uploadedAt = blobInfo.uploadedAt as string;
+    const pathname = blobInfo.pathname;
+    const url = blobInfo.url;
+    const size = blobInfo.size;
+    const uploadedAt = blobInfo.uploadedAt;
 
     // Extract book slug from the path
     // Format is usually: "books/{bookSlug}/audio/{filename}.mp3"
@@ -139,11 +146,11 @@ async function getFileInfo(blobInfo: Record<string, unknown>): Promise<AudioFile
     };
   } catch (error) {
     return {
-      pathname: blobInfo.pathname as string,
+      pathname: blobInfo.pathname,
       size: 0,
       exists: false,
       isPlaceholder: false,
-      url: blobInfo.url as string,
+      url: blobInfo.url,
       error: error instanceof Error ? error.message : String(error),
     };
   }
@@ -285,7 +292,7 @@ async function main() {
     // Filter by book if specified
     const filteredBlobs = options.bookSlug
       ? audioBlobs.filter((blob) => {
-          const pathname = blob.pathname as string;
+          const pathname = blob.pathname;
           return pathname.includes(`/books/${options.bookSlug}/`);
         })
       : audioBlobs;
