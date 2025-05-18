@@ -1,9 +1,26 @@
 // Import all book translations
+import bhagavadGita from './books/bhagavad-gita';
+import bibleNewTestament from './books/bible-new-testament';
+import bibleOldTestament from './books/bible-old-testament';
+// Available books
+import declarationOfIndependence from './books/declaration-of-independence';
+import divineComedyInferno from './books/divine-comedy-inferno';
+import divineComedyParadiso from './books/divine-comedy-paradiso';
+import divineComedyPurgatorio from './books/divine-comedy-purgatorio';
+import gilgamesh from './books/gilgamesh';
 import hamlet from './books/hamlet';
 import huckleberryFinn from './books/huckleberry-finn';
+import meditations from './books/meditations';
+import midsummerNightsDream from './books/midsummer-nights-dream';
+import paradiseLost from './books/paradise-lost';
+import prideAndPrejudice from './books/pride-and-prejudice';
+import quran from './books/quran';
+import romeoAndJuliet from './books/romeo-and-juliet';
 import theAeneid from './books/the-aeneid';
 import theIliad from './books/the-iliad';
 import theOdyssey from './books/the-odyssey';
+// Coming soon books
+import theRepublic from './books/the-republic';
 
 /**
  * Translations index
@@ -15,31 +32,31 @@ import theOdyssey from './books/the-odyssey';
 export * from './types';
 export * from './utils';
 
-// TODO: Import the rest of the books when they are added
-// import theRepublic from './books/the-republic';
-// import declarationOfIndependence from './books/declaration-of-independence';
-// import prideAndPrejudice from './books/pride-and-prejudice';
-// import paradiseLost from './books/paradise-lost';
-// import meditations from './books/meditations';
-// import divineComedyInferno from './books/divine-comedy-inferno';
-// import divineComedyPurgatorio from './books/divine-comedy-purgatorio';
-// import divineComedyParadiso from './books/divine-comedy-paradiso';
-// import bibleOldTestament from './books/bible-old-testament';
-// import bibleNewTestament from './books/bible-new-testament';
-// import quran from './books/quran';
-// import romeoAndJuliet from './books/romeo-and-juliet';
-// import midsummerNightsDream from './books/midsummer-nights-dream';
-// import gilgamesh from './books/gilgamesh';
-// import bhagavadGita from './books/bhagavad-gita';
-
 // Create and export the translations array
 const translations = [
+  // Available books
   theIliad,
   huckleberryFinn,
   theOdyssey,
   theAeneid,
   hamlet,
-  // Add the rest of the books when they are imported
+  declarationOfIndependence,
+
+  // Coming soon books
+  theRepublic,
+  prideAndPrejudice,
+  paradiseLost,
+  meditations,
+  divineComedyInferno,
+  divineComedyPurgatorio,
+  divineComedyParadiso,
+  bibleOldTestament,
+  bibleNewTestament,
+  quran,
+  romeoAndJuliet,
+  midsummerNightsDream,
+  gilgamesh,
+  bhagavadGita,
 ];
 
 export default translations;
