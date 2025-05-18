@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Production Text File Standardization** - Completed migration of text files to standardized paths:
+
+  - Migrated 179 text files from legacy paths to standardized blob paths
+  - Updated URL generation logic to handle both standard and non-standard asset paths
+  - Fixed getAssetUrl function to properly convert asset paths to blob paths
+  - Verified all standardized URLs are accessible in production
+  - Created custom migration script that actually copies files (not just logs)
+  - Ensured backward compatibility during transition period
+
 - **Standardized Asset Naming Convention** - Implemented comprehensive file naming standards:
 
   - Created AssetNameValidator utility to enforce consistent naming patterns

@@ -107,11 +107,14 @@ export function generateBlobUrl(path: string, options: BlobUrlOptions = {}): str
   // Convert path if needed
   const blobPath = convertToBlobPath(path);
 
+  // If the path starts with 'assets/', it's already in the new format - don't convert it
+  const finalPath = path.startsWith('assets/') ? path : blobPath;
+
   // Determine the base URL
   const blobBaseUrl = determineBaseUrl(environment, baseUrl);
 
-  // Generate the full URL
-  const url = blobService.getUrlForPath(blobPath, { baseUrl: blobBaseUrl, noCache });
+  // Generate the full URL - use the path directly without legacy conversion
+  const url = finalPath.startsWith('http') ? finalPath : `${blobBaseUrl}/${finalPath}`;
 
   // Cache the result if caching is enabled
   if (!noCache) {
@@ -151,6 +154,37 @@ export function getAssetUrl(
   useBlobStorage: boolean = true,
   options: Omit<BlobUrlOptions, 'useBlobStorage'> = {}
 ): string {
+  if (!useBlobStorage) {
+    return legacyPath;
+  }
+
+  // If the path already starts with 'assets/', convert it to the blob path format
+  if (legacyPath.startsWith('/assets/')) {
+    const baseUrl = options.baseUrl || process.env.NEXT_PUBLIC_BLOB_BASE_URL;
+    // Remove /assets/ prefix and generate blob path
+    const pathWithoutAssets = legacyPath.substring('/assets/'.length);
+
+    // Convert legacy asset paths to standard blob paths
+    if (pathWithoutAssets.startsWith('text/')) {
+      // Standard text path like /assets/text/hamlet/brainrot-act-01.txt
+      const blobPath = blobPathService.convertLegacyPath(legacyPath);
+      return `${baseUrl}/${blobPath}`;
+    } else if (pathWithoutAssets.match(/^[^/]+\/text\//)) {
+      // Non-standard text path like /assets/the-iliad/text/book-01.txt
+      // Convert to standard blob path
+      const blobPath = blobPathService.convertLegacyPath(legacyPath);
+      return `${baseUrl}/${blobPath}`;
+    } else if (pathWithoutAssets.match(/^[^/]+\/images?\//)) {
+      // Image path like /assets/hamlet/images/hamlet-07.png
+      const blobPath = blobPathService.convertLegacyPath(legacyPath);
+      return `${baseUrl}/${blobPath}`;
+    } else {
+      // Other asset paths - convert normally
+      const blobPath = blobPathService.convertLegacyPath(legacyPath);
+      return `${baseUrl}/${blobPath}`;
+    }
+  }
+
   return generateBlobUrl(legacyPath, { ...options, useBlobStorage });
 }
 
@@ -382,6 +416,37 @@ export async function fetchTextWithFallback(
   options: Omit<BlobUrlOptions, 'useBlobStorage'> = {}
 ): Promise<string> {
   try {
+    // Check if this is already a full URL (not a path)
+    const isFullUrl = legacyPath.startsWith('http://') || legacyPath.startsWith('https://');
+
+    if (isFullUrl) {
+      // If it's already a full URL, try to fetch it directly
+      moduleLogger.info({
+        msg: 'Attempting to fetch text from URL',
+        url: legacyPath,
+      });
+
+      try {
+        const response = await fetch(legacyPath);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const textContent = await response.text();
+        moduleLogger.info({
+          msg: 'Successfully fetched text from URL',
+          url: legacyPath,
+        });
+        return textContent;
+      } catch (error) {
+        moduleLogger.error({
+          msg: 'Failed to fetch text from URL',
+          url: legacyPath,
+          error: error instanceof Error ? error.message : String(error),
+        });
+        throw error;
+      }
+    }
+
     // First, try the standardized path
     const standardizedPath = blobPathService.convertLegacyPath(legacyPath);
     const standardizedBlobUrl = blobService.getUrlForPath(standardizedPath, {
