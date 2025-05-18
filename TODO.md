@@ -417,11 +417,11 @@ This TODO list details the tasks required to fully migrate all asset management 
   - Updated translations/index.ts to include all books
   - Created comprehensive tests for explore page functionality
 
-- [ ] **T032: Standardize text file naming and paths**
-  - [ ] Fix naming inconsistencies:
+- [x] **T032: Standardize text file naming and paths**
+  - [x] Fix naming inconsistencies:
     - Huck Finn: "the-adventures-of-huckleberry-finn" vs "huckleberry-finn"
     - Chapters: Roman numerals (chapter-i.txt) vs Arabic (chapter-01.txt)
     - Different patterns: act-{number}.txt vs chapter-{number}.txt
-  - [ ] Create migration script to copy text files to standardized locations
-  - [ ] Update text loading logic to handle both old and new paths during transition
+  - [x] Create migration script to copy text files to standardized locations
+  - [x] Update text loading logic to handle both old and new paths during transition
   - Dependencies: T021, T029

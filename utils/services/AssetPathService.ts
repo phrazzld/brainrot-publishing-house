@@ -271,7 +271,7 @@ export class AssetPathService {
    * @returns New standardized path
    */
   public convertLegacyPath(legacyPath: string): string {
-    // Normalize the path to remove leading slashes
+    // Normalize the path to remove leading slashes and ensure we're working with app paths
     const normalizedPath = legacyPath.replace(/^\/+/, '');
 
     // Handle shared images case (current: images/file.jpg → new: assets/shared/file.jpg)
@@ -282,6 +282,11 @@ export class AssetPathService {
     // Handle site assets (current: site-assets/file.svg → new: assets/site/file.svg)
     if (normalizedPath.match(/^site-assets\//)) {
       return normalizedPath.replace(/^site-assets\//, 'assets/site/');
+    }
+
+    // Handle text file standardization patterns
+    if (normalizedPath.includes('/text/') || normalizedPath.includes('/brainrot/')) {
+      return this.convertTextFilePath(normalizedPath);
     }
 
     // Handle legacy assets path with /assets/ prefix
@@ -517,6 +522,105 @@ export class AssetPathService {
     };
 
     return typeMap[legacyType] || legacyType;
+  }
+
+  /**
+   * Convert a legacy text file path to the standardized format
+   * Handles various path patterns and normalizes them
+   *
+   * @param path The legacy text file path
+   * @returns The standardized path
+   */
+  // eslint-disable-next-line complexity
+  private convertTextFilePath(path: string): string {
+    // Pattern variations to handle
+    const patterns = [
+      {
+        // assets/text/book-slug/brainrot/filename.txt (mixed format)
+        pattern: /^assets\/text\/([^/]+)\/brainrot\/(.+\.txt)$/,
+        id: 'mixed-brainrot',
+      },
+      {
+        // assets/text/book-slug/filename.txt (already standard structure)
+        pattern: /^assets\/text\/([^/]+)\/(.+\.txt)$/,
+        id: 'standard-structure',
+      },
+      {
+        // assets/book-slug/text/filename.txt (legacy)
+        pattern: /^assets\/([^/]+)\/text\/(.+\.txt)$/,
+        id: 'legacy-assets',
+      },
+      {
+        // books/book-slug/text/brainrot/filename.txt
+        pattern: /^books\/([^/]+)\/text\/brainrot\/(.+\.txt)$/,
+        id: 'books-brainrot',
+      },
+      {
+        // book-slug/text/filename.txt
+        pattern: /^([^/]+)\/text\/(.+\.txt)$/,
+        id: 'book-text',
+      },
+    ];
+
+    for (const { pattern, id } of patterns) {
+      const match = path.match(pattern);
+      if (match) {
+        const [, bookSlug, filename] = match;
+        const normalizedSlug = this.normalizeBookSlug(bookSlug);
+
+        // Special handling based on pattern type
+        switch (id) {
+          case 'mixed-brainrot': {
+            // "assets/text/book/brainrot/file.txt" -> standardize the filename
+            const standardizedFilename = this.validator.standardizeChapterIdentifier(filename);
+            return `assets/text/${normalizedSlug}/${standardizedFilename}`;
+          }
+
+          case 'standard-structure': {
+            // "assets/text/book/file.txt" - already in correct structure
+            if (filename.startsWith('brainrot-')) {
+              return `assets/text/${normalizedSlug}/${filename}`;
+            }
+            const standardized = this.validator.standardizeChapterIdentifier(filename);
+            return `assets/text/${normalizedSlug}/${standardized}`;
+          }
+
+          default:
+            // Handle other patterns
+            if (filename.startsWith('brainrot/')) {
+              const actualFilename = filename.replace('brainrot/', '');
+              const stdFilename = this.validator.standardizeChapterIdentifier(actualFilename);
+              return `assets/text/${normalizedSlug}/${stdFilename}`;
+            } else if (filename.includes('/') && !filename.startsWith('brainrot/')) {
+              // Handle nested paths like source/filename.txt
+              const parts = filename.split('/');
+              const actualFilename = parts[parts.length - 1];
+              const prefix = parts.slice(0, -1).join('-');
+              const stdFilename = this.validator.standardizeChapterIdentifier(actualFilename);
+              return `assets/text/${normalizedSlug}/${prefix}-${stdFilename}`;
+            } else {
+              // Direct filename
+              const stdFilename = this.validator.standardizeChapterIdentifier(filename);
+              return `assets/text/${normalizedSlug}/${stdFilename}`;
+            }
+        }
+      }
+    }
+
+    // If no pattern matches, try a more general approach
+    const generalMatch = path.match(/([^/]+)\.(txt)$/);
+    if (generalMatch) {
+      const [filename] = generalMatch;
+      const bookSlugMatch = path.match(/(?:books\/|assets\/)?([^/]+)\//);
+      if (bookSlugMatch) {
+        const bookSlug = this.normalizeBookSlug(bookSlugMatch[1]);
+        const standardizedFilename = this.validator.standardizeChapterIdentifier(filename);
+        return `assets/text/${bookSlug}/${standardizedFilename}`;
+      }
+    }
+
+    // Fallback to original path with assets/ prefix
+    return `assets/${path}`;
   }
 }
 

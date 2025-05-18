@@ -370,72 +370,128 @@ export async function getAssetUrlWithFallback(
 /**
  * Utility to fetch text content with automatic fallback
  *
- * Tries to fetch from Blob storage first, falls back to local path if needed
+ * Tries to fetch from standardized path first, falls back to legacy path if needed
  *
  * @param legacyPath The legacy path to the text asset
  * @param options Optional URL generation options
  * @returns Promise resolving to the text content
  */
+// eslint-disable-next-line complexity
 export async function fetchTextWithFallback(
   legacyPath: string,
   options: Omit<BlobUrlOptions, 'useBlobStorage'> = {}
 ): Promise<string> {
   try {
-    // Handle URL normalization for tenant-specific domains
-    const baseUrl = process.env.NEXT_PUBLIC_BLOB_BASE_URL;
-    let normalizedPath = legacyPath;
+    // First, try the standardized path
+    const standardizedPath = blobPathService.convertLegacyPath(legacyPath);
+    const standardizedBlobUrl = blobService.getUrlForPath(standardizedPath, {
+      baseUrl: options.baseUrl || process.env.NEXT_PUBLIC_BLOB_BASE_URL,
+      noCache: options.noCache,
+    });
 
-    // If the path contains the generic Vercel Blob URL but we have a specific one, replace it
-    if (
-      baseUrl &&
-      legacyPath.startsWith('https://public.blob.vercel-storage.com/') &&
-      baseUrl !== 'https://public.blob.vercel-storage.com'
-    ) {
-      normalizedPath = legacyPath.replace('https://public.blob.vercel-storage.com/', baseUrl + '/');
-      moduleLogger.info({
-        msg: `Normalized text URL from ${legacyPath} to ${normalizedPath}`,
-        operation: 'normalize_text_url',
-        originalPath: legacyPath,
-        normalizedPath,
-      });
-    }
+    moduleLogger.info({
+      msg: 'Attempting to fetch text from standardized path',
+      legacyPath,
+      standardizedPath,
+      standardizedBlobUrl,
+    });
 
-    // First try Blob storage with the normalized URL
     try {
-      // If it's already a full URL after normalization, use it directly
-      if (normalizedPath.startsWith('http')) {
-        moduleLogger.info({
-          msg: `Fetching text from normalized URL: ${normalizedPath}`,
-          operation: 'fetch_text',
-          source: 'normalized_url',
-          url: normalizedPath,
-        });
-        return await blobService.fetchText(normalizedPath);
-      } else {
-        // Otherwise generate a Blob URL
-        const blobUrl = getBlobUrl(normalizedPath, options);
-        moduleLogger.info({
-          msg: `Fetching text from generated URL: ${blobUrl}`,
-          operation: 'fetch_text',
-          source: 'blob_url',
-          url: blobUrl,
-        });
-        return await blobService.fetchText(blobUrl);
-      }
-    } catch (blobError) {
+      const textContent = await blobService.fetchText(standardizedBlobUrl);
+      moduleLogger.info({
+        msg: 'Successfully fetched text from standardized path',
+        standardizedPath,
+      });
+      return textContent;
+    } catch (standardError) {
       moduleLogger.warn({
-        msg: `Failed to fetch from Blob, trying local path: ${legacyPath}`,
-        operation: 'fetch_text_fallback',
+        msg: 'Failed to fetch from standardized path, falling back to legacy path',
+        standardizedPath,
         legacyPath,
-        error: blobError instanceof Error ? blobError.message : String(blobError),
+        error: standardError instanceof Error ? standardError.message : String(standardError),
       });
 
-      // If Blob fetch fails, try the local path
-      const response = await fetch(legacyPath);
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+      // Fallback mechanism
+      const baseUrl = process.env.NEXT_PUBLIC_BLOB_BASE_URL;
+      let normalizedPath = legacyPath;
+
+      // Handle URL normalization for tenant-specific domains
+      if (
+        baseUrl &&
+        legacyPath.startsWith('https://public.blob.vercel-storage.com/') &&
+        baseUrl !== 'https://public.blob.vercel-storage.com'
+      ) {
+        normalizedPath = legacyPath.replace(
+          'https://public.blob.vercel-storage.com/',
+          baseUrl + '/'
+        );
+        moduleLogger.info({
+          msg: `Normalized legacy URL from ${legacyPath} to ${normalizedPath}`,
+          operation: 'normalize_legacy_url',
+          originalPath: legacyPath,
+          normalizedPath,
+        });
       }
-      return await response.text();
+
+      // Try legacy path
+      try {
+        // If it's already a full URL after normalization, use it directly
+        if (normalizedPath.startsWith('http')) {
+          moduleLogger.info({
+            msg: `Fetching text from normalized legacy URL: ${normalizedPath}`,
+            operation: 'fetch_text_legacy',
+            source: 'normalized_legacy_url',
+            url: normalizedPath,
+          });
+          const textContent = await blobService.fetchText(normalizedPath);
+
+          // Log deprecation warning
+          moduleLogger.warn({
+            msg: 'DEPRECATION: Successfully fetched text from legacy path. Please update references.',
+            legacyPath,
+            standardizedPath,
+          });
+
+          return textContent;
+        } else {
+          // Otherwise try as a local path
+          moduleLogger.info({
+            msg: `Fetching text from local path: ${normalizedPath}`,
+            operation: 'fetch_text_local',
+            source: 'local_path',
+            path: normalizedPath,
+          });
+
+          const response = await fetch(normalizedPath);
+          // eslint-disable-next-line max-depth
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+
+          const textContent = await response.text();
+
+          // Log deprecation warning
+          moduleLogger.warn({
+            msg: 'DEPRECATION: Successfully fetched text from legacy local path. Please update references.',
+            legacyPath,
+            standardizedPath,
+          });
+
+          return textContent;
+        }
+      } catch (legacyError) {
+        moduleLogger.error({
+          msg: 'Failed to fetch from legacy path as well',
+          legacyPath,
+          standardizedPath,
+          standardError:
+            standardError instanceof Error ? standardError.message : String(standardError),
+          legacyError: legacyError instanceof Error ? legacyError.message : String(legacyError),
+        });
+
+        // Re-throw the legacy error as it's the final attempt
+        throw legacyError;
+      }
     }
   } catch (error) {
     moduleLogger.error({

@@ -354,6 +354,157 @@ export class AssetNameValidator {
     // If it's a number, convert and pad
     return chapter.toString().padStart(2, '0');
   }
+
+  /**
+   * Standardizes a chapter identifier to the new format
+   * Handles various input formats and converts them to brainrot-{type}-{number}.txt
+   *
+   * @param input The input identifier (could be a filename or chapter identifier)
+   * @returns Standardized filename
+   */
+  // eslint-disable-next-line complexity
+  standardizeChapterIdentifier(input: string): string {
+    const cleanInput = input.toLowerCase().trim();
+
+    // Remove .txt extension if present
+    const withoutExt = cleanInput.replace(/\.txt$/, '');
+
+    // Check for special cases first
+    if (withoutExt === 'fulltext' || withoutExt === 'brainrot-fulltext') {
+      return 'brainrot-fulltext.txt';
+    }
+
+    if (withoutExt === 'prologue' || withoutExt === 'brainrot-prologue') {
+      return 'brainrot-prologue.txt';
+    }
+
+    if (withoutExt === 'epilogue' || withoutExt === 'brainrot-epilogue') {
+      return 'brainrot-epilogue.txt';
+    }
+
+    // Pattern to extract type and number from various formats
+    const patterns = [
+      // brainrot-chapter-01, brainrot-act-05
+      /^brainrot-(chapter|act|part|scene)-(\d+)$/,
+      // chapter-01, act-05, part-02
+      /^(chapter|act|part|scene)-(\d+)$/,
+      // chapter-i, act-v (Roman numerals)
+      /^(chapter|act|part|scene)-([ivxlcdm]+)$/,
+      // act_01, chapter_02 (underscore separator)
+      /^(chapter|act|part|scene)_(\d+)$/,
+      // Chapter 1, Act 3 (space separator, capitalized)
+      /^(chapter|act|part|scene)\s+(\d+)$/i,
+      // Just the number (assume chapter)
+      /^(\d+)$/,
+      // Roman numeral only (assume chapter)
+      /^([ivxlcdm]+)$/,
+    ];
+
+    for (const pattern of patterns) {
+      const match = withoutExt.match(pattern);
+      if (match) {
+        let type: string;
+        let numberPart: string;
+
+        if (pattern.toString() === '/^(\\d+)$/' || pattern.toString() === '/^([ivxlcdm]+)$/') {
+          // Just a number or Roman numeral - assume chapter
+          type = 'chapter';
+          numberPart = match[1];
+        } else if (pattern.toString() === '/^brainrot-(chapter|act|part|scene)-(\\d+)$/') {
+          // Already standardized, just extract parts
+          type = match[1];
+          numberPart = match[2];
+        } else {
+          type = match[1].toLowerCase();
+          numberPart = match[2];
+        }
+
+        // Convert to Arabic if needed and pad
+        const arabicNumber = this.parseNumber(numberPart);
+        const paddedNumber = String(arabicNumber).padStart(2, '0');
+
+        return `brainrot-${type}-${paddedNumber}.txt`;
+      }
+    }
+
+    // If no pattern matches, return the original with brainrot prefix
+    return `brainrot-${withoutExt}.txt`;
+  }
+
+  /**
+   * Parses a number from various formats (Arabic or Roman numerals)
+   *
+   * @param input The input string to parse
+   * @returns The parsed number
+   */
+  private parseNumber(input: string): number {
+    // Guard against undefined/null input
+    if (!input) {
+      return 1;
+    }
+
+    // Check if it's already a numeric string
+    if (/^\d+$/.test(input)) {
+      return parseInt(input, 10);
+    }
+
+    // Check if it's a Roman numeral
+    const lowerInput = input.toLowerCase();
+    if (this.ROMAN_TO_ARABIC[lowerInput]) {
+      return this.ROMAN_TO_ARABIC[lowerInput];
+    }
+
+    // Try to convert general Roman numerals (not in our mapping)
+    const romanValue = this.romanToArabic(lowerInput);
+    if (romanValue > 0) {
+      return romanValue;
+    }
+
+    // Default to 1 if we can't parse
+    return 1;
+  }
+
+  /**
+   * Converts a Roman numeral string to Arabic number
+   * Handles Roman numerals beyond the basic mapping
+   *
+   * @param roman The Roman numeral string
+   * @returns The Arabic number equivalent
+   */
+  private romanToArabic(roman: string): number {
+    const romanMap: Record<string, number> = {
+      i: 1,
+      v: 5,
+      x: 10,
+      l: 50,
+      c: 100,
+      d: 500,
+      m: 1000,
+    };
+
+    let result = 0;
+    let prevValue = 0;
+
+    // Process from right to left
+    for (let i = roman.length - 1; i >= 0; i--) {
+      const char = roman[i];
+      const value = romanMap[char];
+
+      if (!value) {
+        return 0; // Invalid Roman numeral
+      }
+
+      if (value < prevValue) {
+        result -= value;
+      } else {
+        result += value;
+      }
+
+      prevValue = value;
+    }
+
+    return result;
+  }
 }
 
 // Export a singleton instance
