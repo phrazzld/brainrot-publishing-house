@@ -1,3 +1,4 @@
+import { mapAssetPath } from './assetPathMapping';
 import { logger } from './logger';
 import { blobPathService } from './services/BlobPathService';
 import { blobService } from './services/BlobService';
@@ -156,6 +157,16 @@ export function getAssetUrl(
 ): string {
   if (!useBlobStorage) {
     return legacyPath;
+  }
+
+  // Apply asset path mapping first to handle known discrepancies
+  const mappedPath = mapAssetPath(legacyPath);
+
+  // If we got a direct mapping, use it
+  if (mappedPath !== legacyPath) {
+    const baseUrl = options.baseUrl || process.env.NEXT_PUBLIC_BLOB_BASE_URL;
+    // Don't process mapped paths further - use them directly
+    return `${baseUrl}/${mappedPath}`;
   }
 
   // If the path already starts with 'assets/', convert it to the blob path format
