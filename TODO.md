@@ -425,3 +425,13 @@ This TODO list details the tasks required to fully migrate all asset management 
   - [x] Create migration script to copy text files to standardized locations
   - [x] Update text loading logic to handle both old and new paths during transition
   - Dependencies: T021, T029
+
+- [x] **T033: Run T032 text file standardization migration in production**
+  - [ ] Deploy code changes with standardization logic to production
+  - [ ] Run production migration with BLOB_READ_WRITE_TOKEN configured
+  - [ ] Execute: `npm run standardize:text:blob -- --log-file=text-standardization-production.log`
+  - [ ] Verify standardized paths are accessible in production
+  - [ ] Test fallback mechanism works correctly in production
+  - [ ] Monitor for any issues during transition period
+  - [ ] Eventually remove legacy text file locations after successful migration
+  - Dependencies: T032
