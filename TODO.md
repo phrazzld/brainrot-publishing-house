@@ -446,15 +446,15 @@ This TODO list details the tasks required to fully migrate all asset management 
 
 ## Next Tasks
 
-- [ ] **T035: Fix linting issues in utility scripts**
+- [x] **T035: Fix linting issues in utility scripts**
 
-  - [ ] Address unused variable warnings in asset migration scripts
-  - [ ] Fix console.log statements in scripts (replace with structured logger)
-  - [ ] Reduce complexity in functions that exceed threshold
-  - [ ] Establish standard format for utility scripts
-  - [ ] Update .eslintignore to only exclude scripts still being actively developed
+  - [x] Address unused variable warnings in asset migration scripts
+  - [x] Fix console.log statements in scripts (replace with structured logger)
+  - [x] Reduce complexity in functions that exceed threshold
+  - [x] Establish standard format for utility scripts
+  - [x] Update .eslintignore to only exclude scripts still being actively developed
 
-- [ ] **T036: Organize audio files and verify downloads**
-  - [ ] Verify all audio files are accessible
-  - [ ] Create test script for audio file downloads
-  - [ ] Document audio file organization structure
+- [x] **T036: Organize audio files and verify downloads**
+  - [x] Verify all audio files are accessible with verifyAudioFilesAccess.ts script
+  - [x] Create testAudioFileDownloads.ts script for audio file downloads
+  - [x] Document audio file organization structure in AUDIO_FILE_ORGANIZATION.md

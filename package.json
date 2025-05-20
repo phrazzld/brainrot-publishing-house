@@ -80,6 +80,10 @@
     "standardize:text:blob:dry": "tsx scripts/standardizeTextFilesBlob.ts --dry-run",
     "standardize:text:blob:verbose": "tsx scripts/standardizeTextFilesBlob.ts --dry-run --log-file=text-standardization-blob-dry-run.log",
     "verify:text": "tsx scripts/verifyTextMigration.ts",
+    "verify:audio-files": "tsx scripts/verifyAudioFilesAccess.ts",
+    "verify:audio-files:skip-check": "tsx scripts/verifyAudioFilesAccess.ts --skip-access-check",
+    "test:audio-downloads": "tsx scripts/testAudioFileDownloads.ts",
+    "test:audio-downloads:production": "tsx scripts/testAudioFileDownloads.ts --env=production",
     "tsc": "tsc --noEmit",
     "prepare": "husky"
   },
