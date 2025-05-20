@@ -460,7 +460,7 @@ This TODO list details the tasks required to fully migrate all asset management 
   - [x] Document audio file organization structure in AUDIO_FILE_ORGANIZATION.md
 
 - [ ] **T037: Fix linting issues in script files blocking push**
-  - [ ] Fix broken JSDoc comments in script files
+  - [x] Fix broken JSDoc comments in script files
   - [ ] Replace console.log statements with structured logger in:
     - [ ] cleanupLocalAssets.ts
     - [ ] migrateAudioFiles.ts and other audio migration scripts
@@ -474,3 +474,8 @@ This TODO list details the tasks required to fully migrate all asset management 
     - [ ] verifyAudioMigrationWithContent.ts
     - [ ] verifyBlobStorage.ts
     - [ ] verifyTextMigration.ts
+  - [ ] Update husky configuration:
+    - [ ] Fix deprecated husky configuration in pre-push hook
+    - [ ] Remove the "#!/usr/bin/env sh" and ". "$(dirname -- "$0")/_/husky.sh"" lines
+    - [ ] Update to husky v10 compatible configuration
+  - [ ] Re-enable git hooks after fixing linting issues
