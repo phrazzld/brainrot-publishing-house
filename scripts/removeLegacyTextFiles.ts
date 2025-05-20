@@ -8,15 +8,20 @@
  * are accessible and working correctly in production.
  */
 import { del } from '@vercel/blob';
+import dotenv from 'dotenv';
 import fs from 'fs';
+import path from 'path';
 
-import { createLogger } from '../utils/logger';
+import logger from '../utils/logger';
 
-// Initialize structured logger
-const logger = createLogger({ module: 'legacy-file-removal' });
+// Load environment variables from .env files
+dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
+
+// Initialize structured logger with module context
+const moduleLogger = logger.child({ module: 'legacy-file-removal' });
 
 // Create a logger specifically for the removal operations
-const removalLogger = logger.child({ operation: 'remove-legacy-files' });
+const removalLogger = moduleLogger.child({ operation: 'remove-legacy-files' });
 
 interface MigrationEntry {
   originalPath: string;
@@ -199,7 +204,7 @@ async function main() {
   try {
     const { logFilePath, dryRun } = parseArgs();
 
-    logger.info({
+    moduleLogger.info({
       msg: `Legacy text file removal script starting`,
       logFilePath,
       dryRun,
@@ -207,15 +212,15 @@ async function main() {
 
     if (!dryRun) {
       // Ask for confirmation when not in dry-run mode
-      logger.warn({
+      moduleLogger.warn({
         msg: 'WARNING: This operation will permanently delete legacy text files from Blob storage!',
       });
 
-      logger.warn({
+      moduleLogger.warn({
         msg: 'In a real implementation, we would prompt for confirmation here',
       });
 
-      logger.info({
+      moduleLogger.info({
         msg: 'User confirmed deletion operation',
       });
     }
@@ -224,7 +229,7 @@ async function main() {
     const stats = await removeLegacyTextFiles(logFilePath, dryRun);
 
     // Output summary to logs
-    logger.info({
+    moduleLogger.info({
       msg: 'Legacy Text File Removal Summary',
       mode: dryRun ? 'DRY RUN (no files deleted)' : 'EXECUTE (files deleted)',
       total: stats.total,
@@ -236,7 +241,7 @@ async function main() {
         : 'Legacy file removal completed',
     });
   } catch (error) {
-    logger.error({
+    moduleLogger.error({
       msg: 'Script execution failed',
       error: error instanceof Error ? error.message : String(error),
     });
@@ -246,7 +251,7 @@ async function main() {
 
 // Execute the script
 main().catch((error) => {
-  logger.error({
+  moduleLogger.error({
     msg: 'Unhandled error',
     error: error instanceof Error ? error.message : String(error),
     stack: error instanceof Error ? error.stack : undefined,

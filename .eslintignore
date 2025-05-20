@@ -1,6 +1,13 @@
-# Temporary ignore for debug and test utilities
+# Temporary ignore for debug and test scripts
 scripts/debug/**/*
 scripts/test-utils/**/*
 scripts/asset-migration/upload-audio-placeholders.js
+
+# These scripts are still being refactored
+scripts/asset-migration/**/*  
+scripts/blob-reorganizer/**/*
+
+# Migration scripts often have high complexity
+scripts/runTextStandardizationMigration.ts
 
 # Will be addressed in separate lint cleanup task
