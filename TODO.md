@@ -459,23 +459,38 @@ This TODO list details the tasks required to fully migrate all asset management 
   - [x] Create testAudioFileDownloads.ts script for audio file downloads
   - [x] Document audio file organization structure in AUDIO_FILE_ORGANIZATION.md
 
-- [ ] **T037: Fix linting issues in script files blocking push**
+- [x] **T037: Fix linting issues in script files blocking push**
   - [x] Fix broken JSDoc comments in script files
-  - [ ] Replace console.log statements with structured logger in:
-    - [ ] cleanupLocalAssets.ts
-    - [ ] migrateAudioFiles.ts and other audio migration scripts
-    - [ ] verifyAudioMigration.ts and other audio verification scripts
-    - [ ] verifyBlobStorage.ts
-  - [ ] Reduce function complexity in:
-    - [ ] cleanupLocalAssets.ts (cleanupLocalAssets function)
-    - [ ] verifyAudioMigration.ts (verifyAudioMigration function)
-    - [ ] verifyBlobStorage.ts (verifyBlobStorage function)
-  - [ ] Fix max-depth issues (blocks nested too deeply) in:
-    - [ ] verifyAudioMigrationWithContent.ts
-    - [ ] verifyBlobStorage.ts
-    - [ ] verifyTextMigration.ts
-  - [ ] Update husky configuration:
-    - [ ] Fix deprecated husky configuration in pre-push hook
-    - [ ] Remove the "#!/usr/bin/env sh" and ". "$(dirname -- "$0")/_/husky.sh"" lines
-    - [ ] Update to husky v10 compatible configuration
-  - [ ] Re-enable git hooks after fixing linting issues
+  - [x] Replace console.log statements with structured logger in:
+    - [x] cleanupLocalAssets.ts
+    - [x] migrateAudioFiles.ts and other audio migration scripts
+    - [x] verifyAudioMigration.ts and other audio verification scripts
+    - [x] verifyBlobStorage.ts
+  - [x] Reduce function complexity in:
+    - [x] cleanupLocalAssets.ts (cleanupLocalAssets function)
+    - [x] verifyAudioMigration.ts (verifyAudioMigration function)
+    - [x] verifyBlobStorage.ts (verifyBlobStorage function)
+  - [x] Fix max-depth issues (blocks nested too deeply) in:
+    - [x] verifyAudioMigrationWithContent.ts
+    - [x] verifyBlobStorage.ts
+    - [x] verifyTextMigration.ts
+  - [x] Update husky configuration:
+    - [x] Fix deprecated husky configuration in pre-push hook
+    - [x] Remove the "#!/usr/bin/env sh" and ". "$(dirname -- "$0")/_/husky.sh"" lines
+    - [x] Update to husky v10 compatible configuration
+  - [x] Re-enable git hooks after fixing linting issues
+
+- [ ] **T038: Address additional linting issues in script files**
+  - [ ] Fix remaining no-console rule violations:
+    - [ ] Handle interactive CLI prompts properly in cleanupLocalAssets.ts
+    - [ ] Review and update other scripts with console statements
+  - [ ] Fix TypeScript module import issues:
+    - [ ] Correct default imports vs named imports for fs, path
+    - [ ] Address import.meta.url compatibility issues
+  - [ ] Fix unused variables by adding underscore prefixes:
+    - [ ] existsSync in migrateAudioFiles.ts
+    - [ ] ASSETS_DIR in migrateAudioFiles.ts
+    - [ ] Other unused variables
+  - [ ] Fix unnecessary escape characters in regex expressions
+  - [ ] Update .eslintignore configuration to modern format
+  - [ ] Complete verification with lint and type checking to ensure all issues are resolved

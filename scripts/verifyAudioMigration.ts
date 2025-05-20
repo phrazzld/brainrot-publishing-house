@@ -1,15 +1,18 @@
 /**
- * TODO: Replace console.log with logger
- * 
  * Script to verify audio file migration
  */
 import * as dotenv from 'dotenv';
 import { existsSync } from 'fs';
-import fs from 'fs/promises';
-import path from 'path';
+import * as fs from 'fs/promises';
+import * as path from 'path';
 
 import translations from '../translations';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { blobService } from '../utils/services';
+import { logger as rootLogger } from '../utils/logger';
+
+// Create a script-specific logger instance
+const logger = rootLogger.child({ script: 'verifyAudioMigration.ts' });
 
 dotenv.config({ path: '.env.local' });
 
@@ -21,130 +24,198 @@ interface VerificationResult {
   error?: string;
 }
 
-async function verifyAudioMigration() {
-  const results: VerificationResult[] = [];
-  let total = 0;
-  let successful = 0;
-  let failed = 0;
+/**
+ * Check if an audio file exists at the given URL
+ */
+async function checkAudioFileExists(blobUrl: string): Promise<boolean> {
+  try {
+    const response = await fetch(blobUrl, { method: 'HEAD' });
+    return response.ok;
+  } catch (error) {
+    logger.error({ msg: 'Error checking audio file existence', url: blobUrl, error });
+    return false;
+  }
+}
 
-  // Get correct Blob base URL from environment
-  const blobBaseUrl =
-    process.env.NEXT_PUBLIC_BLOB_BASE_URL ||
-    process.env.NEXT_PUBLIC_BLOB_DEV_URL ||
-    'https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com';
+/**
+ * Process a single audio file and verify its existence
+ */
+async function verifyAudioFile(
+  audioPath: string,
+  bookSlug: string,
+  blobBaseUrl: string,
+  counters: { total: number; successful: number; failed: number }
+): Promise<VerificationResult> {
+  counters.total++;
+  
+  try {
+    // Get the path part without domain
+    const pathOnly = audioPath.replace(/^https?:\/\/[^\/]+\//, '');
+    
+    // Construct the correct URL with the actual Blob base URL
+    const blobUrl = `${blobBaseUrl}/${pathOnly}`;
+    
+    // Check if the file exists
+    const exists = await checkAudioFileExists(blobUrl);
+    
+    if (exists) {
+      counters.successful++;
+      logger.info({ msg: 'Audio file exists', url: blobUrl });
+    } else {
+      counters.failed++;
+      logger.error({ msg: 'Audio file not found', url: blobUrl });
+    }
+    
+    return {
+      bookSlug,
+      audioPath,
+      blobUrl,
+      exists,
+    };
+  } catch (error) {
+    counters.failed++;
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    logger.error({ msg: 'Error verifying audio file', path: audioPath, error: errorMessage });
+    
+    return {
+      bookSlug,
+      audioPath,
+      blobUrl: '',
+      exists: false,
+      error: errorMessage,
+    };
+  }
+}
 
-  console.log('Starting audio migration verification...');
-  console.log(`Using Blob base URL: ${blobBaseUrl}`);
-
-  // Process each book
-  for (const book of translations) {
-    console.log(`Verifying audio files for book: ${book.title} (${book.slug})`);
-
-    // Check for audio files in each chapter
-    if (book.chapters) {
-      for (const chapter of book.chapters) {
-        if (chapter.audioSrc && typeof chapter.audioSrc === 'string') {
-          total++;
-          const audioPath = chapter.audioSrc;
-
-          try {
-            // Get the path part without domain
-            const pathOnly = audioPath.replace(/^https?:\/\/[^\/]+\//, '');
-
-            // Construct the correct URL with the actual Blob base URL
-            const blobUrl = `${blobBaseUrl}/${pathOnly}`;
-
-            // Check if it exists using direct fetch
-            let exists = false;
-            try {
-              const response = await fetch(blobUrl, { method: 'HEAD' });
-              exists = response.ok;
-
-              if (exists) {
-                successful++;
-                console.log(`✅ Audio file exists: ${blobUrl}`);
-              } else {
-                failed++;
-                console.error(`❌ Audio file not found: ${blobUrl} - Status: ${response.status}`);
-              }
-            } catch (e) {
-              failed++;
-              const error = e instanceof Error ? e.message : String(e);
-              console.error(`❌ Error checking audio file: ${blobUrl} - ${error}`);
-
-              results.push({
-                bookSlug: book.slug,
-                audioPath,
-                blobUrl,
-                exists: false,
-                error,
-              });
-              continue;
-            }
-
-            results.push({
-              bookSlug: book.slug,
-              audioPath,
-              blobUrl,
-              exists,
-            });
-          } catch (error) {
-            failed++;
-            const errorMessage = error instanceof Error ? error.message : String(error);
-            console.error(`❌ Error verifying audio file: ${audioPath} - ${errorMessage}`);
-
-            results.push({
-              bookSlug: book.slug,
-              audioPath,
-              blobUrl: '',
-              exists: false,
-              error: errorMessage,
-            });
-          }
-        }
-      }
+/**
+ * Process all audio files for a book
+ */
+async function verifyBookAudio(
+  book: { slug: string; title: string; chapters?: Array<{ audioSrc?: string }> },
+  blobBaseUrl: string,
+  counters: { total: number; successful: number; failed: number }
+): Promise<VerificationResult[]> {
+  const bookResults: VerificationResult[] = [];
+  
+  logger.info({ msg: `Verifying audio files for book`, bookTitle: book.title, bookSlug: book.slug });
+  
+  // Skip if no chapters
+  if (!book.chapters) {
+    return bookResults;
+  }
+  
+  // Process each chapter
+  for (const chapter of book.chapters) {
+    if (chapter.audioSrc && typeof chapter.audioSrc === 'string') {
+      const result = await verifyAudioFile(chapter.audioSrc, book.slug, blobBaseUrl, counters);
+      bookResults.push(result);
     }
   }
+  
+  return bookResults;
+}
 
-  // Summarize results
-  console.log('\nAudio Migration Verification Summary:');
-  console.log(`Total audio files: ${total}`);
-  console.log(`Successfully migrated: ${successful}`);
-  console.log(`Failed or missing: ${failed}`);
-  console.log(`Success rate: ${Math.round((successful / total) * 100)}%`);
-
-  // Save verification report
+/**
+ * Save verification report to a file
+ */
+async function saveVerificationReport(
+  summary: { total: number; successful: number; failed: number },
+  results: VerificationResult[]
+): Promise<string> {
+  // Calculate success rate
+  const successRate = summary.total > 0 
+    ? Math.round((summary.successful / summary.total) * 100) 
+    : 0;
+  
+  // Create report object
   const report = {
     date: new Date().toISOString(),
     summary: {
-      total,
-      successful,
-      failed,
-      successRate: `${Math.round((successful / total) * 100)}%`,
+      total: summary.total,
+      successful: summary.successful,
+      failed: summary.failed,
+      successRate: `${successRate}%`,
     },
     results,
   };
-
+  
+  // Generate report path
   const reportPath = path.join(process.cwd(), 'reports', `audio-verification-${Date.now()}.json`);
-
+  
   // Ensure reports directory exists
   const reportsDir = path.join(process.cwd(), 'reports');
   if (!existsSync(reportsDir)) {
     await fs.mkdir(reportsDir, { recursive: true });
   }
-
+  
+  // Write report
   await fs.writeFile(reportPath, JSON.stringify(report, null, 2));
-  console.log(`Verification report saved to: ${reportPath}`);
+  logger.info({ msg: 'Verification report saved', path: reportPath });
+  
+  return reportPath;
+}
 
-  return report;
+/**
+ * Main function to verify audio file migration
+ */
+async function verifyAudioMigration() {
+  const results: VerificationResult[] = [];
+  const counters = { total: 0, successful: 0, failed: 0 };
+  
+  // Get correct Blob base URL from environment
+  const blobBaseUrl =
+    process.env.NEXT_PUBLIC_BLOB_BASE_URL ||
+    process.env.NEXT_PUBLIC_BLOB_DEV_URL ||
+    'https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com';
+  
+  logger.info({ 
+    msg: 'Starting audio migration verification', 
+    blobBaseUrl 
+  });
+  
+  // Process each book
+  for (const book of translations) {
+    const bookResults = await verifyBookAudio(book, blobBaseUrl, counters);
+    results.push(...bookResults);
+  }
+  
+  // Summarize results
+  const successRate = counters.total > 0 
+    ? Math.round((counters.successful / counters.total) * 100) 
+    : 0;
+  
+  logger.info({
+    msg: 'Audio Migration Verification Summary',
+    summary: {
+      total: counters.total,
+      successful: counters.successful,
+      failed: counters.failed,
+      successRate: `${successRate}%`
+    }
+  });
+  
+  // Save verification report
+  await saveVerificationReport(counters, results);
+  
+  // Create report object to return
+  return {
+    date: new Date().toISOString(),
+    summary: {
+      total: counters.total,
+      successful: counters.successful,
+      failed: counters.failed,
+      successRate: `${successRate}%`,
+    },
+    results,
+  };
 }
 
 // Run verification if executed directly
 if (import.meta.url.endsWith(process.argv[1].replace(/^file:\/\//, ''))) {
   verifyAudioMigration()
-    .then(() => console.log('Audio migration verification complete!'))
+    .then(() => logger.info({ msg: 'Audio migration verification complete!' }))
     .catch((error) => {
-      console.error('Audio migration verification failed:', error);
+      logger.error({ msg: 'Audio migration verification failed', error });
       process.exit(1);
     });
 }

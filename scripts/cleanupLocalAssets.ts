@@ -1,6 +1,4 @@
 /**
- * TODO: Replace console.log with logger
- * 
  * Script to clean up local assets after successful migration to Blob storage
  *
  * This script:
@@ -16,6 +14,10 @@ import { exit } from 'process';
 
 import translations from '../translations';
 import { assetExistsInBlobStorage } from '../utils';
+import { logger as rootLogger } from '../utils/logger';
+
+// Create a script-specific logger instance
+const logger = rootLogger.child({ script: 'cleanupLocalAssets.ts' });
 
 // Load environment variables from .env.local
 dotenv.config({ path: '.env.local' });
@@ -72,7 +74,7 @@ function blobPathToLocalPath(blobPath: string): string {
       // Now process the path without the URL part
       return blobPathToLocalPath(urlPath);
     } catch (error) {
-      console.error(`Error parsing URL: ${blobPath}`, error);
+      logger.error({ msg: `Error parsing URL: ${blobPath}`, error, blobPath });
       return '';
     }
   }
@@ -136,114 +138,127 @@ async function processAsset(
   return result;
 }
 
+// Helper to update counters based on asset result
+function updateCounters(
+  result: AssetCleanupResult, 
+  bookSummary: BookCleanupResult['summary'],
+  globalCounters: { assetsInBlob: number; assetsDeleted: number; assetsKept: number; errors: number }
+): void {
+  if (result.existsInBlob) {
+    bookSummary.existInBlob++;
+    globalCounters.assetsInBlob++;
+  }
+
+  if (result.wasDeleted) {
+    bookSummary.deleted++;
+    globalCounters.assetsDeleted++;
+  } else if (result.existsInBlob) {
+    bookSummary.keptLocal++;
+    globalCounters.assetsKept++;
+  }
+
+  if (result.error) {
+    bookSummary.errors++;
+    globalCounters.errors++;
+  }
+}
+
+// Process all assets for a single chapter
+async function processChapterAssets(
+  chapter: { text: string; audioSrc?: string },
+  dryRun: boolean,
+  bookResult: BookCleanupResult,
+  globalCounters: { totalAssets: number; assetsInBlob: number; assetsDeleted: number; assetsKept: number; errors: number }
+): Promise<void> {
+  // Process chapter text
+  bookResult.summary.totalAssets++;
+  globalCounters.totalAssets++;
+
+  const chapterResult = await processAsset(chapter.text, 'chapter', dryRun);
+  bookResult.results.push(chapterResult);
+  updateCounters(chapterResult, bookResult.summary, globalCounters);
+
+  // Process audio (if available)
+  if (chapter.audioSrc) {
+    bookResult.summary.totalAssets++;
+    globalCounters.totalAssets++;
+
+    const audioResult = await processAsset(chapter.audioSrc, 'audio', dryRun);
+    bookResult.results.push(audioResult);
+    updateCounters(audioResult, bookResult.summary, globalCounters);
+  }
+}
+
+// Process all assets for a single book
+async function processBookAssets(
+  book: { slug: string; title: string; coverImage: string; chapters: Array<{ text: string; audioSrc?: string }> },
+  dryRun: boolean,
+  globalCounters: { totalAssets: number; assetsInBlob: number; assetsDeleted: number; assetsKept: number; errors: number }
+): Promise<BookCleanupResult> {
+  logger.info({ msg: `Processing book: ${book.title} (${book.slug})`, bookTitle: book.title, bookSlug: book.slug });
+
+  const bookResult: BookCleanupResult = {
+    slug: book.slug,
+    title: book.title,
+    results: [],
+    summary: {
+      totalAssets: 0,
+      existInBlob: 0,
+      deleted: 0,
+      keptLocal: 0,
+      errors: 0,
+    },
+  };
+
+  // Process cover image
+  bookResult.summary.totalAssets++;
+  globalCounters.totalAssets++;
+
+  const coverResult = await processAsset(book.coverImage, 'cover', dryRun);
+  bookResult.results.push(coverResult);
+  updateCounters(coverResult, bookResult.summary, globalCounters);
+
+  // Process chapters
+  for (const chapter of book.chapters) {
+    await processChapterAssets(chapter, dryRun, bookResult, globalCounters);
+  }
+
+  return bookResult;
+}
+
+// Save the cleanup report to a file
+function saveCleanupReport(report: CleanupReport): string {
+  const reportDir = path.join(process.cwd(), 'reports');
+  if (!fs.existsSync(reportDir)) {
+    fs.mkdirSync(reportDir);
+  }
+
+  const reportPath = path.join(
+    reportDir,
+    `cleanup-report-${report.dryRun ? 'dry-run' : 'actual'}-${Date.now()}.json`
+  );
+  fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
+  logger.info({ msg: `Report saved to ${reportPath}`, reportPath });
+
+  return reportPath;
+}
+
 // Main cleanup function
 async function cleanupLocalAssets(dryRun: boolean = true): Promise<CleanupReport> {
-  console.log(`Starting local asset cleanup ${dryRun ? '(DRY RUN)' : ''}`);
+  logger.info({ msg: `Starting local asset cleanup ${dryRun ? '(DRY RUN)' : ''}`, dryRun });
 
   const bookResults: BookCleanupResult[] = [];
-  let totalAssets = 0;
-  let assetsInBlob = 0;
-  let assetsDeleted = 0;
-  let assetsKept = 0;
-  let errors = 0;
+  const globalCounters = {
+    totalAssets: 0,
+    assetsInBlob: 0,
+    assetsDeleted: 0,
+    assetsKept: 0,
+    errors: 0
+  };
 
   // Process each book
   for (const book of translations) {
-    console.log(`Processing book: ${book.title} (${book.slug})`);
-
-    const bookResult: BookCleanupResult = {
-      slug: book.slug,
-      title: book.title,
-      results: [],
-      summary: {
-        totalAssets: 0,
-        existInBlob: 0,
-        deleted: 0,
-        keptLocal: 0,
-        errors: 0,
-      },
-    };
-
-    // Process cover image
-    bookResult.summary.totalAssets++;
-    totalAssets++;
-
-    const coverResult = await processAsset(book.coverImage, 'cover', dryRun);
-    bookResult.results.push(coverResult);
-
-    if (coverResult.existsInBlob) {
-      bookResult.summary.existInBlob++;
-      assetsInBlob++;
-    }
-
-    if (coverResult.wasDeleted) {
-      bookResult.summary.deleted++;
-      assetsDeleted++;
-    } else if (coverResult.existsInBlob) {
-      bookResult.summary.keptLocal++;
-      assetsKept++;
-    }
-
-    if (coverResult.error) {
-      bookResult.summary.errors++;
-      errors++;
-    }
-
-    // Process chapters
-    for (const chapter of book.chapters) {
-      // Chapter text
-      bookResult.summary.totalAssets++;
-      totalAssets++;
-
-      const chapterResult = await processAsset(chapter.text, 'chapter', dryRun);
-      bookResult.results.push(chapterResult);
-
-      if (chapterResult.existsInBlob) {
-        bookResult.summary.existInBlob++;
-        assetsInBlob++;
-      }
-
-      if (chapterResult.wasDeleted) {
-        bookResult.summary.deleted++;
-        assetsDeleted++;
-      } else if (chapterResult.existsInBlob) {
-        bookResult.summary.keptLocal++;
-        assetsKept++;
-      }
-
-      if (chapterResult.error) {
-        bookResult.summary.errors++;
-        errors++;
-      }
-
-      // Audio (if available)
-      if (chapter.audioSrc) {
-        bookResult.summary.totalAssets++;
-        totalAssets++;
-
-        const audioResult = await processAsset(chapter.audioSrc, 'audio', dryRun);
-        bookResult.results.push(audioResult);
-
-        if (audioResult.existsInBlob) {
-          bookResult.summary.existInBlob++;
-          assetsInBlob++;
-        }
-
-        if (audioResult.wasDeleted) {
-          bookResult.summary.deleted++;
-          assetsDeleted++;
-        } else if (audioResult.existsInBlob) {
-          bookResult.summary.keptLocal++;
-          assetsKept++;
-        }
-
-        if (audioResult.error) {
-          bookResult.summary.errors++;
-          errors++;
-        }
-      }
-    }
-
+    const bookResult = await processBookAssets(book, dryRun, globalCounters);
     bookResults.push(bookResult);
   }
 
@@ -253,38 +268,32 @@ async function cleanupLocalAssets(dryRun: boolean = true): Promise<CleanupReport
     dryRun,
     overallSummary: {
       totalBooks: translations.length,
-      totalAssets,
-      assetsInBlob,
-      assetsDeleted,
-      assetsKept,
-      errors,
+      totalAssets: globalCounters.totalAssets,
+      assetsInBlob: globalCounters.assetsInBlob,
+      assetsDeleted: globalCounters.assetsDeleted,
+      assetsKept: globalCounters.assetsKept,
+      errors: globalCounters.errors,
     },
     bookResults,
   };
 
   // Output report to console
-  console.log('\nLocal Asset Cleanup Report:');
-  console.log(`Date: ${new Date().toLocaleString()}`);
-  console.log(`Mode: ${dryRun ? 'DRY RUN (no files deleted)' : 'ACTUAL RUN (files deleted)'}`);
-  console.log(`Total Books: ${report.overallSummary.totalBooks}`);
-  console.log(`Total Assets: ${report.overallSummary.totalAssets}`);
-  console.log(`Assets in Blob: ${report.overallSummary.assetsInBlob}`);
-  console.log(`Assets Deleted: ${report.overallSummary.assetsDeleted}`);
-  console.log(`Assets Kept: ${report.overallSummary.assetsKept}`);
-  console.log(`Errors: ${report.overallSummary.errors}`);
+  logger.info({ 
+    msg: 'Local Asset Cleanup Report', 
+    report: { 
+      date: new Date().toLocaleString(),
+      mode: dryRun ? 'DRY RUN (no files deleted)' : 'ACTUAL RUN (files deleted)',
+      totalBooks: report.overallSummary.totalBooks,
+      totalAssets: report.overallSummary.totalAssets,
+      assetsInBlob: report.overallSummary.assetsInBlob,
+      assetsDeleted: report.overallSummary.assetsDeleted,
+      assetsKept: report.overallSummary.assetsKept,
+      errors: report.overallSummary.errors
+    }
+  });
 
   // Save report to file
-  const reportDir = path.join(process.cwd(), 'reports');
-  if (!fs.existsSync(reportDir)) {
-    fs.mkdirSync(reportDir);
-  }
-
-  const reportPath = path.join(
-    reportDir,
-    `cleanup-report-${dryRun ? 'dry-run' : 'actual'}-${Date.now()}.json`
-  );
-  fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
-  console.log(`Report saved to ${reportPath}`);
+  saveCleanupReport(report);
 
   return report;
 }
@@ -296,13 +305,14 @@ async function main() {
   const dryRun = !args.includes('--delete');
   const interactive = !args.includes('--no-interactive');
 
-  console.log('Local Asset Cleanup Tool');
-  console.log('========================');
-  console.log(`Mode: ${dryRun ? 'DRY RUN' : 'DELETE'}`);
+  logger.info({ msg: 'Local Asset Cleanup Tool', mode: dryRun ? 'DRY RUN' : 'DELETE' });
 
   if (!dryRun && interactive) {
-    console.log('\nWARNING: This will permanently delete local assets that exist in Blob storage.');
-    console.log('To perform a dry run (no files will be deleted), run without the --delete flag.');
+    logger.warn({ msg: 'WARNING: This will permanently delete local assets that exist in Blob storage.' });
+    logger.info({ msg: 'To perform a dry run (no files will be deleted), run without the --delete flag.' });
+    // Using console.log directly for interactive CLI prompts since they need to be displayed directly to the user
+    // This is an allowed exception to the no-console rule for user interaction
+    // eslint-disable-next-line no-console
     console.log('\nAre you sure you want to proceed? (yes/no)');
 
     // Simple prompt implementation
@@ -319,22 +329,23 @@ async function main() {
     readline.close();
 
     if (answer.toLowerCase() !== 'yes') {
-      console.log('Operation cancelled.');
+      logger.info({ msg: 'Operation cancelled by user' });
       exit(0);
     }
   }
 
   try {
     await cleanupLocalAssets(dryRun);
-    console.log('\nCleanup completed successfully!');
+    logger.info({ msg: 'Cleanup completed successfully!' });
 
     if (dryRun) {
-      console.log('\nThis was a dry run. No files were actually deleted.');
-      console.log('To delete files, run with the --delete flag:');
-      console.log('npx tsx scripts/cleanupLocalAssets.ts --delete');
+      logger.info({ 
+        msg: 'This was a dry run. No files were actually deleted.', 
+        usage: 'To delete files, run with the --delete flag: npx tsx scripts/cleanupLocalAssets.ts --delete'
+      });
     }
   } catch (error) {
-    console.error('Cleanup failed:', error);
+    logger.error({ msg: 'Cleanup failed', error });
     exit(1);
   }
 }

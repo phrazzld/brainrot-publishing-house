@@ -5,7 +5,7 @@ import { config } from 'dotenv';
 import { promises as fs } from 'fs';
 
 import { AssetType } from '../types/assets';
-import { logger as _logger } from '../utils/logger';
+import { logger } from '../utils/logger';
 import { AssetPathService } from '../utils/services/AssetPathService';
 import { createAssetService } from '../utils/services/AssetServiceFactory';
 
@@ -178,7 +178,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   }
 
   verifier.verifyStandardizedPaths(sampleSize).catch((error) => {
-    console.error('Verification failed:', error);
+    logger.error({ msg: 'Verification failed', error });
     process.exit(1);
   });
 }
