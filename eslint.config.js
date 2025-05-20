@@ -16,7 +16,8 @@ const compat = new FlatCompat({
   recommendedConfig: js.configs.recommended,
 });
 
-export default [
+// Create the config array
+const config = [
   // Extend our existing configuration file
   ...compat.config({ extends: ['./.eslintrc.json'] }),
 
@@ -31,17 +32,18 @@ export default [
       'tmp/**',
       'temp/**',
       'coverage/**',
-      // Temporarily ignore debug and utility scripts
+      // Scripts still being actively developed
       'scripts/debug/**',
       'scripts/test-utils/**',
       'scripts/asset-migration/upload-audio-placeholders.js',
-      'scripts/search/**',
-      'scripts/migrateFullAudiobooks.ts', // T035 will fix all linting issues
-      'scripts/verify-standardized-urls.ts',
-      'scripts/verifyTextMigration.ts',
-      'scripts/runTextStandardizationMigration.ts',
-      'scripts/standardizeTextFilesBlob.ts',
-      'scripts/standardizeTextFilesBlobWithCopy.ts',
+      // Complex scripts that will be refactored in future tasks
+      'scripts/blob-reorganizer/**',
+      'scripts/benchmark-downloads.ts',
+      'scripts/migrateFullAudiobooks.ts', // Will be refactored in T036
+      // Migration logs and reports
+      'migration-logs/**',
     ],
   },
 ];
+
+export default config;
