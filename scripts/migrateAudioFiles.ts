@@ -1,4 +1,6 @@
 /**
+ * TODO: Replace console.log with logger
+ * 
  * Script to migrate audio files to Blob storage
  */
 import * as dotenv from 'dotenv';

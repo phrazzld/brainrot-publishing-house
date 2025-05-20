@@ -21,7 +21,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import { AssetType } from '../types/assets';
-import { logger } from '../utils/logger';
+import { logger as _logger } from '../utils/logger';
 import { AssetNameMigration } from '../utils/migration/AssetNameMigration';
 import { blobService } from '../utils/services/BlobService';
 import { assetNameValidator } from '../utils/validators/AssetNameValidator';

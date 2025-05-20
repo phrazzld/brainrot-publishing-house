@@ -16,7 +16,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { execSync } from 'child_process';
 
-import { logger } from '../utils/logger';
+import { logger as _logger } from '../utils/logger';
 
 // Create a script-specific logger
 const scriptLogger = logger.child({ module: 'remove-console-statements' });
@@ -229,7 +229,7 @@ function processFile(filePath: string, options: Options): FileEdit | null {
         .relative(path.dirname(filePath), path.join(path.dirname(filePath), '..', 'utils'))
         .replace(/\\/g, '/');
 
-      const importStatement = `import { logger } from '${relativePath}/logger';`;
+      const importStatement = `import { logger as _logger } from '${relativePath}/logger';`;
 
       if (lastImportLine >= 0) {
         // Insert after the last import

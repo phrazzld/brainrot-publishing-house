@@ -1,4 +1,6 @@
 /**
+ * TODO: Replace console.log with logger
+ * 
  * Search for all images in blob storage
  */
 import dotenv from 'dotenv';
@@ -6,7 +8,7 @@ import path from 'path';
 
 // Let me also test what happens with the current getAssetUrl function
 import { getAssetUrl } from '../utils';
-import { logger } from '../utils/logger';
+import { logger as _logger } from '../utils/logger';
 import { blobService } from '../utils/services/BlobService';
 
 // Load environment variables

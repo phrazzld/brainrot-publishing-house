@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 
 import { getAssetUrl } from '../utils';
-import { logger } from '../utils/logger';
+import { logger as _logger } from '../utils/logger';
 
 // Load environment variables
 dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });

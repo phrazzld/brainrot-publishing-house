@@ -91,6 +91,7 @@ async function checkFfmpeg(): Promise<boolean> {
     await execAsync('ffmpeg -version');
     return true;
   } catch (_error) {
+    // We intentionally ignore the error as we're just checking for ffmpeg availability
     return false;
   }
 }
@@ -543,52 +544,78 @@ async function main() {
   try {
     const result = await migrateFullAudiobooks(options);
 
-    // Print summary
-    console.log('\n📚 Full Audiobook Migration Summary:');
-    console.log(`Total books: ${result.totalBooks}`);
-    console.log(`Migrated: ${result.migrated}`);
-    console.log(`Failed: ${result.failed}`);
-    console.log(`Skipped: ${result.skipped}`);
-
-    console.log('\n📋 Status by Book:');
-    result.details.forEach((d) => {
-      if (d.action === 'migrated') {
-        console.log(`  ✅ ${d.bookSlug}: Successfully migrated`);
-      } else if (d.action === 'failed') {
-        console.log(`  ❌ ${d.bookSlug}: Failed - ${d.error}`);
-      } else if (d.action === 'skipped' && d.error === 'Already has full audiobook') {
-        console.log(`  ✓  ${d.bookSlug}: Already has full audiobook`);
-      } else if (d.action === 'dry-run') {
-        console.log(`  🔵 ${d.bookSlug}: ${d.error}`);
-      } else if (d.action === 'skipped') {
-        console.log(`  ⚠️  ${d.bookSlug}: Skipped - ${d.error}`);
-      }
+    // Print summary using structured logging
+    migrationLogger.info({
+      msg: 'Full Audiobook Migration Summary',
+      totalBooks: result.totalBooks,
+      migrated: result.migrated,
+      failed: result.failed,
+      skipped: result.skipped,
+      details: result.details.map(d => ({
+        bookSlug: d.bookSlug,
+        action: d.action,
+        error: d.error
+      }))
+    });
+    
+    // Log details for each book
+    migrationLogger.info({
+      msg: 'Migration details by book',
+      books: result.details.map(d => {
+        let status = '';
+        if (d.action === 'migrated') {
+          status = 'Successfully migrated';
+        } else if (d.action === 'failed') {
+          status = `Failed - ${d.error}`;
+        } else if (d.action === 'skipped' && d.error === 'Already has full audiobook') {
+          status = 'Already has full audiobook';
+        } else if (d.action === 'dry-run') {
+          status = d.error || 'Dry run';
+        } else if (d.action === 'skipped') {
+          status = `Skipped - ${d.error}`;
+        }
+        return {
+          slug: d.bookSlug,
+          status,
+          action: d.action
+        };
+      })
     });
 
     if (options.dryRun) {
-      console.log('\n🏳️  DRY RUN - No files were modified');
-      const toMigrate = result.details.filter(
-        (d) => (d.action !== 'failed' && d.action !== 'skipped') || d.error === 'No chapters found'
-      );
-      if (toMigrate.length > 0) {
-        console.log('Files that would be migrated:');
-        toMigrate.forEach((d) => {
-          if (d.action !== 'failed') {
-            console.log(`  - ${d.bookSlug}`);
-          }
-        });
-      }
+      const toMigrateCount = result.details.filter(d => 
+        (d.action !== 'failed' && d.action !== 'skipped') || d.error === 'No chapters found'
+      ).length;
+      
+      migrationLogger.info({
+        msg: 'Dry run completed',
+        migrateCount: toMigrateCount,
+        booksToMigrate: result.details
+          .filter(d => (d.action !== 'failed' && d.action !== 'skipped') || d.error === 'No chapters found')
+          .filter(d => d.action !== 'failed')
+          .map(d => d.bookSlug)
+      });
     }
 
     process.exit(result.success ? 0 : 1);
   } catch (error) {
-    migrationLogger.error({ msg: 'Migration failed', error });
-    console.error('Migration failed:', error);
+    migrationLogger.error({ 
+      msg: 'Migration failed', 
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined
+    });
     process.exit(1);
   }
 }
 
 // Run if called directly
 if (process.argv[1] === new URL(import.meta.url).pathname) {
-  main().catch(console.error);
+  main().catch((error) => {
+    migrationLogger.error({ 
+      msg: 'Unhandled error in main execution', 
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined
+    });
+    process.exit(1);
+  });
 }

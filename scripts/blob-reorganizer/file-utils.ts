@@ -3,7 +3,7 @@
  */
 import fs from 'fs';
 
-import { logger } from './logging';
+import { logger as _logger } from './logging';
 
 /**
  * Create output directory for reports if it doesn't exist

@@ -1,4 +1,6 @@
 /**
+ * TODO: Replace console.log with logger
+ * 
  * Script to clean up local assets after successful migration to Blob storage
  *
  * This script:

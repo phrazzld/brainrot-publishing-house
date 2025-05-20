@@ -1,4 +1,6 @@
 /**
+ * TODO: Replace console.log with logger
+ * 
  * Verification script for Blob Storage
  *
  * This script verifies that all assets have been properly migrated to Blob storage.

@@ -2,7 +2,7 @@
  * Reporting utilities for the blob reorganization tool
  */
 import { moveBlob } from './blob-operations';
-import { logger } from './logging';
+import { logger as _logger } from './logging';
 import { CliOptions, MigrationStats, PathMapping } from './types';
 
 /**

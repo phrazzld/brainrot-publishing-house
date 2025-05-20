@@ -1,4 +1,6 @@
 /**
+ * TODO: Replace console.log with logger
+ * 
  * Script to migrate audio files to Vercel Blob storage
  *
  * This script generates realistic audio placeholders (50-100KB) instead of the

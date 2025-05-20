@@ -1,4 +1,6 @@
 /**
+ * TODO: Replace console.log with logger
+ * 
  * Script to verify audio file migration
  */
 import * as dotenv from 'dotenv';

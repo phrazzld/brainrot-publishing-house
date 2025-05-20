@@ -1,13 +1,21 @@
-# Temporary ignore for debug and test scripts
+# Node modules and build outputs
+node_modules/**
+.next/**
+build/**
+public/**
+reports/**
+tmp/**
+temp/**
+coverage/**
+
+# Scripts still being actively developed
 scripts/debug/**/*
 scripts/test-utils/**/*
 scripts/asset-migration/upload-audio-placeholders.js
 
-# These scripts are still being refactored
-scripts/asset-migration/**/*  
+# Complex scripts that will be refactored in future tasks
 scripts/blob-reorganizer/**/*
+scripts/benchmark-downloads.ts
 
-# Migration scripts often have high complexity
-scripts/runTextStandardizationMigration.ts
-
-# Will be addressed in separate lint cleanup task
+# Migration logs and reports
+migration-logs/**/*

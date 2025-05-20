@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
 
-import { logger } from '../utils/logger';
+import { logger as _logger } from '../utils/logger';
 import { blobService } from '../utils/services/BlobService';
 
 // Load environment variables

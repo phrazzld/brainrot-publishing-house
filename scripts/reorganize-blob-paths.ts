@@ -11,7 +11,7 @@ import { listAllBlobs, mapPaths } from './blob-reorganizer/blob-operations';
 // Import utilities from our modular organization
 import { parseArgs } from './blob-reorganizer/cli';
 import { createOutputDirectory, saveHtmlReport, saveReport } from './blob-reorganizer/file-utils';
-import { logger } from './blob-reorganizer/logging';
+import { logger as _logger } from './blob-reorganizer/logging';
 import { createHtmlReport, reorganizeBlobs } from './blob-reorganizer/reporting';
 
 /**

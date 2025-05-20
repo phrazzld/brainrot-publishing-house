@@ -4,7 +4,7 @@
 import fs from 'fs';
 import path from 'path';
 
-import { logger } from '../utils/logger';
+import { logger as _logger } from '../utils/logger';
 
 // Map of book slug to new cover paths
 const coverPaths: Record<string, string> = {

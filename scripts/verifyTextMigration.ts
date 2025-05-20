@@ -5,7 +5,7 @@ import { config } from 'dotenv';
 import { promises as fs } from 'fs';
 
 import { AssetType } from '../types/assets';
-import { logger } from '../utils/logger';
+import { logger as _logger } from '../utils/logger';
 import { AssetPathService } from '../utils/services/AssetPathService';
 import { createAssetService } from '../utils/services/AssetServiceFactory';
 

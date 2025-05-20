@@ -5,7 +5,7 @@ import fetch from 'node-fetch';
 import path from 'path';
 import { performance } from 'perf_hooks';
 
-import { logger } from '../utils/logger';
+import { logger as _logger } from '../utils/logger';
 
 // Configuration
 const TEST_ENVIRONMENTS = ['local', 'development', 'staging', 'production'];

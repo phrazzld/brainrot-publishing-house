@@ -6,7 +6,7 @@ import { createHash } from 'crypto';
 
 import { AssetType } from '../../types/assets';
 import { AssetPathService } from '../../utils/services/AssetPathService';
-import { logger } from './logging';
+import { logger as _logger } from './logging';
 import { CliOptions, ExtendedBlobResult, PathMapping } from './types';
 
 // Initialize AssetPathService

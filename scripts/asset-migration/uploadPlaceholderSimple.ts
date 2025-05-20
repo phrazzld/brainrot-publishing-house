@@ -6,7 +6,7 @@ import path from 'path';
 
 // Import after env is loaded
 import { getAssetUrl } from '../utils';
-import { logger } from '../utils/logger';
+import { logger as _logger } from '../utils/logger';
 import { blobService } from '../utils/services/BlobService';
 
 // Load environment variables

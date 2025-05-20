@@ -1,4 +1,6 @@
 /**
+ * TODO: Replace console.log with logger
+ * 
  * Enhanced verification script for audio files in Blob storage
  *
  * This script verifies that audio files exist in Blob storage and checks

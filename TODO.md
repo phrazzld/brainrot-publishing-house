@@ -458,3 +458,19 @@ This TODO list details the tasks required to fully migrate all asset management 
   - [x] Verify all audio files are accessible with verifyAudioFilesAccess.ts script
   - [x] Create testAudioFileDownloads.ts script for audio file downloads
   - [x] Document audio file organization structure in AUDIO_FILE_ORGANIZATION.md
+
+- [ ] **T037: Fix linting issues in script files blocking push**
+  - [ ] Fix broken JSDoc comments in script files
+  - [ ] Replace console.log statements with structured logger in:
+    - [ ] cleanupLocalAssets.ts
+    - [ ] migrateAudioFiles.ts and other audio migration scripts
+    - [ ] verifyAudioMigration.ts and other audio verification scripts
+    - [ ] verifyBlobStorage.ts
+  - [ ] Reduce function complexity in:
+    - [ ] cleanupLocalAssets.ts (cleanupLocalAssets function)
+    - [ ] verifyAudioMigration.ts (verifyAudioMigration function)
+    - [ ] verifyBlobStorage.ts (verifyBlobStorage function)
+  - [ ] Fix max-depth issues (blocks nested too deeply) in:
+    - [ ] verifyAudioMigrationWithContent.ts
+    - [ ] verifyBlobStorage.ts
+    - [ ] verifyTextMigration.ts

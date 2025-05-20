@@ -4,7 +4,7 @@
 import { getAssetUrl } from '../utils';
 // Check asset path mapping
 import { mapAssetPath } from '../utils/assetPathMapping';
-import { logger } from '../utils/logger';
+import { logger as _logger } from '../utils/logger';
 // Also let's check what the blob path service does with these
 import { blobPathService } from '../utils/services/BlobPathService';
 

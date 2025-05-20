@@ -1,7 +1,7 @@
 /**
  * Debug script to find where existing book covers are stored
  */
-import { logger } from '../utils/logger';
+import { logger as _logger } from '../utils/logger';
 import { blobService } from '../utils/services/BlobService';
 
 // Book cover paths from translation files
