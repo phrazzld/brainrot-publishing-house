@@ -168,39 +168,85 @@ export class TextFileStandardizer {
     }
   }
 
+  /**
+   * Process migration data to extract file paths
+   */
   private processMigrationData(migrationData: Record<string, unknown>, files: string[]): void {
-    for (const book of Object.keys(migrationData)) {
-      if (this.options.books && this.options.books.length > 0) {
-        if (!this.options.books.includes(book)) continue;
-      }
+    // Get filtered list of books
+    const bookNames = this.getFilteredBookNames(migrationData);
 
+    // Process each book
+    for (const book of bookNames) {
       const bookData = migrationData[book];
       if (typeof bookData !== 'object' || bookData === null) continue;
 
-      for (const [_fileName, fileInfo] of Object.entries(bookData)) {
-        if (typeof fileInfo !== 'object' || fileInfo === null) continue;
-
-        const fileData = fileInfo as StandardizationLog & { blobPath?: string; blobUrl?: string };
-
-        // Use blobPath, not blobUrl
-        const blobPath = fileData.blobPath || fileData.originalPath;
-
-        // Skip blobUrl entries
-        if (!blobPath || blobPath.startsWith('http://') || blobPath.startsWith('https://')) {
-          continue;
-        }
-
-        if (blobPath.endsWith('.txt')) {
-          let cleanPath = blobPath;
-
-          if (cleanPath.startsWith('/')) {
-            cleanPath = cleanPath.substring(1);
-          }
-
-          files.push(cleanPath);
-        }
-      }
+      this.processBookData(bookData, files);
     }
+  }
+
+  /**
+   * Get list of book names, filtered by options.books if specified
+   */
+  private getFilteredBookNames(migrationData: Record<string, unknown>): string[] {
+    const allBooks = Object.keys(migrationData);
+
+    // If no book filter is specified, return all books
+    if (!this.options.books || this.options.books.length === 0) {
+      return allBooks;
+    }
+
+    // Return only the books that match the filter
+    // At this point, we know this.options.books exists and is not empty
+    const bookFilter = this.options.books;
+    return allBooks.filter((book) => bookFilter.includes(book));
+  }
+
+  /**
+   * Process a single book's data to extract file paths
+   */
+  private processBookData(bookData: unknown, files: string[]): void {
+    if (typeof bookData !== 'object' || bookData === null) return;
+
+    // Process each file in the book
+    for (const [_fileName, fileInfo] of Object.entries(bookData)) {
+      if (typeof fileInfo !== 'object' || fileInfo === null) continue;
+
+      this.processFileInfo(fileInfo, files);
+    }
+  }
+
+  /**
+   * Process a single file's info to extract its path
+   */
+  private processFileInfo(fileInfo: unknown, files: string[]): void {
+    const fileData = fileInfo as StandardizationLog & { blobPath?: string; blobUrl?: string };
+
+    // Use blobPath, not blobUrl
+    const blobPath = fileData.blobPath || fileData.originalPath;
+
+    // Skip invalid paths or URLs
+    if (!this.isValidTextFilePath(blobPath)) {
+      return;
+    }
+
+    // Clean and add the path
+    let cleanPath = blobPath;
+    if (cleanPath.startsWith('/')) {
+      cleanPath = cleanPath.substring(1);
+    }
+
+    files.push(cleanPath);
+  }
+
+  /**
+   * Check if a path is a valid text file path
+   */
+  private isValidTextFilePath(path: string | undefined): boolean {
+    if (!path) return false;
+    if (path.startsWith('http://') || path.startsWith('https://')) return false;
+    if (!path.endsWith('.txt')) return false;
+
+    return true;
   }
 
   private createBatches<T>(items: T[], batchSize: number): T[][] {

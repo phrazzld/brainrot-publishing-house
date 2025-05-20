@@ -4,9 +4,12 @@
 import { getAssetUrl } from '../utils';
 // Check asset path mapping
 import { mapAssetPath } from '../utils/assetPathMapping';
-import { logger as _logger } from '../utils/logger';
+import { logger } from '../utils/logger';
 // Also let's check what the blob path service does with these
 import { blobPathService } from '../utils/services/BlobPathService';
+
+// Create a debug-specific logger
+const debugLogger = logger.child({ module: 'debug-asset-urls' });
 
 // Test paths
 const testPaths = {
@@ -15,35 +18,32 @@ const testPaths = {
   'pride-cover': '/assets/pride-and-prejudice/images/pride-and-prejudice-01.png',
 };
 
-console.log('\n=== Debug Asset URL Generation ===\n');
+debugLogger.info({ msg: '=== Debug Asset URL Generation ===' });
 
 for (const [name, path] of Object.entries(testPaths)) {
-  console.log(`\nTesting: ${name}`);
-  console.log(`Input path: ${path}`);
+  debugLogger.info({ name, path, msg: `Testing asset path` });
 
   const url = getAssetUrl(path, true);
-  console.log(`Generated URL: ${url}`);
+  debugLogger.info({ name, url, msg: `Generated URL` });
 
   // Check what the base URL is
-  console.log(`Base URL: ${process.env.NEXT_PUBLIC_BLOB_BASE_URL}`);
+  debugLogger.info({ baseUrl: process.env.NEXT_PUBLIC_BLOB_BASE_URL, msg: `Base URL` });
 }
 
-console.log('\n\n=== BlobPathService Conversion ===\n');
+debugLogger.info({ msg: '=== BlobPathService Conversion ===' });
 
 for (const [name, path] of Object.entries(testPaths)) {
-  console.log(`\nTesting: ${name}`);
-  console.log(`Input path: ${path}`);
+  debugLogger.info({ name, path, msg: `Testing BlobPathService conversion` });
 
   const convertedPath = blobPathService.convertLegacyPath(path);
-  console.log(`Converted path: ${convertedPath}`);
+  debugLogger.info({ name, path, convertedPath, msg: `Converted path` });
 }
 
-console.log('\n\n=== Asset Path Mapping ===\n');
+debugLogger.info({ msg: '=== Asset Path Mapping ===' });
 
 for (const [name, path] of Object.entries(testPaths)) {
-  console.log(`\nTesting: ${name}`);
-  console.log(`Input path: ${path}`);
+  debugLogger.info({ name, path, msg: `Testing asset path mapping` });
 
   const mappedPath = mapAssetPath(path);
-  console.log(`Mapped path: ${mappedPath}`);
+  debugLogger.info({ name, path, mappedPath, msg: `Mapped path` });
 }
