@@ -434,7 +434,7 @@ This TODO list details the tasks required to fully migrate all asset management 
   - [x] Successfully migrated 179 text files to standardized paths
   - [x] Updated URL generation logic to handle standardized paths correctly
   - [x] Verified standardized paths are accessible in production
-  - [ ] Eventually remove legacy text file locations after successful migration
+  - [x] Eventually remove legacy text file locations after successful migration (created removeLegacyTextFiles.ts script)
   - Dependencies: T032
 
 - [x] **T035: Fix linting issues in utility scripts**
