@@ -19,7 +19,9 @@ import fs from 'fs/promises';
 import path from 'path';
 
 import translations from '../translations';
-import { getAssetUrlWithFallback } from '../utils/getBlobUrl';
+
+// Not using getAssetUrlWithFallback in this script
+// import { getAssetUrlWithFallback } from '../utils/getBlobUrl';
 
 dotenv.config({ path: '.env.local' });
 

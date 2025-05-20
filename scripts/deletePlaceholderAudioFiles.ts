@@ -18,6 +18,7 @@
 import * as dotenv from 'dotenv';
 import { ListBlobResultBlob } from '@vercel/blob';
 import fs from 'fs/promises';
+// Using path module for output path
 import path from 'path';
 import readline from 'readline';
 
@@ -202,8 +203,13 @@ async function deletePlaceholders(
  */
 async function saveResults(results: DeleteResult, outputPath: string): Promise<void> {
   try {
-    await fs.writeFile(outputPath, JSON.stringify(results, null, 2));
-    console.log(`Results saved to ${outputPath}`);
+    // Ensure output path is absolute
+    const absoluteOutputPath = path.isAbsolute(outputPath)
+      ? outputPath
+      : path.join(process.cwd(), outputPath);
+
+    await fs.writeFile(absoluteOutputPath, JSON.stringify(results, null, 2));
+    console.log(`Results saved to ${absoluteOutputPath}`);
   } catch (error) {
     console.error('Error saving results:', error);
   }
