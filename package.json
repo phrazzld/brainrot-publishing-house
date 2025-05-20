@@ -79,6 +79,7 @@
     "standardize:text:blob": "tsx scripts/standardizeTextFilesBlob.ts",
     "standardize:text:blob:dry": "tsx scripts/standardizeTextFilesBlob.ts --dry-run",
     "standardize:text:blob:verbose": "tsx scripts/standardizeTextFilesBlob.ts --dry-run --log-file=text-standardization-blob-dry-run.log",
+    "verify:text": "tsx scripts/verifyTextMigration.ts",
     "tsc": "tsc --noEmit",
     "prepare": "husky"
   },

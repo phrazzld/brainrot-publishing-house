@@ -33,7 +33,7 @@ interface MigrationResult {
 
 // Simple migration log class for recording results
 class MigrationLog {
-  private entries: StandardizationLog[] = [];
+  private entries: MigrationResult[] = [];
 
   constructor(
     private logFile: string,
@@ -41,7 +41,7 @@ class MigrationLog {
     private logger: typeof defaultLogger
   ) {}
 
-  addEntry(entry: StandardizationLog) {
+  addEntry(entry: MigrationResult) {
     this.entries.push(entry);
   }
 
@@ -178,8 +178,9 @@ class TextFileMigrator {
       // Check if file already exists in Blob storage (unless force flag is set)
       if (!this.options.force) {
         try {
-          const exists = await this.blobService.exists(standardizedPath);
-          if (exists) {
+          const standardUrl = this.blobService.getUrlForPath(standardizedPath);
+          const fileInfo = await this.blobService.getFileInfo(standardUrl);
+          if (fileInfo.size > 0) {
             this.results.push({
               originalPath: appPath,
               standardizedPath,
@@ -289,16 +290,7 @@ class TextFileMigrator {
       );
 
       for (const result of this.results) {
-        const entry = {
-          originalPath: result.originalPath,
-          newPath: result.standardizedPath,
-          status: result.status === 'UPLOADED' ? 'SUCCESS' : result.status,
-          metadata: {
-            fileSize: result.fileSize,
-            error: result.error,
-          },
-        };
-        migrationLog.addEntry(entry);
+        migrationLog.addEntry(result);
       }
 
       await migrationLog.saveLog();

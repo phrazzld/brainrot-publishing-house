@@ -10,7 +10,7 @@ const gilgamesh: Translation = {
   title: 'the epic of gilgamesh',
   shortDescription:
     'ancient mesopotamian hero grinding for immortality, bromance with enkidu goes hard. OG epic poetry hits different.',
-  coverImage: getAssetUrl('/assets/covers/placeholder.jpg', USE_BLOB_STORAGE),
+  coverImage: getAssetUrl('/assets/gilgamesh/images/gilgamesh-01.png', USE_BLOB_STORAGE),
   status: 'coming soon',
   chapters: [],
 };

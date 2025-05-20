@@ -437,3 +437,19 @@ This TODO list details the tasks required to fully migrate all asset management 
   - [ ] Application needs restart to pick up new URL logic
   - [ ] Eventually remove legacy text file locations after successful migration
   - Dependencies: T032
+
+- [ ] **T034: Upload placeholder image for coming soon books**
+  - [ ] Create or obtain a placeholder image for books marked as "coming soon"
+  - [ ] Upload to blob storage at path: assets/images/placeholder.jpg
+  - [ ] Verify all coming soon books display placeholder image correctly
+  - [ ] Update asset path mapping if needed for consistent access
+  - Dependencies: T033
+
+- [ ] **T035: Fix linting issues in utility scripts**
+  - [ ] Address ESLint warnings in debug scripts
+  - [ ] Fix unused variables in script files
+  - [ ] Replace console.log with proper logger in utility scripts
+  - [ ] Refactor high-complexity functions to meet standards
+  - [ ] Fix type issues (remove 'any' types)
+  - [ ] Improve code organization for better maintainability
+  - Dependencies: none

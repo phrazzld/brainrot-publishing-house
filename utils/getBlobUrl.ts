@@ -169,6 +169,35 @@ export function getAssetUrl(
     return `${baseUrl}/${mappedPath}`;
   }
 
+  // Define coming soon books that are in the new format
+  const comingSoonBooksInNewFormat = [
+    'pride-and-prejudice',
+    'paradise-lost',
+    'meditations',
+    'the-divine-comedy-inferno',
+    'the-divine-comedy-purgatorio',
+    'the-divine-comedy-paradiso',
+    'the-bible-old-testament',
+    'the-bible-new-testament',
+    'the-quran',
+    'romeo-and-juliet',
+    'a-midsummer-nights-dream',
+    'gilgamesh',
+    'bhagavad-gita',
+  ];
+
+  // Check if this is a coming soon book in the new format
+  const pathMatch = legacyPath.match(/^\/assets\/([^/]+)\/images\/[^/]+\.(png|jpg|jpeg)$/);
+  if (pathMatch) {
+    const bookSlug = pathMatch[1];
+    if (comingSoonBooksInNewFormat.includes(bookSlug)) {
+      const baseUrl = options.baseUrl || process.env.NEXT_PUBLIC_BLOB_BASE_URL;
+      // Remove leading slash and return directly
+      const cleanPath = legacyPath.substring(1);
+      return `${baseUrl}/${cleanPath}`;
+    }
+  }
+
   // If the path already starts with 'assets/', convert it to the blob path format
   if (legacyPath.startsWith('/assets/')) {
     const baseUrl = options.baseUrl || process.env.NEXT_PUBLIC_BLOB_BASE_URL;

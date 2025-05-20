@@ -57,6 +57,14 @@ audio-migration-with-content.json
 audio-migration-with-placeholders.json
 audio-url-verification.json
 placeholder-deletion-results.json
+missing-assets-*.json
+text-standardization-*.json
+text-verification-*.json
+*.log
+
+# migration logs and reports
+migration-logs/*.log
+migration-logs/*.json
 
 # temporary directories
 /temp

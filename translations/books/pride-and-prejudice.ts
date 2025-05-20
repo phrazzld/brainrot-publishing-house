@@ -10,7 +10,10 @@ const prideAndPrejudice: Translation = {
   title: 'pride and prejudice',
   shortDescription:
     'lizzy bennet vs toxic masculinity, darcy glow-up arc goes crazy. jane austen understood the assignment fr.',
-  coverImage: getAssetUrl('/assets/covers/placeholder.jpg', USE_BLOB_STORAGE),
+  coverImage: getAssetUrl(
+    '/assets/pride-and-prejudice/images/pride-and-prejudice-01.png',
+    USE_BLOB_STORAGE
+  ),
   status: 'coming soon',
   chapters: [],
 };

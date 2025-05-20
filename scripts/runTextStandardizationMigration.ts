@@ -41,7 +41,7 @@ const isLocal =
   process.argv.includes('--local');
 
 if (!process.env.BLOB_READ_WRITE_TOKEN && !isLocal) {
-  rootLogger.error('BLOB_READ_WRITE_TOKEN is required for production migration');
+  rootLogger.error({ msg: 'BLOB_READ_WRITE_TOKEN is required for production migration' });
   process.exit(1);
 }
 
@@ -54,7 +54,7 @@ async function checkAndCopyFile(originalPath: string): Promise<MigrationResult> 
 
     // Skip if already standardized
     if (originalPath === standardizedPath) {
-      fileLogger.info('Path already standardized');
+      fileLogger.info({ msg: 'Path already standardized' });
       return {
         originalPath,
         standardizedPath,
@@ -66,9 +66,10 @@ async function checkAndCopyFile(originalPath: string): Promise<MigrationResult> 
 
     // Check if file already exists at standard path
     try {
-      const exists = await blobService.exists(standardizedPath);
-      if (exists) {
-        fileLogger.info('File already exists at standardized path');
+      const standardUrl = blobService.getUrlForPath(standardizedPath);
+      const fileInfo = await blobService.getFileInfo(standardUrl);
+      if (fileInfo.size > 0) {
+        fileLogger.info({ msg: 'File already exists at standardized path' });
         return {
           originalPath,
           standardizedPath,
@@ -141,7 +142,7 @@ async function main() {
   const startTime = new Date();
   const results: MigrationResult[] = [];
 
-  rootLogger.info('Starting text standardization migration');
+  rootLogger.info({ msg: 'Starting text standardization migration' });
 
   // Load file list from migration logs
   let filesToMigrate: string[] = [];

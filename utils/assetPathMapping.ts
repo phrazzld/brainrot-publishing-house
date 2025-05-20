@@ -15,7 +15,31 @@ export const ASSET_PATH_MAPPINGS: Record<string, string> = {
     'books/the-adventures-of-huckleberry-finn/images/huck-finn-09.png',
 
   // Placeholder image for coming soon books
-  '/assets/covers/placeholder.jpg': 'assets/images/placeholder.jpg',
+  '/assets/covers/placeholder.jpg': 'images/placeholder.jpg',
+
+  // Coming soon book covers - map to actual blob locations
+  '/assets/pride-and-prejudice/images/pride-and-prejudice-01.png':
+    'assets/pride-and-prejudice/images/pride-and-prejudice-01.png',
+  '/assets/paradise-lost/images/paradise-lost-01.png':
+    'assets/paradise-lost/images/paradise-lost-01.png',
+  '/assets/meditations/images/meditations-01.png': 'assets/meditations/images/meditations-01.png',
+  '/assets/the-divine-comedy-inferno/images/inferno-01.png':
+    'assets/the-divine-comedy-inferno/images/inferno-01.png',
+  '/assets/the-divine-comedy-purgatorio/images/purgatorio-02.png':
+    'assets/the-divine-comedy-purgatorio/images/purgatorio-02.png',
+  '/assets/the-divine-comedy-paradiso/images/paradiso-02.png':
+    'assets/the-divine-comedy-paradiso/images/paradiso-02.png',
+  '/assets/the-bible-old-testament/images/old-testament-03.png':
+    'assets/the-bible-old-testament/images/old-testament-03.png',
+  '/assets/the-bible-new-testament/images/new-testament-01.png':
+    'assets/the-bible-new-testament/images/new-testament-01.png',
+  '/assets/the-quran/images/quran-01.png': 'assets/the-quran/images/quran-01.png',
+  '/assets/romeo-and-juliet/images/romeo-and-juliet-02.png':
+    'assets/romeo-and-juliet/images/romeo-and-juliet-02.png',
+  '/assets/a-midsummer-nights-dream/images/midsummer-02.png':
+    'assets/a-midsummer-nights-dream/images/midsummer-02.png',
+  '/assets/gilgamesh/images/gilgamesh-01.png': 'assets/gilgamesh/images/gilgamesh-01.png',
+  '/assets/bhagavad-gita/images/gita-01.png': 'assets/bhagavad-gita/images/gita-01.png',
 };
 
 /**

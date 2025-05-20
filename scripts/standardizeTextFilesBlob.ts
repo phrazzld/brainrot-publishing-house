@@ -1,10 +1,14 @@
 #!/usr/bin/env node
+import { config } from 'dotenv';
 // import { list } from '@vercel/blob';  // Commented out - not available without token
 import { mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
 import logger from '@/utils/logger';
 import { AssetPathService, VercelBlobAssetService } from '@/utils/services';
+
+// Load environment variables from .env.local
+config({ path: '.env.local' });
 
 interface StandardizationLog {
   originalPath: string;
@@ -147,9 +151,10 @@ export class TextFileStandardizer {
       if (chapter.text) {
         let textPath = chapter.text;
 
-        // Remove any blob storage URL prefix
-        textPath = textPath.replace('https://kl4fq7f0qrmpbnkw.public.blob.vercel-storage.com', '');
-        textPath = textPath.replace('https://public.blob.vercel-storage.com', '');
+        // Skip full URLs completely - we only want blob paths
+        if (textPath.startsWith('http://') || textPath.startsWith('https://')) {
+          continue;
+        }
 
         // Remove leading slash if present
         if (textPath.startsWith('/')) {
@@ -170,15 +175,28 @@ export class TextFileStandardizer {
       }
 
       const bookData = migrationData[book];
-      for (const file of Object.values(bookData)) {
-        const fileData = file as StandardizationLog & { blobPath?: string };
+      if (typeof bookData !== 'object' || bookData === null) continue;
+
+      for (const [_fileName, fileInfo] of Object.entries(bookData)) {
+        if (typeof fileInfo !== 'object' || fileInfo === null) continue;
+
+        const fileData = fileInfo as StandardizationLog & { blobPath?: string; blobUrl?: string };
+
+        // Use blobPath, not blobUrl
         const blobPath = fileData.blobPath || fileData.originalPath;
 
-        if (blobPath && blobPath.endsWith('.txt')) {
+        // Skip blobUrl entries
+        if (!blobPath || blobPath.startsWith('http://') || blobPath.startsWith('https://')) {
+          continue;
+        }
+
+        if (blobPath.endsWith('.txt')) {
           let cleanPath = blobPath;
+
           if (cleanPath.startsWith('/')) {
             cleanPath = cleanPath.substring(1);
           }
+
           files.push(cleanPath);
         }
       }

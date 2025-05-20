@@ -10,7 +10,10 @@ const divineComedyPurgatorio: Translation = {
   title: 'divine comedy: purgatorio',
   shortDescription:
     'dante climbs redemption mountain, souls grinding for heaven access. mid-tier afterlife hits different.',
-  coverImage: getAssetUrl('/assets/covers/placeholder.jpg', USE_BLOB_STORAGE),
+  coverImage: getAssetUrl(
+    '/assets/the-divine-comedy-purgatorio/images/purgatorio-02.png',
+    USE_BLOB_STORAGE
+  ),
   status: 'coming soon',
   chapters: [],
 };

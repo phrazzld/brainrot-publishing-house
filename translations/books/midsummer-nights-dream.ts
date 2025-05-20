@@ -10,7 +10,10 @@ const midsummerNightsDream: Translation = {
   title: "a midsummer night's dream",
   shortDescription:
     'fairy drama, love potion chaos, donkey transformation wild. shakespeare on that fantasy pack.',
-  coverImage: getAssetUrl('/assets/covers/placeholder.jpg', USE_BLOB_STORAGE),
+  coverImage: getAssetUrl(
+    '/assets/a-midsummer-nights-dream/images/midsummer-02.png',
+    USE_BLOB_STORAGE
+  ),
   status: 'coming soon',
   chapters: [],
 };

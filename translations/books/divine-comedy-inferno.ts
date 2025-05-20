@@ -10,7 +10,10 @@ const divineComedyInferno: Translation = {
   title: 'divine comedy: inferno',
   shortDescription:
     'dante speedruns hell tiers, virgil best tour guide. medieval doom eternal vibes go crazy.',
-  coverImage: getAssetUrl('/assets/covers/placeholder.jpg', USE_BLOB_STORAGE),
+  coverImage: getAssetUrl(
+    '/assets/the-divine-comedy-inferno/images/inferno-01.png',
+    USE_BLOB_STORAGE
+  ),
   status: 'coming soon',
   chapters: [],
 };

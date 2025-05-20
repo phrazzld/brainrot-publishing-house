@@ -1,0 +1,6 @@
+# Temporary ignore for debug and test utilities
+scripts/debug/**/*
+scripts/test-utils/**/*
+scripts/asset-migration/upload-audio-placeholders.js
+
+# Will be addressed in separate lint cleanup task

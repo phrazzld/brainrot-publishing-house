@@ -10,7 +10,7 @@ const meditations: Translation = {
   title: 'meditations',
   shortDescription:
     'marcus aurelius personal journal hits different. stoic emperor dropping wisdom while running rome.',
-  coverImage: getAssetUrl('/assets/covers/placeholder.jpg', USE_BLOB_STORAGE),
+  coverImage: getAssetUrl('/assets/meditations/images/meditations-01.png', USE_BLOB_STORAGE),
   status: 'coming soon',
   chapters: [],
 };
