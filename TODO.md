@@ -428,6 +428,7 @@ This TODO list details the tasks required to fully migrate all asset management 
   - Dependencies: T021, T029
 
 - [x] **T033: Run T032 text file standardization migration in production**
+
   - [x] Deploy code changes with standardization logic to production
   - [x] Run production migration with BLOB_READ_WRITE_TOKEN configured
   - [x] Execute custom migration script that actually copies files
@@ -437,11 +438,23 @@ This TODO list details the tasks required to fully migrate all asset management 
   - [x] Eventually remove legacy text file locations after successful migration (created removeLegacyTextFiles.ts script)
   - Dependencies: T032
 
-- [x] **T035: Fix linting issues in utility scripts**
-  - [x] Address ESLint warnings in debug scripts
-  - [x] Fix unused variables in script files
-  - [x] Replace console.log with proper logger in utility scripts
-  - [x] Refactor high-complexity functions to meet standards
-  - [x] Fix type issues (remove 'any' types)
-  - [x] Improve code organization for better maintainability
+- [x] **T034: Ensure specific cover images for coming soon books**
+  - [x] Check existing coming soon books for specific covers
+  - [x] Ensure all coming soon books have specific cover images
+  - [x] Add verification script to monitor for missing covers
   - Dependencies: none
+
+## Next Tasks
+
+- [ ] **T035: Fix linting issues in utility scripts**
+
+  - [ ] Address unused variable warnings in asset migration scripts
+  - [ ] Fix console.log statements in scripts (replace with structured logger)
+  - [ ] Reduce complexity in functions that exceed threshold
+  - [ ] Establish standard format for utility scripts
+  - [ ] Update .eslintignore to only exclude scripts still being actively developed
+
+- [ ] **T036: Organize audio files and verify downloads**
+  - [ ] Verify all audio files are accessible
+  - [ ] Create test script for audio file downloads
+  - [ ] Document audio file organization structure
