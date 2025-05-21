@@ -7,6 +7,7 @@ import * as path from 'path';
 import { existsSync } from 'fs';
 
 import translations from '../translations';
+import { generateAssetUrl } from '../utils/ScriptPathUtils';
 import { logger as rootLogger } from '../utils/logger';
 import { adaptTranslation } from '../utils/migration/TranslationAdapter';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -48,11 +49,8 @@ async function checkAudioFileExists(blobUrl: string): Promise<boolean> {
  * @returns Full blob URL
  */
 function constructBlobUrl(audioPath: string, blobBaseUrl: string): string {
-  // Get the path part without domain
-  const pathOnly = audioPath.replace(/^https?:\/\/[^/]+\//, '');
-
-  // Construct the correct URL with the actual Blob base URL
-  return `${blobBaseUrl}/${pathOnly}`;
+  // Use ScriptPathUtils to generate a consistent asset URL
+  return generateAssetUrl(audioPath, { baseUrl: blobBaseUrl });
 }
 
 /**

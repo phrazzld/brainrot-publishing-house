@@ -22,7 +22,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import translations from '../translations/index.js';
-import { blobPathService } from '../utils/services/BlobPathService.js';
+import { generateAssetUrl, normalizePath } from '../utils/ScriptPathUtils.js';
 import { blobService } from '../utils/services/BlobService.js';
 
 // Get this file's directory
@@ -148,8 +148,7 @@ class CoverImageMigrationService {
   private migrationLog: MigrationLog;
 
   constructor(
-    private readonly blobService: any,
-    private readonly blobPathService: any,
+    private readonly blobService: Record<string, unknown>,
     logFile: string = 'cover-images-migration.json'
   ) {
     this.migrationLog = new MigrationLog(logFile);
@@ -200,18 +199,22 @@ class CoverImageMigrationService {
           try {
             // Skip if already migrated and not forced
             if (this.migrationLog.has(book.slug) && !options.force && !options.dryRun) {
-              const existingResult = this.migrationLog.get(book.slug)!;
-              console.log(`Skipping ${book.slug} (already migrated to ${existingResult.blobPath})`);
+              const existingResult = this.migrationLog.get(book.slug);
+              if (existingResult) {
+                console.log(
+                  `Skipping ${book.slug} (already migrated to ${existingResult.blobPath})`
+                );
+              }
 
               result.skipped++;
               result.books[book.slug] = existingResult;
               return;
             }
 
-            // Calculate paths
+            // Calculate paths using ScriptPathUtils
             const originalPath = book.coverImage;
-            const blobPath = this.blobPathService.convertLegacyPath(originalPath);
-            const blobUrl = this.blobService.getUrlForPath(blobPath);
+            const blobPath = normalizePath(originalPath);
+            const blobUrl = generateAssetUrl(blobPath);
 
             // Skip actual upload in dry run mode
             if (options.dryRun) {
@@ -256,7 +259,7 @@ class CoverImageMigrationService {
             const failedResult: BookMigrationResult = {
               status: 'failed',
               originalPath: book.coverImage,
-              blobPath: this.blobPathService.convertLegacyPath(book.coverImage),
+              blobPath: normalizePath(book.coverImage),
               blobUrl: '',
               error: errorMessage,
             };
@@ -290,7 +293,7 @@ class CoverImageMigrationService {
     maxRetries: number = 3
   ): Promise<BookMigrationResult> {
     const originalPath = book.coverImage;
-    const blobPath = this.blobPathService.convertLegacyPath(originalPath);
+    const blobPath = normalizePath(originalPath);
 
     // Verify file exists
     const fullPath = path.join(projectRoot, 'public', originalPath);
@@ -480,12 +483,8 @@ async function main(): Promise<void> {
     // Parse arguments
     const options = parseArgs();
 
-    // Create migration service
-    const migrationService = new CoverImageMigrationService(
-      blobService,
-      blobPathService,
-      options.logFile
-    );
+    // Create migration service (updated to use ScriptPathUtils, no longer needs blobPathService)
+    const migrationService = new CoverImageMigrationService(blobService, options.logFile);
 
     // Run migration
     const result = await migrationService.migrateAll(options);

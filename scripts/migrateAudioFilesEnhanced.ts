@@ -28,7 +28,7 @@ import path from 'path';
 import readline from 'readline';
 
 import translations from '../translations';
-import { blobPathService } from '../utils/services/BlobPathService';
+import { generateAssetUrl, generateBlobPath, generateFilename } from '../utils/ScriptPathUtils';
 import { blobService } from '../utils/services/BlobService';
 
 dotenv.config({ path: '.env.local' });
@@ -307,12 +307,16 @@ class EnhancedAudioMigrator {
       for (const chapter of book.chapters) {
         if (!chapter.audioSrc) continue;
 
-        // Extract the file name
+        // Extract the file name and chapter number
         const fileName = path.basename(chapter.audioSrc);
-        // Construct the Blob path using BlobPathService
-        const blobPath = blobPathService.getAudioPath(bookSlug, fileName.replace(/\.mp3$/, ''));
+        const chapterNumber = fileName.replace(/\.mp3$/, '').replace(/^.*?([\d]+)$/, '$1');
+
+        // Construct standardized filename and path using ScriptPathUtils
+        const standardFilename = generateFilename('audio', chapterNumber);
+        const blobPath = generateBlobPath(bookSlug, 'audio', standardFilename);
+
         // Get URL for verification and uploading
-        const blobUrl = blobService.getUrlForPath(blobPath);
+        const blobUrl = generateAssetUrl(blobPath);
 
         this.audioFiles.push({
           blobPath,

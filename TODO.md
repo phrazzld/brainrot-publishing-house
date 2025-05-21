@@ -551,14 +551,15 @@ This TODO list details the tasks required to fully migrate all asset management 
   - [x] Created simplified test suite for fetchTextWithFallback due to implementation complexity
   - [x] Dependencies: none
 
-- [ ] **T044: Standardize asset path utilities across scripts**
+- [x] **T044: Standardize asset path utilities across scripts**
 
-  - [ ] Fix asset path utility inconsistencies:
-    - [ ] Create consistent path handling utility for scripts
-    - [ ] Ensure compatibility with both old and new path formats
-    - [ ] Update all scripts to use standardized path utilities
-  - [ ] Ensure proper path normalization for all asset types
-  - [ ] Dependencies: none
+  - [x] Fix asset path utility inconsistencies:
+    - [x] Created ScriptPathUtils module with consistent path handling utilities
+    - [x] Ensured compatibility with both old and new path formats
+    - [x] Updated scripts to use standardized path utilities
+  - [x] Ensured proper path normalization for all asset types
+  - [x] Added comprehensive test suite for ScriptPathUtils
+  - [x] Dependencies: none
 
 - [ ] **T045: COMPLEX - Address technical debt in test files**
 
