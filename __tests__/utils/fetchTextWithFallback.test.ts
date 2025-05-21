@@ -1,11 +1,11 @@
-import { fetchTextWithFallback } from '@/utils/getBlobUrl';
-import { blobPathService } from '@/utils/services/BlobPathService';
-import { blobService } from '@/utils/services/BlobService';
+import { fetchTextWithFallback } from '../../utils/getBlobUrl';
+import { blobPathService } from '../../utils/services/BlobPathService';
+import { blobService } from '../../utils/services/BlobService';
 
 // Mock the required services
-jest.mock('@/utils/services/BlobService');
-jest.mock('@/utils/services/BlobPathService');
-jest.mock('@/utils/logger', () => ({
+jest.mock('../../utils/services/BlobService');
+jest.mock('../../utils/services/BlobPathService');
+jest.mock('../../utils/logger', () => ({
   logger: {
     child: jest.fn(() => ({
       info: jest.fn(),
@@ -22,22 +22,47 @@ global.fetch = jest.fn();
 class MockResponse implements Partial<Response> {
   private _status: number;
   private _body: string;
+  public readonly headers: Headers;
+  public readonly ok: boolean;
+  public readonly redirected: boolean;
+  public readonly type: ResponseType;
+  public readonly url: string;
+  public readonly bodyUsed: boolean;
 
   constructor(body: string, init?: { status?: number }) {
     this._body = body;
     this._status = init?.status || 200;
+    this.headers = new Headers();
+    this.ok = this._status >= 200 && this._status < 300;
+    this.redirected = false;
+    this.type = 'basic';
+    this.url = '';
+    this.bodyUsed = false;
   }
 
-  get ok() {
-    return this._status >= 200 && this._status < 300;
-  }
-
-  get status() {
+  get status(): number {
     return this._status;
   }
 
-  async text() {
+  async text(): Promise<string> {
     return this._body;
+  }
+
+  async json(): Promise<unknown> {
+    return JSON.parse(this._body);
+  }
+
+  async arrayBuffer(): Promise<ArrayBuffer> {
+    const buffer = new TextEncoder().encode(this._body).buffer;
+    return buffer as ArrayBuffer;
+  }
+
+  async blob(): Promise<Blob> {
+    return new Blob([this._body]);
+  }
+
+  clone(): Response {
+    return this as unknown as Response;
   }
 }
 
@@ -115,7 +140,9 @@ describe('fetchTextWithFallback', () => {
       mockBlobPathService.convertLegacyPath.mockReturnValue(standardizedPath);
       mockBlobService.getUrlForPath.mockReturnValue(standardizedBlobUrl);
       mockBlobService.fetchText.mockRejectedValue(new Error('Not found'));
-      mockFetch.mockResolvedValue(new MockResponse(textContent, { status: 200 }) as Response);
+      mockFetch.mockResolvedValue(
+        new MockResponse(textContent, { status: 200 }) as unknown as Response
+      );
 
       const result = await fetchTextWithFallback(legacyPath);
 
@@ -135,7 +162,7 @@ describe('fetchTextWithFallback', () => {
       mockBlobPathService.convertLegacyPath.mockReturnValue(standardizedPath);
       mockBlobService.getUrlForPath.mockReturnValue(standardizedBlobUrl);
       mockBlobService.fetchText.mockRejectedValue(new Error('Not found'));
-      mockFetch.mockResolvedValue(new MockResponse('', { status: 404 }) as Response);
+      mockFetch.mockResolvedValue(new MockResponse('', { status: 404 }) as unknown as Response);
 
       await expect(fetchTextWithFallback(legacyPath)).rejects.toThrow('HTTP error! Status: 404');
     });

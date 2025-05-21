@@ -1,8 +1,18 @@
 /**
  * Tests for Full Audiobook Migration Script
  */
-const path = require('path');
-const fs = require('fs');
+import * as fs from 'fs';
+import * as path from 'path';
+
+import type {
+  AudiobookConfig,
+  BookMigrationResult,
+  MigrationOptions,
+} from '../../scripts/migrateFullAudiobooks';
+
+// Define types for exec callback
+type ExecCallback = (error: Error | null, result: { stdout: string; stderr: string }) => void;
+type ExecFunction = (command: string, callback: ExecCallback) => void;
 
 // Mock the logger before anything else
 const mockLogger = {
@@ -19,7 +29,7 @@ jest.mock('../../utils/logger', () => ({
   default: mockLogger,
 }));
 jest.mock('child_process', () => ({
-  exec: jest.fn((cmd, cb) => cb(null, { stdout: '', stderr: '' })),
+  exec: jest.fn((cmd: string, cb: ExecCallback) => cb(null, { stdout: '', stderr: '' })),
 }));
 
 // Mock VercelBlobAssetService
@@ -29,6 +39,10 @@ const mockAssetService = {
   download: jest.fn(),
   upload: jest.fn(),
   getMetadata: jest.fn(),
+  assetExists: jest.fn(),
+  listAssets: jest.fn(),
+  fetchAsset: jest.fn(),
+  uploadAsset: jest.fn(),
 };
 
 jest.mock('../../utils/services/VercelBlobAssetService', () => ({
@@ -36,10 +50,35 @@ jest.mock('../../utils/services/VercelBlobAssetService', () => ({
   vercelBlobAssetService: mockAssetService, // Mock the singleton too
 }));
 
-const { exec } = require('child_process');
+const { exec } = require('child_process') as { exec: ExecFunction & jest.Mock };
 
 // Import after mocks
-let migrateFullAudiobooksModule;
+interface MigrateFullAudiobooksModule {
+  auditAudiobooks: (bookSlugs: string[]) => Promise<AudiobookConfig[]>;
+  downloadChapterFiles: (
+    config: AudiobookConfig | string,
+    chapters: string[],
+    tempDir: string
+  ) => Promise<string[]>;
+  concatenateChapters: (inputFiles: string[], outputFile: string) => Promise<string>;
+  uploadFullAudiobook: (
+    localPath: string,
+    remotePath: string,
+    bookSlug: string
+  ) => Promise<boolean>;
+  verifyMigration: (configs: AudiobookConfig[]) => Promise<BookMigrationResult[]>;
+  migrateFullAudiobooks: (options: MigrationOptions) => Promise<{
+    success: boolean;
+    totalBooks: number;
+    migrated: number;
+    failed: number;
+    skipped: number;
+    details: BookMigrationResult[];
+  }>;
+  resetAssetService: () => void;
+}
+
+let migrateFullAudiobooksModule: MigrateFullAudiobooksModule;
 
 beforeAll(() => {
   migrateFullAudiobooksModule = require('../../scripts/migrateFullAudiobooks');
@@ -142,7 +181,7 @@ describe('migrateFullAudiobooks', () => {
       const outputFile = '/tmp/the-iliad/full-audiobook.mp3';
 
       // Mock ffmpeg check and execution
-      exec.mockImplementation((cmd, cb) => {
+      exec.mockImplementation((cmd: string, cb: ExecCallback) => {
         if (cmd.includes('ffmpeg -version')) {
           cb(null, { stdout: 'ffmpeg version 4.4.0', stderr: '' });
         } else if (cmd.includes('ffmpeg -f concat')) {
@@ -152,7 +191,9 @@ describe('migrateFullAudiobooks', () => {
 
       // Mock file existence
       jest.spyOn(fs, 'existsSync').mockReturnValue(true);
-      jest.spyOn(fs, 'statSync').mockReturnValue({ size: 1024 * 1024 * 10 });
+      jest
+        .spyOn(fs, 'statSync')
+        .mockReturnValue({ size: BigInt(1024 * 1024 * 10) } as unknown as fs.Stats);
       jest.spyOn(fs, 'writeFileSync').mockImplementation(() => {});
       jest.spyOn(fs, 'unlinkSync').mockImplementation(() => {});
 
@@ -170,7 +211,7 @@ describe('migrateFullAudiobooks', () => {
     });
 
     it('should throw error if ffmpeg is not available', async () => {
-      exec.mockImplementation((cmd, cb) => {
+      exec.mockImplementation((cmd: string, cb: ExecCallback) => {
         if (cmd.includes('ffmpeg -version')) {
           cb(new Error('ffmpeg not found'), { stdout: '', stderr: 'command not found' });
         }
@@ -185,7 +226,7 @@ describe('migrateFullAudiobooks', () => {
       const inputFiles = ['/tmp/chapter-01.mp3'];
       const outputFile = '/tmp/full-audiobook.mp3';
 
-      exec.mockImplementation((cmd, cb) => {
+      exec.mockImplementation((cmd: string, cb: ExecCallback) => {
         if (cmd.includes('ffmpeg -version')) {
           cb(null, { stdout: 'ffmpeg version 4.4.0', stderr: '' });
         } else if (cmd.includes('ffmpeg -f concat')) {
@@ -212,9 +253,15 @@ describe('migrateFullAudiobooks', () => {
         url: 'https://blob.vercel-storage.com/assets/audio/the-iliad/full-audiobook.mp3',
       });
 
-      jest.spyOn(fs, 'statSync').mockReturnValue({ size: 1024 * 1024 * 50 });
+      jest
+        .spyOn(fs, 'statSync')
+        .mockReturnValue({ size: BigInt(1024 * 1024 * 50) } as unknown as fs.Stats);
 
-      const result = await migrateFullAudiobooksModule.uploadFullAudiobook(localPath, remotePath);
+      const result = await migrateFullAudiobooksModule.uploadFullAudiobook(
+        localPath,
+        remotePath,
+        'the-iliad'
+      );
 
       expect(result).toBe(true);
       expect(mockAssetService.upload).toHaveBeenCalledWith(
@@ -230,7 +277,9 @@ describe('migrateFullAudiobooks', () => {
       const localPath = '/tmp/the-iliad/full-audiobook.mp3';
       const remotePath = 'assets/audio/the-iliad/full-audiobook.mp3';
 
-      jest.spyOn(fs, 'statSync').mockReturnValue({ size: 1024 * 1024 * 50 });
+      jest
+        .spyOn(fs, 'statSync')
+        .mockReturnValue({ size: BigInt(1024 * 1024 * 50) } as unknown as fs.Stats);
 
       // First attempt fails, second succeeds
       mockAssetService.upload
@@ -239,7 +288,11 @@ describe('migrateFullAudiobooks', () => {
           url: 'https://blob.vercel-storage.com/assets/audio/the-iliad/full-audiobook.mp3',
         });
 
-      const result = await migrateFullAudiobooksModule.uploadFullAudiobook(localPath, remotePath);
+      const result = await migrateFullAudiobooksModule.uploadFullAudiobook(
+        localPath,
+        remotePath,
+        'the-iliad'
+      );
 
       expect(result).toBe(true);
       expect(mockAssetService.upload).toHaveBeenCalledTimes(2);
@@ -248,7 +301,7 @@ describe('migrateFullAudiobooks', () => {
 
   describe('verifyMigration', () => {
     it('should verify all audiobooks exist at standardized paths', async () => {
-      const configs = [
+      const configs: AudiobookConfig[] = [
         {
           bookSlug: 'the-iliad',
           bookTitle: 'The Iliad',
@@ -279,7 +332,7 @@ describe('migrateFullAudiobooks', () => {
     });
 
     it('should report verification failures', async () => {
-      const configs = [
+      const configs: AudiobookConfig[] = [
         {
           bookSlug: 'the-iliad',
           bookTitle: 'The Iliad',
@@ -321,12 +374,14 @@ describe('migrateFullAudiobooks', () => {
       mockAssetService.download.mockResolvedValue(undefined);
 
       // Mock concatenation phase
-      exec.mockImplementation((cmd, cb) => {
+      exec.mockImplementation((cmd: string, cb: ExecCallback) => {
         cb(null, { stdout: 'Success', stderr: '' });
       });
       jest.spyOn(fs, 'existsSync').mockReturnValue(true);
-      jest.spyOn(fs, 'statSync').mockReturnValue({ size: 1024 * 1024 * 10 });
-      jest.spyOn(fs, 'mkdirSync').mockImplementation(() => {});
+      jest
+        .spyOn(fs, 'statSync')
+        .mockReturnValue({ size: BigInt(1024 * 1024 * 10) } as unknown as fs.Stats);
+      jest.spyOn(fs, 'mkdirSync').mockImplementation(() => '' as unknown as string);
       jest.spyOn(fs, 'rmSync').mockImplementation(() => {});
       jest.spyOn(fs, 'writeFileSync').mockImplementation(() => {});
       jest.spyOn(fs, 'unlinkSync').mockImplementation(() => {});

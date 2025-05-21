@@ -496,3 +496,122 @@ This TODO list details the tasks required to fully migrate all asset management 
   - [x] Fix unnecessary escape characters in regex expressions
   - [x] Update .eslintignore configuration to modern format
   - [x] Complete verification with lint and type checking to ensure all issues are resolved
+
+## Code Quality Tasks from TypeScript Audit (2025-05-21)
+
+- [x] **T039: Fix TypeScript errors in test files blocking push**
+  - [x] Fix migrateFullAudiobooks.test.ts issues:
+    - [x] Replace implicit any types for module variables (lines 42, 52, 70, 91, 115, 159, 180...)
+    - [x] Add proper types for callback parameters (lines 145, 173, 188, 324)
+  - [x] Fix fetchTextWithFallback.test.ts type conversion issues:
+    - [x] Address MockResponse to Response conversion errors (lines 118, 138)
+  - [x] Dependencies: none
+
+- [ ] **T040: Fix logger and module import errors in utility scripts**
+  - [ ] Fix asset-migration/copyToPlaceholder.ts import issues:
+    - [ ] Fix module imports for logger and BlobService (lines 7-8)
+    - [ ] Resolve logger variable references (lines 14, 25, 34, 41, 44...)
+  - [ ] Fix logger references across multiple scripts (needs systematic approach):
+    - [ ] Audit all scripts for proper logger imports and usage
+    - [ ] Create consistent pattern for logger initialization
+    - [ ] Update all scripts with correct logger references
+  - [ ] Dependencies: none
+
+- [ ] **T041: Fix type compatibility issues in verification scripts**
+  - [ ] Address Chapter type incompatibilities:
+    - [ ] Fix audioSrc type mismatch (string | null vs string | undefined) in:
+      - [ ] verifyAudioMigration.ts (line 181)
+      - [ ] verifyAudioMigrationWithContent.ts (line 231) 
+      - [ ] verifyBlobStorage.ts (line 231)
+    - [ ] Create consistent Chapter interface for verification scripts
+    - [ ] Update translations type handling across verification scripts
+  - [ ] Dependencies: none
+
+- [ ] **T042: Systematically update max-depth violations in search scripts**
+  - [ ] Fix nested blocks in searchAllImages.ts (line 67)
+  - [ ] Refactor verification scripts to reduce nesting depth:
+    - [ ] Apply extraction pattern similar to the one used in T037
+    - [ ] Extract helper functions to flatten nested conditionals
+    - [ ] Review and refactor loop structures
+  - [ ] Dependencies: none
+
+- [ ] **T043: Fix Response type compatibility with mocks in tests**
+  - [ ] Update fetchTextWithFallback.test.ts to fix MockResponse conversion issues:
+    - [ ] Add proper type assertion or conversion for MockResponse objects (lines 118, 138)
+    - [ ] Create appropriate type interfaces to ensure compatibility
+    - [ ] Ensure proper typing for fetch response mocking across all tests
+  - [ ] Review all test files for similar type compatibility issues
+  - [ ] Dependencies: none
+
+- [ ] **T044: Standardize asset path utilities across scripts**
+  - [ ] Fix asset path utility inconsistencies:
+    - [ ] Create consistent path handling utility for scripts
+    - [ ] Ensure compatibility with both old and new path formats
+    - [ ] Update all scripts to use standardized path utilities
+  - [ ] Ensure proper path normalization for all asset types
+  - [ ] Dependencies: none
+
+- [ ] **T045: COMPLEX - Address technical debt in test files**
+  - [ ] Reorganize test mocks for better type safety:
+    - [ ] Create proper TypeScript interfaces for all mocked services
+    - [ ] Update jest mocks to use type-safe mock implementations
+    - [ ] Standardize mock creation and initialization
+  - [ ] Refactor test file structure to improve organization:
+    - [ ] Group tests by functionality rather than implementation details
+    - [ ] Create shared test utilities with proper typing
+  - [ ] Improve test assertions with type safety:
+    - [ ] Replace any types with proper interfaces
+    - [ ] Use type predicates where appropriate
+  - [ ] Dependencies: T039, T043
+
+- [ ] **T046: Update asset imports and logger initialization across all scripts**
+  - [ ] Create standardized logger initialization pattern:
+    - [ ] Define consistent approach for creating script-specific loggers
+    - [ ] Add proper context and correlation IDs to all loggers
+  - [ ] Fix asset service imports and initialization:
+    - [ ] Update imports to use consistent path and naming
+    - [ ] Ensure proper error handling during initialization
+  - [ ] Dependencies: T040
+
+- [ ] **T047: Fix script dependency loading and module resolution**
+  - [ ] Standardize module import patterns:
+    - [ ] Use consistent import syntax across all files (ESM vs CommonJS)
+    - [ ] Fix relative path issues with imports
+    - [ ] Address node: prefix requirements for Node.js built-ins
+  - [ ] Update import.meta.url usage compatibility:
+    - [ ] Add proper TypeScript configurations for ESM modules
+    - [ ] Ensure consistent approach for resolving file paths in scripts
+    - [ ] Test module loading in both development and production environments
+  - [ ] Dependencies: None
+
+- [ ] **T048: Apply code formatting standards consistently across codebase**
+  - [ ] Update all README.md files with consistent formatting:
+    - [ ] Ensure blank lines before and after lists and code blocks
+    - [ ] Apply consistent indentation in markdown files
+    - [ ] Remove trailing whitespace across all files
+  - [ ] Review script file formatting:
+    - [ ] Apply consistent object formatting (trailing commas, spacing)
+    - [ ] Standardize import ordering and grouping
+    - [ ] Ensure consistent indentation and line breaks in function calls
+  - [ ] Set up automated formatting checks in CI pipeline
+  - [ ] Dependencies: None
+
+- [ ] **T049: Fix remaining ESLint warnings in test files**
+  - [ ] Address no-console warnings in tests:
+    - [ ] Replace console.log with proper test utilities or mocked loggers
+    - [ ] Add appropriate eslint-disable directives where needed (with justification)
+  - [ ] Fix max-depth and complexity issues in test files
+  - [ ] Address unused variable warnings consistently (underscore prefix)
+  - [ ] Dependencies: T042
+
+- [ ] **T050: COMPLEX - Improve test fixtures and type safety in tests**
+  - [ ] Create type-safe fixtures for common test data:
+    - [ ] Define proper interfaces for test fixtures
+    - [ ] Create factory functions for generating test data
+    - [ ] Ensure consistent approach to mocking external dependencies
+  - [ ] Implement better type checking in test assertions:
+    - [ ] Use TypeScript's type narrowing features in test cases
+    - [ ] Add proper type guards for complex assertions
+    - [ ] Update expect statements to use type-aware matchers where possible
+  - [ ] Add proper typing for test utilities and helper functions
+  - [ ] Dependencies: T045
