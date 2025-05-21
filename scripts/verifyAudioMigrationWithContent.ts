@@ -8,8 +8,8 @@ import fs from 'fs';
 import path from 'path';
 
 import translations from '../translations';
-import { blobService } from '../utils/services/BlobService';
 import { logger as rootLogger } from '../utils/logger';
+import { blobService } from '../utils/services/BlobService';
 
 // Create script-specific logger
 const logger = rootLogger.child({ script: 'verifyAudioMigrationWithContent.ts' });
@@ -34,14 +34,14 @@ function getBlobUrlForAudioPath(audioPath: string, baseUrl?: string): string {
     // If it's already a full URL, use it directly
     return audioPath;
   }
-  
+
   // Generate URL with the book path
   const normalizedPath = audioPath.startsWith('/') ? audioPath.substring(1) : audioPath;
-  
+
   if (baseUrl) {
     return `${baseUrl}/${normalizedPath}`;
   }
-  
+
   // Default to the standard Vercel Blob URL
   return `https://public.blob.vercel-storage.com/${normalizedPath}`;
 }
@@ -51,8 +51,9 @@ function getBlobUrlForAudioPath(audioPath: string, baseUrl?: string): string {
  */
 function isValidAudioFile(fileInfo: { size: number; contentType?: string }): boolean {
   return (
-    fileInfo.size > 10 * 1024 && 
-    (fileInfo.contentType?.startsWith('audio/') || fileInfo.contentType === 'application/octet-stream')
+    fileInfo.size > 10 * 1024 &&
+    (fileInfo.contentType?.startsWith('audio/') ||
+      fileInfo.contentType === 'application/octet-stream')
   );
 }
 
@@ -75,24 +76,24 @@ async function verifyAudioFile(
       error: 'No audio path provided',
     };
   }
-  
+
   try {
     // Get the blob URL
     const blobUrl = getBlobUrlForAudioPath(audioPath, baseUrl);
-    
+
     // Check if the file exists and get its properties
     const fileInfo = await blobService.getFileInfo(blobUrl);
-    
+
     // Check if this is a valid audio file
     const validAudio = isValidAudioFile(fileInfo);
-    
+
     if (validAudio) {
       logger.info({
         msg: 'Valid audio file exists',
         url: blobUrl,
         size: fileInfo.size,
         contentType: fileInfo.contentType,
-        bookSlug
+        bookSlug,
       });
       stats.successful++;
     } else if (fileInfo.size > 0) {
@@ -101,18 +102,18 @@ async function verifyAudioFile(
         url: blobUrl,
         size: fileInfo.size,
         contentType: fileInfo.contentType,
-        bookSlug
+        bookSlug,
       });
       stats.successful++; // Count as successful but warn
     } else {
       logger.error({
         msg: 'File exists but is empty',
         url: blobUrl,
-        bookSlug
+        bookSlug,
       });
       stats.failed++;
     }
-    
+
     // Create and return result
     return {
       bookSlug,
@@ -128,11 +129,11 @@ async function verifyAudioFile(
       msg: 'Audio file not found',
       path: audioPath,
       bookSlug,
-      error
+      error,
     });
-    
+
     stats.failed++;
-    
+
     return {
       bookSlug,
       audioPath,
@@ -149,69 +150,66 @@ async function verifyAudioFile(
 async function verifyBookAudioFiles(
   book: { slug: string; title: string; chapters: Array<{ audioSrc?: string }> },
   baseUrl?: string,
-  stats: { totalFiles: number; successful: number; failed: number } = { totalFiles: 0, successful: 0, failed: 0 }
+  stats: { totalFiles: number; successful: number; failed: number } = {
+    totalFiles: 0,
+    successful: 0,
+    failed: 0,
+  }
 ): Promise<VerificationResult[]> {
   logger.info({
     msg: 'Verifying audio files for book',
     bookTitle: book.title,
-    bookSlug: book.slug
+    bookSlug: book.slug,
   });
-  
+
   // Find chapters with audio
-  const chaptersWithAudio = book.chapters.filter(c => c.audioSrc);
-  
+  const chaptersWithAudio = book.chapters.filter((c) => c.audioSrc);
+
   // Skip books without audio
   if (chaptersWithAudio.length === 0) {
     return [];
   }
-  
+
   stats.totalFiles += chaptersWithAudio.length;
-  
+
   // Verify each audio file
   const results: VerificationResult[] = [];
-  
+
   for (const chapter of chaptersWithAudio) {
     if (!chapter.audioSrc) continue;
-    
-    const result = await verifyAudioFile(
-      chapter.audioSrc,
-      book.slug,
-      baseUrl,
-      stats
-    );
-    
+
+    const result = await verifyAudioFile(chapter.audioSrc, book.slug, baseUrl, stats);
+
     results.push(result);
   }
-  
+
   return results;
 }
 
 /**
  * Save the verification report to a file
  */
-function saveVerificationReport(
-  reportData: {
-    date: string;
-    summary: {
-      total: number;
-      successful: number;
-      failed: number;
-      placeholderCount: number;
-      properAudioCount: number;
-      successRate: string;
-    };
-    results: VerificationResult[];
-  }
-): string {
+function saveVerificationReport(reportData: {
+  date: string;
+  summary: {
+    total: number;
+    successful: number;
+    failed: number;
+    placeholderCount: number;
+    properAudioCount: number;
+    successRate: string;
+  };
+  results: VerificationResult[];
+}): string {
   const reportDir = path.resolve(process.cwd(), 'reports');
   if (!fs.existsSync(reportDir)) {
     fs.mkdirSync(reportDir, { recursive: true });
   }
-  
+
   const reportPath = path.resolve(reportDir, `audio-verification-content-${Date.now()}.json`);
   fs.writeFileSync(reportPath, JSON.stringify(reportData, null, 2));
   logger.info({ msg: 'Verification report saved', path: reportPath });
-  
+
   return reportPath;
 }
 
@@ -235,15 +233,14 @@ async function verifyAudioMigration(): Promise<void> {
   }
 
   // Calculate statistics
-  const successRate = stats.totalFiles > 0 
-    ? ((stats.successful / stats.totalFiles) * 100).toFixed(1) + '%' 
-    : '0%';
-    
+  const successRate =
+    stats.totalFiles > 0 ? ((stats.successful / stats.totalFiles) * 100).toFixed(1) + '%' : '0%';
+
   const placeholderCount = results.filter(
-    r => r.exists && r.fileSize && r.fileSize < 10 * 1024
+    (r) => r.exists && r.fileSize && r.fileSize < 10 * 1024
   ).length;
-  
-  const properAudioCount = results.filter(r => r.isValidAudioFile).length;
+
+  const properAudioCount = results.filter((r) => r.isValidAudioFile).length;
 
   // Log summary
   logger.info({
@@ -254,8 +251,8 @@ async function verifyAudioMigration(): Promise<void> {
       missingFiles: stats.failed,
       placeholderFiles: placeholderCount,
       properAudioFiles: properAudioCount,
-      successRate
-    }
+      successRate,
+    },
   });
 
   // Save report to file

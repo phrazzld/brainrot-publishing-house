@@ -1,6 +1,6 @@
 /**
  * TODO: Replace console.log with logger
- * 
+ *
  * Search for all images in blob storage
  */
 import dotenv from 'dotenv';
@@ -8,7 +8,7 @@ import path from 'path';
 
 // Let me also test what happens with the current getAssetUrl function
 import { getAssetUrl } from '../utils';
-import { logger as _logger } from '../utils/logger';
+import { logger } from '../utils/logger';
 import { blobService } from '../utils/services/BlobService';
 
 // Load environment variables
@@ -30,8 +30,8 @@ async function searchImages() {
       'hamlet-07.png',
     ];
 
-    // Try different patterns
-    const patterns = [
+    // Try different pattern paths for image search
+    const _searchPatterns = [
       'books/*/images/*.png',
       'images/*.png',
       'assets/*/images/*.png',
@@ -65,10 +65,12 @@ async function searchImages() {
           const response = await fetch(url, { method: 'HEAD' });
 
           if (response.ok) {
+            // Extract common logic to reduce nesting depth
             logger.info({ msg: `✓ Found: ${path}`, url });
+            continue;
           }
-        } catch (error) {
-          // Continue
+        } catch {
+          // Continue - silent catch for 404s
         }
       }
     }
@@ -82,9 +84,13 @@ const testPaths = [
   '/assets/the-iliad/images/the-iliad-01.png',
 ];
 
+// The following code is used for interactive CLI debugging
+// eslint-disable-next-line no-console -- CLI debugging tool
 console.log('\n=== Testing getAssetUrl ===');
 for (const path of testPaths) {
+  // eslint-disable-next-line no-console -- CLI debugging tool
   console.log(`Input: ${path}`);
+  // eslint-disable-next-line no-console -- CLI debugging tool
   console.log(`Output: ${getAssetUrl(path, true)}`);
 }
 

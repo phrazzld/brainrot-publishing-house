@@ -1,6 +1,6 @@
 # Test Utility Scripts
 
-This directory contains scripts that are used for testing and verification. 
+This directory contains scripts that are used for testing and verification.
 These scripts help with:
 
 - Running tests against specific features

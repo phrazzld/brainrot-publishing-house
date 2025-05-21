@@ -394,7 +394,7 @@ function parseArgs(): StandardizationOptions {
     } else if (arg === '--help' || arg === '-h') {
       const scriptLogger = logger.child({ name: 'TextFileStandardizer' });
       scriptLogger.info({ msg: 'Displaying help information' });
-      
+
       // Using console.error for displaying help is acceptable - it provides direct user visibility
       console.error(`
 Usage: npm run standardize:text:blob [options]
@@ -431,11 +431,14 @@ if (isDirectExecution) {
     })
     .catch((error) => {
       logger.child({ name: 'TextFileStandardizer' }).error({
-        msg: 'Standardization failed', 
-        error: error instanceof Error ? error.message : String(error)
+        msg: 'Standardization failed',
+        error: error instanceof Error ? error.message : String(error),
       });
       // Keep console.error for direct user visibility of errors in the terminal
-      console.error('Standardization failed:', error instanceof Error ? error.message : String(error));
+      console.error(
+        'Standardization failed:',
+        error instanceof Error ? error.message : String(error)
+      );
       process.exit(1);
     });
 }

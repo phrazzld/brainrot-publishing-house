@@ -3,15 +3,16 @@
  */
 import dotenv from 'dotenv';
 import fetch from 'node-fetch';
+
 import { logger } from '../utils/logger';
 
 // Load environment variables from .env.local
 dotenv.config({ path: '.env.local' });
 
 // Create a script-specific logger
-const scriptLogger = logger.child({ 
+const scriptLogger = logger.child({
   script: 'checkBlobUrl',
-  context: 'blob-verification'
+  context: 'blob-verification',
 });
 
 // Get the base URL from environment variables
@@ -20,7 +21,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_BLOB_BASE_URL;
 if (!BASE_URL) {
   scriptLogger.error({
     msg: 'NEXT_PUBLIC_BLOB_BASE_URL environment variable is not set',
-    error: 'Missing required environment variable'
+    error: 'Missing required environment variable',
   });
   process.exit(1);
 }
@@ -29,20 +30,20 @@ async function checkUrl(url: string): Promise<boolean> {
   try {
     const response = await fetch(url, { method: 'HEAD' });
     const status = response.status;
-    
+
     scriptLogger.info({
       msg: `Checked URL: ${url}`,
       url,
       status,
-      exists: response.ok
+      exists: response.ok,
     });
-    
+
     return response.ok;
   } catch (error) {
     scriptLogger.error({
       msg: `Error checking URL ${url}`,
       url,
-      error
+      error,
     });
     return false;
   }
@@ -60,17 +61,17 @@ async function main() {
   scriptLogger.info({
     msg: 'Starting URL verification',
     baseUrl: BASE_URL,
-    urlCount: testUrls.length
+    urlCount: testUrls.length,
   });
-  
+
   let successCount = 0;
 
   for (const url of testUrls) {
     scriptLogger.info({
       msg: 'Checking URL',
-      url
+      url,
     });
-    
+
     const exists = await checkUrl(url);
     if (exists) successCount++;
   }
@@ -80,13 +81,13 @@ async function main() {
     summary: `${successCount} out of ${testUrls.length} URLs are accessible`,
     successCount,
     totalUrls: testUrls.length,
-    successRate: `${Math.round((successCount / testUrls.length) * 100)}%`
+    successRate: `${Math.round((successCount / testUrls.length) * 100)}%`,
   });
 }
 
-main().catch(error => {
+main().catch((error) => {
   scriptLogger.error({
     msg: 'Unhandled error in main execution',
-    error
+    error,
   });
 });

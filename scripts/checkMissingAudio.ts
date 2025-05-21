@@ -10,14 +10,14 @@
  */
 import fs from 'fs/promises';
 import path from 'path';
-import { logger } from '../utils/logger';
 
 import translations from '../translations';
+import { logger } from '../utils/logger';
 
 // Create a script-specific logger
-const scriptLogger = logger.child({ 
+const scriptLogger = logger.child({
   script: 'checkMissingAudio',
-  context: 'audio-verification'
+  context: 'audio-verification',
 });
 
 // Parse command line arguments
@@ -70,9 +70,9 @@ async function main() {
     // Load the inventory file
     scriptLogger.info({
       msg: 'Loading inventory file',
-      path: inventoryPath
+      path: inventoryPath,
     });
-    
+
     const inventoryData = await fs.readFile(inventoryPath, 'utf-8');
     const inventory: Inventory = JSON.parse(inventoryData);
 
@@ -81,7 +81,7 @@ async function main() {
       totalFiles: inventory.totalFiles,
       totalSizeMB: (inventory.totalSize / (1024 * 1024)).toFixed(2),
       realAudioFiles: inventory.realAudioFiles,
-      booksWithAudio: inventory.books.length
+      booksWithAudio: inventory.books.length,
     });
 
     // Compare with translations
@@ -105,15 +105,15 @@ async function main() {
 
     // Save the results to a file
     await saveResultsToFile(expectedAudio.size, actualAudio.size, missingFiles, unexpectedFiles);
-    
+
     scriptLogger.info({
       msg: 'Detailed report saved',
-      path: 'audio-files-report.json'
+      path: 'audio-files-report.json',
     });
   } catch (error) {
     scriptLogger.error({
       msg: 'Error checking missing audio files',
-      error
+      error,
     });
     process.exit(1);
   }
@@ -171,7 +171,7 @@ function collectActualAudioFiles(inventory: Inventory, actualAudio: Map<string, 
  * Finds missing audio files by comparing expected with actual
  */
 function findMissingFiles(
-  expectedAudio: Map<string, AudioInfo>, 
+  expectedAudio: Map<string, AudioInfo>,
   actualAudio: Map<string, boolean>
 ): MissingFile[] {
   const missingFiles: MissingFile[] = [];
@@ -193,7 +193,7 @@ function findMissingFiles(
  * Finds unexpected audio files by comparing actual with expected
  */
 function findUnexpectedFiles(
-  actualAudio: Map<string, boolean>, 
+  actualAudio: Map<string, boolean>,
   expectedAudio: Map<string, AudioInfo>
 ): string[] {
   const unexpectedFiles: string[] = [];
@@ -211,9 +211,9 @@ function findUnexpectedFiles(
  * Reports findings to the console via structured logging
  */
 function reportFindings(
-  expectedCount: number, 
-  actualCount: number, 
-  missingFiles: MissingFile[], 
+  expectedCount: number,
+  actualCount: number,
+  missingFiles: MissingFile[],
   unexpectedFiles: string[]
 ): void {
   scriptLogger.info({
@@ -221,14 +221,14 @@ function reportFindings(
     expectedFiles: expectedCount,
     actualFiles: actualCount,
     missingFiles: missingFiles.length,
-    unexpectedFiles: unexpectedFiles.length
+    unexpectedFiles: unexpectedFiles.length,
   });
 
   if (missingFiles.length > 0) {
     scriptLogger.warn({
       msg: 'Missing audio files detected',
       count: missingFiles.length,
-      files: missingFiles.map(file => `${file.book} - ${file.chapter} (${file.path})`)
+      files: missingFiles.map((file) => `${file.book} - ${file.chapter} (${file.path})`),
     });
   }
 
@@ -236,7 +236,7 @@ function reportFindings(
     scriptLogger.info({
       msg: 'Unexpected audio files (not referenced in translations)',
       count: unexpectedFiles.length,
-      files: unexpectedFiles
+      files: unexpectedFiles,
     });
   }
 }
@@ -245,9 +245,9 @@ function reportFindings(
  * Saves results to a JSON file
  */
 async function saveResultsToFile(
-  expectedCount: number, 
-  actualCount: number, 
-  missingFiles: MissingFile[], 
+  expectedCount: number,
+  actualCount: number,
+  missingFiles: MissingFile[],
   unexpectedFiles: string[]
 ): Promise<void> {
   const results: ResultsReport = {

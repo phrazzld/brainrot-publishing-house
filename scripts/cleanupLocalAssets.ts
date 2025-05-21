@@ -140,9 +140,14 @@ async function processAsset(
 
 // Helper to update counters based on asset result
 function updateCounters(
-  result: AssetCleanupResult, 
+  result: AssetCleanupResult,
   bookSummary: BookCleanupResult['summary'],
-  globalCounters: { assetsInBlob: number; assetsDeleted: number; assetsKept: number; errors: number }
+  globalCounters: {
+    assetsInBlob: number;
+    assetsDeleted: number;
+    assetsKept: number;
+    errors: number;
+  }
 ): void {
   if (result.existsInBlob) {
     bookSummary.existInBlob++;
@@ -168,7 +173,13 @@ async function processChapterAssets(
   chapter: { text: string; audioSrc?: string },
   dryRun: boolean,
   bookResult: BookCleanupResult,
-  globalCounters: { totalAssets: number; assetsInBlob: number; assetsDeleted: number; assetsKept: number; errors: number }
+  globalCounters: {
+    totalAssets: number;
+    assetsInBlob: number;
+    assetsDeleted: number;
+    assetsKept: number;
+    errors: number;
+  }
 ): Promise<void> {
   // Process chapter text
   bookResult.summary.totalAssets++;
@@ -191,11 +202,26 @@ async function processChapterAssets(
 
 // Process all assets for a single book
 async function processBookAssets(
-  book: { slug: string; title: string; coverImage: string; chapters: Array<{ text: string; audioSrc?: string }> },
+  book: {
+    slug: string;
+    title: string;
+    coverImage: string;
+    chapters: Array<{ text: string; audioSrc?: string }>;
+  },
   dryRun: boolean,
-  globalCounters: { totalAssets: number; assetsInBlob: number; assetsDeleted: number; assetsKept: number; errors: number }
+  globalCounters: {
+    totalAssets: number;
+    assetsInBlob: number;
+    assetsDeleted: number;
+    assetsKept: number;
+    errors: number;
+  }
 ): Promise<BookCleanupResult> {
-  logger.info({ msg: `Processing book: ${book.title} (${book.slug})`, bookTitle: book.title, bookSlug: book.slug });
+  logger.info({
+    msg: `Processing book: ${book.title} (${book.slug})`,
+    bookTitle: book.title,
+    bookSlug: book.slug,
+  });
 
   const bookResult: BookCleanupResult = {
     slug: book.slug,
@@ -253,7 +279,7 @@ async function cleanupLocalAssets(dryRun: boolean = true): Promise<CleanupReport
     assetsInBlob: 0,
     assetsDeleted: 0,
     assetsKept: 0,
-    errors: 0
+    errors: 0,
   };
 
   // Process each book
@@ -278,9 +304,9 @@ async function cleanupLocalAssets(dryRun: boolean = true): Promise<CleanupReport
   };
 
   // Output report to console
-  logger.info({ 
-    msg: 'Local Asset Cleanup Report', 
-    report: { 
+  logger.info({
+    msg: 'Local Asset Cleanup Report',
+    report: {
       date: new Date().toLocaleString(),
       mode: dryRun ? 'DRY RUN (no files deleted)' : 'ACTUAL RUN (files deleted)',
       totalBooks: report.overallSummary.totalBooks,
@@ -288,8 +314,8 @@ async function cleanupLocalAssets(dryRun: boolean = true): Promise<CleanupReport
       assetsInBlob: report.overallSummary.assetsInBlob,
       assetsDeleted: report.overallSummary.assetsDeleted,
       assetsKept: report.overallSummary.assetsKept,
-      errors: report.overallSummary.errors
-    }
+      errors: report.overallSummary.errors,
+    },
   });
 
   // Save report to file
@@ -308,11 +334,15 @@ async function main() {
   logger.info({ msg: 'Local Asset Cleanup Tool', mode: dryRun ? 'DRY RUN' : 'DELETE' });
 
   if (!dryRun && interactive) {
-    logger.warn({ msg: 'WARNING: This will permanently delete local assets that exist in Blob storage.' });
-    logger.info({ msg: 'To perform a dry run (no files will be deleted), run without the --delete flag.' });
+    logger.warn({
+      msg: 'WARNING: This will permanently delete local assets that exist in Blob storage.',
+    });
+    logger.info({
+      msg: 'To perform a dry run (no files will be deleted), run without the --delete flag.',
+    });
     // Using console.log directly for interactive CLI prompts since they need to be displayed directly to the user
-    // This is an allowed exception to the no-console rule for user interaction
-    // eslint-disable-next-line no-console
+    // This is an allowed exception to the no-console rule for user interaction in CLI tools
+    // eslint-disable-next-line no-console -- CLI: User prompt for confirmation
     console.log('\nAre you sure you want to proceed? (yes/no)');
 
     // Simple prompt implementation
@@ -339,9 +369,10 @@ async function main() {
     logger.info({ msg: 'Cleanup completed successfully!' });
 
     if (dryRun) {
-      logger.info({ 
-        msg: 'This was a dry run. No files were actually deleted.', 
-        usage: 'To delete files, run with the --delete flag: npx tsx scripts/cleanupLocalAssets.ts --delete'
+      logger.info({
+        msg: 'This was a dry run. No files were actually deleted.',
+        usage:
+          'To delete files, run with the --delete flag: npx tsx scripts/cleanupLocalAssets.ts --delete',
       });
     }
   } catch (error) {

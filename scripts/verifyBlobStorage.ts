@@ -61,31 +61,41 @@ async function verifyAsset(
   counters: { totalAssets: number; migratedAssets: number }
 ): Promise<AssetVerificationResult> {
   counters.totalAssets++;
-  
+
   try {
     const exists = await assetExistsInBlobStorage(assetPath);
-    
+
     if (exists) {
       counters.migratedAssets++;
-      logger.info({ msg: `Asset exists in blob storage`, path: assetPath, type: assetType, bookSlug });
+      logger.info({
+        msg: `Asset exists in blob storage`,
+        path: assetPath,
+        type: assetType,
+        bookSlug,
+      });
     } else {
-      logger.warn({ msg: `Asset missing from blob storage`, path: assetPath, type: assetType, bookSlug });
+      logger.warn({
+        msg: `Asset missing from blob storage`,
+        path: assetPath,
+        type: assetType,
+        bookSlug,
+      });
     }
-    
+
     return {
       path: assetPath,
       exists,
       type: assetType,
     };
   } catch (error) {
-    logger.error({ 
-      msg: `Error checking asset in blob storage`, 
-      path: assetPath, 
-      type: assetType, 
+    logger.error({
+      msg: `Error checking asset in blob storage`,
+      path: assetPath,
+      type: assetType,
       bookSlug,
-      error 
+      error,
     });
-    
+
     return {
       path: assetPath,
       exists: false,
@@ -98,11 +108,16 @@ async function verifyAsset(
  * Process and verify all assets for a single book
  */
 async function verifyBookAssets(
-  book: { slug: string; title: string; coverImage: string; chapters: Array<{ text: string; audioSrc?: string }> },
+  book: {
+    slug: string;
+    title: string;
+    coverImage: string;
+    chapters: Array<{ text: string; audioSrc?: string }>;
+  },
   counters: { totalAssets: number; migratedAssets: number }
 ): Promise<BookVerificationResult> {
   logger.info({ msg: `Verifying book assets`, bookTitle: book.title, bookSlug: book.slug });
-  
+
   // Initialize book result
   const bookResult: BookVerificationResult = {
     slug: book.slug,
@@ -121,38 +136,38 @@ async function verifyBookAssets(
       coverImageMigrated: false,
     },
   };
-  
+
   // Verify cover image
   bookResult.summary.total++;
   const coverResult = await verifyAsset(book.coverImage, 'cover', book.slug, counters);
   bookResult.coverImage = coverResult;
-  
+
   if (coverResult.exists) {
     bookResult.summary.migrated++;
     bookResult.summary.coverImageMigrated = true;
   } else {
     bookResult.summary.missing++;
   }
-  
+
   // Verify chapters and audio
   for (const chapter of book.chapters) {
     // Verify chapter text
     bookResult.summary.total++;
     const chapterResult = await verifyAsset(chapter.text, 'chapter', book.slug, counters);
     bookResult.chapters.push(chapterResult);
-    
+
     if (chapterResult.exists) {
       bookResult.summary.migrated++;
     } else {
       bookResult.summary.missing++;
     }
-    
+
     // Verify audio if available
     if (chapter.audioSrc) {
       bookResult.summary.total++;
       const audioResult = await verifyAsset(chapter.audioSrc, 'audio', book.slug, counters);
       bookResult.audio.push(audioResult);
-      
+
       if (audioResult.exists) {
         bookResult.summary.migrated++;
       } else {
@@ -160,7 +175,7 @@ async function verifyBookAssets(
       }
     }
   }
-  
+
   return bookResult;
 }
 
@@ -173,12 +188,12 @@ function saveVerificationReport(report: VerificationReport): string {
   if (!fs.existsSync(reportDir)) {
     fs.mkdirSync(reportDir);
   }
-  
+
   // Generate report path and save the report
   const reportPath = path.join(reportDir, `blob-verification-${Date.now()}.json`);
   fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
   logger.info({ msg: `Verification report saved`, path: reportPath });
-  
+
   return reportPath;
 }
 
@@ -194,9 +209,7 @@ function calculateOverallSummary(
     booksWithCover: bookResults.filter((b) => b.coverImage.exists).length,
     booksWithAllContent: bookResults.filter(
       (b) =>
-        b.coverImage.exists && 
-        b.chapters.every((c) => c.exists) && 
-        b.audio.every((a) => a.exists)
+        b.coverImage.exists && b.chapters.every((c) => c.exists) && b.audio.every((a) => a.exists)
     ).length,
     totalAssets: counters.totalAssets,
     migratedAssets: counters.migratedAssets,
@@ -230,7 +243,7 @@ async function verifyBlobStorage(): Promise<VerificationReport> {
   };
 
   // Output summary
-  logger.info({ 
+  logger.info({
     msg: 'Blob Storage Verification Report',
     summary: {
       date: new Date().toLocaleString(),
@@ -239,8 +252,8 @@ async function verifyBlobStorage(): Promise<VerificationReport> {
       booksWithAllContent: overallSummary.booksWithAllContent,
       totalAssets: overallSummary.totalAssets,
       migratedAssets: overallSummary.migratedAssets,
-      missingAssets: overallSummary.missingAssets
-    }
+      missingAssets: overallSummary.missingAssets,
+    },
   });
 
   // Save report to file

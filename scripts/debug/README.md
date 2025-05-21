@@ -1,6 +1,6 @@
 # Debug Scripts
 
-This directory contains scripts that are used for debugging and troubleshooting during development. 
+This directory contains scripts that are used for debugging and troubleshooting during development.
 These scripts are not part of the production workflow but are useful for:
 
 - Testing specific features in isolation

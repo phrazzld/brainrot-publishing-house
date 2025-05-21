@@ -14,9 +14,11 @@ After the initial migration, coming soon book covers were showing 404 errors. In
 ## Root Cause
 
 The `BlobPathService.adaptAssetPath` method was converting paths from the new format:
+
 - `assets/the-divine-comedy-inferno/images/inferno-01.png`
 
 To the old format:
+
 - `books/the-divine-comedy-inferno/images/inferno-01.png`
 
 ## Solution Implemented
@@ -28,16 +30,19 @@ To the old format:
 ## Code Changes
 
 ### utils/assetPathMapping.ts
+
 - Added mappings for all 13 coming soon book covers
 - Fixed placeholder image path mapping
 
 ### utils/getBlobUrl.ts
+
 - Added pattern matching to preserve new format asset paths
 - Prevents BlobPathService from converting these paths to old format
 
 ## Verification Results
 
 All 13 coming soon book covers are now accessible:
+
 - ✓ pride-and-prejudice
 - ✓ paradise-lost
 - ✓ meditations
@@ -53,9 +58,11 @@ All 13 coming soon book covers are now accessible:
 - ✓ bhagavad-gita
 
 ## Files Modified
+
 1. `/utils/assetPathMapping.ts` - Added mappings for all coming soon covers
 2. `/utils/getBlobUrl.ts` - Added pattern detection for new format paths
 3. Created verification scripts to ensure all covers are accessible
 
 ## Status
+
 ✅ Complete - All coming soon book covers now display correctly

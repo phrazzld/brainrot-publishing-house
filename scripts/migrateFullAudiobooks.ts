@@ -551,17 +551,17 @@ async function main() {
       migrated: result.migrated,
       failed: result.failed,
       skipped: result.skipped,
-      details: result.details.map(d => ({
+      details: result.details.map((d) => ({
         bookSlug: d.bookSlug,
         action: d.action,
-        error: d.error
-      }))
+        error: d.error,
+      })),
     });
-    
+
     // Log details for each book
     migrationLogger.info({
       msg: 'Migration details by book',
-      books: result.details.map(d => {
+      books: result.details.map((d) => {
         let status = '';
         if (d.action === 'migrated') {
           status = 'Successfully migrated';
@@ -577,32 +577,35 @@ async function main() {
         return {
           slug: d.bookSlug,
           status,
-          action: d.action
+          action: d.action,
         };
-      })
+      }),
     });
 
     if (options.dryRun) {
-      const toMigrateCount = result.details.filter(d => 
-        (d.action !== 'failed' && d.action !== 'skipped') || d.error === 'No chapters found'
+      const toMigrateCount = result.details.filter(
+        (d) => (d.action !== 'failed' && d.action !== 'skipped') || d.error === 'No chapters found'
       ).length;
-      
+
       migrationLogger.info({
         msg: 'Dry run completed',
         migrateCount: toMigrateCount,
         booksToMigrate: result.details
-          .filter(d => (d.action !== 'failed' && d.action !== 'skipped') || d.error === 'No chapters found')
-          .filter(d => d.action !== 'failed')
-          .map(d => d.bookSlug)
+          .filter(
+            (d) =>
+              (d.action !== 'failed' && d.action !== 'skipped') || d.error === 'No chapters found'
+          )
+          .filter((d) => d.action !== 'failed')
+          .map((d) => d.bookSlug),
       });
     }
 
     process.exit(result.success ? 0 : 1);
   } catch (error) {
-    migrationLogger.error({ 
-      msg: 'Migration failed', 
+    migrationLogger.error({
+      msg: 'Migration failed',
       error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined
+      stack: error instanceof Error ? error.stack : undefined,
     });
     process.exit(1);
   }
@@ -611,10 +614,10 @@ async function main() {
 // Run if called directly
 if (process.argv[1] === new URL(import.meta.url).pathname) {
   main().catch((error) => {
-    migrationLogger.error({ 
-      msg: 'Unhandled error in main execution', 
+    migrationLogger.error({
+      msg: 'Unhandled error in main execution',
       error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined
+      stack: error instanceof Error ? error.stack : undefined,
     });
     process.exit(1);
   });
