@@ -527,13 +527,13 @@ This TODO list details the tasks required to fully migrate all asset management 
     - [x] Update translations type handling across verification scripts
   - [x] Dependencies: none
 
-- [~] **T042: Systematically update max-depth violations in search scripts**
+- [x] **T042: Systematically update max-depth violations in search scripts**
   - [x] Fix nested blocks in searchAllImages.ts (line 67)
-  - [ ] Refactor verification scripts to reduce nesting depth:
-    - [ ] Apply extraction pattern similar to the one used in T037
-    - [ ] Extract helper functions to flatten nested conditionals
-    - [ ] Review and refactor loop structures
-  - [ ] Dependencies: none
+  - [x] Refactor verification scripts to reduce nesting depth:
+    - [x] Apply extraction pattern similar to the one used in T037
+    - [x] Extract helper functions to flatten nested conditionals
+    - [x] Review and refactor loop structures
+  - [x] Dependencies: none
 
 - [ ] **T043: Fix Response type compatibility with mocks in tests**
   - [ ] Update fetchTextWithFallback.test.ts to fix MockResponse conversion issues:

@@ -88,13 +88,14 @@ async function verifyAsset(
       exists,
       type: assetType,
     };
-  } catch (error) {
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
     logger.error({
       msg: `Error checking asset in blob storage`,
       path: assetPath,
       type: assetType,
       bookSlug,
-      error,
+      error: errorMessage,
     });
 
     return {
@@ -108,19 +109,15 @@ async function verifyAsset(
 /**
  * Process and verify all assets for a single book
  */
-async function verifyBookAssets(
-  book: {
-    slug: string;
-    title: string;
-    coverImage: string;
-    chapters: Array<{ text: string; audioSrc?: string }>;
-  },
-  counters: { totalAssets: number; migratedAssets: number }
-): Promise<BookVerificationResult> {
-  logger.info({ msg: `Verifying book assets`, bookTitle: book.title, bookSlug: book.slug });
-
-  // Initialize book result
-  const bookResult: BookVerificationResult = {
+/**
+ * Initializes an empty book verification result
+ */
+function initializeBookResult(book: {
+  slug: string;
+  title: string;
+  coverImage: string;
+}): BookVerificationResult {
+  return {
     slug: book.slug,
     title: book.title,
     coverImage: {
@@ -137,44 +134,73 @@ async function verifyBookAssets(
       coverImageMigrated: false,
     },
   };
+}
+
+/**
+ * Update book result summary based on asset verification
+ */
+function updateBookSummary(
+  bookResult: BookVerificationResult,
+  assetResult: AssetVerificationResult,
+  isBookCover: boolean = false
+): void {
+  if (assetResult.exists) {
+    bookResult.summary.migrated++;
+    if (isBookCover) {
+      bookResult.summary.coverImageMigrated = true;
+    }
+  } else {
+    bookResult.summary.missing++;
+  }
+}
+
+/**
+ * Verify a chapter's assets and update the book result
+ */
+async function verifyChapterAssets(
+  chapter: { text: string; audioSrc?: string },
+  bookSlug: string,
+  bookResult: BookVerificationResult,
+  counters: { totalAssets: number; migratedAssets: number }
+): Promise<void> {
+  // Verify chapter text
+  bookResult.summary.total++;
+  const chapterResult = await verifyAsset(chapter.text, 'chapter', bookSlug, counters);
+  bookResult.chapters.push(chapterResult);
+  updateBookSummary(bookResult, chapterResult);
+
+  // Verify audio if available
+  if (chapter.audioSrc) {
+    bookResult.summary.total++;
+    const audioResult = await verifyAsset(chapter.audioSrc, 'audio', bookSlug, counters);
+    bookResult.audio.push(audioResult);
+    updateBookSummary(bookResult, audioResult);
+  }
+}
+
+async function verifyBookAssets(
+  book: {
+    slug: string;
+    title: string;
+    coverImage: string;
+    chapters: Array<{ text: string; audioSrc?: string }>;
+  },
+  counters: { totalAssets: number; migratedAssets: number }
+): Promise<BookVerificationResult> {
+  logger.info({ msg: `Verifying book assets`, bookTitle: book.title, bookSlug: book.slug });
+
+  // Initialize book result
+  const bookResult = initializeBookResult(book);
 
   // Verify cover image
   bookResult.summary.total++;
   const coverResult = await verifyAsset(book.coverImage, 'cover', book.slug, counters);
   bookResult.coverImage = coverResult;
-
-  if (coverResult.exists) {
-    bookResult.summary.migrated++;
-    bookResult.summary.coverImageMigrated = true;
-  } else {
-    bookResult.summary.missing++;
-  }
+  updateBookSummary(bookResult, coverResult, true);
 
   // Verify chapters and audio
   for (const chapter of book.chapters) {
-    // Verify chapter text
-    bookResult.summary.total++;
-    const chapterResult = await verifyAsset(chapter.text, 'chapter', book.slug, counters);
-    bookResult.chapters.push(chapterResult);
-
-    if (chapterResult.exists) {
-      bookResult.summary.migrated++;
-    } else {
-      bookResult.summary.missing++;
-    }
-
-    // Verify audio if available
-    if (chapter.audioSrc) {
-      bookResult.summary.total++;
-      const audioResult = await verifyAsset(chapter.audioSrc, 'audio', book.slug, counters);
-      bookResult.audio.push(audioResult);
-
-      if (audioResult.exists) {
-        bookResult.summary.migrated++;
-      } else {
-        bookResult.summary.missing++;
-      }
-    }
+    await verifyChapterAssets(chapter, book.slug, bookResult, counters);
   }
 
   return bookResult;

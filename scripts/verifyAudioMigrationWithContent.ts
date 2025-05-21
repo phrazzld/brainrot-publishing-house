@@ -59,6 +59,65 @@ function isValidAudioFile(fileInfo: { size: number; contentType?: string }): boo
 }
 
 /**
+ * Handle case where audio path is missing
+ */
+function handleMissingAudioPath(
+  bookSlug: string,
+  stats: { successful: number; failed: number }
+): VerificationResult {
+  stats.failed++;
+  return {
+    bookSlug,
+    audioPath: '',
+    blobUrl: '',
+    exists: false,
+    error: 'No audio path provided',
+  };
+}
+
+/**
+ * Process file info and update statistics
+ */
+function processFileInfo(
+  fileInfo: { size: number; contentType?: string },
+  bookSlug: string,
+  blobUrl: string,
+  stats: { successful: number; failed: number }
+): boolean {
+  // Check if this is a valid audio file
+  const validAudio = isValidAudioFile(fileInfo);
+
+  if (validAudio) {
+    logger.info({
+      msg: 'Valid audio file exists',
+      url: blobUrl,
+      size: fileInfo.size,
+      contentType: fileInfo.contentType,
+      bookSlug,
+    });
+    stats.successful++;
+  } else if (fileInfo.size > 0) {
+    logger.warn({
+      msg: 'Placeholder audio file exists',
+      url: blobUrl,
+      size: fileInfo.size,
+      contentType: fileInfo.contentType,
+      bookSlug,
+    });
+    stats.successful++; // Count as successful but warn
+  } else {
+    logger.error({
+      msg: 'File exists but is empty',
+      url: blobUrl,
+      bookSlug,
+    });
+    stats.failed++;
+  }
+
+  return validAudio;
+}
+
+/**
  * Verify a single audio file
  */
 async function verifyAudioFile(
@@ -68,14 +127,7 @@ async function verifyAudioFile(
   stats: { successful: number; failed: number } = { successful: 0, failed: 0 }
 ): Promise<VerificationResult> {
   if (!audioPath) {
-    stats.failed++;
-    return {
-      bookSlug,
-      audioPath: '',
-      blobUrl: '',
-      exists: false,
-      error: 'No audio path provided',
-    };
+    return handleMissingAudioPath(bookSlug, stats);
   }
 
   try {
@@ -85,35 +137,8 @@ async function verifyAudioFile(
     // Check if the file exists and get its properties
     const fileInfo = await blobService.getFileInfo(blobUrl);
 
-    // Check if this is a valid audio file
-    const validAudio = isValidAudioFile(fileInfo);
-
-    if (validAudio) {
-      logger.info({
-        msg: 'Valid audio file exists',
-        url: blobUrl,
-        size: fileInfo.size,
-        contentType: fileInfo.contentType,
-        bookSlug,
-      });
-      stats.successful++;
-    } else if (fileInfo.size > 0) {
-      logger.warn({
-        msg: 'Placeholder audio file exists',
-        url: blobUrl,
-        size: fileInfo.size,
-        contentType: fileInfo.contentType,
-        bookSlug,
-      });
-      stats.successful++; // Count as successful but warn
-    } else {
-      logger.error({
-        msg: 'File exists but is empty',
-        url: blobUrl,
-        bookSlug,
-      });
-      stats.failed++;
-    }
+    // Process file info and update stats
+    const validAudio = processFileInfo(fileInfo, bookSlug, blobUrl, stats);
 
     // Create and return result
     return {
@@ -125,12 +150,13 @@ async function verifyAudioFile(
       contentType: fileInfo.contentType,
       isValidAudioFile: validAudio,
     };
-  } catch (error) {
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
     logger.error({
       msg: 'Audio file not found',
       path: audioPath,
       bookSlug,
-      error,
+      error: errorMessage,
     });
 
     stats.failed++;

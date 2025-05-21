@@ -41,6 +41,40 @@ async function checkAudioFileExists(blobUrl: string): Promise<boolean> {
 /**
  * Process a single audio file and verify its existence
  */
+/**
+ * Normalize path and construct blob URL
+ * @param audioPath The audio file path
+ * @param blobBaseUrl The base URL for blob storage
+ * @returns Full blob URL
+ */
+function constructBlobUrl(audioPath: string, blobBaseUrl: string): string {
+  // Get the path part without domain
+  const pathOnly = audioPath.replace(/^https?:\/\/[^/]+\//, '');
+
+  // Construct the correct URL with the actual Blob base URL
+  return `${blobBaseUrl}/${pathOnly}`;
+}
+
+/**
+ * Update counters based on verification result
+ * @param exists Whether the file exists
+ * @param blobUrl URL that was checked
+ * @param counters Counters to update
+ */
+function updateCounters(
+  exists: boolean,
+  blobUrl: string,
+  counters: { total: number; successful: number; failed: number }
+): void {
+  if (exists) {
+    counters.successful++;
+    logger.info({ msg: 'Audio file exists', url: blobUrl });
+  } else {
+    counters.failed++;
+    logger.error({ msg: 'Audio file not found', url: blobUrl });
+  }
+}
+
 async function verifyAudioFile(
   audioPath: string,
   bookSlug: string,
@@ -50,22 +84,14 @@ async function verifyAudioFile(
   counters.total++;
 
   try {
-    // Get the path part without domain
-    const pathOnly = audioPath.replace(/^https?:\/\/[^/]+\//, '');
-
-    // Construct the correct URL with the actual Blob base URL
-    const blobUrl = `${blobBaseUrl}/${pathOnly}`;
+    // Construct the blob URL
+    const blobUrl = constructBlobUrl(audioPath, blobBaseUrl);
 
     // Check if the file exists
     const exists = await checkAudioFileExists(blobUrl);
 
-    if (exists) {
-      counters.successful++;
-      logger.info({ msg: 'Audio file exists', url: blobUrl });
-    } else {
-      counters.failed++;
-      logger.error({ msg: 'Audio file not found', url: blobUrl });
-    }
+    // Update counters based on result
+    updateCounters(exists, blobUrl, counters);
 
     return {
       bookSlug,
@@ -73,7 +99,7 @@ async function verifyAudioFile(
       blobUrl,
       exists,
     };
-  } catch (error) {
+  } catch (error: unknown) {
     counters.failed++;
     const errorMessage = error instanceof Error ? error.message : String(error);
     logger.error({ msg: 'Error verifying audio file', path: audioPath, error: errorMessage });
