@@ -561,19 +561,19 @@ This TODO list details the tasks required to fully migrate all asset management 
   - [x] Added comprehensive test suite for ScriptPathUtils
   - [x] Dependencies: none
 
-- [ ] **T045: COMPLEX - Address technical debt in test files**
+- [x] **T045: COMPLEX - Address technical debt in test files**
 
-  - [ ] Reorganize test mocks for better type safety:
-    - [ ] Create proper TypeScript interfaces for all mocked services
-    - [ ] Update jest mocks to use type-safe mock implementations
-    - [ ] Standardize mock creation and initialization
-  - [ ] Refactor test file structure to improve organization:
-    - [ ] Group tests by functionality rather than implementation details
-    - [ ] Create shared test utilities with proper typing
-  - [ ] Improve test assertions with type safety:
-    - [ ] Replace any types with proper interfaces
-    - [ ] Use type predicates where appropriate
-  - [ ] Dependencies: T039, T043
+  - [x] Reorganize test mocks for better type safety:
+    - [x] Create proper TypeScript interfaces for all mocked services
+    - [x] Update jest mocks to use type-safe mock implementations
+    - [x] Standardize mock creation and initialization
+  - [x] Refactor test file structure to improve organization:
+    - [x] Group tests by functionality rather than implementation details
+    - [x] Create shared test utilities with proper typing
+  - [x] Improve test assertions with type safety:
+    - [x] Replace any types with proper interfaces
+    - [x] Use type predicates where appropriate
+  - [x] Dependencies: T039, T043
 
 - [ ] **T046: Update asset imports and logger initialization across all scripts**
 
@@ -595,6 +595,17 @@ This TODO list details the tasks required to fully migrate all asset management 
     - [ ] Add proper TypeScript configurations for ESM modules
     - [ ] Ensure consistent approach for resolving file paths in scripts
     - [ ] Test module loading in both development and production environments
+  - [ ] Dependencies: None
+  
+- [ ] **T051: Fix linting issues in migration scripts**
+
+  - [ ] Address console.log usage in migration scripts:
+    - [ ] Replace with structured logger in migrateBookCoverImages.ts
+    - [ ] Replace with structured logger in migrateAudioFilesEnhanced.ts
+    - [ ] Add allowance for migration scripts in ESLint config if appropriate
+  - [ ] Fix any/unknown type usage in migration scripts
+  - [ ] Refactor complex functions into smaller, more focused functions
+  - [ ] Fix max-depth violations in scripts
   - [ ] Dependencies: None
 
 - [ ] **T048: Apply code formatting standards consistently across codebase**
