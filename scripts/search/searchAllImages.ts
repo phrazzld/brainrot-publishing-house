@@ -1,15 +1,12 @@
 /**
- * TODO: Replace console.log with logger
- *
  * Search for all images in blob storage
  */
-import dotenv from 'dotenv';
-import path from 'path';
+import * as dotenv from 'dotenv';
+import * as path from 'path';
 
-// Let me also test what happens with the current getAssetUrl function
-import { getAssetUrl } from '../utils';
-import { logger } from '../utils/logger';
-import { blobService } from '../utils/services/BlobService';
+import { getAssetUrl } from '../../utils';
+import { logger } from '../../utils/logger';
+import { blobService } from '../../utils/services/BlobService';
 
 // Load environment variables
 dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
@@ -59,23 +56,37 @@ async function searchImages() {
         `images/chapter-images/hamlet/${image}`,
       ];
 
-      for (const path of testPaths) {
-        try {
-          const url = blobService.getUrlForPath(path);
-          const response = await fetch(url, { method: 'HEAD' });
-
-          if (response.ok) {
-            // Extract common logic to reduce nesting depth
-            logger.info({ msg: `✓ Found: ${path}`, url });
-            continue;
-          }
-        } catch {
-          // Continue - silent catch for 404s
+      for (const imagePath of testPaths) {
+        const result = await checkImageExists(imagePath);
+        if (result.exists) {
+          logger.info({ msg: `✓ Found: ${imagePath}`, url: result.url });
         }
       }
     }
-  } catch (error) {
-    logger.error({ msg: 'Error searching images', error: error.message });
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    logger.error({ msg: 'Error searching images', error: errorMessage });
+  }
+}
+
+/**
+ * Check if an image exists at the given path
+ * @param imagePath Path to check
+ * @returns Object with exists flag and URL if found
+ */
+async function checkImageExists(imagePath: string): Promise<{ exists: boolean; url?: string }> {
+  try {
+    const url = blobService.getUrlForPath(imagePath);
+    const response = await fetch(url, { method: 'HEAD' });
+
+    if (response.ok) {
+      return { exists: true, url };
+    }
+
+    return { exists: false };
+  } catch {
+    // Silent catch for 404s
+    return { exists: false };
   }
 }
 
@@ -94,4 +105,8 @@ for (const path of testPaths) {
   console.log(`Output: ${getAssetUrl(path, true)}`);
 }
 
-searchImages().catch(console.error);
+searchImages().catch((error: unknown) => {
+  const errorMessage = error instanceof Error ? error.message : String(error);
+  logger.error({ msg: 'Unhandled error in search images', error: errorMessage });
+  process.exit(1);
+});
