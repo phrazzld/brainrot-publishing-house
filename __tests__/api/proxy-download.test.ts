@@ -1,4 +1,4 @@
-import { MockResponse } from '@/__mocks__/MockResponse';
+import { createSuccessResponse } from '@/__mocks__/MockResponse';
 import { proxyAssetDownload } from '@/app/api/download/proxyService';
 import { AssetError, AssetErrorType, AssetService, AssetType } from '@/types/assets';
 import { createRequestLogger } from '@/utils/logger';
@@ -88,7 +88,7 @@ jest.spyOn(global, 'clearTimeout').mockImplementation(() => {});
 
 // Mock response creation helper function
 const createMockResponseObject = (status = 200, statusText = 'OK', headers = {}) =>
-  new MockResponse('', {
+  createSuccessResponse('', {
     status,
     statusText,
     headers,
@@ -229,7 +229,7 @@ describe('Proxy Download Service', () => {
   function mockSuccessfulFetch(
     options: { headers?: Record<string, string>; extraProps?: Record<string, unknown> } = {}
   ) {
-    const mockResponse = new MockResponse('', {
+    const mockResponse = createSuccessResponse('', {
       status: 200,
       statusText: 'OK',
       headers: {
@@ -273,7 +273,8 @@ describe('Proxy Download Service', () => {
     contentType = 'application/json'
   ) {
     const errorBody = JSON.stringify({ error: 'Access denied' });
-    const mockResponse = new MockResponse(errorBody, {
+    // Create an error response with the custom content type
+    const mockResponse = createSuccessResponse(errorBody, {
       status,
       statusText,
       headers: {
