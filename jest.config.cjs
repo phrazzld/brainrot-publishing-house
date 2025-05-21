@@ -11,20 +11,6 @@ module.exports = {
     customExportConditions: [''],
   },
 
-  // Module handling
-  moduleNameMapper: {
-    // Handle module aliases
-    '^@/(.*)$': '<rootDir>/$1',
-
-    // Handle CSS imports (with CSS modules)
-    '\\.module\\.(css|sass|scss)$': 'identity-obj-proxy',
-
-    // Handle CSS imports (without CSS modules)
-    '\\.(css|sass|scss)$': '<rootDir>/__mocks__/styleMock.js',
-
-    // Handle image imports
-    '\\.(jpg|jpeg|png|gif|webp|svg)$': '<rootDir>/__mocks__/fileMock.js',
-  },
 
   // File patterns
   testMatch: [
@@ -39,15 +25,15 @@ module.exports = {
   transform: {
     // Use custom babel transformer for React components (TSX files)
     '^.+\\.tsx$': '<rootDir>/jest-babel-transformer.cjs',
-    // Use custom ESM transformer for script files in scripts/ directory
-    'scripts/.*\\.ts$': '<rootDir>/jest-esm-transformer.cjs',
+    // Use custom ESM transformer for script files in scripts/ directory and utils/paths.ts
+    '(scripts/.*|utils/paths)\\.ts$': '<rootDir>/jest-esm-transformer.cjs',
     // Use ts-jest for all other TypeScript files
     '^.+\\.ts$': [
       'ts-jest',
       {
         tsconfig: 'tsconfig.json',
         useESM: true,
-        isolatedModules: true,
+        extensionsToTreatAsEsm: ['.ts'],
       },
     ],
     // Use babel-jest for JavaScript files
@@ -66,6 +52,24 @@ module.exports = {
   transformIgnorePatterns: [
     '/node_modules/(?!(@vercel/blob|react|react-dom|wavesurfer.js|next|process|dotenv)/)',
   ],
+  
+  // Module name mapping for node: prefixed imports
+  moduleNameMapper: {
+    // Handle module aliases
+    '^@/(.*)$': '<rootDir>/$1',
+    
+    // Handle node: prefixed imports
+    '^node:(.*)$': '$1',
+
+    // Handle CSS imports (with CSS modules)
+    '\\.module\\.(css|sass|scss)$': 'identity-obj-proxy',
+
+    // Handle CSS imports (without CSS modules)
+    '\\.(css|sass|scss)$': '<rootDir>/__mocks__/styleMock.js',
+
+    // Handle image imports
+    '\\.(jpg|jpeg|png|gif|webp|svg)$': '<rootDir>/__mocks__/fileMock.js',
+  },
 
   // Handle ESM modules
   extensionsToTreatAsEsm: ['.ts', '.tsx'],

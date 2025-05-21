@@ -585,17 +585,17 @@ This TODO list details the tasks required to fully migrate all asset management 
     - [x] Ensure proper error handling during initialization
   - [x] Dependencies: T040
 
-- [ ] **T047: Fix script dependency loading and module resolution**
+- [x] **T047: Fix script dependency loading and module resolution**
 
-  - [ ] Standardize module import patterns:
-    - [ ] Use consistent import syntax across all files (ESM vs CommonJS)
-    - [ ] Fix relative path issues with imports
-    - [ ] Address node: prefix requirements for Node.js built-ins
-  - [ ] Update import.meta.url usage compatibility:
-    - [ ] Add proper TypeScript configurations for ESM modules
-    - [ ] Ensure consistent approach for resolving file paths in scripts
-    - [ ] Test module loading in both development and production environments
-  - [ ] Dependencies: None
+  - [x] Standardize module import patterns:
+    - [x] Use consistent import syntax across all files (ESM vs CommonJS)
+    - [x] Fix relative path issues with imports
+    - [x] Address node: prefix requirements for Node.js built-ins
+  - [x] Update import.meta.url usage compatibility:
+    - [x] Add proper TypeScript configurations for ESM modules
+    - [x] Ensure consistent approach for resolving file paths in scripts
+    - [x] Test module loading in both development and production environments
+  - [x] Dependencies: None
   
 - [ ] **T051: Fix linting issues in migration scripts**
 

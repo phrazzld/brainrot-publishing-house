@@ -1,25 +1,30 @@
 /**
  * Script to verify audio file migration
  */
-import * as dotenv from 'dotenv';
-import * as fs from 'fs/promises';
-import * as path from 'path';
-import { existsSync } from 'fs';
+import { config } from 'dotenv';
+import { existsSync } from 'node:fs';
+import { writeFile } from 'node:fs/promises';
+import path from 'node:path';
 
-import translations from '../translations';
-import { generateAssetUrl } from '../utils/ScriptPathUtils';
-import { createScriptLogger } from '../utils/createScriptLogger';
-import { adaptTranslation } from '../utils/migration/TranslationAdapter';
+import translations from '../translations/index.js';
+import { generateAssetUrl } from '../utils/ScriptPathUtils.js';
+import { createScriptLogger } from '../utils/createScriptLogger.js';
+import { adaptTranslation } from '../utils/migration/TranslationAdapter.js';
+import { getDirname, isMainModule, resolveFromModule } from '../utils/paths.js';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { blobService } from '../utils/services';
+import { blobService } from '../utils/services/index.js';
+
+// Initialize environment
+config({ path: path.resolve(process.cwd(), '.env.local') });
 
 // Create a script-specific logger instance
 const logger = createScriptLogger({
-  taskId: 'T046',
+  taskId: 'T047',
   context: 'verification',
 });
 
-dotenv.config({ path: '.env.local' });
+// Get current directory
+const __dirname = getDirname(import.meta.url);
 
 interface VerificationResult {
   bookSlug: string;
@@ -170,17 +175,20 @@ async function saveVerificationReport(
     results,
   };
 
-  // Generate report path
-  const reportPath = path.join(process.cwd(), 'reports', `audio-verification-${Date.now()}.json`);
+  // Generate report path using standardized path resolution
+  const reportPath = resolveFromModule(
+    import.meta.url,
+    `../reports/audio-verification-${Date.now()}.json`
+  );
 
   // Ensure reports directory exists
-  const reportsDir = path.join(process.cwd(), 'reports');
+  const reportsDir = path.dirname(reportPath);
   if (!existsSync(reportsDir)) {
-    await fs.mkdir(reportsDir, { recursive: true });
+    await import('node:fs/promises').then((fs) => fs.mkdir(reportsDir, { recursive: true }));
   }
 
   // Write report
-  await fs.writeFile(reportPath, JSON.stringify(report, null, 2));
+  await writeFile(reportPath, JSON.stringify(report, null, 2));
   logger.info({ msg: 'Verification report saved', path: reportPath });
 
   return reportPath;
@@ -242,7 +250,7 @@ async function verifyAudioMigration() {
 }
 
 // Run verification if executed directly
-if (require.main === module) {
+if (isMainModule(import.meta.url)) {
   verifyAudioMigration()
     .then(() => logger.info({ msg: 'Audio migration verification complete!' }))
     .catch((error) => {
