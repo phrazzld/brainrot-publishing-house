@@ -29,9 +29,19 @@ import readline from 'readline';
 
 import translations from '../translations';
 import { generateAssetUrl, generateBlobPath, generateFilename } from '../utils/ScriptPathUtils';
-import { blobService } from '../utils/services/BlobService';
+import { createScriptLogger } from '../utils/createScriptLogger';
+import { createServices } from '../utils/createServices';
 
 dotenv.config({ path: '.env.local' });
+
+// Initialize services with standardized logging
+const logger = createScriptLogger({
+  taskId: 'T046',
+  context: 'migration',
+});
+
+// Initialize services
+const { blobService } = createServices({ logger });
 
 // Constants
 const MIN_AUDIO_SIZE_KB = 100; // Minimum size in KB for a valid audio file
@@ -196,27 +206,40 @@ class EnhancedAudioMigrator {
    */
   public async run(): Promise<MigrationSummary> {
     this.startTime = new Date();
-    console.error(
-      `\n🎵 Starting enhanced audio files validation ${this.options.dryRun ? '(DRY RUN)' : ''}`
-    );
+    logger.info({
+      msg: `Starting enhanced audio files validation ${this.options.dryRun ? '(DRY RUN)' : ''}`,
+      operation: 'start',
+      dryRun: this.options.dryRun,
+    });
 
     try {
       // Get books to process
       const booksToProcess =
         this.options.books.length > 0 ? this.options.books : translations.map((book) => book.slug);
 
-      console.error(`Processing books: ${booksToProcess.join(', ')}`);
+      logger.info({
+        msg: `Processing books: ${booksToProcess.join(', ')}`,
+        operation: 'process_books',
+        books: booksToProcess,
+      });
 
       // Gather all audio files to process
       await this.gatherAudioFiles(booksToProcess);
 
       // Process each audio file with concurrency
       this.totalFiles = this.audioFiles.length;
-      console.error(`Found ${this.totalFiles} audio files to process`);
+      logger.info({
+        msg: `Found ${this.totalFiles} audio files to process`,
+        operation: 'files_found',
+        count: this.totalFiles,
+      });
 
       // Confirm operation before beginning
       if (!this.options.dryRun && !(await this.confirmOperation())) {
-        console.error('Operation cancelled by user');
+        logger.info({
+          msg: 'Operation cancelled by user',
+          operation: 'cancelled',
+        });
         process.exit(0);
       }
 
@@ -232,7 +255,12 @@ class EnhancedAudioMigrator {
 
         const promise = this.processAudioFile(audioFile)
           .catch((error) => {
-            console.error(`Error processing ${audioFile.blobPath}:`, error);
+            logger.error({
+              msg: `Error processing ${audioFile.blobPath}`,
+              operation: 'process_file',
+              path: audioFile.blobPath,
+              error: error instanceof Error ? error.message : String(error),
+            });
           })
           .finally(() => {
             this.semaphoreValue++;
@@ -246,7 +274,11 @@ class EnhancedAudioMigrator {
 
       // Wait for all remaining operations
       if (this.activePromises.length > 0) {
-        console.error(`Waiting for ${this.activePromises.length} remaining operations...`);
+        logger.info({
+          msg: `Waiting for ${this.activePromises.length} remaining operations...`,
+          operation: 'wait_remaining',
+          count: this.activePromises.length,
+        });
         await Promise.all(this.activePromises);
       }
 
@@ -257,7 +289,11 @@ class EnhancedAudioMigrator {
 
       return summary;
     } catch (error) {
-      console.error('Migration failed:', error instanceof Error ? error.message : String(error));
+      logger.error({
+        msg: 'Migration failed',
+        operation: 'migration_failed',
+        error: error instanceof Error ? error.message : String(error),
+      });
       throw error;
     }
   }

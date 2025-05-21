@@ -16,10 +16,13 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { execSync } from 'child_process';
 
-import { logger as _logger } from '../utils/logger';
+import { createScriptLogger } from '../utils/createScriptLogger';
 
 // Create a script-specific logger
-const scriptLogger = logger.child({ module: 'remove-console-statements' });
+const logger = createScriptLogger({
+  taskId: 'T046',
+  context: 'utility',
+});
 
 // File patterns to process
 const _FILE_PATTERNS = ['ts', 'tsx', 'js', 'jsx'].map((ext) => `--include="*.${ext}"`).join(' ');
@@ -68,7 +71,7 @@ function countConsoleStatements(): number {
     const output = execSync(cmd, { encoding: 'utf8' });
     return parseInt(output.trim(), 10);
   } catch (error) {
-    scriptLogger.error({
+    logger.error({
       msg: 'Error counting console statements:',
       operation: 'count_statements',
       error: error instanceof Error ? error.message : String(error),
@@ -85,7 +88,7 @@ function findFilesWithConsoleStatements(basePath: string = '.'): string[] {
     const output = execSync(cmd, { encoding: 'utf8' });
     return output.split('\n').filter(Boolean);
   } catch (error) {
-    scriptLogger.error({
+    logger.error({
       msg: 'Error finding files with console statements:',
       operation: 'find_files',
       error: error instanceof Error ? error.message : String(error),
@@ -131,7 +134,7 @@ function processFile(filePath: string, options: Options): FileEdit | null {
       (line) =>
         line.includes('logger.child') ||
         (line.includes('const') &&
-          (line.includes('moduleLogger') || line.includes('scriptLogger')) &&
+          (line.includes('moduleLogger') || line.includes('logger')) &&
           line.includes('logger'))
     );
 
@@ -180,8 +183,8 @@ function processFile(filePath: string, options: Options): FileEdit | null {
               // Create replacement with a context object
               const indentation = line.match(/^\s*/)?.[0] || '';
               const loggerName = hasLoggerInstance
-                ? line.includes('scriptLogger')
-                  ? 'scriptLogger'
+                ? line.includes('logger')
+                  ? 'logger'
                   : 'moduleLogger'
                 : 'logger';
               const contextObject = `{ msg: ${args}, operation: '${path.basename(filePath, path.extname(filePath))}' }`;
@@ -266,7 +269,7 @@ function processFile(filePath: string, options: Options): FileEdit | null {
       (fileEdit.replacements.length > 0 || fileEdit.loggerImportAdded)
     ) {
       fs.writeFileSync(filePath, newContent, 'utf8');
-      scriptLogger.info({
+      logger.info({
         msg: `Updated ${filePath} with ${fileEdit.replacements.length} replacements`,
         operation: 'update_file',
         filePath,
@@ -278,7 +281,7 @@ function processFile(filePath: string, options: Options): FileEdit | null {
 
     return fileEdit.replacements.length > 0 ? fileEdit : null;
   } catch (error) {
-    scriptLogger.error({
+    logger.error({
       msg: `Error processing file ${filePath}:`,
       operation: 'process_file',
       filePath,
@@ -293,7 +296,7 @@ async function main() {
   // Parse command line options
   const options = parseArgs();
 
-  scriptLogger.info({
+  logger.info({
     msg: `Starting console statement replacement with options: ${JSON.stringify(options)}`,
     operation: 'start',
     options,
@@ -304,7 +307,7 @@ async function main() {
 
   // Count console statements before processing
   const initialCount = countConsoleStatements();
-  scriptLogger.info({
+  logger.info({
     msg: `Found ${initialCount} console statements in the codebase.`,
     operation: 'count_initial',
     count: initialCount,
@@ -312,7 +315,7 @@ async function main() {
 
   // Find files with console statements
   const files = findFilesWithConsoleStatements(basePath);
-  scriptLogger.info({
+  logger.info({
     msg: `Found ${files.length} files with console statements.`,
     operation: 'found_files',
     count: files.length,
@@ -329,7 +332,7 @@ async function main() {
       edits.push(fileEdit);
 
       if (options.verbose) {
-        scriptLogger.debug({
+        logger.debug({
           msg: `File ${file}: ${fileEdit.replacements.length} replacements found`,
           operation: 'file_details',
           filePath: file,
@@ -341,7 +344,7 @@ async function main() {
         // Log detailed replacements if requested
         if (options.verbose) {
           for (const replacement of fileEdit.replacements) {
-            scriptLogger.debug({
+            logger.debug({
               msg: `Line ${replacement.line}: ${replacement.original.trim()} -> ${replacement.replacement.trim()}`,
               operation: 'replacement_detail',
               filePath: file,
@@ -381,7 +384,7 @@ Summary:
 - ${finalCount} console statements remain (may require manual intervention or more advanced patterns)
 `;
 
-  scriptLogger.info({
+  logger.info({
     msg: summary,
     operation: 'summary',
     replacedStatements: removedCount,
@@ -392,14 +395,14 @@ Summary:
 
   // If statements remain, list the files
   if (finalCount > 0 && options.verbose) {
-    scriptLogger.debug({
+    logger.debug({
       msg: 'Files with remaining console statements:',
       operation: 'remaining_files',
     });
 
     const remainingFiles = findFilesWithConsoleStatements(basePath);
     for (const file of remainingFiles) {
-      scriptLogger.debug({
+      logger.debug({
         msg: `- ${file}`,
         operation: 'remaining_file',
         filePath: file,
@@ -409,7 +412,7 @@ Summary:
 
   // Add usage hint if just reporting
   if (!options.fix) {
-    scriptLogger.info({
+    logger.info({
       msg: 'Run with --fix to apply the changes. Add --dry-run to see what would change without modifying files.',
       operation: 'usage_hint',
     });
@@ -418,7 +421,7 @@ Summary:
 
 // Run the script
 main().catch((error) => {
-  scriptLogger.error({
+  logger.error({
     msg: 'Error running script:',
     operation: 'fatal_error',
     error: error instanceof Error ? error.message : String(error),

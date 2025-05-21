@@ -8,13 +8,16 @@ import { existsSync } from 'fs';
 
 import translations from '../translations';
 import { generateAssetUrl } from '../utils/ScriptPathUtils';
-import { logger as rootLogger } from '../utils/logger';
+import { createScriptLogger } from '../utils/createScriptLogger';
 import { adaptTranslation } from '../utils/migration/TranslationAdapter';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { blobService } from '../utils/services';
 
 // Create a script-specific logger instance
-const logger = rootLogger.child({ script: 'verifyAudioMigration.ts' });
+const logger = createScriptLogger({
+  taskId: 'T046',
+  context: 'verification',
+});
 
 dotenv.config({ path: '.env.local' });
 

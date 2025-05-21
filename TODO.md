@@ -575,15 +575,15 @@ This TODO list details the tasks required to fully migrate all asset management 
     - [x] Use type predicates where appropriate
   - [x] Dependencies: T039, T043
 
-- [ ] **T046: Update asset imports and logger initialization across all scripts**
+- [x] **T046: Update asset imports and logger initialization across all scripts**
 
-  - [ ] Create standardized logger initialization pattern:
-    - [ ] Define consistent approach for creating script-specific loggers
-    - [ ] Add proper context and correlation IDs to all loggers
-  - [ ] Fix asset service imports and initialization:
-    - [ ] Update imports to use consistent path and naming
-    - [ ] Ensure proper error handling during initialization
-  - [ ] Dependencies: T040
+  - [x] Create standardized logger initialization pattern:
+    - [x] Define consistent approach for creating script-specific loggers
+    - [x] Add proper context and correlation IDs to all loggers
+  - [x] Fix asset service imports and initialization:
+    - [x] Update imports to use consistent path and naming
+    - [x] Ensure proper error handling during initialization
+  - [x] Dependencies: T040
 
 - [ ] **T047: Fix script dependency loading and module resolution**
 
