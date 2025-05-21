@@ -3,6 +3,10 @@
  * These fixtures provide standardized test data for verifying asset paths and access
  */
 import { AssetType } from '../types/assets';
+import {
+  createErrorResponse as createMockErrorResponse,
+  createSuccessResponse,
+} from './MockResponse';
 
 /**
  * Sample book slugs for testing
@@ -115,28 +119,25 @@ export const IMAGE_ASSETS = {
  */
 export const MOCK_BLOB_BASE_URL = 'https://test-blob-storage.com';
 
+// Note: These functions are kept for backward compatibility
+// Use createSuccessResponse and createErrorResponse from MockResponse.ts for new tests
+
 /**
  * Generates a mock HTTP response for a successful asset fetch
  * @param contentType The MIME type of the content
  * @param content The response content
  * @returns A mock Response object
+ * @deprecated Use createSuccessResponse from MockResponse.ts instead
  */
 export function createMockResponse(contentType: string, content: string | Blob): Response {
-  return {
-    ok: true,
-    status: 200,
-    statusText: 'OK',
-    headers: new Headers({
+  return createSuccessResponse(content, {
+    headers: {
       'Content-Type': contentType,
       'Content-Length':
         content instanceof Blob ? content.size.toString() : content.length.toString(),
       'Cache-Control': 'max-age=3600',
-    }),
-    text: async () => (content instanceof Blob ? '' : content),
-    json: async () => ({}),
-    blob: async () => (content instanceof Blob ? content : new Blob([content])),
-    arrayBuffer: async () => new ArrayBuffer(0),
-  } as Response;
+    },
+  });
 }
 
 /**
@@ -144,16 +145,8 @@ export function createMockResponse(contentType: string, content: string | Blob):
  * @param status The HTTP status code
  * @param statusText The status text message
  * @returns A mock Response object
+ * @deprecated Use createErrorResponse from MockResponse.ts instead
  */
 export function createErrorResponse(status: number, statusText: string): Response {
-  return {
-    ok: false,
-    status,
-    statusText,
-    headers: new Headers(),
-    text: async () => `Error ${status}: ${statusText}`,
-    json: async () => ({ error: statusText }),
-    blob: async () => new Blob([`Error ${status}: ${statusText}`]),
-    arrayBuffer: async () => new ArrayBuffer(0),
-  } as Response;
+  return createMockErrorResponse(status, statusText, `Error ${status}: ${statusText}`);
 }

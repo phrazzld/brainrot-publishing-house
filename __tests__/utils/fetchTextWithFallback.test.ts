@@ -1,3 +1,4 @@
+import { MockResponse } from '../../__mocks__/MockResponse';
 import { fetchTextWithFallback } from '../../utils/getBlobUrl';
 import { blobPathService } from '../../utils/services/BlobPathService';
 import { blobService } from '../../utils/services/BlobService';
@@ -17,54 +18,6 @@ jest.mock('../../utils/logger', () => ({
 
 // Mock global fetch
 global.fetch = jest.fn();
-
-// Create a mock Response class for tests
-class MockResponse implements Partial<Response> {
-  private _status: number;
-  private _body: string;
-  public readonly headers: Headers;
-  public readonly ok: boolean;
-  public readonly redirected: boolean;
-  public readonly type: ResponseType;
-  public readonly url: string;
-  public readonly bodyUsed: boolean;
-
-  constructor(body: string, init?: { status?: number }) {
-    this._body = body;
-    this._status = init?.status || 200;
-    this.headers = new Headers();
-    this.ok = this._status >= 200 && this._status < 300;
-    this.redirected = false;
-    this.type = 'basic';
-    this.url = '';
-    this.bodyUsed = false;
-  }
-
-  get status(): number {
-    return this._status;
-  }
-
-  async text(): Promise<string> {
-    return this._body;
-  }
-
-  async json(): Promise<unknown> {
-    return JSON.parse(this._body);
-  }
-
-  async arrayBuffer(): Promise<ArrayBuffer> {
-    const buffer = new TextEncoder().encode(this._body).buffer;
-    return buffer as ArrayBuffer;
-  }
-
-  async blob(): Promise<Blob> {
-    return new Blob([this._body]);
-  }
-
-  clone(): Response {
-    return this as unknown as Response;
-  }
-}
 
 describe('fetchTextWithFallback', () => {
   const mockBlobService = blobService as jest.Mocked<typeof blobService>;
@@ -108,6 +61,10 @@ describe('fetchTextWithFallback', () => {
     });
 
     it('should fallback to legacy blob URL when standardized path fails', async () => {
+      // Setup the Vercel base URL environment variable to ensure proper URL normalization
+      process.env.NEXT_PUBLIC_BLOB_BASE_URL = 'https://example.blob.vercel-storage.com';
+
+      // Test data
       const legacyPath = 'https://public.blob.vercel-storage.com/assets/hamlet/text/act-1.txt';
       const standardizedPath = 'assets/text/hamlet/brainrot-act-01.txt';
       const standardizedBlobUrl =
@@ -116,36 +73,48 @@ describe('fetchTextWithFallback', () => {
         'https://example.blob.vercel-storage.com/assets/hamlet/text/act-1.txt';
       const textContent = 'To be or not to be...';
 
+      // Setup mocks
       mockBlobPathService.convertLegacyPath.mockReturnValue(standardizedPath);
       mockBlobService.getUrlForPath.mockReturnValue(standardizedBlobUrl);
-      mockBlobService.fetchText
-        .mockRejectedValueOnce(new Error('Not found'))
-        .mockResolvedValueOnce(textContent);
 
+      // First call to fetchText (standardized path) fails, second call (legacy path) succeeds
+      mockBlobService.fetchText
+        .mockRejectedValueOnce(new Error('Not found')) // First call fails
+        .mockResolvedValueOnce(textContent); // Second call succeeds
+
+      // Execute function
       const result = await fetchTextWithFallback(legacyPath);
 
+      // Verify
       expect(mockBlobService.fetchText).toHaveBeenCalledTimes(2);
-      expect(mockBlobService.fetchText).toHaveBeenCalledWith(standardizedBlobUrl);
-      expect(mockBlobService.fetchText).toHaveBeenCalledWith(normalizedLegacyUrl);
+      expect(mockBlobService.fetchText).toHaveBeenNthCalledWith(1, standardizedBlobUrl);
+      expect(mockBlobService.fetchText).toHaveBeenNthCalledWith(2, normalizedLegacyUrl);
       expect(result).toBe(textContent);
     });
 
     it('should fallback to local path when standardized path fails', async () => {
+      // Test data
       const legacyPath = '/assets/hamlet/text/act-1.txt';
       const standardizedPath = 'assets/text/hamlet/brainrot-act-01.txt';
       const standardizedBlobUrl =
         'https://example.blob.vercel-storage.com/assets/text/hamlet/brainrot-act-01.txt';
       const textContent = 'To be or not to be...';
 
+      // Setup mocks
       mockBlobPathService.convertLegacyPath.mockReturnValue(standardizedPath);
       mockBlobService.getUrlForPath.mockReturnValue(standardizedBlobUrl);
-      mockBlobService.fetchText.mockRejectedValue(new Error('Not found'));
-      mockFetch.mockResolvedValue(
-        new MockResponse(textContent, { status: 200 }) as unknown as Response
-      );
 
+      // BlobService.fetchText will always fail
+      mockBlobService.fetchText.mockRejectedValue(new Error('Not found'));
+
+      // But fetch will succeed with our custom response
+      const successResponse = new MockResponse(textContent, { status: 200 });
+      mockFetch.mockResolvedValue(successResponse);
+
+      // Execute
       const result = await fetchTextWithFallback(legacyPath);
 
+      // Verify
       expect(mockBlobService.fetchText).toHaveBeenCalledWith(standardizedBlobUrl);
       expect(mockFetch).toHaveBeenCalledWith(legacyPath);
       expect(result).toBe(textContent);
@@ -154,37 +123,56 @@ describe('fetchTextWithFallback', () => {
 
   describe('error scenarios', () => {
     it('should throw error when all attempts fail', async () => {
+      // Test data
       const legacyPath = '/assets/hamlet/text/act-1.txt';
       const standardizedPath = 'assets/text/hamlet/brainrot-act-01.txt';
       const standardizedBlobUrl =
         'https://example.blob.vercel-storage.com/assets/text/hamlet/brainrot-act-01.txt';
 
+      // Setup mocks
       mockBlobPathService.convertLegacyPath.mockReturnValue(standardizedPath);
       mockBlobService.getUrlForPath.mockReturnValue(standardizedBlobUrl);
-      mockBlobService.fetchText.mockRejectedValue(new Error('Not found'));
-      mockFetch.mockResolvedValue(new MockResponse('', { status: 404 }) as unknown as Response);
 
+      // BlobService.fetchText will fail with "Not found"
+      mockBlobService.fetchText.mockRejectedValue(new Error('Not found'));
+
+      // And fetch will fail with a 404 response
+      const errorResponse = new MockResponse('', { status: 404, statusText: 'Not Found' });
+      // Need to ensure ok property is correctly set to false (default for 404, but being explicit)
+      Object.defineProperty(errorResponse, 'ok', { value: false });
+
+      mockFetch.mockResolvedValue(errorResponse);
+
+      // Execute and verify - should throw with the HTTP status error
       await expect(fetchTextWithFallback(legacyPath)).rejects.toThrow('HTTP error! Status: 404');
     });
 
     it('should throw error when standardized and legacy paths both fail', async () => {
+      // Test data with a fully qualified URL
       const legacyPath = 'https://public.blob.vercel-storage.com/assets/hamlet/text/act-1.txt';
       const standardizedPath = 'assets/text/hamlet/brainrot-act-01.txt';
       const standardizedBlobUrl =
         'https://example.blob.vercel-storage.com/assets/text/hamlet/brainrot-act-01.txt';
 
+      // Setup mocks
       mockBlobPathService.convertLegacyPath.mockReturnValue(standardizedPath);
       mockBlobService.getUrlForPath.mockReturnValue(standardizedBlobUrl);
+
+      // Both calls to fetchText will fail with different errors
       mockBlobService.fetchText
         .mockRejectedValueOnce(new Error('Not found - standard'))
         .mockRejectedValueOnce(new Error('Not found - legacy'));
 
-      await expect(fetchTextWithFallback(legacyPath)).rejects.toThrow('Not found - legacy');
+      // Execute and verify - should throw with the legacy error message
+      await expect(fetchTextWithFallback(legacyPath)).rejects.toThrow(
+        'Failed to fetch text: Not found - legacy'
+      );
     });
   });
 
   describe('URL normalization', () => {
     it('should normalize Vercel blob URLs to tenant-specific domains', async () => {
+      // Test data with public Vercel domain
       const legacyPath = 'https://public.blob.vercel-storage.com/assets/hamlet/text/act-1.txt';
       const standardizedPath = 'assets/text/hamlet/brainrot-act-01.txt';
       const standardizedBlobUrl =
@@ -193,19 +181,25 @@ describe('fetchTextWithFallback', () => {
         'https://example.blob.vercel-storage.com/assets/hamlet/text/act-1.txt';
       const textContent = 'To be or not to be...';
 
+      // Setup mocks
       mockBlobPathService.convertLegacyPath.mockReturnValue(standardizedPath);
       mockBlobService.getUrlForPath.mockReturnValue(standardizedBlobUrl);
+
+      // First attempt fails, second succeeds
       mockBlobService.fetchText
-        .mockRejectedValueOnce(new Error('Not found'))
+        .mockRejectedValueOnce(new Error('Not found - standard'))
         .mockResolvedValueOnce(textContent);
 
+      // Execute
       const result = await fetchTextWithFallback(legacyPath);
 
-      expect(mockBlobService.fetchText).toHaveBeenCalledWith(normalizedLegacyUrl);
+      // Verify the URL was normalized from public to tenant-specific domain
+      expect(mockBlobService.fetchText).toHaveBeenNthCalledWith(2, normalizedLegacyUrl);
       expect(result).toBe(textContent);
     });
 
     it('should handle custom base URLs', async () => {
+      // Test data
       const legacyPath = '/assets/hamlet/text/act-1.txt';
       const standardizedPath = 'assets/text/hamlet/brainrot-act-01.txt';
       const customBaseUrl = 'https://custom.blob.example.com';
@@ -213,16 +207,20 @@ describe('fetchTextWithFallback', () => {
         'https://custom.blob.example.com/assets/text/hamlet/brainrot-act-01.txt';
       const textContent = 'To be or not to be...';
 
+      // Setup mocks
       mockBlobPathService.convertLegacyPath.mockReturnValue(standardizedPath);
       mockBlobService.getUrlForPath.mockReturnValue(standardizedBlobUrl);
       mockBlobService.fetchText.mockResolvedValue(textContent);
 
+      // Execute with custom base URL
       const result = await fetchTextWithFallback(legacyPath, { baseUrl: customBaseUrl });
 
+      // Verify custom base URL was used
       expect(mockBlobService.getUrlForPath).toHaveBeenCalledWith(standardizedPath, {
         baseUrl: customBaseUrl,
         noCache: undefined,
       });
+      expect(mockBlobService.fetchText).toHaveBeenCalledWith(standardizedBlobUrl);
       expect(result).toBe(textContent);
     });
   });

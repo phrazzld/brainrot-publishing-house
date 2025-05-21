@@ -1,3 +1,4 @@
+import { MockResponse } from '@/__mocks__/MockResponse';
 import { proxyAssetDownload } from '@/app/api/download/proxyService';
 import { AssetError, AssetErrorType, AssetService, AssetType } from '@/types/assets';
 import { createRequestLogger } from '@/utils/logger';
@@ -85,23 +86,13 @@ jest.spyOn(global, 'setTimeout').mockImplementation((_fn) => {
 // Mock clearTimeout
 jest.spyOn(global, 'clearTimeout').mockImplementation(() => {});
 
-// Mock response creation helper functions
-const createMockResponseObject = (status = 200, statusText = 'OK', headers = {}) => ({
-  status,
-  statusText,
-  headers,
-  ok: status >= 200 && status < 300,
-  type: 'basic',
-  url: '',
-  redirected: false,
-  bodyUsed: false,
-  clone: jest.fn().mockReturnThis(),
-  json: jest.fn().mockResolvedValue({}),
-  text: jest.fn().mockResolvedValue(''),
-  arrayBuffer: jest.fn().mockResolvedValue(new ArrayBuffer(0)),
-  blob: jest.fn().mockResolvedValue(new Blob()),
-  formData: jest.fn().mockResolvedValue(new FormData()),
-});
+// Mock response creation helper function
+const createMockResponseObject = (status = 200, statusText = 'OK', headers = {}) =>
+  new MockResponse('', {
+    status,
+    statusText,
+    headers,
+  });
 
 // Mock NextResponse
 jest.mock('next/server', () => {
@@ -238,18 +229,42 @@ describe('Proxy Download Service', () => {
   function mockSuccessfulFetch(
     options: { headers?: Record<string, string>; extraProps?: Record<string, unknown> } = {}
   ) {
-    mockFetch.mockResolvedValue({
-      ok: true,
+    const mockResponse = new MockResponse('', {
       status: 200,
       statusText: 'OK',
-      headers: createMockHeaders({
+      headers: {
         'content-type': 'audio/mpeg',
         'content-length': '1000000',
         ...(options.headers || {}),
-      }),
-      body: createMockStream(),
-      ...(options.extraProps || {}),
+      },
     });
+
+    // Add a custom body if provided
+    if (options.extraProps?.body) {
+      Object.defineProperty(mockResponse, 'body', {
+        value: options.extraProps.body,
+        writable: false,
+      });
+    } else {
+      Object.defineProperty(mockResponse, 'body', {
+        value: createMockStream(),
+        writable: false,
+      });
+    }
+
+    // Add any other custom properties
+    if (options.extraProps) {
+      Object.entries(options.extraProps)
+        .filter(([key]) => key !== 'body')
+        .forEach(([key, value]) => {
+          Object.defineProperty(mockResponse, key, {
+            value,
+            writable: false,
+          });
+        });
+    }
+
+    mockFetch.mockResolvedValue(mockResponse);
   }
 
   function mockFailedFetch(
@@ -257,19 +272,22 @@ describe('Proxy Download Service', () => {
     statusText = 'Forbidden',
     contentType = 'application/json'
   ) {
-    mockFetch.mockResolvedValue({
-      ok: false,
+    const errorBody = JSON.stringify({ error: 'Access denied' });
+    const mockResponse = new MockResponse(errorBody, {
       status,
       statusText,
-      headers: createMockHeaders({
+      headers: {
         'content-type': contentType,
-      }),
-      text: jest.fn().mockResolvedValue(JSON.stringify({ error: 'Access denied' })),
-      clone: function () {
-        return this;
       },
-      body: createMockStream(),
     });
+
+    // Add stream body
+    Object.defineProperty(mockResponse, 'body', {
+      value: createMockStream(),
+      writable: false,
+    });
+
+    mockFetch.mockResolvedValue(mockResponse);
   }
 
   describe('proxyAssetDownload', () => {

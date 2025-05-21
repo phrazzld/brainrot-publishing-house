@@ -4,14 +4,13 @@
  * This test suite verifies the correctness of asset paths and access using the
  * standardized path structure from the migration project.
  */
+import { createErrorResponse, createSuccessResponse } from '../../__mocks__/MockResponse';
 import {
   AUDIO_ASSETS,
   IMAGE_ASSETS,
   MOCK_BLOB_BASE_URL,
   TEST_BOOKS,
   TEXT_ASSETS,
-  createErrorResponse,
-  createMockResponse,
 } from '../../__mocks__/assetFixtures';
 import { AssetType } from '../../types/assets';
 import { assetPathService } from '../../utils/services/AssetPathService';
@@ -230,7 +229,9 @@ describe('Asset Verification', () => {
     test('successfully fetches text asset content', async () => {
       // Mock successful text response
       mockFetchImplementation.mockResolvedValueOnce(
-        createMockResponse('text/plain', TEXT_ASSETS.BRAINROT_CHAPTER.content)
+        createSuccessResponse(TEXT_ASSETS.BRAINROT_CHAPTER.content, {
+          headers: { 'Content-Type': 'text/plain' },
+        })
       );
 
       // Generate URL

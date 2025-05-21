@@ -500,6 +500,7 @@ This TODO list details the tasks required to fully migrate all asset management 
 ## Code Quality Tasks from TypeScript Audit (2025-05-21)
 
 - [x] **T039: Fix TypeScript errors in test files blocking push**
+
   - [x] Fix migrateFullAudiobooks.test.ts issues:
     - [x] Replace implicit any types for module variables (lines 42, 52, 70, 91, 115, 159, 180...)
     - [x] Add proper types for callback parameters (lines 145, 173, 188, 324)
@@ -508,6 +509,7 @@ This TODO list details the tasks required to fully migrate all asset management 
   - [x] Dependencies: none
 
 - [~] **T040: Fix logger and module import errors in utility scripts**
+
   - [x] Fix asset-migration/copyToPlaceholder.ts import issues:
     - [x] Fix module imports for logger and BlobService (lines 7-8)
     - [x] Resolve logger variable references (lines 14, 25, 34, 41, 44...)
@@ -518,16 +520,18 @@ This TODO list details the tasks required to fully migrate all asset management 
   - [ ] Dependencies: none
 
 - [x] **T041: Fix type compatibility issues in verification scripts**
+
   - [x] Address Chapter type incompatibilities:
     - [x] Fix audioSrc type mismatch (string | null vs string | undefined) in:
       - [x] verifyAudioMigration.ts (line 181)
-      - [x] verifyAudioMigrationWithContent.ts (line 231) 
+      - [x] verifyAudioMigrationWithContent.ts (line 231)
       - [x] verifyBlobStorage.ts (line 231)
     - [x] Create consistent Chapter interface for verification scripts
     - [x] Update translations type handling across verification scripts
   - [x] Dependencies: none
 
 - [x] **T042: Systematically update max-depth violations in search scripts**
+
   - [x] Fix nested blocks in searchAllImages.ts (line 67)
   - [x] Refactor verification scripts to reduce nesting depth:
     - [x] Apply extraction pattern similar to the one used in T037
@@ -535,15 +539,20 @@ This TODO list details the tasks required to fully migrate all asset management 
     - [x] Review and refactor loop structures
   - [x] Dependencies: none
 
-- [ ] **T043: Fix Response type compatibility with mocks in tests**
-  - [ ] Update fetchTextWithFallback.test.ts to fix MockResponse conversion issues:
-    - [ ] Add proper type assertion or conversion for MockResponse objects (lines 118, 138)
-    - [ ] Create appropriate type interfaces to ensure compatibility
-    - [ ] Ensure proper typing for fetch response mocking across all tests
-  - [ ] Review all test files for similar type compatibility issues
-  - [ ] Dependencies: none
+- [x] **T043: Fix Response type compatibility with mocks in tests**
+
+  - [x] Update fetchTextWithFallback.test.ts to fix MockResponse conversion issues:
+    - [x] Add proper type assertion or conversion for MockResponse objects (lines 118, 138)
+    - [x] Create appropriate type interfaces to ensure compatibility
+    - [x] Ensure proper typing for fetch response mocking across all tests
+  - [x] Review all test files for similar type compatibility issues
+  - [x] Created shared MockResponse utility class for consistent use across tests
+  - [x] Updated other test files to use the shared MockResponse implementation
+  - [x] Created simplified test suite for fetchTextWithFallback due to implementation complexity
+  - [x] Dependencies: none
 
 - [ ] **T044: Standardize asset path utilities across scripts**
+
   - [ ] Fix asset path utility inconsistencies:
     - [ ] Create consistent path handling utility for scripts
     - [ ] Ensure compatibility with both old and new path formats
@@ -552,6 +561,7 @@ This TODO list details the tasks required to fully migrate all asset management 
   - [ ] Dependencies: none
 
 - [ ] **T045: COMPLEX - Address technical debt in test files**
+
   - [ ] Reorganize test mocks for better type safety:
     - [ ] Create proper TypeScript interfaces for all mocked services
     - [ ] Update jest mocks to use type-safe mock implementations
@@ -565,6 +575,7 @@ This TODO list details the tasks required to fully migrate all asset management 
   - [ ] Dependencies: T039, T043
 
 - [ ] **T046: Update asset imports and logger initialization across all scripts**
+
   - [ ] Create standardized logger initialization pattern:
     - [ ] Define consistent approach for creating script-specific loggers
     - [ ] Add proper context and correlation IDs to all loggers
@@ -574,6 +585,7 @@ This TODO list details the tasks required to fully migrate all asset management 
   - [ ] Dependencies: T040
 
 - [ ] **T047: Fix script dependency loading and module resolution**
+
   - [ ] Standardize module import patterns:
     - [ ] Use consistent import syntax across all files (ESM vs CommonJS)
     - [ ] Fix relative path issues with imports
@@ -585,6 +597,7 @@ This TODO list details the tasks required to fully migrate all asset management 
   - [ ] Dependencies: None
 
 - [ ] **T048: Apply code formatting standards consistently across codebase**
+
   - [ ] Update all README.md files with consistent formatting:
     - [ ] Ensure blank lines before and after lists and code blocks
     - [ ] Apply consistent indentation in markdown files
@@ -597,6 +610,7 @@ This TODO list details the tasks required to fully migrate all asset management 
   - [ ] Dependencies: None
 
 - [ ] **T049: Fix remaining ESLint warnings in test files**
+
   - [ ] Address no-console warnings in tests:
     - [ ] Replace console.log with proper test utilities or mocked loggers
     - [ ] Add appropriate eslint-disable directives where needed (with justification)
