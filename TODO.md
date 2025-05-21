@@ -517,15 +517,15 @@ This TODO list details the tasks required to fully migrate all asset management 
     - [ ] Update all scripts with correct logger references
   - [ ] Dependencies: none
 
-- [ ] **T041: Fix type compatibility issues in verification scripts**
-  - [ ] Address Chapter type incompatibilities:
-    - [ ] Fix audioSrc type mismatch (string | null vs string | undefined) in:
-      - [ ] verifyAudioMigration.ts (line 181)
-      - [ ] verifyAudioMigrationWithContent.ts (line 231) 
-      - [ ] verifyBlobStorage.ts (line 231)
-    - [ ] Create consistent Chapter interface for verification scripts
-    - [ ] Update translations type handling across verification scripts
-  - [ ] Dependencies: none
+- [x] **T041: Fix type compatibility issues in verification scripts**
+  - [x] Address Chapter type incompatibilities:
+    - [x] Fix audioSrc type mismatch (string | null vs string | undefined) in:
+      - [x] verifyAudioMigration.ts (line 181)
+      - [x] verifyAudioMigrationWithContent.ts (line 231) 
+      - [x] verifyBlobStorage.ts (line 231)
+    - [x] Create consistent Chapter interface for verification scripts
+    - [x] Update translations type handling across verification scripts
+  - [x] Dependencies: none
 
 - [ ] **T042: Systematically update max-depth violations in search scripts**
   - [ ] Fix nested blocks in searchAllImages.ts (line 67)

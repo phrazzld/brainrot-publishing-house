@@ -4,11 +4,12 @@
  * This script verifies that audio files exist in Blob storage and checks
  * that they are proper audio files (not just 1KB placeholders).
  */
-import fs from 'fs';
-import path from 'path';
+import * as fs from 'fs';
+import * as path from 'path';
 
 import translations from '../translations';
 import { logger as rootLogger } from '../utils/logger';
+import { adaptTranslation } from '../utils/migration/TranslationAdapter';
 import { blobService } from '../utils/services/BlobService';
 
 // Create script-specific logger
@@ -226,9 +227,10 @@ async function verifyAudioMigration(): Promise<void> {
   const results: VerificationResult[] = [];
   const stats = { totalFiles: 0, successful: 0, failed: 0 };
 
-  // Process each book in translations
-  for (const book of translations) {
-    const bookResults = await verifyBookAudioFiles(book, baseUrl, stats);
+  // Process each book in translations with adapted type
+  for (const translation of translations) {
+    const adaptedBook = adaptTranslation(translation);
+    const bookResults = await verifyBookAudioFiles(adaptedBook, baseUrl, stats);
     results.push(...bookResults);
   }
 
@@ -284,8 +286,7 @@ async function verifyAudioMigrationWithContent(): Promise<void> {
 }
 
 // Run the verification if this is the main module
-const isMainModule = import.meta.url.endsWith(process.argv[1].replace(/^file:\/\//, ''));
-if (isMainModule) {
+if (require.main === module) {
   verifyAudioMigrationWithContent().catch((error) => {
     logger.error({ msg: 'Verification failed', error });
     process.exit(1);

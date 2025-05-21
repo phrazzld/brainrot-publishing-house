@@ -5,12 +5,13 @@
  * It generates a report of what has been migrated and what still needs to be migrated.
  */
 import * as dotenv from 'dotenv';
-import fs from 'fs';
-import path from 'path';
+import * as fs from 'fs';
+import * as path from 'path';
 
 import translations from '../translations';
 import { assetExistsInBlobStorage } from '../utils';
 import { logger as rootLogger } from '../utils/logger';
+import { adaptTranslation } from '../utils/migration/TranslationAdapter';
 
 // Create a script-specific logger instance
 const logger = rootLogger.child({ script: 'verifyBlobStorage.ts' });
@@ -226,9 +227,10 @@ async function verifyBlobStorage(): Promise<VerificationReport> {
   const bookResults: BookVerificationResult[] = [];
   const counters = { totalAssets: 0, migratedAssets: 0 };
 
-  // Process each book
-  for (const book of translations) {
-    const bookResult = await verifyBookAssets(book, counters);
+  // Process each book with adapted translations
+  for (const translation of translations) {
+    const adaptedBook = adaptTranslation(translation);
+    const bookResult = await verifyBookAssets(adaptedBook, counters);
     bookResults.push(bookResult);
   }
 
@@ -263,9 +265,7 @@ async function verifyBlobStorage(): Promise<VerificationReport> {
 }
 
 // Run the verification if executed directly
-// Using import.meta.url to check if this is the main module
-const isMainModule = import.meta.url.endsWith(process.argv[1].replace(/^file:\/\//, ''));
-if (isMainModule) {
+if (require.main === module) {
   verifyBlobStorage()
     .then(() => logger.info({ msg: 'Blob storage verification complete!' }))
     .catch((error) => logger.error({ msg: 'Blob storage verification failed', error }));

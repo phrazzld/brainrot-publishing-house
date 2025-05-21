@@ -8,6 +8,7 @@ import { existsSync } from 'fs';
 
 import translations from '../translations';
 import { logger as rootLogger } from '../utils/logger';
+import { adaptTranslation } from '../utils/migration/TranslationAdapter';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { blobService } from '../utils/services';
 
@@ -176,9 +177,10 @@ async function verifyAudioMigration() {
     blobBaseUrl,
   });
 
-  // Process each book
-  for (const book of translations) {
-    const bookResults = await verifyBookAudio(book, blobBaseUrl, counters);
+  // Process each book with adapted translations
+  for (const translation of translations) {
+    const adaptedBook = adaptTranslation(translation);
+    const bookResults = await verifyBookAudio(adaptedBook, blobBaseUrl, counters);
     results.push(...bookResults);
   }
 
@@ -213,7 +215,7 @@ async function verifyAudioMigration() {
 }
 
 // Run verification if executed directly
-if (import.meta.url.endsWith(process.argv[1].replace(/^file:\/\//, ''))) {
+if (require.main === module) {
   verifyAudioMigration()
     .then(() => logger.info({ msg: 'Audio migration verification complete!' }))
     .catch((error) => {
