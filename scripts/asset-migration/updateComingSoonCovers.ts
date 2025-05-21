@@ -1,10 +1,10 @@
 /**
  * Script to update coming soon translation files with new cover paths
  */
-import fs from 'fs';
-import path from 'path';
+import * as fs from 'fs';
+import * as path from 'path';
 
-import { logger as _logger } from '../utils/logger';
+import logger from '../../utils/logger';
 
 // Map of book slug to new cover paths
 const coverPaths: Record<string, string> = {
@@ -59,8 +59,9 @@ async function updateTranslationFiles() {
       fs.writeFileSync(filePath, updatedContent);
       logger.info({ msg: 'Updated translation file', file: slug, newPath });
       successful.push(slug);
-    } catch (error) {
-      logger.error({ msg: 'Failed to update file', file: slug, error: error.message });
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      logger.error({ msg: 'Failed to update file', file: slug, error: errorMessage });
       failed.push(slug);
     }
   }

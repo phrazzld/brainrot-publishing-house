@@ -507,10 +507,10 @@ This TODO list details the tasks required to fully migrate all asset management 
     - [x] Address MockResponse to Response conversion errors (lines 118, 138)
   - [x] Dependencies: none
 
-- [ ] **T040: Fix logger and module import errors in utility scripts**
-  - [ ] Fix asset-migration/copyToPlaceholder.ts import issues:
-    - [ ] Fix module imports for logger and BlobService (lines 7-8)
-    - [ ] Resolve logger variable references (lines 14, 25, 34, 41, 44...)
+- [~] **T040: Fix logger and module import errors in utility scripts**
+  - [x] Fix asset-migration/copyToPlaceholder.ts import issues:
+    - [x] Fix module imports for logger and BlobService (lines 7-8)
+    - [x] Resolve logger variable references (lines 14, 25, 34, 41, 44...)
   - [ ] Fix logger references across multiple scripts (needs systematic approach):
     - [ ] Audit all scripts for proper logger imports and usage
     - [ ] Create consistent pattern for logger initialization
