@@ -455,11 +455,13 @@ This TODO list details the tasks required to fully migrate all asset management 
   - [x] Update .eslintignore to only exclude scripts still being actively developed
 
 - [x] **T036: Organize audio files and verify downloads**
+
   - [x] Verify all audio files are accessible with verifyAudioFilesAccess.ts script
   - [x] Create testAudioFileDownloads.ts script for audio file downloads
   - [x] Document audio file organization structure in AUDIO_FILE_ORGANIZATION.md
 
 - [x] **T037: Fix linting issues in script files blocking push**
+
   - [x] Fix broken JSDoc comments in script files
   - [x] Replace console.log statements with structured logger in:
     - [x] cleanupLocalAssets.ts
@@ -476,21 +478,21 @@ This TODO list details the tasks required to fully migrate all asset management 
     - [x] verifyTextMigration.ts
   - [x] Update husky configuration:
     - [x] Fix deprecated husky configuration in pre-push hook
-    - [x] Remove the "#!/usr/bin/env sh" and ". "$(dirname -- "$0")/_/husky.sh"" lines
+    - [x] Remove the "#!/usr/bin/env sh" and ". "$(dirname -- "$0")/\_/husky.sh"" lines
     - [x] Update to husky v10 compatible configuration
   - [x] Re-enable git hooks after fixing linting issues
 
-- [ ] **T038: Address additional linting issues in script files**
-  - [ ] Fix remaining no-console rule violations:
-    - [ ] Handle interactive CLI prompts properly in cleanupLocalAssets.ts
-    - [ ] Review and update other scripts with console statements
-  - [ ] Fix TypeScript module import issues:
-    - [ ] Correct default imports vs named imports for fs, path
-    - [ ] Address import.meta.url compatibility issues
-  - [ ] Fix unused variables by adding underscore prefixes:
-    - [ ] existsSync in migrateAudioFiles.ts
-    - [ ] ASSETS_DIR in migrateAudioFiles.ts
-    - [ ] Other unused variables
-  - [ ] Fix unnecessary escape characters in regex expressions
-  - [ ] Update .eslintignore configuration to modern format
-  - [ ] Complete verification with lint and type checking to ensure all issues are resolved
+- [x] **T038: Address additional linting issues in script files**
+  - [x] Fix remaining no-console rule violations:
+    - [x] Handle interactive CLI prompts properly in cleanupLocalAssets.ts
+    - [x] Review and update other scripts with console statements
+  - [x] Fix TypeScript module import issues:
+    - [x] Correct default imports vs named imports for fs, path
+    - [x] Address import.meta.url compatibility issues
+  - [x] Fix unused variables by adding underscore prefixes:
+    - [x] existsSync in migrateAudioFiles.ts
+    - [x] ASSETS_DIR in migrateAudioFiles.ts
+    - [x] Other unused variables
+  - [x] Fix unnecessary escape characters in regex expressions
+  - [x] Update .eslintignore configuration to modern format
+  - [x] Complete verification with lint and type checking to ensure all issues are resolved

@@ -16,11 +16,11 @@
  */
 // Load environment variables
 import * as dotenv from 'dotenv';
-import { ListBlobResultBlob } from '@vercel/blob';
-import fs from 'fs/promises';
+import * as fs from 'node:fs/promises';
 // Using path module for output path
-import path from 'path';
-import readline from 'readline';
+import * as path from 'node:path';
+import * as readline from 'node:readline';
+import { ListBlobResultBlob } from '@vercel/blob';
 
 import { blobService } from '../utils/services/BlobService';
 
@@ -162,6 +162,7 @@ async function deletePlaceholders(
 
   // For dry run, just return the placeholders
   if (options.dryRun) {
+    // eslint-disable-next-line no-console -- CLI: Dry run information
     console.log(`[DRY RUN] Would delete ${placeholders.length} placeholder files`);
     return { deleted: placeholders.map((p) => p.path), errors: [] };
   }
@@ -170,6 +171,7 @@ async function deletePlaceholders(
   if (!options.force && placeholders.length > 0) {
     const confirmed = await confirmDeletion(placeholders.length);
     if (!confirmed) {
+      // eslint-disable-next-line no-console -- CLI: User interaction feedback
       console.log('Deletion cancelled by user');
       return { deleted: [], errors: [] };
     }
@@ -179,6 +181,7 @@ async function deletePlaceholders(
   for (const placeholder of placeholders) {
     try {
       if (options.verbose) {
+        // eslint-disable-next-line no-console -- CLI: Deletion progress
         console.log(`Deleting: ${placeholder.path} (${placeholder.size} bytes)`);
       }
 
@@ -186,6 +189,7 @@ async function deletePlaceholders(
       deleted.push(placeholder.path);
 
       if (options.verbose) {
+        // eslint-disable-next-line no-console -- CLI: Deletion success feedback
         console.log(`Successfully deleted: ${placeholder.path}`);
       }
     } catch (error) {
@@ -209,6 +213,7 @@ async function saveResults(results: DeleteResult, outputPath: string): Promise<v
       : path.join(process.cwd(), outputPath);
 
     await fs.writeFile(absoluteOutputPath, JSON.stringify(results, null, 2));
+    // eslint-disable-next-line no-console -- CLI: Output file confirmation
     console.log(`Results saved to ${absoluteOutputPath}`);
   } catch (error) {
     console.error('Error saving results:', error);
@@ -223,30 +228,41 @@ async function main() {
     // Parse command-line arguments
     const options = parseArgs();
 
+    // eslint-disable-next-line no-console -- CLI: Script header
     console.log('Delete Placeholder Audio Files');
+    // eslint-disable-next-line no-console -- CLI: Header formatting
     console.log('=============================');
+    // eslint-disable-next-line no-console -- CLI: Configuration info
     console.log(`Dry run: ${options.dryRun}`);
+    // eslint-disable-next-line no-console -- CLI: Configuration info
     console.log(`Size threshold: ${options.sizeThreshold} bytes`);
 
     // List all audio files
+    // eslint-disable-next-line no-console -- CLI: Processing status
     console.log('\nListing audio files in Vercel Blob...');
     const audioFiles = await listAllAudioFiles();
+    // eslint-disable-next-line no-console -- CLI: Results summary
     console.log(`Found ${audioFiles.length} audio files`);
 
     // Identify placeholders
+    // eslint-disable-next-line no-console -- CLI: Processing status
     console.log('\nIdentifying placeholder files...');
     const placeholders = identifyPlaceholders(audioFiles, options.sizeThreshold);
+    // eslint-disable-next-line no-console -- CLI: Results summary
     console.log(`Found ${placeholders.length} placeholder files`);
 
     if (placeholders.length === 0) {
+      // eslint-disable-next-line no-console -- CLI: Status information
       console.log('No placeholder files to delete');
       return;
     }
 
     // Print placeholder info
     if (options.verbose || placeholders.length < 10) {
+      // eslint-disable-next-line no-console -- CLI: Files listing header
       console.log('\nPlaceholder files:');
       placeholders.forEach((file, index) => {
+        // eslint-disable-next-line no-console -- CLI: File details listing
         console.log(
           `${index + 1}. ${file.path} (${file.size} bytes, uploaded: ${file.uploaded.toISOString()})`
         );
@@ -254,6 +270,7 @@ async function main() {
     }
 
     // Delete placeholders
+    // eslint-disable-next-line no-console -- CLI: Processing status
     console.log('\nDeleting placeholder files...');
     const { deleted, errors } = await deletePlaceholders(placeholders, options);
 
@@ -273,24 +290,33 @@ async function main() {
     await saveResults(results, options.output);
 
     // Print summary
+    // eslint-disable-next-line no-console -- CLI: Summary header
     console.log('\nDeletion Summary:');
+    // eslint-disable-next-line no-console -- CLI: Result statistics
     console.log(`- Total audio files checked: ${results.totalFilesChecked}`);
+    // eslint-disable-next-line no-console -- CLI: Result statistics
     console.log(`- Placeholder files found: ${results.placeholdersFound}`);
 
     if (options.dryRun) {
+      // eslint-disable-next-line no-console -- CLI: Dry run results
       console.log(`- Placeholder files that would be deleted: ${results.placeholdersFound}`);
     } else {
+      // eslint-disable-next-line no-console -- CLI: Deletion statistics
       console.log(`- Placeholder files deleted: ${results.placeholdersDeleted}`);
+      // eslint-disable-next-line no-console -- CLI: Error statistics
       console.log(`- Failed deletions: ${results.failedDeletions}`);
     }
 
     if (errors.length > 0) {
+      // eslint-disable-next-line no-console -- CLI: Errors header
       console.log('\nErrors:');
       errors.forEach((error, index) => {
+        // eslint-disable-next-line no-console -- CLI: Error details
         console.log(`${index + 1}. ${error.path}: ${error.error}`);
       });
     }
 
+    // eslint-disable-next-line no-console -- CLI: Completion status
     console.log('\n✅ Placeholder audio files deletion completed');
   } catch (error) {
     console.error('❌ Error deleting placeholder files:', error);

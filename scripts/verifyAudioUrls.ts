@@ -15,8 +15,8 @@
  */
 // Load environment variables
 import * as dotenv from 'dotenv';
-import fs from 'fs/promises';
-import path from 'path';
+import * as fs from 'node:fs/promises';
+import * as path from 'node:path';
 
 import translations from '../translations';
 
@@ -104,6 +104,7 @@ async function verifyAudioUrl(
     // Construct the URL directly using the known pattern from our migration results
     const directUrl = `${baseUrl}/${bookSlug}/audio/${filename}`;
 
+    // eslint-disable-next-line no-console -- DEBUG: Direct URL testing in CLI script
     console.log(`Testing direct URL: ${directUrl}`);
     result.resolvedUrl = directUrl;
 
@@ -160,17 +161,22 @@ function findAudioUrls(bookSlug: string = '') {
  */
 async function main() {
   const options = parseArgs();
+  // eslint-disable-next-line no-console -- CLI: Script header display
   console.log('Audio URL Verification');
+  // eslint-disable-next-line no-console -- CLI: Script header display
   console.log('=====================');
 
   if (options.bookSlug) {
+    // eslint-disable-next-line no-console -- CLI: Status display
     console.log(`Testing book: ${options.bookSlug}`);
   } else {
+    // eslint-disable-next-line no-console -- CLI: Status display
     console.log('Testing all books');
   }
 
   // Find all audio URLs to check
   const audioUrls = findAudioUrls(options.bookSlug);
+  // eslint-disable-next-line no-console -- CLI: Status display
   console.log(`Found ${audioUrls.length} audio URLs to verify`);
 
   // Verify each URL
@@ -182,7 +188,9 @@ async function main() {
     const { bookSlug, chapterTitle, audioSrc } = audioUrls[i];
 
     if (options.verbose) {
+      // eslint-disable-next-line no-console -- CLI: Verification progress display
       console.log(`\nVerifying [${i + 1}/${audioUrls.length}]: ${bookSlug} - ${chapterTitle}`);
+      // eslint-disable-next-line no-console -- CLI: URL information display
       console.log(`Original URL: ${audioSrc}`);
     } else {
       process.stdout.write(`Verifying URLs: ${i + 1}/${audioUrls.length}\r`);
@@ -194,8 +202,11 @@ async function main() {
     if (result.status === 'success') {
       successCount++;
       if (options.verbose) {
+        // eslint-disable-next-line no-console -- CLI: Success status display
         console.log(`✅ Success: ${result.resolvedUrl}`);
+        // eslint-disable-next-line no-console -- CLI: Content type display
         console.log(`   Content Type: ${result.contentType}`);
+        // eslint-disable-next-line no-console -- CLI: Size info display
         console.log(
           `   Size: ${result.contentLength ? formatSize(result.contentLength) : 'unknown'}`
         );
@@ -203,6 +214,7 @@ async function main() {
     } else {
       failureCount++;
       if (options.verbose) {
+        // eslint-disable-next-line no-console -- CLI: Error display
         console.log(`❌ Failed: ${result.error}`);
       }
     }
@@ -239,13 +251,19 @@ async function main() {
   };
 
   // Print summary
+  // eslint-disable-next-line no-console -- CLI: Results summary display
   console.log('\nSummary:');
+  // eslint-disable-next-line no-console -- CLI: Total URLs summary
   console.log(`Total URLs: ${summary.totalUrls}`);
+  // eslint-disable-next-line no-console -- CLI: Success count summary
   console.log(`Successful: ${summary.successCount}`);
+  // eslint-disable-next-line no-console -- CLI: Failure count summary
   console.log(`Failed: ${summary.failureCount}`);
 
+  // eslint-disable-next-line no-console -- CLI: Book results header
   console.log('\nResults by Book:');
   for (const [book, counts] of Object.entries(summary.bookResults)) {
+    // eslint-disable-next-line no-console -- CLI: Per-book results
     console.log(`- ${book}: ${counts.success}/${counts.total} successful`);
   }
 
@@ -255,12 +273,14 @@ async function main() {
     : path.join(process.cwd(), options.outputFile);
 
   await fs.writeFile(outputPath, JSON.stringify(summary, null, 2));
+  // eslint-disable-next-line no-console -- CLI: Output file path display
   console.log(`\nDetailed results saved to: ${outputPath}`);
 
   // Create markdown report
   const markdownReport = generateMarkdownReport(summary);
   const markdownPath = outputPath.replace(/\.json$/, '.md');
   await fs.writeFile(markdownPath, markdownReport);
+  // eslint-disable-next-line no-console -- CLI: Markdown report path display
   console.log(`Markdown report saved to: ${markdownPath}`);
 
   // Return appropriate exit code
