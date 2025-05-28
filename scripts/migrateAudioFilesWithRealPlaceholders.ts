@@ -103,7 +103,7 @@ class AudioFilesMigrator {
    */
   private async createPlaceholderMp3(
     filePath: string,
-    sizeKb = 50
+    sizeKb = 50,
   ): Promise<{ path: string; size: number }> {
     const buffer = generateMp3PlaceholderBuffer(sizeKb * 1024);
     const fullPath = path.resolve(this.placeholdersDir, filePath);
@@ -137,7 +137,7 @@ class AudioFilesMigrator {
             .catch((error) => {
               console.error('Error in queued upload:', error);
             })
-            .finally(() => this.releaseSemaphore())
+            .finally(() => this.releaseSemaphore()),
         );
       }
     }
@@ -210,11 +210,11 @@ class AudioFilesMigrator {
       console.log();
       // eslint-disable-next-line no-console -- Interactive CLI tool
       console.log(
-        `Total uploaded  : ${chalk.blue((totalUploadSize / (1024 * 1024)).toFixed(2) + ' MB')}`
+        `Total uploaded  : ${chalk.blue((totalUploadSize / (1024 * 1024)).toFixed(2) + ' MB')}`,
       );
       // eslint-disable-next-line no-console -- Interactive CLI tool
       console.log(
-        `Total duration  : ${chalk.blue((totalDuration / 1000).toFixed(2) + ' seconds')}`
+        `Total duration  : ${chalk.blue((totalDuration / 1000).toFixed(2) + ' seconds')}`,
       );
       // eslint-disable-next-line no-console -- Interactive CLI tool
       console.log();
@@ -297,7 +297,7 @@ class AudioFilesMigrator {
 
     // eslint-disable-next-line no-console -- Interactive CLI tool
     console.log(
-      chalk.blue(`📖 Processing book: ${chalk.white(book.title)} (${chalk.gray(book.slug)})`)
+      chalk.blue(`📖 Processing book: ${chalk.white(book.title)} (${chalk.gray(book.slug)})`),
     );
 
     // Find chapters with audio
@@ -321,9 +321,9 @@ class AudioFilesMigrator {
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           this.processAudioFile(chapter.audioSrc!, book.slug, chapter.title)
             .catch((error) =>
-              console.error(`Error processing ${book.slug}/${chapter.title}:`, error)
+              console.error(`Error processing ${book.slug}/${chapter.title}:`, error),
             )
-            .finally(() => this.releaseSemaphore())
+            .finally(() => this.releaseSemaphore()),
         );
       } else {
         // Queue this upload for later
@@ -331,8 +331,8 @@ class AudioFilesMigrator {
           // Using non-null assertion here because we explicitly filter for chapters with audioSrc
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           this.processAudioFile(chapter.audioSrc!, book.slug, chapter.title).catch((error) =>
-            console.error(`Error processing ${book.slug}/${chapter.title}:`, error)
-          )
+            console.error(`Error processing ${book.slug}/${chapter.title}:`, error),
+          ),
         );
       }
     }
@@ -347,7 +347,7 @@ class AudioFilesMigrator {
   private async processAudioFile(
     audioSrc: string,
     bookSlug: string,
-    chapterTitle: string
+    chapterTitle: string,
   ): Promise<void> {
     const startTime = Date.now();
 
@@ -382,7 +382,7 @@ class AudioFilesMigrator {
         if (fileInfo.size > 10 * 1024 && !this.options.force) {
           // eslint-disable-next-line no-console -- Interactive CLI tool
           console.log(
-            chalk.yellow(`   Skipping existing file: ${targetBlobPath} (${fileInfo.size} bytes)`)
+            chalk.yellow(`   Skipping existing file: ${targetBlobPath} (${fileInfo.size} bytes)`),
           );
 
           this.results.push({
@@ -404,7 +404,7 @@ class AudioFilesMigrator {
         if (this.options.verbose) {
           // eslint-disable-next-line no-console -- Interactive CLI tool
           console.log(
-            chalk.gray(`   File not found in Blob storage, will upload: ${targetBlobPath}`)
+            chalk.gray(`   File not found in Blob storage, will upload: ${targetBlobPath}`),
           );
         }
       }
@@ -418,8 +418,8 @@ class AudioFilesMigrator {
         // eslint-disable-next-line no-console -- Interactive CLI tool
         console.log(
           chalk.gray(
-            `   [DRY RUN] Would upload ${placeholderFile.path} (${placeholderFile.size} bytes) to ${targetBlobPath}`
-          )
+            `   [DRY RUN] Would upload ${placeholderFile.path} (${placeholderFile.size} bytes) to ${targetBlobPath}`,
+          ),
         );
 
         this.results.push({
@@ -458,8 +458,8 @@ class AudioFilesMigrator {
         // eslint-disable-next-line no-console -- Interactive CLI tool
         console.log(
           chalk.green(
-            `   ✅ Uploaded: ${targetBlobPath} (${verifyResult.size} bytes) as ${verifyResult.contentType}`
-          )
+            `   ✅ Uploaded: ${targetBlobPath} (${verifyResult.size} bytes) as ${verifyResult.contentType}`,
+          ),
         );
       }
 

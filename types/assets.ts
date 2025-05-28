@@ -254,7 +254,7 @@ export class AssetError extends Error {
       cause?: unknown;
       statusCode?: number;
       assetPath?: string;
-    }
+    },
   ) {
     super(message, { cause: options?.cause });
     this.type = type;
@@ -282,7 +282,7 @@ export interface AssetService {
     assetType: AssetType,
     bookSlug: string,
     assetName: string,
-    options?: AssetUrlOptions
+    options?: AssetUrlOptions,
   ): Promise<string>;
 
   /**
@@ -348,7 +348,7 @@ export interface AssetService {
   listAssets(
     assetType: AssetType,
     bookSlug: string,
-    options?: ListOptions
+    options?: ListOptions,
   ): Promise<AssetListResult>;
 }
 
@@ -383,7 +383,7 @@ export interface AssetPathService {
   getTextPath(
     bookSlug: string,
     textType: 'fulltext' | 'chapter' | 'source',
-    chapter?: string | number
+    chapter?: string | number,
   ): string;
 
   /**
@@ -396,7 +396,7 @@ export interface AssetPathService {
   getImagePath(
     bookSlug: string,
     imageType: 'cover' | 'chapter' | 'thumbnail',
-    chapter?: string | number
+    chapter?: string | number,
   ): string;
 
   /**

@@ -367,7 +367,7 @@ async function testProxyEndpoint({
 async function testBookDownloads(
   baseUrl: string,
   book: TestBook,
-  options: { skipFullAudiobooks: boolean }
+  options: { skipFullAudiobooks: boolean },
 ): Promise<TestResult[]> {
   const results: TestResult[] = [];
 
@@ -383,7 +383,7 @@ async function testBookDownloads(
         baseUrl,
         book,
         type: 'full',
-      })
+      }),
     );
 
     // Test proxy endpoint (direct download)
@@ -392,7 +392,7 @@ async function testBookDownloads(
         baseUrl,
         book,
         type: 'full',
-      })
+      }),
     );
   }
 
@@ -411,7 +411,7 @@ async function testBookDownloads(
         type: 'chapter',
         chapterNumber: chapter.index,
         chapterTitle: chapter.title,
-      })
+      }),
     );
 
     // Test proxy endpoint (direct download)
@@ -422,7 +422,7 @@ async function testBookDownloads(
         type: 'chapter',
         chapterNumber: chapter.index,
         chapterTitle: chapter.title,
-      })
+      }),
     );
   }
 

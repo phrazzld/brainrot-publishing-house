@@ -356,7 +356,7 @@ export class TextFileStandardizer {
     const reportPath = join(
       process.cwd(),
       'migration-logs',
-      `text-standardization-report-${Date.now()}.json`
+      `text-standardization-report-${Date.now()}.json`,
     );
     writeFileSync(reportPath, JSON.stringify(report, null, 2), 'utf-8');
     this.logger.info({ msg: 'Report saved', path: reportPath });
@@ -437,7 +437,7 @@ if (isDirectExecution) {
       // Keep console.error for direct user visibility of errors in the terminal
       console.error(
         'Standardization failed:',
-        error instanceof Error ? error.message : String(error)
+        error instanceof Error ? error.message : String(error),
       );
       process.exit(1);
     });

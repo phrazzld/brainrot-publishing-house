@@ -127,7 +127,7 @@ function extractResponseMetadata(response: Response): {
 async function verifyAsset(
   assetType: AssetType,
   slug: string,
-  assetPath: string
+  assetPath: string,
 ): Promise<VerificationResult> {
   const startTime = performance.now();
 
@@ -226,7 +226,7 @@ function processVerificationResult(
   result: VerificationResult,
   assetName: string,
   assetType: AssetType,
-  summary: VerificationSummary
+  summary: VerificationSummary,
 ): void {
   // Add result to the summary
   summary.results.push(result);
@@ -255,7 +255,7 @@ function processVerificationResult(
     logger.error({
       message: formatMessage(
         `❌ Failed: ${assetName} - Status ${result.statusCode} - ${result.errorMessage}`,
-        indentation
+        indentation,
       ),
     });
   }
@@ -267,7 +267,7 @@ function processVerificationResult(
 async function verifyBookAssets(
   book: string,
   assetType: AssetType,
-  summary: VerificationSummary
+  summary: VerificationSummary,
 ): Promise<void> {
   logger.info({ message: `  Checking ${assetType} assets...` });
 
@@ -476,7 +476,7 @@ function generateHtmlReport(summary: VerificationSummary): string {
         <div class="stat-value">${stats.successful}/${stats.total}</div>
         <div class="stat-label">${((stats.successful / (stats.total || 1)) * 100).toFixed(1)}% Success</div>
       </div>
-    `
+    `,
       )
       .join('')}
   </div>
@@ -504,7 +504,7 @@ function generateHtmlReport(summary: VerificationSummary): string {
           <td>${result.statusCode || 'N/A'}</td>
           <td>${result.errorMessage || 'Unknown error'}</td>
         </tr>
-      `
+      `,
           )
           .join('') ||
         '<tr><td colspan="4" style="text-align: center;">No failed assets 🎉</td></tr>'
@@ -537,7 +537,7 @@ function generateHtmlReport(summary: VerificationSummary): string {
           <td>${result.contentLength ? (result.contentLength / 1024).toFixed(2) + ' KB' : 'N/A'}</td>
           <td>${result.responseTimeMs} ms</td>
         </tr>
-      `
+      `,
         )
         .join('')}
     </tbody>
@@ -709,16 +709,16 @@ async function runVerification() {
     console.warn(`Successful: ${chalk.green.bold(summary.successfulAssets)}`);
     console.warn(`Failed: ${chalk.red.bold(summary.failedAssets)}`);
     console.warn(
-      `Success Rate: ${((summary.successfulAssets / summary.totalAssets) * 100).toFixed(2)}%`
+      `Success Rate: ${((summary.successfulAssets / summary.totalAssets) * 100).toFixed(2)}%`,
     );
     console.warn(
-      `Content References: ${referencesValid ? chalk.green('Valid') : chalk.red('Invalid')}`
+      `Content References: ${referencesValid ? chalk.green('Valid') : chalk.red('Invalid')}`,
     );
     console.warn(
-      `Regression Tests: ${regressionsPassed ? chalk.green('Passed') : chalk.red('Failed')}`
+      `Regression Tests: ${regressionsPassed ? chalk.green('Passed') : chalk.red('Failed')}`,
     );
     console.warn(
-      `Overall Status: ${overallSuccess ? chalk.green.bold('MIGRATION SUCCESSFUL') : chalk.red.bold('MIGRATION INCOMPLETE')}`
+      `Overall Status: ${overallSuccess ? chalk.green.bold('MIGRATION SUCCESSFUL') : chalk.red.bold('MIGRATION INCOMPLETE')}`,
     );
     console.warn('=======================================');
     console.warn(`Reports saved to:`);

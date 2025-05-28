@@ -11,7 +11,6 @@ module.exports = {
     customExportConditions: [''],
   },
 
-
   // File patterns
   testMatch: [
     '**/__tests__/**/*.test.(ts|tsx|js|jsx)',
@@ -52,12 +51,12 @@ module.exports = {
   transformIgnorePatterns: [
     '/node_modules/(?!(@vercel/blob|react|react-dom|wavesurfer.js|next|process|dotenv)/)',
   ],
-  
+
   // Module name mapping for node: prefixed imports
   moduleNameMapper: {
     // Handle module aliases
     '^@/(.*)$': '<rootDir>/$1',
-    
+
     // Handle node: prefixed imports
     '^node:(.*)$': '$1',
 

@@ -172,7 +172,7 @@ async function compareDownloadFlow() {
     // Test URL generation endpoint
     try {
       const urlResponse = await fetch(
-        `${env.baseUrl}/api/download?slug=the-iliad&type=chapter&chapter=1`
+        `${env.baseUrl}/api/download?slug=the-iliad&type=chapter&chapter=1`,
       );
       console.log(`URL Generation Status: ${urlResponse.status}`);
       if (urlResponse.ok) {
@@ -187,7 +187,7 @@ async function compareDownloadFlow() {
     try {
       const proxyResponse = await fetch(
         `${env.baseUrl}/api/download?slug=the-iliad&type=chapter&chapter=1&proxy=true`,
-        { method: 'HEAD' }
+        { method: 'HEAD' },
       );
       console.log(`Proxy Status: ${proxyResponse.status}`);
       console.log(`Proxy Headers: ${JSON.stringify(Object.fromEntries(proxyResponse.headers))}`);

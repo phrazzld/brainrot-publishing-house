@@ -49,7 +49,7 @@ async function findOriginalCover() {
           ok: testResponse.ok,
         });
       }
-    } catch (error) {
+    } catch {
       // Continue to next path
     }
   }

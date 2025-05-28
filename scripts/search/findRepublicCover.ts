@@ -47,7 +47,7 @@ async function findRepublicCover() {
       if (response.ok) {
         logger.info({ msg: `✓ Found image at: ${testPath}`, url });
       }
-    } catch (error) {
+    } catch {
       // Continue to next path
     }
   }

@@ -26,7 +26,9 @@ module.exports = babelJest.createTransformer({
               urlPropertyPath.node.property.name === 'url'
             ) {
               // Create a proper file URL that works with our path utilities
-              urlPropertyPath.replaceWithSourceString(`'file://' + require('path').resolve(__filename)`);
+              urlPropertyPath.replaceWithSourceString(
+                `'file://' + require('path').resolve(__filename)`,
+              );
             }
           }
         },

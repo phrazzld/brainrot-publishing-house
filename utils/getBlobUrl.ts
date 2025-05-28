@@ -43,7 +43,7 @@ function getCacheKey(
   path: string,
   baseUrl?: string,
   environment?: string,
-  useBlobStorage = true
+  useBlobStorage = true,
 ): string {
   return `${path}-${baseUrl}-${environment}-${useBlobStorage}`;
 }
@@ -61,7 +61,7 @@ function getCachedUrl(cacheKey: string): string | null {
  */
 function determineBaseUrl(
   environment: 'development' | 'production',
-  customBaseUrl?: string
+  customBaseUrl?: string,
 ): string {
   if (customBaseUrl) {
     return customBaseUrl;
@@ -134,7 +134,7 @@ export function generateBlobUrl(path: string, options: BlobUrlOptions = {}): str
  */
 export function getBlobUrl(
   legacyPath: string,
-  options: Omit<BlobUrlOptions, 'useBlobStorage'> = {}
+  options: Omit<BlobUrlOptions, 'useBlobStorage'> = {},
 ): string {
   return generateBlobUrl(legacyPath, { ...options, useBlobStorage: true });
 }
@@ -153,7 +153,7 @@ export function getBlobUrl(
 export function getAssetUrl(
   legacyPath: string,
   useBlobStorage: boolean = true,
-  options: Omit<BlobUrlOptions, 'useBlobStorage'> = {}
+  options: Omit<BlobUrlOptions, 'useBlobStorage'> = {},
 ): string {
   if (!useBlobStorage) {
     return legacyPath;
@@ -304,7 +304,7 @@ function extractBlobPath(path: string): string {
 async function checkAssetExistence(
   path: string,
   blobPath: string,
-  baseUrl?: string
+  baseUrl?: string,
 ): Promise<boolean> {
   // Direct URL check if it's a full blob URL
   const isAlreadyFullUrl = path.startsWith('http');
@@ -355,7 +355,7 @@ async function checkAssetExistence(
 export async function assetExistsInBlobStorage(
   legacyPath: string,
   _options: Omit<BlobUrlOptions, 'useBlobStorage' | 'noCache'> = {},
-  useCache: boolean = true
+  useCache: boolean = true,
 ): Promise<boolean> {
   // Check existence cache if enabled
   const cachedResult = getExistenceFromCache(legacyPath, useCache);
@@ -411,7 +411,7 @@ export async function assetExistsInBlobStorage(
  */
 export async function getAssetUrlWithFallback(
   legacyPath: string,
-  options: Omit<BlobUrlOptions, 'useBlobStorage'> = {}
+  options: Omit<BlobUrlOptions, 'useBlobStorage'> = {},
 ): Promise<string> {
   try {
     // Check if the asset exists in Blob storage (use cache for performance)
@@ -453,7 +453,7 @@ export async function getAssetUrlWithFallback(
 // eslint-disable-next-line complexity
 export async function fetchTextWithFallback(
   legacyPath: string,
-  options: Omit<BlobUrlOptions, 'useBlobStorage'> = {}
+  options: Omit<BlobUrlOptions, 'useBlobStorage'> = {},
 ): Promise<string> {
   try {
     // Check if this is already a full URL (not a path)
@@ -528,7 +528,7 @@ export async function fetchTextWithFallback(
       ) {
         normalizedPath = legacyPath.replace(
           'https://public.blob.vercel-storage.com/',
-          baseUrl + '/'
+          baseUrl + '/',
         );
         moduleLogger.info({
           msg: `Normalized legacy URL from ${legacyPath} to ${normalizedPath}`,
@@ -607,7 +607,7 @@ export async function fetchTextWithFallback(
     });
 
     throw new Error(
-      `Failed to fetch text: ${error instanceof Error ? error.message : String(error)}`
+      `Failed to fetch text: ${error instanceof Error ? error.message : String(error)}`,
     );
   }
 }

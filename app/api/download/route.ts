@@ -134,7 +134,7 @@ function createDirectDownloadResponse(url: string): NextResponse {
       isCdnUrl: false, // No longer using CDN URLs
       shouldProxy: false, // No need to proxy Vercel Blob URLs
     },
-    { status: 200 }
+    { status: 200 },
   );
 }
 
@@ -148,7 +148,7 @@ function createDirectDownloadResponse(url: string): NextResponse {
 function createDownloadFilename(
   validatedSlug: string,
   validatedType: 'full' | 'chapter',
-  chapter?: string
+  chapter?: string,
 ): string {
   return validatedType === 'full'
     ? `${validatedSlug}.mp3`
@@ -311,7 +311,7 @@ function logProxyRequest(context: ProxyLogContext): void {
  */
 function generateAssetName(
   validation: { type: 'full' | 'chapter'; chapter?: string },
-  correlationId: string
+  correlationId: string,
 ): { assetName: string; error?: NextResponse } {
   if (validation.type === 'full') {
     return { assetName: 'full-audiobook.mp3' };
@@ -324,7 +324,7 @@ function generateAssetName(
         message: 'Chapter parameter is required when type is "chapter"',
         correlationId,
       },
-      { status: 400 }
+      { status: 400 },
     );
     return { assetName: '', error };
   }
@@ -347,7 +347,7 @@ function generateOperationId(): string {
 function formatErrorResponse(
   proxyError: unknown,
   correlationId: string,
-  operationId: string
+  operationId: string,
 ): Record<string, unknown> {
   const errorResponse = {
     error: 'Proxy error',
@@ -379,7 +379,7 @@ type AssetService = ReturnType<
  */
 function initializeProxyServices(
   log: ReturnType<typeof createRequestLogger>,
-  correlationId: string
+  correlationId: string,
 ): {
   downloadService: ReturnType<typeof createDownloadService>;
   assetService: AssetService;
@@ -436,7 +436,7 @@ async function handleProxyRequest(context: ProxyRequestContext): Promise<NextRes
           type: 'SERVICE_ERROR',
           correlationId,
         },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -507,7 +507,7 @@ async function getDownloadUrl(
     correlationId: string;
   },
   downloadService: NonNullable<ReturnType<typeof createDownloadService>>,
-  log: ReturnType<typeof createRequestLogger>
+  log: ReturnType<typeof createRequestLogger>,
 ) {
   const { slug, type, chapter, correlationId } = params;
 
@@ -540,7 +540,7 @@ async function getDownloadUrl(
  */
 async function processDownloadRequest(
   validation: { valid: boolean; slug?: string; type?: 'full' | 'chapter'; chapter?: string },
-  context: RequestContext
+  context: RequestContext,
 ): Promise<NextResponse> {
   const { searchParams, correlationId, log, headers } = context;
 
@@ -554,7 +554,7 @@ async function processDownloadRequest(
         type: 'SERVICE_ERROR',
         correlationId,
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 
@@ -572,7 +572,7 @@ async function processDownloadRequest(
         correlationId,
       },
       downloadService,
-      log
+      log,
     );
 
     // Create filename for download
@@ -591,7 +591,7 @@ async function processDownloadRequest(
           if (value) {
             requestHeaders[header] = value;
           }
-        }
+        },
       );
 
       return handleProxyRequest({
@@ -624,7 +624,7 @@ async function processDownloadRequest(
         chapter: validation.chapter,
         correlationId,
       },
-      log
+      log,
     );
   }
 }

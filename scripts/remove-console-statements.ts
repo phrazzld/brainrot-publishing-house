@@ -126,7 +126,7 @@ function processFile(filePath: string, options: Options): FileEdit | null {
     // Check if file already imports logger
     const hasLoggerImport = lines.some(
       (line) =>
-        line.includes('import') && line.includes('logger') && line.includes('../utils/logger')
+        line.includes('import') && line.includes('logger') && line.includes('../utils/logger'),
     );
 
     // Check if file already has a local logger instance
@@ -135,7 +135,7 @@ function processFile(filePath: string, options: Options): FileEdit | null {
         line.includes('logger.child') ||
         (line.includes('const') &&
           (line.includes('moduleLogger') || line.includes('logger')) &&
-          line.includes('logger'))
+          line.includes('logger')),
     );
 
     // Find all console statements

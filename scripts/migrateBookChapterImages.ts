@@ -19,7 +19,7 @@
 import * as dotenv from 'dotenv';
 import * as fs from 'fs/promises';
 import * as path from 'path';
-import { existsSync, readdirSync } from 'fs';
+import { readdirSync as _readdirSync, existsSync } from 'fs';
 import { fileURLToPath } from 'url';
 
 import { blobPathService } from '../utils/services/BlobPathService.js';
@@ -103,7 +103,7 @@ class MigrationLog {
       }
     } catch (error) {
       console.warn(
-        `Error loading migration log: ${error instanceof Error ? error.message : String(error)}`
+        `Error loading migration log: ${error instanceof Error ? error.message : String(error)}`,
       );
       this.log = {};
     }
@@ -118,10 +118,10 @@ class MigrationLog {
       console.log(`Migration log saved to ${this.logPath}`);
     } catch (error) {
       console.error(
-        `Error saving migration log: ${error instanceof Error ? error.message : String(error)}`
+        `Error saving migration log: ${error instanceof Error ? error.message : String(error)}`,
       );
       throw new Error(
-        `Failed to save migration log: ${error instanceof Error ? error.message : String(error)}`
+        `Failed to save migration log: ${error instanceof Error ? error.message : String(error)}`,
       );
     }
   }
@@ -179,9 +179,9 @@ class ChapterImageMigrationService {
   private migrationLog: MigrationLog;
 
   constructor(
-    private readonly blobService: any,
-    private readonly blobPathService: any,
-    logFile: string = 'chapter-images-migration.json'
+    private readonly blobService: unknown,
+    private readonly blobPathService: unknown,
+    logFile: string = 'chapter-images-migration.json',
   ) {
     this.migrationLog = new MigrationLog(logFile);
   }
@@ -214,7 +214,7 @@ class ChapterImageMigrationService {
         file.toLowerCase().endsWith('.png') ||
         file.toLowerCase().endsWith('.jpg') ||
         file.toLowerCase().endsWith('.jpeg') ||
-        file.toLowerCase().endsWith('.gif')
+        file.toLowerCase().endsWith('.gif'),
     );
   }
 
@@ -301,7 +301,7 @@ class ChapterImageMigrationService {
                     ) {
                       const existingResult = this.migrationLog.get(bookSlug, imageName)!;
                       console.log(
-                        `Skipping ${bookSlug}/${imageName} (already migrated to ${existingResult.blobPath})`
+                        `Skipping ${bookSlug}/${imageName} (already migrated to ${existingResult.blobPath})`,
                       );
 
                       bookResult.skipped++;
@@ -336,13 +336,13 @@ class ChapterImageMigrationService {
                     const migrationResult = await this.migrateImage(
                       bookSlug,
                       imageName,
-                      options.retries || 3
+                      options.retries || 3,
                     );
 
                     // Update statistics
                     if (migrationResult.status === 'success') {
                       console.log(
-                        `✅ Successfully migrated ${bookSlug}/${imageName} to ${migrationResult.blobUrl}`
+                        `✅ Successfully migrated ${bookSlug}/${imageName} to ${migrationResult.blobUrl}`,
                       );
                       bookResult.migrated++;
                     } else if (migrationResult.status === 'skipped') {
@@ -350,7 +350,7 @@ class ChapterImageMigrationService {
                       bookResult.skipped++;
                     } else {
                       console.error(
-                        `❌ Failed to migrate ${bookSlug}/${imageName}: ${migrationResult.error}`
+                        `❌ Failed to migrate ${bookSlug}/${imageName}: ${migrationResult.error}`,
                       );
                       bookResult.failed++;
                     }
@@ -367,7 +367,7 @@ class ChapterImageMigrationService {
                       status: 'failed',
                       originalPath: `/assets/${bookSlug}/images/${imageName}`,
                       blobPath: this.blobPathService.convertLegacyPath(
-                        `/assets/${bookSlug}/images/${imageName}`
+                        `/assets/${bookSlug}/images/${imageName}`,
                       ),
                       blobUrl: '',
                       error: errorMessage,
@@ -377,7 +377,7 @@ class ChapterImageMigrationService {
                     bookResult.images[imageName] = failedResult;
                     this.migrationLog.add(bookSlug, imageName, failedResult);
                   }
-                })
+                }),
               );
             }
 
@@ -393,7 +393,7 @@ class ChapterImageMigrationService {
             const errorMessage = error instanceof Error ? error.message : String(error);
             console.error(`⚠️ Error processing book ${bookSlug}: ${errorMessage}`);
           }
-        })
+        }),
       );
     }
 
@@ -418,7 +418,7 @@ class ChapterImageMigrationService {
    */
   private async migrateSharedImages(
     result: MigrationResult,
-    options: MigrationOptions
+    options: MigrationOptions,
   ): Promise<void> {
     const sharedImagesDir = path.join(ASSETS_DIR, 'images');
 
@@ -446,7 +446,7 @@ class ChapterImageMigrationService {
         file.toLowerCase().endsWith('.png') ||
         file.toLowerCase().endsWith('.jpg') ||
         file.toLowerCase().endsWith('.jpeg') ||
-        file.toLowerCase().endsWith('.gif')
+        file.toLowerCase().endsWith('.gif'),
     );
 
     bookResult.total = images.length;
@@ -469,7 +469,7 @@ class ChapterImageMigrationService {
             if (this.migrationLog.has(bookSlug, imageName) && !options.force && !options.dryRun) {
               const existingResult = this.migrationLog.get(bookSlug, imageName)!;
               console.log(
-                `Skipping shared/${imageName} (already migrated to ${existingResult.blobPath})`
+                `Skipping shared/${imageName} (already migrated to ${existingResult.blobPath})`,
               );
 
               bookResult.skipped++;
@@ -568,7 +568,7 @@ class ChapterImageMigrationService {
                 };
 
                 console.log(
-                  `✅ Successfully migrated shared/${imageName} to ${migrationResult.blobUrl}`
+                  `✅ Successfully migrated shared/${imageName} to ${migrationResult.blobUrl}`,
                 );
                 bookResult.migrated++;
                 bookResult.images[imageName] = migrationResult;
@@ -616,7 +616,7 @@ class ChapterImageMigrationService {
             bookResult.images[imageName] = failedResult;
             this.migrationLog.add(bookSlug, imageName, failedResult);
           }
-        })
+        }),
       );
     }
 
@@ -636,7 +636,7 @@ class ChapterImageMigrationService {
   private async migrateImage(
     bookSlug: string,
     imageName: string,
-    maxRetries: number = 3
+    maxRetries: number = 3,
   ): Promise<ImageMigrationResult> {
     const originalPath = `/assets/${bookSlug}/images/${imageName}`;
     const blobPath = this.blobPathService.convertLegacyPath(originalPath);
@@ -723,7 +723,7 @@ class ChapterImageMigrationService {
       return fileInfo.size > 0;
     } catch (error) {
       console.warn(
-        `Verification failed for ${blobUrl}: ${error instanceof Error ? error.message : String(error)}`
+        `Verification failed for ${blobUrl}: ${error instanceof Error ? error.message : String(error)}`,
       );
       return false;
     }
@@ -840,7 +840,7 @@ async function main(): Promise<void> {
     const migrationService = new ChapterImageMigrationService(
       blobService,
       blobPathService,
-      options.logFile
+      options.logFile,
     );
 
     // Run migration

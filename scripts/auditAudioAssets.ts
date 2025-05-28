@@ -204,7 +204,7 @@ function getAudioType(path: string): 'chapter' | 'full' | 'unknown' {
 function processAudioBlob(
   blob: { pathname: string; url: string; size: number; downloadUrl?: string; uploadedAt?: Date },
   bookSlugs: Set<string>,
-  pathIssues: Record<string, string[]>
+  pathIssues: Record<string, string[]>,
 ): AudioAssetInfo {
   // Extract book slug from path
   const bookSlug = assetPathService.getBookSlugFromPath(blob.pathname);
@@ -336,7 +336,7 @@ function categorizeAssets(
       standardized: number;
       nonStandardized: number;
     }
-  >
+  >,
 ): void {
   audioAssets.forEach((asset) => {
     // Categorize by book
@@ -481,7 +481,7 @@ function createHtmlReport(results: AuditResults): string {
         <td>${asset.audioType}</td>
         <td>${formatBytes(asset.size)}</td>
       </tr>
-    `
+    `,
     )
     .join('');
 
@@ -497,7 +497,7 @@ function createHtmlReport(results: AuditResults): string {
           <td>${p}</td>
           <td>${assetPathService.convertLegacyPath(p)}</td>
         </tr>
-      `
+      `,
         )
         .join('');
 

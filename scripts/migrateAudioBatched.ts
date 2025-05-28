@@ -72,7 +72,7 @@ async function migrateAudioFile(bookNumber: number): Promise<void> {
       const fileInfo = await blobService.getFileInfo(blobUrl);
       console.error(`Existing file info:`);
       console.error(
-        `Size: ${fileInfo.size} bytes (${(fileInfo.size / 1024 / 1024).toFixed(2)} MB)`
+        `Size: ${fileInfo.size} bytes (${(fileInfo.size / 1024 / 1024).toFixed(2)} MB)`,
       );
       console.error(`Content-Type: ${fileInfo.contentType}`);
 
@@ -114,7 +114,7 @@ async function migrateAudioFile(bookNumber: number): Promise<void> {
       }
     } catch (error) {
       console.error(
-        `❌ Error checking source file: ${error instanceof Error ? error.message : String(error)}`
+        `❌ Error checking source file: ${error instanceof Error ? error.message : String(error)}`,
       );
       return;
     }
@@ -134,7 +134,7 @@ async function migrateAudioFile(bookNumber: number): Promise<void> {
 
     const downloadDuration = Date.now() - downloadStartTime;
     console.error(
-      `✅ Downloaded ${buffer.length} bytes (${(buffer.length / 1024 / 1024).toFixed(2)} MB) in ${(downloadDuration / 1000).toFixed(1)}s`
+      `✅ Downloaded ${buffer.length} bytes (${(buffer.length / 1024 / 1024).toFixed(2)} MB) in ${(downloadDuration / 1000).toFixed(1)}s`,
     );
 
     // Create a File object from the downloaded buffer
@@ -159,7 +159,7 @@ async function migrateAudioFile(bookNumber: number): Promise<void> {
     console.error(`\n🔍 Verifying upload...`);
     const verifyResult = await blobService.getFileInfo(uploadResult.url);
     console.error(
-      `Size: ${verifyResult.size} bytes (${(verifyResult.size / 1024 / 1024).toFixed(2)} MB)`
+      `Size: ${verifyResult.size} bytes (${(verifyResult.size / 1024 / 1024).toFixed(2)} MB)`,
     );
     console.error(`Content-Type: ${verifyResult.contentType}`);
 
@@ -167,7 +167,7 @@ async function migrateAudioFile(bookNumber: number): Promise<void> {
       console.error(`\n✅ Verification passed: Sizes match`);
     } else {
       console.error(
-        `\n❌ Verification failed: Size mismatch (expected ${buffer.length}, got ${verifyResult.size})`
+        `\n❌ Verification failed: Size mismatch (expected ${buffer.length}, got ${verifyResult.size})`,
       );
     }
 

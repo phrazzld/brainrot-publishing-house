@@ -310,7 +310,7 @@ class EnhancedAudioMigrator {
     const failed = this.results.filter((r) => r.status === 'failed').length;
 
     process.stdout.write(
-      `\rProgress: ${this.progressCount}/${this.totalFiles} (${percent}%) - Success: ${success}, Skipped: ${skipped}, Failed: ${failed}`
+      `\rProgress: ${this.progressCount}/${this.totalFiles} (${percent}%) - Success: ${success}, Skipped: ${skipped}, Failed: ${failed}`,
     );
   }
 
@@ -320,23 +320,32 @@ class EnhancedAudioMigrator {
   private async gatherAudioFiles(booksToProcess: string[]): Promise<void> {
     // If inventory path is provided, load from there
     if (this.options.inventoryPath && existsSync(this.options.inventoryPath)) {
-      console.error(`Loading audio inventory from ${this.options.inventoryPath}...`);
+      logger.info({
+        msg: 'Loading audio inventory from file',
+        inventoryPath: this.options.inventoryPath,
+      });
       await this.loadAudioFilesFromInventory();
       return;
     }
 
     // Otherwise build list from translations and check Vercel Blob
-    console.error('Building audio files list from translations...');
+    logger.info({ msg: 'Building audio files list from translations' });
     for (const bookSlug of booksToProcess) {
       const book = translations.find((t) => t.slug === bookSlug);
 
       if (!book) {
-        console.warn(`Book not found: ${bookSlug}`);
+        logger.warn({
+          msg: 'Book not found in translations',
+          bookSlug,
+        });
         continue;
       }
 
       if (!book.chapters) {
-        console.error(`No chapters found for book: ${bookSlug}`);
+        logger.error({
+          msg: 'No chapters found for book',
+          bookSlug,
+        });
         continue;
       }
 
@@ -383,173 +392,236 @@ class EnhancedAudioMigrator {
         const booksToInclude =
           this.options.books.length > 0
             ? inventory.books.filter((b: Record<string, unknown>) =>
-                this.options.books.includes(b.slug as string)
+                this.options.books.includes(b.slug as string),
               )
             : inventory.books;
 
         for (const book of booksToInclude) {
-          if (!book.files || !Array.isArray(book.files)) continue;
-
-          for (const file of book.files) {
-            // Skip placeholder files
-            if (file.isPlaceholder) continue;
-
-            // Skip non-existent files
-            if (!file.exists) continue;
-
-            // Use the blobUrl directly from the inventory if available
-            if (file.blobUrl) {
-              this.audioFiles.push({
-                blobPath: file.blobPath || `books/${book.slug}/audio/${path.basename(file.key)}`,
-                bookSlug: book.slug,
-                chapterTitle: file.chapterTitle,
-                size: file.size,
-                blobUrl: file.blobUrl,
-              });
-            }
-          }
+          this.processInventoryBook(book);
         }
       } else {
         throw new Error('Invalid inventory format');
       }
 
-      console.error(`Loaded ${this.audioFiles.length} audio files from inventory`);
+      logger.info({
+        msg: 'Loaded audio files from inventory',
+        audioFilesCount: this.audioFiles.length,
+      });
     } catch (error) {
-      console.error('Error loading inventory:', error);
+      logger.error({
+        msg: 'Error loading inventory',
+        error: error instanceof Error ? error.message : String(error),
+      });
       throw new Error(
-        `Failed to load inventory: ${error instanceof Error ? error.message : String(error)}`
+        `Failed to load inventory: ${error instanceof Error ? error.message : String(error)}`,
       );
     }
   }
 
+  private processInventoryBook(book: Record<string, unknown>): void {
+    if (!book.files || !Array.isArray(book.files)) return;
+
+    for (const file of book.files) {
+      if (this.shouldProcessInventoryFile(file)) {
+        this.addAudioFileFromInventory(book, file);
+      }
+    }
+  }
+
+  private shouldProcessInventoryFile(file: Record<string, unknown>): boolean {
+    // Skip placeholder files
+    if (file.isPlaceholder) return false;
+
+    // Skip non-existent files
+    if (!file.exists) return false;
+
+    // Only process files with blob URLs
+    return !!file.blobUrl;
+  }
+
+  private addAudioFileFromInventory(
+    book: Record<string, unknown>,
+    file: Record<string, unknown>,
+  ): void {
+    this.audioFiles.push({
+      blobPath:
+        (file.blobPath as string) ||
+        `books/${book.slug as string}/audio/${path.basename(file.key as string)}`,
+      bookSlug: book.slug as string,
+      chapterTitle: file.chapterTitle as string,
+      size: file.size as number,
+      blobUrl: file.blobUrl as string,
+    });
+  }
+
   /**
    * Process a single audio file
-   *
-   * This is a complex method that handles file validation
-   * eslint-disable-next-line complexity
    */
   private async processAudioFile(audioFile: AudioFile): Promise<void> {
     const operationStartTime = Date.now();
-    const { blobPath, bookSlug, chapterTitle, blobUrl } = audioFile;
+    const { blobPath, blobUrl } = audioFile;
 
     this.log(`\nProcessing: ${blobPath}`);
 
-    const result: MigrationResult = {
+    const result = this.createInitialResult(audioFile);
+
+    try {
+      const fileStatus = await this.checkFileExistence(blobUrl);
+
+      if (this.shouldSkipFile(fileStatus)) {
+        this.handleSkippedFile(result, fileStatus);
+        return;
+      }
+
+      if (this.options.dryRun) {
+        this.handleDryRunFile(result, blobPath);
+        return;
+      }
+
+      if (fileStatus.exists) {
+        await this.validateFileContent(result, blobUrl, fileStatus.size, operationStartTime);
+      } else {
+        this.handleNonExistentFile(result);
+      }
+    } catch (error) {
+      this.handleFileError(result, error, operationStartTime);
+    }
+
+    this.results.push(result);
+  }
+
+  private createInitialResult(audioFile: AudioFile): MigrationResult {
+    return {
       status: 'failed',
-      bookSlug,
-      chapterTitle,
-      blobPath,
-      blobUrl,
+      bookSlug: audioFile.bookSlug,
+      chapterTitle: audioFile.chapterTitle,
+      blobPath: audioFile.blobPath,
+      blobUrl: audioFile.blobUrl,
       totalTime: 0,
       validated: false,
     };
+  }
 
+  private async checkFileExistence(blobUrl: string): Promise<{ exists: boolean; size: number }> {
     try {
-      // Check if file exists in Blob storage
-      let exists = false;
-      let fileSize = 0;
+      const fileInfo = await blobService.getFileInfo(blobUrl);
+      const fileSize = fileInfo?.size || 0;
+      const exists = fileInfo && fileInfo.size > this.options.sizeThreshold * 1024;
 
-      try {
-        const fileInfo = await blobService.getFileInfo(blobUrl);
-        fileSize = fileInfo?.size || 0;
-
-        // Consider it exists only if it's a real file (not a tiny placeholder)
-        exists = fileInfo && fileInfo.size > this.options.sizeThreshold * 1024;
-
-        if (exists) {
-          this.log(`File exists in Blob storage (${formatSize(fileInfo.size)})`);
-        } else if (fileSize > 0) {
-          this.log(`Small placeholder file exists (${formatSize(fileSize)}) - will replace`);
-        }
-      } catch {
-        // File doesn't exist, skip or validate
-        exists = false;
-      }
-
-      // Skip if doesn't exist and not in force mode
-      if (!exists && !this.options.force) {
-        this.log(`Skipping (file doesn't exist)`);
-
-        result.status = 'skipped';
-        result.skipReason = "file doesn't exist";
-        this.results.push(result);
-        return;
-      }
-
-      // In dry run mode, simulate the operation
-      if (this.options.dryRun) {
-        this.log(`DRY RUN: Would validate ${blobPath}`);
-
-        result.status = 'skipped';
-        result.skipReason = 'dry run';
-        this.results.push(result);
-        return;
-      }
-
-      // Validate the file content
       if (exists) {
-        this.log(`Validating file content: ${blobPath}`);
-
-        // Fetch the file content
-        const response = await fetch(blobUrl);
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const contentType = response.headers.get('content-type') || 'audio/mpeg';
-        const buffer = await response.arrayBuffer();
-        const content = Buffer.from(buffer);
-
-        // Verify the content is valid audio
-        const contentValid = verifyAudioContent(content);
-
-        if (!contentValid) {
-          this.log(`WARNING: Content validation failed - file doesn't appear to be valid MP3`);
-        } else {
-          this.log(`Content validation passed - file appears to be valid MP3`);
-        }
-
-        // Record validation information
-        result.validated = true;
-        result.validationInfo = {
-          sizeValid: fileSize > this.options.sizeThreshold * 1024,
-          contentValidated: contentValid,
-          size: fileSize,
-        };
-
-        // Mark as success if validation passed
-        result.status = result.validationInfo.sizeValid && contentValid ? 'success' : 'failed';
-        result.contentType = contentType;
-        result.totalTime = Date.now() - operationStartTime;
-
-        if (result.status === 'success') {
-          this.log(`Successfully validated audio file in ${result.totalTime}ms`);
-        } else {
-          if (!result.validationInfo.sizeValid) {
-            result.error = `Size validation failed: file too small (${formatSize(fileSize)})`;
-          } else {
-            result.error = `Content validation failed: not a valid MP3 file`;
-          }
-          this.log(`Validation failed: ${result.error}`);
-        }
-      } else {
-        result.status = 'skipped';
-        result.skipReason = "file doesn't exist and not in force mode";
-        result.validated = false;
-        this.log(`Skipping (file doesn't exist and not in force mode)`);
+        this.log(`File exists in Blob storage (${formatSize(fileInfo.size)})`);
+      } else if (fileSize > 0) {
+        this.log(`Small placeholder file exists (${formatSize(fileSize)}) - will replace`);
       }
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      this.log(`Error: ${errorMessage}`);
 
-      result.status = 'failed';
-      result.error = errorMessage;
-      result.totalTime = Date.now() - operationStartTime;
+      return { exists, size: fileSize };
+    } catch {
+      return { exists: false, size: 0 };
+    }
+  }
+
+  private shouldSkipFile(fileStatus: { exists: boolean; size: number }): boolean {
+    return !fileStatus.exists && !this.options.force;
+  }
+
+  private handleSkippedFile(
+    result: MigrationResult,
+    _fileStatus: { exists: boolean; size: number },
+  ): void {
+    this.log(`Skipping (file doesn't exist)`);
+    result.status = 'skipped';
+    result.skipReason = "file doesn't exist";
+    this.results.push(result);
+  }
+
+  private handleDryRunFile(result: MigrationResult, blobPath: string): void {
+    this.log(`DRY RUN: Would validate ${blobPath}`);
+    result.status = 'skipped';
+    result.skipReason = 'dry run';
+    this.results.push(result);
+  }
+
+  private async validateFileContent(
+    result: MigrationResult,
+    blobUrl: string,
+    fileSize: number,
+    operationStartTime: number,
+  ): Promise<void> {
+    this.log(`Validating file content: ${result.blobPath}`);
+
+    const response = await fetch(blobUrl);
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
-    // Add to results
-    this.results.push(result);
+    const contentType = response.headers.get('content-type') || 'audio/mpeg';
+    const buffer = await response.arrayBuffer();
+    const content = Buffer.from(buffer);
+    const contentValid = verifyAudioContent(content);
+
+    this.logValidationResult(contentValid);
+
+    result.validated = true;
+    result.validationInfo = {
+      sizeValid: fileSize > this.options.sizeThreshold * 1024,
+      contentValidated: contentValid,
+      size: fileSize,
+    };
+
+    this.setValidationStatus(result, contentType, operationStartTime);
+  }
+
+  private logValidationResult(contentValid: boolean): void {
+    if (!contentValid) {
+      this.log(`WARNING: Content validation failed - file doesn't appear to be valid MP3`);
+    } else {
+      this.log(`Content validation passed - file appears to be valid MP3`);
+    }
+  }
+
+  private setValidationStatus(
+    result: MigrationResult,
+    contentType: string,
+    operationStartTime: number,
+  ): void {
+    const isValid = result.validationInfo?.sizeValid && result.validationInfo?.contentValidated;
+    result.status = isValid ? 'success' : 'failed';
+    result.contentType = contentType;
+    result.totalTime = Date.now() - operationStartTime;
+
+    if (result.status === 'success') {
+      this.log(`Successfully validated audio file in ${result.totalTime}ms`);
+    } else {
+      result.error = this.getValidationError(result);
+      this.log(`Validation failed: ${result.error}`);
+    }
+  }
+
+  private getValidationError(result: MigrationResult): string {
+    if (!result.validationInfo?.sizeValid) {
+      return `Size validation failed: file too small (${formatSize(result.validationInfo?.size || 0)})`;
+    }
+    return `Content validation failed: not a valid MP3 file`;
+  }
+
+  private handleNonExistentFile(result: MigrationResult): void {
+    result.status = 'skipped';
+    result.skipReason = "file doesn't exist and not in force mode";
+    result.validated = false;
+    this.log(`Skipping (file doesn't exist and not in force mode)`);
+  }
+
+  private handleFileError(
+    result: MigrationResult,
+    error: unknown,
+    operationStartTime: number,
+  ): void {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    this.log(`Error: ${errorMessage}`);
+
+    result.status = 'failed';
+    result.error = errorMessage;
+    result.totalTime = Date.now() - operationStartTime;
   }
 
   /**
@@ -583,10 +655,10 @@ class EnhancedAudioMigrator {
     const booksCovered = [...new Set(this.results.map((r) => r.bookSlug))];
 
     const validationSuccess = this.results.filter(
-      (r) => r.validated && r.validationInfo?.sizeValid && r.validationInfo?.contentValidated
+      (r) => r.validated && r.validationInfo?.sizeValid && r.validationInfo?.contentValidated,
     ).length;
     const validationFailed = this.results.filter(
-      (r) => r.validated && (!r.validationInfo?.sizeValid || !r.validationInfo?.contentValidated)
+      (r) => r.validated && (!r.validationInfo?.sizeValid || !r.validationInfo?.contentValidated),
     ).length;
 
     return {
@@ -697,30 +769,33 @@ class EnhancedAudioMigrator {
    * Print migration summary
    */
   private printSummary(summary: MigrationSummary): void {
-    console.error('\n\n📊 Validation Summary');
-    console.error('------------------');
-    console.error(`Total files: ${summary.total}`);
-    console.error(`Successful : ${summary.successful}`);
-    console.error(`Skipped    : ${summary.skipped}`);
-    console.error(`Failed     : ${summary.failed}`);
-
-    console.error('\nValidation:');
-    console.error(`Success    : ${summary.validationSuccess}`);
-    console.error(`Failed     : ${summary.validationFailed}`);
-
     const durationMin = (summary.totalDuration / (1000 * 60)).toFixed(2);
-    console.error(`\nTotal duration  : ${durationMin} minutes`);
 
-    console.error(`\nBooks covered: ${summary.booksCovered.join(', ')}`);
+    // Get failed files details (limit to 10 for logging)
+    const failedFiles = this.results
+      .filter((r) => r.status === 'failed')
+      .slice(0, 10)
+      .map((r) => ({
+        bookSlug: r.bookSlug,
+        blobPath: r.blobPath,
+        error: r.error,
+      }));
 
-    if (summary.failed > 0) {
-      console.error('\n❌ Failed Files:');
-      this.results
-        .filter((r) => r.status === 'failed')
-        .forEach((r) => {
-          console.error(`   - ${r.bookSlug} / ${r.blobPath}: ${r.error}`);
-        });
-    }
+    logger.info({
+      msg: 'Migration validation summary',
+      summary: {
+        totalFiles: summary.total,
+        successful: summary.successful,
+        skipped: summary.skipped,
+        failed: summary.failed,
+        validationSuccess: summary.validationSuccess,
+        validationFailed: summary.validationFailed,
+        durationMinutes: durationMin,
+        booksCovered: summary.booksCovered,
+        failedFiles: failedFiles.length > 0 ? failedFiles : undefined,
+        additionalFailures: summary.failed > 10 ? summary.failed - 10 : 0,
+      },
+    });
   }
 
   /**
@@ -738,12 +813,18 @@ class EnhancedAudioMigrator {
       : path.join(process.cwd(), this.options.logFile);
 
     await fs.writeFile(outputPath, JSON.stringify(output, null, 2), 'utf8');
-    console.error(`\n💾 Results saved to ${outputPath}`);
+    logger.info({
+      msg: 'Migration results saved',
+      outputPath,
+    });
 
     // Also save a human-readable report
     const reportPath = outputPath.replace(/\.json$/, '.md');
     await this.saveMarkdownReport(summary, reportPath);
-    console.error(`📝 Report saved to ${reportPath}`);
+    logger.info({
+      msg: 'Migration report saved',
+      reportPath,
+    });
   }
 
   /**
@@ -751,7 +832,10 @@ class EnhancedAudioMigrator {
    */
   private log(message: string): void {
     if (this.options.verbose) {
-      console.error(message);
+      logger.info({
+        msg: 'Verbose log message',
+        message,
+      });
     }
   }
 }
@@ -765,13 +849,15 @@ async function main(): Promise<void> {
     const migrator = new EnhancedAudioMigrator(options);
     await migrator.run();
 
-    console.error('\n✅ Enhanced audio validation completed successfully!');
+    logger.info({
+      msg: 'Enhanced audio validation completed successfully',
+    });
     process.exit(0);
   } catch (error) {
-    console.error(
-      '\n❌ Enhanced audio validation failed:',
-      error instanceof Error ? error.message : String(error)
-    );
+    logger.error({
+      msg: 'Enhanced audio validation failed',
+      error: error instanceof Error ? error.message : String(error),
+    });
     process.exit(1);
   }
 }

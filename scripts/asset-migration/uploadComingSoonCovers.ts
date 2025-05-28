@@ -141,7 +141,7 @@ async function createPlaceholderImage(_title: string): Promise<Buffer> {
   // This is a 1x1 transparent pixel PNG
   const transparentPixel = Buffer.from(
     'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+P+/HgAFJQJCX0sFXQAAAABJRU5ErkJggg==',
-    'base64'
+    'base64',
   );
 
   return transparentPixel;
@@ -268,7 +268,7 @@ async function uploadComingSoonCovers(options: UploadOptions): Promise<UploadRes
           filename,
           access: 'public',
           cacheControl: 'max-age=31536000', // 1 year cache
-        }
+        },
       );
 
       logger.info({

@@ -286,7 +286,7 @@ const cacheBustedUrl = await assetService.getAssetUrl(AssetType.IMAGE, 'the-ilia
 const exists = await assetService.assetExists(
   AssetType.TEXT,
   'the-odyssey',
-  'brainrot-fulltext.txt'
+  'brainrot-fulltext.txt',
 );
 
 if (exists) {
@@ -414,7 +414,7 @@ export async function GET(request: NextRequest) {
     const assetContent = await assetService.fetchAsset(
       AssetType.AUDIO,
       slug,
-      `chapter-${chapter.padStart(2, '0')}.mp3`
+      `chapter-${chapter.padStart(2, '0')}.mp3`,
     );
 
     return new NextResponse(assetContent, {

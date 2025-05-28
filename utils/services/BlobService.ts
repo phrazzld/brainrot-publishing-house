@@ -66,7 +66,7 @@ export class BlobService {
   public async uploadText(
     content: string,
     path: string,
-    options: Omit<UploadOptions, 'pathname' | 'filename'> = {}
+    options: Omit<UploadOptions, 'pathname' | 'filename'> = {},
   ): Promise<PutBlobResult> {
     try {
       // Create a Blob from the text content

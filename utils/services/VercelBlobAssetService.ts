@@ -42,7 +42,7 @@ export class VercelBlobAssetService implements AssetService {
   constructor(
     private readonly pathService: AssetPathService,
     private readonly config: AssetServiceConfig,
-    private readonly logger: Logger = defaultLogger
+    private readonly logger: Logger = defaultLogger,
   ) {
     this.logger.info({
       message: 'VercelBlobAssetService initialized',
@@ -64,7 +64,7 @@ export class VercelBlobAssetService implements AssetService {
     assetType: AssetType,
     bookSlug: string,
     assetName: string,
-    options?: AssetUrlOptions
+    options?: AssetUrlOptions,
   ): Promise<string> {
     const operation = 'getAssetUrl';
     const path = this.pathService.getAssetPath(assetType, bookSlug, assetName);
@@ -171,7 +171,7 @@ export class VercelBlobAssetService implements AssetService {
         'Failed to generate asset URL',
         AssetErrorType.UNKNOWN_ERROR,
         operation,
-        { cause: error, assetPath: path }
+        { cause: error, assetPath: path },
       );
     }
   }
@@ -234,7 +234,7 @@ export class VercelBlobAssetService implements AssetService {
   async fetchAsset(
     assetType: AssetType,
     bookSlug: string,
-    assetName: string
+    assetName: string,
   ): Promise<ArrayBuffer> {
     const operation = 'fetchAsset';
     const path = this.pathService.getAssetPath(assetType, bookSlug, assetName);
@@ -301,7 +301,7 @@ export class VercelBlobAssetService implements AssetService {
               `Failed to fetch asset: HTTP ${response.status} ${response.statusText}`,
               errorType,
               operation,
-              { statusCode: response.status, assetPath: path }
+              { statusCode: response.status, assetPath: path },
             );
           }
 
@@ -403,7 +403,7 @@ export class VercelBlobAssetService implements AssetService {
         'Failed to fetch asset content',
         AssetErrorType.UNKNOWN_ERROR,
         operation,
-        { cause: error, assetPath: path }
+        { cause: error, assetPath: path },
       );
     }
   }
@@ -444,7 +444,7 @@ export class VercelBlobAssetService implements AssetService {
               `Failed to fetch text asset: HTTP ${response.status} ${response.statusText}`,
               this.mapHttpStatusToErrorType(response.status),
               operation,
-              { statusCode: response.status, assetPath: path }
+              { statusCode: response.status, assetPath: path },
             );
           }
 
@@ -474,7 +474,7 @@ export class VercelBlobAssetService implements AssetService {
 
           // Exponential backoff
           await new Promise((resolve) =>
-            setTimeout(resolve, BASE_RETRY_DELAY * Math.pow(2, attempts - 1))
+            setTimeout(resolve, BASE_RETRY_DELAY * Math.pow(2, attempts - 1)),
           );
         }
       }
@@ -499,7 +499,7 @@ export class VercelBlobAssetService implements AssetService {
         'Failed to fetch text asset',
         AssetErrorType.UNKNOWN_ERROR,
         operation,
-        { cause: error, assetPath: path }
+        { cause: error, assetPath: path },
       );
     }
   }
@@ -591,7 +591,7 @@ export class VercelBlobAssetService implements AssetService {
         'Failed to upload asset',
         AssetErrorType.STORAGE_ERROR,
         operation,
-        { cause: error, assetPath: path }
+        { cause: error, assetPath: path },
       );
     }
   }
@@ -659,7 +659,7 @@ export class VercelBlobAssetService implements AssetService {
         'Failed to delete asset',
         AssetErrorType.STORAGE_ERROR,
         operation,
-        { cause: error, assetPath: path }
+        { cause: error, assetPath: path },
       );
     }
   }
@@ -675,7 +675,7 @@ export class VercelBlobAssetService implements AssetService {
   async listAssets(
     assetType: AssetType,
     bookSlug: string,
-    options?: ListOptions
+    options?: ListOptions,
   ): Promise<AssetListResult> {
     const operation = 'listAssets';
     const prefix = `${this.config.rootPrefix || 'assets'}/${assetType}/${bookSlug}/`;
@@ -749,7 +749,7 @@ export class VercelBlobAssetService implements AssetService {
         'Failed to list assets',
         AssetErrorType.STORAGE_ERROR,
         operation,
-        { cause: error }
+        { cause: error },
       );
     }
   }
@@ -767,7 +767,7 @@ export class VercelBlobAssetService implements AssetService {
       const url = await this.getAssetUrl(
         this.getAssetTypeFromPath(path),
         this.getBookSlugFromPath(path),
-        this.getAssetNameFromPath(path)
+        this.getAssetNameFromPath(path),
       );
 
       // Use fetch with retries
@@ -784,7 +784,7 @@ export class VercelBlobAssetService implements AssetService {
               `Failed to fetch asset: HTTP ${response.status} ${response.statusText}`,
               this.mapHttpStatusToErrorType(response.status),
               operation,
-              { statusCode: response.status, assetPath: path }
+              { statusCode: response.status, assetPath: path },
             );
           }
 
@@ -814,7 +814,7 @@ export class VercelBlobAssetService implements AssetService {
 
           // Exponential backoff
           await new Promise((resolve) =>
-            setTimeout(resolve, BASE_RETRY_DELAY * Math.pow(2, attempts - 1))
+            setTimeout(resolve, BASE_RETRY_DELAY * Math.pow(2, attempts - 1)),
           );
         }
       }
@@ -838,7 +838,7 @@ export class VercelBlobAssetService implements AssetService {
         'Failed to fetch asset content',
         AssetErrorType.UNKNOWN_ERROR,
         operation,
-        { cause: error, assetPath: path }
+        { cause: error, assetPath: path },
       );
     }
   }
@@ -877,7 +877,7 @@ export class VercelBlobAssetService implements AssetService {
       cause?: unknown;
       statusCode?: number;
       assetPath?: string;
-    }
+    },
   ): AssetError {
     return new AssetError(message, type, operation, options);
   }
@@ -1003,5 +1003,5 @@ export const vercelBlobAssetService = new VercelBlobAssetService(
     rootPrefix: 'assets',
     defaultCacheControl: 'public, max-age=31536000',
     defaultCacheBusting: false,
-  }
+  },
 );

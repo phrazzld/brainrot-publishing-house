@@ -58,13 +58,13 @@ interface MigrateFullAudiobooksModule {
   downloadChapterFiles: (
     config: AudiobookConfig | string,
     chapters: string[],
-    tempDir: string
+    tempDir: string,
   ) => Promise<string[]>;
   concatenateChapters: (inputFiles: string[], outputFile: string) => Promise<string>;
   uploadFullAudiobook: (
     localPath: string,
     remotePath: string,
-    bookSlug: string
+    bookSlug: string,
   ) => Promise<boolean>;
   verifyMigration: (configs: AudiobookConfig[]) => Promise<BookMigrationResult[]>;
   migrateFullAudiobooks: (options: MigrationOptions) => Promise<{
@@ -154,7 +154,7 @@ describe('migrateFullAudiobooks', () => {
       const downloadedFiles = await migrateFullAudiobooksModule.downloadChapterFiles(
         'the-iliad',
         chapters,
-        tempDir
+        tempDir,
       );
 
       expect(downloadedFiles).toHaveLength(2);
@@ -170,7 +170,7 @@ describe('migrateFullAudiobooks', () => {
       mockAssetService.download.mockRejectedValueOnce(new Error('Network error'));
 
       await expect(
-        migrateFullAudiobooksModule.downloadChapterFiles('the-iliad', chapters, tempDir)
+        migrateFullAudiobooksModule.downloadChapterFiles('the-iliad', chapters, tempDir),
       ).rejects.toThrow('Network error');
     });
   });
@@ -202,11 +202,11 @@ describe('migrateFullAudiobooks', () => {
       expect(result).toBe(outputFile);
       expect(exec).toHaveBeenCalledWith(
         expect.stringContaining('ffmpeg -version'),
-        expect.any(Function)
+        expect.any(Function),
       );
       expect(exec).toHaveBeenCalledWith(
         expect.stringContaining('ffmpeg -f concat'),
-        expect.any(Function)
+        expect.any(Function),
       );
     });
 
@@ -218,7 +218,7 @@ describe('migrateFullAudiobooks', () => {
       });
 
       await expect(
-        migrateFullAudiobooksModule.concatenateChapters([], '/tmp/output.mp3')
+        migrateFullAudiobooksModule.concatenateChapters([], '/tmp/output.mp3'),
       ).rejects.toThrow('ffmpeg is not installed');
     });
 
@@ -239,7 +239,7 @@ describe('migrateFullAudiobooks', () => {
       jest.spyOn(fs, 'unlinkSync').mockImplementation(() => {});
 
       await expect(
-        migrateFullAudiobooksModule.concatenateChapters(inputFiles, outputFile)
+        migrateFullAudiobooksModule.concatenateChapters(inputFiles, outputFile),
       ).rejects.toThrow('Concatenation failed: output file not created');
     });
   });
@@ -260,7 +260,7 @@ describe('migrateFullAudiobooks', () => {
       const result = await migrateFullAudiobooksModule.uploadFullAudiobook(
         localPath,
         remotePath,
-        'the-iliad'
+        'the-iliad',
       );
 
       expect(result).toBe(true);
@@ -269,7 +269,7 @@ describe('migrateFullAudiobooks', () => {
         remotePath,
         expect.objectContaining({
           contentType: 'audio/mpeg',
-        })
+        }),
       );
     });
 
@@ -291,7 +291,7 @@ describe('migrateFullAudiobooks', () => {
       const result = await migrateFullAudiobooksModule.uploadFullAudiobook(
         localPath,
         remotePath,
-        'the-iliad'
+        'the-iliad',
       );
 
       expect(result).toBe(true);

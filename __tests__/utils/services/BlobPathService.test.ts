@@ -53,7 +53,7 @@ describe('BlobPathService', () => {
     it('should delegate to AssetPathService and adapt paths correctly', () => {
       // Setup the mock
       mockAssetPathService.getBrainrotTextPath.mockReturnValue(
-        'assets/text/hamlet/brainrot-chapter-01.txt'
+        'assets/text/hamlet/brainrot-chapter-01.txt',
       );
 
       // Call the method
@@ -83,7 +83,7 @@ describe('BlobPathService', () => {
     it('should delegate to AssetPathService and adapt paths correctly', () => {
       // Setup the mock
       mockAssetPathService.getSourceTextPath.mockReturnValue(
-        'assets/text/hamlet/source-source.txt'
+        'assets/text/hamlet/source-source.txt',
       );
 
       // Call the method
@@ -149,7 +149,7 @@ describe('BlobPathService', () => {
       expect(mockAssetPathService.getAssetPath).toHaveBeenCalledWith(
         AssetType.AUDIO,
         'hamlet',
-        'full-audiobook.mp3'
+        'full-audiobook.mp3',
       );
       expect(result).toBe('books/hamlet/audio/full-audiobook.mp3');
 
@@ -163,7 +163,7 @@ describe('BlobPathService', () => {
       expect(mockAssetPathService.getAssetPath).toHaveBeenCalledWith(
         AssetType.IMAGE,
         'odyssey',
-        'cover.jpg'
+        'cover.jpg',
       );
       expect(imageResult).toBe('books/odyssey/images/cover.jpg');
     });
@@ -179,7 +179,7 @@ describe('BlobPathService', () => {
 
       // Verify the result
       expect(mockAssetPathService.normalizeLegacyPath).toHaveBeenCalledWith(
-        '/assets/hamlet/images/hamlet-01.png'
+        '/assets/hamlet/images/hamlet-01.png',
       );
       expect(result).toBe('books/hamlet/images/hamlet-01.png');
     });
@@ -193,7 +193,7 @@ describe('BlobPathService', () => {
 
       // Verify the result
       expect(mockAssetPathService.normalizeLegacyPath).toHaveBeenCalledWith(
-        '/assets/images/shared-image.png'
+        '/assets/images/shared-image.png',
       );
       expect(result).toBe('images/shared-image.png');
     });
@@ -207,7 +207,7 @@ describe('BlobPathService', () => {
 
       // Verify the result
       expect(mockAssetPathService.normalizeLegacyPath).toHaveBeenCalledWith(
-        '/site-assets/logo.svg'
+        '/site-assets/logo.svg',
       );
       expect(result).toBe('site-assets/logo.svg');
     });
@@ -223,7 +223,7 @@ describe('BlobPathService', () => {
 
       // Verify the result
       expect(mockAssetPathService.getBookSlugFromPath).toHaveBeenCalledWith(
-        'books/hamlet/images/hamlet-01.png'
+        'books/hamlet/images/hamlet-01.png',
       );
       expect(result).toBe('hamlet');
     });
@@ -237,7 +237,7 @@ describe('BlobPathService', () => {
 
       // Verify the result
       expect(mockAssetPathService.getBookSlugFromPath).toHaveBeenCalledWith(
-        'something/not-a-book-path/file.txt'
+        'something/not-a-book-path/file.txt',
       );
       expect(result).toBeNull();
     });

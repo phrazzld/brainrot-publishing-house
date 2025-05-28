@@ -1,4 +1,4 @@
-import { list, put } from '@vercel/blob';
+import { put as _put, list } from '@vercel/blob';
 import pino from 'pino';
 
 const logger = pino({

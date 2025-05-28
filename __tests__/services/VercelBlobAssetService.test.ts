@@ -127,7 +127,7 @@ describe('VercelBlobAssetService', () => {
         defaultCacheControl: 'public, max-age=31536000',
         defaultCacheBusting: false,
       },
-      mockLogger
+      mockLogger,
     );
   });
 
@@ -141,7 +141,7 @@ describe('VercelBlobAssetService', () => {
       const url = await service.getAssetUrl(AssetType.AUDIO, 'the-iliad', 'chapter-01.mp3');
 
       expect(url).toBe(
-        'https://public.blob.vercel-storage.com/assets/audio/the-iliad/chapter-01.mp3'
+        'https://public.blob.vercel-storage.com/assets/audio/the-iliad/chapter-01.mp3',
       );
       expect(mockLogger.info).toHaveBeenCalled();
     });
@@ -156,7 +156,7 @@ describe('VercelBlobAssetService', () => {
         const url = await service.getAssetUrl(AssetType.TEXT, 'hamlet', 'fulltext.txt', options);
 
         expect(url).toContain(
-          'https://public.blob.vercel-storage.com/assets/text/hamlet/fulltext.txt?'
+          'https://public.blob.vercel-storage.com/assets/text/hamlet/fulltext.txt?',
         );
         expect(url).toContain('_t=1234567890');
         expect(mockLogger.info).toHaveBeenCalled();
@@ -207,7 +207,7 @@ describe('VercelBlobAssetService', () => {
       const content = await service.fetchAsset(AssetType.AUDIO, 'the-iliad', 'chapter-01.mp3');
 
       expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining('the-iliad/chapter-01.mp3')
+        expect.stringContaining('the-iliad/chapter-01.mp3'),
       );
       expect(content).toBe(mockArrayBuffer);
       expect(mockLogger.info).toHaveBeenCalled();
@@ -241,7 +241,7 @@ describe('VercelBlobAssetService', () => {
           size: expect.any(Number),
           contentType: expect.any(String),
           uploadedAt: expect.any(Date),
-        })
+        }),
       );
       expect(mockLogger.info).toHaveBeenCalled();
     });
@@ -263,7 +263,7 @@ describe('VercelBlobAssetService', () => {
           size: expect.any(Number),
           contentType: expect.any(String),
           uploadedAt: expect.any(Date),
-        })
+        }),
       );
       expect(mockLogger.info).toHaveBeenCalled();
     });
@@ -323,7 +323,7 @@ describe('VercelBlobAssetService', () => {
             }),
           ]),
           hasMore: expect.any(Boolean),
-        })
+        }),
       );
       expect(mockLogger.info).toHaveBeenCalled();
     });
@@ -338,7 +338,7 @@ describe('VercelBlobAssetService', () => {
         expect.objectContaining({
           limit: 10,
           cursor: 'next-page',
-        })
+        }),
       );
     });
 

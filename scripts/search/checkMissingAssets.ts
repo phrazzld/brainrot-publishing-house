@@ -109,7 +109,7 @@ async function main() {
       logger.info(`✅ ${result.name}: Found at ${result.url}`);
     } else {
       logger.error(
-        `❌ ${result.name}: Not found at ${result.url} (${result.statusCode || result.error})`
+        `❌ ${result.name}: Not found at ${result.url} (${result.statusCode || result.error})`,
       );
     }
   });

@@ -100,7 +100,7 @@ async function checkAndCopyFile(originalPath: string): Promise<MigrationResult> 
  */
 async function isFileAlreadyMigrated(
   standardizedPath: string,
-  logger: ReturnType<typeof rootLogger.child>
+  logger: ReturnType<typeof rootLogger.child>,
 ): Promise<boolean> {
   try {
     const standardUrl = blobService.getUrlForPath(standardizedPath);
@@ -121,7 +121,7 @@ async function isFileAlreadyMigrated(
  */
 async function downloadOriginalFile(
   originalPath: string,
-  logger: ReturnType<typeof rootLogger.child>
+  logger: ReturnType<typeof rootLogger.child>,
 ): Promise<{
   status: 'success' | 'failed';
   content?: Buffer;
@@ -153,7 +153,7 @@ async function downloadOriginalFile(
 async function uploadToStandardizedPath(
   content: Buffer,
   standardizedPath: string,
-  logger: ReturnType<typeof rootLogger.child>
+  logger: ReturnType<typeof rootLogger.child>,
 ): Promise<MigrationResult> {
   try {
     // Convert buffer to string for text files
@@ -342,7 +342,7 @@ function generateMigrationSummary(results: MigrationResult[], startTime: Date): 
   const reportPath = join(
     process.cwd(),
     'migration-logs',
-    `text-standardization-production-${Date.now()}.json`
+    `text-standardization-production-${Date.now()}.json`,
   );
   writeFileSync(reportPath, JSON.stringify(summary, null, 2));
 

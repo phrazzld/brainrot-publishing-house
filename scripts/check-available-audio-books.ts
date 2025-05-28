@@ -3,7 +3,7 @@ import chalk from 'chalk';
 import translations from '../translations';
 
 async function checkBookAudio(
-  bookSlug: string
+  bookSlug: string,
 ): Promise<{ bookSlug: string; hasAudio: boolean; audioCount: number }> {
   const blobBaseUrl =
     process.env.NEXT_PUBLIC_BLOB_BASE_URL || 'https://public.blob.vercel-storage.com';
@@ -62,7 +62,7 @@ async function main() {
   console.error(`Total books: ${translations.length}`);
   console.error(`Books with audio: ${booksWithAudio.length}`);
   console.error(
-    `Total audio files across all books: ${booksWithAudio.reduce((sum, book) => sum + book.audioCount, 0)}`
+    `Total audio files across all books: ${booksWithAudio.reduce((sum, book) => sum + book.audioCount, 0)}`,
   );
 }
 

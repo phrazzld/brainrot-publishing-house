@@ -72,7 +72,7 @@ global.AbortController = class MockAbortController {
     (this.signal as unknown as { aborted: boolean }).aborted = true;
     (this.signal as unknown as { reason: Error }).reason = new DOMException(
       'The operation was aborted',
-      'AbortError'
+      'AbortError',
     );
   });
 } as unknown as typeof AbortController;
@@ -209,7 +209,7 @@ describe('Proxy Download Service', () => {
       assetServiceOptions?: { shouldFail?: boolean; errorType?: AssetErrorType };
       filename?: string;
       [key: string]: unknown;
-    } = {}
+    } = {},
   ) {
     const logger = createRequestLogger('test-correlation-id');
     const assetService = new MockAssetService(overrides.assetServiceOptions);
@@ -227,7 +227,7 @@ describe('Proxy Download Service', () => {
   }
 
   function mockSuccessfulFetch(
-    options: { headers?: Record<string, string>; extraProps?: Record<string, unknown> } = {}
+    options: { headers?: Record<string, string>; extraProps?: Record<string, unknown> } = {},
   ) {
     const mockResponse = createSuccessResponse('', {
       status: 200,
@@ -270,7 +270,7 @@ describe('Proxy Download Service', () => {
   function mockFailedFetch(
     status = 403,
     statusText = 'Forbidden',
-    contentType = 'application/json'
+    contentType = 'application/json',
   ) {
     const errorBody = JSON.stringify({ error: 'Access denied' });
     // Create an error response with the custom content type
@@ -312,7 +312,7 @@ describe('Proxy Download Service', () => {
             Accept: '*/*',
           }),
           signal: expect.anything(),
-        })
+        }),
       );
     });
 
@@ -386,7 +386,7 @@ describe('Proxy Download Service', () => {
           status: init?.status || 200,
           headers: init?.headers || {},
           body,
-        })
+        }),
       );
 
       // Setup successful fetch with specific headers
@@ -413,7 +413,7 @@ describe('Proxy Download Service', () => {
         expect.objectContaining({
           status: 200,
           headers: expect.any(Object),
-        })
+        }),
       );
     });
   });

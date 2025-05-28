@@ -15,7 +15,7 @@ import { expect } from '@jest/globals';
 export function expectCalledWithObjectContaining<T, K extends keyof T>(
   mockFn: jest.MockedFunction<(...args: unknown[]) => unknown>,
   paramIndex: number,
-  expectedProps: Pick<T, K>
+  expectedProps: Pick<T, K>,
 ): void {
   expect(mockFn).toHaveBeenCalled();
   const calls = mockFn.mock.calls;
@@ -35,7 +35,7 @@ export function expectCalledWithObjectContaining<T, K extends keyof T>(
  */
 export function expectLoggedWithContext(
   loggerFn: jest.MockedFunction<(...args: unknown[]) => unknown>,
-  expectedContext: Record<string, unknown>
+  expectedContext: Record<string, unknown>,
 ): void {
   expectCalledWithObjectContaining(loggerFn, 0, expectedContext);
 }
@@ -48,19 +48,19 @@ export function expectLoggedWithContext(
  */
 export function expectFetchCalledWith(
   url: string | RegExp,
-  options?: RequestInit | Record<string, unknown>
+  options?: RequestInit | Record<string, unknown>,
 ): void {
   expect(global.fetch).toHaveBeenCalled();
 
   if (url instanceof RegExp) {
     expect(global.fetch).toHaveBeenCalledWith(
       expect.stringMatching(url),
-      options ? expect.objectContaining(options) : undefined
+      options ? expect.objectContaining(options) : undefined,
     );
   } else {
     expect(global.fetch).toHaveBeenCalledWith(
       url,
-      options ? expect.objectContaining(options) : undefined
+      options ? expect.objectContaining(options) : undefined,
     );
   }
 }
@@ -91,7 +91,7 @@ export function expectPathStructure(
     bookSlug?: string;
     assetType?: string;
     filename?: string;
-  }
+  },
 ): void {
   if (structure.prefix) {
     expect(path).toMatch(new RegExp(`^${structure.prefix}`));
@@ -118,7 +118,7 @@ export function expectPathStructure(
  */
 export function expectObjectShape<T extends Record<string, unknown>>(
   obj: unknown,
-  schema: Record<keyof T, string | (new (...args: unknown[]) => unknown)>
+  schema: Record<keyof T, string | (new (...args: unknown[]) => unknown)>,
 ): void {
   expect(obj).toBeTruthy();
   const typedObj = obj as T;

@@ -420,7 +420,7 @@ function groupObjectsByBook(objects: Record<string, unknown>[]): {
  */
 function collectChapterAudioAssets(
   chapters: Array<{ audioSrc?: string; title: string }>,
-  referencedAssets: Map<string, { type: AssetType; path: string; info: string }>
+  referencedAssets: Map<string, { type: AssetType; path: string; info: string }>,
 ): void {
   for (const chapter of chapters) {
     if (chapter.audioSrc) {
@@ -439,7 +439,7 @@ function collectChapterAudioAssets(
  */
 function collectFullAudioAsset(
   fullAudioSrc: string,
-  referencedAssets: Map<string, { type: AssetType; path: string; info: string }>
+  referencedAssets: Map<string, { type: AssetType; path: string; info: string }>,
 ): void {
   const assetName = getAssetNameFromPath(fullAudioSrc);
   referencedAssets.set(`audio:${assetName}`, {
@@ -454,7 +454,7 @@ function collectFullAudioAsset(
  */
 function collectCoverImageAsset(
   coverImage: string,
-  referencedAssets: Map<string, { type: AssetType; path: string; info: string }>
+  referencedAssets: Map<string, { type: AssetType; path: string; info: string }>,
 ): void {
   const assetName = getAssetNameFromPath(coverImage);
   referencedAssets.set(`image:${assetName}`, {
@@ -469,7 +469,7 @@ function collectCoverImageAsset(
  */
 function collectFullTextAsset(
   fullText: string,
-  referencedAssets: Map<string, { type: AssetType; path: string; info: string }>
+  referencedAssets: Map<string, { type: AssetType; path: string; info: string }>,
 ): void {
   referencedAssets.set(`text:fulltext.txt`, {
     type: 'text',
@@ -483,7 +483,7 @@ function collectFullTextAsset(
  */
 function collectChapterImageAssets(
   chapters: Array<{ image?: string; title: string }>,
-  referencedAssets: Map<string, { type: AssetType; path: string; info: string }>
+  referencedAssets: Map<string, { type: AssetType; path: string; info: string }>,
 ): void {
   for (const chapter of chapters) {
     if (chapter.image) {
@@ -505,7 +505,7 @@ function collectAudioAssets(
     chapters?: Array<{ audioSrc?: string; title: string; image?: string }>;
     fullAudioSrc?: string;
   },
-  referencedAssets: Map<string, { type: AssetType; path: string; info: string }>
+  referencedAssets: Map<string, { type: AssetType; path: string; info: string }>,
 ): void {
   // Chapters audio
   if (typedBook.chapters) {
@@ -526,7 +526,7 @@ function collectImageAssets(
     chapters?: Array<{ image?: string; title: string }>;
     coverImage?: string;
   },
-  referencedAssets: Map<string, { type: AssetType; path: string; info: string }>
+  referencedAssets: Map<string, { type: AssetType; path: string; info: string }>,
 ): void {
   // Cover image
   if (typedBook.coverImage) {
@@ -544,7 +544,7 @@ function collectImageAssets(
  */
 function collectReferencedAssets(
   book: Record<string, unknown>,
-  options: InventoryOptions
+  options: InventoryOptions,
 ): Map<string, { type: AssetType; path: string; info: string }> {
   const referencedAssets = new Map<string, { type: AssetType; path: string; info: string }>();
 
@@ -589,7 +589,7 @@ function collectReferencedAssets(
 async function processVercelBlobObject(
   obj: Record<string, unknown>,
   context: ProcessObjectsContext,
-  getBlobMetadata: boolean
+  getBlobMetadata: boolean,
 ): Promise<void> {
   const { book, bookInventory, referencedAssets, options, report } = context;
 
@@ -657,14 +657,14 @@ async function processVercelBlobObject(
  */
 async function processVercelBlobObjects(
   context: ProcessObjectsContext,
-  blobBookObjects: Record<string, unknown>[]
+  blobBookObjects: Record<string, unknown>[],
 ): Promise<void> {
   const { options } = context;
   const getBlobMetadata = options.verifyAll || options.checkContent;
 
   // Process each object in parallel
   const processPromises = blobBookObjects.map((obj) =>
-    processVercelBlobObject(obj, context, getBlobMetadata)
+    processVercelBlobObject(obj, context, getBlobMetadata),
   );
 
   await Promise.all(processPromises);
@@ -676,7 +676,7 @@ async function processVercelBlobObjects(
 function processMissingReferencedAssets(
   book: Record<string, unknown>,
   bookInventory: BookInventory,
-  referencedAssets: Map<string, { type: AssetType; path: string; info: string }>
+  referencedAssets: Map<string, { type: AssetType; path: string; info: string }>,
 ): void {
   for (const [_key, assetRef] of referencedAssets.entries()) {
     const assetName = getAssetNameFromPath(assetRef.path);
@@ -684,7 +684,7 @@ function processMissingReferencedAssets(
 
     // Check if asset already exists in our inventory
     const asset = bookInventory.assets.find(
-      (a) => a.type === assetType && a.assetName === assetName
+      (a) => a.type === assetType && a.assetName === assetName,
     );
 
     if (!asset) {
@@ -1119,8 +1119,8 @@ function printInventorySummary(report: InventoryReport): void {
   console.error('\nStorage Statistics:');
   console.error(
     `Vercel Blob: ${report.summary.storageStats.vercelBlob.totalCount} objects (${formatSize(
-      report.summary.storageStats.vercelBlob.totalSize
-    )})`
+      report.summary.storageStats.vercelBlob.totalSize,
+    )})`,
   );
   console.error('\nIssues Detected:');
   console.error(`Total Issues: ${report.summary.issueCount.total}`);

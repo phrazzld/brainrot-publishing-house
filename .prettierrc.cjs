@@ -23,7 +23,7 @@ module.exports = {
   bracketSameLine: false, // Put the closing bracket of JSX elements on a new line
 
   // Object formatting
-  trailingComma: 'es5', // Include trailing commas where valid in ES5 (objects, arrays, etc.)
+  trailingComma: 'all', // Include trailing commas where valid in ES5 (objects, arrays, etc.)
   bracketSpacing: true, // Put spaces between brackets in object literals
 
   // Special parser options
@@ -32,6 +32,9 @@ module.exports = {
 
   // End of file handling
   endOfLine: 'lf', // Line feed only for consistent line endings
+
+  // Prose wrapping for Markdown
+  proseWrap: 'preserve', // Preserve existing line wrapping in prose
 
   // Import order configuration (requires @trivago/prettier-plugin-sort-imports)
   importOrder: [

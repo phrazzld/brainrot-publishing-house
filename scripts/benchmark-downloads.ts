@@ -161,7 +161,7 @@ async function benchmarkDirectUrl(
     category: 'small' | 'medium' | 'large';
     concurrencyLevel: number;
     testIndex: number;
-  }
+  },
 ): Promise<BenchmarkResult> {
   const startTime = performance.now();
   let ttfbTime = 0;
@@ -215,7 +215,7 @@ async function benchmarkDirectUrl(
     if (result.metrics.contentLength) {
       result.metrics.transferSpeedKBps = calculateTransferSpeed(
         result.metrics.contentLength,
-        downloadTime
+        downloadTime,
       );
     }
   } catch (error) {
@@ -408,7 +408,7 @@ async function benchmarkProxyEndpoint(params: ProxyEndpointParams): Promise<Benc
     if (result.metrics.contentLength) {
       result.metrics.transferSpeedKBps = calculateTransferSpeed(
         result.metrics.contentLength,
-        downloadTime
+        downloadTime,
       );
     }
   } catch (error) {
@@ -430,7 +430,7 @@ async function benchmarkProxyEndpoint(params: ProxyEndpointParams): Promise<Benc
 async function runConcurrentTests<T>(
   benchmarkFn: (params: T) => Promise<BenchmarkResult>,
   concurrencyLevel: number,
-  args: T[]
+  args: T[],
 ): Promise<BenchmarkResult[]> {
   const results: BenchmarkResult[] = [];
 
@@ -464,7 +464,7 @@ async function benchmarkBook(
     hasFullAudiobook: boolean;
     chapters: number[];
   },
-  concurrencyLevel: number
+  concurrencyLevel: number,
 ): Promise<BenchmarkResult[]> {
   const results: BenchmarkResult[] = [];
 
@@ -515,7 +515,7 @@ async function benchmarkBook(
   const apiResults = await runConcurrentTests<ApiEndpointParams>(
     benchmarkApiEndpoint,
     concurrencyLevel,
-    apiTestConfigs.map((params) => params[0])
+    apiTestConfigs.map((params) => params[0]),
   );
   results.push(...apiResults);
 
@@ -566,7 +566,7 @@ async function benchmarkBook(
   const proxyResults = await runConcurrentTests<ProxyEndpointParams>(
     benchmarkProxyEndpoint,
     concurrencyLevel,
-    proxyTestConfigs.map((params) => params[0])
+    proxyTestConfigs.map((params) => params[0]),
   );
   results.push(...proxyResults);
 
@@ -732,8 +732,8 @@ async function runBenchmarks() {
         statistics: stats,
       },
       null,
-      2
-    )
+      2,
+    ),
   );
 
   // Log results
@@ -752,17 +752,17 @@ async function runBenchmarks() {
   console.warn(`Failed: ${chalk.red.bold(benchmarkSuite.failed)}`);
   console.warn(`Success Rate: ${successRate.toFixed(2)}%`);
   console.warn(
-    `Duration: ${((benchmarkSuite.endTime - benchmarkSuite.startTime) / 1000).toFixed(2)}s`
+    `Duration: ${((benchmarkSuite.endTime - benchmarkSuite.startTime) / 1000).toFixed(2)}s`,
   );
 
   // Summary of key metrics
   const apiResponseTime = Math.round(
     stats.filter((s) => s.testType === 'api').reduce((sum, s) => sum + s.avg, 0) /
-      stats.filter((s) => s.testType === 'api').length
+      stats.filter((s) => s.testType === 'api').length,
   );
   const proxyResponseTime = Math.round(
     stats.filter((s) => s.testType === 'proxy').reduce((sum, s) => sum + s.avg, 0) /
-      stats.filter((s) => s.testType === 'proxy').length
+      stats.filter((s) => s.testType === 'proxy').length,
   );
 
   console.warn(`\nAverage API Response Time: ${chalk.cyan.bold(apiResponseTime)} ms`);

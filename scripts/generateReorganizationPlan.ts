@@ -162,13 +162,13 @@ function readAuditReports(): {
 } {
   try {
     const textReport = JSON.parse(
-      fs.readFileSync(path.join('./text-assets-audit', 'text-assets-audit.json'), 'utf8')
+      fs.readFileSync(path.join('./text-assets-audit', 'text-assets-audit.json'), 'utf8'),
     ) as AuditReport;
     const imageReport = JSON.parse(
-      fs.readFileSync(path.join('./image-assets-audit', 'image-assets-audit.json'), 'utf8')
+      fs.readFileSync(path.join('./image-assets-audit', 'image-assets-audit.json'), 'utf8'),
     ) as AuditReport;
     const audioReport = JSON.parse(
-      fs.readFileSync(path.join('./audio-assets-audit', 'audio-assets-audit.json'), 'utf8')
+      fs.readFileSync(path.join('./audio-assets-audit', 'audio-assets-audit.json'), 'utf8'),
     ) as AuditReport;
 
     return { text: textReport, image: imageReport, audio: audioReport };

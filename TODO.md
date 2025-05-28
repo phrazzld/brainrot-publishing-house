@@ -596,8 +596,8 @@ This TODO list details the tasks required to fully migrate all asset management 
     - [x] Ensure consistent approach for resolving file paths in scripts
     - [x] Test module loading in both development and production environments
   - [x] Dependencies: None
-  
-- [ ] **T051: Fix linting issues in migration scripts**
+
+- [~] **T051: Fix linting issues in migration scripts**
 
   - [ ] Address console.log usage in migration scripts:
     - [ ] Replace with structured logger in migrateBookCoverImages.ts
@@ -608,18 +608,19 @@ This TODO list details the tasks required to fully migrate all asset management 
   - [ ] Fix max-depth violations in scripts
   - [ ] Dependencies: None
 
-- [ ] **T048: Apply code formatting standards consistently across codebase**
+- [x] **T048: Apply code formatting standards consistently across codebase**
 
-  - [ ] Update all README.md files with consistent formatting:
-    - [ ] Ensure blank lines before and after lists and code blocks
-    - [ ] Apply consistent indentation in markdown files
-    - [ ] Remove trailing whitespace across all files
-  - [ ] Review script file formatting:
-    - [ ] Apply consistent object formatting (trailing commas, spacing)
-    - [ ] Standardize import ordering and grouping
-    - [ ] Ensure consistent indentation and line breaks in function calls
-  - [ ] Set up automated formatting checks in CI pipeline
-  - [ ] Dependencies: None
+  - [x] Update all README.md files with consistent formatting:
+    - [x] Ensure blank lines before and after lists and code blocks
+    - [x] Apply consistent indentation in markdown files
+    - [x] Remove trailing whitespace across all files
+  - [x] Review script file formatting:
+    - [x] Apply consistent object formatting (trailing commas, spacing)
+    - [x] Standardize import ordering and grouping
+    - [x] Ensure consistent indentation and line breaks in function calls
+  - [x] Set up automated formatting checks in CI pipeline
+  - [x] Dependencies: None
+  - [x] COMPLETED: Applied Prettier formatting to 130+ files, configured pre-commit hooks, added CI formatting check
 
 - [ ] **T049: Fix remaining ESLint warnings in test files**
 
@@ -631,6 +632,7 @@ This TODO list details the tasks required to fully migrate all asset management 
   - [ ] Dependencies: T042
 
 - [ ] **T050: COMPLEX - Improve test fixtures and type safety in tests**
+
   - [ ] Create type-safe fixtures for common test data:
     - [ ] Define proper interfaces for test fixtures
     - [ ] Create factory functions for generating test data
@@ -641,3 +643,19 @@ This TODO list details the tasks required to fully migrate all asset management 
     - [ ] Update expect statements to use type-aware matchers where possible
   - [ ] Add proper typing for test utilities and helper functions
   - [ ] Dependencies: T045
+
+- [ ] **T052: Address complexity warnings in core application files**
+  - [ ] Reduce function complexity in app/api/download/proxyService.ts:
+    - [ ] createProxyErrorResponse (complexity: 24, limit: 10)
+    - [ ] extractErrorDetails (complexity: 23, limit: 10)
+    - [ ] handleAssetUrlError (complexity: 12, limit: 10)
+    - [ ] proxyFileDownload (complexity: 17, limit: 10)
+  - [ ] Split large files exceeding 500 line limit:
+    - [ ] app/api/download/proxyService.ts (939 lines)
+  - [ ] Reduce complexity in utility functions:
+    - [ ] utils/ScriptPathUtils.ts: extractAssetInfo (complexity: 13)
+    - [ ] utils/ScriptPathUtils.ts: generateFilename (complexity: 15)
+    - [ ] utils/getBlobUrl.ts: generateBlobUrl (complexity: 12)
+    - [ ] utils/getBlobUrl.ts: getAssetUrl (complexity: 14)
+  - [ ] Address remaining complexity issues from T048 formatting task
+  - [ ] Dependencies: None

@@ -44,7 +44,7 @@ export class TextMigrationVerifier {
         try {
           const content = await fs.readFile(
             path.join('/Users/phaedrus/Development/brainrot-publishing-house', file),
-            'utf-8'
+            'utf-8',
           );
           const migration = JSON.parse(content);
 
@@ -55,7 +55,7 @@ export class TextMigrationVerifier {
               if (bookFiles[filename] && bookFiles[filename].blobPath) {
                 // Use AssetPathService to get standardized path
                 const standardizedPath = this.pathService.convertLegacyPath(
-                  bookFiles[filename].blobPath
+                  bookFiles[filename].blobPath,
                 );
                 files.push({
                   from: bookFiles[filename].blobPath,
@@ -121,7 +121,7 @@ export class TextMigrationVerifier {
 
       const reportPath = path.join(
         '/Users/phaedrus/Development/brainrot-publishing-house/migration-logs',
-        `text-verification-${Date.now()}.json`
+        `text-verification-${Date.now()}.json`,
       );
 
       await fs.writeFile(reportPath, JSON.stringify(verificationReport, null, 2));

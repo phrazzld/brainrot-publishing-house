@@ -173,7 +173,7 @@ describe('downloadFromSpaces', () => {
 
     // Assertions
     await expect(downloadFromSpaces(url, { maxRetries: 2 })).rejects.toThrow(
-      'Failed to download from'
+      'Failed to download from',
     );
 
     expect(mockFetch).toHaveBeenCalledTimes(3); // Initial + 2 retries

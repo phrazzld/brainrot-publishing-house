@@ -36,7 +36,7 @@ export function createMockLogger(customImplementations: Partial<MockLogger> = {}
  * @param customImplementations Optional custom implementations for methods
  */
 export function createMockBlobService(
-  customImplementations: Partial<MockBlobService> = {}
+  customImplementations: Partial<MockBlobService> = {},
 ): MockBlobService {
   return {
     uploadFile: jest.fn().mockResolvedValue({
@@ -78,13 +78,13 @@ export function createMockBlobService(
  * @param customImplementations Optional custom implementations for methods
  */
 export function createMockBlobPathService(
-  customImplementations: Partial<MockBlobPathService> = {}
+  customImplementations: Partial<MockBlobPathService> = {},
 ): MockBlobPathService {
   return {
     getAssetPath: jest
       .fn()
       .mockImplementation(
-        (assetType, bookSlug, assetName) => `books/${bookSlug}/${assetType}/${assetName}`
+        (assetType, bookSlug, assetName) => `books/${bookSlug}/${assetType}/${assetName}`,
       ),
     getBookImagePath: jest
       .fn()
@@ -117,13 +117,13 @@ export function createMockBlobPathService(
  * @param customImplementations Optional custom implementations for methods
  */
 export function createMockVercelBlobAssetService(
-  customImplementations: Partial<MockVercelBlobAssetService> = {}
+  customImplementations: Partial<MockVercelBlobAssetService> = {},
 ): MockVercelBlobAssetService {
   return {
     getAssetUrl: jest
       .fn()
       .mockImplementation((assetType, bookSlug, assetName) =>
-        Promise.resolve(`https://example.com/assets/${assetType}/${bookSlug}/${assetName}`)
+        Promise.resolve(`https://example.com/assets/${assetType}/${bookSlug}/${assetName}`),
       ),
     assetExists: jest.fn().mockResolvedValue(true),
     fetchAsset: jest.fn().mockResolvedValue(new ArrayBuffer(100)),
@@ -148,7 +148,7 @@ export function createMockVercelBlobAssetService(
  * @param customImplementations Optional custom implementations for methods
  */
 export function createMockVercelBlob(
-  customImplementations: Partial<MockVercelBlob> = {}
+  customImplementations: Partial<MockVercelBlob> = {},
 ): MockVercelBlob {
   const mockPutResult: PutBlobResult = {
     url: 'https://example.com/assets/test.txt',
@@ -195,7 +195,7 @@ export function createMockVercelBlob(
  */
 export function createMockResponse(
   body: string | ArrayBuffer | Blob = '',
-  options: Partial<Response> = {}
+  options: Partial<Response> = {},
 ): MockResponse {
   const status = options.status || 200;
   const statusText = options.statusText || 'OK';
@@ -272,13 +272,13 @@ export function createMockFetch(responseFactory: () => Response | Promise<Respon
  * @param customImplementations Optional custom implementations for methods
  */
 export function createMockAssetPathService(
-  customImplementations: Partial<MockAssetPathService> = {}
+  customImplementations: Partial<MockAssetPathService> = {},
 ): MockAssetPathService {
   return {
     getAssetPath: jest
       .fn()
       .mockImplementation(
-        (assetType, bookSlug, assetName) => `assets/${assetType}/${bookSlug}/${assetName}`
+        (assetType, bookSlug, assetName) => `assets/${assetType}/${bookSlug}/${assetName}`,
       ),
     normalizeLegacyPath: jest.fn().mockImplementation((legacyPath) => {
       if (legacyPath.startsWith('/assets/')) {

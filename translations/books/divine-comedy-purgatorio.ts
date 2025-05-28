@@ -12,7 +12,7 @@ const divineComedyPurgatorio: Translation = {
     'dante climbs redemption mountain, souls grinding for heaven access. mid-tier afterlife hits different.',
   coverImage: getAssetUrl(
     '/assets/the-divine-comedy-purgatorio/images/purgatorio-02.png',
-    USE_BLOB_STORAGE
+    USE_BLOB_STORAGE,
   ),
   status: 'coming soon',
   chapters: [],

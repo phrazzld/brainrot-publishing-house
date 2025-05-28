@@ -12,7 +12,7 @@ const declarationOfIndependence: Translation = {
     'colonies went no cap on king george, dropped the hardest breakup letter in history. life, liberty, and vibes only.',
   coverImage: getAssetUrl(
     '/assets/declaration-of-independence/images/the-declaration-01.png',
-    USE_BLOB_STORAGE
+    USE_BLOB_STORAGE,
   ),
   status: 'available',
   chapters: [
@@ -20,7 +20,7 @@ const declarationOfIndependence: Translation = {
       title: 'the declaration',
       text: getAssetUrl(
         '/assets/text/declaration-of-independence/brainrot-declaration.txt',
-        USE_BLOB_STORAGE
+        USE_BLOB_STORAGE,
       ),
       audioSrc: getDirectAudioUrl('declaration-of-independence', 'full-audiobook'),
     },

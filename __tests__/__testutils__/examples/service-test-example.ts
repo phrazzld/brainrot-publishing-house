@@ -40,7 +40,7 @@ describe('VercelBlobAssetService Example Test', () => {
         defaultCacheControl: 'public, max-age=31536000',
         defaultCacheBusting: false,
       },
-      mockLogger
+      mockLogger,
     );
 
     // Set up mock fetch implementation

@@ -56,7 +56,7 @@ async function searchForCoverImages(): Promise<CoverMapping[]> {
   do {
     const result = await list({ cursor });
     const images = result.blobs.filter((blob) =>
-      blob.pathname.match(/\.(png|jpg|jpeg|gif|webp)$/i)
+      blob.pathname.match(/\.(png|jpg|jpeg|gif|webp)$/i),
     );
 
     imageFiles.push(...images.map((img) => img.pathname));
@@ -71,7 +71,8 @@ async function searchForCoverImages(): Promise<CoverMapping[]> {
     logger.info(`Original path: ${book.originalPath}`);
 
     // Extract the filename from the original path
-    const filename = book.originalPath.split('/').pop()!;
+    const pathParts = book.originalPath.split('/');
+    const filename = pathParts[pathParts.length - 1] || '';
     const baseFilename = filename.replace(/\.[^.]+$/, ''); // Remove extension
 
     // Search strategies:
@@ -94,13 +95,13 @@ async function searchForCoverImages(): Promise<CoverMapping[]> {
 
     // Partial filename matches
     const partialMatches = imageFiles.filter((path) =>
-      path.toLowerCase().includes(baseFilename.toLowerCase())
+      path.toLowerCase().includes(baseFilename.toLowerCase()),
     );
     foundPaths.push(...partialMatches);
 
     // Book slug matches
     const slugMatches = imageFiles.filter((path) =>
-      path.toLowerCase().includes(book.slug.toLowerCase())
+      path.toLowerCase().includes(book.slug.toLowerCase()),
     );
     foundPaths.push(...slugMatches);
 

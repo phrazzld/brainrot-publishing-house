@@ -149,7 +149,7 @@ export class DownloadService {
     log: Logger | undefined,
     params: DownloadRequestParams,
     assetName: string,
-    url: string
+    url: string,
   ): void {
     const { slug, type, chapter } = params;
 

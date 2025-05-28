@@ -11,7 +11,7 @@ describe('AssetNameValidator', () => {
   describe('validateAssetName', () => {
     test('should throw error for empty asset names', () => {
       expect(() => validator.validateAssetName(AssetType.AUDIO, '')).toThrow(
-        'Asset name cannot be empty'
+        'Asset name cannot be empty',
       );
     });
 
@@ -19,7 +19,7 @@ describe('AssetNameValidator', () => {
       // Using type assertion to create an invalid type for testing
       const invalidType = 'invalid' as unknown as AssetType;
       expect(() => validator.validateAssetName(invalidType, 'test.jpg')).toThrow(
-        'Unsupported asset type'
+        'Unsupported asset type',
       );
     });
 
@@ -68,13 +68,13 @@ describe('AssetNameValidator', () => {
 
     test('throws error for invalid names', () => {
       expect(() => validator.validateAudioAssetName('invalid.mp3')).toThrow(
-        'Invalid audio asset name'
+        'Invalid audio asset name',
       );
       expect(() => validator.validateAudioAssetName('chapter.mp3')).toThrow(
-        'Invalid audio asset name'
+        'Invalid audio asset name',
       );
       expect(() => validator.validateAudioAssetName('audio.wav')).toThrow(
-        'Invalid audio asset name'
+        'Invalid audio asset name',
       );
     });
   });
@@ -83,7 +83,7 @@ describe('AssetNameValidator', () => {
     test('should accept valid fulltext formats', () => {
       expect(validator.validateTextAssetName('fulltext.txt')).toBe('fulltext.txt');
       expect(validator.validateTextAssetName('brainrot-fulltext.txt')).toBe(
-        'brainrot-fulltext.txt'
+        'brainrot-fulltext.txt',
       );
       expect(validator.validateTextAssetName('source-fulltext.txt')).toBe('source-fulltext.txt');
     });
@@ -91,19 +91,19 @@ describe('AssetNameValidator', () => {
     test('should accept valid chapter formats', () => {
       expect(validator.validateTextAssetName('chapter-01.txt')).toBe('chapter-01.txt');
       expect(validator.validateTextAssetName('brainrot-chapter-01.txt')).toBe(
-        'brainrot-chapter-01.txt'
+        'brainrot-chapter-01.txt',
       );
       expect(validator.validateTextAssetName('source-chapter-01.txt')).toBe(
-        'source-chapter-01.txt'
+        'source-chapter-01.txt',
       );
     });
 
     test('should accept valid source custom formats', () => {
       expect(validator.validateTextAssetName('source-introduction.txt')).toBe(
-        'source-introduction.txt'
+        'source-introduction.txt',
       );
       expect(validator.validateTextAssetName('source-translators-note.txt')).toBe(
-        'source-translators-note.txt'
+        'source-translators-note.txt',
       );
     });
 
@@ -115,7 +115,7 @@ describe('AssetNameValidator', () => {
     test('should convert legacy source path format', () => {
       expect(validator.validateTextAssetName('source/1.txt')).toBe('source-chapter-01.txt');
       expect(validator.validateTextAssetName('source/introduction.txt')).toBe(
-        'source-introduction.txt'
+        'source-introduction.txt',
       );
     });
 
@@ -126,10 +126,10 @@ describe('AssetNameValidator', () => {
 
     test('should throw error for invalid text asset names', () => {
       expect(() => validator.validateTextAssetName('invalid.doc')).toThrow(
-        'Invalid text asset name'
+        'Invalid text asset name',
       );
       expect(() => validator.validateTextAssetName('chapter.txt')).toThrow(
-        'Invalid text asset name'
+        'Invalid text asset name',
       );
     });
   });
@@ -153,7 +153,7 @@ describe('AssetNameValidator', () => {
     test('should allow other book-specific images with valid extensions', () => {
       expect(validator.validateImageAssetName('title-page.jpg')).toBe('title-page.jpg');
       expect(validator.validateImageAssetName('introduction-illustration.png')).toBe(
-        'introduction-illustration.png'
+        'introduction-illustration.png',
       );
     });
 
@@ -164,10 +164,10 @@ describe('AssetNameValidator', () => {
 
     test('should throw error for invalid image asset names', () => {
       expect(() => validator.validateImageAssetName('image.tiff')).toThrow(
-        'Invalid image asset name'
+        'Invalid image asset name',
       );
       expect(() => validator.validateImageAssetName('chapter.gif')).toThrow(
-        'Invalid image asset name'
+        'Invalid image asset name',
       );
     });
   });

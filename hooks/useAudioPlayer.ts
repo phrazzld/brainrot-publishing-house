@@ -23,7 +23,7 @@ interface AudioPlayerActions {
 export function useAudioPlayer(
   waveformRef: RefObject<HTMLDivElement | null>,
   audioSrc: string | null | undefined,
-  onTimeUpdate?: (time: number) => void
+  onTimeUpdate?: (time: number) => void,
 ): [AudioPlayerState, AudioPlayerActions] {
   // State for UI
   const [isPlaying, setIsPlaying] = useState(false);
@@ -61,7 +61,7 @@ export function useAudioPlayer(
         ctx.fillRect(i * (barWidth + barGap), (height - barHeight) / 2, barWidth, barHeight);
       }
     },
-    []
+    [],
   );
 
   // Use the React wavesurfer hook with memoized config
@@ -88,7 +88,7 @@ export function useAudioPlayer(
         setter(value);
       }
     },
-    []
+    [],
   );
 
   // Format time helper function

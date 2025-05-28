@@ -164,7 +164,7 @@ export async function auditAudiobooks(bookSlugs: string[]): Promise<AudiobookCon
 export async function downloadChapterFiles(
   config: AudiobookConfig,
   chapters: string[],
-  tempDir: string
+  tempDir: string,
 ): Promise<string[]> {
   // Initialize asset service if not already initialized
   if (!assetService) {
@@ -202,7 +202,7 @@ export async function downloadChapterFiles(
  */
 export async function concatenateChapters(
   inputFiles: string[],
-  outputFile: string
+  outputFile: string,
 ): Promise<string> {
   // Check if ffmpeg is available
   const ffmpegAvailable = await checkFfmpeg();
@@ -261,7 +261,7 @@ export async function concatenateChapters(
 export async function uploadFullAudiobook(
   localPath: string,
   remotePath: string,
-  bookSlug: string
+  bookSlug: string,
 ): Promise<boolean> {
   // Initialize asset service if not already initialized
   if (!assetService) {
@@ -284,7 +284,7 @@ export async function uploadFullAudiobook(
       // Convert Buffer to ArrayBuffer for the upload
       const arrayBuffer = fileContent.buffer.slice(
         fileContent.byteOffset,
-        fileContent.byteOffset + fileContent.byteLength
+        fileContent.byteOffset + fileContent.byteLength,
       );
       await assetService.uploadAsset({
         assetType: AssetType.AUDIO,
@@ -334,7 +334,7 @@ export async function verifyMigration(configs: AudiobookConfig[]): Promise<BookM
       const exists = await assetService.assetExists(
         AssetType.AUDIO,
         config.bookSlug,
-        'full-audiobook.mp3'
+        'full-audiobook.mp3',
       );
 
       if (!exists) {
@@ -373,7 +373,7 @@ export async function verifyMigration(configs: AudiobookConfig[]): Promise<BookM
  */
 async function migrateBook(
   config: AudiobookConfig,
-  options: MigrationOptions
+  options: MigrationOptions,
 ): Promise<BookMigrationResult> {
   if (config.status === 'exists' && !options.force) {
     migrationLogger.info({ msg: 'Skipping existing audiobook', bookSlug: config.bookSlug });
@@ -489,7 +489,7 @@ export async function migrateFullAudiobooks(options: MigrationOptions): Promise<
   let verificationResults: BookMigrationResult[] = [];
   if (!options.dryRun) {
     const configsToVerify = configs.filter(
-      (c) => c.status === 'needs_concatenation' || (c.status === 'exists' && options.force)
+      (c) => c.status === 'needs_concatenation' || (c.status === 'exists' && options.force),
     );
     verificationResults = await verifyMigration(configsToVerify);
   }
@@ -584,7 +584,7 @@ async function main() {
 
     if (options.dryRun) {
       const toMigrateCount = result.details.filter(
-        (d) => (d.action !== 'failed' && d.action !== 'skipped') || d.error === 'No chapters found'
+        (d) => (d.action !== 'failed' && d.action !== 'skipped') || d.error === 'No chapters found',
       ).length;
 
       migrationLogger.info({
@@ -593,7 +593,7 @@ async function main() {
         booksToMigrate: result.details
           .filter(
             (d) =>
-              (d.action !== 'failed' && d.action !== 'skipped') || d.error === 'No chapters found'
+              (d.action !== 'failed' && d.action !== 'skipped') || d.error === 'No chapters found',
           )
           .filter((d) => d.action !== 'failed')
           .map((d) => d.bookSlug),

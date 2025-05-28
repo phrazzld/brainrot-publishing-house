@@ -86,7 +86,7 @@ export function printHelpAndExit(): never {
  */
 export function handleFlag(
   flag: string,
-  nextArg: string | undefined
+  nextArg: string | undefined,
 ): { parsedValue: boolean | string | number | undefined; consumesNextArg: boolean } {
   const definitions = createOptionDefinitions();
   const definition = definitions.find((def) => def.fullName === flag || def.shortName === flag);
@@ -135,7 +135,7 @@ const flagToOptionMap: Record<
 export function applyOptionValue(
   options: CliOptions,
   flag: string,
-  value: boolean | string | number
+  value: boolean | string | number,
 ): void {
   const mapping = flagToOptionMap[flag];
   if (mapping) {
@@ -149,7 +149,7 @@ export function applyOptionValue(
 export function parseFlag(
   args: string[],
   index: number,
-  options: CliOptions
+  options: CliOptions,
 ): { newIndex: number } {
   const flag = args[index];
   const nextArg = index + 1 < args.length ? args[index + 1] : undefined;

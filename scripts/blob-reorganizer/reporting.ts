@@ -25,7 +25,7 @@ export function formatBytes(bytes: number, decimals = 2): string {
  */
 export async function reorganizeBlobs(
   mappings: PathMapping[],
-  options: CliOptions
+  options: CliOptions,
 ): Promise<MigrationStats> {
   const stats: MigrationStats = {
     totalAssets: mappings.length,
@@ -103,7 +103,7 @@ export async function reorganizeBlobs(
 export function createHtmlReport(
   stats: MigrationStats,
   mappings: PathMapping[],
-  options: CliOptions
+  options: CliOptions,
 ): string {
   const successRate =
     stats.totalAssets > 0 ? Math.round((stats.movedAssets / stats.totalAssets) * 100) : 0;
@@ -134,7 +134,7 @@ export function createHtmlReport(
         <td>${error.newPath}</td>
         <td>${error.error}</td>
       </tr>
-    `
+    `,
     )
     .join('');
 
@@ -149,7 +149,7 @@ export function createHtmlReport(
         <td>${mapping.contentType}</td>
         <td>${formatBytes(mapping.size)}</td>
       </tr>
-    `
+    `,
     )
     .join('');
 

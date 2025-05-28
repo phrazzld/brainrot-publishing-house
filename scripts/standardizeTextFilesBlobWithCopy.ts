@@ -250,7 +250,7 @@ export class TextFileStandardizer {
           // Download file content from original path
           this.logger.info({ msg: 'Downloading file', path: blobPath });
           const response = await fetch(
-            `https://kl4fq7f0qrmpbnkw.public.blob.vercel-storage.com/${blobPath}`
+            `https://kl4fq7f0qrmpbnkw.public.blob.vercel-storage.com/${blobPath}`,
           );
 
           if (!response.ok) {
@@ -341,7 +341,7 @@ export class TextFileStandardizer {
     const reportPath = join(
       process.cwd(),
       'migration-logs',
-      `text-standardization-report-${Date.now()}.json`
+      `text-standardization-report-${Date.now()}.json`,
     );
     writeFileSync(reportPath, JSON.stringify(report, null, 2), 'utf-8');
     this.logger.info({ msg: 'Report saved', path: reportPath });

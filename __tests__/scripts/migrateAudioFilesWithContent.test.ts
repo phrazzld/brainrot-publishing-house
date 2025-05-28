@@ -212,7 +212,7 @@ describe('migrateAudioFilesWithContent script', () => {
     expect(fs.writeFile).toHaveBeenCalledWith(
       expect.stringContaining('test-output.json'),
       expect.any(String),
-      'utf8'
+      'utf8',
     );
   });
 

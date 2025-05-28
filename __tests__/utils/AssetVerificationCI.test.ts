@@ -75,7 +75,7 @@ describe('Asset Verification CI Tests', () => {
         const textPath = assetPathService.getAssetPath(
           AssetType.TEXT,
           TEST_BOOKS.HAMLET,
-          'test.txt'
+          'test.txt',
         );
         expect(textPath).toMatch(/^assets\/text\/[^/]+\/[^/]+$/);
       });
@@ -85,7 +85,7 @@ describe('Asset Verification CI Tests', () => {
         const audioPath = assetPathService.getAssetPath(
           AssetType.AUDIO,
           TEST_BOOKS.ILIAD,
-          'test.mp3'
+          'test.mp3',
         );
         expect(audioPath).toMatch(/^assets\/audio\/[^/]+\/[^/]+$/);
       });
@@ -95,7 +95,7 @@ describe('Asset Verification CI Tests', () => {
         const imagePath = assetPathService.getAssetPath(
           AssetType.IMAGE,
           TEST_BOOKS.ODYSSEY,
-          'test.jpg'
+          'test.jpg',
         );
         expect(imagePath).toMatch(/^assets\/image\/[^/]+\/[^/]+$/);
       });
@@ -142,7 +142,7 @@ describe('Asset Verification CI Tests', () => {
         // Brainrot fulltext
         const brainrotFulltextPath = assetPathService.getBrainrotTextPath(
           TEST_BOOKS.HAMLET,
-          'full'
+          'full',
         );
         expect(brainrotFulltextPath).toContain('brainrot-fulltext.txt');
       });
@@ -151,7 +151,7 @@ describe('Asset Verification CI Tests', () => {
         // Also works with 'fulltext' keyword
         const brainrotFulltextAltPath = assetPathService.getBrainrotTextPath(
           TEST_BOOKS.HAMLET,
-          'fulltext'
+          'fulltext',
         );
         expect(brainrotFulltextAltPath).toContain('brainrot-fulltext.txt');
       });
@@ -178,13 +178,13 @@ describe('Asset Verification CI Tests', () => {
       // With leading slash
       const pathWithSlash = `/${TEXT_ASSETS.BRAINROT_CHAPTER.legacy}`;
       expect(assetPathService.convertLegacyPath(pathWithSlash)).toBe(
-        TEXT_ASSETS.BRAINROT_CHAPTER.unified
+        TEXT_ASSETS.BRAINROT_CHAPTER.unified,
       );
 
       // With multiple leading slashes
       const pathWithMultipleSlashes = `/////${AUDIO_ASSETS.CHAPTER.legacy}`;
       expect(assetPathService.convertLegacyPath(pathWithMultipleSlashes)).toBe(
-        AUDIO_ASSETS.CHAPTER.unified
+        AUDIO_ASSETS.CHAPTER.unified,
       );
     });
 
@@ -218,7 +218,7 @@ describe('Asset Verification CI Tests', () => {
       delete process.env.NEXT_PUBLIC_BLOB_BASE_URL;
       const defaultUrl = blobService.getUrlForPath(IMAGE_ASSETS.BOOK_COVER.unified);
       expect(defaultUrl).toBe(
-        `https://public.blob.vercel-storage.com/${IMAGE_ASSETS.BOOK_COVER.unified}`
+        `https://public.blob.vercel-storage.com/${IMAGE_ASSETS.BOOK_COVER.unified}`,
       );
     });
 

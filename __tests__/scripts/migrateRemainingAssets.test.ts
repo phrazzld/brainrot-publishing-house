@@ -26,7 +26,7 @@ jest.mock('@vercel/blob', () => {
         size: 12345,
         uploadedAt: new Date().toISOString(),
         pathname: 'mocked-blob-path',
-      })
+      }),
     ),
     head: jest.fn().mockImplementation(() =>
       Promise.resolve({
@@ -34,7 +34,7 @@ jest.mock('@vercel/blob', () => {
         size: 12345,
         uploadedAt: new Date().toISOString(),
         pathname: 'mocked-blob-path',
-      })
+      }),
     ),
   };
 });
@@ -71,14 +71,14 @@ jest.mock('../../utils/services/BlobService', () => ({
         url: 'https://example.com/mocked-blob-url',
         size: 12345,
         uploadedAt: new Date().toISOString(),
-      })
+      }),
     ),
     uploadText: jest.fn().mockImplementation(() =>
       Promise.resolve({
         url: 'https://example.com/mocked-blob-url',
         size: 12345,
         uploadedAt: new Date().toISOString(),
-      })
+      }),
     ),
     getFileInfo: jest.fn().mockImplementation(() =>
       Promise.resolve({
@@ -86,7 +86,7 @@ jest.mock('../../utils/services/BlobService', () => ({
         size: 12345,
         uploadedAt: new Date().toISOString(),
         contentType: 'application/octet-stream',
-      })
+      }),
     ),
     getUrlForPath: jest.fn((filePath) => `https://example.com/${filePath}`),
   },
@@ -291,7 +291,7 @@ describe('migrateRemainingAssets', () => {
           url: 'https://example.com/mocked-blob-url',
           size: 12345,
           uploadedAt: new Date().toISOString(),
-        })
+        }),
       );
 
     // In a real test, we'd verify retry behavior
@@ -309,11 +309,11 @@ describe('migrateRemainingAssets', () => {
 
     // Check for different file types in the calls
     const hasJsonCall = writeFile.mock.calls.some(
-      (call: unknown[]) => call[0] && typeof call[0] === 'string' && call[0].includes('.json')
+      (call: unknown[]) => call[0] && typeof call[0] === 'string' && call[0].includes('.json'),
     );
 
     const hasMarkdownCall = writeFile.mock.calls.some(
-      (call: unknown[]) => call[0] && typeof call[0] === 'string' && call[0].includes('.md')
+      (call: unknown[]) => call[0] && typeof call[0] === 'string' && call[0].includes('.md'),
     );
 
     expect(hasJsonCall).toBeTruthy();

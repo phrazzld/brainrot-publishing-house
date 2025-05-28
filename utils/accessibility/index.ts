@@ -6,7 +6,7 @@ import { KeyboardEvent } from 'react';
  */
 export const handleKeyboardInteraction = (
   event: KeyboardEvent<HTMLElement>,
-  action: () => void
+  action: () => void,
 ) => {
   if (event.key === 'Enter' || event.key === ' ') {
     // Prevent default behavior (like scrolling on Space)

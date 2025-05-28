@@ -184,7 +184,7 @@ export function generateMetricsTable(stats: StatisticalMetrics[]): string {
             <td class="text-right">${Math.round(stat.avgTransferSpeed)}</td>
             <td class="text-right">${(stat.avgSize / 1024).toFixed(2)}</td>
           </tr>
-        `
+        `,
           )
           .join('')}
       </tbody>
@@ -235,7 +235,7 @@ export function generateRawResultsTable(suite: BenchmarkSuite): string {
               <td class="text-right">${result.metrics.contentLength ? (result.metrics.contentLength / 1024).toFixed(2) : 'N/A'}</td>
               <td class="text-right">${result.metrics.transferSpeedKBps || 'N/A'}</td>
             </tr>
-          `
+          `,
           )
           .join('')}
       </tbody>

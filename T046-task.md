@@ -3,6 +3,7 @@
 ## Title: Update asset imports and logger initialization across all scripts
 
 ## Original Ticket Text:
+
 - [~] **T046: Update asset imports and logger initialization across all scripts**
 
   - [ ] Create standardized logger initialization pattern:
@@ -18,6 +19,7 @@
 This task involves standardizing two critical aspects of our scripts:
 
 1. **Logger initialization**: We need to create a consistent pattern for initializing and using loggers across all script files. This includes:
+
    - Standardizing how we create loggers
    - Ensuring proper context and correlation IDs are added
    - Making error logging consistent

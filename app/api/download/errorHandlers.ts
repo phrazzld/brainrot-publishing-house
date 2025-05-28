@@ -20,7 +20,7 @@ interface DownloadParams {
 export function safeLog(
   logger: Logger,
   level: 'info' | 'warn' | 'error' | 'debug',
-  data: Record<string, unknown>
+  data: Record<string, unknown>,
 ) {
   try {
     logger[level](data);
@@ -64,7 +64,7 @@ function createErrorResponse(
     correlationId: string;
     additionalDetails?: Record<string, unknown>;
   },
-  status: number
+  status: number,
 ): NextResponse {
   const { message, error, correlationId, additionalDetails = {} } = responseData;
 
@@ -75,7 +75,7 @@ function createErrorResponse(
       correlationId,
       ...additionalDetails,
     },
-    { status }
+    { status },
   );
 }
 
@@ -93,7 +93,7 @@ function logAssetError(
   error: AssetError,
   params: DownloadParams,
   log: Logger,
-  isNotFound: boolean
+  isNotFound: boolean,
 ): void {
   const { slug, type, chapter } = params;
 
@@ -149,7 +149,7 @@ function handleAssetError(error: AssetError, params: DownloadParams, log: Logger
       correlationId,
       additionalDetails: { type: error.type, operation: error.operation },
     },
-    status
+    status,
   );
 }
 
@@ -159,7 +159,7 @@ function handleAssetError(error: AssetError, params: DownloadParams, log: Logger
 function handleAssetNotFoundError(
   error: AssetNotFoundError,
   params: DownloadParams,
-  log: Logger
+  log: Logger,
 ): NextResponse {
   const { slug, type, chapter, correlationId } = params;
 
@@ -178,7 +178,7 @@ function handleAssetNotFoundError(
       correlationId,
       additionalDetails: { type: 'NOT_FOUND' },
     },
-    404
+    404,
   );
 }
 
@@ -207,7 +207,7 @@ function handleUnexpectedError(error: unknown, params: DownloadParams, log: Logg
       correlationId,
       additionalDetails: responseDetails,
     },
-    500
+    500,
   );
 }
 
@@ -221,7 +221,7 @@ function handleUnexpectedError(error: unknown, params: DownloadParams, log: Logg
 export function handleDownloadServiceError(
   error: unknown,
   params: DownloadParams,
-  log: Logger
+  log: Logger,
 ): NextResponse {
   if (error instanceof AssetError) {
     return handleAssetError(error, params, log);
@@ -257,7 +257,7 @@ function logCriticalError(error: unknown, correlationId: string, log: Logger): v
 export function handleCriticalError(
   error: unknown,
   correlationId: string,
-  log: Logger
+  log: Logger,
 ): NextResponse {
   logCriticalError(error, correlationId, log);
 
@@ -281,6 +281,6 @@ export function handleCriticalError(
       correlationId,
       additionalDetails: responseDetails,
     },
-    500
+    500,
   );
 }

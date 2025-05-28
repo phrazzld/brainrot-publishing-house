@@ -190,7 +190,7 @@ function getTextType(path: string): 'source' | 'brainrot' | 'unknown' {
 function processTextBlob(
   blob: { pathname: string; url: string; size: number; contentType?: string },
   bookSlugs: Set<string>,
-  pathIssues: Record<string, string[]>
+  pathIssues: Record<string, string[]>,
 ): TextAssetInfo {
   // Extract book slug from path
   const bookSlug = assetPathService.getBookSlugFromPath(blob.pathname);
@@ -293,7 +293,7 @@ function categorizeAssetsByBook(
       nonStandardized: number;
       assets: TextAssetInfo[];
     }
-  >
+  >,
 ): void {
   textAssets.forEach((asset) => {
     const bookKey = asset.bookSlug || 'unknown';
@@ -407,7 +407,7 @@ function createHtmlReport(results: AuditResults): string {
         <td>${asset.textType}</td>
         <td>${formatBytes(asset.size)}</td>
       </tr>
-    `
+    `,
     )
     .join('');
 
@@ -423,7 +423,7 @@ function createHtmlReport(results: AuditResults): string {
           <td>${p}</td>
           <td>${assetPathService.convertLegacyPath(p)}</td>
         </tr>
-      `
+      `,
         )
         .join('');
 

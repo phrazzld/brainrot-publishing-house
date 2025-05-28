@@ -18,7 +18,7 @@ interface ResponseOptions {
  */
 function initializeResponse(
   body: string | Blob | ArrayBuffer,
-  options: ResponseOptions = {}
+  options: ResponseOptions = {},
 ): Response {
   // Extract options with defaults
   const status = options.status || 200;
@@ -98,7 +98,7 @@ function initializeResponse(
  */
 export function createSuccessResponse(
   content: string | Blob | ArrayBuffer,
-  options?: ResponseOptions
+  options?: ResponseOptions,
 ): Response {
   // Set default status text to 'OK' for success responses
   const updatedOptions = {
@@ -116,7 +116,7 @@ export function createSuccessResponse(
 export function createErrorResponse(
   status = 404,
   statusText = 'Not Found',
-  errorBody = ''
+  errorBody = '',
 ): Response {
   const body = errorBody || `Error ${status}: ${statusText}`;
   return initializeResponse(body, {

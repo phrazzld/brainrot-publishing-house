@@ -100,7 +100,7 @@ async function listAudioFiles(): Promise<
 
       // Filter to only include .mp3 files
       const mp3Files = result.blobs.filter((blob) =>
-        (blob.pathname as string).toLowerCase().endsWith('.mp3')
+        (blob.pathname as string).toLowerCase().endsWith('.mp3'),
       );
 
       audioFiles.push(...mp3Files);
@@ -362,7 +362,7 @@ async function main() {
         `- ${book.title} (${book.slug}): ${book.audioCount} files, ${(
           book.totalSize /
           (1024 * 1024)
-        ).toFixed(2)} MB, ${book.missingFiles.length} missing`
+        ).toFixed(2)} MB, ${book.missingFiles.length} missing`,
       );
     }
 

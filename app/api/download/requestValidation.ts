@@ -23,13 +23,13 @@ export interface ValidatedRequestParams {
  */
 function createErrorResponse(
   validationResult: { error?: { message: string; status: number } },
-  correlationId?: string
+  correlationId?: string,
 ): NextResponse {
   // For 400-level errors, keep the original error from validator
   if (validationResult.error?.status && validationResult.error.status < 500) {
     return NextResponse.json(
       { error: validationResult.error.message },
-      { status: validationResult.error.status }
+      { status: validationResult.error.status },
     );
   }
 
@@ -41,7 +41,7 @@ function createErrorResponse(
       type: 'CONFIG_ERROR',
       correlationId,
     },
-    { status: validationResult.error?.status || 500 }
+    { status: validationResult.error?.status || 500 },
   );
 }
 
@@ -56,7 +56,7 @@ function validateParameters(
     chapter: string | null | undefined;
   },
   log: Logger,
-  _correlationId: string
+  _correlationId: string,
 ): ValidatedRequestParams {
   const { slug, type, chapter } = params;
 
@@ -106,7 +106,7 @@ function validateParameters(
 export function validateRequestParameters(
   searchParams: URLSearchParams,
   log: Logger,
-  correlationId: string
+  correlationId: string,
 ): ValidatedRequestParams {
   // Parse query params
   const slug = searchParams.get('slug')?.trim();

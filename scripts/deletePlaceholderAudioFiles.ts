@@ -138,7 +138,7 @@ async function listAllAudioFiles(): Promise<ListBlobResultBlob[]> {
  */
 function identifyPlaceholders(
   files: ListBlobResultBlob[],
-  sizeThreshold: number
+  sizeThreshold: number,
 ): PlaceholderFile[] {
   return files
     .filter((file) => file.size > 0 && file.size < sizeThreshold)
@@ -155,7 +155,7 @@ function identifyPlaceholders(
  */
 async function deletePlaceholders(
   placeholders: PlaceholderFile[],
-  options: Options
+  options: Options,
 ): Promise<{ deleted: string[]; errors: { path: string; error: string }[] }> {
   const deleted: string[] = [];
   const errors: { path: string; error: string }[] = [];
@@ -264,7 +264,7 @@ async function main() {
       placeholders.forEach((file, index) => {
         // eslint-disable-next-line no-console -- CLI: File details listing
         console.log(
-          `${index + 1}. ${file.path} (${file.size} bytes, uploaded: ${file.uploaded.toISOString()})`
+          `${index + 1}. ${file.path} (${file.size} bytes, uploaded: ${file.uploaded.toISOString()})`,
         );
       });
     }

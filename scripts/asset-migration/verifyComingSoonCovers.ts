@@ -360,7 +360,7 @@ function printSummary(result: VerificationResult): void {
 
   // Show next steps if we have local files that need uploading
   const localOnlyFiles = Object.values(result.books).filter(
-    (book) => !book.exists && book.fileExists
+    (book) => !book.exists && book.fileExists,
   );
 
   if (localOnlyFiles.length > 0) {

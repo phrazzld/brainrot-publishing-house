@@ -21,7 +21,7 @@ interface ChapterNavigationActions {
 }
 
 export function useChapterNavigation(
-  translations: Translation[]
+  translations: Translation[],
 ): [ChapterNavigationState, ChapterNavigationActions] {
   const router = useRouter();
   const searchParams = useSearchParams();

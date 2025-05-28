@@ -12,7 +12,7 @@ const bibleOldTestament: Translation = {
     'OG biblical lore drops. god tier world building, moses main character arc goes crazy.',
   coverImage: getAssetUrl(
     '/assets/the-bible-old-testament/images/old-testament-03.png',
-    USE_BLOB_STORAGE
+    USE_BLOB_STORAGE,
   ),
   status: 'coming soon',
   chapters: [],

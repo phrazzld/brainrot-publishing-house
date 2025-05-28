@@ -118,16 +118,16 @@ async function verifyCovers() {
 
   // Summary by type
   const existingSuccess = results.filter(
-    (r) => r.type === 'existing' && r.status === 'success'
+    (r) => r.type === 'existing' && r.status === 'success',
   ).length;
   const existingFailed = results.filter(
-    (r) => r.type === 'existing' && r.status === 'failed'
+    (r) => r.type === 'existing' && r.status === 'failed',
   ).length;
   const comingSoonSuccess = results.filter(
-    (r) => r.type === 'coming-soon' && r.status === 'success'
+    (r) => r.type === 'coming-soon' && r.status === 'success',
   ).length;
   const comingSoonFailed = results.filter(
-    (r) => r.type === 'coming-soon' && r.status === 'failed'
+    (r) => r.type === 'coming-soon' && r.status === 'failed',
   ).length;
 
   logger.info({

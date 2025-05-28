@@ -143,15 +143,11 @@
     "typescript": "^5.8.3"
   },
   "lint-staged": {
+    "*.{ts,tsx,js,jsx,json,md,css,scss,yml,yaml}": [
+      "prettier --write"
+    ],
     "*.{js,jsx,ts,tsx}": [
-      "eslint --fix --max-warnings=100",
-      "prettier --write"
-    ],
-    "*.{json,css}": [
-      "prettier --write"
-    ],
-    "*.md": [
-      "sh -c 'if [ ! -L \"$1\" ]; then prettier --write \"$1\"; fi' --"
+      "eslint --fix --max-warnings=100"
     ]
   }
 }

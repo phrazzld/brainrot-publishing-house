@@ -172,7 +172,7 @@ function getExpectedAudioFiles(): ExpectedAudioFile[] {
  */
 function matchAudioFiles(
   expectedFiles: ExpectedAudioFile[],
-  actualFiles: AudioFile[]
+  actualFiles: AudioFile[],
 ): Map<string, AudioFile> {
   const fileMap = new Map<string, AudioFile>();
 
@@ -189,7 +189,7 @@ function matchAudioFiles(
  */
 async function verifyAudioFileAccess(
   expected: ExpectedAudioFile,
-  actual: AudioFile | null
+  actual: AudioFile | null,
 ): Promise<AudioVerificationResult> {
   const result: AudioVerificationResult = {
     expected,
@@ -235,7 +235,7 @@ function processBookResults(
   bookSummary: VerificationSummary['bookSummary'],
   result: AudioVerificationResult,
   missingFiles: ExpectedAudioFile[],
-  inaccessibleFiles: { expected: ExpectedAudioFile; error: string }[]
+  inaccessibleFiles: { expected: ExpectedAudioFile; error: string }[],
 ): void {
   const bookSlug = result.expected.bookSlug;
 

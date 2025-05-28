@@ -247,7 +247,7 @@ export function extractAssetInfo(path: string): AssetPathInfo {
 export function generateBlobPath(
   bookSlug: string | null,
   assetType: AssetType | 'shared' | 'site',
-  filename: string
+  filename: string,
 ): string {
   return assetPathService.getAssetPath(assetType, bookSlug, filename);
 }
@@ -334,7 +334,7 @@ export function getFileExtension(assetType: AssetType, subType?: string): string
 export function generateFilename(
   assetType: AssetType,
   identifier: string | number,
-  options: FilenameOptions = {}
+  options: FilenameOptions = {},
 ): string {
   const { prefix, extension } = options;
 

@@ -29,13 +29,13 @@ async function listBlobAudioFiles(): Promise<void> {
 
       // Filter only audio files
       const pageAudioFiles = result.blobs.filter(
-        (blob) => blob.pathname.includes('/audio/') && blob.pathname.endsWith('.mp3')
+        (blob) => blob.pathname.includes('/audio/') && blob.pathname.endsWith('.mp3'),
       );
 
       audioFiles.push(...pageAudioFiles);
 
       console.warn(
-        `Page ${page}: Found ${pageAudioFiles.length} audio files (${result.blobs.length} total files)`
+        `Page ${page}: Found ${pageAudioFiles.length} audio files (${result.blobs.length} total files)`,
       );
 
       cursor = result.cursor;

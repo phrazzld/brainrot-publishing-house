@@ -139,7 +139,7 @@ async function uploadPlaceholderAudioFiles() {
   console.log(`  Total uploaded: ${totalUploaded}`);
   console.log(`  Total errors: ${totalErrors}`);
   console.log(
-    `  Success rate: ${((totalUploaded / (totalUploaded + totalErrors)) * 100).toFixed(1)}%`
+    `  Success rate: ${((totalUploaded / (totalUploaded + totalErrors)) * 100).toFixed(1)}%`,
   );
 
   // Verify uploads

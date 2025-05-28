@@ -25,19 +25,19 @@ __testutils/
 Use these factories to create consistent mocks across test files:
 
 ```typescript
-import { createMockLogger, createMockBlobService } from '../__testutils__/mocks/factories';
+import { createMockBlobService, createMockLogger } from '../__testutils__/mocks/factories';
 
 describe('MyComponent', () => {
   it('should log events properly', () => {
     // Create a typed mock logger
     const mockLogger = createMockLogger();
-    
+
     // Use in your test
     const result = myFunction(mockLogger);
-    
+
     // Type-safe assertions
     expect(mockLogger.info).toHaveBeenCalledWith(
-      expect.objectContaining({ message: 'Operation completed' })
+      expect.objectContaining({ message: 'Operation completed' }),
     );
   });
 });
@@ -48,24 +48,24 @@ describe('MyComponent', () => {
 Easily mock network requests:
 
 ```typescript
-import { createJsonFetch, createErrorResponse } from '../__testutils__/network';
+import { createErrorResponse, createJsonFetch } from '../__testutils__/network';
 
 describe('DataFetcher', () => {
   it('should fetch data successfully', async () => {
     // Mock the global fetch with a JSON response
     global.fetch = createJsonFetch({ data: 'test' });
-    
+
     const result = await fetchData('/api/endpoint');
-    
+
     expect(result).toEqual({ data: 'test' });
   });
-  
+
   it('should handle error responses', async () => {
     // Create an error response
-    global.fetch = createMockFetch(() => 
-      createErrorResponse(404, 'Not Found', { code: 'RESOURCE_NOT_FOUND' })
+    global.fetch = createMockFetch(() =>
+      createErrorResponse(404, 'Not Found', { code: 'RESOURCE_NOT_FOUND' }),
     );
-    
+
     await expect(fetchData('/api/endpoint')).rejects.toThrow();
   });
 });
@@ -76,36 +76,36 @@ describe('DataFetcher', () => {
 Type-safe custom assertions:
 
 ```typescript
-import { 
-  expectLoggedWithContext, 
+import {
   expectFetchCalledWith,
-  expectPathStructure
+  expectLoggedWithContext,
+  expectPathStructure,
 } from '../__testutils__/assertions';
 
 describe('LoggingService', () => {
   it('should log with correct context', () => {
     const mockLogger = createMockLogger();
     const service = new LoggingService(mockLogger);
-    
+
     service.logEvent('test', { userId: '123' });
-    
+
     // Type-safe assertion for log context
     expectLoggedWithContext(mockLogger.info, {
       event: 'test',
-      userId: '123'
+      userId: '123',
     });
   });
-  
+
   it('should generate paths correctly', () => {
     const pathService = new AssetPathService();
     const path = pathService.getAssetPath('audio', 'hamlet', 'chapter-01.mp3');
-    
+
     // Assert path structure
     expectPathStructure(path, {
       prefix: 'assets',
       assetType: 'audio',
       bookSlug: 'hamlet',
-      filename: 'chapter-01.mp3'
+      filename: 'chapter-01.mp3',
     });
   });
 });
@@ -131,20 +131,21 @@ To migrate existing tests to use these utilities:
 Example:
 
 ```typescript
+// After
+import { createMockLogger } from '../__testutils__/mocks/factories';
+
 // Before
 jest.mock('../../utils/logger', () => ({
   logger: {
     info: jest.fn(),
     error: jest.fn(),
     // other methods missing or inconsistent
-  }
+  },
 }));
 
-// After
-import { createMockLogger } from '../__testutils__/mocks/factories';
 const mockLogger = createMockLogger();
 jest.mock('../../utils/logger', () => ({
   logger: mockLogger,
-  createRequestLogger: jest.fn().mockReturnValue(mockLogger)
+  createRequestLogger: jest.fn().mockReturnValue(mockLogger),
 }));
 ```

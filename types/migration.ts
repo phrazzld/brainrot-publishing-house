@@ -352,7 +352,7 @@ export interface AssetSourceAdapter {
     options?: {
       limit?: number;
       cursor?: string;
-    }
+    },
   ): Promise<{
     assets: {
       path: string;

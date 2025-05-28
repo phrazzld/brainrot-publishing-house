@@ -215,7 +215,7 @@ async function migrateBookCover(
   bookSlug: string,
   originalPath: string,
   blobPath: string,
-  maxRetries: number = 3
+  maxRetries: number = 3,
 ): Promise<AssetMigrationResult> {
   // Prepare the result object
   const result: AssetMigrationResult = {
@@ -296,7 +296,7 @@ async function migrateTextFile(
   bookSlug: string,
   originalPath: string,
   blobPath: string,
-  maxRetries: number = 3
+  maxRetries: number = 3,
 ): Promise<AssetMigrationResult> {
   // Prepare the result object
   const result: AssetMigrationResult = {
@@ -369,7 +369,7 @@ async function migrateAudioFile(
   bookSlug: string,
   originalPath: string,
   blobPath: string,
-  maxRetries: number = 3
+  maxRetries: number = 3,
 ): Promise<AssetMigrationResult> {
   // Prepare the result object
   const result: AssetMigrationResult = {
@@ -498,7 +498,7 @@ async function migrateChapterImage(
   bookSlug: string,
   originalPath: string,
   blobPath: string,
-  maxRetries: number = 3
+  maxRetries: number = 3,
 ): Promise<AssetMigrationResult> {
   // This uses the same logic as book covers since they're both images
   return migrateBookCover(bookSlug, originalPath, blobPath, maxRetries);
@@ -509,7 +509,7 @@ async function migrateChapterImage(
  */
 async function migrateAsset(
   asset: MissingAsset,
-  options: MigrationOptions
+  options: MigrationOptions,
 ): Promise<AssetMigrationResult> {
   console.error(`Migrating ${asset.type} asset: ${asset.path} -> ${asset.blobPath}`);
 
@@ -665,7 +665,7 @@ async function verifyUpload(blobUrl: string): Promise<boolean> {
     return fileInfo.size > 0;
   } catch (error) {
     console.warn(
-      `Verification failed for ${blobUrl}: ${error instanceof Error ? error.message : String(error)}`
+      `Verification failed for ${blobUrl}: ${error instanceof Error ? error.message : String(error)}`,
     );
     return false;
   }
@@ -837,14 +837,14 @@ function printResults(result: MigrationResult): void {
 
   console.error('\nResults by type:');
   console.error(
-    `Cover images: ${result.byType.cover.migrated}/${result.byType.cover.total} migrated`
+    `Cover images: ${result.byType.cover.migrated}/${result.byType.cover.total} migrated`,
   );
   console.error(
-    `Chapter images: ${result.byType.chapter.migrated}/${result.byType.chapter.total} migrated`
+    `Chapter images: ${result.byType.chapter.migrated}/${result.byType.chapter.total} migrated`,
   );
   console.error(`Text files: ${result.byType.text.migrated}/${result.byType.text.total} migrated`);
   console.error(
-    `Audio files: ${result.byType.audio.migrated}/${result.byType.audio.total} migrated`
+    `Audio files: ${result.byType.audio.migrated}/${result.byType.audio.total} migrated`,
   );
 
   if (result.failedAssets > 0) {

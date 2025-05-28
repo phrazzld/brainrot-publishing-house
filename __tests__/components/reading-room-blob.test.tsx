@@ -94,7 +94,7 @@ describe('Reading Room with Blob Storage', () => {
 
     // Mock the fetchTextWithFallback function
     (fetchTextWithFallback as jest.Mock).mockResolvedValue(
-      'Test chapter content from Blob storage'
+      'Test chapter content from Blob storage',
     );
 
     // getAssetUrlWithFallback no longer used in component
@@ -107,7 +107,7 @@ describe('Reading Room with Blob Storage', () => {
 
     // Check if the component is trying to fetch text from Blob
     expect(fetchTextWithFallback).toHaveBeenCalledWith(
-      '/assets/test-book/text/brainrot/chapter-1.txt'
+      '/assets/test-book/text/brainrot/chapter-1.txt',
     );
 
     // Wait for text to be loaded
@@ -126,7 +126,7 @@ describe('Reading Room with Blob Storage', () => {
 
     // Check if the component is trying to fetch text from Blob
     expect(fetchTextWithFallback).toHaveBeenCalledWith(
-      '/assets/test-book/text/brainrot/chapter-1.txt'
+      '/assets/test-book/text/brainrot/chapter-1.txt',
     );
 
     // Wait for error message to be displayed
@@ -146,7 +146,7 @@ describe('Reading Room with Blob Storage', () => {
 
     // Initial chapter
     expect(fetchTextWithFallback).toHaveBeenCalledWith(
-      '/assets/test-book/text/brainrot/chapter-1.txt'
+      '/assets/test-book/text/brainrot/chapter-1.txt',
     );
 
     // Update search params to change chapter
@@ -166,7 +166,7 @@ describe('Reading Room with Blob Storage', () => {
 
     // Should fetch new chapter
     expect(fetchTextWithFallback).toHaveBeenCalledWith(
-      '/assets/test-book/text/brainrot/chapter-2.txt'
+      '/assets/test-book/text/brainrot/chapter-2.txt',
     );
   });
 
@@ -197,7 +197,7 @@ describe('Reading Room with Blob Storage', () => {
 
     // Should still fetch text
     expect(fetchTextWithFallback).toHaveBeenCalledWith(
-      '/assets/test-book/text/brainrot/chapter-2.txt'
+      '/assets/test-book/text/brainrot/chapter-2.txt',
     );
 
     // Audio player should not be displayed

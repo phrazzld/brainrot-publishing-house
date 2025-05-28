@@ -97,7 +97,7 @@ export function validateType(type: string | null | undefined, log: Logger): Vali
 export function validateChapter(
   chapter: string | null | undefined,
   type: string,
-  log: Logger
+  log: Logger,
 ): ValidationResult {
   // Chapter is only required when type is 'chapter'
   if (type !== 'chapter') {

@@ -101,7 +101,7 @@ class TimeoutError extends Error {
 async function fetchWithTimeout(
   url: string,
   options: RequestInit = {},
-  timeoutMs: number = FETCH_TIMEOUT_MS
+  timeoutMs: number = FETCH_TIMEOUT_MS,
 ): Promise<Response> {
   // Create a controller to abort the fetch operation if it takes too long
   const controller = new AbortController();
@@ -282,7 +282,7 @@ async function extractErrorDetails(config: ErrorDetailsConfig): Promise<string> 
       // Add to appropriate category
       if (
         ['x-content-type-options', 'content-security-policy', 'strict-transport-security'].includes(
-          lowerKey
+          lowerKey,
         )
       ) {
         securityHeaders[key] = value;
@@ -903,7 +903,7 @@ async function fetchAssetWithLogging(params: FetchAssetParams): Promise<FetchRes
           'User-Agent': `Brainrot-Publishing-House/${process.env.NEXT_PUBLIC_APP_VERSION || 'dev'} (${process.env.NODE_ENV})`,
         },
       },
-      FETCH_TIMEOUT_MS
+      FETCH_TIMEOUT_MS,
     );
 
     // Calculate fetch duration

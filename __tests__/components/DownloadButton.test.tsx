@@ -112,12 +112,12 @@ describe('DownloadButton Component', () => {
 
       // Should first call the API to get URL info
       expect((global.fetch as jest.Mock).mock.calls[0][0]).toContain(
-        '/api/download?slug=hamlet&type=full'
+        '/api/download?slug=hamlet&type=full',
       );
 
       // Then should call the proxy endpoint
       expect((global.fetch as jest.Mock).mock.calls[1][0]).toContain(
-        '/api/download?slug=hamlet&type=full&proxy=true'
+        '/api/download?slug=hamlet&type=full&proxy=true',
       );
 
       // Check if the download link was created and clicked
@@ -167,12 +167,12 @@ describe('DownloadButton Component', () => {
 
       // Should first call the API to get URL info
       expect((global.fetch as jest.Mock).mock.calls[0][0]).toContain(
-        '/api/download?slug=hamlet&type=chapter&chapter=3'
+        '/api/download?slug=hamlet&type=chapter&chapter=3',
       );
 
       // Then should call the proxy endpoint
       expect((global.fetch as jest.Mock).mock.calls[1][0]).toContain(
-        '/api/download?slug=hamlet&type=chapter&chapter=3&proxy=true'
+        '/api/download?slug=hamlet&type=chapter&chapter=3&proxy=true',
       );
 
       // Check download filename
@@ -239,7 +239,7 @@ describe('DownloadButton Component', () => {
           error: 'Resource not found',
           message: 'The requested audio file does not exist',
           code: 'NotFound.404',
-        })
+        }),
       ),
     });
 
@@ -251,7 +251,7 @@ describe('DownloadButton Component', () => {
 
     await waitFor(() => {
       const errorMessage = container.textContent?.includes(
-        'The requested audio file does not exist'
+        'The requested audio file does not exist',
       );
       expect(errorMessage).toBe(true);
     });

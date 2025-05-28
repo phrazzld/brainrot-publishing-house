@@ -78,12 +78,12 @@ async function verifyAudioMigration(bookSlugs?: string[]) {
         if (isValidAudio) {
           validAudioFiles++;
           console.log(
-            `   ✅ Valid audio file: ${formatSize(fileInfo.size)}, ${fileInfo.contentType}`
+            `   ✅ Valid audio file: ${formatSize(fileInfo.size)}, ${fileInfo.contentType}`,
           );
         } else {
           smallPlaceholders++;
           console.log(
-            `   ⚠️ Small placeholder file: ${formatSize(fileInfo.size)}, ${fileInfo.contentType}`
+            `   ⚠️ Small placeholder file: ${formatSize(fileInfo.size)}, ${fileInfo.contentType}`,
           );
         }
 
@@ -119,13 +119,13 @@ async function verifyAudioMigration(bookSlugs?: string[]) {
   console.log(`------------------------------------`);
   console.log(`Total audio files expected: ${totalFiles}`);
   console.log(
-    `Files found in Blob storage: ${existingFiles} (${formatPercentage(existingFiles, totalFiles)})`
+    `Files found in Blob storage: ${existingFiles} (${formatPercentage(existingFiles, totalFiles)})`,
   );
   console.log(
-    `Valid audio files: ${validAudioFiles} (${formatPercentage(validAudioFiles, totalFiles)})`
+    `Valid audio files: ${validAudioFiles} (${formatPercentage(validAudioFiles, totalFiles)})`,
   );
   console.log(
-    `Small placeholder files: ${smallPlaceholders} (${formatPercentage(smallPlaceholders, totalFiles)})`
+    `Small placeholder files: ${smallPlaceholders} (${formatPercentage(smallPlaceholders, totalFiles)})`,
   );
   console.log(`Missing files: ${missingFiles} (${formatPercentage(missingFiles, totalFiles)})`);
 

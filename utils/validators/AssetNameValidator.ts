@@ -131,7 +131,7 @@ export class AssetNameValidator {
 
     throw new Error(
       `Invalid audio asset name: "${assetName}". ` +
-        'Should be "full-audiobook.mp3" or "chapter-XX.mp3".'
+        'Should be "full-audiobook.mp3" or "chapter-XX.mp3".',
     );
   }
 
@@ -269,7 +269,7 @@ export class AssetNameValidator {
     // If we get here, the name is invalid
     throw new Error(
       `Invalid text asset name: "${assetName}". ` +
-        'Should follow standard naming conventions for text assets.'
+        'Should follow standard naming conventions for text assets.',
     );
   }
 
@@ -322,7 +322,7 @@ export class AssetNameValidator {
 
     throw new Error(
       `Invalid image asset name: "${assetName}". ` +
-        'Should follow standard naming conventions for image assets.'
+        'Should follow standard naming conventions for image assets.',
     );
   }
 

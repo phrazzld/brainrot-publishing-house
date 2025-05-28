@@ -12,7 +12,7 @@ const divineComedyParadiso: Translation = {
     'dante achieves peak enlightenment, heaven tour maximum vibes. beatrice best girl confirmed.',
   coverImage: getAssetUrl(
     '/assets/the-divine-comedy-paradiso/images/paradiso-02.png',
-    USE_BLOB_STORAGE
+    USE_BLOB_STORAGE,
   ),
   status: 'coming soon',
   chapters: [],

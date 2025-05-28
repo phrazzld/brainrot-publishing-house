@@ -12,7 +12,7 @@ const huckleberryFinn: Translation = {
     "huck yeets from civil society, links with jim, raft life hits diff. dodging l's, chasing w's, river got that main character energy.",
   coverImage: getAssetUrl(
     '/assets/the-adventures-of-huckleberry-finn/images/huck-finn-09.png',
-    USE_BLOB_STORAGE
+    USE_BLOB_STORAGE,
   ),
   status: 'available',
   purchaseUrl: 'https://a.co/d/4hjXftX',

@@ -153,7 +153,7 @@ When migrating assets to the new Blob structure:
      {
        // ...
        coverImage: blobService.getUrlForPath(
-         blobPathService.getBookImagePath('hamlet', 'hamlet-07.png')
+         blobPathService.getBookImagePath('hamlet', 'hamlet-07.png'),
        ),
        text: blobService.getUrlForPath(blobPathService.getBrainrotTextPath('hamlet', 'act-i')),
      },

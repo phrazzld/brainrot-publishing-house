@@ -108,7 +108,7 @@ class MigrationLog {
       }
     } catch (error) {
       console.warn(
-        `Error loading migration log: ${error instanceof Error ? error.message : String(error)}`
+        `Error loading migration log: ${error instanceof Error ? error.message : String(error)}`,
       );
       this.log = {};
     }
@@ -123,10 +123,10 @@ class MigrationLog {
       console.log(`Migration log saved to ${this.logPath}`);
     } catch (error) {
       console.error(
-        `Error saving migration log: ${error instanceof Error ? error.message : String(error)}`
+        `Error saving migration log: ${error instanceof Error ? error.message : String(error)}`,
       );
       throw new Error(
-        `Failed to save migration log: ${error instanceof Error ? error.message : String(error)}`
+        `Failed to save migration log: ${error instanceof Error ? error.message : String(error)}`,
       );
     }
   }
@@ -184,9 +184,9 @@ class CustomTextMigrationService {
   private migrationLog: MigrationLog;
 
   constructor(
-    private readonly blobService: any,
-    private readonly blobPathService: any,
-    logFile: string = 'custom-text-migration.json'
+    private readonly blobService: unknown,
+    private readonly blobPathService: unknown,
+    logFile: string = 'custom-text-migration.json',
   ) {
     this.migrationLog = new MigrationLog(logFile);
   }
@@ -303,7 +303,7 @@ class CustomTextMigrationService {
                     ) {
                       const existingResult = this.migrationLog.get(bookSlug, fileName)!;
                       console.log(
-                        `Skipping ${bookSlug}/${fileName} (already migrated to ${existingResult.blobPath})`
+                        `Skipping ${bookSlug}/${fileName} (already migrated to ${existingResult.blobPath})`,
                       );
 
                       bookResult.skipped++;
@@ -338,13 +338,13 @@ class CustomTextMigrationService {
                     const migrationResult = await this.migrateTextFile(
                       bookSlug,
                       fileName,
-                      options.retries || 3
+                      options.retries || 3,
                     );
 
                     // Update statistics
                     if (migrationResult.status === 'success') {
                       console.log(
-                        `✅ Successfully migrated ${bookSlug}/${fileName} to ${migrationResult.blobUrl}`
+                        `✅ Successfully migrated ${bookSlug}/${fileName} to ${migrationResult.blobUrl}`,
                       );
                       bookResult.migrated++;
                     } else if (migrationResult.status === 'skipped') {
@@ -352,7 +352,7 @@ class CustomTextMigrationService {
                       bookResult.skipped++;
                     } else {
                       console.error(
-                        `❌ Failed to migrate ${bookSlug}/${fileName}: ${migrationResult.error}`
+                        `❌ Failed to migrate ${bookSlug}/${fileName}: ${migrationResult.error}`,
                       );
                       bookResult.failed++;
                     }
@@ -369,7 +369,7 @@ class CustomTextMigrationService {
                       status: 'failed',
                       originalPath: `/assets/${bookSlug}/text/${fileName}`,
                       blobPath: this.blobPathService.convertLegacyPath(
-                        `/assets/${bookSlug}/text/${fileName}`
+                        `/assets/${bookSlug}/text/${fileName}`,
                       ),
                       blobUrl: '',
                       error: errorMessage,
@@ -379,7 +379,7 @@ class CustomTextMigrationService {
                     bookResult.files[fileName] = failedResult;
                     this.migrationLog.add(bookSlug, fileName, failedResult);
                   }
-                })
+                }),
               );
             }
 
@@ -395,7 +395,7 @@ class CustomTextMigrationService {
             const errorMessage = error instanceof Error ? error.message : String(error);
             console.error(`⚠️ Error processing book ${bookSlug}: ${errorMessage}`);
           }
-        })
+        }),
       );
     }
 
@@ -418,7 +418,7 @@ class CustomTextMigrationService {
   private async migrateTextFile(
     bookSlug: string,
     fileName: string,
-    maxRetries: number = 3
+    maxRetries: number = 3,
   ): Promise<TextFileMigrationResult> {
     const originalPath = `/assets/${bookSlug}/text/${fileName}`;
     const blobPath = this.blobPathService.convertLegacyPath(originalPath);
@@ -497,7 +497,7 @@ class CustomTextMigrationService {
       return fileInfo.size > 0;
     } catch (error) {
       console.warn(
-        `Verification failed for ${blobUrl}: ${error instanceof Error ? error.message : String(error)}`
+        `Verification failed for ${blobUrl}: ${error instanceof Error ? error.message : String(error)}`,
       );
       return false;
     }
@@ -591,7 +591,7 @@ async function main(): Promise<void> {
     const migrationService = new CustomTextMigrationService(
       blobService,
       blobPathService,
-      options.logFile
+      options.logFile,
     );
 
     // Run migration

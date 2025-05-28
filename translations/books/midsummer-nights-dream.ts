@@ -12,7 +12,7 @@ const midsummerNightsDream: Translation = {
     'fairy drama, love potion chaos, donkey transformation wild. shakespeare on that fantasy pack.',
   coverImage: getAssetUrl(
     '/assets/a-midsummer-nights-dream/images/midsummer-02.png',
-    USE_BLOB_STORAGE
+    USE_BLOB_STORAGE,
   ),
   status: 'coming soon',
   chapters: [],

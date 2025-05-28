@@ -59,7 +59,7 @@ async function verifyAsset(
   assetPath: string,
   assetType: 'cover' | 'chapter' | 'audio',
   bookSlug: string,
-  counters: { totalAssets: number; migratedAssets: number }
+  counters: { totalAssets: number; migratedAssets: number },
 ): Promise<AssetVerificationResult> {
   counters.totalAssets++;
 
@@ -142,7 +142,7 @@ function initializeBookResult(book: {
 function updateBookSummary(
   bookResult: BookVerificationResult,
   assetResult: AssetVerificationResult,
-  isBookCover: boolean = false
+  isBookCover: boolean = false,
 ): void {
   if (assetResult.exists) {
     bookResult.summary.migrated++;
@@ -161,7 +161,7 @@ async function verifyChapterAssets(
   chapter: { text: string; audioSrc?: string },
   bookSlug: string,
   bookResult: BookVerificationResult,
-  counters: { totalAssets: number; migratedAssets: number }
+  counters: { totalAssets: number; migratedAssets: number },
 ): Promise<void> {
   // Verify chapter text
   bookResult.summary.total++;
@@ -185,7 +185,7 @@ async function verifyBookAssets(
     coverImage: string;
     chapters: Array<{ text: string; audioSrc?: string }>;
   },
-  counters: { totalAssets: number; migratedAssets: number }
+  counters: { totalAssets: number; migratedAssets: number },
 ): Promise<BookVerificationResult> {
   logger.info({ msg: `Verifying book assets`, bookTitle: book.title, bookSlug: book.slug });
 
@@ -229,14 +229,14 @@ function saveVerificationReport(report: VerificationReport): string {
  */
 function calculateOverallSummary(
   bookResults: BookVerificationResult[],
-  counters: { totalAssets: number; migratedAssets: number }
+  counters: { totalAssets: number; migratedAssets: number },
 ): VerificationReport['overallSummary'] {
   return {
     totalBooks: translations.length,
     booksWithCover: bookResults.filter((b) => b.coverImage.exists).length,
     booksWithAllContent: bookResults.filter(
       (b) =>
-        b.coverImage.exists && b.chapters.every((c) => c.exists) && b.audio.every((a) => a.exists)
+        b.coverImage.exists && b.chapters.every((c) => c.exists) && b.audio.every((a) => a.exists),
     ).length,
     totalAssets: counters.totalAssets,
     migratedAssets: counters.migratedAssets,

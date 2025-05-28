@@ -206,7 +206,7 @@ describe('Fallback mechanism', () => {
     it('should handle full URL audio sources', async () => {
       // Mock the condition where a full URL is detected
       (blobPathService.convertLegacyPath as jest.Mock).mockImplementationOnce(
-        (path) => path // For full URLs, just return as is
+        (path) => path, // For full URLs, just return as is
       );
 
       // Mock asset exists in Blob by passing a URL check
@@ -225,13 +225,13 @@ describe('Fallback mechanism', () => {
           ok: true,
           status: 200,
           headers: new Headers({ 'content-length': '1024' }),
-        } as Response)
+        } as Response),
       );
 
       const result = await getAssetUrlWithFallback(audioSrc);
 
       expect(result).toBe(
-        'https://public.blob.vercel-storage.com/books/the-iliad/audio/book-01.mp3'
+        'https://public.blob.vercel-storage.com/books/the-iliad/audio/book-01.mp3',
       );
     });
 
@@ -241,7 +241,7 @@ describe('Fallback mechanism', () => {
 
       // Don't convert tenant-specific URLs
       (blobPathService.convertLegacyPath as jest.Mock).mockImplementationOnce(
-        (path) => path // For full URLs, just return as is
+        (path) => path, // For full URLs, just return as is
       );
 
       // Mock the URL normalization by making sure it detects the right conditions
@@ -260,7 +260,7 @@ describe('Fallback mechanism', () => {
           ok: true,
           status: 200,
           headers: new Headers({ 'content-length': '1024' }),
-        } as Response)
+        } as Response),
       );
 
       const audioSrc = 'https://public.blob.vercel-storage.com/books/the-iliad/audio/book-01.mp3';

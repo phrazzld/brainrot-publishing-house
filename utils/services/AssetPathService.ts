@@ -41,7 +41,7 @@ export class AssetPathService {
   public getAssetPath(
     assetType: AssetType | 'shared' | 'site',
     bookSlug: string | null,
-    assetName: string
+    assetName: string,
   ): string {
     // For shared and site assets, no book slug is needed
     if (assetType === 'shared' || assetType === 'site') {
@@ -104,7 +104,7 @@ export class AssetPathService {
   public getTextPath(
     bookSlug: string,
     textType: 'fulltext' | 'chapter' | 'source',
-    chapter?: string | number
+    chapter?: string | number,
   ): string {
     let assetName: string;
 
@@ -145,7 +145,7 @@ export class AssetPathService {
     bookSlug: string,
     imageType: 'cover' | 'chapter' | 'thumbnail',
     chapter?: string | number,
-    extension: string = 'jpg'
+    extension: string = 'jpg',
   ): string {
     let assetName: string;
 
@@ -368,7 +368,7 @@ export class AssetPathService {
   private processAssetTypeAndRemainder(
     bookSlug: string,
     assetType: string,
-    remainder: string
+    remainder: string,
   ): string {
     // Normalize the book slug
     const normalizedSlug = this.normalizeBookSlug(bookSlug);

@@ -107,7 +107,7 @@ function blobPathToLocalPath(blobPath: string): string {
 async function processAsset(
   assetPath: string,
   type: 'cover' | 'chapter' | 'audio',
-  dryRun: boolean
+  dryRun: boolean,
 ): Promise<AssetCleanupResult> {
   const result: AssetCleanupResult = {
     path: assetPath,
@@ -147,7 +147,7 @@ function updateCounters(
     assetsDeleted: number;
     assetsKept: number;
     errors: number;
-  }
+  },
 ): void {
   if (result.existsInBlob) {
     bookSummary.existInBlob++;
@@ -179,7 +179,7 @@ async function processChapterAssets(
     assetsDeleted: number;
     assetsKept: number;
     errors: number;
-  }
+  },
 ): Promise<void> {
   // Process chapter text
   bookResult.summary.totalAssets++;
@@ -215,7 +215,7 @@ async function processBookAssets(
     assetsDeleted: number;
     assetsKept: number;
     errors: number;
-  }
+  },
 ): Promise<BookCleanupResult> {
   logger.info({
     msg: `Processing book: ${book.title} (${book.slug})`,
@@ -261,7 +261,7 @@ function saveCleanupReport(report: CleanupReport): string {
 
   const reportPath = path.join(
     reportDir,
-    `cleanup-report-${report.dryRun ? 'dry-run' : 'actual'}-${Date.now()}.json`
+    `cleanup-report-${report.dryRun ? 'dry-run' : 'actual'}-${Date.now()}.json`,
   );
   fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
   logger.info({ msg: `Report saved to ${reportPath}`, reportPath });

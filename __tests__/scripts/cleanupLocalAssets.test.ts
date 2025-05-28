@@ -84,8 +84,8 @@ describe('cleanupLocalAssets', () => {
     // Check that the audio file (which doesn't exist in Blob) wasn't deleted
     expect(
       report.bookResults[0].results.find(
-        (r: { type: string; wasDeleted: boolean }) => r.type === 'audio'
-      )?.wasDeleted
+        (r: { type: string; wasDeleted: boolean }) => r.type === 'audio',
+      )?.wasDeleted,
     ).toBe(false);
   });
 });

@@ -11,6 +11,7 @@ This project uses ES modules (`"type": "module"` in package.json) with TypeScrip
 Always use the `node:` prefix for Node.js built-in modules:
 
 ### File System Operations
+
 ```typescript
 // ✅ CORRECT
 import { readFile, writeFile, existsSync } from 'node:fs';
@@ -23,6 +24,7 @@ import { readFile } from 'fs';
 ```
 
 ### Path Operations
+
 ```typescript
 // ✅ CORRECT
 import path from 'node:path';
@@ -33,6 +35,7 @@ import { join, resolve } from 'path';
 ```
 
 ### URL Operations
+
 ```typescript
 // ✅ CORRECT
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -42,14 +45,14 @@ import { fileURLToPath } from 'url';
 ```
 
 ### Process and OS
+
 ```typescript
 // ✅ CORRECT
+import * as os from 'os';
+import { arch, platform } from 'node:os';
 import { exit } from 'node:process';
-import { platform, arch } from 'node:os';
-
 // ❌ INCORRECT
 import process from 'process';
-import * as os from 'os';
 ```
 
 ## Path Resolution
@@ -81,29 +84,31 @@ if (import.meta.url === `file://${process.argv[1]}`) {
 ## External Libraries
 
 ### Vercel Blob
+
 ```typescript
 // ✅ CORRECT
-import { put, list, del } from '@vercel/blob';
-import type { ListBlobResult, PutBlobResult } from '@vercel/blob';
-
 // ❌ INCORRECT
 import * as blob from '@vercel/blob';
+import { del, list, put } from '@vercel/blob';
+import type { ListBlobResult, PutBlobResult } from '@vercel/blob';
 ```
 
 ### Dotenv
+
 ```typescript
 // ✅ CORRECT
 import { config } from 'dotenv';
+// ❌ INCORRECT
+import dotenv from 'dotenv';
 import path from 'node:path';
 
 config({ path: path.resolve(process.cwd(), '.env.local') });
 
-// ❌ INCORRECT
-import dotenv from 'dotenv';
 dotenv.config({ path: '.env.local' });
 ```
 
 ### Logger (Internal)
+
 ```typescript
 // ✅ CORRECT
 import { createScriptLogger } from '../utils/createScriptLogger.js';
@@ -121,6 +126,7 @@ const logger = rootLogger.child({ script: 'my-script' });
 ## Internal Modules
 
 ### Relative Imports
+
 ```typescript
 // ✅ CORRECT - Always include .js extension for local files
 import { someUtil } from '../utils/helper.js';
@@ -132,6 +138,7 @@ import translations from '../translations';
 ```
 
 ### Same-Directory Imports
+
 ```typescript
 // ✅ CORRECT
 import { helperFunction } from './helper.js';
@@ -148,21 +155,19 @@ Here's a standardized script template:
 #!/usr/bin/env tsx
 /**
  * Script description
- * 
+ *
  * Usage: tsx scripts/my-script.ts [options]
  */
-
 // Node.js built-ins with node: prefix
+// External libraries
+import { config } from 'dotenv';
 import { writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
-// External libraries
-import { config } from 'dotenv';
-
+import translations from '../translations/index.js';
 // Internal utilities (with .js extensions)
 import { createScriptLogger } from '../utils/createScriptLogger.js';
-import { getDirname, resolveFromModule, isMainModule } from '../utils/paths.js';
-import translations from '../translations/index.js';
+import { getDirname, isMainModule, resolveFromModule } from '../utils/paths.js';
 
 // Initialize environment
 config({ path: path.resolve(process.cwd(), '.env.local') });
@@ -170,7 +175,7 @@ config({ path: path.resolve(process.cwd(), '.env.local') });
 // Initialize logger
 const logger = createScriptLogger({
   scriptName: 'my-script',
-  context: 'utility'
+  context: 'utility',
 });
 
 // Get current directory and resolve paths
@@ -180,22 +185,22 @@ const configPath = resolveFromModule(import.meta.url, '../config.json');
 // Main script logic
 async function main(): Promise<void> {
   try {
-    logger.info({ 
+    logger.info({
       msg: 'Starting script execution',
-      operation: 'start'
+      operation: 'start',
     });
 
     // Script implementation here
 
-    logger.info({ 
+    logger.info({
       msg: 'Script completed successfully',
-      operation: 'complete'
+      operation: 'complete',
     });
   } catch (error) {
-    logger.error({ 
+    logger.error({
       msg: 'Script failed',
       operation: 'error',
-      error: error instanceof Error ? error.message : String(error)
+      error: error instanceof Error ? error.message : String(error),
     });
     process.exit(1);
   }

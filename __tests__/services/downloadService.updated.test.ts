@@ -61,7 +61,7 @@ describe('DownloadService', () => {
       expect(mockAssetUrlResolver.getAssetUrl).toHaveBeenCalledWith(
         'audio',
         'hamlet',
-        'full-audiobook.mp3'
+        'full-audiobook.mp3',
       );
 
       // Verify result is the resolved URL
@@ -75,7 +75,7 @@ describe('DownloadService', () => {
       expect(mockAssetUrlResolver.getAssetUrl).toHaveBeenCalledWith(
         'audio',
         'hamlet',
-        'chapter-01.mp3'
+        'chapter-01.mp3',
       );
 
       expect(result).toBe(TEST_BLOB_URL);
@@ -88,7 +88,7 @@ describe('DownloadService', () => {
 
       // Expect the error to be propagated
       await expect(downloadService.getDownloadUrl(fullAudiobookParams)).rejects.toThrow(
-        AssetNotFoundError
+        AssetNotFoundError,
       );
     });
 
@@ -99,7 +99,7 @@ describe('DownloadService', () => {
 
       // Expect the error to be propagated
       await expect(downloadService.getDownloadUrl(fullAudiobookParams)).rejects.toThrow(
-        'Generic error'
+        'Generic error',
       );
     });
 
@@ -112,7 +112,7 @@ describe('DownloadService', () => {
       };
 
       await expect(downloadService.getDownloadUrl(invalidParams)).rejects.toThrow(
-        'Chapter parameter is required'
+        'Chapter parameter is required',
       );
     });
   });

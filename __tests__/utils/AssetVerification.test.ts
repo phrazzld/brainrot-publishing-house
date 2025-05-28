@@ -89,7 +89,7 @@ describe('Asset Verification', () => {
       const textAssetPath = assetPathService.getAssetPath(
         AssetType.TEXT,
         TEST_BOOKS.HAMLET,
-        'brainrot-chapter-01.txt'
+        'brainrot-chapter-01.txt',
       );
       expect(textAssetPath).toBe(TEXT_ASSETS.BRAINROT_CHAPTER.unified);
     });
@@ -110,7 +110,7 @@ describe('Asset Verification', () => {
       const audioAssetPath = assetPathService.getAssetPath(
         AssetType.AUDIO,
         TEST_BOOKS.HAMLET,
-        'chapter-03.mp3'
+        'chapter-03.mp3',
       );
       expect(audioAssetPath).toBe(AUDIO_ASSETS.CHAPTER.unified);
     });
@@ -132,13 +132,13 @@ describe('Asset Verification', () => {
     test('correctly converts legacy paths to unified paths', () => {
       // Test brainrot chapter text path conversion
       const brainrotTextConversion = assetPathService.convertLegacyPath(
-        TEXT_ASSETS.BRAINROT_CHAPTER.legacy
+        TEXT_ASSETS.BRAINROT_CHAPTER.legacy,
       );
       expect(brainrotTextConversion).toBe(TEXT_ASSETS.BRAINROT_CHAPTER.unified);
 
       // Test audio chapter path conversion
       const audioChapterConversion = assetPathService.convertLegacyPath(
-        AUDIO_ASSETS.CHAPTER.legacy
+        AUDIO_ASSETS.CHAPTER.legacy,
       );
       expect(audioChapterConversion).toBe(AUDIO_ASSETS.CHAPTER.unified);
 
@@ -148,7 +148,7 @@ describe('Asset Verification', () => {
 
       // Test shared asset path conversion
       const sharedImageConversion = assetPathService.convertLegacyPath(
-        IMAGE_ASSETS.SHARED_IMAGE.legacy
+        IMAGE_ASSETS.SHARED_IMAGE.legacy,
       );
       expect(sharedImageConversion).toBe(IMAGE_ASSETS.SHARED_IMAGE.unified);
     });
@@ -156,7 +156,7 @@ describe('Asset Verification', () => {
     test('correctly extracts book slug from paths', () => {
       // Extract from unified path
       const bookSlugFromUnified = assetPathService.getBookSlugFromPath(
-        TEXT_ASSETS.BRAINROT_CHAPTER.unified
+        TEXT_ASSETS.BRAINROT_CHAPTER.unified,
       );
       expect(bookSlugFromUnified).toBe(TEST_BOOKS.HAMLET);
 
@@ -166,7 +166,7 @@ describe('Asset Verification', () => {
 
       // No book slug from shared assets
       const bookSlugFromShared = assetPathService.getBookSlugFromPath(
-        IMAGE_ASSETS.SHARED_IMAGE.unified
+        IMAGE_ASSETS.SHARED_IMAGE.unified,
       );
       expect(bookSlugFromShared).toBeNull();
     });
@@ -176,7 +176,7 @@ describe('Asset Verification', () => {
       const pathWithSpecialChars = assetPathService.getAssetPath(
         AssetType.TEXT,
         TEST_BOOKS.HAMLET,
-        'special characters & symbols!.txt'
+        'special characters & symbols!.txt',
       );
       expect(pathWithSpecialChars).toBe('assets/text/hamlet/special characters & symbols!.txt');
 
@@ -185,10 +185,10 @@ describe('Asset Verification', () => {
       const longPath = assetPathService.getAssetPath(
         AssetType.TEXT,
         longBookSlug,
-        'extremely-long-filename-with-detailed-description-of-contents.txt'
+        'extremely-long-filename-with-detailed-description-of-contents.txt',
       );
       expect(longPath).toBe(
-        'assets/text/very-long-book-title-that-exceeds-normal-length-limits/extremely-long-filename-with-detailed-description-of-contents.txt'
+        'assets/text/very-long-book-title-that-exceeds-normal-length-limits/extremely-long-filename-with-detailed-description-of-contents.txt',
       );
     });
   });
@@ -218,7 +218,7 @@ describe('Asset Verification', () => {
       try {
         const expectedUrl = `${MOCK_BLOB_BASE_URL}/${TEXT_ASSETS.BRAINROT_CHAPTER.unified}?_t=1234567890`;
         expect(
-          blobService.getUrlForPath(TEXT_ASSETS.BRAINROT_CHAPTER.unified, { noCache: true })
+          blobService.getUrlForPath(TEXT_ASSETS.BRAINROT_CHAPTER.unified, { noCache: true }),
         ).toBe(expectedUrl);
       } finally {
         // Restore original Date.now
@@ -231,7 +231,7 @@ describe('Asset Verification', () => {
       mockFetchImplementation.mockResolvedValueOnce(
         createSuccessResponse(TEXT_ASSETS.BRAINROT_CHAPTER.content, {
           headers: { 'Content-Type': 'text/plain' },
-        })
+        }),
       );
 
       // Generate URL
@@ -254,7 +254,7 @@ describe('Asset Verification', () => {
 
       // Attempt to fetch
       await expect(blobService.fetchText(textAssetUrl)).rejects.toThrow(
-        'Failed to fetch text: HTTP error! Status: 404'
+        'Failed to fetch text: HTTP error! Status: 404',
       );
 
       // Mock network error
@@ -262,7 +262,7 @@ describe('Asset Verification', () => {
 
       // Attempt to fetch again
       await expect(blobService.fetchText(textAssetUrl)).rejects.toThrow(
-        'Failed to fetch text: Network error'
+        'Failed to fetch text: Network error',
       );
     });
   });
@@ -281,32 +281,32 @@ describe('Asset Verification', () => {
 
       // Verify that AssetPathService can normalize these paths
       expect(assetPathService.convertLegacyPath(legacyTextPath)).toBe(
-        TEXT_ASSETS.BRAINROT_CHAPTER.unified
+        TEXT_ASSETS.BRAINROT_CHAPTER.unified,
       );
       expect(assetPathService.convertLegacyPath(legacyAudioPath)).toBe(
-        AUDIO_ASSETS.CHAPTER.unified
+        AUDIO_ASSETS.CHAPTER.unified,
       );
       expect(assetPathService.convertLegacyPath(legacyImagePath)).toBe(
-        IMAGE_ASSETS.BOOK_COVER.unified
+        IMAGE_ASSETS.BOOK_COVER.unified,
       );
     });
 
     test('can extract book slugs from both old and new paths', () => {
       // Extract from unified path
       const bookSlugFromUnified = assetPathService.getBookSlugFromPath(
-        TEXT_ASSETS.BRAINROT_CHAPTER.unified
+        TEXT_ASSETS.BRAINROT_CHAPTER.unified,
       );
       expect(bookSlugFromUnified).toBe(TEST_BOOKS.HAMLET);
 
       // Extract from legacy path
       const bookSlugFromLegacy = assetPathService.getBookSlugFromPath(
-        TEXT_ASSETS.BRAINROT_CHAPTER.legacy
+        TEXT_ASSETS.BRAINROT_CHAPTER.legacy,
       );
       expect(bookSlugFromLegacy).toBe(TEST_BOOKS.HAMLET);
 
       // Extract using legacy BlobPathService
       const bookSlugFromLegacyService = blobPathService.getBookSlugFromPath(
-        TEXT_ASSETS.BRAINROT_CHAPTER.legacy
+        TEXT_ASSETS.BRAINROT_CHAPTER.legacy,
       );
       expect(bookSlugFromLegacyService).toBe(TEST_BOOKS.HAMLET);
     });
@@ -325,7 +325,7 @@ describe('Asset Verification', () => {
 
       // Get file info
       const textFileInfo = await blobService.getFileInfo(
-        `${MOCK_BLOB_BASE_URL}/${TEXT_ASSETS.BRAINROT_CHAPTER.unified}`
+        `${MOCK_BLOB_BASE_URL}/${TEXT_ASSETS.BRAINROT_CHAPTER.unified}`,
       );
 
       // Verify content type
@@ -341,7 +341,7 @@ describe('Asset Verification', () => {
 
       // Get file info
       const audioFileInfo = await blobService.getFileInfo(
-        `${MOCK_BLOB_BASE_URL}/${AUDIO_ASSETS.CHAPTER.unified}`
+        `${MOCK_BLOB_BASE_URL}/${AUDIO_ASSETS.CHAPTER.unified}`,
       );
 
       // Verify content type

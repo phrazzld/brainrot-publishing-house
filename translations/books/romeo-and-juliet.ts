@@ -12,7 +12,7 @@ const romeoAndJuliet: Translation = {
     'teen love speedrun any%, family beef ruins everything. shakespeare understood toxic relationships fr.',
   coverImage: getAssetUrl(
     '/assets/romeo-and-juliet/images/romeo-and-juliet-02.png',
-    USE_BLOB_STORAGE
+    USE_BLOB_STORAGE,
   ),
   status: 'coming soon',
   chapters: [],

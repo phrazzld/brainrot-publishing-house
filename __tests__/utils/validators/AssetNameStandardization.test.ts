@@ -7,20 +7,20 @@ describe('AssetNameValidator - standardizeChapterIdentifier', () => {
   describe('standard formats', () => {
     it('should handle already standardized formats', () => {
       expect(validator.standardizeChapterIdentifier('brainrot-chapter-01.txt')).toBe(
-        'brainrot-chapter-01.txt'
+        'brainrot-chapter-01.txt',
       );
       expect(validator.standardizeChapterIdentifier('brainrot-act-05.txt')).toBe(
-        'brainrot-act-05.txt'
+        'brainrot-act-05.txt',
       );
       expect(validator.standardizeChapterIdentifier('brainrot-part-03.txt')).toBe(
-        'brainrot-part-03.txt'
+        'brainrot-part-03.txt',
       );
     });
 
     it('should handle special cases', () => {
       expect(validator.standardizeChapterIdentifier('fulltext')).toBe('brainrot-fulltext.txt');
       expect(validator.standardizeChapterIdentifier('brainrot-fulltext')).toBe(
-        'brainrot-fulltext.txt'
+        'brainrot-fulltext.txt',
       );
       expect(validator.standardizeChapterIdentifier('prologue')).toBe('brainrot-prologue.txt');
       expect(validator.standardizeChapterIdentifier('epilogue')).toBe('brainrot-epilogue.txt');
@@ -86,14 +86,14 @@ describe('AssetNameValidator - standardizeChapterIdentifier', () => {
   describe('edge cases', () => {
     it('should handle files with .txt extension', () => {
       expect(validator.standardizeChapterIdentifier('chapter-1.txt')).toBe(
-        'brainrot-chapter-01.txt'
+        'brainrot-chapter-01.txt',
       );
       expect(validator.standardizeChapterIdentifier('act-v.txt')).toBe('brainrot-act-05.txt');
     });
 
     it('should handle unrecognized formats', () => {
       expect(validator.standardizeChapterIdentifier('unknown-format')).toBe(
-        'brainrot-unknown-format.txt'
+        'brainrot-unknown-format.txt',
       );
       expect(validator.standardizeChapterIdentifier('custom')).toBe('brainrot-custom.txt');
     });
@@ -121,65 +121,65 @@ describe('AssetPathService - convertLegacyPath with text standardization', () =>
   describe('text file path conversions', () => {
     it('should standardize Huckleberry Finn paths', () => {
       expect(
-        service.convertLegacyPath('/assets/the-adventures-of-huckleberry-finn/text/chapter-i.txt')
+        service.convertLegacyPath('/assets/the-adventures-of-huckleberry-finn/text/chapter-i.txt'),
       ).toBe('assets/text/huckleberry-finn/brainrot-chapter-01.txt');
       expect(
         service.convertLegacyPath(
-          'books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-1.txt'
-        )
+          'books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-1.txt',
+        ),
       ).toBe('assets/text/huckleberry-finn/brainrot-chapter-01.txt');
     });
 
     it('should standardize Hamlet paths', () => {
       expect(service.convertLegacyPath('/assets/hamlet/text/act-1.txt')).toBe(
-        'assets/text/hamlet/brainrot-act-01.txt'
+        'assets/text/hamlet/brainrot-act-01.txt',
       );
       expect(service.convertLegacyPath('books/hamlet/text/brainrot/act-05.txt')).toBe(
-        'assets/text/hamlet/brainrot-act-05.txt'
+        'assets/text/hamlet/brainrot-act-05.txt',
       );
     });
 
     it('should handle various path patterns', () => {
       // Direct text path
       expect(service.convertLegacyPath('the-iliad/text/chapter-1.txt')).toBe(
-        'assets/text/the-iliad/brainrot-chapter-01.txt'
+        'assets/text/the-iliad/brainrot-chapter-01.txt',
       );
 
       // Assets prefix with text subdirectory
       expect(service.convertLegacyPath('assets/the-odyssey/text/chapter-v.txt')).toBe(
-        'assets/text/the-odyssey/brainrot-chapter-05.txt'
+        'assets/text/the-odyssey/brainrot-chapter-05.txt',
       );
 
       // Already partially standardized
       expect(service.convertLegacyPath('assets/text/the-aeneid/brainrot/chapter-10.txt')).toBe(
-        'assets/text/the-aeneid/brainrot-chapter-10.txt'
+        'assets/text/the-aeneid/brainrot-chapter-10.txt',
       );
     });
 
     it('should handle Roman numerals in filenames', () => {
       expect(service.convertLegacyPath('/assets/hamlet/text/act-i.txt')).toBe(
-        'assets/text/hamlet/brainrot-act-01.txt'
+        'assets/text/hamlet/brainrot-act-01.txt',
       );
       expect(service.convertLegacyPath('/assets/hamlet/text/act-v.txt')).toBe(
-        'assets/text/hamlet/brainrot-act-05.txt'
+        'assets/text/hamlet/brainrot-act-05.txt',
       );
     });
 
     it('should handle special files', () => {
       expect(service.convertLegacyPath('/assets/the-raven/text/fulltext.txt')).toBe(
-        'assets/text/the-raven/brainrot-fulltext.txt'
+        'assets/text/the-raven/brainrot-fulltext.txt',
       );
       expect(service.convertLegacyPath('/assets/some-book/text/prologue.txt')).toBe(
-        'assets/text/some-book/brainrot-prologue.txt'
+        'assets/text/some-book/brainrot-prologue.txt',
       );
     });
 
     it('should handle numeric-only filenames', () => {
       expect(service.convertLegacyPath('books/huckleberry-finn/text/brainrot/1.txt')).toBe(
-        'assets/text/huckleberry-finn/brainrot-chapter-01.txt'
+        'assets/text/huckleberry-finn/brainrot-chapter-01.txt',
       );
       expect(service.convertLegacyPath('books/huckleberry-finn/text/brainrot/15.txt')).toBe(
-        'assets/text/huckleberry-finn/brainrot-chapter-15.txt'
+        'assets/text/huckleberry-finn/brainrot-chapter-15.txt',
       );
     });
   });
@@ -187,10 +187,10 @@ describe('AssetPathService - convertLegacyPath with text standardization', () =>
   describe('book slug normalization', () => {
     it('should normalize book slugs during conversion', () => {
       expect(
-        service.convertLegacyPath('/assets/the-adventures-of-huckleberry-finn/text/chapter-1.txt')
+        service.convertLegacyPath('/assets/the-adventures-of-huckleberry-finn/text/chapter-1.txt'),
       ).toBe('assets/text/huckleberry-finn/brainrot-chapter-01.txt');
       expect(
-        service.convertLegacyPath('/assets/the-declaration-of-independence/text/fulltext.txt')
+        service.convertLegacyPath('/assets/the-declaration-of-independence/text/fulltext.txt'),
       ).toBe('assets/text/the-declaration/brainrot-fulltext.txt');
     });
   });
@@ -198,13 +198,13 @@ describe('AssetPathService - convertLegacyPath with text standardization', () =>
   describe('non-text paths', () => {
     it('should not affect audio paths', () => {
       expect(service.convertLegacyPath('/assets/the-iliad/audio/chapter-01.mp3')).toBe(
-        'assets/audio/the-iliad/chapter-01.mp3'
+        'assets/audio/the-iliad/chapter-01.mp3',
       );
     });
 
     it('should not affect image paths', () => {
       expect(service.convertLegacyPath('/assets/the-odyssey/images/cover.jpg')).toBe(
-        'assets/image/the-odyssey/cover.jpg'
+        'assets/image/the-odyssey/cover.jpg',
       );
     });
   });

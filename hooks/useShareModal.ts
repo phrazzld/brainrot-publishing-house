@@ -21,7 +21,7 @@ interface ShareModalActions {
 export function useShareModal(
   slug: string,
   chapterIndex: number,
-  currentTime: number
+  currentTime: number,
 ): [ShareModalState, ShareModalActions] {
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [shareFeedback, setShareFeedback] = useState('');

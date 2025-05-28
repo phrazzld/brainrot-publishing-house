@@ -8,7 +8,7 @@ async function testDownloadAPI() {
   console.log('1. Testing URL generation (no proxy):');
   try {
     const response = await fetch(
-      'http://localhost:3000/api/download?slug=the-iliad&type=chapter&chapter=11'
+      'http://localhost:3000/api/download?slug=the-iliad&type=chapter&chapter=11',
     );
     const data = await response.json();
     console.log('Response:', JSON.stringify(data, null, 2));
@@ -20,7 +20,7 @@ async function testDownloadAPI() {
   console.log('\n2. Testing proxy download:');
   try {
     const response = await fetch(
-      'http://localhost:3000/api/download?slug=the-iliad&type=chapter&chapter=11&proxy=true'
+      'http://localhost:3000/api/download?slug=the-iliad&type=chapter&chapter=11&proxy=true',
     );
     console.log('Status:', response.status);
     console.log('Content-Type:', response.headers.get('content-type'));

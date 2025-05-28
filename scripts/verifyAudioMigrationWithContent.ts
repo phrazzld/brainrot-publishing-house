@@ -63,7 +63,7 @@ function isValidAudioFile(fileInfo: { size: number; contentType?: string }): boo
  */
 function handleMissingAudioPath(
   bookSlug: string,
-  stats: { successful: number; failed: number }
+  stats: { successful: number; failed: number },
 ): VerificationResult {
   stats.failed++;
   return {
@@ -82,7 +82,7 @@ function processFileInfo(
   fileInfo: { size: number; contentType?: string },
   bookSlug: string,
   blobUrl: string,
-  stats: { successful: number; failed: number }
+  stats: { successful: number; failed: number },
 ): boolean {
   // Check if this is a valid audio file
   const validAudio = isValidAudioFile(fileInfo);
@@ -124,7 +124,7 @@ async function verifyAudioFile(
   audioPath: string,
   bookSlug: string,
   baseUrl?: string,
-  stats: { successful: number; failed: number } = { successful: 0, failed: 0 }
+  stats: { successful: number; failed: number } = { successful: 0, failed: 0 },
 ): Promise<VerificationResult> {
   if (!audioPath) {
     return handleMissingAudioPath(bookSlug, stats);
@@ -181,7 +181,7 @@ async function verifyBookAudioFiles(
     totalFiles: 0,
     successful: 0,
     failed: 0,
-  }
+  },
 ): Promise<VerificationResult[]> {
   logger.info({
     msg: 'Verifying audio files for book',
@@ -265,7 +265,7 @@ async function verifyAudioMigration(): Promise<void> {
     stats.totalFiles > 0 ? ((stats.successful / stats.totalFiles) * 100).toFixed(1) + '%' : '0%';
 
   const placeholderCount = results.filter(
-    (r) => r.exists && r.fileSize && r.fileSize < 10 * 1024
+    (r) => r.exists && r.fileSize && r.fileSize < 10 * 1024,
   ).length;
 
   const properAudioCount = results.filter((r) => r.isValidAudioFile).length;

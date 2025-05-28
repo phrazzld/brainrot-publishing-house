@@ -88,7 +88,7 @@ async function uploadBookImages() {
         console.log(`✅ Uploaded ${file.filename} to ${result.url}`);
       } catch (error) {
         console.error(
-          `❌ Error uploading ${file.filename}: ${error instanceof Error ? error.message : String(error)}`
+          `❌ Error uploading ${file.filename}: ${error instanceof Error ? error.message : String(error)}`,
         );
       }
     }

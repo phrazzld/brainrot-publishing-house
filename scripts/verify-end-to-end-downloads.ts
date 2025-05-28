@@ -81,7 +81,7 @@ function calculateChecksum(buffer: Buffer): string {
  */
 async function testDirectUrl(
   url: string,
-  expected: { type: string; slug: string; asset: string }
+  expected: { type: string; slug: string; asset: string },
 ): Promise<TestResult> {
   const startTime = performance.now();
   const result: TestResult = {
@@ -129,7 +129,7 @@ async function testApiEndpoint(
   baseUrl: string,
   slug: string,
   type: 'full' | 'chapter',
-  chapter?: number
+  chapter?: number,
 ): Promise<TestResult> {
   const startTime = performance.now();
   const params = new URLSearchParams({
@@ -205,7 +205,7 @@ async function testProxyEndpoint(
   baseUrl: string,
   slug: string,
   type: 'full' | 'chapter',
-  chapter?: number
+  chapter?: number,
 ): Promise<TestResult> {
   const startTime = performance.now();
   const params = new URLSearchParams({
@@ -262,7 +262,7 @@ async function testProxyEndpoint(
  */
 async function testBookDownloads(
   baseUrl: string,
-  book: { slug: string; hasFullAudiobook: boolean; chapters: number[] }
+  book: { slug: string; hasFullAudiobook: boolean; chapters: number[] },
 ): Promise<TestResult[]> {
   const results: TestResult[] = [];
 
@@ -439,7 +439,7 @@ async function runTests() {
   console.warn(`Passed: ${chalk.green.bold(testSuite.successful)}`);
   console.warn(`Failed: ${chalk.red.bold(testSuite.failed)}`);
   console.warn(
-    `Success Rate: ${successRate === 100 ? chalk.green.bold(`${successRate.toFixed(2)}%`) : chalk.yellow.bold(`${successRate.toFixed(2)}%`)}`
+    `Success Rate: ${successRate === 100 ? chalk.green.bold(`${successRate.toFixed(2)}%`) : chalk.yellow.bold(`${successRate.toFixed(2)}%`)}`,
   );
   console.warn(`Duration: ${chalk.bold((testSuite.endTime - testSuite.startTime) / 1000)}s`);
   console.warn('=======================================');

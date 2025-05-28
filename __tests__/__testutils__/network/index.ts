@@ -41,7 +41,7 @@ export function createJsonResponse<T>(data: T, options: ResponseOptions = {}): R
  */
 export function createJsonFetch<T>(
   data: T,
-  options: ResponseOptions = {}
+  options: ResponseOptions = {},
 ): jest.MockedFunction<typeof fetch> {
   return createMockFetch(() => createJsonResponse(data, options));
 }
@@ -56,7 +56,7 @@ export function createJsonFetch<T>(
 export function createErrorResponse(
   status = 404,
   message = 'Not Found',
-  details?: Record<string, unknown>
+  details?: Record<string, unknown>,
 ): Response {
   const errorBody = details ? JSON.stringify({ error: message, ...details }) : message;
 
@@ -75,7 +75,7 @@ export function createErrorResponse(
  * @param errorMessage The error message
  */
 export function createNetworkErrorFetch(
-  errorMessage = 'Network request failed'
+  errorMessage = 'Network request failed',
 ): jest.MockedFunction<typeof fetch> {
   return jest.fn().mockRejectedValue(new Error(errorMessage));
 }

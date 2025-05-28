@@ -118,17 +118,17 @@ class CoverImageMigrationService {
     private readonly blobService: {
       uploadFile: (
         file: Blob,
-        options: { pathname: string; filename: string; access: string; cacheControl: string }
+        options: { pathname: string; filename: string; access: string; cacheControl: string },
       ) => Promise<{ url: string; size: number; uploadedAt: string }>;
       getFileInfo: (
-        url: string
+        url: string,
       ) => Promise<{ size: number; uploadedAt: string; contentType: string }>;
       getUrlForPath: (path: string) => string;
     },
     private readonly blobPathService: {
       convertLegacyPath: (path: string) => string;
     },
-    logFile: string = 'cover-images-migration.json'
+    logFile: string = 'cover-images-migration.json',
   ) {
     this.migrationLog = new MigrationLog(logFile);
   }
@@ -162,7 +162,7 @@ class CoverImageMigrationService {
    */
   private handleMigrationFailure(
     book: { slug: string; coverImage: string },
-    error: unknown
+    error: unknown,
   ): BookMigrationResult {
     const errorMessage = error instanceof Error ? error.message : String(error);
 
@@ -181,7 +181,7 @@ class CoverImageMigrationService {
   private updateMigrationStats(
     result: MigrationResult,
     bookSlug: string,
-    migrationResult: BookMigrationResult
+    migrationResult: BookMigrationResult,
   ): void {
     // Update statistics
     if (migrationResult.status === 'success') {
@@ -203,7 +203,7 @@ class CoverImageMigrationService {
   private async processBookMigration(
     book: { slug: string; coverImage: string },
     options: MigrationOptions,
-    result: MigrationResult
+    result: MigrationResult,
   ): Promise<void> {
     // Skip if already migrated and not forced
     if (this.migrationLog.has(book.slug) && !options.force && !options.dryRun) {
@@ -256,7 +256,7 @@ class CoverImageMigrationService {
     // Get books with cover images
     const books = translations.filter(
       (book: { slug: string; coverImage?: string }) =>
-        book.coverImage && (!options.books || options.books.includes(book.slug))
+        book.coverImage && (!options.books || options.books.includes(book.slug)),
     );
 
     result.total = books.length;
@@ -339,7 +339,7 @@ describe('CoverImageMigrationService', () => {
     migrationService = new CoverImageMigrationService(
       new BlobService(),
       new BlobPathService(),
-      'test-migration-log.json'
+      'test-migration-log.json',
     );
   });
 
@@ -375,7 +375,7 @@ describe('CoverImageMigrationService', () => {
 
     // Check each book has a successful result
     for (const book of translations.filter(
-      (b: { slug: string; coverImage?: string }) => b.coverImage
+      (b: { slug: string; coverImage?: string }) => b.coverImage,
     )) {
       expect(result.books[book.slug]).toBeDefined();
       expect(result.books[book.slug].status).toBe('success');

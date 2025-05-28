@@ -84,7 +84,7 @@ function parseArgs() {
 async function verifyAudioUrl(
   bookSlug: string,
   chapterTitle: string,
-  audioSrc: string
+  audioSrc: string,
 ): Promise<VerificationResult> {
   const result: VerificationResult = {
     book: bookSlug,
@@ -208,7 +208,7 @@ async function main() {
         console.log(`   Content Type: ${result.contentType}`);
         // eslint-disable-next-line no-console -- CLI: Size info display
         console.log(
-          `   Size: ${result.contentLength ? formatSize(result.contentLength) : 'unknown'}`
+          `   Size: ${result.contentLength ? formatSize(result.contentLength) : 'unknown'}`,
         );
       }
     } else {

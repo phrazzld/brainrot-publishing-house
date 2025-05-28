@@ -58,7 +58,7 @@ export class VercelBlobSourceAdapter implements AssetSourceAdapter {
     options?: {
       limit?: number;
       cursor?: string;
-    }
+    },
   ): Promise<{
     assets: {
       path: string;
@@ -101,7 +101,7 @@ export class VercelBlobSourceAdapter implements AssetSourceAdapter {
     } catch (error) {
       logger.error({ message: 'Error listing assets from Vercel Blob', error });
       throw new Error(
-        `Failed to list assets from Vercel Blob: ${error instanceof Error ? error.message : String(error)}`
+        `Failed to list assets from Vercel Blob: ${error instanceof Error ? error.message : String(error)}`,
       );
     }
   }
@@ -128,7 +128,7 @@ export class VercelBlobSourceAdapter implements AssetSourceAdapter {
 
       if (!response.ok) {
         throw new Error(
-          `Failed to fetch asset from Vercel Blob: ${response.status} ${response.statusText}`
+          `Failed to fetch asset from Vercel Blob: ${response.status} ${response.statusText}`,
         );
       }
 
@@ -149,7 +149,7 @@ export class VercelBlobSourceAdapter implements AssetSourceAdapter {
     } catch (error) {
       logger.error({ message: `Error fetching asset from Vercel Blob (${path})`, error });
       throw new Error(
-        `Failed to fetch asset from Vercel Blob: ${error instanceof Error ? error.message : String(error)}`
+        `Failed to fetch asset from Vercel Blob: ${error instanceof Error ? error.message : String(error)}`,
       );
     }
   }
@@ -180,7 +180,7 @@ export class VercelBlobSourceAdapter implements AssetSourceAdapter {
 
       logger.error({ message: `Error checking if Vercel Blob asset exists (${path})`, error });
       throw new Error(
-        `Failed to check if asset exists in Vercel Blob: ${error instanceof Error ? error.message : String(error)}`
+        `Failed to check if asset exists in Vercel Blob: ${error instanceof Error ? error.message : String(error)}`,
       );
     }
   }
@@ -224,7 +224,7 @@ export class VercelBlobSourceAdapter implements AssetSourceAdapter {
 
       logger.error({ message: `Error getting Vercel Blob asset info (${path})`, error });
       throw new Error(
-        `Failed to get asset info from Vercel Blob: ${error instanceof Error ? error.message : String(error)}`
+        `Failed to get asset info from Vercel Blob: ${error instanceof Error ? error.message : String(error)}`,
       );
     }
   }
@@ -290,7 +290,7 @@ export class VercelBlobDestinationAdapter implements AssetDestinationAdapter {
     } catch (error) {
       logger.error({ message: `Error uploading asset to Vercel Blob (${path})`, error });
       throw new Error(
-        `Failed to upload asset to Vercel Blob: ${error instanceof Error ? error.message : String(error)}`
+        `Failed to upload asset to Vercel Blob: ${error instanceof Error ? error.message : String(error)}`,
       );
     }
   }
@@ -321,7 +321,7 @@ export class VercelBlobDestinationAdapter implements AssetDestinationAdapter {
 
       logger.error({ message: `Error checking if Vercel Blob asset exists (${path})`, error });
       throw new Error(
-        `Failed to check if asset exists in Vercel Blob: ${error instanceof Error ? error.message : String(error)}`
+        `Failed to check if asset exists in Vercel Blob: ${error instanceof Error ? error.message : String(error)}`,
       );
     }
   }
@@ -365,7 +365,7 @@ export class VercelBlobDestinationAdapter implements AssetDestinationAdapter {
 
       logger.error({ message: `Error getting Vercel Blob asset info (${path})`, error });
       throw new Error(
-        `Failed to get asset info from Vercel Blob: ${error instanceof Error ? error.message : String(error)}`
+        `Failed to get asset info from Vercel Blob: ${error instanceof Error ? error.message : String(error)}`,
       );
     }
   }

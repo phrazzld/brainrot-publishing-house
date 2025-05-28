@@ -67,7 +67,7 @@ export interface AssetService {
     assetType: AssetType,
     bookSlug: string,
     assetName: string,
-    options?: AssetUrlOptions
+    options?: AssetUrlOptions,
   ): Promise<string>;
 
   /**
@@ -110,7 +110,7 @@ export interface AssetService {
     bookSlug: string,
     assetName: string,
     content: Blob | ArrayBuffer | string,
-    options?: UploadOptions
+    options?: UploadOptions,
   ): Promise<AssetUploadResult>;
 
   /**
@@ -132,7 +132,7 @@ export interface AssetService {
   listAssets(
     assetType: AssetType,
     bookSlug: string,
-    options?: ListOptions
+    options?: ListOptions,
   ): Promise<AssetListResult>;
 }
 ```
@@ -220,7 +220,7 @@ export class VercelBlobAssetService implements AssetService {
   constructor(
     private readonly pathService: AssetPathService,
     private readonly config: AssetServiceConfig,
-    private readonly logger?: Logger
+    private readonly logger?: Logger,
   ) {}
 
   // Implementation of all interface methods using Vercel Blob SDK

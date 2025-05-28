@@ -70,7 +70,7 @@ function constructBlobUrl(audioPath: string, blobBaseUrl: string): string {
 function updateCounters(
   exists: boolean,
   blobUrl: string,
-  counters: { total: number; successful: number; failed: number }
+  counters: { total: number; successful: number; failed: number },
 ): void {
   if (exists) {
     counters.successful++;
@@ -85,7 +85,7 @@ async function verifyAudioFile(
   audioPath: string,
   bookSlug: string,
   blobBaseUrl: string,
-  counters: { total: number; successful: number; failed: number }
+  counters: { total: number; successful: number; failed: number },
 ): Promise<VerificationResult> {
   counters.total++;
 
@@ -126,7 +126,7 @@ async function verifyAudioFile(
 async function verifyBookAudio(
   book: { slug: string; title: string; chapters?: Array<{ audioSrc?: string }> },
   blobBaseUrl: string,
-  counters: { total: number; successful: number; failed: number }
+  counters: { total: number; successful: number; failed: number },
 ): Promise<VerificationResult[]> {
   const bookResults: VerificationResult[] = [];
 
@@ -157,7 +157,7 @@ async function verifyBookAudio(
  */
 async function saveVerificationReport(
   summary: { total: number; successful: number; failed: number },
-  results: VerificationResult[]
+  results: VerificationResult[],
 ): Promise<string> {
   // Calculate success rate
   const successRate =
@@ -178,7 +178,7 @@ async function saveVerificationReport(
   // Generate report path using standardized path resolution
   const reportPath = resolveFromModule(
     import.meta.url,
-    `../reports/audio-verification-${Date.now()}.json`
+    `../reports/audio-verification-${Date.now()}.json`,
   );
 
   // Ensure reports directory exists

@@ -114,7 +114,7 @@ class AudioFilesMigrator {
     this.startTime = new Date();
     // Use process.stderr for allowed console output
     process.stderr.write(
-      `\n🎵 Starting audio placeholder creation ${this.options.dryRun ? '(DRY RUN)' : ''}\n`
+      `\n🎵 Starting audio placeholder creation ${this.options.dryRun ? '(DRY RUN)' : ''}\n`,
     );
     process.stderr.write(`Options: ${JSON.stringify(this.options, null, 2)}\n\n`);
 
@@ -145,7 +145,7 @@ class AudioFilesMigrator {
     } catch (error) {
       // Use process.stderr for error output
       process.stderr.write(
-        `Migration failed: ${error instanceof Error ? error.message : String(error)}\n`
+        `Migration failed: ${error instanceof Error ? error.message : String(error)}\n`,
       );
       throw error;
     }
@@ -201,7 +201,7 @@ class AudioFilesMigrator {
    * Get audio files from a book
    */
   private getBookAudioFiles(
-    book: (typeof translations)[0]
+    book: (typeof translations)[0],
   ): Array<{ path: string; chapterTitle: string }> {
     const audioFiles: Array<{ path: string; chapterTitle: string }> = [];
 
@@ -227,7 +227,7 @@ class AudioFilesMigrator {
   private async processAudioFile(
     audioSrc: string,
     bookSlug: string,
-    chapterTitle: string
+    chapterTitle: string,
   ): Promise<void> {
     const operationStartTime = Date.now();
 
@@ -235,7 +235,7 @@ class AudioFilesMigrator {
     const { audioPath, targetBlobPath, blobUrl, result } = this.initializeAudioFileProcessing(
       audioSrc,
       bookSlug,
-      chapterTitle
+      chapterTitle,
     );
 
     try {
@@ -258,7 +258,7 @@ class AudioFilesMigrator {
         placeholderResult,
         targetBlobPath,
         result,
-        operationStartTime
+        operationStartTime,
       );
 
       this.log(`   🎉 Successfully created placeholder in ${result.totalTime}ms`);
@@ -276,7 +276,7 @@ class AudioFilesMigrator {
   private initializeAudioFileProcessing(
     audioSrc: string,
     bookSlug: string,
-    chapterTitle: string
+    chapterTitle: string,
   ): { audioPath: string; targetBlobPath: string; blobUrl: string; result: AudioMigrationResult } {
     // Parse the audio path for Blob storage
     const audioPath = getAudioPathFromUrl(audioSrc);
@@ -352,7 +352,7 @@ class AudioFilesMigrator {
   private async createPlaceholderFile(
     audioPath: string,
     chapterTitle: string,
-    result: AudioMigrationResult
+    result: AudioMigrationResult,
   ): Promise<{ size: number; contentType: string; content: ArrayBuffer }> {
     this.log(`   🔄 Creating placeholder for: ${audioPath}`);
     const creationStartTime = Date.now();
@@ -429,7 +429,7 @@ class AudioFilesMigrator {
     placeholderResult: { size: number; contentType: string; content: ArrayBuffer },
     targetBlobPath: string,
     result: AudioMigrationResult,
-    operationStartTime: number
+    operationStartTime: number,
   ): Promise<void> {
     // Create a File object from the placeholder buffer
     const file = new File(
@@ -437,7 +437,7 @@ class AudioFilesMigrator {
       path.basename(targetBlobPath),
       {
         type: placeholderResult.contentType || 'audio/mpeg',
-      }
+      },
     );
 
     // Upload to Vercel Blob storage
@@ -473,7 +473,7 @@ class AudioFilesMigrator {
     const verifyResult = await blobService.getFileInfo(uploadUrl);
     if (verifyResult?.size !== expectedSize) {
       throw new Error(
-        `Upload verification failed: size mismatch (expected ${expectedSize}, got ${verifyResult?.size || 0})`
+        `Upload verification failed: size mismatch (expected ${expectedSize}, got ${verifyResult?.size || 0})`,
       );
     }
   }
@@ -484,7 +484,7 @@ class AudioFilesMigrator {
   private handleProcessingError(
     err: unknown,
     result: AudioMigrationResult,
-    operationStartTime: number
+    operationStartTime: number,
   ): void {
     const errorMessage = err instanceof Error ? err.message : String(err);
     process.stderr.write(`   ❌ Error: ${errorMessage}\n`);
@@ -574,7 +574,7 @@ class AudioFilesMigrator {
       process.stderr.write(`\n💾 Results saved to ${outputPath}\n`);
     } catch (err) {
       process.stderr.write(
-        `Failed to save results: ${err instanceof Error ? err.message : String(err)}\n`
+        `Failed to save results: ${err instanceof Error ? err.message : String(err)}\n`,
       );
     }
   }
@@ -640,7 +640,7 @@ async function main(): Promise<void> {
     process.exit(0);
   } catch (error) {
     process.stderr.write(
-      `\n❌ Audio placeholder creation failed: ${error instanceof Error ? error.message : String(error)}\n`
+      `\n❌ Audio placeholder creation failed: ${error instanceof Error ? error.message : String(error)}\n`,
     );
     process.exit(1);
   }

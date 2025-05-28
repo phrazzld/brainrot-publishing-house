@@ -46,7 +46,7 @@ describe('Type guards for API responses', () => {
         typeof (item as BookSearchResult).id === 'number' &&
         typeof (item as BookSearchResult).title === 'string' &&
         typeof (item as BookSearchResult).authors === 'string' &&
-        typeof (item as BookSearchResult).downloadCount === 'number'
+        typeof (item as BookSearchResult).downloadCount === 'number',
     );
   }
 

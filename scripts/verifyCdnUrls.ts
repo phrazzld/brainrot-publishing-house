@@ -97,7 +97,7 @@ class MockDownloadService {
     slug: string,
     type: 'full' | 'chapter',
     log: unknown, // We don't actually use the logger in this function
-    chapter?: string
+    chapter?: string,
   ) {
     // Generate paths in a simplified way for testing only
     // Use Vercel Blob URL instead of Digital Ocean
@@ -136,7 +136,7 @@ function createDownloadService() {
  */
 async function checkUrlAccessibility(
   url: string,
-  timeoutMs: number
+  timeoutMs: number,
 ): Promise<{
   exists: boolean;
   statusCode: number | null;
@@ -194,7 +194,7 @@ async function checkUrlAccessibility(
 function generateResourcePaths(
   params: DownloadRequestParams,
   log: ReturnType<typeof createRequestLogger>,
-  verbose: boolean
+  verbose: boolean,
 ): {
   cdnUrl: string;
   fallbackUrl: string;
@@ -244,7 +244,7 @@ function initializeVerificationResult(
     cdnUrl: string;
     fallbackUrl: string;
     blobUrl?: string;
-  }
+  },
 ): UrlVerificationResult {
   const { slug, type, chapter } = params;
   const { cdnUrl, fallbackUrl, blobUrl } = urls;
@@ -295,7 +295,7 @@ function initializeVerificationResult(
 async function checkCdnAccessibility(
   cdnUrl: string,
   timeoutMs: number,
-  verbose: boolean
+  verbose: boolean,
 ): Promise<{
   exists: boolean;
   statusCode: number | null;
@@ -340,7 +340,7 @@ async function checkCdnAccessibility(
 async function checkFallbackAccessibility(
   fallbackUrl: string,
   timeoutMs: number,
-  verbose: boolean
+  verbose: boolean,
 ): Promise<{
   exists: boolean;
   statusCode: number | null;
@@ -389,7 +389,7 @@ async function checkBlobAccessibility(
   blobUrl: string | undefined,
   timeoutMs: number,
   headOnly: boolean,
-  verbose: boolean
+  verbose: boolean,
 ): Promise<{
   exists: boolean;
   statusCode: number | null;
@@ -469,7 +469,7 @@ function updateResultWithCheckResults(
     headers: Record<string, string>;
     error: string | null;
     duration: number | null;
-  }
+  },
 ): void {
   result.exists[checkType] = checkResult.exists;
   result.statusCodes[checkType] = checkResult.statusCode;
@@ -486,7 +486,7 @@ function updateResultWithCheckResults(
  */
 async function verifyUrl(
   params: DownloadRequestParams,
-  options: VerificationOptions
+  options: VerificationOptions,
 ): Promise<UrlVerificationResult> {
   const { verbose, timeoutMs, headOnly, checkCdn, checkFallback, checkBlob } = options;
 
@@ -526,7 +526,7 @@ async function verifyUrl(
       paths.blobUrl,
       timeoutMs,
       headOnly,
-      verbose
+      verbose,
     );
     updateResultWithCheckResults(result, 'blob', blobCheck);
   }
@@ -561,7 +561,7 @@ function createDefaultOptions(): VerificationOptions {
 function assignOptionValue<K extends keyof VerificationOptions>(
   options: VerificationOptions,
   key: K,
-  value: VerificationOptions[K]
+  value: VerificationOptions[K],
 ): void {
   options[key] = value;
 }
@@ -579,7 +579,7 @@ function parseFlag(
   flag: string,
   options: VerificationOptions,
   key: keyof VerificationOptions,
-  value: boolean
+  value: boolean,
 ): boolean {
   if (arg === flag) {
     // Use the helper function to assign the value
@@ -605,7 +605,7 @@ function parseOptionWithValue(
   flag: string,
   options: VerificationOptions,
   key: keyof VerificationOptions,
-  transform?: (value: string) => unknown
+  transform?: (value: string) => unknown,
 ): number {
   if (args[index] === flag && index + 1 < args.length) {
     const value = args[index + 1];
@@ -698,7 +698,7 @@ function parseCompareOptions(args: string[], index: number, options: Verificatio
 function parsePerformanceOptions(
   args: string[],
   index: number,
-  options: VerificationOptions
+  options: VerificationOptions,
 ): number {
   // Handle --timeout option
   const timeoutIdx = parseOptionWithValue(
@@ -707,7 +707,7 @@ function parsePerformanceOptions(
     '--timeout',
     options,
     'timeoutMs',
-    (value) => parseInt(value, 10) || 10000
+    (value) => parseInt(value, 10) || 10000,
   );
   if (timeoutIdx > -1) return timeoutIdx;
 
@@ -718,7 +718,7 @@ function parsePerformanceOptions(
     '--concurrent',
     options,
     'maxConcurrent',
-    (value) => parseInt(value, 10) || 5
+    (value) => parseInt(value, 10) || 5,
   );
   if (concurrentIdx > -1) return concurrentIdx;
 
@@ -735,7 +735,7 @@ function parsePerformanceOptions(
 function parseBooksOption(args: string[], index: number, options: VerificationOptions): number {
   // Handle --books option
   const booksIdx = parseOptionWithValue(args, index, '--books', options, 'books', (value) =>
-    value.split(',')
+    value.split(','),
   );
   if (booksIdx > -1) return booksIdx;
 
@@ -936,7 +936,7 @@ function calculateSummaryStats(results: UrlVerificationResult[]): {
  */
 function generateReportHeader(
   results: UrlVerificationResult[],
-  stats: ReturnType<typeof calculateSummaryStats>
+  stats: ReturnType<typeof calculateSummaryStats>,
 ): string {
   let markdown = `# CDN URL Verification Report\n\n`;
   markdown += `*Generated on ${new Date().toISOString()}*\n\n`;
@@ -957,7 +957,7 @@ function generateReportHeader(
  * @returns Object with results grouped by book
  */
 function groupResultsByBook(
-  results: UrlVerificationResult[]
+  results: UrlVerificationResult[],
 ): Record<string, UrlVerificationResult[]> {
   const bookGroups: Record<string, UrlVerificationResult[]> = {};
 
@@ -1007,7 +1007,7 @@ function generateResultTableRow(result: UrlVerificationResult): string {
   const cdnStatusCode = formatStatusCode(result.statusCodes.cdn, result.durations.cdn);
   const fallbackStatusCode = formatStatusCode(
     result.statusCodes.fallback,
-    result.durations.fallback
+    result.durations.fallback,
   );
 
   const notes = generateErrorNotes(result);
@@ -1089,7 +1089,7 @@ function createResultKey(result: UrlVerificationResult): string {
  */
 function createComparisonMaps(
   currentResults: UrlVerificationResult[],
-  previousResults: UrlVerificationResult[]
+  previousResults: UrlVerificationResult[],
 ): {
   currentMap: Map<string, UrlVerificationResult>;
   previousMap: Map<string, UrlVerificationResult>;
@@ -1134,7 +1134,7 @@ function createDifference(
   previousResult: UrlVerificationResult,
   field: string,
   current: string,
-  previous: string
+  previous: string,
 ): DifferenceItem {
   return {
     slug: currentResult.slug,
@@ -1151,7 +1151,7 @@ function createDifference(
  */
 function compareCdnAccessibility(
   currentResult: UrlVerificationResult,
-  previousResult: UrlVerificationResult
+  previousResult: UrlVerificationResult,
 ): { isDifferent: boolean; difference?: DifferenceItem } {
   if (currentResult.exists.cdn !== previousResult.exists.cdn) {
     return {
@@ -1161,7 +1161,7 @@ function compareCdnAccessibility(
         previousResult,
         'CDN Accessibility',
         currentResult.exists.cdn ? 'Accessible' : 'Not accessible',
-        previousResult.exists.cdn ? 'Accessible' : 'Not accessible'
+        previousResult.exists.cdn ? 'Accessible' : 'Not accessible',
       ),
     };
   }
@@ -1173,7 +1173,7 @@ function compareCdnAccessibility(
  */
 function compareFallbackAccessibility(
   currentResult: UrlVerificationResult,
-  previousResult: UrlVerificationResult
+  previousResult: UrlVerificationResult,
 ): { isDifferent: boolean; difference?: DifferenceItem } {
   if (currentResult.exists.fallback !== previousResult.exists.fallback) {
     return {
@@ -1183,7 +1183,7 @@ function compareFallbackAccessibility(
         previousResult,
         'Fallback Accessibility',
         currentResult.exists.fallback ? 'Accessible' : 'Not accessible',
-        previousResult.exists.fallback ? 'Accessible' : 'Not accessible'
+        previousResult.exists.fallback ? 'Accessible' : 'Not accessible',
       ),
     };
   }
@@ -1195,7 +1195,7 @@ function compareFallbackAccessibility(
  */
 function compareBlobAvailability(
   currentResult: UrlVerificationResult,
-  previousResult: UrlVerificationResult
+  previousResult: UrlVerificationResult,
 ): { isDifferent: boolean; difference?: DifferenceItem } {
   if (currentResult.exists.blob !== previousResult.exists.blob) {
     return {
@@ -1205,7 +1205,7 @@ function compareBlobAvailability(
         previousResult,
         'Blob Availability',
         currentResult.exists.blob ? 'Available' : 'Not available',
-        previousResult.exists.blob ? 'Available' : 'Not available'
+        previousResult.exists.blob ? 'Available' : 'Not available',
       ),
     };
   }
@@ -1217,7 +1217,7 @@ function compareBlobAvailability(
  */
 function compareCdnUrlFormat(
   currentResult: UrlVerificationResult,
-  previousResult: UrlVerificationResult
+  previousResult: UrlVerificationResult,
 ): { isDifferent: boolean; difference?: DifferenceItem } {
   if (currentResult.cdnUrl !== previousResult.cdnUrl) {
     return {
@@ -1227,7 +1227,7 @@ function compareCdnUrlFormat(
         previousResult,
         'CDN URL Format',
         currentResult.cdnUrl,
-        previousResult.cdnUrl
+        previousResult.cdnUrl,
       ),
     };
   }
@@ -1239,7 +1239,7 @@ function compareCdnUrlFormat(
  */
 function compareFallbackUrlFormat(
   currentResult: UrlVerificationResult,
-  previousResult: UrlVerificationResult
+  previousResult: UrlVerificationResult,
 ): { isDifferent: boolean; difference?: DifferenceItem } {
   if (currentResult.fallbackUrl !== previousResult.fallbackUrl) {
     return {
@@ -1249,7 +1249,7 @@ function compareFallbackUrlFormat(
         previousResult,
         'Fallback URL Format',
         currentResult.fallbackUrl,
-        previousResult.fallbackUrl
+        previousResult.fallbackUrl,
       ),
     };
   }
@@ -1261,7 +1261,7 @@ function compareFallbackUrlFormat(
  */
 function compareBlobUrlFormat(
   currentResult: UrlVerificationResult,
-  previousResult: UrlVerificationResult
+  previousResult: UrlVerificationResult,
 ): { isDifferent: boolean; difference?: DifferenceItem } {
   if (
     currentResult.blobUrl &&
@@ -1275,7 +1275,7 @@ function compareBlobUrlFormat(
         previousResult,
         'Blob URL Format',
         currentResult.blobUrl,
-        previousResult.blobUrl
+        previousResult.blobUrl,
       ),
     };
   }
@@ -1290,7 +1290,7 @@ function compareBlobUrlFormat(
  */
 function findDifferences(
   currentMap: Map<string, UrlVerificationResult>,
-  previousMap: Map<string, UrlVerificationResult>
+  previousMap: Map<string, UrlVerificationResult>,
 ): DifferenceItem[] {
   const differences: DifferenceItem[] = [];
 
@@ -1342,7 +1342,7 @@ function truncateUrl(url: string): string {
 function generateComparisonHeader(
   differences: DifferenceItem[],
   currentEnv: string,
-  compareEnv: string
+  compareEnv: string,
 ): string {
   let markdown = `# CDN URL Comparison Report\n\n`;
   markdown += `*Generated on ${new Date().toISOString()}*\n\n`;
@@ -1365,7 +1365,7 @@ function generateComparisonHeader(
 function generateDifferencesTable(
   differences: DifferenceItem[],
   currentEnv: string,
-  compareEnv: string
+  compareEnv: string,
 ): string {
   if (differences.length === 0) {
     return `No differences found between environments.\n\n`;
@@ -1407,7 +1407,7 @@ function generateCurrentEnvConfig(currentEnv: string): string {
  */
 function generateCompareEnvConfig(
   compareEnv: string,
-  previousResults: UrlVerificationResult[]
+  previousResults: UrlVerificationResult[],
 ): string {
   let markdown = `\n### ${compareEnv}\n`;
   // Extract the Blob URL base from the first result's URL if possible
@@ -1429,7 +1429,7 @@ function formatComparisonReport(
   currentResults: UrlVerificationResult[],
   previousResults: UrlVerificationResult[],
   currentEnv: string,
-  compareEnv: string
+  compareEnv: string,
 ): string {
   // Create lookup maps for quick comparison
   const { currentMap, previousMap } = createComparisonMaps(currentResults, previousResults);
@@ -1458,7 +1458,7 @@ function formatComparisonReport(
  */
 async function runVerificationTests(
   testCases: DownloadRequestParams[],
-  options: VerificationOptions
+  options: VerificationOptions,
 ): Promise<UrlVerificationResult[]> {
   const results: UrlVerificationResult[] = [];
   const { maxConcurrent, verbose } = options;
@@ -1557,7 +1557,7 @@ async function main() {
     try {
       // Read previous results from file
       const previousResults = JSON.parse(
-        fs.readFileSync(options.compareFile, 'utf-8')
+        fs.readFileSync(options.compareFile, 'utf-8'),
       ) as UrlVerificationResult[];
 
       moduleLogger.info({
@@ -1572,7 +1572,7 @@ async function main() {
         results,
         previousResults,
         options.environment,
-        previousResults[0]?.environment || 'previous'
+        previousResults[0]?.environment || 'previous',
       );
     } catch (error) {
       moduleLogger.error({

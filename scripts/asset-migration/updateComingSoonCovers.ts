@@ -43,7 +43,7 @@ async function updateTranslationFiles() {
       // Replace placeholder with actual cover path
       const updatedContent = content.replace(
         /coverImage: getAssetUrl\('\/assets\/covers\/placeholder\.jpg', USE_BLOB_STORAGE\)/,
-        `coverImage: getAssetUrl('${newPath}', USE_BLOB_STORAGE)`
+        `coverImage: getAssetUrl('${newPath}', USE_BLOB_STORAGE)`,
       );
 
       if (content === updatedContent) {

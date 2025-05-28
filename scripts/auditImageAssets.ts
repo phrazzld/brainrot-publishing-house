@@ -212,7 +212,7 @@ function getImageType(path: string): 'cover' | 'chapter' | 'shared' | 'site' | '
 function processImageBlob(
   blob: { pathname: string; url: string; size: number; contentType?: string },
   bookSlugs: Set<string>,
-  pathIssues: Record<string, string[]>
+  pathIssues: Record<string, string[]>,
 ): ImageAssetInfo {
   // Extract book slug from path
   const bookSlug = assetPathService.getBookSlugFromPath(blob.pathname);
@@ -353,7 +353,7 @@ function categorizeImageAssets(
       standardized: number;
       nonStandardized: number;
     }
-  >
+  >,
 ): void {
   imageAssets.forEach((asset) => {
     // Categorize by book
@@ -504,7 +504,7 @@ function createHtmlReport(results: AuditResults): string {
         <td>${asset.imageType}</td>
         <td>${formatBytes(asset.size)}</td>
       </tr>
-    `
+    `,
     )
     .join('');
 
@@ -520,7 +520,7 @@ function createHtmlReport(results: AuditResults): string {
           <td>${p}</td>
           <td>${assetPathService.convertLegacyPath(p)}</td>
         </tr>
-      `
+      `,
         )
         .join('');
 

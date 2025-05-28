@@ -14,7 +14,7 @@ function createUrlParams(
   slug: string,
   type: string,
   chapter?: number,
-  useProxy = false
+  useProxy = false,
 ): URLSearchParams {
   const params = new URLSearchParams({
     slug,
@@ -68,7 +68,7 @@ function triggerFileDownload(blob: Blob, fileName: string): void {
 async function downloadViaProxy(
   slug: string,
   type: 'full' | 'chapter',
-  chapter?: number
+  chapter?: number,
 ): Promise<void> {
   console.warn('[Download] Using proxy approach for audio downloads');
 

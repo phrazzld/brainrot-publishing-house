@@ -123,7 +123,7 @@ describe('Download API Route', () => {
 
       expect(res.status).toBe(400);
       expect(data.error).toBe(
-        'Invalid slug format. Must contain only letters, numbers, hyphens, or underscores.'
+        'Invalid slug format. Must contain only letters, numbers, hyphens, or underscores.',
       );
     });
 
@@ -152,7 +152,7 @@ describe('Download API Route', () => {
 
       expect(res.status).toBe(400);
       expect(data.error).toBe(
-        'Missing required parameter: chapter (required when type is "chapter")'
+        'Missing required parameter: chapter (required when type is "chapter")',
       );
     });
 
@@ -175,7 +175,7 @@ describe('Download API Route', () => {
       // Verify results
       expect(res.status).toBe(200);
       expect(data.url).toBe(
-        'https://public.blob.vercel-storage.com/assets/audio/hamlet/full-audiobook.mp3'
+        'https://public.blob.vercel-storage.com/assets/audio/hamlet/full-audiobook.mp3',
       );
       expect(data.isCdnUrl).toBe(false);
       expect(data.shouldProxy).toBe(false);
@@ -189,7 +189,7 @@ describe('Download API Route', () => {
       // Verify results
       expect(res.status).toBe(200);
       expect(data.url).toBe(
-        'https://public.blob.vercel-storage.com/assets/audio/hamlet/chapter-01.mp3'
+        'https://public.blob.vercel-storage.com/assets/audio/hamlet/chapter-01.mp3',
       );
       expect(data.isCdnUrl).toBe(false);
       expect(data.shouldProxy).toBe(false);

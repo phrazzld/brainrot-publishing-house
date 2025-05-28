@@ -22,7 +22,7 @@ export const getDirectAudioUrl = (bookSlug: string, filename: string): string =>
  */
 export function getTranslationBySlug(
   translations: Translation[],
-  slug: string
+  slug: string,
 ): Translation | undefined {
   return translations.find((t) => t.slug === slug);
 }

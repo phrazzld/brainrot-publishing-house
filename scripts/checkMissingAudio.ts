@@ -172,7 +172,7 @@ function collectActualAudioFiles(inventory: Inventory, actualAudio: Map<string, 
  */
 function findMissingFiles(
   expectedAudio: Map<string, AudioInfo>,
-  actualAudio: Map<string, boolean>
+  actualAudio: Map<string, boolean>,
 ): MissingFile[] {
   const missingFiles: MissingFile[] = [];
 
@@ -194,7 +194,7 @@ function findMissingFiles(
  */
 function findUnexpectedFiles(
   actualAudio: Map<string, boolean>,
-  expectedAudio: Map<string, AudioInfo>
+  expectedAudio: Map<string, AudioInfo>,
 ): string[] {
   const unexpectedFiles: string[] = [];
 
@@ -214,7 +214,7 @@ function reportFindings(
   expectedCount: number,
   actualCount: number,
   missingFiles: MissingFile[],
-  unexpectedFiles: string[]
+  unexpectedFiles: string[],
 ): void {
   scriptLogger.info({
     msg: 'Audio files verification summary',
@@ -248,7 +248,7 @@ async function saveResultsToFile(
   expectedCount: number,
   actualCount: number,
   missingFiles: MissingFile[],
-  unexpectedFiles: string[]
+  unexpectedFiles: string[],
 ): Promise<void> {
   const results: ResultsReport = {
     timestamp: new Date().toISOString(),

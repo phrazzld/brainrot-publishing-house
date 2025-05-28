@@ -32,7 +32,7 @@ describe('Blob URL Utilities', () => {
 
     // Mock implementation for convertLegacyPath
     (blobPathService.convertLegacyPath as jest.Mock).mockImplementation((path: string) =>
-      path.replace(/^\/assets\//, 'books/').replace(/^\//, '')
+      path.replace(/^\/assets\//, 'books/').replace(/^\//, ''),
     );
 
     // Mock implementation for getUrlForPath with proper typing
@@ -40,7 +40,7 @@ describe('Blob URL Utilities', () => {
       (path: string, options?: { baseUrl?: string; noCache?: boolean }) => {
         const baseUrl = options?.baseUrl || 'https://public.blob.vercel-storage.com';
         return `${baseUrl}/${path}`;
-      }
+      },
     );
 
     // Set default environment variables using a type assertion to bypass readonly constraint
@@ -113,7 +113,7 @@ describe('Blob URL Utilities', () => {
         blobPath,
         expect.objectContaining({
           baseUrl: process.env.NEXT_PUBLIC_BLOB_DEV_URL,
-        })
+        }),
       );
     });
 
@@ -149,7 +149,7 @@ describe('Blob URL Utilities', () => {
 
       expect(blobService.getUrlForPath).toHaveBeenCalledWith(
         blobPath,
-        expect.objectContaining({ baseUrl: customBaseUrl })
+        expect.objectContaining({ baseUrl: customBaseUrl }),
       );
     });
   });
@@ -192,7 +192,7 @@ describe('Blob URL Utilities', () => {
 
       expect(blobService.getUrlForPath).toHaveBeenCalledWith(
         expect.any(String),
-        expect.objectContaining({ noCache: true })
+        expect.objectContaining({ noCache: true }),
       );
     });
   });
@@ -229,7 +229,7 @@ describe('Blob URL Utilities', () => {
 
       expect(blobService.getUrlForPath).toHaveBeenCalledWith(
         expect.any(String),
-        expect.objectContaining({ noCache: true })
+        expect.objectContaining({ noCache: true }),
       );
     });
   });

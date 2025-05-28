@@ -48,7 +48,7 @@ async function verifyBlobAudioPaths(): Promise<void> {
         const audioFiles = result.blobs.filter(
           (blob) =>
             blob.pathname.endsWith('.mp3') &&
-            booksToCheck.some((slug) => blob.pathname.includes(slug))
+            booksToCheck.some((slug) => blob.pathname.includes(slug)),
         );
 
         if (audioFiles.length > 0) {

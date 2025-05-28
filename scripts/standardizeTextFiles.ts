@@ -38,7 +38,7 @@ class MigrationLog {
   constructor(
     private logFile: string,
     private type: string,
-    private logger: typeof defaultLogger
+    private logger: typeof defaultLogger,
   ) {}
 
   addEntry(entry: MigrationResult) {
@@ -72,7 +72,7 @@ class TextFileMigrator {
     assetPathService: AssetPathService,
     blobService: BlobService,
     logger: typeof defaultLogger,
-    options: MigrationOptions
+    options: MigrationOptions,
   ) {
     this.assetPathService = assetPathService;
     this.blobService = blobService;
@@ -128,7 +128,7 @@ class TextFileMigrator {
 
     // Filter to only .txt files in text directories
     return files.filter(
-      (file) => file.endsWith('.txt') && (file.includes('/text/') || file.includes('/brainrot/'))
+      (file) => file.endsWith('.txt') && (file.includes('/text/') || file.includes('/brainrot/')),
     );
   }
 
@@ -286,7 +286,7 @@ class TextFileMigrator {
       const migrationLog = new MigrationLog(
         this.options.logFile,
         'text-standardization',
-        this.logger
+        this.logger,
       );
 
       for (const result of this.results) {

@@ -91,7 +91,7 @@ function groupFilesByBook(audioFiles: AudioFile[]): {
 function generateReport(
   audioFiles: AudioFile[],
   bookMap: Map<string, AudioFile[]>,
-  fullAudiobookMap: Map<string, AudioFile>
+  fullAudiobookMap: Map<string, AudioFile>,
 ): void {
   logger.info({ msg: '📊 Audio Assets Summary:' });
   logger.info({ msg: `Total audio files: ${audioFiles.length}` });

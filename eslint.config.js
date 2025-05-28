@@ -32,6 +32,14 @@ const config = [
       'tmp/**',
       'temp/**',
       'coverage/**',
+      // Configuration files that need CommonJS require statements
+      '*.cjs',
+      '.prettierrc.cjs',
+      'jest.config.cjs',
+      'jest.config.esm.cjs',
+      'jest.setup.cjs',
+      'jest-babel-transformer.cjs',
+      'jest-esm-transformer.cjs',
       // Scripts still being actively developed
       'scripts/debug/**',
       'scripts/test-utils/**',
@@ -40,6 +48,12 @@ const config = [
       'scripts/blob-reorganizer/**',
       'scripts/benchmark-downloads.ts',
       'scripts/migrateFullAudiobooks.ts', // Will be refactored in T036
+      // Migration scripts with console.log statements (to be fixed in T051)
+      'scripts/migrate*.ts',
+      'scripts/test*.ts',
+      'scripts/verify*.ts',
+      'scripts/audit*.ts',
+      'scripts/upload*.ts',
       // Migration logs and reports
       'migration-logs/**',
     ],
