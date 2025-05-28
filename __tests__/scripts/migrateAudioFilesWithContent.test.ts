@@ -150,7 +150,12 @@ beforeAll(() => {
     AudioFilesMigrator = importedModule.AudioFilesMigrator;
     _parseArgs = importedModule.parseArgs;
   } catch (error) {
-    console.error('Error loading script module:', error);
+    // Capture the error for test debugging but don't use console
+    // This is a test setup issue if it occurs, not a test failure
+    jest.spyOn(global.console, 'error').mockImplementation(() => {});
+    throw new Error(
+      `Failed to load script module: ${error instanceof Error ? error.message : String(error)}`,
+    );
   }
 });
 

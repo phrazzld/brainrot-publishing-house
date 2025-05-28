@@ -622,14 +622,15 @@ This TODO list details the tasks required to fully migrate all asset management 
   - [x] Dependencies: None
   - [x] COMPLETED: Applied Prettier formatting to 130+ files, configured pre-commit hooks, added CI formatting check
 
-- [ ] **T049: Fix remaining ESLint warnings in test files**
+- [x] **T049: Fix remaining ESLint warnings in test files**
 
-  - [ ] Address no-console warnings in tests:
-    - [ ] Replace console.log with proper test utilities or mocked loggers
-    - [ ] Add appropriate eslint-disable directives where needed (with justification)
-  - [ ] Fix max-depth and complexity issues in test files
-  - [ ] Address unused variable warnings consistently (underscore prefix)
-  - [ ] Dependencies: T042
+  - [x] Address no-console warnings in tests:
+    - [x] Replace console.log with proper test utilities or mocked loggers
+    - [x] Add appropriate eslint-disable directives where needed (with justification)
+  - [x] Fix max-depth and complexity issues in test files
+  - [x] Address unused variable warnings consistently (underscore prefix)
+  - [x] Dependencies: T042
+  - [x] COMPLETED: Fixed console.error in migrateAudioFilesWithContent.test.ts; verified all test files pass ESLint with zero warnings
 
 - [ ] **T050: COMPLEX - Improve test fixtures and type safety in tests**
 
