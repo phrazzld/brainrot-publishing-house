@@ -4,6 +4,8 @@
  */
 import { expect } from '@jest/globals';
 
+import { AssetType } from '../fixtures/assets';
+
 /**
  * Asserts that a function was called with a parameter containing expected properties
  * This is type-safe compared to the standard toHaveBeenCalledWith that uses any
@@ -12,10 +14,10 @@ import { expect } from '@jest/globals';
  * @param paramIndex Index of the parameter to check (0-based)
  * @param expectedProps Expected properties in the parameter object
  */
-export function expectCalledWithObjectContaining<T, K extends keyof T>(
+export function expectCalledWithObjectContaining<T extends Record<string, unknown>>(
   mockFn: jest.MockedFunction<(...args: unknown[]) => unknown>,
   paramIndex: number,
-  expectedProps: Pick<T, K>,
+  expectedProps: Partial<T>,
 ): void {
   expect(mockFn).toHaveBeenCalled();
   const calls = mockFn.mock.calls;
@@ -33,9 +35,9 @@ export function expectCalledWithObjectContaining<T, K extends keyof T>(
  * @param loggerFn The logger function mock to check (e.g., mockLogger.info)
  * @param expectedContext The expected context fields
  */
-export function expectLoggedWithContext(
+export function expectLoggedWithContext<T extends Record<string, unknown>>(
   loggerFn: jest.MockedFunction<(...args: unknown[]) => unknown>,
-  expectedContext: Record<string, unknown>,
+  expectedContext: Partial<T>,
 ): void {
   expectCalledWithObjectContaining(loggerFn, 0, expectedContext);
 }
@@ -78,6 +80,31 @@ export function expectUrlContains(url: string, expectedParts: string[]): void {
 }
 
 /**
+ * Asserts that a URL has the expected asset structure
+ *
+ * @param url The URL to check
+ * @param assetType Type of asset (audio, text, image)
+ * @param bookSlug Book slug identifier
+ * @param filename Filename or pattern to match
+ */
+export function expectValidAssetUrl(
+  url: string,
+  assetType: AssetType,
+  bookSlug: string,
+  filename: string | RegExp,
+): void {
+  expect(url).toContain(`/${assetType}/`);
+  expect(url).toContain(`/${bookSlug}/`);
+
+  if (filename instanceof RegExp) {
+    expect(url).toMatch(filename);
+  } else {
+    const encodedFilename = encodeURIComponent(filename).replace(/%2F/g, '/');
+    expect(url.endsWith(encodedFilename) || url.endsWith(filename)).toBeTruthy();
+  }
+}
+
+/**
  * Asserts that a path follows the expected structure
  * Useful for testing path generation functions
  *
@@ -90,7 +117,7 @@ export function expectPathStructure(
     prefix?: string;
     bookSlug?: string;
     assetType?: string;
-    filename?: string;
+    filename?: string | RegExp;
   },
 ): void {
   if (structure.prefix) {
@@ -106,7 +133,11 @@ export function expectPathStructure(
   }
 
   if (structure.filename) {
-    expect(path).toMatch(new RegExp(`${structure.filename}$`));
+    if (structure.filename instanceof RegExp) {
+      expect(path).toMatch(structure.filename);
+    } else {
+      expect(path).toMatch(new RegExp(`${structure.filename}$`));
+    }
   }
 }
 
@@ -119,7 +150,7 @@ export function expectPathStructure(
 export function expectObjectShape<T extends Record<string, unknown>>(
   obj: unknown,
   schema: Record<keyof T, string | (new (...args: unknown[]) => unknown)>,
-): void {
+): asserts obj is T {
   expect(obj).toBeTruthy();
   const typedObj = obj as T;
 
@@ -140,8 +171,8 @@ export function expectObjectShape<T extends Record<string, unknown>>(
  * @param mockFn The mock function to check
  * @param predicates Functions that check if parameters are of the expected type/shape
  */
-export function expectCalledWithTypes(
-  mockFn: jest.MockedFunction<(...args: unknown[]) => unknown>,
+export function expectCalledWithTypes<T extends unknown[]>(
+  mockFn: jest.MockedFunction<(...args: T) => unknown>,
   ...predicates: ((arg: unknown) => boolean)[]
 ): void {
   expect(mockFn).toHaveBeenCalled();
@@ -154,5 +185,87 @@ export function expectCalledWithTypes(
     const predicate = predicates[i];
     const param = lastCall[i];
     expect(predicate(param)).toBe(true);
+  }
+}
+
+/**
+ * Type predicate for checking if a value is a non-null object
+ */
+export function isObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
+}
+
+/**
+ * Type predicate for checking if a value is a string
+ */
+export function isString(value: unknown): value is string {
+  return typeof value === 'string';
+}
+
+/**
+ * Type predicate for checking if a value is a number
+ */
+export function isNumber(value: unknown): value is number {
+  return typeof value === 'number';
+}
+
+/**
+ * Type predicate for checking if a value is a boolean
+ */
+export function isBoolean(value: unknown): value is boolean {
+  return typeof value === 'boolean';
+}
+
+/**
+ * Type predicate for checking if a value is an array
+ */
+export function isArray(value: unknown): value is unknown[] {
+  return Array.isArray(value);
+}
+
+/**
+ * Creates a type predicate for checking if a value is an array of a specific type
+ */
+export function isArrayOf<T>(
+  predicate: (item: unknown) => item is T,
+): (value: unknown) => value is T[] {
+  return (value: unknown): value is T[] => {
+    return Array.isArray(value) && value.every(predicate);
+  };
+}
+
+/**
+ * Asserts that a response has the expected status code and content type
+ */
+export function expectResponseProperties(
+  response: Response,
+  options: {
+    status?: number;
+    contentType?: string | RegExp;
+    hasBody?: boolean;
+  } = {},
+): void {
+  if (options.status !== undefined) {
+    expect(response.status).toBe(options.status);
+    expect(response.ok).toBe(options.status >= 200 && options.status < 300);
+  }
+
+  if (options.contentType !== undefined) {
+    const contentTypeHeader = response.headers.get('content-type');
+    expect(contentTypeHeader).not.toBeNull();
+
+    if (options.contentType instanceof RegExp) {
+      expect(contentTypeHeader).toMatch(options.contentType);
+    } else {
+      expect(contentTypeHeader).toContain(options.contentType);
+    }
+  }
+
+  if (options.hasBody !== undefined) {
+    if (options.hasBody) {
+      expect(response.body).not.toBeNull();
+    } else {
+      expect(response.body).toBeNull();
+    }
   }
 }
