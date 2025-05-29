@@ -506,18 +506,18 @@ This TODO list details the tasks required to fully migrate all asset management 
     - [x] Add proper types for callback parameters (lines 145, 173, 188, 324)
   - [x] Fix fetchTextWithFallback.test.ts type conversion issues:
     - [x] Address MockResponse to Response conversion errors (lines 118, 138)
-  - [x] Dependencies: none
+  - Dependencies: none
 
-- [~] **T040: Fix logger and module import errors in utility scripts**
+- [x] **T040: Fix logger and module import errors in utility scripts**
 
   - [x] Fix asset-migration/copyToPlaceholder.ts import issues:
     - [x] Fix module imports for logger and BlobService (lines 7-8)
     - [x] Resolve logger variable references (lines 14, 25, 34, 41, 44...)
-  - [ ] Fix logger references across multiple scripts (needs systematic approach):
-    - [ ] Audit all scripts for proper logger imports and usage
-    - [ ] Create consistent pattern for logger initialization
-    - [ ] Update all scripts with correct logger references
-  - [ ] Dependencies: none
+  - [x] Fix logger references across multiple scripts (needs systematic approach):
+    - [x] Audit all scripts for proper logger imports and usage
+    - [x] Create consistent pattern for logger initialization
+    - [x] Update all scripts with correct logger references
+  - Dependencies: none
 
 - [x] **T041: Fix type compatibility issues in verification scripts**
 
@@ -528,7 +528,7 @@ This TODO list details the tasks required to fully migrate all asset management 
       - [x] verifyBlobStorage.ts (line 231)
     - [x] Create consistent Chapter interface for verification scripts
     - [x] Update translations type handling across verification scripts
-  - [x] Dependencies: none
+  - Dependencies: none
 
 - [x] **T042: Systematically update max-depth violations in search scripts**
 
@@ -537,7 +537,7 @@ This TODO list details the tasks required to fully migrate all asset management 
     - [x] Apply extraction pattern similar to the one used in T037
     - [x] Extract helper functions to flatten nested conditionals
     - [x] Review and refactor loop structures
-  - [x] Dependencies: none
+  - Dependencies: none
 
 - [x] **T043: Fix Response type compatibility with mocks in tests**
 
@@ -549,7 +549,7 @@ This TODO list details the tasks required to fully migrate all asset management 
   - [x] Created shared MockResponse utility class for consistent use across tests
   - [x] Updated other test files to use the shared MockResponse implementation
   - [x] Created simplified test suite for fetchTextWithFallback due to implementation complexity
-  - [x] Dependencies: none
+  - Dependencies: none
 
 - [x] **T044: Standardize asset path utilities across scripts**
 
@@ -559,7 +559,7 @@ This TODO list details the tasks required to fully migrate all asset management 
     - [x] Updated scripts to use standardized path utilities
   - [x] Ensured proper path normalization for all asset types
   - [x] Added comprehensive test suite for ScriptPathUtils
-  - [x] Dependencies: none
+  - Dependencies: none
 
 - [x] **T045: COMPLEX - Address technical debt in test files**
 
@@ -573,7 +573,7 @@ This TODO list details the tasks required to fully migrate all asset management 
   - [x] Improve test assertions with type safety:
     - [x] Replace any types with proper interfaces
     - [x] Use type predicates where appropriate
-  - [x] Dependencies: T039, T043
+  - Dependencies: T039, T043
 
 - [x] **T046: Update asset imports and logger initialization across all scripts**
 
@@ -583,7 +583,7 @@ This TODO list details the tasks required to fully migrate all asset management 
   - [x] Fix asset service imports and initialization:
     - [x] Update imports to use consistent path and naming
     - [x] Ensure proper error handling during initialization
-  - [x] Dependencies: T040
+  - Dependencies: T040
 
 - [x] **T047: Fix script dependency loading and module resolution**
 
@@ -595,18 +595,18 @@ This TODO list details the tasks required to fully migrate all asset management 
     - [x] Add proper TypeScript configurations for ESM modules
     - [x] Ensure consistent approach for resolving file paths in scripts
     - [x] Test module loading in both development and production environments
-  - [x] Dependencies: None
+  - Dependencies: None
 
-- [~] **T051: Fix linting issues in migration scripts**
+- [x] **T051: Fix linting issues in migration scripts**
 
-  - [ ] Address console.log usage in migration scripts:
-    - [ ] Replace with structured logger in migrateBookCoverImages.ts
-    - [ ] Replace with structured logger in migrateAudioFilesEnhanced.ts
-    - [ ] Add allowance for migration scripts in ESLint config if appropriate
-  - [ ] Fix any/unknown type usage in migration scripts
-  - [ ] Refactor complex functions into smaller, more focused functions
-  - [ ] Fix max-depth violations in scripts
-  - [ ] Dependencies: None
+  - [x] Address console.log usage in migration scripts:
+    - [x] Replace with structured logger in migrateBookCoverImages.ts
+    - [x] Replace with structured logger in migrateAudioFilesEnhanced.ts
+    - [x] Add allowance for migration scripts in ESLint config if appropriate
+  - [x] Fix any/unknown type usage in migration scripts
+  - [x] Refactor complex functions into smaller, more focused functions
+  - [x] Fix max-depth violations in scripts
+  - Dependencies: None
 
 - [x] **T048: Apply code formatting standards consistently across codebase**
 
@@ -619,7 +619,7 @@ This TODO list details the tasks required to fully migrate all asset management 
     - [x] Standardize import ordering and grouping
     - [x] Ensure consistent indentation and line breaks in function calls
   - [x] Set up automated formatting checks in CI pipeline
-  - [x] Dependencies: None
+  - Dependencies: None
   - [x] COMPLETED: Applied Prettier formatting to 130+ files, configured pre-commit hooks, added CI formatting check
 
 - [x] **T049: Fix remaining ESLint warnings in test files**
@@ -629,7 +629,7 @@ This TODO list details the tasks required to fully migrate all asset management 
     - [x] Add appropriate eslint-disable directives where needed (with justification)
   - [x] Fix max-depth and complexity issues in test files
   - [x] Address unused variable warnings consistently (underscore prefix)
-  - [x] Dependencies: T042
+  - Dependencies: T042
   - [x] COMPLETED: Fixed console.error in migrateAudioFilesWithContent.test.ts; verified all test files pass ESLint with zero warnings
 
 - [x] **T050: COMPLEX - Improve test fixtures and type safety in tests**
@@ -643,7 +643,7 @@ This TODO list details the tasks required to fully migrate all asset management 
     - [x] Add proper type guards for complex assertions
     - [x] Update expect statements to use type-aware matchers where possible
   - [x] Add proper typing for test utilities and helper functions
-  - [x] Dependencies: T045
+  - Dependencies: T045
   - [x] COMPLETED: Created comprehensive type-safe fixtures and utilities in **tests**/**testutils**/fixtures, enhanced assertion utilities, and provided example usage
 
 - [ ] **T052: Address complexity warnings in core application files**
@@ -660,4 +660,4 @@ This TODO list details the tasks required to fully migrate all asset management 
     - [ ] utils/getBlobUrl.ts: generateBlobUrl (complexity: 12)
     - [ ] utils/getBlobUrl.ts: getAssetUrl (complexity: 14)
   - [ ] Address remaining complexity issues from T048 formatting task
-  - [ ] Dependencies: None
+  - Dependencies: None

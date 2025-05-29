@@ -116,10 +116,33 @@ function verifyAudioContent(buffer: Buffer): boolean {
 }
 
 /**
+ * Process a single command line argument
+ */
+function processArgument(arg: string, options: MigrationOptions): void {
+  if (arg === '--dry-run') {
+    options.dryRun = true;
+  } else if (arg.startsWith('--books=')) {
+    const books = arg.substring('--books='.length).split(',');
+    options.books = books.map((b) => b.trim()).filter(Boolean);
+  } else if (arg === '--force') {
+    options.force = true;
+  } else if (arg.startsWith('--retries=')) {
+    options.retries = parseInt(arg.substring('--retries='.length), 10);
+  } else if (arg.startsWith('--concurrency=')) {
+    options.concurrency = parseInt(arg.substring('--concurrency='.length), 10);
+  } else if (arg.startsWith('--log-file=')) {
+    options.logFile = arg.substring('--log-file='.length);
+  } else if (arg === '--verbose') {
+    options.verbose = true;
+  } else if (arg.startsWith('--size-threshold=')) {
+    options.sizeThreshold = parseInt(arg.substring('--size-threshold='.length), 10);
+  } else if (arg.startsWith('--inventory=')) {
+    options.inventoryPath = arg.substring('--inventory='.length);
+  }
+}
+
+/**
  * Parse command-line arguments
- *
- * This function has high complexity due to parsing many different command line args
- * eslint-disable-next-line complexity
  */
 function parseArgs(): MigrationOptions {
   const options: MigrationOptions = {
@@ -135,26 +158,7 @@ function parseArgs(): MigrationOptions {
 
   const args = process.argv.slice(2);
   for (const arg of args) {
-    if (arg === '--dry-run') {
-      options.dryRun = true;
-    } else if (arg.startsWith('--books=')) {
-      const books = arg.substring('--books='.length).split(',');
-      options.books = books.map((b) => b.trim()).filter(Boolean);
-    } else if (arg === '--force') {
-      options.force = true;
-    } else if (arg.startsWith('--retries=')) {
-      options.retries = parseInt(arg.substring('--retries='.length), 10);
-    } else if (arg.startsWith('--concurrency=')) {
-      options.concurrency = parseInt(arg.substring('--concurrency='.length), 10);
-    } else if (arg.startsWith('--log-file=')) {
-      options.logFile = arg.substring('--log-file='.length);
-    } else if (arg === '--verbose') {
-      options.verbose = true;
-    } else if (arg.startsWith('--size-threshold=')) {
-      options.sizeThreshold = parseInt(arg.substring('--size-threshold='.length), 10);
-    } else if (arg.startsWith('--inventory=')) {
-      options.inventoryPath = arg.substring('--inventory='.length);
-    }
+    processArgument(arg, options);
   }
 
   return options;
@@ -206,96 +210,154 @@ class EnhancedAudioMigrator {
    */
   public async run(): Promise<MigrationSummary> {
     this.startTime = new Date();
+    this.logStartupInfo();
+
+    try {
+      // Process books and gather files
+      await this.prepareAudioFiles();
+
+      // Confirm and process files
+      if (!this.options.dryRun && !(await this.confirmOperation())) {
+        this.logOperationCancelled();
+        process.exit(0);
+      }
+
+      // Process files with concurrency
+      await this.processAudioFilesWithConcurrency();
+
+      // Generate summary and save results
+      return await this.finalizeMigration();
+    } catch (error) {
+      this.logMigrationFailure(error);
+      throw error;
+    }
+  }
+
+  /**
+   * Log startup information
+   */
+  private logStartupInfo(): void {
     logger.info({
       msg: `Starting enhanced audio files validation ${this.options.dryRun ? '(DRY RUN)' : ''}`,
       operation: 'start',
       dryRun: this.options.dryRun,
     });
+  }
 
-    try {
-      // Get books to process
-      const booksToProcess =
-        this.options.books.length > 0 ? this.options.books : translations.map((book) => book.slug);
+  /**
+   * Log operation cancelled message
+   */
+  private logOperationCancelled(): void {
+    logger.info({
+      msg: 'Operation cancelled by user',
+      operation: 'cancelled',
+    });
+  }
 
-      logger.info({
-        msg: `Processing books: ${booksToProcess.join(', ')}`,
-        operation: 'process_books',
-        books: booksToProcess,
-      });
+  /**
+   * Log migration failure
+   */
+  private logMigrationFailure(error: unknown): void {
+    logger.error({
+      msg: 'Migration failed',
+      operation: 'migration_failed',
+      error: error instanceof Error ? error.message : String(error),
+    });
+  }
 
-      // Gather all audio files to process
-      await this.gatherAudioFiles(booksToProcess);
+  /**
+   * Prepare audio files for processing
+   */
+  private async prepareAudioFiles(): Promise<void> {
+    // Get books to process
+    const booksToProcess =
+      this.options.books.length > 0 ? this.options.books : translations.map((book) => book.slug);
 
-      // Process each audio file with concurrency
-      this.totalFiles = this.audioFiles.length;
-      logger.info({
-        msg: `Found ${this.totalFiles} audio files to process`,
-        operation: 'files_found',
-        count: this.totalFiles,
-      });
+    logger.info({
+      msg: `Processing books: ${booksToProcess.join(', ')}`,
+      operation: 'process_books',
+      books: booksToProcess,
+    });
 
-      // Confirm operation before beginning
-      if (!this.options.dryRun && !(await this.confirmOperation())) {
-        logger.info({
-          msg: 'Operation cancelled by user',
-          operation: 'cancelled',
-        });
-        process.exit(0);
-      }
+    // Gather all audio files to process
+    await this.gatherAudioFiles(booksToProcess);
 
-      // Process files in parallel with semaphore
-      for (const audioFile of this.audioFiles) {
-        // Wait if we've reached concurrency limit
-        if (this.semaphoreValue <= 0) {
-          await Promise.race(this.activePromises);
-        }
+    // Process each audio file with concurrency
+    this.totalFiles = this.audioFiles.length;
+    logger.info({
+      msg: `Found ${this.totalFiles} audio files to process`,
+      operation: 'files_found',
+      count: this.totalFiles,
+    });
+  }
 
-        // Process the file
-        this.semaphoreValue--;
-
-        const promise = this.processAudioFile(audioFile)
-          .catch((error) => {
-            logger.error({
-              msg: `Error processing ${audioFile.blobPath}`,
-              operation: 'process_file',
-              path: audioFile.blobPath,
-              error: error instanceof Error ? error.message : String(error),
-            });
-          })
-          .finally(() => {
-            this.semaphoreValue++;
-            this.activePromises = this.activePromises.filter((p) => p !== promise);
-            this.progressCount++;
-            this.updateProgress();
-          });
-
-        this.activePromises.push(promise);
-      }
-
-      // Wait for all remaining operations
-      if (this.activePromises.length > 0) {
-        logger.info({
-          msg: `Waiting for ${this.activePromises.length} remaining operations...`,
-          operation: 'wait_remaining',
-          count: this.activePromises.length,
-        });
-        await Promise.all(this.activePromises);
-      }
-
-      // Generate and save summary
-      const summary = this.generateSummary();
-      this.printSummary(summary);
-      await this.saveResults(summary);
-
-      return summary;
-    } catch (error) {
-      logger.error({
-        msg: 'Migration failed',
-        operation: 'migration_failed',
-        error: error instanceof Error ? error.message : String(error),
-      });
-      throw error;
+  /**
+   * Process audio files with concurrency control
+   */
+  private async processAudioFilesWithConcurrency(): Promise<void> {
+    for (const audioFile of this.audioFiles) {
+      await this.processAudioFileWithSemaphore(audioFile);
     }
+
+    // Wait for all remaining operations
+    if (this.activePromises.length > 0) {
+      await this.waitForRemainingOperations();
+    }
+  }
+
+  /**
+   * Wait for remaining operations to complete
+   */
+  private async waitForRemainingOperations(): Promise<void> {
+    logger.info({
+      msg: `Waiting for ${this.activePromises.length} remaining operations...`,
+      operation: 'wait_remaining',
+      count: this.activePromises.length,
+    });
+    await Promise.all(this.activePromises);
+  }
+
+  /**
+   * Process a single audio file with semaphore control
+   */
+  private async processAudioFileWithSemaphore(audioFile: AudioFile): Promise<void> {
+    // Wait if we've reached concurrency limit
+    if (this.semaphoreValue <= 0) {
+      await Promise.race(this.activePromises);
+    }
+
+    // Process the file
+    this.semaphoreValue--;
+
+    const promise = this.processAudioFile(audioFile)
+      .catch((error) => {
+        logger.error({
+          msg: `Error processing ${audioFile.blobPath}`,
+          operation: 'process_file',
+          path: audioFile.blobPath,
+          error: error instanceof Error ? error.message : String(error),
+        });
+      })
+      .finally(() => {
+        this.semaphoreValue++;
+        this.activePromises = this.activePromises.filter((p) => p !== promise);
+        this.progressCount++;
+        this.updateProgress();
+      });
+
+    this.activePromises.push(promise);
+  }
+
+  /**
+   * Finalize migration with summary and saved results
+   */
+  private async finalizeMigration(): Promise<MigrationSummary> {
+    // Generate and save summary
+    const summary = this.generateSummary();
+    this.printSummary(summary);
+    await this.saveResults(summary);
+
+    return summary;
   }
 
   /**
@@ -309,9 +371,17 @@ class EnhancedAudioMigrator {
     const skipped = this.results.filter((r) => r.status === 'skipped').length;
     const failed = this.results.filter((r) => r.status === 'failed').length;
 
-    process.stdout.write(
-      `\rProgress: ${this.progressCount}/${this.totalFiles} (${percent}%) - Success: ${success}, Skipped: ${skipped}, Failed: ${failed}`,
-    );
+    // Replace console output with structured logging
+    logger.info({
+      msg: 'Progress update',
+      operation: 'progress',
+      current: this.progressCount,
+      total: this.totalFiles,
+      percent,
+      success,
+      skipped,
+      failed,
+    });
   }
 
   /**
@@ -330,6 +400,13 @@ class EnhancedAudioMigrator {
 
     // Otherwise build list from translations and check Vercel Blob
     logger.info({ msg: 'Building audio files list from translations' });
+    await this.buildAudioFilesFromTranslations(booksToProcess);
+  }
+
+  /**
+   * Build audio files list from translations
+   */
+  private async buildAudioFilesFromTranslations(booksToProcess: string[]): Promise<void> {
     for (const bookSlug of booksToProcess) {
       const book = translations.find((t) => t.slug === bookSlug);
 
@@ -349,35 +426,39 @@ class EnhancedAudioMigrator {
         continue;
       }
 
-      for (const chapter of book.chapters) {
-        if (!chapter.audioSrc) continue;
+      this.processBookChapters(book);
+    }
+  }
 
-        // Extract the file name and chapter number
-        const fileName = path.basename(chapter.audioSrc);
-        const chapterNumber = fileName.replace(/\.mp3$/, '').replace(/^.*?([\d]+)$/, '$1');
+  /**
+   * Process chapters from a book to add audio files
+   */
+  private processBookChapters(book: (typeof translations)[0]): void {
+    for (const chapter of book.chapters) {
+      if (!chapter.audioSrc) continue;
 
-        // Construct standardized filename and path using ScriptPathUtils
-        const standardFilename = generateFilename('audio', chapterNumber);
-        const blobPath = generateBlobPath(bookSlug, 'audio', standardFilename);
+      // Extract the file name and chapter number
+      const fileName = path.basename(chapter.audioSrc);
+      const chapterNumber = fileName.replace(/\.mp3$/, '').replace(/^.*?([\d]+)$/, '$1');
 
-        // Get URL for verification and uploading
-        const blobUrl = generateAssetUrl(blobPath);
+      // Construct standardized filename and path using ScriptPathUtils
+      const standardFilename = generateFilename('audio', chapterNumber);
+      const blobPath = generateBlobPath(book.slug, 'audio', standardFilename);
 
-        this.audioFiles.push({
-          blobPath,
-          bookSlug,
-          chapterTitle: chapter.title,
-          blobUrl,
-        });
-      }
+      // Get URL for verification and uploading
+      const blobUrl = generateAssetUrl(blobPath);
+
+      this.audioFiles.push({
+        blobPath,
+        bookSlug: book.slug,
+        chapterTitle: chapter.title,
+        blobUrl,
+      });
     }
   }
 
   /**
    * Load audio files from an existing inventory JSON file
-   *
-   * This method is complex due to parsing JSON data
-   * eslint-disable-next-line complexity
    */
   private async loadAudioFilesFromInventory(): Promise<void> {
     if (!this.options.inventoryPath) return;
@@ -388,17 +469,7 @@ class EnhancedAudioMigrator {
 
       // Check if this is the expected format
       if (inventory.books && Array.isArray(inventory.books)) {
-        // Filter to only include books specified in options.books if any
-        const booksToInclude =
-          this.options.books.length > 0
-            ? inventory.books.filter((b: Record<string, unknown>) =>
-                this.options.books.includes(b.slug as string),
-              )
-            : inventory.books;
-
-        for (const book of booksToInclude) {
-          this.processInventoryBook(book);
-        }
+        this.processInventoryBooks(inventory.books);
       } else {
         throw new Error('Invalid inventory format');
       }
@@ -418,6 +489,24 @@ class EnhancedAudioMigrator {
     }
   }
 
+  /**
+   * Process books from inventory data
+   */
+  private processInventoryBooks(books: Array<Record<string, unknown>>): void {
+    // Filter to only include books specified in options.books if any
+    const booksToInclude =
+      this.options.books.length > 0
+        ? books.filter((b) => this.options.books.includes(b.slug as string))
+        : books;
+
+    for (const book of booksToInclude) {
+      this.processInventoryBook(book);
+    }
+  }
+
+  /**
+   * Process a single book from inventory
+   */
   private processInventoryBook(book: Record<string, unknown>): void {
     if (!book.files || !Array.isArray(book.files)) return;
 
@@ -428,6 +517,9 @@ class EnhancedAudioMigrator {
     }
   }
 
+  /**
+   * Determine if an inventory file should be processed
+   */
   private shouldProcessInventoryFile(file: Record<string, unknown>): boolean {
     // Skip placeholder files
     if (file.isPlaceholder) return false;
@@ -439,6 +531,9 @@ class EnhancedAudioMigrator {
     return !!file.blobUrl;
   }
 
+  /**
+   * Add an audio file from inventory data
+   */
   private addAudioFileFromInventory(
     book: Record<string, unknown>,
     file: Record<string, unknown>,
@@ -461,7 +556,7 @@ class EnhancedAudioMigrator {
     const operationStartTime = Date.now();
     const { blobPath, blobUrl } = audioFile;
 
-    this.log(`\nProcessing: ${blobPath}`);
+    this.logVerbose(`Processing: ${blobPath}`);
 
     const result = this.createInitialResult(audioFile);
 
@@ -490,6 +585,9 @@ class EnhancedAudioMigrator {
     this.results.push(result);
   }
 
+  /**
+   * Create initial result object for a file
+   */
   private createInitialResult(audioFile: AudioFile): MigrationResult {
     return {
       status: 'failed',
@@ -502,6 +600,9 @@ class EnhancedAudioMigrator {
     };
   }
 
+  /**
+   * Check if a file exists in blob storage
+   */
   private async checkFileExistence(blobUrl: string): Promise<{ exists: boolean; size: number }> {
     try {
       const fileInfo = await blobService.getFileInfo(blobUrl);
@@ -509,9 +610,9 @@ class EnhancedAudioMigrator {
       const exists = fileInfo && fileInfo.size > this.options.sizeThreshold * 1024;
 
       if (exists) {
-        this.log(`File exists in Blob storage (${formatSize(fileInfo.size)})`);
+        this.logVerbose(`File exists in Blob storage (${formatSize(fileInfo.size)})`);
       } else if (fileSize > 0) {
-        this.log(`Small placeholder file exists (${formatSize(fileSize)}) - will replace`);
+        this.logVerbose(`Small placeholder file exists (${formatSize(fileSize)}) - will replace`);
       }
 
       return { exists, size: fileSize };
@@ -520,34 +621,46 @@ class EnhancedAudioMigrator {
     }
   }
 
+  /**
+   * Determine if a file should be skipped
+   */
   private shouldSkipFile(fileStatus: { exists: boolean; size: number }): boolean {
     return !fileStatus.exists && !this.options.force;
   }
 
+  /**
+   * Handle a file that is being skipped
+   */
   private handleSkippedFile(
     result: MigrationResult,
     _fileStatus: { exists: boolean; size: number },
   ): void {
-    this.log(`Skipping (file doesn't exist)`);
+    this.logVerbose(`Skipping (file doesn't exist)`);
     result.status = 'skipped';
     result.skipReason = "file doesn't exist";
     this.results.push(result);
   }
 
+  /**
+   * Handle a file in dry run mode
+   */
   private handleDryRunFile(result: MigrationResult, blobPath: string): void {
-    this.log(`DRY RUN: Would validate ${blobPath}`);
+    this.logVerbose(`DRY RUN: Would validate ${blobPath}`);
     result.status = 'skipped';
     result.skipReason = 'dry run';
     this.results.push(result);
   }
 
+  /**
+   * Validate file content for a blob
+   */
   private async validateFileContent(
     result: MigrationResult,
     blobUrl: string,
     fileSize: number,
     operationStartTime: number,
   ): Promise<void> {
-    this.log(`Validating file content: ${result.blobPath}`);
+    this.logVerbose(`Validating file content: ${result.blobPath}`);
 
     const response = await fetch(blobUrl);
     if (!response.ok) {
@@ -571,14 +684,20 @@ class EnhancedAudioMigrator {
     this.setValidationStatus(result, contentType, operationStartTime);
   }
 
+  /**
+   * Log validation result
+   */
   private logValidationResult(contentValid: boolean): void {
     if (!contentValid) {
-      this.log(`WARNING: Content validation failed - file doesn't appear to be valid MP3`);
+      this.logVerbose(`WARNING: Content validation failed - file doesn't appear to be valid MP3`);
     } else {
-      this.log(`Content validation passed - file appears to be valid MP3`);
+      this.logVerbose(`Content validation passed - file appears to be valid MP3`);
     }
   }
 
+  /**
+   * Set the validation status on the result
+   */
   private setValidationStatus(
     result: MigrationResult,
     contentType: string,
@@ -590,13 +709,16 @@ class EnhancedAudioMigrator {
     result.totalTime = Date.now() - operationStartTime;
 
     if (result.status === 'success') {
-      this.log(`Successfully validated audio file in ${result.totalTime}ms`);
+      this.logVerbose(`Successfully validated audio file in ${result.totalTime}ms`);
     } else {
       result.error = this.getValidationError(result);
-      this.log(`Validation failed: ${result.error}`);
+      this.logVerbose(`Validation failed: ${result.error}`);
     }
   }
 
+  /**
+   * Get validation error message
+   */
   private getValidationError(result: MigrationResult): string {
     if (!result.validationInfo?.sizeValid) {
       return `Size validation failed: file too small (${formatSize(result.validationInfo?.size || 0)})`;
@@ -604,20 +726,26 @@ class EnhancedAudioMigrator {
     return `Content validation failed: not a valid MP3 file`;
   }
 
+  /**
+   * Handle a non-existent file
+   */
   private handleNonExistentFile(result: MigrationResult): void {
     result.status = 'skipped';
     result.skipReason = "file doesn't exist and not in force mode";
     result.validated = false;
-    this.log(`Skipping (file doesn't exist and not in force mode)`);
+    this.logVerbose(`Skipping (file doesn't exist and not in force mode)`);
   }
 
+  /**
+   * Handle a file error
+   */
   private handleFileError(
     result: MigrationResult,
     error: unknown,
     operationStartTime: number,
   ): void {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    this.log(`Error: ${errorMessage}`);
+    this.logVerbose(`Error: ${errorMessage}`);
 
     result.status = 'failed';
     result.error = errorMessage;
@@ -677,40 +805,10 @@ class EnhancedAudioMigrator {
   }
 
   /**
-   * Save a human-readable Markdown report
-   *
-   * This method is complex due to report generation format
-   * eslint-disable-next-line complexity
+   * Generate book breakdown sections for Markdown report
    */
-  private async saveMarkdownReport(summary: MigrationSummary, filePath: string): Promise<void> {
-    const lines = [
-      '# Enhanced Audio Validation Report',
-      '',
-      `Generated: ${new Date().toISOString()}`,
-      '',
-      '## Summary',
-      '',
-      `- **Total files**: ${summary.total}`,
-      `- **Successful**: ${summary.successful}`,
-      `- **Skipped**: ${summary.skipped}`,
-      `- **Failed**: ${summary.failed}`,
-      '',
-      '### Validation',
-      '',
-      `- **Success**: ${summary.validationSuccess}`,
-      `- **Failed**: ${summary.validationFailed}`,
-      '',
-      '### Performance Statistics',
-      '',
-      `- **Total duration**: ${(summary.totalDuration / (1000 * 60)).toFixed(2)} minutes`,
-      '',
-      '### Books Covered',
-      '',
-      ...summary.booksCovered.map((book) => `- ${book}`),
-      '',
-    ];
-
-    // Add book-by-book breakdown
+  private generateBookBreakdownSection(summary: MigrationSummary): string[] {
+    const lines: string[] = [];
     lines.push('## Book-by-Book Breakdown', '');
 
     for (const bookSlug of summary.booksCovered) {
@@ -741,7 +839,15 @@ class EnhancedAudioMigrator {
       }
     }
 
-    // Add detailed logs for failures
+    return lines;
+  }
+
+  /**
+   * Generate detailed failure logs section for Markdown report
+   */
+  private generateFailureLogsSection(summary: MigrationSummary): string[] {
+    const lines: string[] = [];
+
     if (summary.failed > 0) {
       lines.push('## Detailed Failure Logs', '');
 
@@ -761,6 +867,55 @@ class EnhancedAudioMigrator {
         lines.push('');
       }
     }
+
+    return lines;
+  }
+
+  /**
+   * Generate summary section for Markdown report
+   */
+  private generateSummarySection(summary: MigrationSummary): string[] {
+    const lines = [
+      '# Enhanced Audio Validation Report',
+      '',
+      `Generated: ${new Date().toISOString()}`,
+      '',
+      '## Summary',
+      '',
+      `- **Total files**: ${summary.total}`,
+      `- **Successful**: ${summary.successful}`,
+      `- **Skipped**: ${summary.skipped}`,
+      `- **Failed**: ${summary.failed}`,
+      '',
+      '### Validation',
+      '',
+      `- **Success**: ${summary.validationSuccess}`,
+      `- **Failed**: ${summary.validationFailed}`,
+      '',
+      '### Performance Statistics',
+      '',
+      `- **Total duration**: ${(summary.totalDuration / (1000 * 60)).toFixed(2)} minutes`,
+      '',
+      '### Books Covered',
+      '',
+      ...summary.booksCovered.map((book) => `- ${book}`),
+      '',
+    ];
+
+    return lines;
+  }
+
+  /**
+   * Save a human-readable Markdown report
+   */
+  private async saveMarkdownReport(summary: MigrationSummary, filePath: string): Promise<void> {
+    // Generate the different sections
+    const summarySection = this.generateSummarySection(summary);
+    const bookBreakdownSection = this.generateBookBreakdownSection(summary);
+    const failureLogsSection = this.generateFailureLogsSection(summary);
+
+    // Combine all sections
+    const lines = [...summarySection, ...bookBreakdownSection, ...failureLogsSection];
 
     await fs.writeFile(filePath, lines.join('\n'), 'utf8');
   }
@@ -830,11 +985,11 @@ class EnhancedAudioMigrator {
   /**
    * Conditionally log messages based on verbose option
    */
-  private log(message: string): void {
+  private logVerbose(message: string): void {
     if (this.options.verbose) {
       logger.info({
-        msg: 'Verbose log message',
-        message,
+        msg: message,
+        context: 'verbose',
       });
     }
   }
