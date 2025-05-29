@@ -1,6 +1,6 @@
 /**
  * Download API Module
- * 
+ *
  * This module provides functionality for proxying file downloads through the API
  * with robust error handling, logging, and metrics.
  */

@@ -8,7 +8,7 @@
 const AssetType = {
   AUDIO: 'audio',
   TEXT: 'text',
-  IMAGE: 'image'
+  IMAGE: 'image',
 };
 
 /**
@@ -22,11 +22,12 @@ function createAssetFixture(assetType, bookSlug, assetName, overrides = {}) {
   } else if (assetType === AssetType.AUDIO) {
     contentType = 'audio/mpeg';
   } else if (assetType === AssetType.IMAGE) {
-    contentType = assetName.endsWith('.jpg') || assetName.endsWith('.jpeg')
-      ? 'image/jpeg'
-      : assetName.endsWith('.png')
-      ? 'image/png'
-      : 'image/webp';
+    contentType =
+      assetName.endsWith('.jpg') || assetName.endsWith('.jpeg')
+        ? 'image/jpeg'
+        : assetName.endsWith('.png')
+          ? 'image/png'
+          : 'image/webp';
   }
 
   const path = `assets/${assetType}/${bookSlug}/${assetName}`;
@@ -48,10 +49,11 @@ function createAssetFixture(assetType, bookSlug, assetName, overrides = {}) {
  * Creates an audio asset fixture
  */
 function createAudioAssetFixture(bookSlug, chapter, overrides = {}) {
-  const assetName = typeof chapter === 'number'
-    ? `chapter-${String(chapter).padStart(2, '0')}.mp3`
-    : 'full-audiobook.mp3';
-  
+  const assetName =
+    typeof chapter === 'number'
+      ? `chapter-${String(chapter).padStart(2, '0')}.mp3`
+      : 'full-audiobook.mp3';
+
   return createAssetFixture(AssetType.AUDIO, bookSlug, assetName, {
     contentType: 'audio/mpeg',
     size: 1024 * 1024 * 2, // 2MB for audio files
@@ -64,7 +66,7 @@ function createAudioAssetFixture(bookSlug, chapter, overrides = {}) {
  */
 function createTextAssetFixture(bookSlug, chapter, textType = 'brainrot', overrides = {}) {
   let assetName;
-  
+
   if (typeof chapter === 'number') {
     assetName = `${textType}-chapter-${String(chapter).padStart(2, '0')}.txt`;
   } else if (chapter === 'fulltext') {
@@ -72,7 +74,7 @@ function createTextAssetFixture(bookSlug, chapter, textType = 'brainrot', overri
   } else {
     assetName = `${textType}-${chapter}.txt`;
   }
-  
+
   return createAssetFixture(AssetType.TEXT, bookSlug, assetName, {
     contentType: 'text/plain',
     size: 1024 * 10, // 10KB for text files
@@ -85,11 +87,12 @@ function createTextAssetFixture(bookSlug, chapter, textType = 'brainrot', overri
  */
 function createImageAssetFixture(bookSlug, imageName, overrides = {}) {
   return createAssetFixture(AssetType.IMAGE, bookSlug, imageName, {
-    contentType: imageName.endsWith('.jpg') || imageName.endsWith('.jpeg')
-      ? 'image/jpeg'
-      : imageName.endsWith('.png')
-      ? 'image/png'
-      : 'image/webp',
+    contentType:
+      imageName.endsWith('.jpg') || imageName.endsWith('.jpeg')
+        ? 'image/jpeg'
+        : imageName.endsWith('.png')
+          ? 'image/png'
+          : 'image/webp',
     size: 1024 * 100, // 100KB for image files
     ...overrides,
   });
@@ -103,7 +106,7 @@ function createCoverImageFixture(bookSlug, overrides = {}) {
 }
 
 // Export asset types and functions
-module.exports = {
+export {
   AssetType,
   createAssetFixture,
   createAudioAssetFixture,

@@ -1,12 +1,12 @@
 /**
  * Fixtures for book-related test data
  */
-const { Book, Chapter } = require('../../../translations/types');
+import type { Book as _Book, Chapter as _Chapter } from '../../../translations/types';
 
 /**
  * Creates a Chapter fixture with type-safe overrides
  */
-function createChapterFixture(overrides = {}) {
+function createChapterFixture(overrides = {}): Record<string, unknown> {
   return {
     number: 1,
     title: 'Chapter 1',
@@ -19,7 +19,7 @@ function createChapterFixture(overrides = {}) {
 /**
  * Creates a Book fixture with type-safe overrides
  */
-function createBookFixture(overrides = {}) {
+function createBookFixture(overrides = {}): Record<string, unknown> {
   return {
     slug: 'test-book',
     title: 'Test Book',
@@ -30,7 +30,12 @@ function createBookFixture(overrides = {}) {
     description: 'A test book description',
     chapters: [
       createChapterFixture(),
-      createChapterFixture({ number: 2, title: 'Chapter 2', path: 'chapter-02.txt', audioSrc: 'chapter-02.mp3' }),
+      createChapterFixture({
+        number: 2,
+        title: 'Chapter 2',
+        path: 'chapter-02.txt',
+        audioSrc: 'chapter-02.mp3',
+      }),
     ],
     status: 'published',
     ...overrides,
@@ -41,6 +46,8 @@ function createBookFixture(overrides = {}) {
  * Builder pattern for creating complex Book objects
  */
 class BookBuilder {
+  private book: Record<string, unknown>;
+
   constructor() {
     this.book = {
       slug: 'test-book',
@@ -58,7 +65,7 @@ class BookBuilder {
   /**
    * Set the book slug
    */
-  withSlug(slug) {
+  withSlug(slug: string): BookBuilder {
     this.book.slug = slug;
     return this;
   }
@@ -66,7 +73,7 @@ class BookBuilder {
   /**
    * Set the book title
    */
-  withTitle(title) {
+  withTitle(title: string): BookBuilder {
     this.book.title = title;
     return this;
   }
@@ -74,7 +81,7 @@ class BookBuilder {
   /**
    * Set the book author
    */
-  withAuthor(author) {
+  withAuthor(author: string): BookBuilder {
     this.book.author = author;
     return this;
   }
@@ -82,7 +89,7 @@ class BookBuilder {
   /**
    * Set the book status
    */
-  withStatus(status) {
+  withStatus(status: string): BookBuilder {
     this.book.status = status;
     return this;
   }
@@ -90,7 +97,7 @@ class BookBuilder {
   /**
    * Add chapters to the book
    */
-  withChapters(count) {
+  withChapters(count: number): BookBuilder {
     this.book.chapters = Array.from({ length: count }).map((_, i) => ({
       number: i + 1,
       title: `Chapter ${i + 1}`,
@@ -103,7 +110,7 @@ class BookBuilder {
   /**
    * Add custom chapters to the book
    */
-  withCustomChapters(chapters) {
+  withCustomChapters(chapters: Array<Record<string, unknown>>): BookBuilder {
     this.book.chapters = chapters;
     return this;
   }
@@ -111,13 +118,9 @@ class BookBuilder {
   /**
    * Build the final Book object
    */
-  build() {
+  build(): Record<string, unknown> {
     return this.book;
   }
 }
 
-module.exports = {
-  createChapterFixture,
-  createBookFixture,
-  BookBuilder,
-};
+export { createChapterFixture, createBookFixture, BookBuilder };

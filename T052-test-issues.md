@@ -3,6 +3,7 @@
 ## Issues identified:
 
 1. Require-style imports in test utilities:
+
    - `__tests__/__testutils__/assertions/index.ts`
    - `__tests__/__testutils__/fixtures/books.ts`
    - `__tests__/__testutils__/fixtures/index.ts`

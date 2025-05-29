@@ -36,20 +36,22 @@ type ProxyLogContext = {
 /**
  * Logs the start of a legacy proxy request
  */
-function logLegacyProxyStart(context: ProxyLogContext & {
-  filename: string;
-  requestParams?: Record<string, string | string[]>;
-}): void {
+function logLegacyProxyStart(
+  context: ProxyLogContext & {
+    filename: string;
+    requestParams?: Record<string, string | string[]>;
+  },
+): void {
   const { url, log, opId, filename, requestParams } = context;
   const sanitizedUrl = sanitizeUrlForLogging(url);
-  
+
   safeLog(log, 'warn', {
     msg: 'Using deprecated proxyFileDownload function',
     opId,
     url: sanitizedUrl,
     timestamp: new Date().toISOString(),
   });
-  
+
   safeLog(log, 'info', {
     msg: 'Legacy proxy download request received',
     opId,
@@ -64,10 +66,12 @@ function logLegacyProxyStart(context: ProxyLogContext & {
 /**
  * Logs the fetch completion
  */
-function logFetchCompletion(context: ProxyLogContext & {
-  response: Response;
-  fetchDuration: number;
-}): void {
+function logFetchCompletion(
+  context: ProxyLogContext & {
+    response: Response;
+    fetchDuration: number;
+  },
+): void {
   const { url, response, fetchDuration, log, opId } = context;
 
   safeLog(log, 'debug', {
@@ -99,11 +103,13 @@ function getSafeResponseHeaders(response: Response): Record<string, string> {
 /**
  * Handles the error case for legacy proxy
  */
-async function handleLegacyProxyError(context: ProxyLogContext & {
-  response: Response;
-  fetchDuration: number;
-  requestParams?: Record<string, string | string[]>;
-}): Promise<NextResponse> {
+async function handleLegacyProxyError(
+  context: ProxyLogContext & {
+    response: Response;
+    fetchDuration: number;
+    requestParams?: Record<string, string | string[]>;
+  },
+): Promise<NextResponse> {
   const { url, response, fetchDuration, log, opId, requestParams } = context;
   const sanitizedUrl = sanitizeUrlForLogging(url);
 
@@ -145,11 +151,13 @@ async function handleLegacyProxyError(context: ProxyLogContext & {
 /**
  * Creates a success response for the legacy proxy
  */
-function createLegacyProxySuccessResponse(context: ProxyLogContext & {
-  response: Response;
-  filename: string;
-  fetchDuration: number;
-}): NextResponse {
+function createLegacyProxySuccessResponse(
+  context: ProxyLogContext & {
+    response: Response;
+    filename: string;
+    fetchDuration: number;
+  },
+): NextResponse {
   const { url, response, filename, fetchDuration, log, opId } = context;
   const sanitizedUrl = sanitizeUrlForLogging(url);
 
@@ -195,7 +203,11 @@ function createLegacyProxySuccessResponse(context: ProxyLogContext & {
 /**
  * Creates error details for proxy errors
  */
-function createErrorDetails(error: unknown, url: string, filename: string): Record<string, unknown> {
+function createErrorDetails(
+  error: unknown,
+  url: string,
+  filename: string,
+): Record<string, unknown> {
   if (error instanceof Error) {
     return {
       message: error.message,
@@ -205,18 +217,20 @@ function createErrorDetails(error: unknown, url: string, filename: string): Reco
       filename,
     };
   }
-  
+
   return { error: String(error) };
 }
 
 /**
  * Handles errors during the legacy proxy process
  */
-function handleLegacyProxyException(context: ProxyLogContext & {
-  error: unknown;
-  filename: string;
-  requestParams?: Record<string, string | string[]>;
-}): NextResponse {
+function handleLegacyProxyException(
+  context: ProxyLogContext & {
+    error: unknown;
+    filename: string;
+    requestParams?: Record<string, string | string[]>;
+  },
+): NextResponse {
   const { url, error, filename, requestParams, log, opId } = context;
   const sanitizedUrl = sanitizeUrlForLogging(url);
 
@@ -279,7 +293,7 @@ function handleLegacyProxyException(context: ProxyLogContext & {
 /**
  * Legacy handler for proxying file downloads through the API
  * @deprecated Use proxyAssetDownload instead
- * 
+ *
  * @param config Configuration for the proxy operation
  * @returns Promise resolving to NextResponse
  */
@@ -304,11 +318,11 @@ export async function proxyFileDownload(config: ProxyFileConfig): Promise<NextRe
     if (!fileResponse.ok) {
       return await handleLegacyProxyError({
         url,
-        response: fileResponse, 
-        fetchDuration, 
-        log, 
-        opId, 
-        requestParams
+        response: fileResponse,
+        fetchDuration,
+        log,
+        opId,
+        requestParams,
       });
     }
 
@@ -319,7 +333,7 @@ export async function proxyFileDownload(config: ProxyFileConfig): Promise<NextRe
       filename,
       fetchDuration,
       log,
-      opId
+      opId,
     });
   } catch (error) {
     // Step 6: Handle exceptions during proxy process
@@ -329,7 +343,7 @@ export async function proxyFileDownload(config: ProxyFileConfig): Promise<NextRe
       filename,
       requestParams,
       log,
-      opId
+      opId,
     });
   }
 }

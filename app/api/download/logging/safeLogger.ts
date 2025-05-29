@@ -68,7 +68,7 @@ export function sanitizeUrlForLogging(url: string): string {
 
 /**
  * Safely logs errors to prevent logger crashes
- * 
+ *
  * @param logger Logger instance to use
  * @param level Log level to use
  * @param data Data to log

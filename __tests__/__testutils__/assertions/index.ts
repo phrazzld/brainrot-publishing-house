@@ -2,7 +2,7 @@
  * Type-safe assertion utilities for common test patterns
  * These utilities improve testing by adding type safety to assertions
  */
-const { expect } = require('@jest/globals');
+import { expect } from '@jest/globals';
 
 /**
  * Asserts that a function was called with a parameter containing expected properties
@@ -12,7 +12,11 @@ const { expect } = require('@jest/globals');
  * @param paramIndex Index of the parameter to check (0-based)
  * @param expectedProps Expected properties in the parameter object
  */
-function expectCalledWithObjectContaining(mockFn, paramIndex, expectedProps) {
+function expectCalledWithObjectContaining(
+  mockFn: jest.Mock,
+  paramIndex: number,
+  expectedProps: Record<string, unknown>,
+): void {
   expect(mockFn).toHaveBeenCalled();
   const calls = mockFn.mock.calls;
   const actualParam = calls[calls.length - 1][paramIndex];
@@ -29,7 +33,10 @@ function expectCalledWithObjectContaining(mockFn, paramIndex, expectedProps) {
  * @param loggerFn The logger function mock to check (e.g., mockLogger.info)
  * @param expectedContext The expected context fields
  */
-function expectLoggedWithContext(loggerFn, expectedContext) {
+function expectLoggedWithContext(
+  loggerFn: jest.Mock,
+  expectedContext: Record<string, unknown>,
+): void {
   expectCalledWithObjectContaining(loggerFn, 0, expectedContext);
 }
 
@@ -39,7 +46,7 @@ function expectLoggedWithContext(loggerFn, expectedContext) {
  * @param url Expected URL or URL pattern
  * @param options Optional expected request options
  */
-function expectFetchCalledWith(url, options) {
+function expectFetchCalledWith(url: string | RegExp, options?: Record<string, unknown>): void {
   expect(global.fetch).toHaveBeenCalled();
 
   if (url instanceof RegExp) {
@@ -61,7 +68,7 @@ function expectFetchCalledWith(url, options) {
  * @param url The URL to check
  * @param expectedParts Expected parts of the URL
  */
-function expectUrlContains(url, expectedParts) {
+function expectUrlContains(url: string, expectedParts: string[]): void {
   for (const part of expectedParts) {
     expect(url).toContain(part);
   }
@@ -75,7 +82,12 @@ function expectUrlContains(url, expectedParts) {
  * @param bookSlug Book slug identifier
  * @param filename Filename or pattern to match
  */
-function expectValidAssetUrl(url, assetType, bookSlug, filename) {
+function expectValidAssetUrl(
+  url: string,
+  assetType: string,
+  bookSlug: string,
+  filename: string | RegExp,
+): void {
   expect(url).toContain(`/${assetType}/`);
   expect(url).toContain(`/${bookSlug}/`);
 
@@ -94,7 +106,10 @@ function expectValidAssetUrl(url, assetType, bookSlug, filename) {
  * @param path The path to check
  * @param structure Expected path structure with parts
  */
-function expectPathStructure(path, structure) {
+function expectPathStructure(
+  path: string,
+  structure: Record<string, string | RegExp | undefined>,
+): void {
   if (structure.prefix) {
     expect(path).toMatch(new RegExp(`^${structure.prefix}`));
   }
@@ -122,7 +137,10 @@ function expectPathStructure(path, structure) {
  * @param obj The object to check
  * @param schema Expected keys and their types
  */
-function expectObjectShape(obj, schema) {
+function expectObjectShape(
+  obj: Record<string, unknown>,
+  schema: Record<string, string | (new (...args: unknown[]) => unknown)>,
+): Record<string, unknown> {
   expect(obj).toBeTruthy();
 
   for (const [key, expectedType] of Object.entries(schema)) {
@@ -134,7 +152,7 @@ function expectObjectShape(obj, schema) {
       expect(obj[key]).toBeInstanceOf(expectedType);
     }
   }
-  
+
   return obj;
 }
 
@@ -144,7 +162,10 @@ function expectObjectShape(obj, schema) {
  * @param mockFn The mock function to check
  * @param predicates Functions that check if parameters are of the expected type/shape
  */
-function expectCalledWithTypes(mockFn, ...predicates) {
+function expectCalledWithTypes(
+  mockFn: jest.Mock,
+  ...predicates: Array<(value: unknown) => boolean>
+): void {
   expect(mockFn).toHaveBeenCalled();
   const calls = mockFn.mock.calls;
   const lastCall = calls[calls.length - 1];
@@ -161,43 +182,43 @@ function expectCalledWithTypes(mockFn, ...predicates) {
 /**
  * Type predicate for checking if a value is a non-null object
  */
-function isObject(value) {
+function isObject(value: unknown): boolean {
   return typeof value === 'object' && value !== null;
 }
 
 /**
  * Type predicate for checking if a value is a string
  */
-function isString(value) {
+function isString(value: unknown): boolean {
   return typeof value === 'string';
 }
 
 /**
  * Type predicate for checking if a value is a number
  */
-function isNumber(value) {
+function isNumber(value: unknown): boolean {
   return typeof value === 'number';
 }
 
 /**
  * Type predicate for checking if a value is a boolean
  */
-function isBoolean(value) {
+function isBoolean(value: unknown): boolean {
   return typeof value === 'boolean';
 }
 
 /**
  * Type predicate for checking if a value is an array
  */
-function isArray(value) {
+function isArray(value: unknown): boolean {
   return Array.isArray(value);
 }
 
 /**
  * Creates a type predicate for checking if a value is an array of a specific type
  */
-function isArrayOf(predicate) {
-  return (value) => {
+function isArrayOf(predicate: (value: unknown) => boolean): (value: unknown) => boolean {
+  return (value: unknown): boolean => {
     return Array.isArray(value) && value.every(predicate);
   };
 }
@@ -205,10 +226,10 @@ function isArrayOf(predicate) {
 /**
  * Asserts that a response has the expected status code and content type
  */
-function expectResponseProperties(response, options = {}) {
+function expectResponseProperties(response: Response, options: Record<string, unknown> = {}): void {
   if (options.status !== undefined) {
     expect(response.status).toBe(options.status);
-    expect(response.ok).toBe(options.status >= 200 && options.status < 300);
+    expect(response.ok).toBe(Number(options.status) >= 200 && Number(options.status) < 300);
   }
 
   if (options.contentType !== undefined) {
@@ -218,7 +239,7 @@ function expectResponseProperties(response, options = {}) {
     if (options.contentType instanceof RegExp) {
       expect(contentTypeHeader).toMatch(options.contentType);
     } else {
-      expect(contentTypeHeader).toContain(options.contentType);
+      expect(contentTypeHeader).toContain(String(options.contentType));
     }
   }
 
@@ -231,7 +252,7 @@ function expectResponseProperties(response, options = {}) {
   }
 }
 
-module.exports = {
+export {
   expectCalledWithObjectContaining,
   expectLoggedWithContext,
   expectFetchCalledWith,

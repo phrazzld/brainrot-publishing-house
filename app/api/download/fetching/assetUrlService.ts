@@ -20,7 +20,7 @@ export type GetAssetUrlParams = {
 
 /**
  * Gets an asset URL from the asset service with logging
- * 
+ *
  * @param params Parameters for the operation
  * @returns Promise resolving to the asset URL
  */
@@ -65,7 +65,7 @@ export type LogProxyRequestParams = {
 
 /**
  * Logs detailed information about a proxy request
- * 
+ *
  * @param params Parameters for the log operation
  */
 export function logProxyRequest(params: LogProxyRequestParams): void {

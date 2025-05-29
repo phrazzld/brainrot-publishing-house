@@ -1,6 +1,6 @@
 /**
  * Creates appropriate headers for file download
- * 
+ *
  * @param contentType The MIME type of the file content
  * @param filename The filename to use for the downloaded file
  * @returns Headers object with appropriate Content-Type and Content-Disposition
@@ -14,7 +14,7 @@ export function createDownloadHeaders(contentType: string, filename: string): He
 
 /**
  * Creates headers for error responses
- * 
+ *
  * @param errorType The type of error
  * @param errorCategory The category of error
  * @param operationId Unique operation ID for tracking
@@ -23,7 +23,7 @@ export function createDownloadHeaders(contentType: string, filename: string): He
 export function createErrorHeaders(
   errorType: string,
   errorCategory: string,
-  operationId?: string
+  operationId?: string,
 ): Headers {
   const headers = new Headers();
   headers.set('X-Error-Type', errorType);

@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
 
+import { createErrorHeaders } from '../responses/responseHeaders';
 import { categorizeError, getDeveloperHint } from './errorCategories';
 import { ProxyErrorConfig } from './errorTypes';
-import { createErrorHeaders } from '../responses/responseHeaders';
 
 /**
  * Creates common response object properties for error responses
- * 
+ *
  * @param errorType Error type description
  * @param errorMessage User-facing error message
  * @param errorCategory Error category for grouping
@@ -17,7 +17,7 @@ function createBaseErrorResponseObject(
   errorType: string,
   errorMessage: string,
   errorCategory: string,
-  operationId?: string
+  operationId?: string,
 ): Record<string, unknown> {
   const responseObj: Record<string, unknown> = {
     error: errorType,
@@ -36,7 +36,7 @@ function createBaseErrorResponseObject(
 
 /**
  * Adds environment-specific details to error response
- * 
+ *
  * @param responseObj Base response object
  * @param status HTTP status code
  * @param details Optional technical details
@@ -47,11 +47,11 @@ function addEnvironmentDetails(
   responseObj: Record<string, unknown>,
   status: number,
   details?: string,
-  operationId?: string
+  operationId?: string,
 ): Record<string, unknown> {
   if (process.env.NODE_ENV !== 'production') {
     // Add detailed technical information in non-production environments
-    
+
     // If details is a JSON string, parse it for better formatting
     let parsedDetails: unknown = details;
     if (details && details.startsWith('{') && details.endsWith('}')) {
@@ -89,7 +89,7 @@ function addEnvironmentDetails(
  */
 export function createProxyErrorResponse(config: ProxyErrorConfig): NextResponse {
   const { status, errorMessage, details, operationId } = config;
-  
+
   // Get error type and category based on status code
   const { errorType, errorCategory } = categorizeError(status);
 
@@ -98,18 +98,15 @@ export function createProxyErrorResponse(config: ProxyErrorConfig): NextResponse
     errorType,
     errorMessage,
     errorCategory,
-    operationId
+    operationId,
   );
 
   // Add environment-specific details
   responseObj = addEnvironmentDetails(responseObj, status, details, operationId);
 
   // Create and return the response with appropriate headers
-  return NextResponse.json(
-    responseObj,
-    {
-      status,
-      headers: createErrorHeaders(errorType, errorCategory, operationId),
-    }
-  );
+  return NextResponse.json(responseObj, {
+    status,
+    headers: createErrorHeaders(errorType, errorCategory, operationId),
+  });
 }

@@ -2,11 +2,10 @@
  * Fixtures for API response-related test data
  * Provides factory functions for creating Response objects
  */
-
 /**
  * Response options interface
  */
-const jest = require('@jest/globals').jest;
+import { jest } from '@jest/globals';
 
 /**
  * Split response creation into multiple functions to reduce complexity
@@ -108,7 +107,7 @@ function createResponseFixture(body, options = {}) {
   const statusText = options.statusText || (status === 200 ? 'OK' : '');
   const url = options.url || 'https://example.com/api';
   const headers = new Headers(options.headers || {});
-  
+
   // Add content-type if not specified
   if (!headers.has('content-type')) {
     headers.set('content-type', contentType);
@@ -143,7 +142,7 @@ function createResponseFixture(body, options = {}) {
 function createJsonResponse(data, options = {}) {
   const headers = new Headers(options.headers || {});
   headers.set('content-type', 'application/json');
-  
+
   return createResponseFixture(JSON.stringify(data), {
     ...options,
     headers,
@@ -158,7 +157,7 @@ function createJsonResponse(data, options = {}) {
 function createTextResponse(text, options = {}) {
   const headers = new Headers(options.headers || {});
   headers.set('content-type', 'text/plain');
-  
+
   return createResponseFixture(text, {
     ...options,
     headers,
@@ -174,7 +173,7 @@ function createErrorResponse(status = 404, statusText = 'Not Found', errorBody =
   const isJson = typeof errorBody !== 'string';
   const body = isJson ? JSON.stringify(errorBody) : errorBody || `Error ${status}: ${statusText}`;
   const contentType = isJson ? 'application/json' : 'text/plain';
-  
+
   return createResponseFixture(body, {
     status,
     statusText,
@@ -195,11 +194,13 @@ function createNetworkError(message = 'Network error') {
  * Creates a fetch function that returns a successful response
  */
 function createSuccessFetch(data, options = {}) {
-  return jest.fn().mockResolvedValue(
-    typeof data === 'string'
-      ? createTextResponse(data, options)
-      : createJsonResponse(data, options)
-  );
+  return jest
+    .fn()
+    .mockResolvedValue(
+      typeof data === 'string'
+        ? createTextResponse(data, options)
+        : createJsonResponse(data, options),
+    );
 }
 
 /**
@@ -218,7 +219,7 @@ function createNetworkErrorFetch(message = 'Network error') {
   });
 }
 
-module.exports = {
+export {
   createResponseFixture,
   createJsonResponse,
   createTextResponse,

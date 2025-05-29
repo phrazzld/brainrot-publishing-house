@@ -49,7 +49,7 @@ export type FetchAssetParams = {
 
 /**
  * Fetches an asset with timeout handling and comprehensive logging
- * 
+ *
  * @param params Parameters for the fetch operation
  * @returns Promise resolving to fetch result
  */
@@ -189,11 +189,13 @@ export type HandleErrorResponseParams = {
 
 /**
  * Handles error responses from the fetch operation
- * 
+ *
  * @param params Parameters for error handling
  * @returns Promise resolving to error response
  */
-export async function handleErrorResponse(params: HandleErrorResponseParams): Promise<NextResponse> {
+export async function handleErrorResponse(
+  params: HandleErrorResponseParams,
+): Promise<NextResponse> {
   const { fileResponse, log, opId, operation, assetUrl, assetType, bookSlug, assetName, metrics } =
     params;
 
@@ -259,7 +261,7 @@ export type CreateSuccessResponseParams = {
 
 /**
  * Creates a success response for a file download
- * 
+ *
  * @param params Parameters for creating the success response
  * @returns NextResponse with the file content
  */

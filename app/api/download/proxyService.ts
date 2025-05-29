@@ -5,7 +5,11 @@ import { Logger } from '@/utils/logger';
 
 import { handleAssetUrlError } from './errors/assetUrlErrorHandler';
 import { handleUnexpectedProxyError } from './errors/unexpectedErrorHandler';
-import { createSuccessResponse, fetchAssetWithLogging, handleErrorResponse } from './fetching/assetFetcher';
+import {
+  createSuccessResponse,
+  fetchAssetWithLogging,
+  handleErrorResponse,
+} from './fetching/assetFetcher';
 import { getAssetUrlWithLogging, logProxyRequest } from './fetching/assetUrlService';
 import { proxyFileDownload } from './fetching/legacyProxyService';
 import { createDownloadHeaders } from './responses/responseHeaders';

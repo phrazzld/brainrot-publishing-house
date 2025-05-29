@@ -647,6 +647,7 @@ This TODO list details the tasks required to fully migrate all asset management 
   - [x] COMPLETED: Created comprehensive type-safe fixtures and utilities in **tests**/**testutils**/fixtures, enhanced assertion utilities, and provided example usage
 
 - [x] **T052: Address complexity warnings in core application files**
+
   - [x] Reduce function complexity in app/api/download/proxyService.ts:
     - [x] createProxyErrorResponse (complexity: 24, limit: 10)
     - [x] extractErrorDetails (complexity: 23, limit: 10)
@@ -663,18 +664,20 @@ This TODO list details the tasks required to fully migrate all asset management 
   - Dependencies: None
   - COMPLETED: Completely refactored proxyService.ts into a modular directory structure with smaller, focused files and extracted helper functions to dramatically reduce complexity
 
-- [ ] **T053: Fix linting issues in test files**
-  - [ ] Fix require-style imports in test utilities:
-    - [ ] Update imports in `__tests__/__testutils__/assertions/index.ts`
-    - [ ] Update imports in `__tests__/__testutils__/fixtures/books.ts`
-    - [ ] Update imports in `__tests__/__testutils__/fixtures/index.ts`
-    - [ ] Update imports in `__tests__/__testutils__/fixtures/responses.ts`
-  - [ ] Fix unused variables not prefixed with underscore:
-    - [ ] Add underscore prefix to `Book` and `Chapter` in `__tests__/__testutils__/fixtures/books.ts`
-    - [ ] Add underscore prefix to `createTextResponse` in `__tests__/utils/fetchTextWithFallback.simple.test.ts`
-    - [ ] Add underscore prefix to `createTextResponse` in `__tests__/utils/fetchTextWithFallback.test.js`
-  - [ ] Update test utilities to use proper TypeScript patterns
+- [x] **T053: Fix linting issues in test files**
+
+  - [x] Fix require-style imports in test utilities:
+    - [x] Update imports in `__tests__/__testutils__/assertions/index.ts`
+    - [x] Update imports in `__tests__/__testutils__/fixtures/books.ts`
+    - [x] Update imports in `__tests__/__testutils__/fixtures/index.ts`
+    - [x] Update imports in `__tests__/__testutils__/fixtures/responses.ts`
+  - [x] Fix unused variables not prefixed with underscore:
+    - [x] Add underscore prefix to `Book` and `Chapter` in `__tests__/__testutils__/fixtures/books.ts`
+    - [x] Add underscore prefix to `createTextResponse` in `__tests__/utils/fetchTextWithFallback.simple.test.ts`
+    - [x] Add underscore prefix to `createTextResponse` in `__tests__/utils/fetchTextWithFallback.test.js`
+  - [x] Update test utilities to use proper TypeScript patterns
   - Dependencies: None
+  - COMPLETED: Fixed ES module imports in all test utility files, added proper type annotations, fixed unused variable warnings, and standardized fixture exports
 
 - [ ] **T054: Fix TypeScript module resolution issues**
   - [ ] Fix type errors in module imports:

@@ -16,7 +16,7 @@ export type ErrorDetailsConfig = {
 
 /**
  * Categorizes headers into logical groups for better debugging
- * 
+ *
  * @param headers Response headers
  * @returns Object with categorized headers
  */
@@ -72,14 +72,14 @@ function categorizeHeaders(headers: Headers): {
 
 /**
  * Logs response headers with categorization
- * 
+ *
  * @param response The response
  * @param log Logger instance
  * @param opId Operation ID for correlation
  */
 function logResponseHeaders(response: Response, log: Logger, opId?: string): void {
   const categorizedHeaders = categorizeHeaders(response.headers);
-  
+
   safeLog(log, 'debug', {
     msg: 'Response headers from failed fetch',
     opId,
@@ -101,7 +101,7 @@ function logResponseHeaders(response: Response, log: Logger, opId?: string): voi
 
 /**
  * Extracts a structured error message from JSON response data
- * 
+ *
  * @param jsonData The parsed JSON data
  * @returns Structured error message or empty string if not found
  */
@@ -124,7 +124,7 @@ function extractStructuredErrorMessage(jsonData: Record<string, unknown>): strin
 
 /**
  * Tries to parse and extract JSON error information
- * 
+ *
  * @param response The response to extract from
  * @returns Object with parsed results and error body
  */
@@ -135,7 +135,7 @@ async function parseJsonErrorResponse(response: Response): Promise<{
 }> {
   // Check if response is JSON
   const contentType = response.headers.get('content-type') || '';
-  
+
   if (contentType.includes('application/json')) {
     const jsonText = await response.text();
     try {
@@ -166,7 +166,7 @@ async function parseJsonErrorResponse(response: Response): Promise<{
 
 /**
  * Log details about the response body
- * 
+ *
  * @param logContext Context information for logging
  */
 function logResponseBody(logContext: {
@@ -178,7 +178,7 @@ function logResponseBody(logContext: {
   startTime: number;
 }): void {
   const { errorBody, log, opId, isJsonResponse, parsedJson, startTime } = logContext;
-  
+
   // Get truncated response body for logging
   const truncatedText = errorBody.substring(0, MAX_RESPONSE_BODY_LOG_LENGTH);
   const isTruncated = errorBody.length > MAX_RESPONSE_BODY_LOG_LENGTH;
@@ -222,11 +222,11 @@ export async function extractErrorDetails(config: ErrorDetailsConfig): Promise<s
     // Step 3: Log the response body
     logResponseBody({
       errorBody,
-      log, 
-      opId, 
-      isJsonResponse, 
-      parsedJson, 
-      startTime: errorStartTime
+      log,
+      opId,
+      isJsonResponse,
+      parsedJson,
+      startTime: errorStartTime,
     });
 
     // Step 4: Attempt to extract error message from parsedJson if available

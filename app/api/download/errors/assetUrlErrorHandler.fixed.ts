@@ -29,7 +29,7 @@ function mapAssetErrorToStatusCode(errorType: AssetErrorType): number {
 
 /**
  * Creates error message for AssetError based on type
- * 
+ *
  * @param errorType The error type
  * @param assetPath The asset path if available
  * @returns Formatted error message
@@ -38,14 +38,14 @@ function createAssetErrorMessage(errorType: AssetErrorType, assetPath?: string):
   if (errorType === AssetErrorType.NOT_FOUND) {
     return `Asset not found: ${assetPath || '[unknown path]'}`;
   }
-  
+
   // Default to a generic message
   return `Failed to retrieve asset: ${assetPath || '[unknown path]'}`;
 }
 
 /**
  * Formats asset path for error messages
- * 
+ *
  * @param assetType Asset type
  * @param bookSlug Book slug
  * @param assetName Asset name
@@ -57,7 +57,7 @@ function formatAssetPath(assetType: AssetType, bookSlug: string, assetName: stri
 
 /**
  * Logs error details for asset URL errors
- * 
+ *
  * @param error The error that occurred
  * @param context The logging context
  */
@@ -70,7 +70,7 @@ function logAssetUrlError(
     assetType: AssetType;
     bookSlug: string;
     assetName: string;
-  }
+  },
 ): void {
   const { log, opId, operation, assetType, bookSlug, assetName } = context;
 
@@ -116,7 +116,7 @@ export type HandleAssetUrlErrorParams = {
 
 /**
  * Handles errors that occur when retrieving asset URLs
- * 
+ *
  * @param params Parameters for error handling
  * @returns NextResponse with appropriate error details
  */
@@ -133,11 +133,11 @@ export function handleAssetUrlError(params: HandleAssetUrlErrorParams): NextResp
   if (assetError instanceof AssetError) {
     // Map AssetError to appropriate HTTP status
     const status = assetError.statusCode || mapAssetErrorToStatusCode(assetError.type);
-    
+
     // Get appropriate error message
     const errorMessage = createAssetErrorMessage(
-      assetError.type, 
-      assetError.assetPath || formattedPath
+      assetError.type,
+      assetError.assetPath || formattedPath,
     );
 
     // Create and return error response

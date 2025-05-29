@@ -1,11 +1,10 @@
 /**
- * Simple test for fetchTextWithFallback using CommonJS modules
+ * Simple test for fetchTextWithFallback using ES modules
  */
-
-const { fetchTextWithFallback } = require('../../utils/getBlobUrl');
-const { blobPathService } = require('../../utils/services/BlobPathService');
-const { blobService } = require('../../utils/services/BlobService');
-const { createTextResponse } = require('../__testutils__/fixtures');
+import { fetchTextWithFallback } from '../../utils/getBlobUrl';
+import { blobPathService } from '../../utils/services/BlobPathService';
+import { blobService } from '../../utils/services/BlobService';
+import { createTextResponse as _createTextResponse } from '../__testutils__/fixtures';
 
 // Mock the BlobService
 jest.mock('../../utils/services/BlobService', () => ({

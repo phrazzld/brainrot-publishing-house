@@ -23,7 +23,7 @@ export type HandleUnexpectedProxyErrorParams = {
 
 /**
  * Handles unexpected errors in the proxy download process
- * 
+ *
  * @param params Parameters for error handling
  * @returns NextResponse with error details
  */

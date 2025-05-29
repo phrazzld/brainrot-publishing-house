@@ -69,7 +69,8 @@ describe('fetchTextWithFallback with CommonJS', () => {
     // Test data
     const legacyPath = '/assets/hamlet/text/act-1.txt';
     const standardizedPath = 'assets/text/hamlet/brainrot-act-01.txt';
-    const blobUrl = 'https://example.blob.vercel-storage.com/assets/text/hamlet/brainrot-act-01.txt';
+    const blobUrl =
+      'https://example.blob.vercel-storage.com/assets/text/hamlet/brainrot-act-01.txt';
     const textContent = 'To be or not to be...';
 
     // Configure mocks
@@ -95,7 +96,8 @@ describe('fetchTextWithFallback with CommonJS', () => {
     // Test data
     const legacyPath = '/assets/hamlet/text/act-1.txt';
     const standardizedPath = 'assets/text/hamlet/brainrot-act-01.txt';
-    const blobUrl = 'https://example.blob.vercel-storage.com/assets/text/hamlet/brainrot-act-01.txt';
+    const blobUrl =
+      'https://example.blob.vercel-storage.com/assets/text/hamlet/brainrot-act-01.txt';
     const textContent = 'To be or not to be...';
 
     // Configure mocks
@@ -117,7 +119,8 @@ describe('fetchTextWithFallback with CommonJS', () => {
     // Test data
     const legacyPath = '/assets/hamlet/text/act-1.txt';
     const standardizedPath = 'assets/text/hamlet/brainrot-act-01.txt';
-    const blobUrl = 'https://example.blob.vercel-storage.com/assets/text/hamlet/brainrot-act-01.txt';
+    const blobUrl =
+      'https://example.blob.vercel-storage.com/assets/text/hamlet/brainrot-act-01.txt';
 
     // Configure mocks
     mockBlobPathService.convertLegacyPath.mockReturnValue(standardizedPath);
