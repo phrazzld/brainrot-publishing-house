@@ -675,3 +675,16 @@ This TODO list details the tasks required to fully migrate all asset management 
     - [ ] Add underscore prefix to `createTextResponse` in `__tests__/utils/fetchTextWithFallback.test.js`
   - [ ] Update test utilities to use proper TypeScript patterns
   - Dependencies: None
+
+- [ ] **T054: Fix TypeScript module resolution issues**
+  - [ ] Fix type errors in module imports:
+    - [ ] Add explicit `.js` extensions to ESM imports as required by Node16/NodeNext module resolution
+    - [ ] Fix path aliases in imports to ensure they resolve correctly
+    - [ ] Update imports in utility modules to follow consistent patterns
+    - [ ] Fix type errors in VercelBlobAssetService with unknown types
+  - [ ] Ensure type-checking passes in CI:
+    - [ ] Fix ArrayBuffer type compatibility in MockResponse.ts
+    - [ ] Add explicit types to parameters in test utilities
+    - [ ] Ensure all imports correctly reference their dependencies
+  - [ ] Document proper import patterns for module resolution in README
+  - Dependencies: None
