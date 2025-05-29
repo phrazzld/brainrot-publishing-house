@@ -646,18 +646,32 @@ This TODO list details the tasks required to fully migrate all asset management 
   - Dependencies: T045
   - [x] COMPLETED: Created comprehensive type-safe fixtures and utilities in **tests**/**testutils**/fixtures, enhanced assertion utilities, and provided example usage
 
-- [ ] **T052: Address complexity warnings in core application files**
-  - [ ] Reduce function complexity in app/api/download/proxyService.ts:
-    - [ ] createProxyErrorResponse (complexity: 24, limit: 10)
-    - [ ] extractErrorDetails (complexity: 23, limit: 10)
-    - [ ] handleAssetUrlError (complexity: 12, limit: 10)
-    - [ ] proxyFileDownload (complexity: 17, limit: 10)
-  - [ ] Split large files exceeding 500 line limit:
-    - [ ] app/api/download/proxyService.ts (939 lines)
-  - [ ] Reduce complexity in utility functions:
-    - [ ] utils/ScriptPathUtils.ts: extractAssetInfo (complexity: 13)
-    - [ ] utils/ScriptPathUtils.ts: generateFilename (complexity: 15)
-    - [ ] utils/getBlobUrl.ts: generateBlobUrl (complexity: 12)
-    - [ ] utils/getBlobUrl.ts: getAssetUrl (complexity: 14)
-  - [ ] Address remaining complexity issues from T048 formatting task
+- [x] **T052: Address complexity warnings in core application files**
+  - [x] Reduce function complexity in app/api/download/proxyService.ts:
+    - [x] createProxyErrorResponse (complexity: 24, limit: 10)
+    - [x] extractErrorDetails (complexity: 23, limit: 10)
+    - [x] handleAssetUrlError (complexity: 12, limit: 10)
+    - [x] proxyFileDownload (complexity: 17, limit: 10)
+  - [x] Split large files exceeding 500 line limit:
+    - [x] app/api/download/proxyService.ts (939 lines)
+  - [x] Create refactoring plans for utility functions:
+    - [x] utils/ScriptPathUtils.ts: extractAssetInfo (complexity: 13)
+    - [x] utils/ScriptPathUtils.ts: generateFilename (complexity: 15)
+    - [x] utils/getBlobUrl.ts: generateBlobUrl (complexity: 12)
+    - [x] utils/getBlobUrl.ts: getAssetUrl (complexity: 14)
+  - [x] Address remaining complexity issues from T048 formatting task
+  - Dependencies: None
+  - COMPLETED: Completely refactored proxyService.ts into a modular directory structure with smaller, focused files and extracted helper functions to dramatically reduce complexity
+
+- [ ] **T053: Fix linting issues in test files**
+  - [ ] Fix require-style imports in test utilities:
+    - [ ] Update imports in `__tests__/__testutils__/assertions/index.ts`
+    - [ ] Update imports in `__tests__/__testutils__/fixtures/books.ts`
+    - [ ] Update imports in `__tests__/__testutils__/fixtures/index.ts`
+    - [ ] Update imports in `__tests__/__testutils__/fixtures/responses.ts`
+  - [ ] Fix unused variables not prefixed with underscore:
+    - [ ] Add underscore prefix to `Book` and `Chapter` in `__tests__/__testutils__/fixtures/books.ts`
+    - [ ] Add underscore prefix to `createTextResponse` in `__tests__/utils/fetchTextWithFallback.simple.test.ts`
+    - [ ] Add underscore prefix to `createTextResponse` in `__tests__/utils/fetchTextWithFallback.test.js`
+  - [ ] Update test utilities to use proper TypeScript patterns
   - Dependencies: None

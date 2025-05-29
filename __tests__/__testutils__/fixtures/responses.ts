@@ -1,26 +1,18 @@
 /**
  * Fixtures for API response-related test data
- * Provides type-safe factory functions for creating Response objects
+ * Provides factory functions for creating Response objects
  */
 
 /**
  * Response options interface
  */
-export interface ResponseOptions {
-  status?: number;
-  statusText?: string;
-  headers?: HeadersInit;
-  url?: string;
-}
+const jest = require('@jest/globals').jest;
 
 /**
  * Split response creation into multiple functions to reduce complexity
  */
-function processResponseBody(body: string | ArrayBuffer | Blob | unknown): {
-  responseBody: string | ArrayBuffer | Blob;
-  contentType: string;
-} {
-  let responseBody: string | ArrayBuffer | Blob;
+function processResponseBody(body) {
+  let responseBody;
   let contentType = 'text/plain';
 
   if (typeof body === 'string') {
@@ -43,18 +35,7 @@ function processResponseBody(body: string | ArrayBuffer | Blob | unknown): {
 /**
  * Creates method implementations for the Response object
  */
-function createResponseMethods(
-  responseBody: string | ArrayBuffer | Blob,
-  headers: Headers,
-  contentType: string,
-): {
-  text: jest.Mock;
-  json: jest.Mock;
-  arrayBuffer: jest.Mock;
-  blob: jest.Mock;
-  formData: jest.Mock;
-  clone: jest.Mock;
-} {
+function createResponseMethods(responseBody, headers, contentType) {
   // Create text implementation
   const textImpl = jest.fn().mockImplementation(async () => {
     if (typeof responseBody === 'string') {
@@ -118,10 +99,7 @@ function createResponseMethods(
 /**
  * Creates a type-safe Response object
  */
-export function createResponseFixture<T = unknown>(
-  body: string | ArrayBuffer | Blob | T,
-  options: ResponseOptions = {},
-): Response {
+function createResponseFixture(body, options = {}) {
   // Process the body
   const { responseBody, contentType } = processResponseBody(body);
 
@@ -130,20 +108,20 @@ export function createResponseFixture<T = unknown>(
   const statusText = options.statusText || (status === 200 ? 'OK' : '');
   const url = options.url || 'https://example.com/api';
   const headers = new Headers(options.headers || {});
-
+  
   // Add content-type if not specified
   if (!headers.has('content-type')) {
     headers.set('content-type', contentType);
   }
 
   // Create response object
-  const response: Partial<Response> = {
+  const response = {
     status,
     statusText,
     headers,
     ok: status >= 200 && status < 300,
     redirected: false,
-    type: 'basic' as ResponseType,
+    type: 'basic',
     url,
     bodyUsed: false,
     body: null,
@@ -156,16 +134,16 @@ export function createResponseFixture<T = unknown>(
   // Set up circular reference for clone method
   methods.clone.mockReturnValue(response);
 
-  return response as Response;
+  return response;
 }
 
 /**
  * Creates a successful JSON response
  */
-export function createJsonResponse<T = unknown>(data: T, options: ResponseOptions = {}): Response {
+function createJsonResponse(data, options = {}) {
   const headers = new Headers(options.headers || {});
   headers.set('content-type', 'application/json');
-
+  
   return createResponseFixture(JSON.stringify(data), {
     ...options,
     headers,
@@ -177,10 +155,10 @@ export function createJsonResponse<T = unknown>(data: T, options: ResponseOption
 /**
  * Creates a successful text response
  */
-export function createTextResponse(text: string, options: ResponseOptions = {}): Response {
+function createTextResponse(text, options = {}) {
   const headers = new Headers(options.headers || {});
   headers.set('content-type', 'text/plain');
-
+  
   return createResponseFixture(text, {
     ...options,
     headers,
@@ -192,15 +170,11 @@ export function createTextResponse(text: string, options: ResponseOptions = {}):
 /**
  * Creates an error response
  */
-export function createErrorResponse(
-  status = 404,
-  statusText = 'Not Found',
-  errorBody: string | Record<string, unknown> = '',
-): Response {
+function createErrorResponse(status = 404, statusText = 'Not Found', errorBody = '') {
   const isJson = typeof errorBody !== 'string';
   const body = isJson ? JSON.stringify(errorBody) : errorBody || `Error ${status}: ${statusText}`;
   const contentType = isJson ? 'application/json' : 'text/plain';
-
+  
   return createResponseFixture(body, {
     status,
     statusText,
@@ -211,7 +185,7 @@ export function createErrorResponse(
 /**
  * Creates a network error (throws instead of returning a Response)
  */
-export function createNetworkError(message = 'Network error'): () => never {
+function createNetworkError(message = 'Network error') {
   return () => {
     throw new TypeError(message);
   };
@@ -220,37 +194,37 @@ export function createNetworkError(message = 'Network error'): () => never {
 /**
  * Creates a fetch function that returns a successful response
  */
-export function createSuccessFetch<T = unknown>(
-  data: T,
-  options: ResponseOptions = {},
-): jest.MockedFunction<typeof fetch> {
-  return jest
-    .fn()
-    .mockResolvedValue(
-      typeof data === 'string'
-        ? createTextResponse(data, options)
-        : createJsonResponse(data, options),
-    );
+function createSuccessFetch(data, options = {}) {
+  return jest.fn().mockResolvedValue(
+    typeof data === 'string'
+      ? createTextResponse(data, options)
+      : createJsonResponse(data, options)
+  );
 }
 
 /**
  * Creates a fetch function that returns an error response
  */
-export function createErrorFetch(
-  status = 404,
-  statusText = 'Not Found',
-  errorBody: string | Record<string, unknown> = '',
-): jest.MockedFunction<typeof fetch> {
+function createErrorFetch(status = 404, statusText = 'Not Found', errorBody = '') {
   return jest.fn().mockResolvedValue(createErrorResponse(status, statusText, errorBody));
 }
 
 /**
  * Creates a fetch function that throws a network error
  */
-export function createNetworkErrorFetch(
-  message = 'Network error',
-): jest.MockedFunction<typeof fetch> {
+function createNetworkErrorFetch(message = 'Network error') {
   return jest.fn().mockImplementation(() => {
     throw new TypeError(message);
   });
 }
+
+module.exports = {
+  createResponseFixture,
+  createJsonResponse,
+  createTextResponse,
+  createErrorResponse,
+  createNetworkError,
+  createSuccessFetch,
+  createErrorFetch,
+  createNetworkErrorFetch,
+};

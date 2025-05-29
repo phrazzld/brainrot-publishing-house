@@ -1,13 +1,14 @@
-import { fetchTextWithFallback } from '../../utils/getBlobUrl';
-import { blobPathService } from '../../utils/services/BlobPathService';
-import { blobService } from '../../utils/services/BlobService';
-import { expectFetchCalledWith, expectValidAssetUrl } from '../__testutils__/assertions';
-import {
+// Import dependencies using CommonJS to avoid ESM issues
+const { fetchTextWithFallback } = require('../../utils/getBlobUrl');
+const { blobPathService } = require('../../utils/services/BlobPathService');
+const { blobService } = require('../../utils/services/BlobService');
+const { expectFetchCalledWith, expectValidAssetUrl } = require('../__testutils__/assertions');
+const {
   createErrorResponse,
   createTextAssetFixture,
   createTextResponse,
-} from '../__testutils__/fixtures';
-import { createMockLogger } from '../__testutils__/mocks/factories';
+} = require('../__testutils__/fixtures');
+const { createMockLogger } = require('../__testutils__/mocks/factories');
 
 // Create a cleaner implementation by directly mocking the BlobService fetchText method
 // Since this is the primary method tested in the fetchTextWithFallback function
@@ -38,7 +39,7 @@ global.fetch = jest.fn();
 describe('fetchTextWithFallback', () => {
   const mockBlobService = blobService;
   const mockBlobPathService = blobPathService;
-  const mockFetch = global.fetch as jest.MockedFunction<typeof fetch>;
+  const mockFetch = global.fetch;
 
   beforeEach(() => {
     jest.clearAllMocks();

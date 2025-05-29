@@ -5,7 +5,8 @@ import { randomUUID } from 'crypto';
 import { AssetType } from '@/types/assets';
 import { createRequestLogger } from '@/utils/logger';
 
-import { handleCriticalError, handleDownloadServiceError, safeLog } from './errorHandlers';
+import { handleCriticalError, handleDownloadServiceError } from './errorHandlers';
+import { safeLog } from './logging/safeLogger';
 import { proxyAssetDownload } from './proxyService';
 import { validateRequestParameters } from './requestValidation';
 import { createDownloadService } from './serviceFactory';

@@ -2,9 +2,7 @@
  * Type-safe assertion utilities for common test patterns
  * These utilities improve testing by adding type safety to assertions
  */
-import { expect } from '@jest/globals';
-
-import { AssetType } from '../fixtures/assets';
+const { expect } = require('@jest/globals');
 
 /**
  * Asserts that a function was called with a parameter containing expected properties
@@ -14,11 +12,7 @@ import { AssetType } from '../fixtures/assets';
  * @param paramIndex Index of the parameter to check (0-based)
  * @param expectedProps Expected properties in the parameter object
  */
-export function expectCalledWithObjectContaining<T extends Record<string, unknown>>(
-  mockFn: jest.MockedFunction<(...args: unknown[]) => unknown>,
-  paramIndex: number,
-  expectedProps: Partial<T>,
-): void {
+function expectCalledWithObjectContaining(mockFn, paramIndex, expectedProps) {
   expect(mockFn).toHaveBeenCalled();
   const calls = mockFn.mock.calls;
   const actualParam = calls[calls.length - 1][paramIndex];
@@ -35,10 +29,7 @@ export function expectCalledWithObjectContaining<T extends Record<string, unknow
  * @param loggerFn The logger function mock to check (e.g., mockLogger.info)
  * @param expectedContext The expected context fields
  */
-export function expectLoggedWithContext<T extends Record<string, unknown>>(
-  loggerFn: jest.MockedFunction<(...args: unknown[]) => unknown>,
-  expectedContext: Partial<T>,
-): void {
+function expectLoggedWithContext(loggerFn, expectedContext) {
   expectCalledWithObjectContaining(loggerFn, 0, expectedContext);
 }
 
@@ -48,10 +39,7 @@ export function expectLoggedWithContext<T extends Record<string, unknown>>(
  * @param url Expected URL or URL pattern
  * @param options Optional expected request options
  */
-export function expectFetchCalledWith(
-  url: string | RegExp,
-  options?: RequestInit | Record<string, unknown>,
-): void {
+function expectFetchCalledWith(url, options) {
   expect(global.fetch).toHaveBeenCalled();
 
   if (url instanceof RegExp) {
@@ -73,7 +61,7 @@ export function expectFetchCalledWith(
  * @param url The URL to check
  * @param expectedParts Expected parts of the URL
  */
-export function expectUrlContains(url: string, expectedParts: string[]): void {
+function expectUrlContains(url, expectedParts) {
   for (const part of expectedParts) {
     expect(url).toContain(part);
   }
@@ -87,12 +75,7 @@ export function expectUrlContains(url: string, expectedParts: string[]): void {
  * @param bookSlug Book slug identifier
  * @param filename Filename or pattern to match
  */
-export function expectValidAssetUrl(
-  url: string,
-  assetType: AssetType,
-  bookSlug: string,
-  filename: string | RegExp,
-): void {
+function expectValidAssetUrl(url, assetType, bookSlug, filename) {
   expect(url).toContain(`/${assetType}/`);
   expect(url).toContain(`/${bookSlug}/`);
 
@@ -111,15 +94,7 @@ export function expectValidAssetUrl(
  * @param path The path to check
  * @param structure Expected path structure with parts
  */
-export function expectPathStructure(
-  path: string,
-  structure: {
-    prefix?: string;
-    bookSlug?: string;
-    assetType?: string;
-    filename?: string | RegExp;
-  },
-): void {
+function expectPathStructure(path, structure) {
   if (structure.prefix) {
     expect(path).toMatch(new RegExp(`^${structure.prefix}`));
   }
@@ -147,22 +122,20 @@ export function expectPathStructure(
  * @param obj The object to check
  * @param schema Expected keys and their types
  */
-export function expectObjectShape<T extends Record<string, unknown>>(
-  obj: unknown,
-  schema: Record<keyof T, string | (new (...args: unknown[]) => unknown)>,
-): asserts obj is T {
+function expectObjectShape(obj, schema) {
   expect(obj).toBeTruthy();
-  const typedObj = obj as T;
 
   for (const [key, expectedType] of Object.entries(schema)) {
-    expect(typedObj).toHaveProperty(key);
+    expect(obj).toHaveProperty(key);
 
     if (typeof expectedType === 'string') {
-      expect(typeof typedObj[key as keyof T]).toBe(expectedType);
+      expect(typeof obj[key]).toBe(expectedType);
     } else {
-      expect(typedObj[key as keyof T]).toBeInstanceOf(expectedType);
+      expect(obj[key]).toBeInstanceOf(expectedType);
     }
   }
+  
+  return obj;
 }
 
 /**
@@ -171,10 +144,7 @@ export function expectObjectShape<T extends Record<string, unknown>>(
  * @param mockFn The mock function to check
  * @param predicates Functions that check if parameters are of the expected type/shape
  */
-export function expectCalledWithTypes<T extends unknown[]>(
-  mockFn: jest.MockedFunction<(...args: T) => unknown>,
-  ...predicates: ((arg: unknown) => boolean)[]
-): void {
+function expectCalledWithTypes(mockFn, ...predicates) {
   expect(mockFn).toHaveBeenCalled();
   const calls = mockFn.mock.calls;
   const lastCall = calls[calls.length - 1];
@@ -191,45 +161,43 @@ export function expectCalledWithTypes<T extends unknown[]>(
 /**
  * Type predicate for checking if a value is a non-null object
  */
-export function isObject(value: unknown): value is Record<string, unknown> {
+function isObject(value) {
   return typeof value === 'object' && value !== null;
 }
 
 /**
  * Type predicate for checking if a value is a string
  */
-export function isString(value: unknown): value is string {
+function isString(value) {
   return typeof value === 'string';
 }
 
 /**
  * Type predicate for checking if a value is a number
  */
-export function isNumber(value: unknown): value is number {
+function isNumber(value) {
   return typeof value === 'number';
 }
 
 /**
  * Type predicate for checking if a value is a boolean
  */
-export function isBoolean(value: unknown): value is boolean {
+function isBoolean(value) {
   return typeof value === 'boolean';
 }
 
 /**
  * Type predicate for checking if a value is an array
  */
-export function isArray(value: unknown): value is unknown[] {
+function isArray(value) {
   return Array.isArray(value);
 }
 
 /**
  * Creates a type predicate for checking if a value is an array of a specific type
  */
-export function isArrayOf<T>(
-  predicate: (item: unknown) => item is T,
-): (value: unknown) => value is T[] {
-  return (value: unknown): value is T[] => {
+function isArrayOf(predicate) {
+  return (value) => {
     return Array.isArray(value) && value.every(predicate);
   };
 }
@@ -237,14 +205,7 @@ export function isArrayOf<T>(
 /**
  * Asserts that a response has the expected status code and content type
  */
-export function expectResponseProperties(
-  response: Response,
-  options: {
-    status?: number;
-    contentType?: string | RegExp;
-    hasBody?: boolean;
-  } = {},
-): void {
+function expectResponseProperties(response, options = {}) {
   if (options.status !== undefined) {
     expect(response.status).toBe(options.status);
     expect(response.ok).toBe(options.status >= 200 && options.status < 300);
@@ -269,3 +230,21 @@ export function expectResponseProperties(
     }
   }
 }
+
+module.exports = {
+  expectCalledWithObjectContaining,
+  expectLoggedWithContext,
+  expectFetchCalledWith,
+  expectUrlContains,
+  expectValidAssetUrl,
+  expectPathStructure,
+  expectObjectShape,
+  expectCalledWithTypes,
+  isObject,
+  isString,
+  isNumber,
+  isBoolean,
+  isArray,
+  isArrayOf,
+  expectResponseProperties,
+};

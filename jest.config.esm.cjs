@@ -23,6 +23,16 @@ module.exports = {
         ],
       },
     ],
+    // For module files in __testutils__
+    '^__tests__/__testutils__/.*\\.ts$': [
+      'babel-jest',
+      {
+        presets: [
+          ['@babel/preset-env', { targets: { node: 'current' }, modules: 'commonjs' }],
+          '@babel/preset-typescript',
+        ],
+      },
+    ],
     // For script files
     'scripts/.*\\.ts$': [
       'babel-jest',
