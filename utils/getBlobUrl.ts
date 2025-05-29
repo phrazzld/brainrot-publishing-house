@@ -1,7 +1,7 @@
-import { mapAssetPath } from './assetPathMapping';
-import { logger } from './logger';
-import { blobPathService } from './services/BlobPathService';
-import { blobService } from './services/BlobService';
+import { mapAssetPath } from './assetPathMapping.js';
+import { logger } from './logger.js';
+import { blobPathService } from './services/BlobPathService.js';
+import { blobService } from './services/BlobService.js';
 
 const moduleLogger = logger.child({ module: 'getBlobUrl' });
 // URL generation options interface

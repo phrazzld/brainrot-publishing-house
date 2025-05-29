@@ -1,25 +1,25 @@
-// Import dependencies using CommonJS to avoid ESM issues
-const { fetchTextWithFallback } = require('../../utils/getBlobUrl');
-const { blobPathService } = require('../../utils/services/BlobPathService');
-const { blobService } = require('../../utils/services/BlobService');
-const { expectFetchCalledWith, expectValidAssetUrl } = require('../__testutils__/assertions');
-const {
+// Import dependencies using ES modules with explicit .js extensions
+import { fetchTextWithFallback } from '../../utils/getBlobUrl.js';
+import { blobPathService } from '../../utils/services/BlobPathService.js';
+import { blobService } from '../../utils/services/BlobService.js';
+import { expectFetchCalledWith, expectValidAssetUrl } from '../__testutils__/assertions/index.js';
+import {
   createErrorResponse,
   createTextAssetFixture,
   createTextResponse,
-} = require('../__testutils__/fixtures');
-const { createMockLogger } = require('../__testutils__/mocks/factories');
+} from '../__testutils__/fixtures/index.js';
+import { createMockLogger } from '../__testutils__/mocks/factories.js';
 
 // Create a cleaner implementation by directly mocking the BlobService fetchText method
 // Since this is the primary method tested in the fetchTextWithFallback function
-jest.mock('../../utils/services/BlobService', () => ({
+jest.mock('../../utils/services/BlobService.js', () => ({
   blobService: {
     getUrlForPath: jest.fn(),
     fetchText: jest.fn(),
   },
 }));
 
-jest.mock('../../utils/services/BlobPathService', () => ({
+jest.mock('../../utils/services/BlobPathService.js', () => ({
   blobPathService: {
     convertLegacyPath: jest.fn(),
   },
@@ -27,7 +27,7 @@ jest.mock('../../utils/services/BlobPathService', () => ({
 
 // Create a properly typed mock logger
 const mockLogger = createMockLogger();
-jest.mock('../../utils/logger', () => ({
+jest.mock('../../utils/logger.js', () => ({
   logger: {
     child: jest.fn(() => mockLogger),
   },

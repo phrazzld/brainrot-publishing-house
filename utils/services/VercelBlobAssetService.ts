@@ -23,8 +23,8 @@ import {
   AssetUrlOptions,
   ListOptions,
   UploadOptions,
-} from '../../types/assets';
-import { Logger, logger as defaultLogger } from '../logger';
+} from '../../types/assets.js';
+import { Logger, logger as defaultLogger } from '../logger.js';
 
 // Number of retry attempts for transient errors
 const DEFAULT_RETRY_ATTEMPTS = 3;
@@ -705,11 +705,11 @@ export class VercelBlobAssetService implements AssetService {
           pathname: string;
           url: string;
           size: number;
-          uploadedAt: string;
+          uploadedAt: Date | string;
           contentType?: string;
         }
 
-        // Convert to unknown first, then to our interface to avoid direct type conversion errors
+        // Use a two-step type assertion with unknown intermediate
         const blobWithContentType = blob as unknown as VercelBlobItem;
 
         return {

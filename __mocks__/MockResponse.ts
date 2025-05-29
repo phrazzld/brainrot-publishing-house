@@ -17,7 +17,7 @@ interface ResponseOptions {
  * Creates and initializes the basic properties for a Response
  */
 function initializeResponse(
-  body: string | Blob | ArrayBuffer,
+  body: string | Blob | ArrayBufferLike,
   options: ResponseOptions = {},
 ): Response {
   // Extract options with defaults
@@ -61,7 +61,10 @@ function initializeResponse(
   };
 
   response.arrayBuffer = async () => {
-    if (body instanceof ArrayBuffer) {
+    if ('buffer' in body && body.buffer instanceof ArrayBuffer) {
+      // Handle typed arrays like Uint8Array
+      return body.buffer;
+    } else if (body instanceof ArrayBuffer) {
       return body;
     } else if (typeof body === 'string') {
       return new TextEncoder().encode(body).buffer;
@@ -74,7 +77,11 @@ function initializeResponse(
   response.blob = async () => {
     if (body instanceof Blob) {
       return body;
-    } else if (typeof body === 'string' || body instanceof ArrayBuffer) {
+    } else if (
+      typeof body === 'string' ||
+      body instanceof ArrayBuffer ||
+      ArrayBuffer.isView(body)
+    ) {
       return new Blob([body]);
     }
     return new Blob([]);
@@ -97,7 +104,7 @@ function initializeResponse(
  * Creates a success response with the given content and options
  */
 export function createSuccessResponse(
-  content: string | Blob | ArrayBuffer,
+  content: string | Blob | ArrayBufferLike,
   options?: ResponseOptions,
 ): Response {
   // Set default status text to 'OK' for success responses
