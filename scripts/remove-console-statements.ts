@@ -16,7 +16,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { execSync } from 'child_process';
 
-import { createScriptLogger } from '../utils/createScriptLogger';
+import { createScriptLogger } from '../utils/createScriptLogger.js';
 
 // Create a script-specific logger
 const logger = createScriptLogger({

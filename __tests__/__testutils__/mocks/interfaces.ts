@@ -5,10 +5,10 @@
  */
 import { jest } from '@jest/globals';
 
-import { Logger } from '../../../utils/logger';
-import { BlobPathService } from '../../../utils/services/BlobPathService';
-import { BlobService } from '../../../utils/services/BlobService';
-import { VercelBlobAssetService } from '../../../utils/services/VercelBlobAssetService';
+import { Logger } from '../../../utils/logger.js';
+import { BlobPathService } from '../../../utils/services/BlobPathService.js';
+import { BlobService } from '../../../utils/services/BlobService.js';
+import { VercelBlobAssetService } from '../../../utils/services/VercelBlobAssetService.js';
 
 /**
  * Type-safe mock for the Logger service
@@ -106,15 +106,15 @@ export type MockFetch = jest.MockedFunction<typeof global.fetch>;
  */
 export interface MockAssetPathService {
   getAssetPath: jest.MockedFunction<
-    (typeof import('../../../utils/services/AssetPathService'))['AssetPathService']['prototype']['getAssetPath']
+    (typeof import('../../../utils/services/AssetPathService.js'))['AssetPathService']['prototype']['getAssetPath']
   >;
   normalizeLegacyPath: jest.MockedFunction<
-    (typeof import('../../../utils/services/AssetPathService'))['AssetPathService']['prototype']['normalizeLegacyPath']
+    (typeof import('../../../utils/services/AssetPathService.js'))['AssetPathService']['prototype']['normalizeLegacyPath']
   >;
   getTextPath: jest.MockedFunction<
-    (typeof import('../../../utils/services/AssetPathService'))['AssetPathService']['prototype']['getTextPath']
+    (typeof import('../../../utils/services/AssetPathService.js'))['AssetPathService']['prototype']['getTextPath']
   >;
   getBookSlugFromPath: jest.MockedFunction<
-    (typeof import('../../../utils/services/AssetPathService'))['AssetPathService']['prototype']['getBookSlugFromPath']
+    (typeof import('../../../utils/services/AssetPathService.js'))['AssetPathService']['prototype']['getBookSlugFromPath']
   >;
 }

@@ -3,7 +3,7 @@ import * as dotenv from 'dotenv';
 import { promises as fs } from 'fs';
 import pino from 'pino';
 
-import { getAssetUrl } from '../utils';
+import { getAssetUrl } from '../utils.js';
 
 dotenv.config({ path: '.env.local' });
 

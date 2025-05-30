@@ -4,11 +4,11 @@
  * Service responsible for generating consistent asset paths for Vercel Blob storage
  * Implements the unified path structure documented in UNIFIED_BLOB_PATH_STRUCTURE.md
  */
-import { AssetType } from '../../types/assets';
+import { AssetType } from '../../types/assets.js';
 import {
   AssetNameValidator,
   assetNameValidator as defaultValidator,
-} from '../validators/AssetNameValidator';
+} from '../validators/AssetNameValidator.js';
 
 export class AssetPathService {
   private readonly validator: AssetNameValidator;

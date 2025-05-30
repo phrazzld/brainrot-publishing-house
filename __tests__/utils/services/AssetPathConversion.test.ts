@@ -1,4 +1,4 @@
-import { AssetPathService } from '../../../utils/services/AssetPathService';
+import { AssetPathService } from '../../../utils/services/AssetPathService.js';
 
 describe('AssetPathService - Path Conversion', () => {
   let service: AssetPathService;

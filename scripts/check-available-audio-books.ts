@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 
-import translations from '../translations';
+import translations from '../translations/index.js';
 
 async function checkBookAudio(
   bookSlug: string,

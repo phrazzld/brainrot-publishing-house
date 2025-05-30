@@ -1,4 +1,4 @@
-import { AssetType } from './assets';
+import { AssetType } from './assets.js';
 
 /**
  * Migration options

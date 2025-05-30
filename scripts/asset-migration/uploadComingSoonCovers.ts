@@ -18,11 +18,11 @@ import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-import translations from '../../translations';
-import { ASSET_PATH_MAPPINGS } from '../../utils/assetPathMapping';
-import logger from '../../utils/logger';
-import { blobPathService as _blobPathService } from '../../utils/services/BlobPathService';
-import { blobService } from '../../utils/services/BlobService';
+import translations from '../../translations.js';
+import { ASSET_PATH_MAPPINGS } from '../../utils/assetPathMapping.js';
+import logger from '../../utils/logger.js';
+import { blobPathService as _blobPathService } from '../../utils/services/BlobPathService.js';
+import { blobService } from '../../utils/services/BlobService.js';
 
 // Initialize environment
 dotenv.config({ path: '.env.local' });

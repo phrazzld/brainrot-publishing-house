@@ -5,9 +5,9 @@ import dotenv from 'dotenv';
 import path from 'path';
 
 // Import after env is loaded
-import { getAssetUrl } from '../utils';
-import { logger as _logger } from '../utils/logger';
-import { blobService } from '../utils/services/BlobService';
+import { getAssetUrl } from '../utils.js';
+import { logger as _logger } from '../utils/logger.js';
+import { blobService } from '../utils/services/BlobService.js';
 
 // Load environment variables
 dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });

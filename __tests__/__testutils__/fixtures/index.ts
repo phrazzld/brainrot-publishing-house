@@ -4,6 +4,6 @@
  */
 
 // Export all fixtures directly
-export * from './books';
-export * from './assets';
-export * from './responses';
+export * from './books.js';
+export * from './assets.js';
+export * from './responses.js';

@@ -7,10 +7,10 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-import translations from '../translations';
-import { logger as rootLogger } from '../utils/logger';
-import { adaptTranslation } from '../utils/migration/TranslationAdapter';
-import { blobService } from '../utils/services/BlobService';
+import translations from '../translations/index.js';
+import { logger as rootLogger } from '../utils/logger.js';
+import { adaptTranslation } from '../utils/migration/TranslationAdapter.js';
+import { blobService } from '../utils/services/BlobService.js';
 
 // Create script-specific logger
 const logger = rootLogger.child({ script: 'verifyAudioMigrationWithContent.ts' });

@@ -22,10 +22,10 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 import { existsSync } from 'fs';
 
-import translations from '../translations';
-import { assetExistsInBlobStorage } from '../utils/getBlobUrl';
-import { blobPathService } from '../utils/services/BlobPathService';
-import { blobService } from '../utils/services/BlobService';
+import translations from '../translations/index.js';
+import { assetExistsInBlobStorage } from '../utils/getBlobUrl.js';
+import { blobPathService } from '../utils/services/BlobPathService.js';
+import { blobService } from '../utils/services/BlobService.js';
 
 // Load environment variables from .env.local
 dotenv.config({ path: '.env.local' });

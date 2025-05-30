@@ -1,5 +1,5 @@
-import { AssetPathService } from '@/utils/services/AssetPathService';
-import { AssetNameValidator } from '@/utils/validators/AssetNameValidator';
+import { AssetPathService } from '@/utils/services/AssetPathService.js';
+import { AssetNameValidator } from '@/utils/validators/AssetNameValidator.js';
 
 describe('AssetNameValidator - standardizeChapterIdentifier', () => {
   const validator = new AssetNameValidator();

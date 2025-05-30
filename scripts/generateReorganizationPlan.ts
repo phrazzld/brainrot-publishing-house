@@ -9,7 +9,7 @@ import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 
-import logger, { createRequestLogger } from '../utils/logger';
+import logger, { createRequestLogger } from '../utils/logger.js';
 
 // Configure logger for the reorganization planning process
 const _planLogger = createRequestLogger('reorg-plan');

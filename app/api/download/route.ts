@@ -2,14 +2,14 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { randomUUID } from 'crypto';
 
-import { AssetType } from '@/types/assets';
-import { createRequestLogger } from '@/utils/logger';
+import { AssetType } from '@/types/assets.js';
+import { createRequestLogger } from '@/utils/logger.js';
 
-import { handleCriticalError, handleDownloadServiceError } from './errorHandlers';
-import { safeLog } from './logging/safeLogger';
-import { proxyAssetDownload } from './proxyService';
-import { validateRequestParameters } from './requestValidation';
-import { createDownloadService } from './serviceFactory';
+import { handleCriticalError, handleDownloadServiceError } from './errorHandlers.js';
+import { safeLog } from './logging/safeLogger.js';
+import { proxyAssetDownload } from './proxyService.js';
+import { validateRequestParameters } from './requestValidation.js';
+import { createDownloadService } from './serviceFactory.js';
 
 /**
  * Download API route handler

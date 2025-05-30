@@ -4,19 +4,19 @@ import {
   generateBlobUrl,
   getAssetUrl,
   getBlobUrl,
-} from '../../utils/getBlobUrl';
-import { blobPathService } from '../../utils/services/BlobPathService';
-import { blobService } from '../../utils/services/BlobService';
+} from '../../utils/getBlobUrl.js';
+import { blobPathService } from '../../utils/services/BlobPathService.js';
+import { blobService } from '../../utils/services/BlobService.js';
 
 // Mock services
-jest.mock('../../utils/services/BlobService', () => ({
+jest.mock('../../utils/services/BlobService.js', () => ({
   blobService: {
     getUrlForPath: jest.fn(),
     getFileInfo: jest.fn(),
   },
 }));
 
-jest.mock('../../utils/services/BlobPathService', () => ({
+jest.mock('../../utils/services/BlobPathService.js', () => ({
   blobPathService: {
     convertLegacyPath: jest.fn(),
   },

@@ -9,7 +9,7 @@ import {
   expectLoggedWithContext,
   expectPathStructure,
   expectValidAssetUrl,
-} from '../assertions';
+} from '../assertions.js';
 import {
   BookBuilder,
   createAudioAssetFixture,
@@ -17,10 +17,10 @@ import {
   createSuccessFetch,
   createTextAssetFixture,
   createTextResponse,
-} from '../fixtures';
-import { createMockLogger, createMockVercelBlobAssetService } from '../mocks/factories';
-import { MockLogger } from '../mocks/interfaces';
-import { MockVercelBlobAssetService } from '../mocks/interfaces';
+} from '../fixtures.js';
+import { createMockLogger, createMockVercelBlobAssetService } from '../mocks/factories.js';
+import { MockLogger } from '../mocks/interfaces.js';
+import { MockVercelBlobAssetService } from '../mocks/interfaces.js';
 
 // Example component that we want to test
 class AssetManager {

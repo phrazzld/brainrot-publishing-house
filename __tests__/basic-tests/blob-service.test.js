@@ -47,7 +47,7 @@ global.Blob = class Blob {
 };
 
 // Import the BlobService
-const { BlobService } = require('../../utils/services/BlobService');
+const { BlobService } = require('../../utils/services/BlobService.js');
 
 describe('BlobService', () => {
   let blobService;

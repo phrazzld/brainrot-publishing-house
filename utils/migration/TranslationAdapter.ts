@@ -4,7 +4,7 @@
  * This utility provides adapter functions to handle type compatibility issues
  * between the Translation/Chapter interfaces and verification scripts.
  */
-import { Chapter, Translation } from '../../translations/types';
+import { Chapter, Translation } from '../../translations/types.js';
 
 /**
  * An interface compatible with verification scripts that expect

@@ -27,10 +27,10 @@ import fs from 'fs/promises';
 import path from 'path';
 import readline from 'readline';
 
-import translations from '../translations';
-import { generateAssetUrl, generateBlobPath, generateFilename } from '../utils/ScriptPathUtils';
-import { createScriptLogger } from '../utils/createScriptLogger';
-import { createServices } from '../utils/createServices';
+import translations from '../translations/index.js';
+import { generateAssetUrl, generateBlobPath, generateFilename } from '../utils/ScriptPathUtils.js';
+import { createScriptLogger } from '../utils/createScriptLogger.js';
+import { createServices } from '../utils/createServices.js';
 
 dotenv.config({ path: '.env.local' });
 

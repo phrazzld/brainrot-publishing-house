@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 
-import { Logger } from '@/utils/logger';
+import { Logger } from '@/utils/logger.js';
 
-import { validateChapter, validateSlug, validateType } from './validators';
+import { validateChapter, validateSlug, validateType } from './validators.js';
 
 /**
  * Interface for the parsed and validated request parameters

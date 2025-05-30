@@ -1,5 +1,5 @@
-import { AssetUrlResolver } from '../types/dependencies';
-import { createRequestLogger } from '../utils/logger';
+import { AssetUrlResolver } from '../types/dependencies.js';
+import { createRequestLogger } from '../utils/logger.js';
 
 // Define a type for the logger to make it easier to work with
 type Logger = ReturnType<typeof createRequestLogger>;

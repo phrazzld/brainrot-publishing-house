@@ -19,9 +19,9 @@ import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-import translations from '../../translations';
+import translations from '../../translations.js';
 import { ASSET_PATH_MAPPINGS } from '../../utils/assetPathMapping.js';
-import logger from '../../utils/logger';
+import logger from '../../utils/logger.js';
 import { blobPathService } from '../../utils/services/BlobPathService.js';
 import { blobService } from '../../utils/services/BlobService.js';
 

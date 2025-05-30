@@ -3,20 +3,20 @@
  */
 
 // Mock the modules first, before requiring anything
-jest.mock('../../utils/services/BlobService', () => ({
+jest.mock('../../utils/services/BlobService.js', () => ({
   blobService: {
     getUrlForPath: jest.fn(),
     fetchText: jest.fn(),
   },
 }));
 
-jest.mock('../../utils/services/BlobPathService', () => ({
+jest.mock('../../utils/services/BlobPathService.js', () => ({
   blobPathService: {
     convertLegacyPath: jest.fn(),
   },
 }));
 
-jest.mock('../../utils/logger', () => ({
+jest.mock('../../utils/logger.js', () => ({
   logger: {
     child: jest.fn(() => ({
       info: jest.fn(),
@@ -28,8 +28,8 @@ jest.mock('../../utils/logger', () => ({
 
 // Now require the module under test and the mocked dependencies
 const { fetchTextWithFallback } = jest.requireActual('../../utils/getBlobUrl');
-const { blobPathService } = require('../../utils/services/BlobPathService');
-const { blobService } = require('../../utils/services/BlobService');
+const { blobPathService } = require('../../utils/services/BlobPathService.js');
+const { blobService } = require('../../utils/services/BlobService.js');
 
 // Setup global fetch mock
 global.fetch = jest.fn();

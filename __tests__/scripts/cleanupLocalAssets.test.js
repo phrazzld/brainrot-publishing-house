@@ -9,8 +9,8 @@ const cleanupLocalAssets = require('../../__mocks__/cleanupLocalAssets.js');
 // Mock modules
 jest.mock('fs');
 jest.mock('path');
-jest.mock('../../utils');
-jest.mock('../../translations', () => [
+jest.mock('../../utils.js');
+jest.mock('../../translations.js', () => [
   {
     slug: 'test-book',
     title: 'Test Book',
@@ -32,7 +32,7 @@ describe('cleanupLocalAssets', () => {
     jest.clearAllMocks();
 
     // Mock utils.assetExistsInBlobStorage
-    const utils = require('../../utils');
+    const utils = require('../../utils.js');
     utils.assetExistsInBlobStorage.mockImplementation(async (path) => {
       // Return true for cover and text, false for audio to test both scenarios
       if (path.includes('audio')) {

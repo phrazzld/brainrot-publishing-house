@@ -6,9 +6,9 @@ import fetch, { Response } from 'node-fetch';
 import path from 'path';
 import { performance } from 'perf_hooks';
 
-import { AssetType } from '../types/assets';
-import { logger as _logger } from '../utils/logger';
-import { createAssetService } from '../utils/services/AssetServiceFactory';
+import { AssetType } from '../types/assets.js';
+import { logger as _logger } from '../utils/logger.js';
+import { createAssetService } from '../utils/services/AssetServiceFactory.js';
 
 // Define AssetCategory enum locally since it's not defined in types/assets.ts
 enum AssetCategory {

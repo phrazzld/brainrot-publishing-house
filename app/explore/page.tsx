@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import translations from '@/translations';
+import translations from '@/translations.js';
 
 export default function ExplorePage() {
   return (

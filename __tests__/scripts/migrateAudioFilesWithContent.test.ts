@@ -11,7 +11,7 @@ jest.mock('fs', () => ({
 }));
 
 // Mock downloadFromSpaces with type-safe implementation
-jest.mock('../../utils/downloadFromSpaces', () => {
+jest.mock('../../utils/downloadFromSpaces.js', () => {
   return {
     downloadFromSpaces: jest.fn().mockImplementation(() => {
       return Promise.resolve({
@@ -33,7 +33,7 @@ jest.mock('../../utils/downloadFromSpaces', () => {
 });
 
 // Mock blobService with type-safe implementation
-jest.mock('../../utils/services/BlobService', () => {
+jest.mock('../../utils/services/BlobService.js', () => {
   const mockUploadResult = {
     url: 'https://public.blob.vercel-storage.com/the-iliad/audio/book-01.mp3',
     size: 1024 * 1024,
@@ -65,7 +65,7 @@ jest.mock('../../utils/services/BlobService', () => {
 });
 
 // Mock blobPathService with type-safe implementation
-jest.mock('../../utils/services/BlobPathService', () => {
+jest.mock('../../utils/services/BlobPathService.js', () => {
   return {
     blobPathService: {
       convertLegacyPath: jest.fn().mockImplementation((path) => {
@@ -77,7 +77,7 @@ jest.mock('../../utils/services/BlobPathService', () => {
 });
 
 // Mock translations
-jest.mock('../../translations/index', () => ({
+jest.mock('../../translations/index.js', () => ({
   default: [
     {
       slug: 'the-iliad',

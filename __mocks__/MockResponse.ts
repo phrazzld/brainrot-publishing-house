@@ -17,7 +17,7 @@ interface ResponseOptions {
  * Creates and initializes the basic properties for a Response
  */
 function initializeResponse(
-  body: string | Blob | ArrayBufferLike,
+  body: string | Blob | ArrayBuffer | ArrayBufferView,
   options: ResponseOptions = {},
 ): Response {
   // Extract options with defaults
@@ -60,8 +60,8 @@ function initializeResponse(
     return JSON.parse(text);
   };
 
-  response.arrayBuffer = async () => {
-    if ('buffer' in body && body.buffer instanceof ArrayBuffer) {
+  response.arrayBuffer = async (): Promise<ArrayBuffer> => {
+    if (ArrayBuffer.isView(body)) {
       // Handle typed arrays like Uint8Array
       return body.buffer;
     } else if (body instanceof ArrayBuffer) {
@@ -104,7 +104,7 @@ function initializeResponse(
  * Creates a success response with the given content and options
  */
 export function createSuccessResponse(
-  content: string | Blob | ArrayBufferLike,
+  content: string | Blob | ArrayBuffer | ArrayBufferView,
   options?: ResponseOptions,
 ): Response {
   // Set default status text to 'OK' for success responses

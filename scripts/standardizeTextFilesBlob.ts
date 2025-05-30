@@ -4,8 +4,8 @@ import { config } from 'dotenv';
 import { mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
-import logger from '@/utils/logger';
-import { AssetPathService, VercelBlobAssetService } from '@/utils/services';
+import logger from '@/utils/logger.js';
+import { AssetPathService, VercelBlobAssetService } from '@/utils/services.js';
 
 // Load environment variables from .env.local
 config({ path: '.env.local' });

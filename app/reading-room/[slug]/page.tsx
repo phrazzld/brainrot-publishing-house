@@ -3,18 +3,18 @@
 import { useRef, useState } from 'react';
 
 // Components
-import AudioPlayer from '@/components/reading-room/AudioPlayer';
-import ChapterHeader from '@/components/reading-room/ChapterHeader';
-import ChapterSidebar from '@/components/reading-room/ChapterSidebar';
-import DownloadModal from '@/components/reading-room/DownloadModal';
-import ShareModal from '@/components/reading-room/ShareModal';
-import TextContent from '@/components/reading-room/TextContent';
-import { useAudioPlayer } from '@/hooks/useAudioPlayer';
-import { useChapterNavigation } from '@/hooks/useChapterNavigation';
-import { useShareModal } from '@/hooks/useShareModal';
-import { useTextLoader } from '@/hooks/useTextLoader';
+import AudioPlayer from '@/components/reading-room/AudioPlayer.js';
+import ChapterHeader from '@/components/reading-room/ChapterHeader.js';
+import ChapterSidebar from '@/components/reading-room/ChapterSidebar.js';
+import DownloadModal from '@/components/reading-room/DownloadModal.js';
+import ShareModal from '@/components/reading-room/ShareModal.js';
+import TextContent from '@/components/reading-room/TextContent.js';
+import { useAudioPlayer } from '@/hooks/useAudioPlayer.js';
+import { useChapterNavigation } from '@/hooks/useChapterNavigation.js';
+import { useShareModal } from '@/hooks/useShareModal.js';
+import { useTextLoader } from '@/hooks/useTextLoader.js';
 // Custom hooks
-import translations from '@/translations';
+import translations from '@/translations.js';
 
 export default function ReadingRoom() {
   // Waveform container ref

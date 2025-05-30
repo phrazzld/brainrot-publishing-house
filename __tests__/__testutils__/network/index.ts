@@ -2,7 +2,7 @@
  * Network-related utilities for tests
  * Provides tools for mocking network requests and responses
  */
-import { createMockFetch, createMockResponse } from '../mocks/factories';
+import { createMockFetch, createMockResponse } from '../mocks/factories.js';
 
 export { createMockResponse, createMockFetch };
 

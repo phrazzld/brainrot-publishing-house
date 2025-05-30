@@ -7,11 +7,11 @@ import '@testing-library/jest-dom';
 
 // Import the component after setting up mocks
 import ReadingRoom from '../../app/reading-room/[slug]/page';
-import { fetchTextWithFallback } from '../../utils/getBlobUrl';
-import { act, render, screen, waitFor } from '../utils/test-utils';
+import { fetchTextWithFallback } from '../../utils/getBlobUrl.js';
+import { act, render, screen, waitFor } from '../utils/test-utils.js';
 
 // Mock the utils module
-jest.mock('../../utils/getBlobUrl', () => ({
+jest.mock('../../utils/getBlobUrl.js', () => ({
   fetchTextWithFallback: jest.fn(),
 }));
 
@@ -23,7 +23,7 @@ jest.mock('next/navigation', () => ({
 }));
 
 // Mock translations
-jest.mock('../../translations', () => [
+jest.mock('../../translations.js', () => [
   {
     slug: 'test-book',
     title: 'Test Book',

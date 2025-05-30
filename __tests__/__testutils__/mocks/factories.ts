@@ -14,7 +14,7 @@ import {
   MockResponse,
   MockVercelBlob,
   MockVercelBlobAssetService,
-} from './interfaces';
+} from './interfaces.js';
 
 /**
  * Creates a type-safe mock Logger instance

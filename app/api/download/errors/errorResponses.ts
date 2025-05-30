@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 
-import { createErrorHeaders } from '../responses/responseHeaders';
-import { categorizeError, getDeveloperHint } from './errorCategories';
-import { ProxyErrorConfig } from './errorTypes';
+import { createErrorHeaders } from '../responses/responseHeaders.js';
+import { categorizeError, getDeveloperHint } from './errorCategories.js';
+import { ProxyErrorConfig } from './errorTypes.js';
 
 /**
  * Creates common response object properties for error responses

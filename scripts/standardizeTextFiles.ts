@@ -8,9 +8,9 @@ import { put } from '@vercel/blob';
 import { existsSync } from 'fs';
 import { readFile, readdir, writeFile } from 'fs/promises';
 
-import { logger as defaultLogger } from '../utils/logger';
-import { AssetPathService } from '../utils/services/AssetPathService';
-import { BlobService } from '../utils/services/BlobService';
+import { logger as defaultLogger } from '../utils/logger.js';
+import { AssetPathService } from '../utils/services/AssetPathService.js';
+import { BlobService } from '../utils/services/BlobService.js';
 
 const { join, relative } = path;
 

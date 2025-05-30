@@ -1,7 +1,7 @@
 import { type ListBlobResultBlob, head, list, put } from '@vercel/blob';
 
-import { AssetDestinationAdapter, AssetSourceAdapter } from '../../types/migration';
-import { logger } from '../logger';
+import { AssetDestinationAdapter, AssetSourceAdapter } from '../../types/migration.js';
+import { logger } from '../logger.js';
 
 /**
  * Shared utility methods for Vercel Blob adapters

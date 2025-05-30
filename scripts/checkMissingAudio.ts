@@ -11,8 +11,8 @@
 import fs from 'fs/promises';
 import path from 'path';
 
-import translations from '../translations';
-import { logger } from '../utils/logger';
+import translations from '../translations/index.js';
+import { logger } from '../utils/logger.js';
 
 // Create a script-specific logger
 const scriptLogger = logger.child({

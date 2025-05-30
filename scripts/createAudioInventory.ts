@@ -22,7 +22,7 @@ import { head, list } from '@vercel/blob';
 import fs from 'fs/promises';
 import path from 'path';
 
-import translations from '../translations';
+import translations from '../translations/index.js';
 
 dotenv.config({ path: '.env.local' });
 

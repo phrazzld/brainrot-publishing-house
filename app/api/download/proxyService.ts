@@ -1,18 +1,18 @@
 import { NextResponse } from 'next/server';
 
-import { AssetType } from '@/types/assets';
-import { Logger } from '@/utils/logger';
+import { AssetType } from '@/types/assets.js';
+import { Logger } from '@/utils/logger.js';
 
-import { handleAssetUrlError } from './errors/assetUrlErrorHandler';
-import { handleUnexpectedProxyError } from './errors/unexpectedErrorHandler';
+import { handleAssetUrlError } from './errors/assetUrlErrorHandler.js';
+import { handleUnexpectedProxyError } from './errors/unexpectedErrorHandler.js';
 import {
   createSuccessResponse,
   fetchAssetWithLogging,
   handleErrorResponse,
-} from './fetching/assetFetcher';
-import { getAssetUrlWithLogging, logProxyRequest } from './fetching/assetUrlService';
-import { proxyFileDownload } from './fetching/legacyProxyService';
-import { createDownloadHeaders } from './responses/responseHeaders';
+} from './fetching/assetFetcher.js';
+import { getAssetUrlWithLogging, logProxyRequest } from './fetching/assetUrlService.js';
+import { proxyFileDownload } from './fetching/legacyProxyService.js';
+import { createDownloadHeaders } from './responses/responseHeaders.js';
 
 // Re-export the legacy proxy function
 export { proxyFileDownload };

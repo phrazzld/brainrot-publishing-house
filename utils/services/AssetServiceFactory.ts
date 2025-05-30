@@ -4,10 +4,10 @@
  * Factory for creating instances of AssetService with the correct dependencies.
  * This makes dependency injection consistent across the application.
  */
-import { AssetService, AssetServiceConfig } from '../../types/assets';
-import { Logger, createRequestLogger, logger as defaultLogger } from '../logger';
-import { AssetPathService, assetPathService } from './AssetPathService';
-import { VercelBlobAssetService } from './VercelBlobAssetService';
+import { AssetService, AssetServiceConfig } from '../../types/assets.js';
+import { Logger, createRequestLogger, logger as defaultLogger } from '../logger.js';
+import { AssetPathService, assetPathService } from './AssetPathService.js';
+import { VercelBlobAssetService } from './VercelBlobAssetService.js';
 
 /**
  * Creates a new instance of AssetService

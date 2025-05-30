@@ -1,9 +1,9 @@
 /**
  * Translation data for Divine Comedy: Paradiso
  */
-import { getAssetUrl } from '../../utils';
-import { Translation } from '../types';
-import { USE_BLOB_STORAGE } from '../utils';
+import { getAssetUrl } from '../utils.js';
+import { Translation } from '../types.js';
+import { USE_BLOB_STORAGE } from '../utils.js';
 
 const divineComedyParadiso: Translation = {
   slug: 'divine-comedy-paradiso',

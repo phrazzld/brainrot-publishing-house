@@ -1,9 +1,9 @@
-import { DownloadService } from '@/services/downloadService';
-import { AssetService } from '@/types/assets';
-import { Logger } from '@/utils/logger';
-import { createAssetService } from '@/utils/services/AssetServiceFactory';
+import { DownloadService } from '@/services/downloadService.js';
+import { AssetService } from '@/types/assets.js';
+import { Logger } from '@/utils/logger.js';
+import { createAssetService } from '@/utils/services/AssetServiceFactory.js';
 
-import { safeLog } from './errorHandlers';
+import { safeLog } from './errorHandlers.js';
 
 /**
  * Creates an instance of the download service with all required dependencies

@@ -22,7 +22,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import puppeteer from 'puppeteer';
 
-import translations from '../translations';
+import translations from '../translations/index.js';
 
 dotenv.config({ path: '.env.local' });
 

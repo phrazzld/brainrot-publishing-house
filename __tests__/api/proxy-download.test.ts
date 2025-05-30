@@ -1,7 +1,7 @@
-import { createSuccessResponse } from '@/__mocks__/MockResponse';
-import { proxyAssetDownload } from '@/app/api/download/proxyService';
-import { AssetError, AssetErrorType, AssetService, AssetType } from '@/types/assets';
-import { createRequestLogger } from '@/utils/logger';
+import { createSuccessResponse } from '@/__mocks__/MockResponse.js';
+import { proxyAssetDownload } from '@/app/api/download/proxyService.js';
+import { AssetError, AssetErrorType, AssetService, AssetType } from '@/types/assets.js';
+import { createRequestLogger } from '@/utils/logger.js';
 
 // Define the mock NextResponse
 const __mockNextResponse = {
@@ -13,7 +13,7 @@ const __mockNextResponse = {
 };
 
 // Mock the logger
-jest.mock('@/utils/logger', () => ({
+jest.mock('@/utils/logger.js', () => ({
   createRequestLogger: jest.fn().mockImplementation(() => ({
     debug: jest.fn(),
     info: jest.fn(),

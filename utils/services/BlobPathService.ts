@@ -7,12 +7,12 @@
  * This service delegates to AssetPathService internally and adapts the results
  * to maintain compatibility with existing code.
  */
-import { AssetType } from '../../types/assets';
+import { AssetType } from '../../types/assets.js';
 import {
   AssetNameValidator,
   assetNameValidator as defaultValidator,
-} from '../validators/AssetNameValidator';
-import { AssetPathService, assetPathService as defaultAssetPathService } from './AssetPathService';
+} from '../validators/AssetNameValidator.js';
+import { AssetPathService, assetPathService as defaultAssetPathService } from './AssetPathService.js';
 
 export class BlobPathService {
   /** The underlying AssetPathService that generates standardized paths */

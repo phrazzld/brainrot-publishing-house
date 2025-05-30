@@ -4,18 +4,18 @@
  * This test suite verifies the correctness of asset paths and access using the
  * standardized path structure from the migration project.
  */
-import { createErrorResponse, createSuccessResponse } from '../../__mocks__/MockResponse';
+import { createErrorResponse, createSuccessResponse } from '../../__mocks__/MockResponse.js';
 import {
   AUDIO_ASSETS,
   IMAGE_ASSETS,
   MOCK_BLOB_BASE_URL,
   TEST_BOOKS,
   TEXT_ASSETS,
-} from '../../__mocks__/assetFixtures';
-import { AssetType } from '../../types/assets';
-import { assetPathService } from '../../utils/services/AssetPathService';
-import { blobPathService } from '../../utils/services/BlobPathService';
-import { BlobService } from '../../utils/services/BlobService';
+} from '../../__mocks__/assetFixtures.js';
+import { AssetType } from '../../types/assets.js';
+import { assetPathService } from '../../utils/services/AssetPathService.js';
+import { blobPathService } from '../../utils/services/BlobPathService.js';
+import { BlobService } from '../../utils/services/BlobService.js';
 
 // Mock the Vercel Blob module
 jest.mock('@vercel/blob', () => ({

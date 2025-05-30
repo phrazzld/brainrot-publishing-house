@@ -5,10 +5,10 @@
  * This module provides a consistent interface for script-specific path operations,
  * ensuring compatibility with both legacy and standardized path formats.
  */
-import { AssetType } from '../types/assets';
-import { logger } from './logger';
-import { assetPathService } from './services/AssetPathService';
-import { assetNameValidator } from './validators/AssetNameValidator';
+import { AssetType } from '../types/assets.js';
+import { logger } from './logger.js';
+import { assetPathService } from './services/AssetPathService.js';
+import { assetNameValidator } from './validators/AssetNameValidator.js';
 
 // Create a module-specific logger
 const moduleLogger = logger.child({ module: 'ScriptPathUtils' });

@@ -18,10 +18,10 @@ import * as dotenv from 'dotenv';
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 
-import translations from '../translations';
+import translations from '../translations/index.js';
 
 // Not using getAssetUrlWithFallback in this script
-// import { getAssetUrlWithFallback } from '../utils/getBlobUrl';
+// import { getAssetUrlWithFallback } from '../utils/getBlobUrl.js';
 
 dotenv.config({ path: '.env.local' });
 

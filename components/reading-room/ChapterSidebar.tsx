@@ -1,6 +1,6 @@
 'use client';
 
-import { Translation } from '@/utils/types';
+import { Translation } from '@/utils/types.js';
 
 interface ChapterSidebarProps {
   translation: Translation;

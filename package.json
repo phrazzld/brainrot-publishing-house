@@ -84,6 +84,11 @@
     "verify:audio-files:skip-check": "tsx scripts/verifyAudioFilesAccess.ts --skip-access-check",
     "test:audio-downloads": "tsx scripts/testAudioFileDownloads.ts",
     "test:audio-downloads:production": "tsx scripts/testAudioFileDownloads.ts --env=production",
+    "fix:imports": "tsx scripts/add-js-extensions.ts",
+    "fix:imports:dry": "tsx scripts/add-js-extensions.ts --dry-run",
+    "fix:imports:utils": "tsx scripts/add-js-extensions.ts ./utils",
+    "fix:imports:tests": "tsx scripts/add-js-extensions.ts ./__tests__",
+    "fix:imports:services": "tsx scripts/add-js-extensions.ts ./services",
     "tsc": "tsc --noEmit",
     "prepare": "husky"
   },

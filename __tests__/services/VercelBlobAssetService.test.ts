@@ -1,7 +1,7 @@
-import { AssetType, AssetUrlOptions } from '../../types/assets';
-import { Logger } from '../../utils/logger';
-import { AssetPathService } from '../../utils/services/AssetPathService';
-import { VercelBlobAssetService } from '../../utils/services/VercelBlobAssetService';
+import { AssetType, AssetUrlOptions } from '../../types/assets.js';
+import { Logger } from '../../utils/logger.js';
+import { AssetPathService } from '../../utils/services/AssetPathService.js';
+import { VercelBlobAssetService } from '../../utils/services/VercelBlobAssetService.js';
 
 // Mock @vercel/blob
 jest.mock('@vercel/blob', () => ({

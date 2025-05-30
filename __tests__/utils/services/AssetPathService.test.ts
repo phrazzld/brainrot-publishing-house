@@ -1,5 +1,5 @@
-import { AssetType } from '../../../types/assets';
-import { AssetPathService } from '../../../utils/services/AssetPathService';
+import { AssetType } from '../../../types/assets.js';
+import { AssetPathService } from '../../../utils/services/AssetPathService.js';
 
 describe('AssetPathService', () => {
   let service: AssetPathService;

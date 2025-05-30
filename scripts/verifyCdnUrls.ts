@@ -4,10 +4,10 @@ import * as fs from 'fs';
 import { randomUUID } from 'crypto';
 
 // Import necessary modules and types
-import { DownloadRequestParams } from '../services/downloadService';
-import { assetExistsInBlobStorage, getAssetUrlWithFallback, getBlobUrl } from '../utils/getBlobUrl';
-import { createRequestLogger, logger } from '../utils/logger';
-import { blobPathService } from '../utils/services/BlobPathService';
+import { DownloadRequestParams } from '../services/downloadService.js';
+import { assetExistsInBlobStorage, getAssetUrlWithFallback, getBlobUrl } from '../utils/getBlobUrl.js';
+import { createRequestLogger, logger } from '../utils/logger.js';
+import { blobPathService } from '../utils/services/BlobPathService.js';
 
 const moduleLogger = logger.child({ module: 'verifyCdnUrls' });
 

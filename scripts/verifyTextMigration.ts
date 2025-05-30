@@ -4,10 +4,10 @@ import { head } from '@vercel/blob';
 import { config } from 'dotenv';
 import { promises as fs } from 'fs';
 
-import { AssetType } from '../types/assets';
-import { logger } from '../utils/logger';
-import { AssetPathService } from '../utils/services/AssetPathService';
-import { createAssetService } from '../utils/services/AssetServiceFactory';
+import { AssetType } from '../types/assets.js';
+import { logger } from '../utils/logger.js';
+import { AssetPathService } from '../utils/services/AssetPathService.js';
+import { createAssetService } from '../utils/services/AssetServiceFactory.js';
 
 // Load environment variables from .env.local
 config({ path: '.env.local' });

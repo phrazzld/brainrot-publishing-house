@@ -1,12 +1,18 @@
 /**
  * Utility functions for working with translations
  */
-import { Translation } from './types';
+import { Translation } from './types.js';
+import { getAssetUrl as importedGetAssetUrl } from '../utils/getBlobUrl.js';
 
 /**
  * Enable/disable Blob storage globally for testing
  */
 export const USE_BLOB_STORAGE = true;
+
+/**
+ * Expose getAssetUrl for translations
+ */
+export const getAssetUrl = importedGetAssetUrl;
 
 /**
  * Helper function to generate audio URLs directly to avoid double URL issue

@@ -23,8 +23,8 @@ import { fileURLToPath } from 'url';
 
 import translations from '../translations/index.js';
 import { generateAssetUrl, normalizePath } from '../utils/ScriptPathUtils.js';
-import { createScriptLogger } from '../utils/createScriptLogger';
-import { BlobService } from '../utils/services/BlobService';
+import { createScriptLogger } from '../utils/createScriptLogger.js';
+import { BlobService } from '../utils/services/BlobService.js';
 // Import BlobService
 import { blobService } from '../utils/services/BlobService.js';
 

@@ -1,4 +1,4 @@
-import { Logger } from '@/utils/logger';
+import { Logger } from '@/utils/logger.js';
 
 /**
  * Maximum length for response body text in logs

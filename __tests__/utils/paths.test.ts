@@ -10,7 +10,7 @@ import {
   isMainModule,
   resolveFromModule,
   resolveFromRoot,
-} from '../../utils/paths';
+} from '../../utils/paths.js';
 
 describe('Path Utilities', () => {
   const mockImportMetaUrl = 'file:///Users/test/project/utils/test.ts';

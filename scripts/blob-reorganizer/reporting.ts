@@ -1,9 +1,9 @@
 /**
  * Reporting utilities for the blob reorganization tool
  */
-import { moveBlob } from './blob-operations';
-import { logger as _logger } from './logging';
-import { CliOptions, MigrationStats, PathMapping } from './types';
+import { moveBlob } from './blob-operations.js';
+import { logger as _logger } from './logging.js';
+import { CliOptions, MigrationStats, PathMapping } from './types.js';
 
 /**
  * Format bytes to a human-readable form

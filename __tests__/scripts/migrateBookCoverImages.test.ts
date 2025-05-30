@@ -1,6 +1,6 @@
 // Import with proper typing - using underscore to indicate unused type imports
-import type { BlobPathService as _BlobPathService } from '../../utils/services/BlobPathService';
-import type { BlobService as _IBlobService } from '../../utils/services/BlobService';
+import type { BlobPathService as _BlobPathService } from '../../utils/services/BlobPathService.js';
+import type { BlobService as _IBlobService } from '../../utils/services/BlobService.js';
 
 // Use CommonJS require for compatibility with Jest
 // Explicitly type the requires to avoid TS errors
@@ -8,7 +8,7 @@ const fs = require('fs/promises') as typeof import('fs/promises');
 const path = require('path') as typeof import('path');
 
 // Import local modules
-const translations = require('../../translations').default;
+const translations = require('../../translations.js').default;
 
 // Create a mock class that implements our interface requirements
 class MockBlobService {
@@ -30,7 +30,7 @@ class MockBlobService {
 }
 
 // Mock the BlobService module
-jest.mock('../../utils/services/BlobService', () => {
+jest.mock('../../utils/services/BlobService.js', () => {
   return {
     BlobService: jest.fn().mockImplementation(() => new MockBlobService()),
     blobService: new MockBlobService(),

@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
 
-import { AssetError, AssetErrorType, AssetType } from '@/types/assets';
-import { Logger } from '@/utils/logger';
+import { AssetError, AssetErrorType, AssetType } from '@/types/assets.js';
+import { Logger } from '@/utils/logger.js';
 
-import { safeLog } from '../logging/safeLogger';
-import { createProxyErrorResponse } from './errorResponses';
+import { safeLog } from '../logging/safeLogger.js';
+import { createProxyErrorResponse } from './errorResponses.js';
 
 /**
  * Maps an AssetError type to an appropriate HTTP status code

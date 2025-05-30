@@ -3,7 +3,7 @@
  */
 // We don't use path directly, so we can remove this import
 // import path from 'path';
-import { Logger, logger as rootLogger } from './logger';
+import { Logger, logger as rootLogger } from './logger.js';
 
 export interface ScriptLoggerOptions {
   /**

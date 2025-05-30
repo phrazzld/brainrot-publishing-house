@@ -1,9 +1,9 @@
 /**
  * Translation data for The Aeneid
  */
-import { getAssetUrl } from '../../utils';
-import { Translation } from '../types';
-import { USE_BLOB_STORAGE, getDirectAudioUrl } from '../utils';
+import { getAssetUrl } from '../utils.js';
+import { Translation } from '../types.js';
+import { USE_BLOB_STORAGE, getDirectAudioUrl } from '../utils.js';
 
 const theAeneid: Translation = {
   slug: 'the-aeneid',

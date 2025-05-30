@@ -1,14 +1,14 @@
 import { NextResponse } from 'next/server';
 
-import { AssetType } from '@/types/assets';
-import { Logger } from '@/utils/logger';
+import { AssetType } from '@/types/assets.js';
+import { Logger } from '@/utils/logger.js';
 
-import { extractErrorDetails } from '../errors/errorExtractor';
-import { createProxyErrorResponse } from '../errors/errorResponses';
-import { TimeoutError } from '../errors/errorTypes';
-import { safeLog, sanitizeUrlForLogging } from '../logging/safeLogger';
-import { createDownloadHeaders } from '../responses/responseHeaders';
-import { FETCH_TIMEOUT_MS, fetchWithTimeout } from './fetchWithTimeout';
+import { extractErrorDetails } from '../errors/errorExtractor.js';
+import { createProxyErrorResponse } from '../errors/errorResponses.js';
+import { TimeoutError } from '../errors/errorTypes.js';
+import { safeLog, sanitizeUrlForLogging } from '../logging/safeLogger.js';
+import { createDownloadHeaders } from '../responses/responseHeaders.js';
+import { FETCH_TIMEOUT_MS, fetchWithTimeout } from './fetchWithTimeout.js';
 
 /**
  * Result of a successful fetch operation

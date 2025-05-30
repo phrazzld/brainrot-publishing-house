@@ -29,9 +29,9 @@ import { existsSync } from 'fs';
 import fs from 'fs/promises';
 import path from 'path';
 
-import translations from '../translations';
-import { Translation as ImportedTranslation } from '../translations/types';
-import logger from '../utils/logger';
+import translations from '../translations/index.js';
+import { Translation as ImportedTranslation } from '../translations/types.js';
+import logger from '../utils/logger.js';
 
 // Load environment variables
 dotenv.config({ path: '.env.local' });

@@ -8,10 +8,10 @@ import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 import * as path from 'path';
 
-import translations from '../translations';
-import { assetExistsInBlobStorage } from '../utils';
-import { logger as rootLogger } from '../utils/logger';
-import { adaptTranslation } from '../utils/migration/TranslationAdapter';
+import translations from '../translations/index.js';
+import { assetExistsInBlobStorage } from '../utils.js';
+import { logger as rootLogger } from '../utils/logger.js';
+import { adaptTranslation } from '../utils/migration/TranslationAdapter.js';
 
 // Create a script-specific logger instance
 const logger = rootLogger.child({ script: 'verifyBlobStorage.ts' });

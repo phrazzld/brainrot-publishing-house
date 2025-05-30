@@ -22,7 +22,7 @@ import * as path from 'node:path';
 import * as readline from 'node:readline';
 import { ListBlobResultBlob } from '@vercel/blob';
 
-import { blobService } from '../utils/services/BlobService';
+import { blobService } from '../utils/services/BlobService.js';
 
 dotenv.config({ path: '.env.local' });
 

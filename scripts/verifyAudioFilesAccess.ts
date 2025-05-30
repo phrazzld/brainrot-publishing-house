@@ -6,13 +6,16 @@ import fs from 'fs';
 import fetch from 'node-fetch';
 import path from 'path';
 
-import translations from '../translations';
-import { createFileLogger } from '../utils/logger';
+import translations from '../translations/index.js';
+import { logger } from '../utils/logger.js';
 
 dotenv.config({ path: '.env.local' });
 
 // Initialize logger
-const logger = createFileLogger('audio-file-access-verification');
+const scriptLogger = logger.child({
+  module: 'audio-file-access-verification',
+  script: 'verifyAudioFilesAccess',
+});
 
 /**
  * Audio file information
@@ -83,7 +86,7 @@ async function fetchAudioFiles(): Promise<AudioFile[]> {
 
   try {
     do {
-      logger.info({
+      scriptLogger.info({
         msg: `Fetching audio files page ${page}...`,
         page,
       });
@@ -103,7 +106,7 @@ async function fetchAudioFiles(): Promise<AudioFile[]> {
 
       audioFiles.push(...transformedFiles);
 
-      logger.info({
+      scriptLogger.info({
         msg: `Page ${page}: Found ${allAudioFiles.length} audio files`,
         page,
         totalAudioFiles: allAudioFiles.length,
@@ -113,14 +116,14 @@ async function fetchAudioFiles(): Promise<AudioFile[]> {
       page++;
     } while (cursor);
 
-    logger.info({
+    scriptLogger.info({
       msg: `Completed fetching audio files. Total found: ${audioFiles.length}`,
       totalFiles: audioFiles.length,
     });
 
     return audioFiles;
   } catch (error) {
-    logger.error({
+    scriptLogger.error({
       msg: 'Error fetching audio files from Vercel Blob',
       error: error instanceof Error ? error.message : String(error),
       stack: error instanceof Error ? error.stack : undefined,
@@ -471,7 +474,7 @@ async function verifyAudioFilesAccess(): Promise<void> {
   const startTime = Date.now();
   const options = parseArgs();
 
-  logger.info({
+  scriptLogger.info({
     msg: '🔍 Starting audio files accessibility verification...',
     options,
   });
@@ -484,17 +487,17 @@ async function verifyAudioFilesAccess(): Promise<void> {
     }
 
     // 1. Get expected audio files from translations
-    logger.info({ msg: 'Getting expected audio files from translations data...' });
+    scriptLogger.info({ msg: 'Getting expected audio files from translations data...' });
     const expectedFiles = getExpectedAudioFiles();
-    logger.info({
+    scriptLogger.info({
       msg: `Found ${expectedFiles.length} expected audio files in translations data`,
       expectedFilesCount: expectedFiles.length,
     });
 
     // 2. Fetch actual audio files from Vercel Blob
-    logger.info({ msg: 'Fetching actual audio files from Vercel Blob...' });
+    scriptLogger.info({ msg: 'Fetching actual audio files from Vercel Blob...' });
     const actualFiles = await fetchAudioFiles();
-    logger.info({
+    scriptLogger.info({
       msg: `Found ${actualFiles.length} actual audio files in Vercel Blob`,
       actualFilesCount: actualFiles.length,
     });
@@ -505,7 +508,7 @@ async function verifyAudioFilesAccess(): Promise<void> {
     // 4. Verify accessibility of each file
     const verificationResults: AudioVerificationResult[] = [];
 
-    logger.info({
+    scriptLogger.info({
       msg: `Verifying accessibility of ${expectedFiles.length} audio files...`,
       skipAccessCheck: options.skipAccessCheck,
     });
@@ -536,7 +539,7 @@ async function verifyAudioFilesAccess(): Promise<void> {
       const batchResults = await Promise.all(batchPromises);
       verificationResults.push(...batchResults);
 
-      logger.info({
+      scriptLogger.info({
         msg: `Processed batch ${Math.floor(i / batchSize) + 1}/${Math.ceil(expectedFiles.length / batchSize)}`,
         batchSize,
         progress: `${Math.min(i + batchSize, expectedFiles.length)}/${expectedFiles.length}`,
@@ -544,7 +547,7 @@ async function verifyAudioFilesAccess(): Promise<void> {
     }
 
     // 5. Generate summary
-    logger.info({ msg: 'Generating verification summary...' });
+    scriptLogger.info({ msg: 'Generating verification summary...' });
     const summary = generateSummary(verificationResults);
 
     // 6. Generate and save reports
@@ -556,14 +559,14 @@ async function verifyAudioFilesAccess(): Promise<void> {
     fs.writeFileSync(jsonReportPath, JSON.stringify(summary, null, 2));
 
     const duration = (Date.now() - startTime) / 1000;
-    logger.info({
+    scriptLogger.info({
       msg: `✅ Verification completed in ${duration.toFixed(2)}s. Reports saved to:`,
       duration: duration.toFixed(2),
       htmlReportPath,
       jsonReportPath,
     });
 
-    logger.info({
+    scriptLogger.info({
       msg: '📊 Summary:',
       totalExpected: summary.totalExpected,
       totalFound: summary.totalFound,
@@ -573,26 +576,26 @@ async function verifyAudioFilesAccess(): Promise<void> {
     });
 
     // Log summary of available books with full audiobooks
-    logger.info({ msg: 'Available books with full audiobooks:' });
+    scriptLogger.info({ msg: 'Available books with full audiobooks:' });
     Object.entries(summary.bookSummary)
       .filter(([_, info]) => info.status === 'available' && info.hasFullAudiobook)
       .forEach(([slug, info]) => {
-        logger.info({
+        scriptLogger.info({
           msg: `  ✅ ${info.title} (${slug}): ${info.accessible}/${info.expected} files accessible`,
         });
       });
 
     // Log summary of available books missing full audiobooks
-    logger.info({ msg: 'Available books missing full audiobooks:' });
+    scriptLogger.info({ msg: 'Available books missing full audiobooks:' });
     Object.entries(summary.bookSummary)
       .filter(([_, info]) => info.status === 'available' && !info.hasFullAudiobook)
       .forEach(([slug, info]) => {
-        logger.info({
+        scriptLogger.info({
           msg: `  ❌ ${info.title} (${slug}): missing full audiobook`,
         });
       });
   } catch (error) {
-    logger.error({
+    scriptLogger.error({
       msg: 'Error during audio files verification:',
       error: error instanceof Error ? error.message : String(error),
       stack: error instanceof Error ? error.stack : undefined,
@@ -603,7 +606,7 @@ async function verifyAudioFilesAccess(): Promise<void> {
 
 // Run the verification
 verifyAudioFilesAccess().catch((error) => {
-  logger.error({
+  scriptLogger.error({
     msg: 'Unhandled error during verification:',
     error: error instanceof Error ? error.message : String(error),
     stack: error instanceof Error ? error.stack : undefined,

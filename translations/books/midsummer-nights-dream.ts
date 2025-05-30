@@ -1,9 +1,9 @@
 /**
  * Translation data for A Midsummer Night's Dream
  */
-import { getAssetUrl } from '../../utils';
-import { Translation } from '../types';
-import { USE_BLOB_STORAGE } from '../utils';
+import { getAssetUrl } from '../utils.js';
+import { Translation } from '../types.js';
+import { USE_BLOB_STORAGE } from '../utils.js';
 
 const midsummerNightsDream: Translation = {
   slug: 'midsummer-nights-dream',

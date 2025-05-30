@@ -4,8 +4,8 @@
 import * as dotenv from 'dotenv';
 import * as path from 'path';
 
-import logger from '../../utils/logger';
-import { blobService } from '../../utils/services/BlobService';
+import logger from '../../utils/logger.js';
+import { blobService } from '../../utils/services/BlobService.js';
 
 // Load environment variables
 dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });

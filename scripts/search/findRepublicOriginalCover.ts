@@ -4,8 +4,8 @@
 import dotenv from 'dotenv';
 import path from 'path';
 
-import { logger as _logger } from '../utils/logger';
-import { blobService } from '../utils/services/BlobService';
+import { logger as _logger } from '../utils/logger.js';
+import { blobService } from '../utils/services/BlobService.js';
 
 // Load environment variables
 dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
@@ -38,7 +38,7 @@ async function findOriginalCover() {
         logger.info({ msg: `✓ Found The Republic cover at: ${testPath}`, url });
 
         // Test if getAssetUrl would find it with the original path
-        const { getAssetUrl } = await import('../utils');
+        const { getAssetUrl } = await import('../utils.js');
         const assetUrl = getAssetUrl(originalPath, true);
         logger.info({ msg: 'Testing with getAssetUrl', input: originalPath, output: assetUrl });
 

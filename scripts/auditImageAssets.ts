@@ -9,9 +9,9 @@
 import fs from 'fs';
 import path from 'path';
 
-import { createRequestLogger } from '../utils/logger';
-import { AssetPathService } from '../utils/services/AssetPathService';
-import { blobService } from '../utils/services/BlobService';
+import { createRequestLogger } from '../utils/logger.js';
+import { AssetPathService } from '../utils/services/AssetPathService.js';
+import { blobService } from '../utils/services/BlobService.js';
 
 // Configure logger
 const auditLogger = createRequestLogger('image-audit');

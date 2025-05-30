@@ -12,7 +12,7 @@ import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
 
-import logger from '../utils/logger';
+import logger from '../utils/logger.js';
 
 // Load environment variables from .env files
 dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });

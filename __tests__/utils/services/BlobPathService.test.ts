@@ -1,6 +1,6 @@
-import { AssetType } from '../../../types/assets';
-import { AssetPathService } from '../../../utils/services/AssetPathService';
-import { BlobPathService, blobPathService } from '../../../utils/services/BlobPathService';
+import { AssetType } from '../../../types/assets.js';
+import { AssetPathService } from '../../../utils/services/AssetPathService.js';
+import { BlobPathService, blobPathService } from '../../../utils/services/BlobPathService.js';
 
 describe('BlobPathService', () => {
   let service: BlobPathService;

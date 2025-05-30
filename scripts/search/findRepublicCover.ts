@@ -4,8 +4,8 @@
 import dotenv from 'dotenv';
 import path from 'path';
 
-import { logger as _logger } from '../utils/logger';
-import { blobService } from '../utils/services/BlobService';
+import { logger as _logger } from '../utils/logger.js';
+import { blobService } from '../utils/services/BlobService.js';
 
 // Load environment variables
 dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
@@ -59,7 +59,7 @@ async function findRepublicCover() {
   logger.info({ msg: '\nChecking if The Republic was included in coming soon migration...' });
 
   // Check our existing mapping
-  const { ASSET_PATH_MAPPINGS } = await import('../utils/assetPathMapping');
+  const { ASSET_PATH_MAPPINGS } = await import('../utils/assetPathMapping.js');
   logger.info({
     msg: 'Placeholder mapping in assetPathMapping.ts',
     mapping: ASSET_PATH_MAPPINGS['/assets/covers/placeholder.jpg'],

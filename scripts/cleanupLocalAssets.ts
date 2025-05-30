@@ -12,9 +12,9 @@ import fs from 'fs';
 import path from 'path';
 import { exit } from 'process';
 
-import translations from '../translations';
-import { assetExistsInBlobStorage } from '../utils';
-import { logger as rootLogger } from '../utils/logger';
+import translations from '../translations/index.js';
+import { assetExistsInBlobStorage } from '../utils.js';
+import { logger as rootLogger } from '../utils/logger.js';
 
 // Create a script-specific logger instance
 const logger = rootLogger.child({ script: 'cleanupLocalAssets.ts' });

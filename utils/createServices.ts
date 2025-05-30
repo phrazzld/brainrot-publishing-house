@@ -1,12 +1,12 @@
 /**
  * Utility for creating standardized service instances with proper logging
  */
-import { AssetService, AssetServiceConfig } from '../types/assets';
-import { createScriptLogger } from './createScriptLogger';
-import { Logger } from './logger';
-import { AssetPathService, assetPathService } from './services/AssetPathService';
-import { createAssetService } from './services/AssetServiceFactory';
-import { BlobService, blobService } from './services/BlobService';
+import { AssetService, AssetServiceConfig } from '../types/assets.js';
+import { createScriptLogger } from './createScriptLogger.js';
+import { Logger } from './logger.js';
+import { AssetPathService, assetPathService } from './services/AssetPathService.js';
+import { createAssetService } from './services/AssetServiceFactory.js';
+import { BlobService, blobService } from './services/BlobService.js';
 
 export interface ServiceOptions {
   /**

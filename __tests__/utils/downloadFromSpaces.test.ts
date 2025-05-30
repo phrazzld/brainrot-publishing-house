@@ -1,5 +1,5 @@
-import { downloadFromSpaces, getAudioPathFromUrl } from '../../utils/downloadFromSpaces';
-import { assetPathService } from '../../utils/services/AssetPathService';
+import { downloadFromSpaces, getAudioPathFromUrl } from '../../utils/downloadFromSpaces.js';
+import { assetPathService } from '../../utils/services/AssetPathService.js';
 
 // Mock fetch API
 global.fetch = jest.fn();

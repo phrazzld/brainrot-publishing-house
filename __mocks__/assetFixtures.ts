@@ -2,11 +2,11 @@
  * Mock fixtures for asset verification tests
  * These fixtures provide standardized test data for verifying asset paths and access
  */
-import { AssetType } from '../types/assets';
+import { AssetType } from '../types/assets.js';
 import {
   createErrorResponse as createMockErrorResponse,
   createSuccessResponse,
-} from './MockResponse';
+} from './MockResponse.js';
 
 /**
  * Sample book slugs for testing

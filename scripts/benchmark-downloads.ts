@@ -7,8 +7,8 @@ import path from 'path';
 import { performance } from 'perf_hooks';
 import { setTimeout as sleep } from 'timers/promises';
 
-import { createRequestLogger } from '../utils/logger';
-import { generateHtmlReport } from './benchmark-report-generator';
+import { createRequestLogger } from '../utils/logger.js';
+import { generateHtmlReport } from './benchmark-report-generator.js';
 
 // Configuration
 const TEST_ENVIRONMENTS = ['local', 'development', 'staging', 'production'];

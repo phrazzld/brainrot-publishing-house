@@ -1,5 +1,5 @@
-import { DownloadRequestParams, DownloadService } from '../../services/downloadService';
-import { AssetNotFoundError, AssetUrlResolver } from '../../types/dependencies';
+import { DownloadRequestParams, DownloadService } from '../../services/downloadService.js';
+import { AssetNotFoundError, AssetUrlResolver } from '../../types/dependencies.js';
 
 // Mock implementations of dependencies
 const createMockAssetUrlResolver = (): jest.Mocked<AssetUrlResolver> => ({

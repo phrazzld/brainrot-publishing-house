@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 
-import { AssetError, AssetErrorType } from '@/types/assets';
-import { AssetNotFoundError } from '@/types/dependencies';
-import { Logger } from '@/utils/logger';
+import { AssetError, AssetErrorType } from '@/types/assets.js';
+import { AssetNotFoundError } from '@/types/dependencies.js';
+import { Logger } from '@/utils/logger.js';
 
 /**
  * Parameters for download service error handling

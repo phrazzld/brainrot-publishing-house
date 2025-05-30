@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 
-import { GET } from '@/app/api/download/route';
-import { AssetError, AssetErrorType } from '@/types/assets';
+import { GET } from '@/app/api/download/route.js';
+import { AssetError, AssetErrorType } from '@/types/assets.js';
 
 // Mock crypto for reliable UUID generation in tests
 jest.mock('crypto', () => ({
@@ -27,7 +27,7 @@ jest.mock('next/server', () => ({
 }));
 
 // Mock the logger
-jest.mock('@/utils/logger', () => ({
+jest.mock('@/utils/logger.js', () => ({
   createRequestLogger: jest.fn().mockImplementation(() => ({
     debug: jest.fn(),
     info: jest.fn(),
@@ -43,7 +43,7 @@ jest.mock('@/utils/logger', () => ({
 }));
 
 // Mock the DownloadService
-jest.mock('@/services/downloadService', () => {
+jest.mock('@/services/downloadService.js', () => {
   return {
     DownloadService: jest.fn().mockImplementation(() => ({
       getDownloadUrl: jest.fn().mockImplementation(async ({ slug, type, chapter }) => {
@@ -72,7 +72,7 @@ jest.mock('@/services/downloadService', () => {
 });
 
 // Mock the AssetServiceFactory
-jest.mock('@/utils/services/AssetServiceFactory', () => ({
+jest.mock('@/utils/services/AssetServiceFactory.js', () => ({
   createAssetService: jest.fn().mockImplementation(() => ({})),
 }));
 
@@ -263,7 +263,7 @@ describe('Download API Route', () => {
   describe('Proxy Handling', () => {
     it('should call proxy handler when proxy=true is specified', async () => {
       // Mock the proxyFileDownload function
-      jest.mock('@/app/api/download/proxyService', () => ({
+      jest.mock('@/app/api/download/proxyService.js', () => ({
         proxyFileDownload: jest.fn().mockResolvedValue({
           status: 200,
           json: jest.fn().mockResolvedValue({ proxied: true }),

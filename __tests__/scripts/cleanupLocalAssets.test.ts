@@ -2,12 +2,12 @@
 import * as _fs from 'fs';
 import * as _path from 'path';
 
-import * as _utils from '../../utils';
+import * as _utils from '../../utils.js';
 
 // Then use CommonJS require but assign to different variable names
 const fs = require('fs');
 const path = require('path');
-const utils = require('../../utils');
+const utils = require('../../utils.js');
 
 // Use jest.requireActual to import our mock instead of the actual module
 // This avoids ESM-related issues with import.meta
@@ -16,8 +16,8 @@ const cleanupLocalAssets = jest.requireActual('../../__mocks__/cleanupLocalAsset
 // Mock modules
 jest.mock('fs');
 jest.mock('path');
-jest.mock('../../utils');
-jest.mock('../../translations', () => [
+jest.mock('../../utils.js');
+jest.mock('../../translations.js', () => [
   {
     slug: 'test-book',
     title: 'Test Book',

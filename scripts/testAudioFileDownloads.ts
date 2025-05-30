@@ -6,8 +6,8 @@ import fetch from 'node-fetch';
 import path from 'path';
 import { performance } from 'perf_hooks';
 
-import translations from '../translations';
-import { createFileLogger } from '../utils/logger';
+import translations from '../translations/index.js';
+import { createFileLogger } from '../utils/logger.js';
 
 dotenv.config({ path: '.env.local' });
 

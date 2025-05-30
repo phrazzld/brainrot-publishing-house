@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server';
 
-import { Logger } from '@/utils/logger';
+import { Logger } from '@/utils/logger.js';
 
-import { extractErrorDetails } from '../errors/errorExtractor';
-import { createProxyErrorResponse } from '../errors/errorResponses';
-import { TimeoutError } from '../errors/errorTypes';
-import { safeLog, sanitizeUrlForLogging } from '../logging/safeLogger';
-import { createDownloadHeaders } from '../responses/responseHeaders';
-import { FETCH_TIMEOUT_MS, fetchWithTimeout } from './fetchWithTimeout';
+import { extractErrorDetails } from '../errors/errorExtractor.js';
+import { createProxyErrorResponse } from '../errors/errorResponses.js';
+import { TimeoutError } from '../errors/errorTypes.js';
+import { safeLog, sanitizeUrlForLogging } from '../logging/safeLogger.js';
+import { createDownloadHeaders } from '../responses/responseHeaders.js';
+import { FETCH_TIMEOUT_MS, fetchWithTimeout } from './fetchWithTimeout.js';
 
 /**
  * Configuration for legacy proxy file downloads

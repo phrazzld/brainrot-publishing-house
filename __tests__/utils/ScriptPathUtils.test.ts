@@ -1,4 +1,4 @@
-import { AssetType } from '../../types/assets';
+import { AssetType } from '../../types/assets.js';
 import {
   extractAssetInfo,
   generateAssetUrl,
@@ -7,7 +7,7 @@ import {
   getFileExtension,
   isLegacyPath,
   normalizePath,
-} from '../../utils/ScriptPathUtils';
+} from '../../utils/ScriptPathUtils.js';
 
 describe('ScriptPathUtils', () => {
   describe('normalizePath', () => {

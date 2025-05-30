@@ -4,9 +4,9 @@
  * Provides utilities for converting legacy asset names to standardized formats.
  * This helps with gradual migration of asset names without breaking compatibility.
  */
-import { AssetType } from '@/types/assets';
+import { AssetType } from '@/types/assets.js';
 
-import { assetNameValidator } from '../validators/AssetNameValidator';
+import { assetNameValidator } from '../validators/AssetNameValidator.js';
 
 /**
  * Result of an asset name migration attempt

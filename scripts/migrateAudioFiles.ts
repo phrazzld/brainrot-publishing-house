@@ -7,9 +7,9 @@ import * as path from 'path';
 import { existsSync as _existsSync } from 'fs';
 import { parseArgs } from 'util';
 
-import translations from '../translations';
-import { logger as rootLogger } from '../utils/logger';
-import { blobPathService, blobService } from '../utils/services';
+import translations from '../translations/index.js';
+import { logger as rootLogger } from '../utils/logger.js';
+import { blobPathService, blobService } from '../utils/services.js';
 
 // Create a script-specific logger instance
 const logger = rootLogger.child({ script: 'migrateAudioFiles.ts' });

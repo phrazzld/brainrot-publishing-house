@@ -3,8 +3,8 @@ import React from 'react';
 import '@testing-library/jest-dom';
 import { fireEvent, waitFor } from '@testing-library/react';
 
-import DownloadButton from '../../components/DownloadButton';
-import { render } from '../utils/test-utils';
+import DownloadButton from '../../components/DownloadButton.js';
+import { render } from '../utils/test-utils.js';
 
 // Mock URL.createObjectURL
 URL.createObjectURL = jest.fn(() => 'mock-blob-url');
