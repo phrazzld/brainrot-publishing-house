@@ -88,6 +88,9 @@ thinktank_*/
 # planning files
 *-plan.md
 
+# task tracking files
+T0*.md
+
 # glance documentation files
 glance.md
 **/glance.md
