@@ -41,19 +41,17 @@ export function createMockBlobService(
   return {
     uploadFile: jest.fn().mockResolvedValue({
       url: 'https://example.com/mock-file.txt',
+      downloadUrl: 'https://example.com/mock-file.txt?download=1',
       pathname: 'mock-file.txt',
       contentDisposition: 'inline',
       contentType: 'text/plain',
-      contentLength: 100,
-      uploadedAt: new Date(),
     }),
     uploadText: jest.fn().mockResolvedValue({
       url: 'https://example.com/mock-text.txt',
+      downloadUrl: 'https://example.com/mock-text.txt?download=1',
       pathname: 'mock-text.txt',
       contentDisposition: 'inline',
       contentType: 'text/plain',
-      contentLength: 100,
-      uploadedAt: new Date(),
     }),
     listFiles: jest.fn().mockResolvedValue({
       blobs: [],
@@ -152,27 +150,28 @@ export function createMockVercelBlob(
 ): MockVercelBlob {
   const mockPutResult: PutBlobResult = {
     url: 'https://example.com/assets/test.txt',
+    downloadUrl: 'https://example.com/assets/test.txt?download=1',
     pathname: 'assets/test.txt',
     contentDisposition: 'inline',
     contentType: 'text/plain',
-    contentLength: 100,
-    uploadedAt: new Date(),
   };
 
   const mockListResult: ListBlobResultBlob = {
     url: 'https://example.com/assets/audio/the-iliad/chapter-01.mp3',
     pathname: 'assets/audio/the-iliad/chapter-01.mp3',
-    downloadUrl: 'https://example.com/assets/audio/the-iliad/chapter-01.mp3',
-    contentType: 'audio/mpeg',
-    contentLength: 1000000,
+    downloadUrl: 'https://example.com/assets/audio/the-iliad/chapter-01.mp3?download=1',
+    size: 1000000,
     uploadedAt: new Date(),
   };
 
   const mockHeadResult: HeadBlobResult = {
     url: 'https://example.com/assets/audio/the-iliad/chapter-01.mp3',
+    downloadUrl: 'https://example.com/assets/audio/the-iliad/chapter-01.mp3?download=1',
     pathname: 'assets/audio/the-iliad/chapter-01.mp3',
     contentType: 'audio/mpeg',
-    contentLength: 1000000,
+    contentDisposition: 'inline',
+    cacheControl: 'public, max-age=31536000',
+    size: 1000000,
     uploadedAt: new Date(),
   };
 

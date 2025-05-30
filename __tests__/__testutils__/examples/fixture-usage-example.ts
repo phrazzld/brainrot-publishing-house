@@ -4,12 +4,14 @@
  */
 import { expect } from '@jest/globals';
 
+import { AssetType } from '@/types/assets.js';
+
 import {
   expectFetchCalledWith,
   expectLoggedWithContext,
   expectPathStructure,
   expectValidAssetUrl,
-} from '../assertions.js';
+} from '../assertions/index.js';
 import {
   BookBuilder,
   createAudioAssetFixture,
@@ -17,7 +19,7 @@ import {
   createSuccessFetch,
   createTextAssetFixture,
   createTextResponse,
-} from '../fixtures.js';
+} from '../fixtures/index.js';
 import { createMockLogger, createMockVercelBlobAssetService } from '../mocks/factories.js';
 import { MockLogger } from '../mocks/interfaces.js';
 import { MockVercelBlobAssetService } from '../mocks/interfaces.js';
@@ -29,7 +31,7 @@ class AssetManager {
     private readonly logger: MockLogger,
   ) {}
 
-  async fetchAsset(assetType: string, bookSlug: string, assetName: string): Promise<string> {
+  async fetchAsset(assetType: AssetType, bookSlug: string, assetName: string): Promise<string> {
     try {
       this.logger.info({ msg: 'Fetching asset', assetType, bookSlug, assetName });
       const url = await this.assetService.getAssetUrl(assetType, bookSlug, assetName);
@@ -75,27 +77,27 @@ describe('AssetManager', () => {
     it('should fetch text assets successfully', async () => {
       // Set up mocks with type-safe fixtures
       mockAssetService.getAssetUrl.mockResolvedValue(textAsset.url);
-      global.fetch = createSuccessFetch('To be or not to be...');
+      (global as any).fetch = createSuccessFetch('To be or not to be...');
 
       // Execute the function under test
-      const result = await assetManager.fetchAsset('text', 'hamlet', textAsset.assetName);
+      const result = await assetManager.fetchAsset(AssetType.TEXT, 'hamlet', textAsset.assetName);
 
       // Type-safe assertions
       expect(result).toBe('To be or not to be...');
       expect(mockAssetService.getAssetUrl).toHaveBeenCalledWith(
-        'text',
+        AssetType.TEXT,
         'hamlet',
         textAsset.assetName,
       );
       expectFetchCalledWith(textAsset.url);
-      expectLoggedWithContext(mockLogger.info, {
+      expectLoggedWithContext(mockLogger.info as unknown as jest.Mock, {
         msg: 'Fetching asset',
-        assetType: 'text',
+        assetType: AssetType.TEXT,
         bookSlug: 'hamlet',
       });
 
       // Verify URL structure
-      expectValidAssetUrl(textAsset.url, 'text', 'hamlet', textAsset.assetName);
+      expectValidAssetUrl(textAsset.url, AssetType.TEXT, 'hamlet', textAsset.assetName);
     });
 
     it('should handle fetch errors gracefully', async () => {
@@ -105,13 +107,13 @@ describe('AssetManager', () => {
 
       // Verify error handling
       await expect(
-        assetManager.fetchAsset('audio', 'hamlet', audioAsset.assetName),
+        assetManager.fetchAsset(AssetType.AUDIO, 'hamlet', audioAsset.assetName),
       ).rejects.toThrow('HTTP error! Status: 404');
 
       // Verify error was logged
-      expectLoggedWithContext(mockLogger.error, {
+      expectLoggedWithContext(mockLogger.error as unknown as jest.Mock, {
         msg: 'Failed to fetch asset',
-        assetType: 'audio',
+        assetType: AssetType.AUDIO,
         bookSlug: 'hamlet',
       });
     });
@@ -123,11 +125,11 @@ describe('AssetManager', () => {
 
       // Verify error handling
       await expect(
-        assetManager.fetchAsset('audio', 'hamlet', audioAsset.assetName),
+        assetManager.fetchAsset(AssetType.AUDIO, 'hamlet', audioAsset.assetName),
       ).rejects.toThrow('Network error');
 
       // Verify error was logged
-      expectLoggedWithContext(mockLogger.error, {
+      expectLoggedWithContext(mockLogger.error as unknown as jest.Mock, {
         msg: 'Failed to fetch asset',
         error: 'Network error',
       });
@@ -156,12 +158,12 @@ describe('AssetManager', () => {
         .mockResolvedValue(createTextResponse('In the Republic, Plato says...'));
 
       // Execute the function under test
-      const result = await assetManager.fetchAsset('text', 'republic', textAsset.assetName);
+      const result = await assetManager.fetchAsset(AssetType.TEXT, 'republic', textAsset.assetName);
 
       // Assertions
       expect(result).toBe('In the Republic, Plato says...');
       expect(mockAssetService.getAssetUrl).toHaveBeenCalledWith(
-        'text',
+        AssetType.TEXT,
         'republic',
         textAsset.assetName,
       );

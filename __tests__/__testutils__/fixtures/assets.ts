@@ -1,20 +1,31 @@
 /**
  * Fixtures for asset-related test data
  */
+import { AssetType } from '@/types/assets.js';
 
 /**
- * Asset types supported by the application
+ * Asset data structure
  */
-const AssetType = {
-  AUDIO: 'audio',
-  TEXT: 'text',
-  IMAGE: 'image',
-};
+export interface AssetData {
+  assetType: AssetType;
+  bookSlug: string;
+  assetName: string;
+  path: string;
+  url: string;
+  contentType: string;
+  size: number;
+  [key: string]: unknown;
+}
 
 /**
  * Creates an asset data fixture
  */
-function createAssetFixture(assetType, bookSlug, assetName, overrides = {}) {
+function createAssetFixture(
+  assetType: AssetType,
+  bookSlug: string,
+  assetName: string,
+  overrides: Partial<AssetData> = {},
+): AssetData {
   // Determine content type based on asset type and file extension
   let contentType = 'application/octet-stream';
   if (assetType === AssetType.TEXT) {
@@ -48,7 +59,11 @@ function createAssetFixture(assetType, bookSlug, assetName, overrides = {}) {
 /**
  * Creates an audio asset fixture
  */
-function createAudioAssetFixture(bookSlug, chapter, overrides = {}) {
+function createAudioAssetFixture(
+  bookSlug: string,
+  chapter: number | 'full' | null,
+  overrides: Partial<AssetData> = {},
+): AssetData {
   const assetName =
     typeof chapter === 'number'
       ? `chapter-${String(chapter).padStart(2, '0')}.mp3`
@@ -64,8 +79,13 @@ function createAudioAssetFixture(bookSlug, chapter, overrides = {}) {
 /**
  * Creates a text asset fixture
  */
-function createTextAssetFixture(bookSlug, chapter, textType = 'brainrot', overrides = {}) {
-  let assetName;
+function createTextAssetFixture(
+  bookSlug: string,
+  chapter: number | 'fulltext' | string,
+  textType: string = 'brainrot',
+  overrides: Partial<AssetData> = {},
+): AssetData {
+  let assetName: string;
 
   if (typeof chapter === 'number') {
     assetName = `${textType}-chapter-${String(chapter).padStart(2, '0')}.txt`;
@@ -85,7 +105,11 @@ function createTextAssetFixture(bookSlug, chapter, textType = 'brainrot', overri
 /**
  * Creates an image asset fixture
  */
-function createImageAssetFixture(bookSlug, imageName, overrides = {}) {
+function createImageAssetFixture(
+  bookSlug: string,
+  imageName: string,
+  overrides: Partial<AssetData> = {},
+): AssetData {
   return createAssetFixture(AssetType.IMAGE, bookSlug, imageName, {
     contentType:
       imageName.endsWith('.jpg') || imageName.endsWith('.jpeg')
@@ -101,13 +125,12 @@ function createImageAssetFixture(bookSlug, imageName, overrides = {}) {
 /**
  * Creates a cover image asset fixture
  */
-function createCoverImageFixture(bookSlug, overrides = {}) {
+function createCoverImageFixture(bookSlug: string, overrides: Partial<AssetData> = {}): AssetData {
   return createImageAssetFixture(bookSlug, 'cover.jpg', overrides);
 }
 
-// Export asset types and functions
+// Export asset functions
 export {
-  AssetType,
   createAssetFixture,
   createAudioAssetFixture,
   createTextAssetFixture,

@@ -23,3 +23,9 @@ export interface Translation {
   purchaseUrl?: string;
   chapters: Chapter[];
 }
+
+/**
+ * Book type alias for backward compatibility with tests
+ * This allows tests to import { Book } from '../../../translations/types.js'
+ */
+export type Book = Translation;

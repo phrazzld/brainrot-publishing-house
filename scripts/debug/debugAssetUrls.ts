@@ -1,10 +1,10 @@
 /**
  * Debug script to understand how asset URLs are being generated
  */
+import { logger } from '../../utils/logger.js';
 import { getAssetUrl } from '../utils.js';
 // Check asset path mapping
 import { mapAssetPath } from '../utils/assetPathMapping.js';
-import { logger as _logger } from '../utils/logger.js';
 // Also let's check what the blob path service does with these
 import { blobPathService } from '../utils/services/BlobPathService.js';
 

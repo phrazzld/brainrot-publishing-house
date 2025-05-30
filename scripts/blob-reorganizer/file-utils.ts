@@ -3,7 +3,7 @@
  */
 import fs from 'fs';
 
-import { logger as _logger } from './logging.js';
+import { logger } from './logging.js';
 
 /**
  * Create output directory for reports if it doesn't exist

@@ -5,7 +5,7 @@ import { put } from '@vercel/blob';
 import dotenv from 'dotenv';
 import path from 'path';
 
-import { logger as _logger } from '../utils/logger.js';
+import { logger } from '../../utils/logger.js';
 
 // Load environment variables
 dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });

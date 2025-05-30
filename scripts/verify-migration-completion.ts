@@ -7,7 +7,7 @@ import path from 'path';
 import { performance } from 'perf_hooks';
 
 import { AssetType } from '../types/assets.js';
-import { logger as _logger } from '../utils/logger.js';
+import { logger } from '../utils/logger.js';
 import { createAssetService } from '../utils/services/AssetServiceFactory.js';
 
 // Define AssetCategory enum locally since it's not defined in types/assets.ts

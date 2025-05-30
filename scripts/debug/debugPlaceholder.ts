@@ -4,8 +4,8 @@
 import dotenv from 'dotenv';
 import path from 'path';
 
+import { logger } from '../../utils/logger.js';
 import { getAssetUrl } from '../utils.js';
-import { logger as _logger } from '../utils/logger.js';
 import { blobService } from '../utils/services/BlobService.js';
 
 // Load environment variables

@@ -8,10 +8,28 @@
 import { jest } from '@jest/globals';
 
 /**
+ * Type for response body
+ */
+type ResponseBodyType = string | ArrayBuffer | Blob | Record<string, unknown>;
+
+/**
+ * Response options interface
+ */
+interface ResponseOptions {
+  status?: number;
+  statusText?: string;
+  headers?: HeadersInit;
+  url?: string;
+}
+
+/**
  * Split response creation into multiple functions to reduce complexity
  */
-function processResponseBody(body) {
-  let responseBody;
+function processResponseBody(body: ResponseBodyType): {
+  responseBody: string | ArrayBuffer | Blob;
+  contentType: string;
+} {
+  let responseBody: string | ArrayBuffer | Blob;
   let contentType = 'text/plain';
 
   if (typeof body === 'string') {
@@ -32,9 +50,25 @@ function processResponseBody(body) {
 }
 
 /**
+ * Response methods interface
+ */
+interface ResponseMethods {
+  text: jest.Mock<() => Promise<string>>;
+  json: jest.Mock<() => Promise<unknown>>;
+  arrayBuffer: jest.Mock<() => Promise<ArrayBuffer>>;
+  blob: jest.Mock<() => Promise<Blob>>;
+  formData: jest.Mock<() => Promise<FormData>>;
+  clone: jest.Mock;
+}
+
+/**
  * Creates method implementations for the Response object
  */
-function createResponseMethods(responseBody, headers, contentType) {
+function createResponseMethods(
+  responseBody: string | ArrayBuffer | Blob,
+  headers: Headers,
+  contentType: string,
+): ResponseMethods {
   // Create text implementation
   const textImpl = jest.fn().mockImplementation(async () => {
     if (typeof responseBody === 'string') {
@@ -51,7 +85,7 @@ function createResponseMethods(responseBody, headers, contentType) {
   const jsonImpl = jest.fn().mockImplementation(async () => {
     const text = await textImpl();
     try {
-      return JSON.parse(text);
+      return JSON.parse(text as string);
     } catch {
       throw new SyntaxError('Unexpected token in JSON at position 0');
     }
@@ -80,16 +114,16 @@ function createResponseMethods(responseBody, headers, contentType) {
   });
 
   // Create formData implementation
-  const formDataImpl = jest.fn().mockResolvedValue(new FormData());
+  const formDataImpl = jest.fn<() => Promise<FormData>>().mockResolvedValue(new FormData());
 
   // Create a mock for clone that returns itself
   const cloneImpl = jest.fn();
 
   return {
-    text: textImpl,
-    json: jsonImpl,
-    arrayBuffer: arrayBufferImpl,
-    blob: blobImpl,
+    text: textImpl as jest.Mock<() => Promise<string>>,
+    json: jsonImpl as jest.Mock<() => Promise<unknown>>,
+    arrayBuffer: arrayBufferImpl as jest.Mock<() => Promise<ArrayBuffer>>,
+    blob: blobImpl as jest.Mock<() => Promise<Blob>>,
     formData: formDataImpl,
     clone: cloneImpl,
   };
@@ -98,7 +132,7 @@ function createResponseMethods(responseBody, headers, contentType) {
 /**
  * Creates a type-safe Response object
  */
-function createResponseFixture(body, options = {}) {
+function createResponseFixture(body: ResponseBodyType, options: ResponseOptions = {}): Response {
   // Process the body
   const { responseBody, contentType } = processResponseBody(body);
 
@@ -114,13 +148,13 @@ function createResponseFixture(body, options = {}) {
   }
 
   // Create response object
-  const response = {
+  const response: Record<string, unknown> = {
     status,
     statusText,
     headers,
     ok: status >= 200 && status < 300,
     redirected: false,
-    type: 'basic',
+    type: 'basic' as ResponseType,
     url,
     bodyUsed: false,
     body: null,
@@ -133,13 +167,13 @@ function createResponseFixture(body, options = {}) {
   // Set up circular reference for clone method
   methods.clone.mockReturnValue(response);
 
-  return response;
+  return response as Response;
 }
 
 /**
  * Creates a successful JSON response
  */
-function createJsonResponse(data, options = {}) {
+function createJsonResponse(data: unknown, options: ResponseOptions = {}) {
   const headers = new Headers(options.headers || {});
   headers.set('content-type', 'application/json');
 
@@ -154,7 +188,7 @@ function createJsonResponse(data, options = {}) {
 /**
  * Creates a successful text response
  */
-function createTextResponse(text, options = {}) {
+function createTextResponse(text: string, options: ResponseOptions = {}) {
   const headers = new Headers(options.headers || {});
   headers.set('content-type', 'text/plain');
 
@@ -169,7 +203,11 @@ function createTextResponse(text, options = {}) {
 /**
  * Creates an error response
  */
-function createErrorResponse(status = 404, statusText = 'Not Found', errorBody = '') {
+function createErrorResponse(
+  status = 404,
+  statusText = 'Not Found',
+  errorBody: string | Record<string, unknown> = '',
+) {
   const isJson = typeof errorBody !== 'string';
   const body = isJson ? JSON.stringify(errorBody) : errorBody || `Error ${status}: ${statusText}`;
   const contentType = isJson ? 'application/json' : 'text/plain';
@@ -193,7 +231,7 @@ function createNetworkError(message = 'Network error') {
 /**
  * Creates a fetch function that returns a successful response
  */
-function createSuccessFetch(data, options = {}) {
+function createSuccessFetch(data: unknown, options: ResponseOptions = {}): jest.Mock {
   return jest
     .fn()
     .mockResolvedValue(
@@ -206,7 +244,11 @@ function createSuccessFetch(data, options = {}) {
 /**
  * Creates a fetch function that returns an error response
  */
-function createErrorFetch(status = 404, statusText = 'Not Found', errorBody = '') {
+function createErrorFetch(
+  status = 404,
+  statusText = 'Not Found',
+  errorBody: string | Record<string, unknown> = '',
+): jest.Mock {
   return jest.fn().mockResolvedValue(createErrorResponse(status, statusText, errorBody));
 }
 

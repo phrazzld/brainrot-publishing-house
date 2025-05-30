@@ -3,7 +3,7 @@ import * as dotenv from 'dotenv';
 import { list } from '@vercel/blob';
 import type { ListBlobResult } from '@vercel/blob';
 
-import { logger as _logger } from '../utils/logger.js';
+import { logger } from '../utils/logger.js';
 
 dotenv.config({ path: '.env.local' });
 

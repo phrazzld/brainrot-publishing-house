@@ -63,11 +63,13 @@ function initializeResponse(
   response.arrayBuffer = async (): Promise<ArrayBuffer> => {
     if (ArrayBuffer.isView(body)) {
       // Handle typed arrays like Uint8Array
-      return body.buffer;
+      // Cast to ArrayBuffer explicitly to satisfy TypeScript
+      return body.buffer as ArrayBuffer;
     } else if (body instanceof ArrayBuffer) {
       return body;
     } else if (typeof body === 'string') {
-      return new TextEncoder().encode(body).buffer;
+      // TextEncoder.encode() returns Uint8Array, so we need to access its buffer as ArrayBuffer
+      return new TextEncoder().encode(body).buffer as ArrayBuffer;
     } else if (body instanceof Blob) {
       return await body.arrayBuffer();
     }
