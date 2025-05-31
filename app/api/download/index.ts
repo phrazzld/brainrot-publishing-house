@@ -7,8 +7,8 @@
 
 // Export main proxy service functions
 export { proxyAssetDownload, proxyFileDownload, createDownloadHeaders } from './proxyService.js';
-export type { ProxyAssetConfig } from './proxyService';
-export type { ProxyFileConfig } from './fetching/legacyProxyService';
+export type { ProxyAssetConfig } from './proxyService.js';
+export type { ProxyFileConfig } from './fetching/legacyProxyService.js';
 
 // Export error handling utilities
 export { createProxyErrorResponse } from './errors/errorResponses.js';

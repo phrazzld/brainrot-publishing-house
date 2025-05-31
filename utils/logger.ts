@@ -16,7 +16,9 @@ const createClientLogger = () => {
 
 // Configure the logger with appropriate options for server-side
 const createServerLogger = () => {
-  return pino({
+  // Use default export for pino in Node.js environments
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return (pino as any)({
     level: process.env.LOG_LEVEL || 'info',
     browser: {
       asObject: true,

@@ -70,7 +70,7 @@ function initializeRequest(req: NextRequest): RequestContext {
   const headers: Record<string, string> = {};
   const sensitiveHeaders = ['authorization', 'cookie', 'set-cookie'];
 
-  req.headers.forEach((value, key) => {
+  req.headers.forEach((value: string, key: string) => {
     if (!sensitiveHeaders.includes(key.toLowerCase())) {
       headers[key] = value;
     }
