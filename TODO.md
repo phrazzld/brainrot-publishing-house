@@ -715,6 +715,7 @@ This TODO list details the tasks required to fully migrate all asset management 
   - Dependencies: T054
 
 - [x] **T056: Fix Remaining TypeScript Errors (Post Module Resolution)**
+
   - [x] Fix type errors in test fixtures:
     - [x] Address import issues in `__tests__/__testutils__/examples/`
     - [x] Fix 'AssetType' parameter type incompatibilities
@@ -727,3 +728,75 @@ This TODO list details the tasks required to fully migrate all asset management 
   - [x] Run final type verification to ensure all errors are fixed
   - Dependencies: T055
   - COMPLETED: Fixed major TypeScript errors in test fixtures, logger imports, and verification scripts. Reduced total error count from ~500+ to 214. Remaining errors are primarily in test mock configurations and edge cases.
+
+- [ ] **T057: Fix Jest Mock Type Errors in Test Utilities**
+
+  - [ ] Fix 'never' type assignment errors in service-test-example.ts:
+    - [ ] Fix mockResolvedValue type incompatibilities (lines 96, 125-127, 158)
+    - [ ] Properly type jest.fn() mock functions with correct signatures
+  - [ ] Fix Response type conversion error in fixtures/responses.ts:
+    - [ ] Fix line 170: conversion from Record<string, unknown> to Response
+    - [ ] Fix line 238, 252: Response assignable to 'never' parameter
+  - [ ] Fix mock factory type errors in mocks/factories.ts:
+    - [ ] Fix MockedFunction type assignment for logger child method (line 29)
+    - [ ] Fix all 'never' parameter type errors in mock return values
+    - [ ] Fix path type 'unknown' error (line 106)
+    - [ ] Fix Mock<UnknownFunction> to MockedFunction conversions
+  - Dependencies: T056
+
+- [ ] **T058: Fix Pino Logger Import Issues**
+
+  - [ ] Fix pino import error in utils/logger.ts (line 19):
+    - [ ] Update to use correct pino import syntax for TypeScript
+    - [ ] Ensure logger exports are properly typed
+  - [ ] Fix pino import errors in search scripts:
+    - [ ] scripts/search/checkAvailableAssets.ts
+    - [ ] scripts/search/checkMissingAssets.ts
+    - [ ] scripts/search/findComingSoonCovers.ts
+    - [ ] scripts/search/searchBlobAssets.ts
+    - [ ] scripts/test-utils/verifyAssetMappings.ts
+  - [ ] Fix createFileLogger export issue in scripts/testAudioFileDownloads.ts
+  - Dependencies: T056
+
+- [ ] **T059: Fix Script Import Path and Module Resolution Issues**
+
+  - [ ] Fix missing utils.js imports:
+    - [ ] scripts/test-utils/testMissingAssets.ts (line 6)
+    - [ ] scripts/cleanupLocalAssets.ts
+    - [ ] scripts/verifyBlobStorage.ts
+  - [ ] Fix @/utils/services.js imports:
+    - [ ] scripts/standardizeTextFilesBlob.ts
+    - [ ] scripts/standardizeTextFilesBlobWithCopy.ts
+  - [ ] Fix ../utils/services.js imports:
+    - [ ] scripts/upload-book-images.ts (lines 5-6)
+  - [ ] Fix relative import paths in blob-reorganizer scripts
+  - Dependencies: T057, T058
+
+- [ ] **T060: Fix Missing Logger References in Scripts**
+
+  - [ ] Add logger import to scripts/reorganize-blob-paths.ts
+  - [ ] Fix logger vs \_logger reference in scripts/runTextStandardizationMigration.ts
+  - [ ] Add logger import to scripts/validateAssetNames.ts
+  - [ ] Fix all "Cannot find name 'logger'" errors in script files
+  - Dependencies: T058
+
+- [ ] **T061: Fix Error Type Handling in Scripts**
+
+  - [ ] Add proper error type handling in catch blocks:
+    - [ ] scripts/search/findExistingBookAssets.ts (line 67)
+    - [ ] scripts/test-utils/finalFinalVerify.ts (lines 101-102)
+    - [ ] scripts/test-utils/finalVerifyAllBooks.ts (lines 95-96)
+    - [ ] scripts/test-utils/testRepublic.ts (line 37)
+    - [ ] scripts/test-utils/testRepublicFinal.ts (line 34)
+    - [ ] scripts/test-utils/verifyAllBookCovers.ts (lines 108, 114)
+    - [ ] scripts/test-utils/verifyComingSoonCovers.ts (lines 69-70)
+  - [ ] Fix browser/msg type unknown in scripts/testAudioPlayback.ts
+  - [ ] Fix Buffer type issue in scripts/runTextStandardizationMigration.ts
+  - Dependencies: T059
+
+- [ ] **T062: Configure TypeScript for Script Files**
+  - [ ] Create separate tsconfig for scripts directory with appropriate settings
+  - [ ] Consider adding script files to eslintignore if they don't need strict checking
+  - [ ] Or update script files to fully comply with strict TypeScript settings
+  - [ ] Ensure all script imports use correct module resolution
+  - Dependencies: T057-T061
