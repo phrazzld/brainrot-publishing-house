@@ -98,8 +98,9 @@ async function finalFinalVerify() {
         results.push({ ...book, status: 'failed', error: `HTTP ${response.status}` });
       }
     } catch (error) {
-      logger.error({ msg: `✗ ${book.name} - ${error.message}` });
-      results.push({ ...book, status: 'failed', error: error.message });
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      logger.error({ msg: `✗ ${book.name} - ${errorMessage}` });
+      results.push({ ...book, status: 'failed', error: errorMessage });
     }
   }
 

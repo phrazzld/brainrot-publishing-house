@@ -105,13 +105,14 @@ async function verifyCovers() {
         });
       }
     } catch (error) {
-      logger.error({ msg: `✗ ${book.name} cover failed to fetch`, url, error: error.message });
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      logger.error({ msg: `✗ ${book.name} cover failed to fetch`, url, error: errorMessage });
       results.push({
         book: book.name,
         url,
         type: book.type,
         status: 'failed',
-        error: error.message,
+        error: errorMessage,
       });
     }
   }

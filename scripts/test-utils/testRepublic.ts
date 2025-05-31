@@ -34,7 +34,10 @@ async function testRepublic() {
       });
     }
   } catch (error) {
-    logger.error({ msg: 'Error fetching cover', error: error.message });
+    logger.error({
+      msg: 'Error fetching cover',
+      error: error instanceof Error ? error.message : String(error),
+    });
   }
 }
 

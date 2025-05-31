@@ -10,8 +10,12 @@ import path from 'path';
 import { listAllBlobs, mapPaths } from './blob-reorganizer/blob-operations.js';
 // Import utilities from our modular organization
 import { parseArgs } from './blob-reorganizer/cli.js';
-import { createOutputDirectory, saveHtmlReport, saveReport } from './blob-reorganizer/file-utils.js';
-import { logger as _logger } from './blob-reorganizer/logging.js';
+import {
+  createOutputDirectory,
+  saveHtmlReport,
+  saveReport,
+} from './blob-reorganizer/file-utils.js';
+import { logger } from './blob-reorganizer/logging.js';
 import { createHtmlReport, reorganizeBlobs } from './blob-reorganizer/reporting.js';
 
 /**

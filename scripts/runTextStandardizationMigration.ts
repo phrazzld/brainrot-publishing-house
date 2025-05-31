@@ -32,7 +32,7 @@ interface MigrationSummary {
   durationMs: number;
 }
 
-const rootLogger = logger.child({ module: 'text-standardization-migration' });
+const rootLogger = _logger.child({ module: 'text-standardization-migration' });
 
 // Check if running locally
 const isLocal =

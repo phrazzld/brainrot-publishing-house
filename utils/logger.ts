@@ -1,4 +1,4 @@
-import * as pino from 'pino';
+import pino from 'pino';
 
 // Define type for log data
 type LogData = Record<string, unknown>;
@@ -16,7 +16,7 @@ const createClientLogger = () => {
 
 // Configure the logger with appropriate options for server-side
 const createServerLogger = () => {
-  return pino.default({
+  return pino({
     level: process.env.LOG_LEVEL || 'info',
     browser: {
       asObject: true,

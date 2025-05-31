@@ -7,12 +7,12 @@ import path from 'path';
 import { performance } from 'perf_hooks';
 
 import translations from '../translations/index.js';
-import { createFileLogger } from '../utils/logger.js';
+import { logger as baseLogger } from '../utils/logger.js';
 
 dotenv.config({ path: '.env.local' });
 
 // Initialize logger
-const logger = createFileLogger('audio-download-test');
+const logger = baseLogger.child({ script: 'audio-download-test' });
 
 // Configuration
 const TEST_ENVIRONMENTS = ['local', 'development', 'staging', 'production'];

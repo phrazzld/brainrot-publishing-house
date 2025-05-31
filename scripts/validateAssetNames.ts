@@ -29,7 +29,7 @@ import { assetNameValidator } from '../utils/validators/AssetNameValidator.js';
 dotenv.config({ path: '.env.local' });
 
 // Create a scoped logger for this script
-const scriptLogger = logger.child({ module: 'validateAssetNames' });
+const scriptLogger = _logger.child({ module: 'validateAssetNames' });
 
 // Get this file's directory
 const __filename = fileURLToPath(import.meta.url);

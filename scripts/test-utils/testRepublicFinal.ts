@@ -31,7 +31,10 @@ async function testRepublicFinal() {
       logger.error({ msg: '✗ The Republic cover still not working', status: response.status });
     }
   } catch (error) {
-    logger.error({ msg: 'Error fetching cover', error: error.message });
+    logger.error({
+      msg: 'Error fetching cover',
+      error: error instanceof Error ? error.message : String(error),
+    });
   }
 }
 

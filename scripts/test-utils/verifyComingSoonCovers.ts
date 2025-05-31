@@ -66,8 +66,9 @@ async function verifyCovers() {
         results.push({ book: book.name, url, status: 'failed', error: `HTTP ${response.status}` });
       }
     } catch (error) {
-      logger.error({ msg: `✗ ${book.name} cover failed to fetch`, url, error: error.message });
-      results.push({ book: book.name, url, status: 'failed', error: error.message });
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      logger.error({ msg: `✗ ${book.name} cover failed to fetch`, url, error: errorMessage });
+      results.push({ book: book.name, url, status: 'failed', error: errorMessage });
     }
   }
 

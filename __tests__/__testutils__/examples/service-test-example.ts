@@ -24,8 +24,9 @@ describe('VercelBlobAssetService Example Test', () => {
   const mockAssetPathService = createMockAssetPathService();
   let service: VercelBlobAssetService;
 
-  // Mock fetch function
+  // Mock fetch function with proper typing
   const originalFetch = global.fetch;
+  const mockFetch = jest.fn<typeof fetch>();
 
   beforeEach(() => {
     // Clear mock state before each test
@@ -47,8 +48,8 @@ describe('VercelBlobAssetService Example Test', () => {
       mockLogger,
     );
 
-    // Set up mock fetch implementation
-    global.fetch = jest.fn<typeof fetch>();
+    // Set up mock fetch implementation with proper type
+    global.fetch = mockFetch as typeof fetch;
   });
 
   afterEach(() => {
@@ -93,7 +94,7 @@ describe('VercelBlobAssetService Example Test', () => {
       const mockBinaryResponse = createBinaryResponse(mockArrayBuffer, 'audio/mpeg');
 
       // Set up fetch mock to return binary response
-      (global.fetch as jest.Mock).mockResolvedValue(mockBinaryResponse);
+      mockFetch.mockResolvedValue(mockBinaryResponse);
 
       // Call the method under test
       const content = await service.fetchAsset(AssetType.AUDIO, 'the-iliad', 'chapter-01.mp3');
@@ -121,7 +122,7 @@ describe('VercelBlobAssetService Example Test', () => {
       const mockBinaryResponse = createBinaryResponse(mockArrayBuffer, 'audio/mpeg');
 
       // Set up fetch mock to fail twice then succeed
-      (global.fetch as jest.Mock)
+      mockFetch
         .mockRejectedValueOnce(new Error('Network error 1'))
         .mockRejectedValueOnce(new Error('Network error 2'))
         .mockResolvedValueOnce(mockBinaryResponse);
@@ -130,7 +131,7 @@ describe('VercelBlobAssetService Example Test', () => {
       const content = await service.fetchAsset(AssetType.AUDIO, 'the-iliad', 'chapter-01.mp3');
 
       // Verify fetch was called multiple times
-      expect(global.fetch).toHaveBeenCalledTimes(3);
+      expect(mockFetch).toHaveBeenCalledTimes(3);
 
       // Assert result is as expected
       expect(content).toBe(mockArrayBuffer);
@@ -155,7 +156,7 @@ describe('VercelBlobAssetService Example Test', () => {
       const mockTextResponse = createJsonResponse(mockTextContent);
 
       // Set up fetch mock to return text response
-      (global.fetch as jest.Mock).mockResolvedValue(mockTextResponse);
+      mockFetch.mockResolvedValue(mockTextResponse);
 
       // Call the method under test
       const content = await service.fetchTextAsset('the-iliad', 'fulltext.txt');

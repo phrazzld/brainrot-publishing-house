@@ -21,14 +21,19 @@ import {
  * @param customImplementations Optional custom implementations to override defaults
  */
 export function createMockLogger(customImplementations: Partial<MockLogger> = {}): MockLogger {
-  return {
+  const mockLogger = {
     info: jest.fn(),
     debug: jest.fn(),
     warn: jest.fn(),
     error: jest.fn(),
-    child: jest.fn().mockReturnThis(),
+    child: jest.fn(),
     ...customImplementations,
   };
+
+  // Set up the child method to return the mock logger itself
+  mockLogger.child.mockReturnValue(mockLogger);
+
+  return mockLogger;
 }
 
 /**
@@ -38,37 +43,51 @@ export function createMockLogger(customImplementations: Partial<MockLogger> = {}
 export function createMockBlobService(
   customImplementations: Partial<MockBlobService> = {},
 ): MockBlobService {
+  const mockUploadFile = jest.fn().mockResolvedValue({
+    url: 'https://example.com/mock-file.txt',
+    downloadUrl: 'https://example.com/mock-file.txt?download=1',
+    pathname: 'mock-file.txt',
+    contentDisposition: 'inline',
+    contentType: 'text/plain',
+  });
+
+  const mockUploadText = jest.fn().mockResolvedValue({
+    url: 'https://example.com/mock-text.txt',
+    downloadUrl: 'https://example.com/mock-text.txt?download=1',
+    pathname: 'mock-text.txt',
+    contentDisposition: 'inline',
+    contentType: 'text/plain',
+  });
+
+  const mockListFiles = jest.fn().mockResolvedValue({
+    blobs: [],
+    cursor: undefined,
+  });
+
+  const mockGetFileInfo = jest.fn().mockResolvedValue({
+    url: 'https://example.com/mock-file.txt',
+    pathname: 'mock-file.txt',
+    contentType: 'text/plain',
+    contentLength: 100,
+    uploadedAt: new Date(),
+  });
+
+  const mockDeleteFile = jest.fn().mockResolvedValue(undefined);
+  const mockGetUrlForPath = jest
+    .fn()
+    .mockImplementation((path: string) => `https://example.com/${path}`);
+  const mockFetchText = jest.fn().mockResolvedValue('Mock text content');
+
   return {
-    uploadFile: jest.fn().mockResolvedValue({
-      url: 'https://example.com/mock-file.txt',
-      downloadUrl: 'https://example.com/mock-file.txt?download=1',
-      pathname: 'mock-file.txt',
-      contentDisposition: 'inline',
-      contentType: 'text/plain',
-    }),
-    uploadText: jest.fn().mockResolvedValue({
-      url: 'https://example.com/mock-text.txt',
-      downloadUrl: 'https://example.com/mock-text.txt?download=1',
-      pathname: 'mock-text.txt',
-      contentDisposition: 'inline',
-      contentType: 'text/plain',
-    }),
-    listFiles: jest.fn().mockResolvedValue({
-      blobs: [],
-      cursor: undefined,
-    }),
-    getFileInfo: jest.fn().mockResolvedValue({
-      url: 'https://example.com/mock-file.txt',
-      pathname: 'mock-file.txt',
-      contentType: 'text/plain',
-      contentLength: 100,
-      uploadedAt: new Date(),
-    }),
-    deleteFile: jest.fn().mockResolvedValue(undefined),
-    getUrlForPath: jest.fn().mockImplementation((path) => `https://example.com/${path}`),
-    fetchText: jest.fn().mockResolvedValue('Mock text content'),
+    uploadFile: mockUploadFile as MockBlobService['uploadFile'],
+    uploadText: mockUploadText as MockBlobService['uploadText'],
+    listFiles: mockListFiles as MockBlobService['listFiles'],
+    getFileInfo: mockGetFileInfo as MockBlobService['getFileInfo'],
+    deleteFile: mockDeleteFile as MockBlobService['deleteFile'],
+    getUrlForPath: mockGetUrlForPath as MockBlobService['getUrlForPath'],
+    fetchText: mockFetchText as MockBlobService['fetchText'],
     ...customImplementations,
-  } as MockBlobService;
+  };
 }
 
 /**
@@ -102,7 +121,7 @@ export function createMockBlobPathService(
       .fn()
       .mockImplementation((bookSlug, chapter) => `books/${bookSlug}/audio/${chapter}.mp3`),
     convertLegacyPath: jest.fn().mockImplementation((legacyPath) => legacyPath),
-    getBookSlugFromPath: jest.fn().mockImplementation((path) => {
+    getBookSlugFromPath: jest.fn().mockImplementation((path: string) => {
       const match = path.match(/books\/([^/]+)/);
       return match ? match[1] : null;
     }),
@@ -117,28 +136,40 @@ export function createMockBlobPathService(
 export function createMockVercelBlobAssetService(
   customImplementations: Partial<MockVercelBlobAssetService> = {},
 ): MockVercelBlobAssetService {
+  const mockGetAssetUrl = jest
+    .fn()
+    .mockImplementation((assetType: string, bookSlug: string, assetName: string) =>
+      Promise.resolve(`https://example.com/assets/${assetType}/${bookSlug}/${assetName}`),
+    );
+
+  const mockAssetExists = jest.fn().mockResolvedValue(true);
+  const mockFetchAsset = jest.fn().mockResolvedValue(new ArrayBuffer(100));
+  const mockFetchTextAsset = jest.fn().mockResolvedValue('Mock text content');
+
+  const mockUploadAsset = jest.fn().mockResolvedValue({
+    url: 'https://example.com/assets/mock-asset.txt',
+    size: 100,
+    contentType: 'text/plain',
+    uploadedAt: new Date(),
+  });
+
+  const mockDeleteAsset = jest.fn().mockResolvedValue(true);
+
+  const mockListAssets = jest.fn().mockResolvedValue({
+    assets: [],
+    hasMore: false,
+  });
+
   return {
-    getAssetUrl: jest
-      .fn()
-      .mockImplementation((assetType, bookSlug, assetName) =>
-        Promise.resolve(`https://example.com/assets/${assetType}/${bookSlug}/${assetName}`),
-      ),
-    assetExists: jest.fn().mockResolvedValue(true),
-    fetchAsset: jest.fn().mockResolvedValue(new ArrayBuffer(100)),
-    fetchTextAsset: jest.fn().mockResolvedValue('Mock text content'),
-    uploadAsset: jest.fn().mockResolvedValue({
-      url: 'https://example.com/assets/mock-asset.txt',
-      size: 100,
-      contentType: 'text/plain',
-      uploadedAt: new Date(),
-    }),
-    deleteAsset: jest.fn().mockResolvedValue(true),
-    listAssets: jest.fn().mockResolvedValue({
-      assets: [],
-      hasMore: false,
-    }),
+    getAssetUrl: mockGetAssetUrl as MockVercelBlobAssetService['getAssetUrl'],
+    assetExists: mockAssetExists as MockVercelBlobAssetService['assetExists'],
+    fetchAsset: mockFetchAsset as MockVercelBlobAssetService['fetchAsset'],
+    fetchTextAsset: mockFetchTextAsset as MockVercelBlobAssetService['fetchTextAsset'],
+    uploadAsset: mockUploadAsset as MockVercelBlobAssetService['uploadAsset'],
+    deleteAsset: mockDeleteAsset as MockVercelBlobAssetService['deleteAsset'],
+    listAssets: mockListAssets as MockVercelBlobAssetService['listAssets'],
     ...customImplementations,
-  } as MockVercelBlobAssetService;
+  };
 }
 
 /**

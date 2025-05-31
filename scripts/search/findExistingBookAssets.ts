@@ -64,7 +64,10 @@ async function findAssets() {
           logger.debug({ msg: `Not found at: ${path}`, status: response.status });
         }
       } catch (error) {
-        logger.debug({ msg: `Error checking: ${path}`, error: error.message });
+        logger.debug({
+          msg: `Error checking: ${path}`,
+          error: error instanceof Error ? error.message : String(error),
+        });
       }
     }
   }

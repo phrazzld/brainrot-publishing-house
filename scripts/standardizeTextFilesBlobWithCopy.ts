@@ -3,10 +3,10 @@ import { config } from 'dotenv';
 import { mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
-import { AssetType } from '@/types/assets.js';
-import logger from '@/utils/logger.js';
-import { AssetPathService, VercelBlobAssetService } from '@/utils/services.js';
-import { createAssetService } from '@/utils/services/AssetServiceFactory.js';
+import { AssetType } from '../types/assets.js';
+import logger from '../utils/logger.js';
+import { createAssetService } from '../utils/services/AssetServiceFactory.js';
+import { AssetPathService, VercelBlobAssetService } from '../utils/services/index.js';
 
 // Load environment variables from .env.local
 config({ path: '.env.local' });

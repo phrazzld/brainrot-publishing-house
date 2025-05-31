@@ -147,8 +147,11 @@ function createResponseFixture(body: ResponseBodyType, options: ResponseOptions 
     headers.set('content-type', contentType);
   }
 
-  // Create response object
-  const response: Record<string, unknown> = {
+  // Create and add method implementations first
+  const methods = createResponseMethods(responseBody, headers, contentType);
+
+  // Create response object with proper properties
+  const response = {
     status,
     statusText,
     headers,
@@ -158,16 +161,13 @@ function createResponseFixture(body: ResponseBodyType, options: ResponseOptions 
     url,
     bodyUsed: false,
     body: null,
+    ...methods,
   };
-
-  // Create and add method implementations
-  const methods = createResponseMethods(responseBody, headers, contentType);
-  Object.assign(response, methods);
 
   // Set up circular reference for clone method
   methods.clone.mockReturnValue(response);
 
-  return response as Response;
+  return response as unknown as Response;
 }
 
 /**
