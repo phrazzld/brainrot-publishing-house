@@ -148,11 +148,14 @@
     "typescript": "^5.8.3"
   },
   "lint-staged": {
+    "package.json": [
+      "prettier --write"
+    ],
     "*.{ts,tsx,js,jsx,json,md,css,scss,yml,yaml}": [
       "prettier --write"
     ],
     "*.{js,jsx,ts,tsx}": [
-      "eslint --fix --max-warnings=100"
+      "eslint --fix --max-warnings=10"
     ]
   }
 }

@@ -1,9 +1,8 @@
 /**
  * Translation data for Divine Comedy: Purgatorio
  */
-import { getAssetUrl } from '../utils.js';
 import { Translation } from '../types.js';
-import { USE_BLOB_STORAGE } from '../utils.js';
+import { USE_BLOB_STORAGE, getAssetUrl } from '../utils.js';
 
 const divineComedyPurgatorio: Translation = {
   slug: 'divine-comedy-purgatorio',

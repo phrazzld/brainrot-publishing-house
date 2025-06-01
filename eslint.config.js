@@ -25,10 +25,13 @@ const config = [
   {
     // Disable import/no-unresolved rule for path aliases handled by Next.js
     rules: {
-      "import/no-unresolved": ["error", {
-        "ignore": ["^@/"]
-      }]
-    }
+      'import/no-unresolved': [
+        'error',
+        {
+          ignore: ['^@/'],
+        },
+      ],
+    },
   },
   {
     ignores: [

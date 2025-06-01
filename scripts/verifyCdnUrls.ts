@@ -5,7 +5,11 @@ import { randomUUID } from 'crypto';
 
 // Import necessary modules and types
 import { DownloadRequestParams } from '../services/downloadService.js';
-import { assetExistsInBlobStorage, getAssetUrlWithFallback, getBlobUrl } from '../utils/getBlobUrl.js';
+import {
+  assetExistsInBlobStorage,
+  getAssetUrlWithFallback,
+  getBlobUrl,
+} from '../utils/getBlobUrl.js';
 import { createRequestLogger, logger } from '../utils/logger.js';
 import { blobPathService } from '../utils/services/BlobPathService.js';
 

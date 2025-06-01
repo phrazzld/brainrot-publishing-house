@@ -12,7 +12,10 @@ import {
   AssetNameValidator,
   assetNameValidator as defaultValidator,
 } from '../validators/AssetNameValidator.js';
-import { AssetPathService, assetPathService as defaultAssetPathService } from './AssetPathService.js';
+import {
+  AssetPathService,
+  assetPathService as defaultAssetPathService,
+} from './AssetPathService.js';
 
 export class BlobPathService {
   /** The underlying AssetPathService that generates standardized paths */

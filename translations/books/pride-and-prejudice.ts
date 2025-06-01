@@ -1,9 +1,8 @@
 /**
  * Translation data for Pride and Prejudice
  */
-import { getAssetUrl } from '../utils.js';
 import { Translation } from '../types.js';
-import { USE_BLOB_STORAGE } from '../utils.js';
+import { USE_BLOB_STORAGE, getAssetUrl } from '../utils.js';
 
 const prideAndPrejudice: Translation = {
   slug: 'pride-and-prejudice',

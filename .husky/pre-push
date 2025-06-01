@@ -1,4 +1,15 @@
-echo "Running pre-push type checking with strict enforcement..."
-# Temporarily disabled strict type checking for Next.js module resolution issues
-# npm run tsc
-echo "Type checking temporarily disabled - TODO: fix Next.js module resolution"
+echo "Running pre-push checks (formatting, linting, and Next.js build)..."
+
+# 1. Check formatting
+echo "1. Checking code formatting..."
+npm run prettier:check
+
+# 2. Check linting
+echo "2. Running ESLint..."
+npm run lint
+
+# 3. Test Next.js build (the same as CI does)
+echo "3. Testing Next.js build..."
+npm run build
+
+echo "All pre-push checks passed!"

@@ -1,9 +1,8 @@
 /**
  * Translation data for Romeo and Juliet
  */
-import { getAssetUrl } from '../utils.js';
 import { Translation } from '../types.js';
-import { USE_BLOB_STORAGE } from '../utils.js';
+import { USE_BLOB_STORAGE, getAssetUrl } from '../utils.js';
 
 const romeoAndJuliet: Translation = {
   slug: 'romeo-and-juliet',

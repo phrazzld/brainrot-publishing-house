@@ -1,9 +1,8 @@
 /**
  * Translation data for The Bhagavad Gita
  */
-import { getAssetUrl } from '../utils.js';
 import { Translation } from '../types.js';
-import { USE_BLOB_STORAGE } from '../utils.js';
+import { USE_BLOB_STORAGE, getAssetUrl } from '../utils.js';
 
 const bhagavadGita: Translation = {
   slug: 'bhagavad-gita',
