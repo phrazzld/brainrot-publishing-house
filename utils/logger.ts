@@ -1,4 +1,4 @@
-import pino from 'pino';
+import { pino } from 'pino';
 
 // Define type for log data
 type LogData = Record<string, unknown>;
@@ -16,9 +16,7 @@ const createClientLogger = () => {
 
 // Configure the logger with appropriate options for server-side
 const createServerLogger = () => {
-  // Use default export for pino in Node.js environments
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return (pino as any)({
+  return pino({
     level: process.env.LOG_LEVEL || 'info',
     browser: {
       asObject: true,

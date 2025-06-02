@@ -1,5 +1,5 @@
 import * as dotenv from 'dotenv';
-import pino from 'pino';
+import { pino } from 'pino';
 
 import { getAssetUrl } from '../../utils.js';
 

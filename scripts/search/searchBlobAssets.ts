@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv';
 import { list } from '@vercel/blob';
-import pino from 'pino';
+import { pino } from 'pino';
 
 // Load environment variables
 dotenv.config({ path: '.env.local' });

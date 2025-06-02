@@ -744,7 +744,7 @@ This TODO list details the tasks required to fully migrate all asset management 
     - [ ] Fix Mock<UnknownFunction> to MockedFunction conversions
   - Dependencies: T056
 
-- [ ] **T058: Fix Pino Logger Import Issues**
+- [x] **T058: Fix Pino Logger Import Issues**
 
   - [ ] Fix pino import error in utils/logger.ts (line 19):
     - [ ] Update to use correct pino import syntax for TypeScript

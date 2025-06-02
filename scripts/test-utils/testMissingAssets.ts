@@ -1,7 +1,7 @@
 #!/usr/bin/env tsx
 import * as dotenv from 'dotenv';
 import { promises as fs } from 'fs';
-import pino from 'pino';
+import { pino } from 'pino';
 
 import { getAssetUrl } from '../../utils.js';
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env tsx
 import * as dotenv from 'dotenv';
 import { put } from '@vercel/blob';
-import pino from 'pino';
+import { pino } from 'pino';
 
 dotenv.config({ path: '.env.local' });
 
