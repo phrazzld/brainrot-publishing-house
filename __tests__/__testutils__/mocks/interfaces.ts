@@ -87,13 +87,17 @@ export interface MockVercelBlob {
  * Type-safe mock for fetch Response
  */
 export interface MockResponse
-  extends Omit<Response, 'json' | 'text' | 'arrayBuffer' | 'blob' | 'formData' | 'clone'> {
+  extends Omit<
+    Response,
+    'json' | 'text' | 'arrayBuffer' | 'blob' | 'formData' | 'clone' | 'bytes'
+  > {
   json: jest.MockedFunction<Response['json']>;
   text: jest.MockedFunction<Response['text']>;
   arrayBuffer: jest.MockedFunction<Response['arrayBuffer']>;
   blob: jest.MockedFunction<Response['blob']>;
   formData: jest.MockedFunction<Response['formData']>;
   clone: jest.MockedFunction<Response['clone']>;
+  bytes: jest.MockedFunction<Response['bytes']>;
 }
 
 /**
@@ -106,15 +110,15 @@ export type MockFetch = jest.MockedFunction<typeof global.fetch>;
  */
 export interface MockAssetPathService {
   getAssetPath: jest.MockedFunction<
-    (typeof import('../../../utils/services/AssetPathService.js'))['AssetPathService']['prototype']['getAssetPath']
+    (assetType: string, bookSlug: string | null, assetName: string) => string
   >;
-  normalizeLegacyPath: jest.MockedFunction<
-    (typeof import('../../../utils/services/AssetPathService.js'))['AssetPathService']['prototype']['normalizeLegacyPath']
-  >;
+  normalizeLegacyPath: jest.MockedFunction<(legacyPath: string) => string>;
   getTextPath: jest.MockedFunction<
-    (typeof import('../../../utils/services/AssetPathService.js'))['AssetPathService']['prototype']['getTextPath']
+    (bookSlug: string, textType: string, chapter?: string | number) => string
   >;
-  getBookSlugFromPath: jest.MockedFunction<
-    (typeof import('../../../utils/services/AssetPathService.js'))['AssetPathService']['prototype']['getBookSlugFromPath']
+  getBookSlugFromPath: jest.MockedFunction<(path: string) => string | null>;
+  getAudioPath: jest.MockedFunction<(bookSlug: string, chapter: string | number) => string>;
+  getImagePath: jest.MockedFunction<
+    (bookSlug: string, imageType: string, chapter?: string | number, extension?: string) => string
   >;
 }

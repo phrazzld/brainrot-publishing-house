@@ -24,12 +24,12 @@ interface ResponseOptions {
  */
 export function createJsonResponse<T>(data: T, options: ResponseOptions = {}): Response {
   const jsonString = JSON.stringify(data);
+  const headers = new Headers(options.headers || {});
+  headers.set('Content-Type', 'application/json');
+
   return createMockResponse(jsonString, {
     ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...(options.headers || {}),
-    },
+    headers,
   });
 }
 
@@ -62,10 +62,13 @@ export function createErrorResponse(
 
   const contentType = details ? 'application/json' : 'text/plain';
 
+  const headers = new Headers();
+  headers.set('Content-Type', contentType);
+
   return createMockResponse(errorBody, {
     status,
     statusText: message,
-    headers: { 'Content-Type': contentType },
+    headers,
   });
 }
 
@@ -87,11 +90,14 @@ export function createNetworkErrorFetch(
  * @param contentType The content MIME type
  */
 export function createBinaryResponse(content: ArrayBuffer | Blob, contentType: string): Response {
+  const headers = new Headers();
+  headers.set('Content-Type', contentType);
+  headers.set(
+    'Content-Length',
+    content instanceof Blob ? content.size.toString() : content.byteLength.toString(),
+  );
+
   return createMockResponse(content, {
-    headers: {
-      'Content-Type': contentType,
-      'Content-Length':
-        content instanceof Blob ? content.size.toString() : content.byteLength.toString(),
-    },
+    headers,
   });
 }

@@ -26,7 +26,7 @@ describe('VercelBlobAssetService Example Test', () => {
 
   // Mock fetch function with proper typing
   const originalFetch = global.fetch;
-  const mockFetch = jest.fn<typeof fetch>();
+  const mockFetch = jest.fn<typeof fetch>() as jest.MockedFunction<typeof fetch>;
 
   beforeEach(() => {
     // Clear mock state before each test
@@ -38,7 +38,7 @@ describe('VercelBlobAssetService Example Test', () => {
 
     // Create service instance with mocked dependencies
     service = new VercelBlobAssetService(
-      mockAssetPathService as unknown as AssetPathService,
+      mockAssetPathService,
       {
         baseUrl: 'https://public.blob.vercel-storage.com',
         rootPrefix: 'assets',
@@ -49,7 +49,7 @@ describe('VercelBlobAssetService Example Test', () => {
     );
 
     // Set up mock fetch implementation with proper type
-    global.fetch = mockFetch as typeof fetch;
+    global.fetch = mockFetch;
   });
 
   afterEach(() => {
@@ -76,7 +76,7 @@ describe('VercelBlobAssetService Example Test', () => {
       });
 
       // Verify logger was called with correct context
-      expectLoggedWithContext(mockLogger.info as unknown as jest.Mock, {
+      expectLoggedWithContext(mockLogger.info, {
         msg: expect.stringContaining('Generated asset URL'),
         assetType: AssetType.AUDIO,
         bookSlug: 'the-iliad',
@@ -106,7 +106,7 @@ describe('VercelBlobAssetService Example Test', () => {
       expect(content).toBe(mockArrayBuffer);
 
       // Verify logging
-      expectLoggedWithContext(mockLogger.info as unknown as jest.Mock, {
+      expectLoggedWithContext(mockLogger.info, {
         msg: expect.stringContaining('Fetched asset'),
         assetType: AssetType.AUDIO,
         bookSlug: 'the-iliad',
@@ -140,7 +140,7 @@ describe('VercelBlobAssetService Example Test', () => {
       expect(mockLogger.warn).toHaveBeenCalledTimes(2);
 
       // Verify success log
-      expectLoggedWithContext(mockLogger.info as unknown as jest.Mock, {
+      expectLoggedWithContext(mockLogger.info, {
         msg: expect.stringContaining('Fetched asset'),
       });
     });
@@ -168,7 +168,7 @@ describe('VercelBlobAssetService Example Test', () => {
       expect(content).toBe(mockTextContent);
 
       // Verify logging
-      expectLoggedWithContext(mockLogger.info as unknown as jest.Mock, {
+      expectLoggedWithContext(mockLogger.info, {
         msg: expect.stringContaining('Fetched text asset'),
         bookSlug: 'the-iliad',
       });

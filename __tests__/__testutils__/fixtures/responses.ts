@@ -116,6 +116,19 @@ function createResponseMethods(
   // Create formData implementation
   const formDataImpl = jest.fn<() => Promise<FormData>>().mockResolvedValue(new FormData());
 
+  // Create bytes implementation
+  const bytesImpl = jest.fn<() => Promise<Uint8Array>>().mockImplementation(async () => {
+    if (responseBody instanceof ArrayBuffer) {
+      return new Uint8Array(responseBody);
+    } else if (typeof responseBody === 'string') {
+      return new TextEncoder().encode(responseBody);
+    } else if (responseBody instanceof Blob) {
+      const buffer = await responseBody.arrayBuffer();
+      return new Uint8Array(buffer);
+    }
+    return new Uint8Array(0);
+  });
+
   // Create a mock for clone that returns itself
   const cloneImpl = jest.fn();
 
@@ -125,6 +138,7 @@ function createResponseMethods(
     arrayBuffer: arrayBufferImpl as jest.Mock<() => Promise<ArrayBuffer>>,
     blob: blobImpl as jest.Mock<() => Promise<Blob>>,
     formData: formDataImpl,
+    bytes: bytesImpl,
     clone: cloneImpl,
   };
 }
@@ -167,7 +181,7 @@ function createResponseFixture(body: ResponseBodyType, options: ResponseOptions 
   // Set up circular reference for clone method
   methods.clone.mockReturnValue(response);
 
-  return response as unknown as Response;
+  return response as Response;
 }
 
 /**
@@ -231,9 +245,12 @@ function createNetworkError(message = 'Network error') {
 /**
  * Creates a fetch function that returns a successful response
  */
-function createSuccessFetch(data: unknown, options: ResponseOptions = {}): jest.Mock {
+function createSuccessFetch(
+  data: unknown,
+  options: ResponseOptions = {},
+): jest.Mock<() => Promise<Response>> {
   return jest
-    .fn()
+    .fn<() => Promise<Response>>()
     .mockResolvedValue(
       typeof data === 'string'
         ? createTextResponse(data, options)
@@ -248,8 +265,10 @@ function createErrorFetch(
   status = 404,
   statusText = 'Not Found',
   errorBody: string | Record<string, unknown> = '',
-): jest.Mock {
-  return jest.fn().mockResolvedValue(createErrorResponse(status, statusText, errorBody));
+): jest.Mock<() => Promise<Response>> {
+  return jest
+    .fn<() => Promise<Response>>()
+    .mockResolvedValue(createErrorResponse(status, statusText, errorBody));
 }
 
 /**

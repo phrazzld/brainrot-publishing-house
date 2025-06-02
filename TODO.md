@@ -729,7 +729,7 @@ This TODO list details the tasks required to fully migrate all asset management 
   - Dependencies: T055
   - COMPLETED: Fixed major TypeScript errors in test fixtures, logger imports, and verification scripts. Reduced total error count from ~500+ to 214. Remaining errors are primarily in test mock configurations and edge cases.
 
-- [ ] **T057: Fix Jest Mock Type Errors in Test Utilities**
+- [x] **T057: Fix Jest Mock Type Errors in Test Utilities**
 
   - [ ] Fix 'never' type assignment errors in service-test-example.ts:
     - [ ] Fix mockResolvedValue type incompatibilities (lines 96, 125-127, 158)

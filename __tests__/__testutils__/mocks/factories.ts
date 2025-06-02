@@ -5,6 +5,7 @@
 import { jest } from '@jest/globals';
 import { HeadBlobResult, ListBlobResultBlob, PutBlobResult } from '@vercel/blob';
 
+import { Logger } from '../../../utils/logger.js';
 import {
   MockAssetPathService,
   MockBlobPathService,
@@ -16,17 +17,20 @@ import {
   MockVercelBlobAssetService,
 } from './interfaces.js';
 
+// Type for log data - matches the one in logger.ts
+type LogData = Record<string, unknown>;
+
 /**
  * Creates a type-safe mock Logger instance
  * @param customImplementations Optional custom implementations to override defaults
  */
 export function createMockLogger(customImplementations: Partial<MockLogger> = {}): MockLogger {
-  const mockLogger = {
-    info: jest.fn(),
-    debug: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn(),
-    child: jest.fn(),
+  const mockLogger: MockLogger = {
+    info: jest.fn<(obj: LogData) => void>(),
+    debug: jest.fn<(obj: LogData) => void>(),
+    warn: jest.fn<(obj: LogData) => void>(),
+    error: jest.fn<(obj: LogData) => void>(),
+    child: jest.fn<(bindings: LogData) => Logger>(),
     ...customImplementations,
   };
 
@@ -43,7 +47,7 @@ export function createMockLogger(customImplementations: Partial<MockLogger> = {}
 export function createMockBlobService(
   customImplementations: Partial<MockBlobService> = {},
 ): MockBlobService {
-  const mockUploadFile = jest.fn().mockResolvedValue({
+  const mockUploadFile = jest.fn<MockBlobService['uploadFile']>().mockResolvedValue({
     url: 'https://example.com/mock-file.txt',
     downloadUrl: 'https://example.com/mock-file.txt?download=1',
     pathname: 'mock-file.txt',
@@ -51,7 +55,7 @@ export function createMockBlobService(
     contentType: 'text/plain',
   });
 
-  const mockUploadText = jest.fn().mockResolvedValue({
+  const mockUploadText = jest.fn<MockBlobService['uploadText']>().mockResolvedValue({
     url: 'https://example.com/mock-text.txt',
     downloadUrl: 'https://example.com/mock-text.txt?download=1',
     pathname: 'mock-text.txt',
@@ -59,24 +63,29 @@ export function createMockBlobService(
     contentType: 'text/plain',
   });
 
-  const mockListFiles = jest.fn().mockResolvedValue({
+  const mockListFiles = jest.fn<MockBlobService['listFiles']>().mockResolvedValue({
     blobs: [],
     cursor: undefined,
   });
 
-  const mockGetFileInfo = jest.fn().mockResolvedValue({
+  const mockGetFileInfo = jest.fn<MockBlobService['getFileInfo']>().mockResolvedValue({
     url: 'https://example.com/mock-file.txt',
     pathname: 'mock-file.txt',
     contentType: 'text/plain',
-    contentLength: 100,
+    size: 100,
     uploadedAt: new Date(),
   });
 
-  const mockDeleteFile = jest.fn().mockResolvedValue(undefined);
+  const mockDeleteFile = jest.fn<MockBlobService['deleteFile']>().mockResolvedValue(undefined);
   const mockGetUrlForPath = jest
-    .fn()
-    .mockImplementation((path: string) => `https://example.com/${path}`);
-  const mockFetchText = jest.fn().mockResolvedValue('Mock text content');
+    .fn<MockBlobService['getUrlForPath']>()
+    .mockImplementation(
+      (path: string, _options?: { baseUrl?: string; noCache?: boolean }) =>
+        `https://example.com/${path}`,
+    );
+  const mockFetchText = jest
+    .fn<MockBlobService['fetchText']>()
+    .mockResolvedValue('Mock text content');
 
   return {
     uploadFile: mockUploadFile as MockBlobService['uploadFile'],
@@ -137,25 +146,35 @@ export function createMockVercelBlobAssetService(
   customImplementations: Partial<MockVercelBlobAssetService> = {},
 ): MockVercelBlobAssetService {
   const mockGetAssetUrl = jest
-    .fn()
-    .mockImplementation((assetType: string, bookSlug: string, assetName: string) =>
-      Promise.resolve(`https://example.com/assets/${assetType}/${bookSlug}/${assetName}`),
+    .fn<MockVercelBlobAssetService['getAssetUrl']>()
+    .mockImplementation(
+      (assetType: string, bookSlug: string, assetName: string, _options?: object) =>
+        Promise.resolve(`https://example.com/assets/${assetType}/${bookSlug}/${assetName}`),
     );
 
-  const mockAssetExists = jest.fn().mockResolvedValue(true);
-  const mockFetchAsset = jest.fn().mockResolvedValue(new ArrayBuffer(100));
-  const mockFetchTextAsset = jest.fn().mockResolvedValue('Mock text content');
+  const mockAssetExists = jest
+    .fn<MockVercelBlobAssetService['assetExists']>()
+    .mockResolvedValue(true);
+  const mockFetchAsset = jest
+    .fn<MockVercelBlobAssetService['fetchAsset']>()
+    .mockResolvedValue(new ArrayBuffer(100));
+  const mockFetchTextAsset = jest
+    .fn<MockVercelBlobAssetService['fetchTextAsset']>()
+    .mockResolvedValue('Mock text content');
 
-  const mockUploadAsset = jest.fn().mockResolvedValue({
+  const mockUploadAsset = jest.fn<MockVercelBlobAssetService['uploadAsset']>().mockResolvedValue({
     url: 'https://example.com/assets/mock-asset.txt',
+    path: 'assets/mock-asset.txt',
     size: 100,
     contentType: 'text/plain',
     uploadedAt: new Date(),
   });
 
-  const mockDeleteAsset = jest.fn().mockResolvedValue(true);
+  const mockDeleteAsset = jest
+    .fn<MockVercelBlobAssetService['deleteAsset']>()
+    .mockResolvedValue(true);
 
-  const mockListAssets = jest.fn().mockResolvedValue({
+  const mockListAssets = jest.fn<MockVercelBlobAssetService['listAssets']>().mockResolvedValue({
     assets: [],
     hasMore: false,
   });
@@ -207,13 +226,14 @@ export function createMockVercelBlob(
   };
 
   return {
-    put: jest.fn().mockResolvedValue(mockPutResult),
-    list: jest.fn().mockResolvedValue({
+    put: jest.fn<MockVercelBlob['put']>().mockResolvedValue(mockPutResult),
+    list: jest.fn<MockVercelBlob['list']>().mockResolvedValue({
       blobs: [mockListResult],
       cursor: undefined,
+      hasMore: false,
     }),
-    head: jest.fn().mockResolvedValue(mockHeadResult),
-    del: jest.fn().mockResolvedValue(undefined),
+    head: jest.fn<MockVercelBlob['head']>().mockResolvedValue(mockHeadResult),
+    del: jest.fn<MockVercelBlob['del']>().mockResolvedValue(undefined),
     ...customImplementations,
   };
 }
@@ -233,7 +253,7 @@ export function createMockResponse(
   const ok = status >= 200 && status < 300;
 
   // Create text implementation based on body type
-  const textImpl = jest.fn().mockImplementation(async () => {
+  const textImpl = jest.fn<() => Promise<string>>().mockImplementation(async () => {
     if (typeof body === 'string') {
       return body;
     } else if (body instanceof Blob) {
@@ -245,13 +265,13 @@ export function createMockResponse(
   });
 
   // Create json implementation that parses text
-  const jsonImpl = jest.fn().mockImplementation(async () => {
+  const jsonImpl = jest.fn<() => Promise<unknown>>().mockImplementation(async () => {
     const text = await textImpl();
-    return JSON.parse(text);
+    return JSON.parse(text as string);
   });
 
   // Create arrayBuffer implementation
-  const arrayBufferImpl = jest.fn().mockImplementation(async () => {
+  const arrayBufferImpl = jest.fn<() => Promise<ArrayBuffer>>().mockImplementation(async () => {
     if (body instanceof ArrayBuffer) {
       return body;
     } else if (typeof body === 'string') {
@@ -263,14 +283,27 @@ export function createMockResponse(
   });
 
   // Create blob implementation
-  const blobImpl = jest.fn().mockImplementation(async () => {
+  const blobImpl = jest.fn<() => Promise<Blob>>().mockImplementation(async () => {
     if (body instanceof Blob) {
       return body;
     }
     return new Blob([body instanceof ArrayBuffer ? body : String(body)]);
   });
 
-  return {
+  // Create bytes implementation
+  const bytesImpl = jest.fn<() => Promise<Uint8Array>>().mockImplementation(async () => {
+    if (body instanceof ArrayBuffer) {
+      return new Uint8Array(body);
+    } else if (typeof body === 'string') {
+      return new TextEncoder().encode(body);
+    } else if (body instanceof Blob) {
+      const buffer = await body.arrayBuffer();
+      return new Uint8Array(buffer);
+    }
+    return new Uint8Array(0);
+  });
+
+  const response: MockResponse = {
     status,
     statusText,
     headers: headers instanceof Headers ? headers : new Headers(headers as HeadersInit),
@@ -284,9 +317,12 @@ export function createMockResponse(
     json: jsonImpl,
     arrayBuffer: arrayBufferImpl,
     blob: blobImpl,
-    formData: jest.fn().mockResolvedValue(new FormData()),
-    clone: jest.fn(),
-  } as MockResponse;
+    bytes: bytesImpl,
+    formData: jest.fn<() => Promise<FormData>>().mockResolvedValue(new FormData()),
+    clone: jest.fn<() => Response>(),
+  };
+
+  return response;
 }
 
 /**
@@ -294,7 +330,7 @@ export function createMockResponse(
  * @param responseFactory Function that returns the response for each fetch call
  */
 export function createMockFetch(responseFactory: () => Response | Promise<Response>): MockFetch {
-  return jest.fn().mockImplementation(() => Promise.resolve(responseFactory()));
+  return jest.fn<typeof fetch>().mockImplementation(() => Promise.resolve(responseFactory()));
 }
 
 /**
@@ -306,23 +342,50 @@ export function createMockAssetPathService(
 ): MockAssetPathService {
   return {
     getAssetPath: jest
-      .fn()
+      .fn<(assetType: string, bookSlug: string | null, assetName: string) => string>()
       .mockImplementation(
         (assetType, bookSlug, assetName) => `assets/${assetType}/${bookSlug}/${assetName}`,
       ),
-    normalizeLegacyPath: jest.fn().mockImplementation((legacyPath) => {
-      if (legacyPath.startsWith('/assets/')) {
-        return legacyPath.replace(/^\/assets\/([^/]+)\/images\//, 'assets/image/$1/');
-      }
-      return legacyPath;
-    }),
+    normalizeLegacyPath: jest
+      .fn<(legacyPath: string) => string>()
+      .mockImplementation((legacyPath: string) => {
+        if (legacyPath.startsWith('/assets/')) {
+          return legacyPath.replace(/^\/assets\/([^/]+)\/images\//, 'assets/image/$1/');
+        }
+        return legacyPath;
+      }),
     getTextPath: jest
-      .fn()
-      .mockImplementation((bookSlug, textType) => `assets/text/${bookSlug}/${textType}.txt`),
-    getBookSlugFromPath: jest.fn().mockImplementation((path) => {
-      const match = path.match(/assets\/[^/]+\/([^/]+)/);
-      return match ? match[1] : null;
-    }),
+      .fn<(bookSlug: string, textType: string, chapter?: string | number) => string>()
+      .mockImplementation(
+        (bookSlug: string, textType: string) => `assets/text/${bookSlug}/${textType}.txt`,
+      ),
+    getBookSlugFromPath: jest
+      .fn<(path: string) => string | null>()
+      .mockImplementation((path: string) => {
+        const match = path.match(/assets\/[^/]+\/([^/]+)/);
+        return match ? match[1] : null;
+      }),
+    getAudioPath: jest
+      .fn<(bookSlug: string, chapter: string | number) => string>()
+      .mockImplementation(
+        (bookSlug: string, chapter: string | number) =>
+          `assets/audio/${bookSlug}/chapter-${String(chapter).padStart(2, '0')}.mp3`,
+      ),
+    getImagePath: jest
+      .fn<
+        (
+          bookSlug: string,
+          imageType: string,
+          chapter?: string | number,
+          extension?: string,
+        ) => string
+      >()
+      .mockImplementation(
+        (bookSlug: string, imageType: string, chapter?: string | number, extension = 'jpg') => {
+          const chapterPart = chapter ? `-${String(chapter).padStart(2, '0')}` : '';
+          return `assets/image/${bookSlug}/${imageType}${chapterPart}.${extension}`;
+        },
+      ),
     ...customImplementations,
-  } as MockAssetPathService;
+  };
 }
