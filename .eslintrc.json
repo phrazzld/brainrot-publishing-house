@@ -33,6 +33,28 @@
         "@typescript-eslint/no-require-imports": "off",
         "max-nested-callbacks": ["warn", 6]
       }
+    },
+    {
+      "files": ["scripts/**/*.ts", "scripts/**/*.js"],
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "max-lines": ["warn", { "max": 1000, "skipBlankLines": true, "skipComments": true }],
+        "max-lines-per-function": [
+          "warn",
+          {
+            "max": 300,
+            "skipBlankLines": true,
+            "skipComments": true,
+            "IIFEs": true
+          }
+        ],
+        "max-depth": ["warn", 6],
+        "max-nested-callbacks": ["warn", 5],
+        "max-params": ["warn", 6],
+        "complexity": ["warn", 15],
+        "no-console": "off"
+      }
     }
   ],
   "rules": {

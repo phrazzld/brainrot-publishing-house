@@ -794,9 +794,9 @@ This TODO list details the tasks required to fully migrate all asset management 
   - [x] Fix Buffer type issue in scripts/runTextStandardizationMigration.ts
   - Dependencies: T059
 
-- [ ] **T062: Configure TypeScript for Script Files**
-  - [ ] Create separate tsconfig for scripts directory with appropriate settings
-  - [ ] Consider adding script files to eslintignore if they don't need strict checking
-  - [ ] Or update script files to fully comply with strict TypeScript settings
-  - [ ] Ensure all script imports use correct module resolution
+- [x] **T062: Configure TypeScript for Script Files**
+  - [x] Create separate tsconfig for scripts directory with appropriate settings
+  - [x] Consider adding script files to eslintignore if they don't need strict checking
+  - [x] Or update script files to fully comply with strict TypeScript settings
+  - [x] Ensure all script imports use correct module resolution
   - Dependencies: T057-T061
