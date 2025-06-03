@@ -34,7 +34,7 @@ async function uploadPlaceholder() {
     logger.info({ msg: 'Successfully uploaded placeholder', url });
 
     // Test with getAssetUrl
-    const { getAssetUrl } = await import('../utils.js');
+    const { getAssetUrl } = await import('../../utils.js');
     const testUrl = getAssetUrl('/assets/covers/placeholder.jpg', true);
     logger.info({ msg: 'Testing placeholder URL', expectedUrl: testUrl });
 

@@ -2,7 +2,7 @@
  * Debug script to find where existing book covers are stored
  */
 import { logger } from '../../utils/logger.js';
-import { blobService } from '../utils/services/BlobService.js';
+import { blobService } from '../../utils/services/BlobService.js';
 
 // Book cover paths from translation files
 const bookCovers = [

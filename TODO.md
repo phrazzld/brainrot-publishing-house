@@ -758,7 +758,7 @@ This TODO list details the tasks required to fully migrate all asset management 
   - [ ] Fix createFileLogger export issue in scripts/testAudioFileDownloads.ts
   - Dependencies: T056
 
-- [ ] **T059: Fix Script Import Path and Module Resolution Issues**
+- [x] **T059: Fix Script Import Path and Module Resolution Issues**
 
   - [ ] Fix missing utils.js imports:
     - [ ] scripts/test-utils/testMissingAssets.ts (line 6)

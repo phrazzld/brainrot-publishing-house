@@ -2,8 +2,7 @@ import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 import * as path from 'path';
 
-import { blobService } from '../utils/services/index.js';
-import { blobPathService } from '../utils/services/index.js';
+import { blobPathService, blobService } from '../utils/services/index.js';
 
 // Load environment variables from .env.local
 dotenv.config({ path: '.env.local' });
