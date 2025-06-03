@@ -126,7 +126,7 @@ function findTestCases(
  * Test playback for a single chapter
  */
 async function testChapterPlayback(
-  browser: any, // Using puppeteer.Browser
+  browser: puppeteer.Browser,
   book: string,
   chapterIndex: number,
   timeout: number,
@@ -148,11 +148,9 @@ async function testChapterPlayback(
   };
 
   // Set up error logging
-  page.on('console', (msg: any) => {
-    if (msg.type && typeof msg.type === 'function' && msg.type() === 'error') {
-      result.errors.push(
-        `Console error: ${msg.text && typeof msg.text === 'function' ? msg.text() : String(msg)}`,
-      );
+  page.on('console', (msg: puppeteer.ConsoleMessage) => {
+    if (msg.type() === 'error') {
+      result.errors.push(`Console error: ${msg.text()}`);
     }
   });
 

@@ -85,7 +85,10 @@ async function checkAndCopyFile(originalPath: string): Promise<MigrationResult> 
     // Upload to standardized path
     return await uploadToStandardizedPath(downloadResult.content, standardizedPath, fileLogger);
   } catch (error) {
-    fileLogger.error({ error, msg: 'Unexpected error during migration' });
+    fileLogger.error({
+      error: error instanceof Error ? error.message : String(error),
+      msg: 'Unexpected error during migration',
+    });
     return {
       originalPath,
       standardizedPath: '',
@@ -137,7 +140,10 @@ async function downloadOriginalFile(
     const content = Buffer.from(await response.arrayBuffer());
     return { status: 'success', content, originalPath, standardizedPath: '' };
   } catch (error) {
-    logger.error({ error, msg: 'Failed to download original file' });
+    logger.error({
+      error: error instanceof Error ? error.message : String(error),
+      msg: 'Failed to download original file',
+    });
     return {
       status: 'failed',
       originalPath,
@@ -175,7 +181,10 @@ async function uploadToStandardizedPath(
       status: 'success',
     };
   } catch (error) {
-    logger.error({ error, msg: 'Failed to upload to standardized path' });
+    logger.error({
+      error: error instanceof Error ? error.message : String(error),
+      msg: 'Failed to upload to standardized path',
+    });
     return {
       originalPath: '',
       standardizedPath,
@@ -206,7 +215,7 @@ async function loadFilesFromMigrationData(): Promise<string[]> {
       } catch (error) {
         rootLogger.error({
           file: migrationFile,
-          error,
+          error: error instanceof Error ? error.message : String(error),
           msg: 'Failed to load migration file',
         });
       }
@@ -275,7 +284,11 @@ async function loadFilesFromTranslations(): Promise<string[]> {
       // Extract paths from chapters
       extractPathsFromChapters(bookData.chapters, filesToMigrate);
     } catch (error) {
-      rootLogger.warn({ book, error, msg: 'Could not load translation' });
+      rootLogger.warn({
+        book,
+        error: error instanceof Error ? error.message : String(error),
+        msg: 'Could not load translation',
+      });
     }
   }
 
@@ -368,7 +381,7 @@ async function main() {
   const filesFromTranslations = await loadFilesFromTranslations();
 
   // Combine and deduplicate files
-  const filesToMigrate = [...new Set([...filesFromMigration, ...filesFromTranslations])];
+  const filesToMigrate = Array.from(new Set([...filesFromMigration, ...filesFromTranslations]));
   rootLogger.info({ count: filesToMigrate.length, msg: 'Files to migrate' });
 
   // Process files
@@ -382,6 +395,9 @@ async function main() {
 }
 
 main().catch((error) => {
-  rootLogger.error({ error, msg: 'Fatal error' });
+  rootLogger.error({
+    error: error instanceof Error ? error.message : String(error),
+    msg: 'Fatal error',
+  });
   process.exit(1);
 });

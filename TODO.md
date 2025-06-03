@@ -772,26 +772,26 @@ This TODO list details the tasks required to fully migrate all asset management 
   - [ ] Fix relative import paths in blob-reorganizer scripts
   - Dependencies: T057, T058
 
-- [ ] **T060: Fix Missing Logger References in Scripts**
+- [x] **T060: Fix Missing Logger References in Scripts**
 
-  - [ ] Add logger import to scripts/reorganize-blob-paths.ts
-  - [ ] Fix logger vs \_logger reference in scripts/runTextStandardizationMigration.ts
-  - [ ] Add logger import to scripts/validateAssetNames.ts
-  - [ ] Fix all "Cannot find name 'logger'" errors in script files
+  - [x] Add logger import to scripts/reorganize-blob-paths.ts
+  - [x] Fix logger vs \_logger reference in scripts/runTextStandardizationMigration.ts
+  - [x] Add logger import to scripts/validateAssetNames.ts
+  - [x] Fix all "Cannot find name 'logger'" errors in script files
   - Dependencies: T058
 
-- [ ] **T061: Fix Error Type Handling in Scripts**
+- [x] **T061: Fix Error Type Handling in Scripts**
 
-  - [ ] Add proper error type handling in catch blocks:
-    - [ ] scripts/search/findExistingBookAssets.ts (line 67)
-    - [ ] scripts/test-utils/finalFinalVerify.ts (lines 101-102)
-    - [ ] scripts/test-utils/finalVerifyAllBooks.ts (lines 95-96)
-    - [ ] scripts/test-utils/testRepublic.ts (line 37)
-    - [ ] scripts/test-utils/testRepublicFinal.ts (line 34)
-    - [ ] scripts/test-utils/verifyAllBookCovers.ts (lines 108, 114)
-    - [ ] scripts/test-utils/verifyComingSoonCovers.ts (lines 69-70)
-  - [ ] Fix browser/msg type unknown in scripts/testAudioPlayback.ts
-  - [ ] Fix Buffer type issue in scripts/runTextStandardizationMigration.ts
+  - [x] Add proper error type handling in catch blocks:
+    - [x] scripts/search/findExistingBookAssets.ts (line 67)
+    - [x] scripts/test-utils/finalFinalVerify.ts (lines 101-102)
+    - [x] scripts/test-utils/finalVerifyAllBooks.ts (lines 95-96)
+    - [x] scripts/test-utils/testRepublic.ts (line 37)
+    - [x] scripts/test-utils/testRepublicFinal.ts (line 34)
+    - [x] scripts/test-utils/verifyAllBookCovers.ts (lines 108, 114)
+    - [x] scripts/test-utils/verifyComingSoonCovers.ts (lines 69-70)
+  - [x] Fix browser/msg type unknown in scripts/testAudioPlayback.ts
+  - [x] Fix Buffer type issue in scripts/runTextStandardizationMigration.ts
   - Dependencies: T059
 
 - [ ] **T062: Configure TypeScript for Script Files**
