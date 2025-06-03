@@ -28,6 +28,7 @@ import path from 'path';
 import readline from 'readline';
 
 import translations from '../translations/index.js';
+import { AssetType } from '../types/assets.js';
 import { generateAssetUrl, generateBlobPath, generateFilename } from '../utils/ScriptPathUtils.js';
 import { createScriptLogger } from '../utils/createScriptLogger.js';
 import { createServices } from '../utils/createServices.js';
@@ -442,8 +443,8 @@ class EnhancedAudioMigrator {
       const chapterNumber = fileName.replace(/\.mp3$/, '').replace(/^.*?([\d]+)$/, '$1');
 
       // Construct standardized filename and path using ScriptPathUtils
-      const standardFilename = generateFilename('audio', chapterNumber);
-      const blobPath = generateBlobPath(book.slug, 'audio', standardFilename);
+      const standardFilename = generateFilename(AssetType.AUDIO, chapterNumber);
+      const blobPath = generateBlobPath(book.slug, AssetType.AUDIO, standardFilename);
 
       // Get URL for verification and uploading
       const blobUrl = generateAssetUrl(blobPath);

@@ -493,7 +493,7 @@ class CoverImageMigrationService {
           pathname,
           filename,
           access: 'public',
-          cacheControl: 'max-age=31536000, immutable', // 1 year cache
+          // cacheControl: 'max-age=31536000, immutable', // 1 year cache - not supported in current UploadOptions
         });
 
         // Verify upload

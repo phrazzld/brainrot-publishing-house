@@ -1,6 +1,7 @@
 /**
  * Create and upload a placeholder image to blob storage
  */
+// @ts-ignore - canvas package may not have types in all environments
 import { createCanvas } from 'canvas';
 import dotenv from 'dotenv';
 import path from 'path';

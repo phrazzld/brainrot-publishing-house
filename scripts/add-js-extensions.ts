@@ -10,7 +10,7 @@ import path from 'path';
 import { createScriptLogger } from '../utils/createScriptLogger.js';
 
 // Configure logger
-const logger = createScriptLogger('add-js-extensions');
+const logger = createScriptLogger({ scriptName: 'add-js-extensions' });
 
 // Import statement regex patterns
 const IMPORT_REGEX = /import\s+(?:{[^}]*}|\*\s+as\s+[^;]*|[^;]*)\s+from\s+['"]([^'"]+)['"]/g;

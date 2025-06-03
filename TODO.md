@@ -746,30 +746,30 @@ This TODO list details the tasks required to fully migrate all asset management 
 
 - [x] **T058: Fix Pino Logger Import Issues**
 
-  - [ ] Fix pino import error in utils/logger.ts (line 19):
-    - [ ] Update to use correct pino import syntax for TypeScript
-    - [ ] Ensure logger exports are properly typed
-  - [ ] Fix pino import errors in search scripts:
-    - [ ] scripts/search/checkAvailableAssets.ts
-    - [ ] scripts/search/checkMissingAssets.ts
-    - [ ] scripts/search/findComingSoonCovers.ts
-    - [ ] scripts/search/searchBlobAssets.ts
-    - [ ] scripts/test-utils/verifyAssetMappings.ts
-  - [ ] Fix createFileLogger export issue in scripts/testAudioFileDownloads.ts
+  - [x] Fix pino import error in utils/logger.ts (line 19):
+    - [x] Update to use correct pino import syntax for TypeScript
+    - [x] Ensure logger exports are properly typed
+  - [x] Fix pino import errors in search scripts:
+    - [x] scripts/search/checkAvailableAssets.ts
+    - [x] scripts/search/checkMissingAssets.ts
+    - [x] scripts/search/findComingSoonCovers.ts
+    - [x] scripts/search/searchBlobAssets.ts
+    - [x] scripts/test-utils/verifyAssetMappings.ts
+  - [x] Fix createFileLogger export issue in scripts/testAudioFileDownloads.ts
   - Dependencies: T056
 
 - [x] **T059: Fix Script Import Path and Module Resolution Issues**
 
-  - [ ] Fix missing utils.js imports:
-    - [ ] scripts/test-utils/testMissingAssets.ts (line 6)
-    - [ ] scripts/cleanupLocalAssets.ts
-    - [ ] scripts/verifyBlobStorage.ts
-  - [ ] Fix @/utils/services.js imports:
-    - [ ] scripts/standardizeTextFilesBlob.ts
-    - [ ] scripts/standardizeTextFilesBlobWithCopy.ts
-  - [ ] Fix ../utils/services.js imports:
-    - [ ] scripts/upload-book-images.ts (lines 5-6)
-  - [ ] Fix relative import paths in blob-reorganizer scripts
+  - [x] Fix missing utils.js imports:
+    - [x] scripts/test-utils/testMissingAssets.ts (line 6)
+    - [x] scripts/cleanupLocalAssets.ts
+    - [x] scripts/verifyBlobStorage.ts
+  - [x] Fix @/utils/services.js imports:
+    - [x] scripts/standardizeTextFilesBlob.ts
+    - [x] scripts/standardizeTextFilesBlobWithCopy.ts
+  - [x] Fix ../utils/services.js imports:
+    - [x] scripts/upload-book-images.ts (lines 5-6)
+  - [x] Fix relative import paths in blob-reorganizer scripts
   - Dependencies: T057, T058
 
 - [x] **T060: Fix Missing Logger References in Scripts**

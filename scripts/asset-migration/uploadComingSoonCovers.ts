@@ -267,7 +267,7 @@ async function uploadComingSoonCovers(options: UploadOptions): Promise<UploadRes
           pathname: dirPath,
           filename,
           access: 'public',
-          cacheControl: 'max-age=31536000', // 1 year cache
+          // cacheControl: 'max-age=31536000', // 1 year cache - not supported in current UploadOptions
         },
       );
 
