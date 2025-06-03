@@ -731,17 +731,17 @@ This TODO list details the tasks required to fully migrate all asset management 
 
 - [x] **T057: Fix Jest Mock Type Errors in Test Utilities**
 
-  - [ ] Fix 'never' type assignment errors in service-test-example.ts:
-    - [ ] Fix mockResolvedValue type incompatibilities (lines 96, 125-127, 158)
-    - [ ] Properly type jest.fn() mock functions with correct signatures
-  - [ ] Fix Response type conversion error in fixtures/responses.ts:
-    - [ ] Fix line 170: conversion from Record<string, unknown> to Response
-    - [ ] Fix line 238, 252: Response assignable to 'never' parameter
-  - [ ] Fix mock factory type errors in mocks/factories.ts:
-    - [ ] Fix MockedFunction type assignment for logger child method (line 29)
-    - [ ] Fix all 'never' parameter type errors in mock return values
-    - [ ] Fix path type 'unknown' error (line 106)
-    - [ ] Fix Mock<UnknownFunction> to MockedFunction conversions
+  - [x] Fix 'never' type assignment errors in service-test-example.ts:
+    - [x] Fix mockResolvedValue type incompatibilities (lines 96, 125-127, 158)
+    - [x] Properly type jest.fn() mock functions with correct signatures
+  - [x] Fix Response type conversion error in fixtures/responses.ts:
+    - [x] Fix line 170: conversion from Record<string, unknown> to Response
+    - [x] Fix line 238, 252: Response assignable to 'never' parameter
+  - [x] Fix mock factory type errors in mocks/factories.ts:
+    - [x] Fix MockedFunction type assignment for logger child method (line 29)
+    - [x] Fix all 'never' parameter type errors in mock return values
+    - [x] Fix path type 'unknown' error (line 106)
+    - [x] Fix Mock<UnknownFunction> to MockedFunction conversions
   - Dependencies: T056
 
 - [x] **T058: Fix Pino Logger Import Issues**

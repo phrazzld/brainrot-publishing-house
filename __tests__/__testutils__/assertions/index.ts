@@ -34,10 +34,10 @@ function expectCalledWithObjectContaining(
  * @param expectedContext The expected context fields
  */
 function expectLoggedWithContext(
-  loggerFn: jest.Mock,
+  loggerFn: jest.Mock | jest.MockedFunction<(...args: unknown[]) => unknown>,
   expectedContext: Record<string, unknown>,
 ): void {
-  expectCalledWithObjectContaining(loggerFn, 0, expectedContext);
+  expectCalledWithObjectContaining(loggerFn as jest.Mock, 0, expectedContext);
 }
 
 /**

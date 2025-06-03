@@ -70,31 +70,34 @@ export function createMockBlobService(
 
   const mockGetFileInfo = jest.fn<MockBlobService['getFileInfo']>().mockResolvedValue({
     url: 'https://example.com/mock-file.txt',
+    downloadUrl: 'https://example.com/mock-file.txt?download=1',
     pathname: 'mock-file.txt',
     contentType: 'text/plain',
+    contentDisposition: 'inline',
+    cacheControl: 'public, max-age=31536000',
     size: 100,
     uploadedAt: new Date(),
   });
 
   const mockDeleteFile = jest.fn<MockBlobService['deleteFile']>().mockResolvedValue(undefined);
   const mockGetUrlForPath = jest
-    .fn<MockBlobService['getUrlForPath']>()
+    .fn()
     .mockImplementation(
       (path: string, _options?: { baseUrl?: string; noCache?: boolean }) =>
         `https://example.com/${path}`,
-    );
+    ) as MockBlobService['getUrlForPath'];
   const mockFetchText = jest
     .fn<MockBlobService['fetchText']>()
     .mockResolvedValue('Mock text content');
 
   return {
-    uploadFile: mockUploadFile as MockBlobService['uploadFile'],
-    uploadText: mockUploadText as MockBlobService['uploadText'],
-    listFiles: mockListFiles as MockBlobService['listFiles'],
-    getFileInfo: mockGetFileInfo as MockBlobService['getFileInfo'],
-    deleteFile: mockDeleteFile as MockBlobService['deleteFile'],
-    getUrlForPath: mockGetUrlForPath as MockBlobService['getUrlForPath'],
-    fetchText: mockFetchText as MockBlobService['fetchText'],
+    uploadFile: mockUploadFile,
+    uploadText: mockUploadText,
+    listFiles: mockListFiles,
+    getFileInfo: mockGetFileInfo,
+    deleteFile: mockDeleteFile,
+    getUrlForPath: mockGetUrlForPath,
+    fetchText: mockFetchText,
     ...customImplementations,
   };
 }
@@ -146,11 +149,11 @@ export function createMockVercelBlobAssetService(
   customImplementations: Partial<MockVercelBlobAssetService> = {},
 ): MockVercelBlobAssetService {
   const mockGetAssetUrl = jest
-    .fn<MockVercelBlobAssetService['getAssetUrl']>()
+    .fn()
     .mockImplementation(
-      (assetType: string, bookSlug: string, assetName: string, _options?: object) =>
+      (assetType: string, bookSlug: string, assetName: string, _options?: unknown) =>
         Promise.resolve(`https://example.com/assets/${assetType}/${bookSlug}/${assetName}`),
-    );
+    ) as MockVercelBlobAssetService['getAssetUrl'];
 
   const mockAssetExists = jest
     .fn<MockVercelBlobAssetService['assetExists']>()
@@ -180,13 +183,13 @@ export function createMockVercelBlobAssetService(
   });
 
   return {
-    getAssetUrl: mockGetAssetUrl as MockVercelBlobAssetService['getAssetUrl'],
-    assetExists: mockAssetExists as MockVercelBlobAssetService['assetExists'],
-    fetchAsset: mockFetchAsset as MockVercelBlobAssetService['fetchAsset'],
-    fetchTextAsset: mockFetchTextAsset as MockVercelBlobAssetService['fetchTextAsset'],
-    uploadAsset: mockUploadAsset as MockVercelBlobAssetService['uploadAsset'],
-    deleteAsset: mockDeleteAsset as MockVercelBlobAssetService['deleteAsset'],
-    listAssets: mockListAssets as MockVercelBlobAssetService['listAssets'],
+    getAssetUrl: mockGetAssetUrl,
+    assetExists: mockAssetExists,
+    fetchAsset: mockFetchAsset,
+    fetchTextAsset: mockFetchTextAsset,
+    uploadAsset: mockUploadAsset,
+    deleteAsset: mockDeleteAsset,
+    listAssets: mockListAssets,
     ...customImplementations,
   };
 }
@@ -225,15 +228,27 @@ export function createMockVercelBlob(
     uploadedAt: new Date(),
   };
 
+  const putMock = jest.fn<() => Promise<unknown>>();
+  putMock.mockResolvedValue(mockPutResult);
+
+  const listMock = jest.fn<() => Promise<unknown>>();
+  listMock.mockResolvedValue({
+    blobs: [mockListResult],
+    cursor: undefined,
+    hasMore: false,
+  });
+
+  const headMock = jest.fn<() => Promise<unknown>>();
+  headMock.mockResolvedValue(mockHeadResult);
+
+  const delMock = jest.fn<() => Promise<unknown>>();
+  delMock.mockResolvedValue(undefined);
+
   return {
-    put: jest.fn<MockVercelBlob['put']>().mockResolvedValue(mockPutResult),
-    list: jest.fn<MockVercelBlob['list']>().mockResolvedValue({
-      blobs: [mockListResult],
-      cursor: undefined,
-      hasMore: false,
-    }),
-    head: jest.fn<MockVercelBlob['head']>().mockResolvedValue(mockHeadResult),
-    del: jest.fn<MockVercelBlob['del']>().mockResolvedValue(undefined),
+    put: putMock as MockVercelBlob['put'],
+    list: listMock as MockVercelBlob['list'],
+    head: headMock as MockVercelBlob['head'],
+    del: delMock as MockVercelBlob['del'],
     ...customImplementations,
   };
 }

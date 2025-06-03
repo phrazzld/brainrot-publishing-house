@@ -59,6 +59,7 @@ interface ResponseMethods {
   blob: jest.Mock<() => Promise<Blob>>;
   formData: jest.Mock<() => Promise<FormData>>;
   clone: jest.Mock;
+  bytes?: jest.Mock<() => Promise<Uint8Array>>;
 }
 
 /**
@@ -181,7 +182,7 @@ function createResponseFixture(body: ResponseBodyType, options: ResponseOptions 
   // Set up circular reference for clone method
   methods.clone.mockReturnValue(response);
 
-  return response as Response;
+  return response as unknown as Response;
 }
 
 /**
