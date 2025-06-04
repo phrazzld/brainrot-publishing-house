@@ -1,4 +1,4 @@
-echo "Running pre-push checks (formatting, linting, and Next.js build)..."
+echo "Running pre-push checks (formatting, linting, security audit, and Next.js build)..."
 
 # 1. Check formatting
 echo "1. Checking code formatting..."
@@ -8,8 +8,12 @@ npm run prettier:check
 echo "2. Running ESLint..."
 npm run lint
 
-# 3. Test Next.js build (the same as CI does)
-echo "3. Testing Next.js build..."
+# 3. Security audit (same as CI)
+echo "3. Running security audit..."
+npm run security:audit
+
+# 4. Test Next.js build (the same as CI does)
+echo "4. Testing Next.js build..."
 npm run build
 
 echo "All pre-push checks passed!"
