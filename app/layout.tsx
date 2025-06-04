@@ -4,7 +4,7 @@ import { ReactNode } from 'react';
 import Footer from '@/components/footer.js';
 import Header from '@/components/header.js';
 
-import { primary, secondary } from './fonts.js';
+import { primary, secondary } from './fonts';
 import './globals.css';
 
 export const metadata: Metadata = {
