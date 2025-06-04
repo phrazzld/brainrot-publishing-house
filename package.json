@@ -93,6 +93,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.823.0",
     "@vercel/blob": "^1.0.0",
     "@wavesurfer/react": "^1.0.11",
     "cheerio": "^1.0.0",
