@@ -3,13 +3,14 @@ import React from 'react';
 import '@testing-library/jest-dom';
 import { fireEvent, screen } from '@testing-library/react';
 
-import SimpleTestComponent from '../../components/SimpleTestComponent';
-import { render } from '../utils/test-utils';
+import SimpleTestComponent from '../../components/SimpleTestComponent.js';
+import { render } from '../utils/test-utils.js';
 
 describe('SimpleTestComponent', () => {
   // Basic rendering test
   it('renders with default props', () => {
-    const { container } = render(<SimpleTestComponent />);
+    // Render the component without using the returned container object
+    render(<SimpleTestComponent />);
 
     // Check if component rendered correctly
     expect(screen.getByTestId('simple-test-container')).toBeInTheDocument();

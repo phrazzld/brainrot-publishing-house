@@ -4,28 +4,27 @@ import {
   generateBlobUrl,
   getAssetUrl,
   getBlobUrl,
-} from '../../utils/getBlobUrl';
-import { blobPathService } from '../../utils/services/BlobPathService';
-import { blobService } from '../../utils/services/BlobService';
+} from '../../utils/getBlobUrl.js';
+import { blobPathService } from '../../utils/services/BlobPathService.js';
+import { blobService } from '../../utils/services/BlobService.js';
 
 // Mock services
-jest.mock('../../utils/services/BlobService', () => ({
+jest.mock('../../utils/services/BlobService.js', () => ({
   blobService: {
     getUrlForPath: jest.fn(),
     getFileInfo: jest.fn(),
   },
 }));
 
-jest.mock('../../utils/services/BlobPathService', () => ({
+jest.mock('../../utils/services/BlobPathService.js', () => ({
   blobPathService: {
     convertLegacyPath: jest.fn(),
   },
 }));
 
 describe('Blob URL Utilities', () => {
-  const originalNodeEnv = process.env.NODE_ENV;
-  const originalBlobBaseUrl = process.env.NEXT_PUBLIC_BLOB_BASE_URL;
-  const originalBlobDevUrl = process.env.NEXT_PUBLIC_BLOB_DEV_URL;
+  // Store original env values to restore later
+  const originalEnv = { ...process.env };
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -33,26 +32,46 @@ describe('Blob URL Utilities', () => {
 
     // Mock implementation for convertLegacyPath
     (blobPathService.convertLegacyPath as jest.Mock).mockImplementation((path: string) =>
-      path.replace(/^\/assets\//, 'books/').replace(/^\//, '')
+      path.replace(/^\/assets\//, 'books/').replace(/^\//, ''),
     );
 
-    // Mock implementation for getUrlForPath
-    (blobService.getUrlForPath as jest.Mock).mockImplementation((path: string, options?: any) => {
-      const baseUrl = options?.baseUrl || 'https://public.blob.vercel-storage.com';
-      return `${baseUrl}/${path}`;
-    });
+    // Mock implementation for getUrlForPath with proper typing
+    (blobService.getUrlForPath as jest.Mock).mockImplementation(
+      (path: string, options?: { baseUrl?: string; noCache?: boolean }) => {
+        const baseUrl = options?.baseUrl || 'https://public.blob.vercel-storage.com';
+        return `${baseUrl}/${path}`;
+      },
+    );
 
-    // Set default environment variables
-    process.env.NODE_ENV = 'production';
-    process.env.NEXT_PUBLIC_BLOB_BASE_URL = 'https://public.blob.vercel-storage.com';
-    process.env.NEXT_PUBLIC_BLOB_DEV_URL = 'https://dev.blob.vercel-storage.com';
+    // Set default environment variables using a type assertion to bypass readonly constraint
+    const env = process.env as unknown as Record<string, string>;
+    env.NODE_ENV = 'production';
+    env.NEXT_PUBLIC_BLOB_BASE_URL = 'https://public.blob.vercel-storage.com';
+    env.NEXT_PUBLIC_BLOB_DEV_URL = 'https://dev.blob.vercel-storage.com';
   });
 
   afterEach(() => {
-    // Restore environment variables
-    process.env.NODE_ENV = originalNodeEnv;
-    process.env.NEXT_PUBLIC_BLOB_BASE_URL = originalBlobBaseUrl;
-    process.env.NEXT_PUBLIC_BLOB_DEV_URL = originalBlobDevUrl;
+    // Restore environment variables using a type assertion to bypass readonly constraint
+    const env = process.env as unknown as Record<string, string>;
+
+    // Only restore what was originally set
+    if ('NODE_ENV' in originalEnv) {
+      env.NODE_ENV = originalEnv.NODE_ENV as string;
+    } else {
+      delete env.NODE_ENV;
+    }
+
+    if ('NEXT_PUBLIC_BLOB_BASE_URL' in originalEnv) {
+      env.NEXT_PUBLIC_BLOB_BASE_URL = originalEnv.NEXT_PUBLIC_BLOB_BASE_URL as string;
+    } else {
+      delete env.NEXT_PUBLIC_BLOB_BASE_URL;
+    }
+
+    if ('NEXT_PUBLIC_BLOB_DEV_URL' in originalEnv) {
+      env.NEXT_PUBLIC_BLOB_DEV_URL = originalEnv.NEXT_PUBLIC_BLOB_DEV_URL as string;
+    } else {
+      delete env.NEXT_PUBLIC_BLOB_DEV_URL;
+    }
   });
 
   describe('generateBlobUrl', () => {
@@ -84,7 +103,8 @@ describe('Blob URL Utilities', () => {
     });
 
     it('should use development URL when environment is development', () => {
-      process.env.NODE_ENV = 'development';
+      // Use type assertion to set readonly property
+      (process.env as unknown as Record<string, string>).NODE_ENV = 'development';
       const blobPath = 'books/hamlet/images/hamlet-01.png';
 
       generateBlobUrl(blobPath);
@@ -93,7 +113,7 @@ describe('Blob URL Utilities', () => {
         blobPath,
         expect.objectContaining({
           baseUrl: process.env.NEXT_PUBLIC_BLOB_DEV_URL,
-        })
+        }),
       );
     });
 
@@ -129,7 +149,7 @@ describe('Blob URL Utilities', () => {
 
       expect(blobService.getUrlForPath).toHaveBeenCalledWith(
         blobPath,
-        expect.objectContaining({ baseUrl: customBaseUrl })
+        expect.objectContaining({ baseUrl: customBaseUrl }),
       );
     });
   });
@@ -172,7 +192,7 @@ describe('Blob URL Utilities', () => {
 
       expect(blobService.getUrlForPath).toHaveBeenCalledWith(
         expect.any(String),
-        expect.objectContaining({ noCache: true })
+        expect.objectContaining({ noCache: true }),
       );
     });
   });
@@ -209,7 +229,7 @@ describe('Blob URL Utilities', () => {
 
       expect(blobService.getUrlForPath).toHaveBeenCalledWith(
         expect.any(String),
-        expect.objectContaining({ noCache: true })
+        expect.objectContaining({ noCache: true }),
       );
     });
   });

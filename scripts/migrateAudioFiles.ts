@@ -2,18 +2,23 @@
  * Script to migrate audio files to Blob storage
  */
 import * as dotenv from 'dotenv';
-import { existsSync } from 'fs';
-import fs from 'fs/promises';
-import path from 'path';
+import * as fs from 'fs/promises';
+import * as path from 'path';
+import { existsSync as _existsSync } from 'fs';
 import { parseArgs } from 'util';
 
-import translations from '../translations';
-import { blobPathService, blobService } from '../utils/services';
+import translations from '../translations/index.js';
+import { logger as rootLogger } from '../utils/logger.js';
+import { blobPathService, blobService } from '../utils/services/index.js';
+
+// Create a script-specific logger instance
+const logger = rootLogger.child({ script: 'migrateAudioFiles.ts' });
 
 dotenv.config({ path: '.env.local' });
 
 // Constants
-const ASSETS_DIR = path.join(process.cwd(), 'public', 'assets');
+
+const _ASSETS_DIR = path.join(process.cwd(), 'public', 'assets');
 // Default audio source URL based on the project structure
 const EXTERNAL_AUDIO_BASE_URL =
   process.env.NEXT_PUBLIC_AUDIO_SOURCE_URL || 'https://brainrot-audio-assets.example.com';
@@ -58,9 +63,12 @@ class AudioFileMigrator {
    * Run the migration process
    */
   async run(): Promise<MigrationResult[]> {
-    console.log(`Starting audio files migration ${this.options.dryRun ? '(DRY RUN)' : ''}`);
-    console.log(`Processing books: ${this.booksToProcess.join(', ')}`);
-    console.log(`Concurrency: ${this.options.concurrency}`);
+    logger.info({
+      msg: `Starting audio files migration ${this.options.dryRun ? '(DRY RUN)' : ''}`,
+      dryRun: this.options.dryRun,
+      books: this.booksToProcess,
+      concurrency: this.options.concurrency,
+    });
 
     try {
       // Process each book
@@ -79,7 +87,7 @@ class AudioFileMigrator {
 
       return this.results;
     } catch (error) {
-      console.error('Migration failed:', error);
+      logger.error({ msg: 'Migration failed', error });
       throw error;
     }
   }
@@ -91,17 +99,21 @@ class AudioFileMigrator {
     const book = translations.find((t) => t.slug === bookSlug);
 
     if (!book) {
-      console.warn(`Book ${bookSlug} not found in translations`);
+      logger.warn({ msg: `Book ${bookSlug} not found in translations`, bookSlug });
       return;
     }
 
-    console.log(`Processing book: ${book.title} (${book.slug})`);
+    logger.info({
+      msg: `Processing book: ${book.title} (${book.slug})`,
+      bookTitle: book.title,
+      bookSlug: book.slug,
+    });
 
     // Get audio paths from translations
     const audioPaths = this.getAudioPathsFromBook(book);
 
     if (audioPaths.length === 0) {
-      console.log(`No audio files found for ${book.title}`);
+      logger.info({ msg: `No audio files found for ${book.title}`, bookTitle: book.title });
       return;
     }
 
@@ -133,7 +145,7 @@ class AudioFileMigrator {
   /**
    * Get audio paths from a book
    */
-  private getAudioPathsFromBook(book: any): string[] {
+  private getAudioPathsFromBook(book: { chapters?: Array<{ audioSrc?: string }> }): string[] {
     const audioPaths: string[] = [];
 
     if (!book.chapters) {
@@ -145,7 +157,7 @@ class AudioFileMigrator {
         // Extract just the path part without the domain and protocol
         const fullPath = chapter.audioSrc;
         // Remove URL prefix if it's a full URL
-        const pathOnly = fullPath.replace(/^https?:\/\/[^\/]+\//, '');
+        const pathOnly = fullPath.replace(/^https?:\/\/[^/]+\//, '');
         audioPaths.push(pathOnly);
       }
     }
@@ -171,7 +183,7 @@ class AudioFileMigrator {
       : blobPathService.convertLegacyPath(blobPathInput);
 
     // Get just the path portion without the domain for storage
-    const normalizedPath = blobPath.replace(/^https?:\/\/[^\/]+\//, '');
+    const normalizedPath = blobPath.replace(/^https?:\/\/[^/]+\//, '');
 
     // Generate URL for verification
     const blobUrl = blobService.getUrlForPath(normalizedPath);
@@ -182,13 +194,16 @@ class AudioFileMigrator {
       try {
         const fileInfo = await blobService.getFileInfo(blobUrl);
         exists = fileInfo && fileInfo.size > 0;
-      } catch (e) {
+      } catch {
         // File doesn't exist, continue with upload
         exists = false;
       }
 
       if (exists && !this.options.force) {
-        console.log(`Audio file already exists in blob storage (skipping): ${normalizedPath}`);
+        logger.info({
+          msg: `Audio file already exists in blob storage (skipping)`,
+          path: normalizedPath,
+        });
         this.results.push({
           path: audioPath,
           blobPath: normalizedPath,
@@ -201,7 +216,11 @@ class AudioFileMigrator {
 
       // In dry run mode, just log what would happen
       if (this.options.dryRun) {
-        console.log(`Would migrate audio file (dry run): ${audioPath} -> ${normalizedPath}`);
+        logger.info({
+          msg: `Would migrate audio file (dry run)`,
+          sourcePath: audioPath,
+          targetPath: normalizedPath,
+        });
         this.results.push({
           path: audioPath,
           blobPath: normalizedPath,
@@ -215,7 +234,7 @@ class AudioFileMigrator {
       // Since we're dealing with external audio files, we need to fetch them first
       // The audio file needs to be fetched from an external source
       const externalUrl = this.buildExternalAudioUrl(audioPath);
-      console.log(`Fetching audio from external source: ${externalUrl}`);
+      logger.info({ msg: `Fetching audio from external source`, url: externalUrl });
 
       // For a real implementation, we would fetch the file
       // But since this is a simulation (we don't have actual audio files),
@@ -248,7 +267,11 @@ class AudioFileMigrator {
         addRandomSuffix: false,
       });
 
-      console.log(`Audio file migrated successfully: ${audioPath} -> ${normalizedPath}`);
+      logger.info({
+        msg: `Audio file migrated successfully`,
+        sourcePath: audioPath,
+        targetPath: normalizedPath,
+      });
       this.results.push({
         path: audioPath,
         blobPath: normalizedPath,
@@ -256,7 +279,7 @@ class AudioFileMigrator {
         success: true,
       });
     } catch (error) {
-      console.error(`Error migrating audio file ${audioPath}:`, error);
+      logger.error({ msg: `Error migrating audio file`, path: audioPath, error });
       this.results.push({
         path: audioPath,
         blobPath: normalizedPath,
@@ -267,8 +290,12 @@ class AudioFileMigrator {
 
       // Try again if retries are enabled
       if (this.options.retries > 0) {
-        console.log(`Retrying audio file (${this.options.retries} attempts left): ${audioPath}`);
-        const retryOptions = { ...this.options, retries: this.options.retries - 1 };
+        logger.info({
+          msg: `Retrying audio file`,
+          path: audioPath,
+          retriesLeft: this.options.retries,
+        });
+        const _retryOptions = { ...this.options, retries: this.options.retries - 1 };
         return this.processAudioFile(audioPath, bookSlug);
       }
     }
@@ -288,7 +315,7 @@ class AudioFileMigrator {
     let normalizedPath = audioPath;
 
     // Remove URL prefix if present
-    normalizedPath = normalizedPath.replace(/^https?:\/\/[^\/]+\//, '');
+    normalizedPath = normalizedPath.replace(/^https?:\/\/[^/]+\//, '');
 
     // Remove leading slash if present
     normalizedPath = normalizedPath.startsWith('/') ? normalizedPath.substring(1) : normalizedPath;
@@ -306,16 +333,24 @@ class AudioFileMigrator {
     const skipped = this.results.filter((r) => r.skipReason).length;
     const totalSize = this.results.reduce((total, r) => total + r.size, 0);
 
-    console.log('\nAudio Migration Results:');
-    console.log(`Total: ${this.results.length}`);
-    console.log(`Successful: ${successful}`);
-    console.log(`Failed: ${failed}`);
-    console.log(`Skipped: ${skipped}`);
-    console.log(`Total Size: ${Math.round((totalSize / 1024 / 1024) * 100) / 100} MB`);
+    logger.info({
+      msg: 'Audio Migration Results',
+      stats: {
+        total: this.results.length,
+        successful,
+        failed,
+        skipped,
+        totalSizeMB: Math.round((totalSize / 1024 / 1024) * 100) / 100,
+      },
+    });
 
     if (failed > 0) {
-      console.log('\nFailed Files:');
-      this.results.filter((r) => !r.success).forEach((r) => console.log(`- ${r.path}: ${r.error}`));
+      const failedFiles = this.results.filter((r) => !r.success);
+      logger.warn({
+        msg: 'Failed Files',
+        count: failed,
+        files: failedFiles.map((r) => ({ path: r.path, error: r.error })),
+      });
     }
   }
 
@@ -340,7 +375,7 @@ class AudioFileMigrator {
 
     // Save the JSON file
     await fs.writeFile(outputPath, JSON.stringify(output, null, 2));
-    console.log(`Results saved to ${outputPath}`);
+    logger.info({ msg: `Results saved to file`, path: outputPath });
   }
 }
 
@@ -370,8 +405,8 @@ const options: MigrationOptions = {
 const migrator = new AudioFileMigrator(options);
 migrator
   .run()
-  .then(() => console.log('Audio files migration complete!'))
+  .then(() => logger.info({ msg: 'Audio files migration complete!' }))
   .catch((error) => {
-    console.error('Audio files migration failed:', error);
+    logger.error({ msg: 'Audio files migration failed', error });
     process.exit(1);
   });

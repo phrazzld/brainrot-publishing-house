@@ -21,7 +21,7 @@ interface ShareModalActions {
 export function useShareModal(
   slug: string,
   chapterIndex: number,
-  currentTime: number
+  currentTime: number,
 ): [ShareModalState, ShareModalActions] {
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [shareFeedback, setShareFeedback] = useState('');
@@ -60,7 +60,7 @@ export function useShareModal(
     try {
       await navigator.clipboard.writeText(shareUrl);
       setShareFeedback('link is in your clipboard, glhf!');
-    } catch (_err) {
+    } catch {
       // Set error feedback message
       setShareFeedback("couldn't copy link sry man");
     }

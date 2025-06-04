@@ -8,29 +8,40 @@ module.exports = babelJest.createTransformer({
       '@babel/preset-env',
       {
         targets: { node: 'current' },
-        modules: false, // Preserve ESM modules
+        modules: 'auto', // Let Babel decide based on environment
       },
     ],
     '@babel/preset-typescript',
   ],
   plugins: [
-    // Plugin to handle import.meta.url
+    // Plugin to handle import.meta.url more robustly
     {
       visitor: {
         MetaProperty(path) {
-          // Replace import.meta.url with a file path
+          // Replace import.meta.url with a proper file URL
           if (path.node.meta.name === 'import' && path.node.property.name === 'meta') {
             const urlPropertyPath = path.parentPath;
             if (
               urlPropertyPath.isMemberExpression() &&
               urlPropertyPath.node.property.name === 'url'
             ) {
-              urlPropertyPath.replaceWithSourceString("'file://' + __filename");
+              // Create a proper file URL that works with our path utilities
+              urlPropertyPath.replaceWithSourceString(
+                `'file://' + require('path').resolve(__filename)`,
+              );
             }
           }
         },
       },
     },
+    // Handle node: prefixed imports
+    [
+      'babel-plugin-transform-import-meta',
+      {
+        module: 'node:path',
+        // Additional configuration for node: prefixed modules
+      },
+    ],
   ],
   babelrc: false,
   configFile: false,

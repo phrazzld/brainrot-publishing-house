@@ -14,7 +14,7 @@ import { useChapterNavigation } from '@/hooks/useChapterNavigation';
 import { useShareModal } from '@/hooks/useShareModal';
 import { useTextLoader } from '@/hooks/useTextLoader';
 // Custom hooks
-import translations from '@/translations';
+import translations from '@/translations.js';
 
 export default function ReadingRoom() {
   // Waveform container ref

@@ -4,6 +4,8 @@ This backlog outlines planned work, balancing immediate needs, technical excelle
 
 ## High Priority
 
+- fix audio player waveform, enabling scrubbing
+
 ### Infrastructure: CI/CD, Quality Gates & Automation
 
 - **[Fix]**: Re-enable and Stabilize CI Quality Gates (Tests and Strict Linting)
@@ -123,11 +125,29 @@ This backlog outlines planned work, balancing immediate needs, technical excelle
 ### Infrastructure: Storage
 
 - **[Feature]**: Configure and Verify Vercel Blob Storage Setup
+
   - **Type**: Feature
   - **Complexity**: Medium
   - **Rationale**: Provides scalable cloud storage essential for storing application assets (e.g., book content). Foundational infrastructure for core features and operational stability.
   - **Expected Outcome**: Vercel Blob storage provisioned. `BLOB_READ_WRITE_TOKEN` secured via environment variables. Relevant setup/migration/verification scripts tested and functional. `docs/BLOB_STORAGE.md` updated.
   - **Dependencies**: Basic CI Pipeline Setup (for secrets management).
+
+- **[Feature]**: Create CDN URL Verification Tool ✅
+
+  - **Type**: Feature
+  - **Complexity**: Medium
+  - **Rationale**: Helps diagnose download issues by testing CDN URL generation and accessibility across environments. Ensures URLs are correctly formatted and resolving properly, improving audio download reliability.
+  - **Expected Outcome**: Script for testing CDN URL generation with HTTP accessibility checks, environment comparison functionality, and detailed reporting. Documentation in `docs/CDN_URL_VERIFICATION.md`.
+  - **Status**: Completed with `verifyCdnUrls.ts` and `verifyAudioUrls.ts` scripts. Issues discovered and documented in `URL_VERIFICATION_REPORT.md` and `ENVIRONMENT_VARIABLE_ANALYSIS.md`.
+  - **Dependencies**: None.
+
+- **[Feature]**: Complete Digital Ocean Spaces Migration and Cleanup ✅
+  - **Type**: Feature
+  - **Complexity**: High
+  - **Rationale**: Remove all dependencies on Digital Ocean Spaces after successful migration to Vercel Blob to simplify the codebase, reduce dependencies, and eliminate need for maintaining multiple storage providers. This is now a critical priority based on URL verification findings showing path inconsistencies.
+  - **Expected Outcome**: All Digital Ocean assets migrated to Vercel Blob with consistent paths, unified asset service implementation, all Digital Ocean references removed from codebase, download service refactored to use only Vercel Blob, download API route handler simplified, all tests updated, comprehensive documentation created.
+  - **Status**: In progress. Detailed 5-phase migration plan created in docs/MIGRATION_PLAN.md with comprehensive TODO list. Initial inventory script created.
+  - **Dependencies**: None - this is now a top priority based on investigation findings.
 
 ### Core Application Features & Cleanup
 

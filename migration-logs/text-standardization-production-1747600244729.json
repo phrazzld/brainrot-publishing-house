@@ -1,0 +1,1109 @@
+{
+  "total": 183,
+  "successful": 0,
+  "failed": 183,
+  "skipped": 0,
+  "results": [
+    {
+      "originalPath": "books/hamlet/text/brainrot/act-v.txt",
+      "standardizedPath": "books/hamlet/text/brainrot-act-05.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/hamlet/text/brainrot/act-ii.txt",
+      "standardizedPath": "books/hamlet/text/brainrot-act-02.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/hamlet/text/brainrot/act-iv.txt",
+      "standardizedPath": "books/hamlet/text/brainrot-act-04.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/hamlet/text/brainrot/act-i.txt",
+      "standardizedPath": "books/hamlet/text/brainrot-act-01.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/hamlet/text/brainrot/act-iii.txt",
+      "standardizedPath": "books/hamlet/text/brainrot-act-03.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/hamlet/text/brainrot/fulltext.txt",
+      "standardizedPath": "books/hamlet/text/brainrot-fulltext.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/pride-and-prejudice/text/brainrot/chapter-ii.txt",
+      "standardizedPath": "books/pride-and-prejudice/text/brainrot-chapter-02.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/pride-and-prejudice/text/brainrot/chapter-v.txt",
+      "standardizedPath": "books/pride-and-prejudice/text/brainrot-chapter-05.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/pride-and-prejudice/text/brainrot/chapter-i.txt",
+      "standardizedPath": "books/pride-and-prejudice/text/brainrot-chapter-01.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/pride-and-prejudice/text/brainrot/chapter-iii.txt",
+      "standardizedPath": "books/pride-and-prejudice/text/brainrot-chapter-03.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/pride-and-prejudice/text/brainrot/chapter-iv.txt",
+      "standardizedPath": "books/pride-and-prejudice/text/brainrot-chapter-04.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/pride-and-prejudice/text/brainrot/chapter-vi.txt",
+      "standardizedPath": "books/pride-and-prejudice/text/brainrot-chapter-06.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/pride-and-prejudice/text/brainrot/fulltext-copy.txt",
+      "standardizedPath": "books/pride-and-prejudice/text/brainrot-fulltext-copy.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/pride-and-prejudice/text/brainrot/fulltext.txt",
+      "standardizedPath": "books/pride-and-prejudice/text/brainrot-fulltext.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-i.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-01.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-iv.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-04.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-ii.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-02.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-iii.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-03.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-ix.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-09.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-vii.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-07.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-v.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-05.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-viii.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-08.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-the-last.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-the-last.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-vi.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-06.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xiv.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-14.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xiii.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-13.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-x.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-10.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xii.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-12.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xi.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-11.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xv.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-15.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xl.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-40.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xli.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-41.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xix.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-19.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xlii.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-42.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxi.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-21.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xviii.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-18.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xvi.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-16.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xx.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-20.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xvii.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-17.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxix.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-29.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxiii.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-23.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxiv.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-24.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxv.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-25.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxii.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-22.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxvi.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-26.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxi.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-31.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxviii.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-28.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxx.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-30.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxvii.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-27.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxiii.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-33.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxii.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-32.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxix.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-39.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxv.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-35.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxiv.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-34.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxvi.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-36.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxvii.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-37.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxviii.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter-38.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/huck-finn-brainrot-processed.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-huck-finn-brainrot-processed.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/brainrot/huck-finn-brainrot.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-huck-finn-brainrot.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-republic/text/brainrot/book-ix.txt",
+      "standardizedPath": "books/the-republic/text/brainrot-book-ix.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-republic/text/brainrot/book-iii.txt",
+      "standardizedPath": "books/the-republic/text/brainrot-book-iii.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-republic/text/brainrot/book-iv.txt",
+      "standardizedPath": "books/the-republic/text/brainrot-book-iv.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-republic/text/brainrot/book-i.txt",
+      "standardizedPath": "books/the-republic/text/brainrot-book-i.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-republic/text/brainrot/book-ii.txt",
+      "standardizedPath": "books/the-republic/text/brainrot-book-ii.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-republic/text/brainrot/book-v.txt",
+      "standardizedPath": "books/the-republic/text/brainrot-book-v.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-republic/text/brainrot/book-x.txt",
+      "standardizedPath": "books/the-republic/text/brainrot-book-x.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-republic/text/brainrot/book-vi.txt",
+      "standardizedPath": "books/the-republic/text/brainrot-book-vi.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-republic/text/brainrot/book-viii.txt",
+      "standardizedPath": "books/the-republic/text/brainrot-book-viii.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-republic/text/brainrot/book-vii.txt",
+      "standardizedPath": "books/the-republic/text/brainrot-book-vii.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-republic/text/brainrot/fulltext-copy.txt",
+      "standardizedPath": "books/the-republic/text/brainrot-fulltext-copy.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-republic/text/brainrot/fulltext.txt",
+      "standardizedPath": "books/the-republic/text/brainrot-fulltext.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_I_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_i_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_III_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_iii_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_IX_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_ix_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_II_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_ii_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_IV_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_iv_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_VII_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_vii_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_V_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_v_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_VIII_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_viii_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_VI_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_vi_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_THE_LAST.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_the_last.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XIII_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_xiii_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XIV_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_xiv_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XI_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_xi_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XII_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_xii_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XIX_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_xix_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XLII_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_xlii_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XVII_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_xvii_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XVIII_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_xviii_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XL_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_xl_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XLI_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_xli_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXII_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_xxii_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XVI_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_xvi_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XV_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_xv_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXIV_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_xxiv_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXIII_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_xxiii_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXVIII_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_xxviii_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXI_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_xxi_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXIX_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_xxix_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXVII_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_xxvii_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXVI_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_xxvi_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXXIII_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_xxxiii_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXV_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_xxv_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXXIX_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_xxxix_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXXII_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_xxxii_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXXIV_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_xxxiv_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXXV_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_xxxv_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXXVIII_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_xxxviii_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXXI_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_xxxi_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXXVI_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_xxxvi_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXXVII_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_xxxvii_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XXX_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_xxx_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_X_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_x_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/chapter_XX_.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-chapter_xx_.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/huck-finn-source-processed.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-huck-finn-source-processed.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-adventures-of-huckleberry-finn/text/source/huck-finn-source.txt",
+      "standardizedPath": "books/huckleberry-finn/text/brainrot-huck-finn-source.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/hamlet/text/source/hamlet-source-processed.txt",
+      "standardizedPath": "books/hamlet/text/brainrot-hamlet-source-processed.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/hamlet/text/source/hamlet-source.txt",
+      "standardizedPath": "books/hamlet/text/brainrot-hamlet-source.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/pride-and-prejudice/text/source/fulltext.txt",
+      "standardizedPath": "books/pride-and-prejudice/text/brainrot-fulltext.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-republic/text/source/fulltext.txt",
+      "standardizedPath": "books/the-republic/text/brainrot-fulltext.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-odyssey/text/book-05.txt",
+      "standardizedPath": "books/the-odyssey/text/brainrot-book-05.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-odyssey/text/book-01.txt",
+      "standardizedPath": "books/the-odyssey/text/brainrot-book-01.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-odyssey/text/book-04.txt",
+      "standardizedPath": "books/the-odyssey/text/brainrot-book-04.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-odyssey/text/book-02.txt",
+      "standardizedPath": "books/the-odyssey/text/brainrot-book-02.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-odyssey/text/book-03.txt",
+      "standardizedPath": "books/the-odyssey/text/brainrot-book-03.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-odyssey/text/book-06.txt",
+      "standardizedPath": "books/the-odyssey/text/brainrot-book-06.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-odyssey/text/book-09.txt",
+      "standardizedPath": "books/the-odyssey/text/brainrot-book-09.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-odyssey/text/book-08.txt",
+      "standardizedPath": "books/the-odyssey/text/brainrot-book-08.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-odyssey/text/book-07.txt",
+      "standardizedPath": "books/the-odyssey/text/brainrot-book-07.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-odyssey/text/book-10.txt",
+      "standardizedPath": "books/the-odyssey/text/brainrot-book-10.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-odyssey/text/book-11.txt",
+      "standardizedPath": "books/the-odyssey/text/brainrot-book-11.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-odyssey/text/book-15.txt",
+      "standardizedPath": "books/the-odyssey/text/brainrot-book-15.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-odyssey/text/book-14.txt",
+      "standardizedPath": "books/the-odyssey/text/brainrot-book-14.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-odyssey/text/book-13.txt",
+      "standardizedPath": "books/the-odyssey/text/brainrot-book-13.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-odyssey/text/book-12.txt",
+      "standardizedPath": "books/the-odyssey/text/brainrot-book-12.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-odyssey/text/book-18.txt",
+      "standardizedPath": "books/the-odyssey/text/brainrot-book-18.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-odyssey/text/book-16.txt",
+      "standardizedPath": "books/the-odyssey/text/brainrot-book-16.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-odyssey/text/book-19.txt",
+      "standardizedPath": "books/the-odyssey/text/brainrot-book-19.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-odyssey/text/book-20.txt",
+      "standardizedPath": "books/the-odyssey/text/brainrot-book-20.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-odyssey/text/book-17.txt",
+      "standardizedPath": "books/the-odyssey/text/brainrot-book-17.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-odyssey/text/book-22.txt",
+      "standardizedPath": "books/the-odyssey/text/brainrot-book-22.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-odyssey/text/book-24.txt",
+      "standardizedPath": "books/the-odyssey/text/brainrot-book-24.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-odyssey/text/book-23.txt",
+      "standardizedPath": "books/the-odyssey/text/brainrot-book-23.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-odyssey/text/book-21.txt",
+      "standardizedPath": "books/the-odyssey/text/brainrot-book-21.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-aeneid/text/book-01.txt",
+      "standardizedPath": "books/the-aeneid/text/brainrot-book-01.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-aeneid/text/book-05.txt",
+      "standardizedPath": "books/the-aeneid/text/brainrot-book-05.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-aeneid/text/book-04.txt",
+      "standardizedPath": "books/the-aeneid/text/brainrot-book-04.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-aeneid/text/book-03.txt",
+      "standardizedPath": "books/the-aeneid/text/brainrot-book-03.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-aeneid/text/book-02.txt",
+      "standardizedPath": "books/the-aeneid/text/brainrot-book-02.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-aeneid/text/book-10.txt",
+      "standardizedPath": "books/the-aeneid/text/brainrot-book-10.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-aeneid/text/book-06.txt",
+      "standardizedPath": "books/the-aeneid/text/brainrot-book-06.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-aeneid/text/book-07.txt",
+      "standardizedPath": "books/the-aeneid/text/brainrot-book-07.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-aeneid/text/book-08.txt",
+      "standardizedPath": "books/the-aeneid/text/brainrot-book-08.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-aeneid/text/book-09.txt",
+      "standardizedPath": "books/the-aeneid/text/brainrot-book-09.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-aeneid/text/book-12.txt",
+      "standardizedPath": "books/the-aeneid/text/brainrot-book-12.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-aeneid/text/book-11.txt",
+      "standardizedPath": "books/the-aeneid/text/brainrot-book-11.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-iliad/text/book-04.txt",
+      "standardizedPath": "books/the-iliad/text/brainrot-book-04.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-iliad/text/book-02.txt",
+      "standardizedPath": "books/the-iliad/text/brainrot-book-02.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-iliad/text/book-01.txt",
+      "standardizedPath": "books/the-iliad/text/brainrot-book-01.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-iliad/text/book-03.txt",
+      "standardizedPath": "books/the-iliad/text/brainrot-book-03.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-iliad/text/book-05.txt",
+      "standardizedPath": "books/the-iliad/text/brainrot-book-05.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-iliad/text/book-06.txt",
+      "standardizedPath": "books/the-iliad/text/brainrot-book-06.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-iliad/text/book-09.txt",
+      "standardizedPath": "books/the-iliad/text/brainrot-book-09.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-iliad/text/book-10.txt",
+      "standardizedPath": "books/the-iliad/text/brainrot-book-10.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-iliad/text/book-08.txt",
+      "standardizedPath": "books/the-iliad/text/brainrot-book-08.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-iliad/text/book-07.txt",
+      "standardizedPath": "books/the-iliad/text/brainrot-book-07.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-iliad/text/book-14.txt",
+      "standardizedPath": "books/the-iliad/text/brainrot-book-14.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-iliad/text/book-12.txt",
+      "standardizedPath": "books/the-iliad/text/brainrot-book-12.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-iliad/text/book-15.txt",
+      "standardizedPath": "books/the-iliad/text/brainrot-book-15.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-iliad/text/book-13.txt",
+      "standardizedPath": "books/the-iliad/text/brainrot-book-13.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-iliad/text/book-11.txt",
+      "standardizedPath": "books/the-iliad/text/brainrot-book-11.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-iliad/text/book-20.txt",
+      "standardizedPath": "books/the-iliad/text/brainrot-book-20.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-iliad/text/book-19.txt",
+      "standardizedPath": "books/the-iliad/text/brainrot-book-19.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-iliad/text/book-16.txt",
+      "standardizedPath": "books/the-iliad/text/brainrot-book-16.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-iliad/text/book-18.txt",
+      "standardizedPath": "books/the-iliad/text/brainrot-book-18.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-iliad/text/book-17.txt",
+      "standardizedPath": "books/the-iliad/text/brainrot-book-17.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-iliad/text/book-21.txt",
+      "standardizedPath": "books/the-iliad/text/brainrot-book-21.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-iliad/text/book-23.txt",
+      "standardizedPath": "books/the-iliad/text/brainrot-book-23.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-iliad/text/introduction.txt",
+      "standardizedPath": "books/the-iliad/text/brainrot-introduction.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-iliad/text/book-24.txt",
+      "standardizedPath": "books/the-iliad/text/brainrot-book-24.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-iliad/text/book-22.txt",
+      "standardizedPath": "books/the-iliad/text/brainrot-book-22.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-iliad/text/translators-preface.txt",
+      "standardizedPath": "books/the-iliad/text/brainrot-translators-preface.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    },
+    {
+      "originalPath": "books/the-declaration-of-independence/text/the-declaration-of-independence.txt",
+      "standardizedPath": "books/the-declaration/text/brainrot-the-declaration-of-independence.txt",
+      "status": "failed",
+      "error": "blobService.upload is not a function"
+    }
+  ],
+  "startTime": "2025-05-18T20:30:33.898Z",
+  "endTime": "2025-05-18T20:30:44.729Z",
+  "durationMs": 10831
+}

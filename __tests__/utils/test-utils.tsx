@@ -1,8 +1,8 @@
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 
-import { act as rtlAct, render as rtlRender } from '@testing-library/react';
+import * as rtl from '@testing-library/react';
 
-// Custom render function for React 19 compatibility
+// Our custom render function that overrides the standard one
 export function render(ui: ReactElement) {
   // Create a container div that exists in the document
   const container = document.createElement('div');
@@ -14,7 +14,7 @@ export function render(ui: ReactElement) {
   container.appendChild(wrapper);
 
   // Render into the wrapper
-  const result = rtlRender(ui, { container: wrapper });
+  const result = rtl.render(ui, { container: wrapper });
 
   return {
     ...result,
@@ -22,9 +22,14 @@ export function render(ui: ReactElement) {
   };
 }
 
-// Export the act function
-export const act = rtlAct;
+// Our act function just reuses the original
+export const act = rtl.act;
 
-// Re-export everything from testing-library/react
-export * from '@testing-library/react';
-export { render, act };
+// Re-export everything else from testing-library/react that isn't overridden above
+export const screen = rtl.screen;
+export const fireEvent = rtl.fireEvent;
+export const waitFor = rtl.waitFor;
+export const within = rtl.within;
+export const prettyDOM = rtl.prettyDOM;
+export const configure = rtl.configure;
+export const cleanup = rtl.cleanup;

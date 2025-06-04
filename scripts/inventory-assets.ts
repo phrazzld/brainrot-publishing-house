@@ -205,21 +205,21 @@ function formatCsv(inventory: AssetInventory): string {
     // Images
     for (const file of book.images.files) {
       rows.push(
-        `${file.path},${file.blobPath},${file.size},${file.lastModified},${bookSlug},image`
+        `${file.path},${file.blobPath},${file.size},${file.lastModified},${bookSlug},image`,
       );
     }
 
     // Brainrot text
     for (const file of book.brainrotText.files) {
       rows.push(
-        `${file.path},${file.blobPath},${file.size},${file.lastModified},${bookSlug},brainrot`
+        `${file.path},${file.blobPath},${file.size},${file.lastModified},${bookSlug},brainrot`,
       );
     }
 
     // Source text
     for (const file of book.sourceText.files) {
       rows.push(
-        `${file.path},${file.blobPath},${file.size},${file.lastModified},${bookSlug},source`
+        `${file.path},${file.blobPath},${file.size},${file.lastModified},${bookSlug},source`,
       );
     }
   }
@@ -245,7 +245,7 @@ function formatMarkdown(inventory: AssetInventory): string {
 
   for (const [bookSlug, book] of Object.entries(inventory.books)) {
     lines.push(
-      `| ${bookSlug} | ${book.images.count} | ${book.brainrotText.count} | ${book.sourceText.count} | ${formatSize(book.totalSize)} |`
+      `| ${bookSlug} | ${book.images.count} | ${book.brainrotText.count} | ${book.sourceText.count} | ${formatSize(book.totalSize)} |`,
     );
   }
 
@@ -268,7 +268,7 @@ function formatMarkdown(inventory: AssetInventory): string {
 
       for (const file of book.images.files) {
         lines.push(
-          `| ${file.path} | ${file.blobPath} | ${formatSize(file.size)} | ${formatDate(file.lastModified)} |`
+          `| ${file.path} | ${file.blobPath} | ${formatSize(file.size)} | ${formatDate(file.lastModified)} |`,
         );
       }
       lines.push('');
@@ -282,7 +282,7 @@ function formatMarkdown(inventory: AssetInventory): string {
 
       for (const file of book.brainrotText.files) {
         lines.push(
-          `| ${file.path} | ${file.blobPath} | ${formatSize(file.size)} | ${formatDate(file.lastModified)} |`
+          `| ${file.path} | ${file.blobPath} | ${formatSize(file.size)} | ${formatDate(file.lastModified)} |`,
         );
       }
       lines.push('');
@@ -296,7 +296,7 @@ function formatMarkdown(inventory: AssetInventory): string {
 
       for (const file of book.sourceText.files) {
         lines.push(
-          `| ${file.path} | ${file.blobPath} | ${formatSize(file.size)} | ${formatDate(file.lastModified)} |`
+          `| ${file.path} | ${file.blobPath} | ${formatSize(file.size)} | ${formatDate(file.lastModified)} |`,
         );
       }
       lines.push('');
@@ -375,7 +375,7 @@ async function main() {
 
     // Print summary
     console.error(
-      `\nInventory complete: ${inventory.totalAssets} assets found (${formatSize(inventory.totalSize)})`
+      `\nInventory complete: ${inventory.totalAssets} assets found (${formatSize(inventory.totalSize)})`,
     );
     console.error(`Books: ${Object.keys(inventory.books).length}`);
     console.error(`Shared images: ${inventory.sharedImages.count}`);

@@ -32,10 +32,7 @@ yarn-error.log*
 
 # env files
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*
 # allow example env files
 !.env.*.example
 
@@ -60,6 +57,14 @@ audio-migration-with-content.json
 audio-migration-with-placeholders.json
 audio-url-verification.json
 placeholder-deletion-results.json
+missing-assets-*.json
+text-standardization-*.json
+text-verification-*.json
+*.log
+
+# migration logs and reports
+migration-logs/*.log
+migration-logs/*.json
 
 # temporary directories
 /temp
@@ -83,8 +88,12 @@ thinktank_*/
 # planning files
 *-plan.md
 
+# task tracking files
+T0*.md
+
 # glance documentation files
 glance.md
 **/glance.md
 
 **/.claude/settings.local.json
+test-reports/

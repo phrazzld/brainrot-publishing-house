@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-import { fetchTextWithFallback } from '@/utils';
+import { fetchTextWithFallback } from '@/utils.js';
 
 interface TextLoaderState {
   rawText: string;

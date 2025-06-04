@@ -1,8 +1,8 @@
-// Import necessary modules for testing
-import { jest } from '@jest/globals';
-import fs from 'fs/promises';
-import path from 'path';
-import { fileURLToPath } from 'url';
+// Use namespaced imports to avoid redeclaration conflicts
+import * as _fsPromises from 'fs/promises';
+
+// Then use CommonJS require but assign to the variable
+const fs = require('fs/promises');
 
 // Mock dependencies
 jest.mock('fs/promises');
@@ -10,26 +10,30 @@ jest.mock('fs', () => ({
   existsSync: jest.fn().mockReturnValue(true),
 }));
 
-// Mock downloadFromSpaces
-jest.mock('../../utils/downloadFromSpaces', () => ({
-  downloadFromSpaces: jest.fn().mockResolvedValue({
-    url: 'https://brainrot-publishing.nyc3.digitaloceanspaces.com/the-iliad/audio/book-01.mp3',
-    content: Buffer.from('mock audio content'),
-    size: 1024 * 1024, // 1MB
-    contentType: 'audio/mpeg',
-    timeTaken: 500,
-  }),
-  getAudioPathFromUrl: (url: string) => {
-    if (url.startsWith('http')) {
-      const urlObj = new URL(url);
-      return urlObj.pathname.startsWith('/') ? urlObj.pathname.slice(1) : urlObj.pathname;
-    }
-    return url.startsWith('/') ? url.slice(1) : url;
-  },
-}));
+// Mock downloadFromSpaces with type-safe implementation
+jest.mock('../../utils/downloadFromSpaces.js', () => {
+  return {
+    downloadFromSpaces: jest.fn().mockImplementation(() => {
+      return Promise.resolve({
+        url: 'https://brainrot-publishing.nyc3.digitaloceanspaces.com/the-iliad/audio/book-01.mp3',
+        content: Buffer.from('mock audio content'),
+        size: 1024 * 1024, // 1MB
+        contentType: 'audio/mpeg',
+        timeTaken: 500,
+      });
+    }),
+    getAudioPathFromUrl: jest.fn().mockImplementation((url) => {
+      if (url.startsWith('http')) {
+        const urlObj = new URL(url);
+        return urlObj.pathname.startsWith('/') ? urlObj.pathname.slice(1) : urlObj.pathname;
+      }
+      return url.startsWith('/') ? url.slice(1) : url;
+    }),
+  };
+});
 
-// Mock blobService
-jest.mock('../../utils/services/BlobService', () => {
+// Mock blobService with type-safe implementation
+jest.mock('../../utils/services/BlobService.js', () => {
   const mockUploadResult = {
     url: 'https://public.blob.vercel-storage.com/the-iliad/audio/book-01.mp3',
     size: 1024 * 1024,
@@ -38,7 +42,9 @@ jest.mock('../../utils/services/BlobService', () => {
 
   return {
     blobService: {
-      uploadFile: jest.fn().mockResolvedValue(mockUploadResult),
+      uploadFile: jest.fn().mockImplementation(() => {
+        return Promise.resolve(mockUploadResult);
+      }),
       getFileInfo: jest.fn().mockImplementation((url) => {
         // Simulate file already exists in some cases
         if (url.includes('book-02.mp3')) {
@@ -51,25 +57,27 @@ jest.mock('../../utils/services/BlobService', () => {
         // Default behavior
         return Promise.resolve({ size: 1024 * 1024, url });
       }),
-      getUrlForPath: jest
-        .fn()
-        .mockImplementation((path) => `https://public.blob.vercel-storage.com/${path}`),
+      getUrlForPath: jest.fn().mockImplementation((path) => {
+        return `https://public.blob.vercel-storage.com/${path}`;
+      }),
     },
   };
 });
 
-// Mock blobPathService
-jest.mock('../../utils/services/BlobPathService', () => ({
-  blobPathService: {
-    convertLegacyPath: jest.fn().mockImplementation((path) => {
-      // Remove leading slash if present
-      return path.startsWith('/') ? path.slice(1) : path;
-    }),
-  },
-}));
+// Mock blobPathService with type-safe implementation
+jest.mock('../../utils/services/BlobPathService.js', () => {
+  return {
+    blobPathService: {
+      convertLegacyPath: jest.fn().mockImplementation((path) => {
+        // Remove leading slash if present
+        return path.startsWith('/') ? path.slice(1) : path;
+      }),
+    },
+  };
+});
 
 // Mock translations
-jest.mock('../../translations/index', () => ({
+jest.mock('../../translations/index.js', () => ({
   default: [
     {
       slug: 'the-iliad',
@@ -99,23 +107,56 @@ jest.mock('../../translations/index', () => ({
 const scriptPath = '../../scripts/migrateAudioFilesWithContent.ts';
 
 // Dynamically require to access the exported classes/functions for testing
-let AudioFilesMigrator: any;
-let parseArgs: any;
+// Define appropriate types for these imports
+interface AudioFilesMigratorClass {
+  new (options: {
+    dryRun: boolean;
+    books: string[];
+    force: boolean;
+    retries: number;
+    concurrency: number;
+    logFile: string;
+    verbose: boolean;
+  }): {
+    run: () => Promise<{ skipped: number; successful: number; failed: number }>;
+  };
+}
 
-// Setup to load the script
-beforeAll(async () => {
+interface ParseArgsFn {
+  (args: string[]): {
+    dryRun: boolean;
+    books: string[];
+    force: boolean;
+    retries: number;
+    concurrency: number;
+    logFile: string;
+    verbose: boolean;
+  };
+}
+
+let AudioFilesMigrator: AudioFilesMigratorClass;
+let _parseArgs: ParseArgsFn; // Prefixed with underscore as it's unused
+
+// Setup to load the script - use require to avoid dynamic import issues in Jest
+beforeAll(() => {
   // Mock implementation needed for script loading
-  (fs.writeFile as jest.Mock).mockResolvedValue(undefined);
+  jest.mocked(fs.writeFile).mockResolvedValue(undefined as unknown as void);
 
-  // Import the script dynamically to test its functions
-  const module = await import(scriptPath);
+  try {
+    // Require the script to test its functions
+    const importedModule = require(scriptPath);
 
-  // Assuming AudioFilesMigrator and parseArgs are exported or can be extracted
-  // This is for illustration - adjust based on how your script is structured
-  AudioFilesMigrator = module.AudioFilesMigrator;
-  parseArgs = module.parseArgs;
-
-  // If they're not exported, you'll need to test the script's behavior through its side effects
+    // Assuming AudioFilesMigrator and parseArgs are exported or can be extracted
+    AudioFilesMigrator = importedModule.AudioFilesMigrator;
+    _parseArgs = importedModule.parseArgs;
+  } catch (error) {
+    // Capture the error for test debugging but don't use console
+    // This is a test setup issue if it occurs, not a test failure
+    jest.spyOn(global.console, 'error').mockImplementation(() => {});
+    throw new Error(
+      `Failed to load script module: ${error instanceof Error ? error.message : String(error)}`,
+    );
+  }
 });
 
 // Reset mocks before each test
@@ -132,13 +173,13 @@ describe('migrateAudioFilesWithContent script', () => {
     process.argv = ['node', 'migrateAudioFilesWithContent.ts', '--dry-run', '--verbose'];
 
     try {
-      // Import and call the main function
-      const { main } = await import(scriptPath);
+      // Use require to avoid dynamic import issues in Jest
+      const { main } = require(scriptPath);
 
       // Mock exit to prevent actual exit
-      const mockExit = jest
-        .spyOn(process, 'exit')
-        .mockImplementation((code?: number) => undefined as never);
+      const mockExit = jest.spyOn(process, 'exit').mockImplementation((code) => {
+        throw new Error(`Process exit called with code: ${code}`);
+      });
 
       // Run the main function
       await main();
@@ -176,7 +217,7 @@ describe('migrateAudioFilesWithContent script', () => {
     expect(fs.writeFile).toHaveBeenCalledWith(
       expect.stringContaining('test-output.json'),
       expect.any(String),
-      'utf8'
+      'utf8',
     );
   });
 

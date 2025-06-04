@@ -1,14 +1,106 @@
 import { useState } from 'react';
 
-// Only import what's actually used
-import { getAssetUrlWithFallback } from '../utils';
-
 type DownloadButtonProps = {
   slug: string;
-  type: 'full' | 'chapter';
-  chapter?: number;
+  type: 'chapter';
+  chapter: number;
   classNames?: string;
 };
+
+/**
+ * Creates URL parameters for download requests
+ */
+function createUrlParams(
+  slug: string,
+  type: string,
+  chapter: number,
+  useProxy = false,
+): URLSearchParams {
+  const params = new URLSearchParams({
+    slug,
+    type,
+    chapter: String(chapter),
+  });
+
+  if (useProxy) {
+    params.append('proxy', 'true');
+  }
+
+  return params;
+}
+
+/**
+ * Handles error responses from fetch operations
+ */
+async function handleErrorResponse(response: Response): Promise<string> {
+  const errorText = await response.text();
+  console.error(`[Download] API error (${response.status}):`, errorText);
+  let errorMessage = 'Error fetching download URL';
+
+  try {
+    const errorData = JSON.parse(errorText);
+    errorMessage = errorData.message || errorData.error || errorMessage;
+  } catch {
+    // If response isn't valid JSON, use the text directly
+    errorMessage = errorText || errorMessage;
+  }
+
+  return errorMessage;
+}
+
+/**
+ * Creates and triggers a download for a blob
+ */
+function triggerFileDownload(blob: Blob, fileName: string): void {
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = fileName;
+
+  // Auto-click the link to trigger a download
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+/**
+ * Fetches audio file through proxy and initiates the download
+ */
+async function downloadViaProxy(slug: string, type: 'chapter', chapter: number): Promise<void> {
+  console.warn('[Download] Using proxy approach for audio downloads');
+
+  // Create proxy URL
+  const proxyParams = createUrlParams(slug, type, chapter, true);
+  const proxyUrl = `/api/download?${proxyParams.toString()}`;
+  console.warn(`[Download] Fetching audio file through proxy: ${proxyUrl}`);
+
+  // Fetch the file
+  const fileRes = await fetch(proxyUrl);
+
+  if (!fileRes.ok) {
+    const errorText = await fileRes.text();
+    console.error(`[Download] Proxy fetch error (${fileRes.status}):`, errorText);
+    throw new Error(`failed to download audio file (${fileRes.status})`);
+  }
+
+  console.warn('[Download] Successfully fetched audio file through proxy, creating blob...');
+  const blob = await fileRes.blob();
+
+  // Create the filename
+  const fileName = `${slug}-chapter-${chapter}.mp3`;
+
+  // Trigger the download
+  triggerFileDownload(blob, fileName);
+}
+
+/**
+ * Sets a user-friendly error message based on the error object
+ */
+function handleDownloadError(err: unknown, setError: (msg: string) => void): void {
+  console.error('[Download] Error details:', err);
+
+  const errorMessage = err instanceof Error ? err.message : 'unknown error';
+  setError(`Failed to download. Please try again. (${errorMessage})`);
+}
 
 export default function DownloadButton({ slug, type, chapter, classNames }: DownloadButtonProps) {
   const [isDownloading, setIsDownloading] = useState(false);
@@ -19,33 +111,21 @@ export default function DownloadButton({ slug, type, chapter, classNames }: Down
     setError('');
 
     try {
-      // Build the file path based on type and chapter
-      const audioFileName =
-        type === 'full' ? 'full-audiobook.mp3' : `book-${zeroPad(chapter as number, 2)}.mp3`;
+      // Initial API call to get download URL
+      const params = createUrlParams(slug, type, chapter);
+      const apiUrl = `/api/download?${params.toString()}`;
+      const response = await fetch(apiUrl);
 
-      // Convert to legacy path format for getAssetUrlWithFallback
-      const legacyPath = `/${slug}/audio/${audioFileName}`;
+      // Handle API response errors
+      if (!response.ok) {
+        const errorMessage = await handleErrorResponse(response);
+        throw new Error(errorMessage);
+      }
 
-      // Get audio URL with automatic fallback mechanism
-      const audioUrl = await getAssetUrlWithFallback(legacyPath);
-
-      // Fetch the audio file as a blob
-      const fileRes = await fetch(audioUrl);
-      if (!fileRes.ok) throw new Error('failed to fetch audio file');
-      const blob = await fileRes.blob();
-
-      // Create a local URL for that blob
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = type === 'full' ? `${slug}.mp3` : `${slug}-chapter-${chapter}.mp3`;
-
-      // Auto-click the link to trigger a download
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } catch {
-      // Set user-friendly error message
-      setError('failed to download. sry bestie.');
+      // Always download using proxy now
+      await downloadViaProxy(slug, type, chapter);
+    } catch (err) {
+      handleDownloadError(err, setError);
     } finally {
       setIsDownloading(false);
     }
@@ -54,23 +134,13 @@ export default function DownloadButton({ slug, type, chapter, classNames }: Down
   return (
     <div>
       <button
-        className={`btn btn-primary ${classNames}`}
+        className={`btn btn-primary ${classNames || ''}`}
         disabled={isDownloading}
         onClick={handleDownload}
       >
-        {isDownloading
-          ? 'downloading...'
-          : type === 'full'
-            ? 'download full audiobook'
-            : `download chapter ${chapter}`}
+        {isDownloading ? 'downloading...' : `download chapter ${chapter}`}
       </button>
       {error && <p className="text-red-400 text-sm">{error}</p>}
     </div>
   );
 }
-
-// Zero-pad helper function for generating consistent file names
-const zeroPad = (num: number, places: number) => {
-  const zero = places - num.toString().length + 1;
-  return Array(+(zero > 0 && zero)).join('0') + num;
-};

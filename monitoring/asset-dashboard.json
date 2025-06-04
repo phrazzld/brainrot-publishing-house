@@ -1,0 +1,249 @@
+{
+  "dashboard": {
+    "name": "Asset Access Monitoring",
+    "version": "1.0.0",
+    "description": "Dashboard for monitoring asset access patterns and performance",
+    "panels": [
+      {
+        "id": "asset-access-overview",
+        "title": "Asset Access Overview",
+        "type": "stat",
+        "description": "Overview of asset access metrics",
+        "query": {
+          "metrics": ["total_asset_requests", "average_response_time", "error_rate"],
+          "timeRange": "last24h",
+          "filter": {
+            "context": "asset_monitoring"
+          }
+        }
+      },
+      {
+        "id": "asset-requests-by-type",
+        "title": "Asset Requests by Type",
+        "type": "pie",
+        "description": "Distribution of asset requests by asset type",
+        "query": {
+          "metrics": ["count"],
+          "dimensions": ["assetType"],
+          "filter": {
+            "context": "asset_monitoring"
+          },
+          "timeRange": "last24h"
+        }
+      },
+      {
+        "id": "asset-performance-timeline",
+        "title": "Asset Performance Timeline",
+        "type": "line",
+        "description": "Response times for asset operations over time",
+        "query": {
+          "metrics": ["metrics.total_duration_ms"],
+          "dimensions": ["operation"],
+          "filter": {
+            "context": "asset_monitoring"
+          },
+          "timeRange": "last24h",
+          "aggregation": "avg"
+        }
+      },
+      {
+        "id": "asset-request-volume",
+        "title": "Asset Request Volume",
+        "type": "bar",
+        "description": "Number of asset requests over time",
+        "query": {
+          "metrics": ["count"],
+          "dimensions": ["timestamp"],
+          "filter": {
+            "context": "asset_monitoring"
+          },
+          "timeRange": "last24h",
+          "interval": "1h"
+        }
+      },
+      {
+        "id": "top-accessed-assets",
+        "title": "Top Accessed Assets",
+        "type": "table",
+        "description": "Most frequently accessed assets",
+        "query": {
+          "metrics": ["count"],
+          "dimensions": ["path", "bookSlug", "assetName"],
+          "filter": {
+            "context": "asset_monitoring"
+          },
+          "timeRange": "last24h",
+          "limit": 10,
+          "sort": {
+            "field": "count",
+            "order": "desc"
+          }
+        }
+      },
+      {
+        "id": "error-rate-by-operation",
+        "title": "Error Rate by Operation",
+        "type": "bar",
+        "description": "Error rates for different asset operations",
+        "query": {
+          "metrics": ["error_rate"],
+          "dimensions": ["operation"],
+          "filter": {
+            "context": "asset_monitoring",
+            "action": [
+              "asset_fetch_failure",
+              "url_generation_error",
+              "asset_existence_check_failed"
+            ]
+          },
+          "timeRange": "last24h"
+        }
+      },
+      {
+        "id": "asset-size-distribution",
+        "title": "Asset Size Distribution",
+        "type": "histogram",
+        "description": "Distribution of asset sizes",
+        "query": {
+          "metrics": ["metrics.content_size_bytes"],
+          "filter": {
+            "context": "asset_monitoring",
+            "action": "asset_fetch_success"
+          },
+          "timeRange": "last24h",
+          "buckets": 10
+        }
+      },
+      {
+        "id": "asset-fetch-retries",
+        "title": "Asset Fetch Retries",
+        "type": "bar",
+        "description": "Number of retry attempts for asset fetches",
+        "query": {
+          "metrics": ["count"],
+          "dimensions": ["metrics.attempt"],
+          "filter": {
+            "context": "asset_monitoring",
+            "action": "asset_fetch_retry"
+          },
+          "timeRange": "last24h"
+        }
+      },
+      {
+        "id": "cache-hit-ratio",
+        "title": "Cache Hit Ratio",
+        "type": "gauge",
+        "description": "Percentage of cache hits for asset requests",
+        "query": {
+          "metrics": ["cache_hit_ratio"],
+          "filter": {
+            "context": "asset_monitoring",
+            "action": "asset_fetch_success"
+          },
+          "timeRange": "last24h"
+        },
+        "thresholds": [
+          {
+            "color": "red",
+            "value": 0.5
+          },
+          {
+            "color": "yellow",
+            "value": 0.7
+          },
+          {
+            "color": "green",
+            "value": 0.9
+          }
+        ]
+      },
+      {
+        "id": "recent-errors",
+        "title": "Recent Errors",
+        "type": "log",
+        "description": "Recent asset access errors",
+        "query": {
+          "filter": {
+            "context": "asset_monitoring",
+            "level": "error"
+          },
+          "timeRange": "last24h",
+          "limit": 100
+        }
+      }
+    ],
+    "layout": {
+      "grid": [
+        { "panelId": "asset-access-overview", "x": 0, "y": 0, "w": 24, "h": 4 },
+        { "panelId": "asset-requests-by-type", "x": 0, "y": 4, "w": 8, "h": 8 },
+        { "panelId": "asset-performance-timeline", "x": 8, "y": 4, "w": 16, "h": 8 },
+        { "panelId": "asset-request-volume", "x": 0, "y": 12, "w": 24, "h": 8 },
+        { "panelId": "top-accessed-assets", "x": 0, "y": 20, "w": 12, "h": 8 },
+        { "panelId": "error-rate-by-operation", "x": 12, "y": 20, "w": 12, "h": 8 },
+        { "panelId": "asset-size-distribution", "x": 0, "y": 28, "w": 12, "h": 8 },
+        { "panelId": "asset-fetch-retries", "x": 12, "y": 28, "w": 12, "h": 8 },
+        { "panelId": "cache-hit-ratio", "x": 0, "y": 36, "w": 24, "h": 6 },
+        { "panelId": "recent-errors", "x": 0, "y": 42, "w": 24, "h": 10 }
+      ]
+    },
+    "filters": [
+      {
+        "name": "Time Range",
+        "field": "timeRange",
+        "type": "time",
+        "default": "last24h",
+        "options": [
+          { "label": "Last Hour", "value": "last1h" },
+          { "label": "Last 6 Hours", "value": "last6h" },
+          { "label": "Last 24 Hours", "value": "last24h" },
+          { "label": "Last 7 Days", "value": "last7d" },
+          { "label": "Custom Range", "value": "custom" }
+        ]
+      },
+      {
+        "name": "Asset Type",
+        "field": "assetType",
+        "type": "multi-select",
+        "default": [],
+        "options": [
+          { "label": "Audio", "value": "audio" },
+          { "label": "Text", "value": "text" },
+          { "label": "Image", "value": "image" }
+        ]
+      },
+      {
+        "name": "Book",
+        "field": "bookSlug",
+        "type": "multi-select",
+        "default": [],
+        "dynamicOptions": {
+          "query": {
+            "dimensions": ["bookSlug"],
+            "filter": {
+              "context": "asset_monitoring"
+            },
+            "distinct": true
+          }
+        }
+      },
+      {
+        "name": "Error Types",
+        "field": "metrics.error_type",
+        "type": "multi-select",
+        "default": [],
+        "options": [
+          { "label": "Not Found", "value": "not_found" },
+          { "label": "Unauthorized", "value": "unauthorized" },
+          { "label": "Forbidden", "value": "forbidden" },
+          { "label": "Network Error", "value": "network_error" },
+          { "label": "Storage Error", "value": "storage_error" },
+          { "label": "Unknown Error", "value": "unknown_error" }
+        ]
+      }
+    ],
+    "refresh": {
+      "auto": true,
+      "interval": 60
+    }
+  }
+}

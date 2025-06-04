@@ -23,7 +23,7 @@ jest.mock('@aws-sdk/client-s3', () => ({
   GetObjectCommand: jest.fn(),
 }));
 
-jest.mock('../../utils/services/BlobService', () => ({
+jest.mock('../../utils/services/BlobService.js', () => ({
   blobService: {
     uploadFile: jest.fn().mockResolvedValue({}),
     getFileInfo: jest.fn().mockResolvedValue({}),
@@ -31,12 +31,12 @@ jest.mock('../../utils/services/BlobService', () => ({
   },
 }));
 
-jest.mock('../../translations', () => ({
+jest.mock('../../translations.js', () => ({
   default: [],
 }));
 
 // Mock the main script to prevent it from running
-jest.mock('../../scripts/migrateAudioFilesEnhanced');
+jest.mock('../../scripts/migrateAudioFilesEnhanced.js');
 
 // Create simple tests that can be verified
 describe('Enhanced Audio Migration Script Mocks', () => {
@@ -57,7 +57,7 @@ describe('Enhanced Audio Migration Script Mocks', () => {
   });
 
   it('should mock the BlobService correctly', () => {
-    const { blobService } = require('../../utils/services/BlobService');
+    const { blobService } = require('../../utils/services/BlobService.js');
     blobService.getUrlForPath('test/path');
     expect(blobService.getUrlForPath).toHaveBeenCalledWith('test/path');
   });

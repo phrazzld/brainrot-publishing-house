@@ -2,8 +2,7 @@ import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 import * as path from 'path';
 
-import { blobService } from '../utils/services';
-import { blobPathService } from '../utils/services';
+import { blobPathService, blobService } from '../utils/services/index.js';
 
 // Load environment variables from .env.local
 dotenv.config({ path: '.env.local' });
@@ -88,7 +87,7 @@ async function uploadBookImages() {
         console.log(`✅ Uploaded ${file.filename} to ${result.url}`);
       } catch (error) {
         console.error(
-          `❌ Error uploading ${file.filename}: ${error instanceof Error ? error.message : String(error)}`
+          `❌ Error uploading ${file.filename}: ${error instanceof Error ? error.message : String(error)}`,
         );
       }
     }

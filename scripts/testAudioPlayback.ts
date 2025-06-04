@@ -22,7 +22,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import puppeteer from 'puppeteer';
 
-import translations from '../translations';
+import translations from '../translations/index.js';
 
 dotenv.config({ path: '.env.local' });
 
@@ -90,7 +90,7 @@ function parseArgs(): TestOptions {
  * Find chapters with audio for testing
  */
 function findTestCases(
-  bookSlug: string = ''
+  bookSlug: string = '',
 ): { book: string; bookTitle: string; chapterIndex: number; chapterTitle: string }[] {
   const testCases: {
     book: string;
@@ -126,10 +126,10 @@ function findTestCases(
  * Test playback for a single chapter
  */
 async function testChapterPlayback(
-  browser: any, // Using puppeteer.Browser
+  browser: puppeteer.Browser,
   book: string,
   chapterIndex: number,
-  timeout: number
+  timeout: number,
 ): Promise<TestResult> {
   // Create a new page for this test
   const page = await browser.newPage();
@@ -148,7 +148,7 @@ async function testChapterPlayback(
   };
 
   // Set up error logging
-  page.on('console', (msg: any) => {
+  page.on('console', (msg: puppeteer.ConsoleMessage) => {
     if (msg.type() === 'error') {
       result.errors.push(`Console error: ${msg.text()}`);
     }
@@ -186,7 +186,7 @@ async function testChapterPlayback(
             const player = document.querySelector('.audio-player');
             return player && player.classList.contains('playing');
           },
-          { timeout: 5000 }
+          { timeout: 5000 },
         )
         .catch(() => {
           result.errors.push('Audio did not start playing within timeout');
@@ -209,7 +209,7 @@ async function testChapterPlayback(
               const player = document.querySelector('.audio-player');
               return player && !player.classList.contains('playing');
             },
-            { timeout: 5000 }
+            { timeout: 5000 },
           )
           .catch(() => {
             result.errors.push('Audio did not pause within timeout');
@@ -302,7 +302,7 @@ async function main() {
     if (!response.ok) {
       throw new Error(`Dev server responded with status: ${response.status}`);
     }
-  } catch (error) {
+  } catch (_error) {
     console.error('ERROR: Development server is not running at http://localhost:3000');
     console.error('Please start the dev server with `npm run dev` before running this test');
     process.exit(1);
@@ -446,7 +446,7 @@ function generateMarkdownReport(summary: TestSummary): string {
       const errorsText = result.errors.length > 0 ? `${result.errors.length} errors` : 'None';
 
       lines.push(
-        `| ${result.chapter} | ${loadedIcon} | ${playableIcon} | ${seekableIcon} | ${pausableIcon} | ${result.loadTime}ms | ${errorsText} |`
+        `| ${result.chapter} | ${loadedIcon} | ${playableIcon} | ${seekableIcon} | ${pausableIcon} | ${result.loadTime}ms | ${errorsText} |`,
       );
     }
 
@@ -477,7 +477,7 @@ function generateMarkdownReport(summary: TestSummary): string {
 // Check if puppeteer is installed
 try {
   require.resolve('puppeteer');
-} catch (e) {
+} catch (_e) {
   console.error('ERROR: puppeteer is not installed. Run `npm install puppeteer` first.');
   process.exit(1);
 }

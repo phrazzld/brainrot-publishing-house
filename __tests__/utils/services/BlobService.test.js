@@ -50,7 +50,7 @@ global.Blob = class Blob {
 };
 
 // Import the BlobService and the mocked modules
-const { BlobService } = require('../../../utils/services/BlobService');
+const { BlobService } = require('../../../utils/services/BlobService.js');
 const { put, list, head, del } = require('@vercel/blob');
 
 describe('BlobService', () => {
@@ -142,7 +142,7 @@ describe('BlobService', () => {
 
       // Act & Assert
       await expect(blobService.uploadFile(mockFile)).rejects.toThrow(
-        'Failed to upload file: Upload failed'
+        'Failed to upload file: Upload failed',
       );
     });
   });
@@ -165,7 +165,7 @@ describe('BlobService', () => {
         expect.objectContaining({
           pathname: 'books/hamlet',
           filename: 'scene1.txt',
-        })
+        }),
       );
       expect(result).toEqual({
         url: 'https://example.com/test.txt',
@@ -190,7 +190,7 @@ describe('BlobService', () => {
         expect.objectContaining({
           pathname: '',
           filename: 'file.txt',
-        })
+        }),
       );
       expect(result).toEqual({
         url: 'https://example.com/test.txt',
@@ -338,7 +338,7 @@ describe('BlobService', () => {
 
         // Assert
         expect(result).toBe(
-          'https://blob.example.com/books/hamlet/scene1.txt?existing=param&_t=1234567890'
+          'https://blob.example.com/books/hamlet/scene1.txt?existing=param&_t=1234567890',
         );
       } finally {
         // Restore original Date.now
@@ -370,7 +370,7 @@ describe('BlobService', () => {
 
       // Act & Assert
       await expect(blobService.fetchText(url)).rejects.toThrow(
-        'Failed to fetch text: HTTP error! Status: 404'
+        'Failed to fetch text: HTTP error! Status: 404',
       );
     });
 
@@ -381,7 +381,7 @@ describe('BlobService', () => {
 
       // Act & Assert
       await expect(blobService.fetchText(url)).rejects.toThrow(
-        'Failed to fetch text: Network error'
+        'Failed to fetch text: Network error',
       );
     });
   });

@@ -38,24 +38,71 @@
     "migrate:chapter-images:dry": "tsx scripts/migrateBookChapterImages.ts --dry-run",
     "migrate:brainrot-text": "tsx scripts/migrateBrainrotTextFiles.ts",
     "migrate:brainrot-text:dry": "tsx scripts/migrateBrainrotTextFiles.ts --dry-run",
+    "validate:asset-names": "tsx scripts/validateAssetNames.ts",
+    "validate:asset-names:fix": "tsx scripts/validateAssetNames.ts --fix",
+    "validate:asset-names:verbose": "tsx scripts/validateAssetNames.ts --verbose",
     "migrate:source-text": "tsx scripts/migrateSourceTextFiles.ts",
     "migrate:source-text:dry": "tsx scripts/migrateSourceTextFiles.ts --dry-run",
     "verify:blob": "tsx scripts/verifyBlobStorage.ts",
+    "verify:cdn": "tsx scripts/verifyCdnUrls.ts",
+    "verify:cdn:md": "tsx scripts/verifyCdnUrls.ts --format=md --output=cdn-url-verification.md",
+    "verify:cdn:verbose": "tsx scripts/verifyCdnUrls.ts --verbose",
+    "verify:cdn:compare": "tsx scripts/verifyCdnUrls.ts --compare-file=cdn-url-verification.json",
     "cleanup:assets": "tsx scripts/cleanupLocalAssets.ts",
     "cleanup:assets:delete": "tsx scripts/cleanupLocalAssets.ts --delete",
     "setup:hooks": "bash scripts/setup-hooks.sh",
+    "reorganize:blob": "tsx scripts/reorganize-blob-paths.ts",
+    "reorganize:blob:dry": "tsx scripts/reorganize-blob-paths.ts --dry-run",
+    "reorganize:blob:verbose": "tsx scripts/reorganize-blob-paths.ts --verbose",
+    "audit:text": "tsx scripts/auditTextAssets.ts",
+    "audit:text:verbose": "tsx scripts/auditTextAssets.ts --verbose",
+    "audit:image": "tsx scripts/auditImageAssets.ts",
+    "audit:image:verbose": "tsx scripts/auditImageAssets.ts --verbose",
+    "audit:audio": "tsx scripts/auditAudioAssets.ts",
+    "audit:audio:verbose": "tsx scripts/auditAudioAssets.ts --verbose",
+    "audit:all": "npm run audit:text && npm run audit:image && npm run audit:audio",
+    "plan:reorganization": "tsx scripts/generateReorganizationPlan.ts",
+    "plan:reorganization:verbose": "tsx scripts/generateReorganizationPlan.ts --verbose",
+    "test:e2e:downloads": "tsx scripts/verify-end-to-end-downloads.ts",
+    "test:e2e:downloads:production": "tsx scripts/verify-end-to-end-downloads.ts --env=production",
+    "benchmark:downloads": "tsx scripts/benchmark-downloads.ts",
+    "benchmark:downloads:production": "tsx scripts/benchmark-downloads.ts --env=production",
+    "verify:migration": "tsx scripts/verify-migration-completion.ts",
+    "verify:migration:production": "tsx scripts/verify-migration-completion.ts --env=production",
+    "migrate:full-audiobooks": "tsx scripts/migrateFullAudiobooks.ts",
+    "migrate:full-audiobooks:dry": "tsx scripts/migrateFullAudiobooks.ts --dry-run",
+    "migrate:full-audiobooks:verbose": "tsx scripts/migrateFullAudiobooks.ts --verbose",
+    "standardize:text": "tsx scripts/standardizeTextFiles.ts",
+    "standardize:text:dry": "tsx scripts/standardizeTextFiles.ts --dry-run",
+    "standardize:text:verbose": "tsx scripts/standardizeTextFiles.ts --dry-run --log-file=text-standardization-dry-run.log",
+    "standardize:text:production": "tsx scripts/standardizeTextFiles.ts --log-file=text-standardization.log",
+    "standardize:text:blob": "tsx scripts/standardizeTextFilesBlob.ts",
+    "standardize:text:blob:dry": "tsx scripts/standardizeTextFilesBlob.ts --dry-run",
+    "standardize:text:blob:verbose": "tsx scripts/standardizeTextFilesBlob.ts --dry-run --log-file=text-standardization-blob-dry-run.log",
+    "verify:text": "tsx scripts/verifyTextMigration.ts",
+    "verify:audio-files": "tsx scripts/verifyAudioFilesAccess.ts",
+    "verify:audio-files:skip-check": "tsx scripts/verifyAudioFilesAccess.ts --skip-access-check",
+    "test:audio-downloads": "tsx scripts/testAudioFileDownloads.ts",
+    "test:audio-downloads:production": "tsx scripts/testAudioFileDownloads.ts --env=production",
+    "fix:imports": "tsx scripts/add-js-extensions.ts",
+    "fix:imports:dry": "tsx scripts/add-js-extensions.ts --dry-run",
+    "fix:imports:utils": "tsx scripts/add-js-extensions.ts ./utils",
+    "fix:imports:tests": "tsx scripts/add-js-extensions.ts ./__tests__",
+    "fix:imports:services": "tsx scripts/add-js-extensions.ts ./services",
+    "tsc": "tsc --noEmit",
     "prepare": "husky"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.797.0",
+    "@aws-sdk/client-s3": "^3.823.0",
     "@vercel/blob": "^1.0.0",
     "@wavesurfer/react": "^1.0.11",
-    "aws-sdk": "^2.1692.0",
     "cheerio": "^1.0.0",
     "dotenv": "^16.5.0",
     "gsap": "^3.12.5",
     "next": "^15.3.1",
     "openai": "^4.80.1",
+    "pino": "^9.6.0",
+    "pino-pretty": "^13.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "wavesurfer.js": "^7.8.14"
@@ -97,19 +144,19 @@
     "puppeteer": "^24.7.2",
     "tailwindcss": "^3.4.17",
     "ts-jest": "^29.3.2",
+    "ts-node": "^10.9.2",
     "tsx": "^4.19.3",
-    "typescript": "^5"
+    "typescript": "^5.8.3"
   },
   "lint-staged": {
+    "package.json": [
+      "prettier --write"
+    ],
+    "*.{ts,tsx,js,jsx,json,md,css,scss,yml,yaml}": [
+      "prettier --write"
+    ],
     "*.{js,jsx,ts,tsx}": [
-      "eslint --fix",
-      "prettier --write"
-    ],
-    "*.{json,css}": [
-      "prettier --write"
-    ],
-    "*.md": [
-      "sh -c 'if [ ! -L \"$1\" ]; then prettier --write \"$1\"; fi' --"
+      "eslint --fix --max-warnings=10"
     ]
   }
 }
