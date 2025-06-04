@@ -2,8 +2,8 @@ import { useState } from 'react';
 
 type DownloadButtonProps = {
   slug: string;
-  type: 'full' | 'chapter';
-  chapter?: number;
+  type: 'chapter';
+  chapter: number;
   classNames?: string;
 };
 
@@ -13,13 +13,13 @@ type DownloadButtonProps = {
 function createUrlParams(
   slug: string,
   type: string,
-  chapter?: number,
+  chapter: number,
   useProxy = false,
 ): URLSearchParams {
   const params = new URLSearchParams({
     slug,
     type,
-    ...(chapter ? { chapter: String(chapter) } : {}),
+    chapter: String(chapter),
   });
 
   if (useProxy) {
@@ -65,11 +65,7 @@ function triggerFileDownload(blob: Blob, fileName: string): void {
 /**
  * Fetches audio file through proxy and initiates the download
  */
-async function downloadViaProxy(
-  slug: string,
-  type: 'full' | 'chapter',
-  chapter?: number,
-): Promise<void> {
+async function downloadViaProxy(slug: string, type: 'chapter', chapter: number): Promise<void> {
   console.warn('[Download] Using proxy approach for audio downloads');
 
   // Create proxy URL
@@ -90,7 +86,7 @@ async function downloadViaProxy(
   const blob = await fileRes.blob();
 
   // Create the filename
-  const fileName = type === 'full' ? `${slug}.mp3` : `${slug}-chapter-${chapter}.mp3`;
+  const fileName = `${slug}-chapter-${chapter}.mp3`;
 
   // Trigger the download
   triggerFileDownload(blob, fileName);
@@ -142,11 +138,7 @@ export default function DownloadButton({ slug, type, chapter, classNames }: Down
         disabled={isDownloading}
         onClick={handleDownload}
       >
-        {isDownloading
-          ? 'downloading...'
-          : type === 'full'
-            ? 'download full audiobook'
-            : `download chapter ${chapter}`}
+        {isDownloading ? 'downloading...' : `download chapter ${chapter}`}
       </button>
       {error && <p className="text-red-400 text-sm">{error}</p>}
     </div>

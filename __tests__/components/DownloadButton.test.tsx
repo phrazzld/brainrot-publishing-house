@@ -3,8 +3,8 @@ import React from 'react';
 import '@testing-library/jest-dom';
 import { fireEvent, waitFor } from '@testing-library/react';
 
-import DownloadButton from '../../components/DownloadButton.js';
-import { render } from '../utils/test-utils.js';
+import DownloadButton from '../../components/DownloadButton';
+import { render } from '../utils/test-utils';
 
 // Mock URL.createObjectURL
 URL.createObjectURL = jest.fn(() => 'mock-blob-url');
@@ -79,56 +79,12 @@ describe('DownloadButton Component', () => {
     });
   });
 
-  it('renders the download button for a full audiobook', () => {
-    const { container } = render(<DownloadButton slug="hamlet" type="full" />);
-
-    // Just check if the text is in the container
-    const buttonText = container.textContent;
-    expect(buttonText).toContain('download full audiobook');
-  });
-
   it('renders the download button for a chapter', () => {
     const { container } = render(<DownloadButton slug="hamlet" type="chapter" chapter={3} />);
 
     // Just check if the text is in the container
     const buttonText = container.textContent;
     expect(buttonText).toContain('download chapter 3');
-  });
-
-  it('downloads a full audiobook through the API proxy', async () => {
-    const { container } = render(<DownloadButton slug="hamlet" type="full" />);
-
-    // Use a direct selector
-    const button = container.querySelector('button');
-    fireEvent.click(button as HTMLButtonElement);
-
-    // Check for downloading state
-    const downloadingText = container.textContent?.includes('downloading...');
-    expect(downloadingText).toBe(true);
-
-    await waitFor(() => {
-      // Verify API calls
-      expect(global.fetch).toHaveBeenCalledTimes(2);
-
-      // Should first call the API to get URL info
-      expect((global.fetch as jest.Mock).mock.calls[0][0]).toContain(
-        '/api/download?slug=hamlet&type=full',
-      );
-
-      // Then should call the proxy endpoint
-      expect((global.fetch as jest.Mock).mock.calls[1][0]).toContain(
-        '/api/download?slug=hamlet&type=full&proxy=true',
-      );
-
-      // Check if the download link was created and clicked
-      expect(mockLink.download).toBe('hamlet.mp3');
-      expect(mockAppendChild).toHaveBeenCalled();
-      expect(mockClick).toHaveBeenCalled();
-      expect(mockRemoveChild).toHaveBeenCalled();
-
-      // Button should return to normal state
-      expect(button).toHaveTextContent('download full audiobook');
-    });
   });
 
   it('downloads a chapter audiobook through the API proxy', async () => {
@@ -184,7 +140,7 @@ describe('DownloadButton Component', () => {
     // Mock the first fetch (API call) to fail
     (global.fetch as jest.Mock).mockRejectedValueOnce(new Error('Network error'));
 
-    const { container } = render(<DownloadButton slug="hamlet" type="full" />);
+    const { container } = render(<DownloadButton slug="hamlet" type="chapter" chapter={1} />);
 
     // Use a direct selector
     const button = container.querySelector('button');
@@ -218,7 +174,7 @@ describe('DownloadButton Component', () => {
       }
     });
 
-    const { container } = render(<DownloadButton slug="hamlet" type="full" />);
+    const { container } = render(<DownloadButton slug="hamlet" type="chapter" chapter={1} />);
 
     // Use a direct selector
     const button = container.querySelector('button');
@@ -243,7 +199,7 @@ describe('DownloadButton Component', () => {
       ),
     });
 
-    const { container } = render(<DownloadButton slug="nonexistent" type="full" />);
+    const { container } = render(<DownloadButton slug="nonexistent" type="chapter" chapter={1} />);
 
     // Use a direct selector
     const button = container.querySelector('button');

@@ -52,7 +52,6 @@ export default function DownloadModal({ isOpen, onClose, slug, chapterIndex }: D
             chapter={chapterIndex + 1}
             classNames="btn btn-primary"
           />
-          <DownloadButton slug={slug} type="full" classNames="btn btn-secondary" />
         </div>
       </div>
     </div>
