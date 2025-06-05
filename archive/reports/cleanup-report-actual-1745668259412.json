@@ -1,12 +1,12 @@
 {
-  "date": "2025-04-26T11:38:09.774Z",
-  "dryRun": true,
+  "date": "2025-04-26T11:50:59.385Z",
+  "dryRun": false,
   "overallSummary": {
     "totalBooks": 20,
     "totalAssets": 201,
     "assetsInBlob": 78,
-    "assetsDeleted": 0,
-    "assetsKept": 78,
+    "assetsDeleted": 78,
+    "assetsKept": 0,
     "errors": 0
   },
   "bookResults": [
@@ -18,7 +18,7 @@
           "path": "https://public.blob.vercel-storage.com/books/the-iliad/images/the-iliad-01.png",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-iliad/images/the-iliad-01.png",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "cover"
         },
         {
@@ -361,8 +361,8 @@
       "summary": {
         "totalAssets": 49,
         "existInBlob": 1,
-        "deleted": 0,
-        "keptLocal": 1,
+        "deleted": 1,
+        "keptLocal": 0,
         "errors": 0
       }
     },
@@ -374,316 +374,316 @@
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/images/huck-finn-09.png",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/images/huck-finn-09.png",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "cover"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-i.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-i.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-ii.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-ii.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-iii.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-iii.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-iv.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-iv.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-v.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-v.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-vi.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-vi.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-vii.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-vii.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-viii.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-viii.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-ix.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-ix.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-x.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-x.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xi.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xi.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xii.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xii.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xiii.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xiii.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xiv.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xiv.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xv.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xv.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xvi.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xvi.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xvii.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xvii.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xviii.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xviii.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xix.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xix.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xx.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xx.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxi.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxi.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxii.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxii.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxiii.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxiii.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxiv.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxiv.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxv.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxv.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxvi.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxvi.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxvii.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxvii.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxviii.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxviii.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxix.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxix.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxx.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxx.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxi.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxi.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxii.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxii.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxiii.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxiii.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxiv.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxiv.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxv.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxv.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxvi.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxvi.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxvii.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxvii.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxviii.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxviii.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxix.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xxxix.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xl.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xl.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xli.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xli.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xlii.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-xlii.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-adventures-of-huckleberry-finn/text/brainrot/chapter-the-last.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-adventures-of-huckleberry-finn/text/brainrot/chapter-the-last.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         }
       ],
       "summary": {
         "totalAssets": 44,
         "existInBlob": 44,
-        "deleted": 0,
-        "keptLocal": 44,
+        "deleted": 44,
+        "keptLocal": 0,
         "errors": 0
       }
     },
@@ -695,7 +695,7 @@
           "path": "https://public.blob.vercel-storage.com/books/the-odyssey/images/the-odyssey-01.png",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-odyssey/images/the-odyssey-01.png",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "cover"
         },
         {
@@ -1038,8 +1038,8 @@
       "summary": {
         "totalAssets": 49,
         "existInBlob": 1,
-        "deleted": 0,
-        "keptLocal": 1,
+        "deleted": 1,
+        "keptLocal": 0,
         "errors": 0
       }
     },
@@ -1051,7 +1051,7 @@
           "path": "https://public.blob.vercel-storage.com/books/the-aeneid/images/the-aeneid-01.png",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-aeneid/images/the-aeneid-01.png",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "cover"
         },
         {
@@ -1226,8 +1226,8 @@
       "summary": {
         "totalAssets": 25,
         "existInBlob": 1,
-        "deleted": 0,
-        "keptLocal": 1,
+        "deleted": 1,
+        "keptLocal": 0,
         "errors": 0
       }
     },
@@ -1239,14 +1239,14 @@
           "path": "https://public.blob.vercel-storage.com/books/hamlet/images/hamlet-07.png",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/hamlet/images/hamlet-07.png",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "cover"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/hamlet/text/brainrot/act-i.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/hamlet/text/brainrot/act-i.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
@@ -1260,36 +1260,36 @@
           "path": "https://public.blob.vercel-storage.com/books/hamlet/text/brainrot/act-ii.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/hamlet/text/brainrot/act-ii.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/hamlet/text/brainrot/act-iii.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/hamlet/text/brainrot/act-iii.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/hamlet/text/brainrot/act-iv.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/hamlet/text/brainrot/act-iv.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/hamlet/text/brainrot/act-v.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/hamlet/text/brainrot/act-v.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         }
       ],
       "summary": {
         "totalAssets": 7,
         "existInBlob": 6,
-        "deleted": 0,
-        "keptLocal": 6,
+        "deleted": 6,
+        "keptLocal": 0,
         "errors": 0
       }
     },
@@ -1301,85 +1301,85 @@
           "path": "https://public.blob.vercel-storage.com/books/the-republic/images/republic-07.png",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-republic/images/republic-07.png",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "cover"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-republic/text/brainrot/book-i.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-republic/text/brainrot/book-i.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-republic/text/brainrot/book-ii.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-republic/text/brainrot/book-ii.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-republic/text/brainrot/book-iii.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-republic/text/brainrot/book-iii.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-republic/text/brainrot/book-iv.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-republic/text/brainrot/book-iv.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-republic/text/brainrot/book-v.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-republic/text/brainrot/book-v.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-republic/text/brainrot/book-vi.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-republic/text/brainrot/book-vi.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-republic/text/brainrot/book-vii.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-republic/text/brainrot/book-vii.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-republic/text/brainrot/book-viii.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-republic/text/brainrot/book-viii.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-republic/text/brainrot/book-ix.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-republic/text/brainrot/book-ix.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-republic/text/brainrot/book-x.txt",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-republic/text/brainrot/book-x.txt",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "chapter"
         }
       ],
       "summary": {
         "totalAssets": 11,
         "existInBlob": 11,
-        "deleted": 0,
-        "keptLocal": 11,
+        "deleted": 11,
+        "keptLocal": 0,
         "errors": 0
       }
     },
@@ -1391,7 +1391,7 @@
           "path": "https://public.blob.vercel-storage.com/books/the-declaration-of-independence/images/america-02.png",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/the-declaration-of-independence/images/america-02.png",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "cover"
         },
         {
@@ -1412,8 +1412,8 @@
       "summary": {
         "totalAssets": 3,
         "existInBlob": 1,
-        "deleted": 0,
-        "keptLocal": 1,
+        "deleted": 1,
+        "keptLocal": 0,
         "errors": 0
       }
     },
@@ -1425,15 +1425,15 @@
           "path": "https://public.blob.vercel-storage.com/books/pride-and-prejudice/images/pride-and-prejudice-01.png",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/pride-and-prejudice/images/pride-and-prejudice-01.png",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "cover"
         }
       ],
       "summary": {
         "totalAssets": 1,
         "existInBlob": 1,
-        "deleted": 0,
-        "keptLocal": 1,
+        "deleted": 1,
+        "keptLocal": 0,
         "errors": 0
       }
     },
@@ -1445,15 +1445,15 @@
           "path": "https://public.blob.vercel-storage.com/books/paradise-lost/images/paradise-lost-01.png",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/paradise-lost/images/paradise-lost-01.png",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "cover"
         }
       ],
       "summary": {
         "totalAssets": 1,
         "existInBlob": 1,
-        "deleted": 0,
-        "keptLocal": 1,
+        "deleted": 1,
+        "keptLocal": 0,
         "errors": 0
       }
     },
@@ -1465,15 +1465,15 @@
           "path": "https://public.blob.vercel-storage.com/books/meditations/images/meditations-01.png",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/meditations/images/meditations-01.png",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "cover"
         }
       ],
       "summary": {
         "totalAssets": 1,
         "existInBlob": 1,
-        "deleted": 0,
-        "keptLocal": 1,
+        "deleted": 1,
+        "keptLocal": 0,
         "errors": 0
       }
     },
@@ -1485,15 +1485,15 @@
           "path": "https://public.blob.vercel-storage.com/images/inferno-01.png",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/images/inferno-01.png",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "cover"
         }
       ],
       "summary": {
         "totalAssets": 1,
         "existInBlob": 1,
-        "deleted": 0,
-        "keptLocal": 1,
+        "deleted": 1,
+        "keptLocal": 0,
         "errors": 0
       }
     },
@@ -1505,15 +1505,15 @@
           "path": "https://public.blob.vercel-storage.com/images/purgatorio-02.png",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/images/purgatorio-02.png",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "cover"
         }
       ],
       "summary": {
         "totalAssets": 1,
         "existInBlob": 1,
-        "deleted": 0,
-        "keptLocal": 1,
+        "deleted": 1,
+        "keptLocal": 0,
         "errors": 0
       }
     },
@@ -1525,15 +1525,15 @@
           "path": "https://public.blob.vercel-storage.com/images/paradiso-02.png",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/images/paradiso-02.png",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "cover"
         }
       ],
       "summary": {
         "totalAssets": 1,
         "existInBlob": 1,
-        "deleted": 0,
-        "keptLocal": 1,
+        "deleted": 1,
+        "keptLocal": 0,
         "errors": 0
       }
     },
@@ -1545,15 +1545,15 @@
           "path": "https://public.blob.vercel-storage.com/images/old-testament-03.png",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/images/old-testament-03.png",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "cover"
         }
       ],
       "summary": {
         "totalAssets": 1,
         "existInBlob": 1,
-        "deleted": 0,
-        "keptLocal": 1,
+        "deleted": 1,
+        "keptLocal": 0,
         "errors": 0
       }
     },
@@ -1565,15 +1565,15 @@
           "path": "https://public.blob.vercel-storage.com/images/new-testament-01.png",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/images/new-testament-01.png",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "cover"
         }
       ],
       "summary": {
         "totalAssets": 1,
         "existInBlob": 1,
-        "deleted": 0,
-        "keptLocal": 1,
+        "deleted": 1,
+        "keptLocal": 0,
         "errors": 0
       }
     },
@@ -1585,15 +1585,15 @@
           "path": "https://public.blob.vercel-storage.com/images/quran-01.png",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/images/quran-01.png",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "cover"
         }
       ],
       "summary": {
         "totalAssets": 1,
         "existInBlob": 1,
-        "deleted": 0,
-        "keptLocal": 1,
+        "deleted": 1,
+        "keptLocal": 0,
         "errors": 0
       }
     },
@@ -1605,15 +1605,15 @@
           "path": "https://public.blob.vercel-storage.com/images/romeo-and-juliet-02.png",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/images/romeo-and-juliet-02.png",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "cover"
         }
       ],
       "summary": {
         "totalAssets": 1,
         "existInBlob": 1,
-        "deleted": 0,
-        "keptLocal": 1,
+        "deleted": 1,
+        "keptLocal": 0,
         "errors": 0
       }
     },
@@ -1625,15 +1625,15 @@
           "path": "https://public.blob.vercel-storage.com/images/midsummer-02.png",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/images/midsummer-02.png",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "cover"
         }
       ],
       "summary": {
         "totalAssets": 1,
         "existInBlob": 1,
-        "deleted": 0,
-        "keptLocal": 1,
+        "deleted": 1,
+        "keptLocal": 0,
         "errors": 0
       }
     },
@@ -1645,15 +1645,15 @@
           "path": "https://public.blob.vercel-storage.com/images/gilgamesh-01.png",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/images/gilgamesh-01.png",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "cover"
         }
       ],
       "summary": {
         "totalAssets": 1,
         "existInBlob": 1,
-        "deleted": 0,
-        "keptLocal": 1,
+        "deleted": 1,
+        "keptLocal": 0,
         "errors": 0
       }
     },
@@ -1665,15 +1665,15 @@
           "path": "https://public.blob.vercel-storage.com/images/gita-01.png",
           "localPath": "/Users/phaedrus/Development/brainrot-publishing-house/public/assets/images/gita-01.png",
           "existsInBlob": true,
-          "wasDeleted": false,
+          "wasDeleted": true,
           "type": "cover"
         }
       ],
       "summary": {
         "totalAssets": 1,
         "existInBlob": 1,
-        "deleted": 0,
-        "keptLocal": 1,
+        "deleted": 1,
+        "keptLocal": 0,
         "errors": 0
       }
     }

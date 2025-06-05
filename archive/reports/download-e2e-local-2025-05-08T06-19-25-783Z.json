@@ -1,0 +1,173 @@
+{
+  "environment": "local",
+  "baseUrl": "http://localhost:3000",
+  "startTime": 159.757208,
+  "endTime": 176.235208,
+  "totalTests": 18,
+  "successful": 0,
+  "failed": 18,
+  "results": [
+    {
+      "assetType": "audio",
+      "bookSlug": "the-iliad",
+      "assetName": "full-audiobook.mp3",
+      "url": "http://localhost:3000/api/download?slug=the-iliad&type=full",
+      "success": false,
+      "durationMs": 8,
+      "error": "request to http://localhost:3000/api/download?slug=the-iliad&type=full failed, reason: "
+    },
+    {
+      "assetType": "audio",
+      "bookSlug": "the-iliad",
+      "assetName": "full-audiobook.mp3",
+      "url": "http://localhost:3000/api/download?slug=the-iliad&type=full&proxy=true",
+      "success": false,
+      "durationMs": 1,
+      "error": "request to http://localhost:3000/api/download?slug=the-iliad&type=full&proxy=true failed, reason: "
+    },
+    {
+      "assetType": "audio",
+      "bookSlug": "the-iliad",
+      "assetName": "chapter-01.mp3",
+      "url": "http://localhost:3000/api/download?slug=the-iliad&type=chapter&chapter=1",
+      "success": false,
+      "durationMs": 0,
+      "error": "request to http://localhost:3000/api/download?slug=the-iliad&type=chapter&chapter=1 failed, reason: "
+    },
+    {
+      "assetType": "audio",
+      "bookSlug": "the-iliad",
+      "assetName": "chapter-01.mp3",
+      "url": "http://localhost:3000/api/download?slug=the-iliad&type=chapter&chapter=1&proxy=true",
+      "success": false,
+      "durationMs": 0,
+      "error": "request to http://localhost:3000/api/download?slug=the-iliad&type=chapter&chapter=1&proxy=true failed, reason: "
+    },
+    {
+      "assetType": "audio",
+      "bookSlug": "the-iliad",
+      "assetName": "chapter-02.mp3",
+      "url": "http://localhost:3000/api/download?slug=the-iliad&type=chapter&chapter=2",
+      "success": false,
+      "durationMs": 1,
+      "error": "request to http://localhost:3000/api/download?slug=the-iliad&type=chapter&chapter=2 failed, reason: "
+    },
+    {
+      "assetType": "audio",
+      "bookSlug": "the-iliad",
+      "assetName": "chapter-02.mp3",
+      "url": "http://localhost:3000/api/download?slug=the-iliad&type=chapter&chapter=2&proxy=true",
+      "success": false,
+      "durationMs": 0,
+      "error": "request to http://localhost:3000/api/download?slug=the-iliad&type=chapter&chapter=2&proxy=true failed, reason: "
+    },
+    {
+      "assetType": "audio",
+      "bookSlug": "hamlet",
+      "assetName": "full-audiobook.mp3",
+      "url": "http://localhost:3000/api/download?slug=hamlet&type=full",
+      "success": false,
+      "durationMs": 0,
+      "error": "request to http://localhost:3000/api/download?slug=hamlet&type=full failed, reason: "
+    },
+    {
+      "assetType": "audio",
+      "bookSlug": "hamlet",
+      "assetName": "full-audiobook.mp3",
+      "url": "http://localhost:3000/api/download?slug=hamlet&type=full&proxy=true",
+      "success": false,
+      "durationMs": 0,
+      "error": "request to http://localhost:3000/api/download?slug=hamlet&type=full&proxy=true failed, reason: "
+    },
+    {
+      "assetType": "audio",
+      "bookSlug": "hamlet",
+      "assetName": "chapter-01.mp3",
+      "url": "http://localhost:3000/api/download?slug=hamlet&type=chapter&chapter=1",
+      "success": false,
+      "durationMs": 1,
+      "error": "request to http://localhost:3000/api/download?slug=hamlet&type=chapter&chapter=1 failed, reason: "
+    },
+    {
+      "assetType": "audio",
+      "bookSlug": "hamlet",
+      "assetName": "chapter-01.mp3",
+      "url": "http://localhost:3000/api/download?slug=hamlet&type=chapter&chapter=1&proxy=true",
+      "success": false,
+      "durationMs": 0,
+      "error": "request to http://localhost:3000/api/download?slug=hamlet&type=chapter&chapter=1&proxy=true failed, reason: "
+    },
+    {
+      "assetType": "audio",
+      "bookSlug": "hamlet",
+      "assetName": "chapter-02.mp3",
+      "url": "http://localhost:3000/api/download?slug=hamlet&type=chapter&chapter=2",
+      "success": false,
+      "durationMs": 0,
+      "error": "request to http://localhost:3000/api/download?slug=hamlet&type=chapter&chapter=2 failed, reason: "
+    },
+    {
+      "assetType": "audio",
+      "bookSlug": "hamlet",
+      "assetName": "chapter-02.mp3",
+      "url": "http://localhost:3000/api/download?slug=hamlet&type=chapter&chapter=2&proxy=true",
+      "success": false,
+      "durationMs": 0,
+      "error": "request to http://localhost:3000/api/download?slug=hamlet&type=chapter&chapter=2&proxy=true failed, reason: "
+    },
+    {
+      "assetType": "audio",
+      "bookSlug": "the-aeneid",
+      "assetName": "full-audiobook.mp3",
+      "url": "http://localhost:3000/api/download?slug=the-aeneid&type=full",
+      "success": false,
+      "durationMs": 0,
+      "error": "request to http://localhost:3000/api/download?slug=the-aeneid&type=full failed, reason: "
+    },
+    {
+      "assetType": "audio",
+      "bookSlug": "the-aeneid",
+      "assetName": "full-audiobook.mp3",
+      "url": "http://localhost:3000/api/download?slug=the-aeneid&type=full&proxy=true",
+      "success": false,
+      "durationMs": 0,
+      "error": "request to http://localhost:3000/api/download?slug=the-aeneid&type=full&proxy=true failed, reason: "
+    },
+    {
+      "assetType": "audio",
+      "bookSlug": "the-aeneid",
+      "assetName": "chapter-01.mp3",
+      "url": "http://localhost:3000/api/download?slug=the-aeneid&type=chapter&chapter=1",
+      "success": false,
+      "durationMs": 0,
+      "error": "request to http://localhost:3000/api/download?slug=the-aeneid&type=chapter&chapter=1 failed, reason: "
+    },
+    {
+      "assetType": "audio",
+      "bookSlug": "the-aeneid",
+      "assetName": "chapter-01.mp3",
+      "url": "http://localhost:3000/api/download?slug=the-aeneid&type=chapter&chapter=1&proxy=true",
+      "success": false,
+      "durationMs": 0,
+      "error": "request to http://localhost:3000/api/download?slug=the-aeneid&type=chapter&chapter=1&proxy=true failed, reason: "
+    },
+    {
+      "assetType": "audio",
+      "bookSlug": "the-aeneid",
+      "assetName": "chapter-02.mp3",
+      "url": "http://localhost:3000/api/download?slug=the-aeneid&type=chapter&chapter=2",
+      "success": false,
+      "durationMs": 0,
+      "error": "request to http://localhost:3000/api/download?slug=the-aeneid&type=chapter&chapter=2 failed, reason: "
+    },
+    {
+      "assetType": "audio",
+      "bookSlug": "the-aeneid",
+      "assetName": "chapter-02.mp3",
+      "url": "http://localhost:3000/api/download?slug=the-aeneid&type=chapter&chapter=2&proxy=true",
+      "success": false,
+      "durationMs": 0,
+      "error": "request to http://localhost:3000/api/download?slug=the-aeneid&type=chapter&chapter=2&proxy=true failed, reason: "
+    }
+  ]
+}

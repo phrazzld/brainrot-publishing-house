@@ -1,0 +1,234 @@
+{
+  "date": "2025-04-27T09:04:37.531Z",
+  "summary": {
+    "totalFiles": 24,
+    "existingFiles": 4,
+    "validAudioFiles": 4,
+    "smallPlaceholders": 0,
+    "missingFiles": 20,
+    "existingPercentage": "17%",
+    "validPercentage": "17%"
+  },
+  "results": [
+    {
+      "bookSlug": "the-odyssey",
+      "chapterTitle": "book 1",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-01.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-01.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 7313815,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "bookSlug": "the-odyssey",
+      "chapterTitle": "book 2",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-02.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-02.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 7628416,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "bookSlug": "the-odyssey",
+      "chapterTitle": "book 3",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-03.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-03.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 8746744,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "bookSlug": "the-odyssey",
+      "chapterTitle": "book 4",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-04.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-04.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 8482767,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "bookSlug": "the-odyssey",
+      "chapterTitle": "book 5",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-05.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-05.mp3",
+      "exists": false,
+      "isValidAudio": false,
+      "error": "Failed to get file info: Vercel Blob: The requested blob does not exist"
+    },
+    {
+      "bookSlug": "the-odyssey",
+      "chapterTitle": "book 6",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-06.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-06.mp3",
+      "exists": false,
+      "isValidAudio": false,
+      "error": "Failed to get file info: Vercel Blob: The requested blob does not exist"
+    },
+    {
+      "bookSlug": "the-odyssey",
+      "chapterTitle": "book 7",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-07.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-07.mp3",
+      "exists": false,
+      "isValidAudio": false,
+      "error": "Failed to get file info: Vercel Blob: The requested blob does not exist"
+    },
+    {
+      "bookSlug": "the-odyssey",
+      "chapterTitle": "book 8",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-08.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-08.mp3",
+      "exists": false,
+      "isValidAudio": false,
+      "error": "Failed to get file info: Vercel Blob: The requested blob does not exist"
+    },
+    {
+      "bookSlug": "the-odyssey",
+      "chapterTitle": "book 9",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-09.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-09.mp3",
+      "exists": false,
+      "isValidAudio": false,
+      "error": "Failed to get file info: Vercel Blob: The requested blob does not exist"
+    },
+    {
+      "bookSlug": "the-odyssey",
+      "chapterTitle": "book 10",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-10.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-10.mp3",
+      "exists": false,
+      "isValidAudio": false,
+      "error": "Failed to get file info: Vercel Blob: The requested blob does not exist"
+    },
+    {
+      "bookSlug": "the-odyssey",
+      "chapterTitle": "book 11",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-11.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-11.mp3",
+      "exists": false,
+      "isValidAudio": false,
+      "error": "Failed to get file info: Vercel Blob: The requested blob does not exist"
+    },
+    {
+      "bookSlug": "the-odyssey",
+      "chapterTitle": "book 12",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-12.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-12.mp3",
+      "exists": false,
+      "isValidAudio": false,
+      "error": "Failed to get file info: Vercel Blob: The requested blob does not exist"
+    },
+    {
+      "bookSlug": "the-odyssey",
+      "chapterTitle": "book 13",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-13.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-13.mp3",
+      "exists": false,
+      "isValidAudio": false,
+      "error": "Failed to get file info: Vercel Blob: The requested blob does not exist"
+    },
+    {
+      "bookSlug": "the-odyssey",
+      "chapterTitle": "book 14",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-14.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-14.mp3",
+      "exists": false,
+      "isValidAudio": false,
+      "error": "Failed to get file info: Vercel Blob: The requested blob does not exist"
+    },
+    {
+      "bookSlug": "the-odyssey",
+      "chapterTitle": "book 15",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-15.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-15.mp3",
+      "exists": false,
+      "isValidAudio": false,
+      "error": "Failed to get file info: Vercel Blob: The requested blob does not exist"
+    },
+    {
+      "bookSlug": "the-odyssey",
+      "chapterTitle": "book 16",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-16.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-16.mp3",
+      "exists": false,
+      "isValidAudio": false,
+      "error": "Failed to get file info: Vercel Blob: The requested blob does not exist"
+    },
+    {
+      "bookSlug": "the-odyssey",
+      "chapterTitle": "book 17",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-17.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-17.mp3",
+      "exists": false,
+      "isValidAudio": false,
+      "error": "Failed to get file info: Vercel Blob: The requested blob does not exist"
+    },
+    {
+      "bookSlug": "the-odyssey",
+      "chapterTitle": "book 18",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-18.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-18.mp3",
+      "exists": false,
+      "isValidAudio": false,
+      "error": "Failed to get file info: Vercel Blob: The requested blob does not exist"
+    },
+    {
+      "bookSlug": "the-odyssey",
+      "chapterTitle": "book 19",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-19.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-19.mp3",
+      "exists": false,
+      "isValidAudio": false,
+      "error": "Failed to get file info: Vercel Blob: The requested blob does not exist"
+    },
+    {
+      "bookSlug": "the-odyssey",
+      "chapterTitle": "book 20",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-20.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-20.mp3",
+      "exists": false,
+      "isValidAudio": false,
+      "error": "Failed to get file info: Vercel Blob: The requested blob does not exist"
+    },
+    {
+      "bookSlug": "the-odyssey",
+      "chapterTitle": "book 21",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-21.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-21.mp3",
+      "exists": false,
+      "isValidAudio": false,
+      "error": "Failed to get file info: Vercel Blob: The requested blob does not exist"
+    },
+    {
+      "bookSlug": "the-odyssey",
+      "chapterTitle": "book 22",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-22.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-22.mp3",
+      "exists": false,
+      "isValidAudio": false,
+      "error": "Failed to get file info: Vercel Blob: The requested blob does not exist"
+    },
+    {
+      "bookSlug": "the-odyssey",
+      "chapterTitle": "book 23",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-23.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-23.mp3",
+      "exists": false,
+      "isValidAudio": false,
+      "error": "Failed to get file info: Vercel Blob: The requested blob does not exist"
+    },
+    {
+      "bookSlug": "the-odyssey",
+      "chapterTitle": "book 24",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-24.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-24.mp3",
+      "exists": false,
+      "isValidAudio": false,
+      "error": "Failed to get file info: Vercel Blob: The requested blob does not exist"
+    }
+  ]
+}

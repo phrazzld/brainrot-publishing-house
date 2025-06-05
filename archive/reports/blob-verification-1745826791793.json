@@ -1,12 +1,12 @@
 {
-  "date": "2025-04-26T08:57:14.636Z",
+  "date": "2025-04-28T07:53:11.783Z",
   "overallSummary": {
     "totalBooks": 20,
     "booksWithCover": 20,
-    "booksWithAllContent": 15,
+    "booksWithAllContent": 20,
     "totalAssets": 201,
-    "migratedAssets": 78,
-    "missingAssets": 123
+    "migratedAssets": 201,
+    "missingAssets": 0
   },
   "bookResults": [
     {
@@ -20,251 +20,251 @@
       "chapters": [
         {
           "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-01.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-02.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-03.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-04.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-05.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-06.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-07.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-08.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-09.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-10.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-11.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-12.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-13.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-14.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-15.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-16.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-17.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-18.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-19.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-20.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-21.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-22.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-23.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-iliad/text/book-24.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         }
       ],
       "audio": [
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-01.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-01.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-02.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-02.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-03.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-03.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-04.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-04.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-05.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-05.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-06.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-06.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-07.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-07.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-08.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-08.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-09.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-09.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-10.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-10.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-11.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-11.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-12.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-12.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-13.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-13.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-14.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-14.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-15.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-15.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-16.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-16.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-17.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-17.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-18.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-18.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-19.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-19.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-20.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-20.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-21.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-21.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-22.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-22.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-23.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-23.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-24.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-24.mp3",
+          "exists": true,
           "type": "audio"
         }
       ],
       "summary": {
         "total": 49,
-        "migrated": 1,
-        "missing": 48,
+        "migrated": 49,
+        "missing": 0,
         "coverImageMigrated": true
       }
     },
@@ -512,251 +512,251 @@
       "chapters": [
         {
           "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-01.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-02.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-03.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-04.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-05.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-06.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-07.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-08.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-09.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-10.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-11.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-12.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-13.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-14.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-15.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-16.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-17.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-18.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-19.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-20.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-21.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-22.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-23.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-odyssey/text/book-24.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         }
       ],
       "audio": [
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-01.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-01.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-02.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-02.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-03.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-03.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-04.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-04.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-05.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-05.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-06.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-06.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-07.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-07.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-08.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-08.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-09.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-09.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-10.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-10.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-11.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-11.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-12.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-12.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-13.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-13.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-14.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-14.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-15.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-15.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-16.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-16.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-17.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-17.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-18.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-18.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-19.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-19.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-20.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-20.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-21.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-21.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-22.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-22.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-23.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-23.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-odyssey/audio/book-24.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-odyssey/audio/book-24.mp3",
+          "exists": true,
           "type": "audio"
         }
       ],
       "summary": {
         "total": 49,
-        "migrated": 1,
-        "missing": 48,
+        "migrated": 49,
+        "missing": 0,
         "coverImageMigrated": true
       }
     },
@@ -771,131 +771,131 @@
       "chapters": [
         {
           "path": "https://public.blob.vercel-storage.com/books/the-aeneid/text/book-01.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-aeneid/text/book-02.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-aeneid/text/book-03.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-aeneid/text/book-04.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-aeneid/text/book-05.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-aeneid/text/book-06.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-aeneid/text/book-07.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-aeneid/text/book-08.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-aeneid/text/book-09.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-aeneid/text/book-10.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-aeneid/text/book-11.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         },
         {
           "path": "https://public.blob.vercel-storage.com/books/the-aeneid/text/book-12.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         }
       ],
       "audio": [
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-01.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-01.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-02.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-02.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-03.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-03.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-04.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-04.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-05.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-05.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-06.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-06.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-07.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-07.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-08.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-08.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-09.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-09.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-10.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-10.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-11.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-11.mp3",
+          "exists": true,
           "type": "audio"
         },
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-12.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-12.mp3",
+          "exists": true,
           "type": "audio"
         }
       ],
       "summary": {
         "total": 25,
-        "migrated": 1,
-        "missing": 24,
+        "migrated": 25,
+        "missing": 0,
         "coverImageMigrated": true
       }
     },
@@ -936,15 +936,15 @@
       ],
       "audio": [
         {
-          "path": "https://public.blob.vercel-storage.com/books/hamlet/audio/act-i.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/hamlet/audio/act-i.mp3",
+          "exists": true,
           "type": "audio"
         }
       ],
       "summary": {
         "total": 7,
-        "migrated": 6,
-        "missing": 1,
+        "migrated": 7,
+        "missing": 0,
         "coverImageMigrated": true
       }
     },
@@ -1027,21 +1027,21 @@
       "chapters": [
         {
           "path": "https://public.blob.vercel-storage.com/books/the-declaration-of-independence/text/the-declaration-of-independence.txt",
-          "exists": false,
+          "exists": true,
           "type": "chapter"
         }
       ],
       "audio": [
         {
-          "path": "https://public.blob.vercel-storage.com/books/the-declaration-of-independence/audio/the-declaration-of-independence.mp3",
-          "exists": false,
+          "path": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-declaration-of-independence/audio/the-declaration-of-independence.mp3",
+          "exists": true,
           "type": "audio"
         }
       ],
       "summary": {
         "total": 3,
-        "migrated": 1,
-        "missing": 2,
+        "migrated": 3,
+        "missing": 0,
         "coverImageMigrated": true
       }
     },

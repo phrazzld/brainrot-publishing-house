@@ -1,0 +1,24 @@
+{
+  "date": "2025-04-27T12:40:24.039Z",
+  "summary": {
+    "totalFiles": 1,
+    "existingFiles": 1,
+    "validAudioFiles": 1,
+    "smallPlaceholders": 0,
+    "missingFiles": 0,
+    "existingPercentage": "100%",
+    "validPercentage": "100%"
+  },
+  "results": [
+    {
+      "bookSlug": "the-declaration-of-independence",
+      "chapterTitle": "the declaration of independence",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-declaration-of-independence/audio/the-declaration-of-independence.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-declaration-of-independence/audio/the-declaration-of-independence.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 3299171,
+      "contentType": "audio/mpeg"
+    }
+  ]
+}

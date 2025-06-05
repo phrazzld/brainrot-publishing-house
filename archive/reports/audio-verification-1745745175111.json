@@ -1,0 +1,122 @@
+{
+  "date": "2025-04-27T09:12:55.109Z",
+  "summary": {
+    "totalFiles": 12,
+    "existingFiles": 0,
+    "validAudioFiles": 0,
+    "smallPlaceholders": 0,
+    "missingFiles": 12,
+    "existingPercentage": "0%",
+    "validPercentage": "0%"
+  },
+  "results": [
+    {
+      "bookSlug": "the-aeneid",
+      "chapterTitle": "book 1",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-01.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-01.mp3",
+      "exists": false,
+      "isValidAudio": false,
+      "error": "Failed to get file info: Vercel Blob: The requested blob does not exist"
+    },
+    {
+      "bookSlug": "the-aeneid",
+      "chapterTitle": "book 2",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-02.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-02.mp3",
+      "exists": false,
+      "isValidAudio": false,
+      "error": "Failed to get file info: Vercel Blob: The requested blob does not exist"
+    },
+    {
+      "bookSlug": "the-aeneid",
+      "chapterTitle": "book 3",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-03.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-03.mp3",
+      "exists": false,
+      "isValidAudio": false,
+      "error": "Failed to get file info: Vercel Blob: The requested blob does not exist"
+    },
+    {
+      "bookSlug": "the-aeneid",
+      "chapterTitle": "book 4",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-04.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-04.mp3",
+      "exists": false,
+      "isValidAudio": false,
+      "error": "Failed to get file info: Vercel Blob: The requested blob does not exist"
+    },
+    {
+      "bookSlug": "the-aeneid",
+      "chapterTitle": "book 5",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-05.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-05.mp3",
+      "exists": false,
+      "isValidAudio": false,
+      "error": "Failed to get file info: Vercel Blob: The requested blob does not exist"
+    },
+    {
+      "bookSlug": "the-aeneid",
+      "chapterTitle": "book 6",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-06.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-06.mp3",
+      "exists": false,
+      "isValidAudio": false,
+      "error": "Failed to get file info: Vercel Blob: The requested blob does not exist"
+    },
+    {
+      "bookSlug": "the-aeneid",
+      "chapterTitle": "book 7",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-07.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-07.mp3",
+      "exists": false,
+      "isValidAudio": false,
+      "error": "Failed to get file info: Vercel Blob: The requested blob does not exist"
+    },
+    {
+      "bookSlug": "the-aeneid",
+      "chapterTitle": "book 8",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-08.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-08.mp3",
+      "exists": false,
+      "isValidAudio": false,
+      "error": "Failed to get file info: Vercel Blob: The requested blob does not exist"
+    },
+    {
+      "bookSlug": "the-aeneid",
+      "chapterTitle": "book 9",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-09.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-09.mp3",
+      "exists": false,
+      "isValidAudio": false,
+      "error": "Failed to get file info: Vercel Blob: The requested blob does not exist"
+    },
+    {
+      "bookSlug": "the-aeneid",
+      "chapterTitle": "book 10",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-10.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-10.mp3",
+      "exists": false,
+      "isValidAudio": false,
+      "error": "Failed to get file info: Vercel Blob: The requested blob does not exist"
+    },
+    {
+      "bookSlug": "the-aeneid",
+      "chapterTitle": "book 11",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-11.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-11.mp3",
+      "exists": false,
+      "isValidAudio": false,
+      "error": "Failed to get file info: Vercel Blob: The requested blob does not exist"
+    },
+    {
+      "bookSlug": "the-aeneid",
+      "chapterTitle": "book 12",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-12.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-12.mp3",
+      "exists": false,
+      "isValidAudio": false,
+      "error": "Failed to get file info: Vercel Blob: The requested blob does not exist"
+    }
+  ]
+}

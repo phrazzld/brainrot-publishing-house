@@ -1,0 +1,134 @@
+{
+  "date": "2025-04-27T09:15:43.000Z",
+  "summary": {
+    "totalFiles": 12,
+    "existingFiles": 12,
+    "validAudioFiles": 12,
+    "smallPlaceholders": 0,
+    "missingFiles": 0,
+    "existingPercentage": "100%",
+    "validPercentage": "100%"
+  },
+  "results": [
+    {
+      "bookSlug": "the-aeneid",
+      "chapterTitle": "book 1",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-01.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-01.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 12040185,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "bookSlug": "the-aeneid",
+      "chapterTitle": "book 2",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-02.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-02.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 12241827,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "bookSlug": "the-aeneid",
+      "chapterTitle": "book 3",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-03.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-03.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 3524596,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "bookSlug": "the-aeneid",
+      "chapterTitle": "book 4",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-04.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-04.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 4788092,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "bookSlug": "the-aeneid",
+      "chapterTitle": "book 5",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-05.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-05.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 8522080,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "bookSlug": "the-aeneid",
+      "chapterTitle": "book 6",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-06.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-06.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 17291204,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "bookSlug": "the-aeneid",
+      "chapterTitle": "book 7",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-07.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-07.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 14439157,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "bookSlug": "the-aeneid",
+      "chapterTitle": "book 8",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-08.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-08.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 3090739,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "bookSlug": "the-aeneid",
+      "chapterTitle": "book 9",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-09.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-09.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 4969654,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "bookSlug": "the-aeneid",
+      "chapterTitle": "book 10",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-10.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-10.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 2451463,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "bookSlug": "the-aeneid",
+      "chapterTitle": "book 11",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-11.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-11.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 10213148,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "bookSlug": "the-aeneid",
+      "chapterTitle": "book 12",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-aeneid/audio/book-12.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-aeneid/audio/book-12.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 14997671,
+      "contentType": "audio/mpeg"
+    }
+  ]
+}

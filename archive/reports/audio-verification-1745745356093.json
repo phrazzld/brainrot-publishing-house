@@ -1,0 +1,23 @@
+{
+  "date": "2025-04-27T09:15:56.093Z",
+  "summary": {
+    "totalFiles": 1,
+    "existingFiles": 0,
+    "validAudioFiles": 0,
+    "smallPlaceholders": 0,
+    "missingFiles": 1,
+    "existingPercentage": "0%",
+    "validPercentage": "0%"
+  },
+  "results": [
+    {
+      "bookSlug": "hamlet",
+      "chapterTitle": "act i",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/hamlet/audio/act-i.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/hamlet/audio/act-i.mp3",
+      "exists": false,
+      "isValidAudio": false,
+      "error": "Failed to get file info: Vercel Blob: The requested blob does not exist"
+    }
+  ]
+}

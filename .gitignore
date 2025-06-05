@@ -96,4 +96,9 @@ glance.md
 **/glance.md
 
 **/.claude/settings.local.json
-test-reports/
+
+# archive directory (for historical data)
+/archive/temp-files/
+
+# coverage directory (if not already ignored)
+coverage/

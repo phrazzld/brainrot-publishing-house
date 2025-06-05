@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Download E2E Test Results - local</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        line-height: 1.6;
+      }
+      h1,
+      h2,
+      h3 {
+        margin-top: 20px;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .summary {
+        background: #f5f5f5;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+      }
+      .success {
+        color: #2e7d32;
+      }
+      .failure {
+        color: #c62828;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 12px;
+        border-bottom: 1px solid #ddd;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+      tr.success {
+        background-color: #e8f5e9;
+      }
+      tr.failure {
+        background-color: #ffebee;
+      }
+      .content-length {
+        text-align: right;
+      }
+      .duration {
+        text-align: right;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Download E2E Test Results</h1>
+
+      <div class="summary">
+        <h2>Summary</h2>
+        <p><strong>Environment:</strong> local</p>
+        <p><strong>Base URL:</strong> http://localhost:3000</p>
+        <p><strong>Test Date:</strong> 2025-05-08T06:19:25.783Z</p>
+        <p><strong>Total Duration:</strong> 0.02s</p>
+        <p><strong>Tests:</strong> 18</p>
+        <p>
+          <strong>Success Rate:</strong> <span class="failure">0.00%</span> (0 passed, 18 failed)
+        </p>
+      </div>
+
+      <h2>Test Results</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Book</th>
+            <th>Asset</th>
+            <th>Test Type</th>
+            <th>Status</th>
+            <th>Content Type</th>
+            <th class="content-length">Size (KB)</th>
+            <th class="duration">Duration (ms)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="failure">
+            <td>the-iliad</td>
+            <td>full-audiobook.mp3</td>
+            <td>Direct API</td>
+            <td>
+              <span class="failure"
+                >✗ Failed: request to http://localhost:3000/api/download?slug=the-iliad&type=full
+                failed, reason:
+              </span>
+            </td>
+            <td>N/A</td>
+            <td class="content-length">N/A</td>
+            <td class="duration">8</td>
+          </tr>
+
+          <tr class="failure">
+            <td>the-iliad</td>
+            <td>full-audiobook.mp3</td>
+            <td>Proxy</td>
+            <td>
+              <span class="failure"
+                >✗ Failed: request to
+                http://localhost:3000/api/download?slug=the-iliad&type=full&proxy=true failed,
+                reason:
+              </span>
+            </td>
+            <td>N/A</td>
+            <td class="content-length">N/A</td>
+            <td class="duration">1</td>
+          </tr>
+
+          <tr class="failure">
+            <td>the-iliad</td>
+            <td>chapter-01.mp3</td>
+            <td>Direct API</td>
+            <td>
+              <span class="failure"
+                >✗ Failed: request to
+                http://localhost:3000/api/download?slug=the-iliad&type=chapter&chapter=1 failed,
+                reason:
+              </span>
+            </td>
+            <td>N/A</td>
+            <td class="content-length">N/A</td>
+            <td class="duration">0</td>
+          </tr>
+
+          <tr class="failure">
+            <td>the-iliad</td>
+            <td>chapter-01.mp3</td>
+            <td>Proxy</td>
+            <td>
+              <span class="failure"
+                >✗ Failed: request to
+                http://localhost:3000/api/download?slug=the-iliad&type=chapter&chapter=1&proxy=true
+                failed, reason:
+              </span>
+            </td>
+            <td>N/A</td>
+            <td class="content-length">N/A</td>
+            <td class="duration">0</td>
+          </tr>
+
+          <tr class="failure">
+            <td>the-iliad</td>
+            <td>chapter-02.mp3</td>
+            <td>Direct API</td>
+            <td>
+              <span class="failure"
+                >✗ Failed: request to
+                http://localhost:3000/api/download?slug=the-iliad&type=chapter&chapter=2 failed,
+                reason:
+              </span>
+            </td>
+            <td>N/A</td>
+            <td class="content-length">N/A</td>
+            <td class="duration">1</td>
+          </tr>
+
+          <tr class="failure">
+            <td>the-iliad</td>
+            <td>chapter-02.mp3</td>
+            <td>Proxy</td>
+            <td>
+              <span class="failure"
+                >✗ Failed: request to
+                http://localhost:3000/api/download?slug=the-iliad&type=chapter&chapter=2&proxy=true
+                failed, reason:
+              </span>
+            </td>
+            <td>N/A</td>
+            <td class="content-length">N/A</td>
+            <td class="duration">0</td>
+          </tr>
+
+          <tr class="failure">
+            <td>hamlet</td>
+            <td>full-audiobook.mp3</td>
+            <td>Direct API</td>
+            <td>
+              <span class="failure"
+                >✗ Failed: request to http://localhost:3000/api/download?slug=hamlet&type=full
+                failed, reason:
+              </span>
+            </td>
+            <td>N/A</td>
+            <td class="content-length">N/A</td>
+            <td class="duration">0</td>
+          </tr>
+
+          <tr class="failure">
+            <td>hamlet</td>
+            <td>full-audiobook.mp3</td>
+            <td>Proxy</td>
+            <td>
+              <span class="failure"
+                >✗ Failed: request to
+                http://localhost:3000/api/download?slug=hamlet&type=full&proxy=true failed, reason:
+              </span>
+            </td>
+            <td>N/A</td>
+            <td class="content-length">N/A</td>
+            <td class="duration">0</td>
+          </tr>
+
+          <tr class="failure">
+            <td>hamlet</td>
+            <td>chapter-01.mp3</td>
+            <td>Direct API</td>
+            <td>
+              <span class="failure"
+                >✗ Failed: request to
+                http://localhost:3000/api/download?slug=hamlet&type=chapter&chapter=1 failed,
+                reason:
+              </span>
+            </td>
+            <td>N/A</td>
+            <td class="content-length">N/A</td>
+            <td class="duration">1</td>
+          </tr>
+
+          <tr class="failure">
+            <td>hamlet</td>
+            <td>chapter-01.mp3</td>
+            <td>Proxy</td>
+            <td>
+              <span class="failure"
+                >✗ Failed: request to
+                http://localhost:3000/api/download?slug=hamlet&type=chapter&chapter=1&proxy=true
+                failed, reason:
+              </span>
+            </td>
+            <td>N/A</td>
+            <td class="content-length">N/A</td>
+            <td class="duration">0</td>
+          </tr>
+
+          <tr class="failure">
+            <td>hamlet</td>
+            <td>chapter-02.mp3</td>
+            <td>Direct API</td>
+            <td>
+              <span class="failure"
+                >✗ Failed: request to
+                http://localhost:3000/api/download?slug=hamlet&type=chapter&chapter=2 failed,
+                reason:
+              </span>
+            </td>
+            <td>N/A</td>
+            <td class="content-length">N/A</td>
+            <td class="duration">0</td>
+          </tr>
+
+          <tr class="failure">
+            <td>hamlet</td>
+            <td>chapter-02.mp3</td>
+            <td>Proxy</td>
+            <td>
+              <span class="failure"
+                >✗ Failed: request to
+                http://localhost:3000/api/download?slug=hamlet&type=chapter&chapter=2&proxy=true
+                failed, reason:
+              </span>
+            </td>
+            <td>N/A</td>
+            <td class="content-length">N/A</td>
+            <td class="duration">0</td>
+          </tr>
+
+          <tr class="failure">
+            <td>the-aeneid</td>
+            <td>full-audiobook.mp3</td>
+            <td>Direct API</td>
+            <td>
+              <span class="failure"
+                >✗ Failed: request to http://localhost:3000/api/download?slug=the-aeneid&type=full
+                failed, reason:
+              </span>
+            </td>
+            <td>N/A</td>
+            <td class="content-length">N/A</td>
+            <td class="duration">0</td>
+          </tr>
+
+          <tr class="failure">
+            <td>the-aeneid</td>
+            <td>full-audiobook.mp3</td>
+            <td>Proxy</td>
+            <td>
+              <span class="failure"
+                >✗ Failed: request to
+                http://localhost:3000/api/download?slug=the-aeneid&type=full&proxy=true failed,
+                reason:
+              </span>
+            </td>
+            <td>N/A</td>
+            <td class="content-length">N/A</td>
+            <td class="duration">0</td>
+          </tr>
+
+          <tr class="failure">
+            <td>the-aeneid</td>
+            <td>chapter-01.mp3</td>
+            <td>Direct API</td>
+            <td>
+              <span class="failure"
+                >✗ Failed: request to
+                http://localhost:3000/api/download?slug=the-aeneid&type=chapter&chapter=1 failed,
+                reason:
+              </span>
+            </td>
+            <td>N/A</td>
+            <td class="content-length">N/A</td>
+            <td class="duration">0</td>
+          </tr>
+
+          <tr class="failure">
+            <td>the-aeneid</td>
+            <td>chapter-01.mp3</td>
+            <td>Proxy</td>
+            <td>
+              <span class="failure"
+                >✗ Failed: request to
+                http://localhost:3000/api/download?slug=the-aeneid&type=chapter&chapter=1&proxy=true
+                failed, reason:
+              </span>
+            </td>
+            <td>N/A</td>
+            <td class="content-length">N/A</td>
+            <td class="duration">0</td>
+          </tr>
+
+          <tr class="failure">
+            <td>the-aeneid</td>
+            <td>chapter-02.mp3</td>
+            <td>Direct API</td>
+            <td>
+              <span class="failure"
+                >✗ Failed: request to
+                http://localhost:3000/api/download?slug=the-aeneid&type=chapter&chapter=2 failed,
+                reason:
+              </span>
+            </td>
+            <td>N/A</td>
+            <td class="content-length">N/A</td>
+            <td class="duration">0</td>
+          </tr>
+
+          <tr class="failure">
+            <td>the-aeneid</td>
+            <td>chapter-02.mp3</td>
+            <td>Proxy</td>
+            <td>
+              <span class="failure"
+                >✗ Failed: request to
+                http://localhost:3000/api/download?slug=the-aeneid&type=chapter&chapter=2&proxy=true
+                failed, reason:
+              </span>
+            </td>
+            <td>N/A</td>
+            <td class="content-length">N/A</td>
+            <td class="duration">0</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

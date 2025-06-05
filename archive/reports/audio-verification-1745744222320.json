@@ -1,0 +1,254 @@
+{
+  "date": "2025-04-27T08:57:02.319Z",
+  "summary": {
+    "totalFiles": 24,
+    "existingFiles": 24,
+    "validAudioFiles": 24,
+    "smallPlaceholders": 0,
+    "missingFiles": 0,
+    "existingPercentage": "100%",
+    "validPercentage": "100%"
+  },
+  "results": [
+    {
+      "bookSlug": "the-iliad",
+      "chapterTitle": "book 1",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-01.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-01.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 9696006,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "bookSlug": "the-iliad",
+      "chapterTitle": "book 2",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-02.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-02.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 8763462,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "bookSlug": "the-iliad",
+      "chapterTitle": "book 3",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-03.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-03.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 12444295,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "bookSlug": "the-iliad",
+      "chapterTitle": "book 4",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-04.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-04.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 7499192,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "bookSlug": "the-iliad",
+      "chapterTitle": "book 5",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-05.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-05.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 14461758,
+      "contentType": "application/octet-stream"
+    },
+    {
+      "bookSlug": "the-iliad",
+      "chapterTitle": "book 6",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-06.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-06.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 7499558,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "bookSlug": "the-iliad",
+      "chapterTitle": "book 7",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-07.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-07.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 11158256,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "bookSlug": "the-iliad",
+      "chapterTitle": "book 8",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-08.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-08.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 7276568,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "bookSlug": "the-iliad",
+      "chapterTitle": "book 9",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-09.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-09.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 9151728,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "bookSlug": "the-iliad",
+      "chapterTitle": "book 10",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-10.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-10.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 17405819,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "bookSlug": "the-iliad",
+      "chapterTitle": "book 11",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-11.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-11.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 14435808,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "bookSlug": "the-iliad",
+      "chapterTitle": "book 12",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-12.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-12.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 7348533,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "bookSlug": "the-iliad",
+      "chapterTitle": "book 13",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-13.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-13.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 12987812,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "bookSlug": "the-iliad",
+      "chapterTitle": "book 14",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-14.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-14.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 9865073,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "bookSlug": "the-iliad",
+      "chapterTitle": "book 15",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-15.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-15.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 6367855,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "bookSlug": "the-iliad",
+      "chapterTitle": "book 16",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-16.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-16.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 8722062,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "bookSlug": "the-iliad",
+      "chapterTitle": "book 17",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-17.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-17.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 4939945,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "bookSlug": "the-iliad",
+      "chapterTitle": "book 18",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-18.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-18.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 16931395,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "bookSlug": "the-iliad",
+      "chapterTitle": "book 19",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-19.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-19.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 5881701,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "bookSlug": "the-iliad",
+      "chapterTitle": "book 20",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-20.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-20.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 11946894,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "bookSlug": "the-iliad",
+      "chapterTitle": "book 21",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-21.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-21.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 7817973,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "bookSlug": "the-iliad",
+      "chapterTitle": "book 22",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-22.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-22.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 5778382,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "bookSlug": "the-iliad",
+      "chapterTitle": "book 23",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-23.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-23.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 11495287,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "bookSlug": "the-iliad",
+      "chapterTitle": "book 24",
+      "audioSrc": "https://public.blob.vercel-storage.com/books/the-iliad/audio/book-24.mp3",
+      "blobUrl": "https://82qos1wlxbd4iq1g.public.blob.vercel-storage.com/the-iliad/audio/book-24.mp3",
+      "exists": true,
+      "isValidAudio": true,
+      "size": 6842199,
+      "contentType": "audio/mpeg"
+    }
+  ]
+}
