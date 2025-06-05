@@ -4,63 +4,76 @@ This project uses Git hooks to automate certain tasks during the Git workflow.
 
 ## Available Hooks
 
-### Post-Commit Hook
+### Pre-Commit Hook
 
-The post-commit hook runs `glance ./` asynchronously after each commit.
+The pre-commit hook runs `glance ./` asynchronously during the commit process, alongside code quality checks.
 
 #### Features:
 
-- Runs non-blocking (asynchronously) so commit operations complete immediately
-- Logs output to timestamped files in `~/.glance-logs/` to prevent terminal clutter
-- Includes metadata (timestamp, repository path, commit hash)
+- Runs non-blocking (asynchronously) so commit operations aren't delayed
+- Executes alongside lint-staged for comprehensive pre-commit checks
+- Generates updated documentation before code is committed
+- Ensures documentation stays current with code changes
 
 ## Setup
 
-To set up the Git hooks, run:
+The pre-commit hooks are automatically set up when you install dependencies:
 
 ```bash
-npm run setup:hooks
+npm install
 ```
 
-This will create the necessary hooks in your local `.git/hooks/` directory and make them executable.
+This uses Husky to manage Git hooks and will configure the pre-commit hook automatically.
 
 ## How It Works
 
-### Post-Commit Hook
+### Pre-Commit Hook
 
-The post-commit hook:
+The pre-commit hook:
 
-1. Runs after each successful commit
-2. Creates a timestamped log file in `~/.glance-logs/`
-3. Executes `glance ./` in the background
-4. Redirects all output to the log file
-5. Returns control to Git immediately
+1. Runs before each commit is finalized
+2. Starts `glance ./` asynchronously in the background
+3. Executes lint-staged for code formatting and linting
+4. Allows commit to proceed without waiting for glance to finish
+5. Generates updated glance.md files based on current code state
 
-Log files follow this format: `~/.glance-logs/glance-[timestamp].log`
+The hook ensures documentation is regenerated on every commit while not blocking the commit process.
 
 ## Troubleshooting
 
 If the hooks aren't working:
 
-1. Make sure they are executable: `chmod +x .git/hooks/post-commit`
-2. Verify the hook exists: `ls -la .git/hooks/`
-3. Check the log files to see if the hook is running but encountering errors
+1. Verify Husky is installed: `npm list husky`
+2. Check the hook exists: `ls -la .husky/pre-commit`
+3. Make sure the hook is executable: `chmod +x .husky/pre-commit`
+4. Verify glance is available: `which glance`
+5. Test the hook manually: `.husky/pre-commit`
 
-## Manual Installation
+## Manual Hook Testing
 
-If you prefer to set up the hooks manually:
+To test the pre-commit hook manually:
 
-1. Copy the hook scripts from `scripts/hooks/` to your `.git/hooks/` directory
-2. Make them executable: `chmod +x .git/hooks/post-commit`
+```bash
+# Test the entire pre-commit hook
+.husky/pre-commit
+
+# Test just the glance command
+glance ./
+```
 
 ## Implementation Details
 
-The post-commit hook is implemented as a shell script that:
+The pre-commit hook is implemented as a shell script that:
 
-1. Creates a timestamped log file
-2. Logs the start time, repository path, and commit hash
-3. Runs `glance ./` and captures its output
-4. Logs the completion time
-5. All of this happens in a subshell that runs in the background (`&`), so the Git operation isn't blocked
+1. Announces the start of pre-commit hooks
+2. Starts `glance ./` asynchronously using `nohup` and `&`
+3. Redirects glance output to `/dev/null` to avoid terminal clutter
+4. Runs lint-staged for code quality checks
+5. Allows the commit to proceed immediately without waiting for glance
 
-This approach ensures that the potentially time-consuming `glance` operation doesn't slow down your workflow while still providing valuable repository analysis after each commit.
+This approach ensures that:
+
+- Code quality checks are enforced before commit
+- Documentation generation happens automatically but doesn't block commits
+- The commit process remains fast and responsive
+- Documentation stays synchronized with code changes

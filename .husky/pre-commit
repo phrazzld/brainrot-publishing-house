@@ -1,2 +1,8 @@
 echo "Running pre-commit hooks..."
+
+# Run glance asynchronously in the background
+echo "Starting glance documentation generation..."
+nohup glance ./ > /dev/null 2>&1 &
+
+# Run lint-staged for code quality checks
 npx lint-staged
