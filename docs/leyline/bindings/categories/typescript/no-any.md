@@ -4,6 +4,7 @@ enforced_by: eslint("@typescript-eslint/no-explicit-any") & tsconfig("noImplicit
 id: no-any
 last_modified: '2025-05-14'
 ---
+
 # Binding: Make Types Explicit, Never Use `any`
 
 Never use the `any` type in TypeScript code. Instead, always create proper type
@@ -174,7 +175,7 @@ function processData(data: any): any {
   return data.value * 2; // No type checking! This could crash at runtime
 }
 
-const result = processData("not an object"); // Runtime error: Cannot read property 'value' of undefined
+const result = processData('not an object'); // Runtime error: Cannot read property 'value' of undefined
 const total: number = result + 10; // TypeScript won't catch that 'result' might not be a number
 ```
 
@@ -271,7 +272,7 @@ function processUserInput(input: any) {
 }
 
 // Someone calls the function with a typo:
-processUserInput({ isvalid: true, userData: { name: "User" } }); // Note lowercase 'v' in 'isvalid'
+processUserInput({ isvalid: true, userData: { name: 'User' } }); // Note lowercase 'v' in 'isvalid'
 
 // Result: Nothing gets saved, but no errors are thrown - silent failure!
 ```
@@ -291,7 +292,7 @@ function processUserInput(input: UserInput) {
 }
 
 // TypeScript error: Property 'isValid' is missing in type '{ isvalid: boolean; userData: { name: string; }; }'
-processUserInput({ isvalid: true, userData: { name: "User" } });
+processUserInput({ isvalid: true, userData: { name: 'User' } });
 ```
 
 ## Related Bindings

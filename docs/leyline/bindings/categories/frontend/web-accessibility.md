@@ -4,6 +4,7 @@ enforced_by: Code review, Automated a11y testing
 id: web-accessibility
 last_modified: '2025-05-14'
 ---
+
 # Binding: Web Accessibility
 
 Make all web interfaces accessible to people with disabilities by following WCAG 2.1 AA
@@ -28,7 +29,7 @@ stairs—it ensures everyone can enter your building, regardless of their abilit
 Beyond the ethical imperative, accessible applications deliver tangible business
 benefits. They reach larger audiences, comply with increasingly common legal
 requirements, rank better in search engines, and often provide better experiences for
-*all* users. Consider how voice interfaces like Siri and Alexa rely on the same semantic
+_all_ users. Consider how voice interfaces like Siri and Alexa rely on the same semantic
 structures that screen readers use, or how keyboard shortcuts benefit both power users
 and those with motor impairments. Properly implemented accessibility creates more
 robust, flexible interfaces that work better across different contexts and devices.
@@ -163,13 +164,7 @@ must be provided whenever possible.
 
      return (
        <div className="modal-overlay">
-         <div
-           ref={modalRef}
-           className="modal"
-           role="dialog"
-           aria-modal="true"
-           tabIndex={-1}
-         >
+         <div ref={modalRef} className="modal" role="dialog" aria-modal="true" tabIndex={-1}>
            {children}
            <button onClick={onClose}>Close</button>
          </div>
@@ -189,13 +184,13 @@ must be provided whenever possible.
    // Form with proper ARIA attributes
    <form>
      <div className="form-group">
-       <label id="nameLabel" htmlFor="name">Full Name</label>
-       <input
-         id="name"
-         aria-labelledby="nameLabel nameHint"
-         aria-required="true"
-       />
-       <p id="nameHint" className="hint">Enter your legal name as it appears on your ID</p>
+       <label id="nameLabel" htmlFor="name">
+         Full Name
+       </label>
+       <input id="name" aria-labelledby="nameLabel nameHint" aria-required="true" />
+       <p id="nameHint" className="hint">
+         Enter your legal name as it appears on your ID
+       </p>
      </div>
 
      <div className="form-group">

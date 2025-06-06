@@ -32,6 +32,7 @@ Common logic extraction must follow these identification and implementation prin
 - **Handle Variations Explicitly**: When logic has slight variations across use cases, design the extraction to handle these variations through parameters or strategy patterns rather than duplicating the core logic.
 
 **Extraction Candidates:**
+
 - Business rules and validation logic
 - Data transformation and formatting algorithms
 - Mathematical calculations and formulas
@@ -40,6 +41,7 @@ Common logic extraction must follow these identification and implementation prin
 - Error handling and recovery logic
 
 **When NOT to Extract:**
+
 - Code that coincidentally looks similar but serves different business purposes
 - Logic that is likely to diverge in the future due to different evolution paths
 - Simple operations where the extraction would be more complex than the duplication

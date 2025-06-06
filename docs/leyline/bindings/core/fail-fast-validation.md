@@ -22,24 +22,28 @@ The principle "dead programs tell no lies" is fundamental here—a program that 
 This binding establishes comprehensive guidelines for input validation and precondition checking:
 
 - **Mandatory Validation Points**: All functions must validate their inputs at entry:
+
   - **Parameter Validation**: Check type, range, format, and business rule compliance
   - **State Validation**: Verify object state preconditions before proceeding
   - **Resource Validation**: Confirm required resources exist and are accessible
   - **Contract Validation**: Ensure calling context meets function's assumptions
 
 - **Validation Requirements**: Each validation must be:
+
   - **Immediate**: Performed before any other logic or side effects
   - **Complete**: Cover all assumptions the function makes about its inputs
   - **Explicit**: State exactly what constraint was violated
   - **Actionable**: Provide information needed to fix the problem
 
 - **Error Handling Standards**:
+
   - **Clear Messages**: Describe what was expected vs. what was received
   - **Context Information**: Include relevant parameter values and constraints
   - **Consistent Format**: Use standardized error structures across the codebase
   - **Appropriate Exceptions**: Choose exception types that reflect the violation category
 
 - **Validation Scope**: Apply validation to:
+
   - Public API entry points (always)
   - Internal function boundaries (when assumptions change)
   - Data transformation points (before and after critical operations)
