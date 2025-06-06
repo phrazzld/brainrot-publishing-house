@@ -46,6 +46,13 @@ process.env.NEXT_PUBLIC_BLOB_BASE_URL = 'https://public.blob.vercel-storage.com'
 process.env.NEXT_PUBLIC_BLOB_DEV_URL = 'https://dev.blob.vercel-storage.com';
 process.env.NODE_ENV = 'test';
 
+// Security testing environment variables
+process.env.SECURITY_RATE_LIMIT_WINDOW_MS = '900000'; // 15 minutes
+process.env.SECURITY_RATE_LIMIT_MAX_REQUESTS = '100';
+process.env.SECURITY_CSP_REPORT_URI = 'https://test.example.com/csp-report';
+process.env.SECURITY_AUDIT_SCHEDULE = '0 2 * * *'; // Daily at 2 AM
+process.env.SECURITY_TEST_MODE = 'true';
+
 // Mock ResizeObserver (not available in jsdom)
 global.ResizeObserver = jest.fn().mockImplementation(() => ({
   observe: jest.fn(),
