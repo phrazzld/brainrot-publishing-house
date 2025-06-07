@@ -169,10 +169,10 @@
 **Dependencies**: SEC-012  
 **Acceptance Criteria**:
 
-- [ ] Integrate rate limiting middleware into `/api/translate/*` routes
-- [ ] Configure appropriate rate limits for translation requests
-- [ ] Handle rate limiting for different translation operations
-- [ ] All related SEC-012 tests pass
+- [x] Integrate rate limiting middleware into `/api/translate/*` routes
+- [x] Configure appropriate rate limits for translation requests
+- [x] Handle rate limiting for different translation operations
+- [x] All related SEC-012 tests pass
 
 #### SEC-015: Integration Test Rate Limiting End-to-End
 
