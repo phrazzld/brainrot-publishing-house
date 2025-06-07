@@ -4,12 +4,72 @@ import { randomUUID } from 'crypto';
 
 import { AssetType } from '@/types/assets.js';
 import { createRequestLogger } from '@/utils/logger.js';
+import { createRateLimitMiddleware, extractClientIP } from '@/utils/security/rateLimiter.js';
 
 import { handleCriticalError, handleDownloadServiceError } from './errorHandlers.js';
 import { safeLog } from './logging/safeLogger.js';
 import { proxyAssetDownload } from './proxyService.js';
 import { validateRequestParameters } from './requestValidation.js';
 import { createDownloadService } from './serviceFactory.js';
+
+// ==================== Rate Limiting Configuration ====================
+
+/**
+ * Detects legitimate automated tools that should bypass rate limiting
+ */
+function isLegitimateAutomatedTool(request: NextRequest): boolean {
+  const userAgent = request.headers.get('user-agent') || '';
+
+  // Allow legitimate crawlers and tools
+  const legitimateAgents = [
+    'Googlebot',
+    'Bingbot',
+    'curl',
+    'wget',
+    'HTTPie',
+    'Postman',
+    'insomnia',
+    'Thunder Client',
+    'Mozilla/5.0 (compatible; monitoring)',
+  ];
+
+  return legitimateAgents.some((agent) => userAgent.toLowerCase().includes(agent.toLowerCase()));
+}
+
+/**
+ * Custom key generator for download API rate limiting
+ * Uses IP-based limiting with special handling for legitimate tools
+ */
+function createDownloadKeyGenerator(request: NextRequest): string {
+  const ip = extractClientIP(request);
+
+  // Bypass rate limiting for legitimate automated tools
+  if (isLegitimateAutomatedTool(request)) {
+    return `bypass:${ip}:${Date.now()}`; // Unique key to always allow
+  }
+
+  return `download:${ip}`;
+}
+
+/**
+ * Rate limiting configuration for download API
+ * More conservative limits for file downloads to prevent abuse
+ */
+const downloadRateLimitConfig = {
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  maxRequests: 50, // 50 downloads per 15 minutes per IP
+  keyGenerator: (request: Request) => createDownloadKeyGenerator(request as NextRequest),
+  onLimitReached: (request: Request, retryAfter: number) => {
+    const ip = extractClientIP(request);
+    const userAgent = request.headers.get('user-agent') || 'unknown';
+    console.warn(
+      `Download rate limit exceeded for IP ${ip}, User-Agent: ${userAgent}, retry after ${retryAfter}ms`,
+    );
+  },
+};
+
+// Create the rate limiting middleware
+const downloadRateLimiter = createRateLimitMiddleware(downloadRateLimitConfig);
 
 /**
  * Download API route handler
@@ -635,6 +695,12 @@ async function processDownloadRequest(
  */
 export async function GET(req: NextRequest) {
   try {
+    // Apply rate limiting first - this may return a 429 response
+    const rateLimitResponse = await downloadRateLimiter(req);
+    if (rateLimitResponse) {
+      return rateLimitResponse; // Rate limit exceeded, return 429
+    }
+
     // Initialize request handling with logging and correlation ID
     const context = initializeRequest(req);
 

@@ -157,11 +157,11 @@
 **Dependencies**: SEC-012  
 **Acceptance Criteria**:
 
-- [ ] Integrate rate limiting middleware into `/api/download/route.ts`
-- [ ] Configure appropriate rate limits for asset downloads
-- [ ] Add rate limiting bypass for legitimate automated tools
-- [ ] Ensure rate limiting doesn't affect legitimate user experience
-- [ ] All related SEC-012 tests pass
+- [x] Integrate rate limiting middleware into `/api/download/route.ts`
+- [x] Configure appropriate rate limits for asset downloads
+- [x] Add rate limiting bypass for legitimate automated tools
+- [x] Ensure rate limiting doesn't affect legitimate user experience
+- [x] All related SEC-012 tests pass
 
 #### SEC-014: Apply Rate Limiting to Translate API
 
