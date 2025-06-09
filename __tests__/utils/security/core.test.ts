@@ -36,11 +36,15 @@ describe('Core Security Utilities', () => {
 
   describe('checkRateLimit', () => {
     it('should allow requests within limit', () => {
-      const request = new NextRequest('http://localhost:3000/api/test', {
-        headers: { 'x-forwarded-for': '192.168.1.1' },
-      });
+      // Mock NextRequest for testing
+      const mockRequest = {
+        ip: '192.168.1.1',
+        headers: {
+          get: jest.fn().mockReturnValue('192.168.1.1'),
+        },
+      } as unknown as NextRequest;
 
-      expect(checkRateLimit(request, 10)).toBe(true);
+      expect(checkRateLimit(mockRequest, 10)).toBe(true);
     });
   });
 });
