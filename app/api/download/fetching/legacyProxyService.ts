@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 
+import { randomBytes } from 'crypto';
+
 import { Logger } from '@/utils/logger.js';
 
 import { extractErrorDetails } from '../errors/errorExtractor.js';
@@ -300,7 +302,7 @@ function handleLegacyProxyException(
 export async function proxyFileDownload(config: ProxyFileConfig): Promise<NextResponse> {
   const { url, filename, log, requestParams } = config;
   // Create a unique operation ID for correlating logs within this request
-  const opId = Date.now().toString(36) + Math.random().toString(36).substring(2, 7);
+  const opId = Date.now().toString(36) + randomBytes(3).toString('hex');
 
   try {
     // Step 1: Log detailed information about the proxy request

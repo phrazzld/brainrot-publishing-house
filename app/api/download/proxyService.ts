@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 
+import { randomBytes } from 'crypto';
+
 import { AssetType } from '@/types/assets.js';
 import { Logger } from '@/utils/logger.js';
 
@@ -52,7 +54,7 @@ export type ProxyAssetConfig = {
 export async function proxyAssetDownload(config: ProxyAssetConfig): Promise<NextResponse> {
   const { assetType, bookSlug, assetName, filename, log, assetService, requestParams } = config;
   // Create a unique operation ID for correlating logs within this request
-  const opId = Date.now().toString(36) + Math.random().toString(36).substring(2, 7);
+  const opId = Date.now().toString(36) + randomBytes(3).toString('hex');
   const operation = 'proxyAssetDownload';
 
   try {

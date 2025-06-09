@@ -58,11 +58,21 @@ describe('Deployment Rollback Scenarios', () => {
     });
 
     it('should detect when deployment would fail due to missing security headers', async () => {
-      // Simulate broken security headers configuration
+      // Verify original config has security headers function call
+      expect(originalNextConfig.includes('createSecurityHeadersInline()')).toBe(true);
+
+      // Simulate broken security headers configuration - replace the specific call
       const brokenHeadersConfig = originalNextConfig.replace(
         'const securityHeaders = createSecurityHeadersInline();',
-        'const securityHeaders = {};', // Remove security headers
+        'const securityHeaders = {};',
       );
+
+      // Verify the replacement actually worked - check that the specific call is gone
+      expect(
+        brokenHeadersConfig.includes('const securityHeaders = createSecurityHeadersInline();'),
+      ).toBe(false);
+      expect(brokenHeadersConfig.includes('const securityHeaders = {};')).toBe(true);
+      expect(brokenHeadersConfig).not.toBe(originalNextConfig);
 
       writeFileSync(nextConfigPath, brokenHeadersConfig);
 
@@ -70,7 +80,9 @@ describe('Deployment Rollback Scenarios', () => {
 
       // Test that validation would detect missing security headers
       const currentConfig = readFileSync(nextConfigPath, 'utf8');
-      if (!currentConfig.includes('createSecurityHeadersInline')) {
+
+      // Check if the security headers function is actually being called in the headers() function
+      if (!currentConfig.includes('const securityHeaders = createSecurityHeadersInline();')) {
         securityHeadersRollbackNeeded = true;
       }
 

@@ -1,0 +1,226 @@
+{
+  "@aws-sdk/client-s3": {
+    "current": "3.823.0",
+    "wanted": "3.826.0",
+    "latest": "3.826.0",
+    "dependent": "brainrot-publishing-house",
+    "location": "/Users/phaedrus/Development/brainrot-publishing-house/node_modules/@aws-sdk/client-s3"
+  },
+  "@babel/preset-env": {
+    "current": "7.26.9",
+    "wanted": "7.27.2",
+    "latest": "7.27.2",
+    "dependent": "brainrot-publishing-house",
+    "location": "/Users/phaedrus/Development/brainrot-publishing-house/node_modules/@babel/preset-env"
+  },
+  "@babel/preset-react": {
+    "current": "7.26.3",
+    "wanted": "7.27.1",
+    "latest": "7.27.1",
+    "dependent": "brainrot-publishing-house",
+    "location": "/Users/phaedrus/Development/brainrot-publishing-house/node_modules/@babel/preset-react"
+  },
+  "@babel/preset-typescript": {
+    "current": "7.27.0",
+    "wanted": "7.27.1",
+    "latest": "7.27.1",
+    "dependent": "brainrot-publishing-house",
+    "location": "/Users/phaedrus/Development/brainrot-publishing-house/node_modules/@babel/preset-typescript"
+  },
+  "@eslint/js": {
+    "current": "9.25.1",
+    "wanted": "9.28.0",
+    "latest": "9.28.0",
+    "dependent": "brainrot-publishing-house",
+    "location": "/Users/phaedrus/Development/brainrot-publishing-house/node_modules/@eslint/js"
+  },
+  "@jest/globals": {
+    "current": "29.7.0",
+    "wanted": "29.7.0",
+    "latest": "30.0.0-beta.3",
+    "dependent": "brainrot-publishing-house",
+    "location": "/Users/phaedrus/Development/brainrot-publishing-house/node_modules/@jest/globals"
+  },
+  "@testing-library/react": {
+    "current": "15.0.7",
+    "wanted": "15.0.7",
+    "latest": "16.3.0",
+    "dependent": "brainrot-publishing-house",
+    "location": "/Users/phaedrus/Development/brainrot-publishing-house/node_modules/@testing-library/react"
+  },
+  "@types/node": {
+    "current": "20.17.32",
+    "wanted": "20.19.0",
+    "latest": "22.15.30",
+    "dependent": "brainrot-publishing-house",
+    "location": "/Users/phaedrus/Development/brainrot-publishing-house/node_modules/@types/node"
+  },
+  "@types/react": {
+    "current": "19.1.2",
+    "wanted": "19.1.6",
+    "latest": "19.1.6",
+    "dependent": "brainrot-publishing-house",
+    "location": "/Users/phaedrus/Development/brainrot-publishing-house/node_modules/@types/react"
+  },
+  "@types/react-dom": {
+    "current": "19.1.2",
+    "wanted": "19.1.6",
+    "latest": "19.1.6",
+    "dependent": "brainrot-publishing-house",
+    "location": "/Users/phaedrus/Development/brainrot-publishing-house/node_modules/@types/react-dom"
+  },
+  "@typescript-eslint/eslint-plugin": {
+    "current": "8.31.0",
+    "wanted": "8.33.1",
+    "latest": "8.33.1",
+    "dependent": "brainrot-publishing-house",
+    "location": "/Users/phaedrus/Development/brainrot-publishing-house/node_modules/@typescript-eslint/eslint-plugin"
+  },
+  "@typescript-eslint/parser": {
+    "current": "8.31.0",
+    "wanted": "8.33.1",
+    "latest": "8.33.1",
+    "dependent": "brainrot-publishing-house",
+    "location": "/Users/phaedrus/Development/brainrot-publishing-house/node_modules/@typescript-eslint/parser"
+  },
+  "@vercel/blob": {
+    "current": "1.0.0",
+    "wanted": "1.1.1",
+    "latest": "1.1.1",
+    "dependent": "brainrot-publishing-house",
+    "location": "/Users/phaedrus/Development/brainrot-publishing-house/node_modules/@vercel/blob"
+  },
+  "babel-jest": {
+    "current": "29.7.0",
+    "wanted": "29.7.0",
+    "latest": "30.0.0-beta.3",
+    "dependent": "brainrot-publishing-house",
+    "location": "/Users/phaedrus/Development/brainrot-publishing-house/node_modules/babel-jest"
+  },
+  "babel-plugin-transform-import-meta": {
+    "current": "2.3.2",
+    "wanted": "2.3.3",
+    "latest": "2.3.3",
+    "dependent": "brainrot-publishing-house",
+    "location": "/Users/phaedrus/Development/brainrot-publishing-house/node_modules/babel-plugin-transform-import-meta"
+  },
+  "cheerio": {
+    "current": "1.0.0",
+    "wanted": "1.1.0",
+    "latest": "1.1.0",
+    "dependent": "brainrot-publishing-house",
+    "location": "/Users/phaedrus/Development/brainrot-publishing-house/node_modules/cheerio"
+  },
+  "eslint": {
+    "current": "9.25.1",
+    "wanted": "9.28.0",
+    "latest": "9.28.0",
+    "dependent": "brainrot-publishing-house",
+    "location": "/Users/phaedrus/Development/brainrot-publishing-house/node_modules/eslint"
+  },
+  "eslint-config-next": {
+    "current": "15.3.1",
+    "wanted": "15.3.3",
+    "latest": "15.3.3",
+    "dependent": "brainrot-publishing-house",
+    "location": "/Users/phaedrus/Development/brainrot-publishing-house/node_modules/eslint-config-next"
+  },
+  "eslint-config-prettier": {
+    "current": "10.1.2",
+    "wanted": "10.1.5",
+    "latest": "10.1.5",
+    "dependent": "brainrot-publishing-house",
+    "location": "/Users/phaedrus/Development/brainrot-publishing-house/node_modules/eslint-config-prettier"
+  },
+  "eslint-plugin-prettier": {
+    "current": "5.2.6",
+    "wanted": "5.4.1",
+    "latest": "5.4.1",
+    "dependent": "brainrot-publishing-house",
+    "location": "/Users/phaedrus/Development/brainrot-publishing-house/node_modules/eslint-plugin-prettier"
+  },
+  "gsap": {
+    "current": "3.12.7",
+    "wanted": "3.13.0",
+    "latest": "3.13.0",
+    "dependent": "brainrot-publishing-house",
+    "location": "/Users/phaedrus/Development/brainrot-publishing-house/node_modules/gsap"
+  },
+  "jest-environment-jsdom": {
+    "current": "29.7.0",
+    "wanted": "29.7.0",
+    "latest": "30.0.0-beta.3",
+    "dependent": "brainrot-publishing-house",
+    "location": "/Users/phaedrus/Development/brainrot-publishing-house/node_modules/jest-environment-jsdom"
+  },
+  "lint-staged": {
+    "current": "15.5.1",
+    "wanted": "15.5.2",
+    "latest": "16.1.0",
+    "dependent": "brainrot-publishing-house",
+    "location": "/Users/phaedrus/Development/brainrot-publishing-house/node_modules/lint-staged"
+  },
+  "next": {
+    "current": "15.3.1",
+    "wanted": "15.3.3",
+    "latest": "15.3.3",
+    "dependent": "brainrot-publishing-house",
+    "location": "/Users/phaedrus/Development/brainrot-publishing-house/node_modules/next"
+  },
+  "openai": {
+    "current": "4.96.0",
+    "wanted": "4.104.0",
+    "latest": "5.1.1",
+    "dependent": "brainrot-publishing-house",
+    "location": "/Users/phaedrus/Development/brainrot-publishing-house/node_modules/openai"
+  },
+  "pino": {
+    "current": "9.6.0",
+    "wanted": "9.7.0",
+    "latest": "9.7.0",
+    "dependent": "brainrot-publishing-house",
+    "location": "/Users/phaedrus/Development/brainrot-publishing-house/node_modules/pino"
+  },
+  "postcss": {
+    "current": "8.5.3",
+    "wanted": "8.5.4",
+    "latest": "8.5.4",
+    "dependent": "brainrot-publishing-house",
+    "location": "/Users/phaedrus/Development/brainrot-publishing-house/node_modules/postcss"
+  },
+  "puppeteer": {
+    "current": "24.7.2",
+    "wanted": "24.10.0",
+    "latest": "24.10.0",
+    "dependent": "brainrot-publishing-house",
+    "location": "/Users/phaedrus/Development/brainrot-publishing-house/node_modules/puppeteer"
+  },
+  "tailwindcss": {
+    "current": "3.4.17",
+    "wanted": "3.4.17",
+    "latest": "4.1.8",
+    "dependent": "brainrot-publishing-house",
+    "location": "/Users/phaedrus/Development/brainrot-publishing-house/node_modules/tailwindcss"
+  },
+  "ts-jest": {
+    "current": "29.3.2",
+    "wanted": "29.3.4",
+    "latest": "29.3.4",
+    "dependent": "brainrot-publishing-house",
+    "location": "/Users/phaedrus/Development/brainrot-publishing-house/node_modules/ts-jest"
+  },
+  "tsx": {
+    "current": "4.19.3",
+    "wanted": "4.19.4",
+    "latest": "4.19.4",
+    "dependent": "brainrot-publishing-house",
+    "location": "/Users/phaedrus/Development/brainrot-publishing-house/node_modules/tsx"
+  },
+  "wavesurfer.js": {
+    "current": "7.9.4",
+    "wanted": "7.9.5",
+    "latest": "7.9.5",
+    "dependent": "brainrot-publishing-house",
+    "location": "/Users/phaedrus/Development/brainrot-publishing-house/node_modules/wavesurfer.js"
+  }
+}
