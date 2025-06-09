@@ -107,10 +107,8 @@ glance.md
 # coverage directory (if not already ignored)
 coverage/
 # Build artifacts and reports
-__tests__/tsconfig.tsbuildinfo
+*.tsbuildinfo
 next-env.d.ts
+*-audit-results.json
+*-rollback.log
 DEPENDENCY_AUDIT_REPORT.md
-npm-outdated-results.json
-snyk-audit-results.json
-snyk-full-audit.json
-deployment-rollback.log
