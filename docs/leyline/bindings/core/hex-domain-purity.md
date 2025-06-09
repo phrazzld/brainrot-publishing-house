@@ -4,7 +4,6 @@ id: hex-domain-purity
 last_modified: '2025-05-14'
 enforced_by: code review & style guides
 ---
-
 # Binding: Keep Business Logic Pure and Infrastructure-Free
 
 Your core business logic (domain layer) must remain completely free from infrastructure

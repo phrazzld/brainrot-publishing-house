@@ -22,14 +22,12 @@ The challenge with YAGNI isn't understanding the principle; it's recognizing whe
 This binding establishes strict criteria for when new functionality should be implemented and clear procedures for preventing speculative development:
 
 - **Demonstrated Need Requirements**: All new features must meet at least one of these criteria:
-
   - **Current User Request**: Direct feedback from actual users experiencing a specific problem
   - **Business Requirement**: Explicit business case with measurable success criteria
   - **Technical Debt Remediation**: Addressing proven maintainability or performance issues
   - **Regulatory/Security Compliance**: Legal or security requirements with specific deadlines
 
 - **Prohibited Speculative Patterns**:
-
   - Features justified with "we might need this later"
   - Overly generic solutions "for future extensibility"
   - Complex configuration systems without proven variability needs
@@ -37,14 +35,12 @@ This binding establishes strict criteria for when new functionality should be im
   - Performance optimizations without measured bottlenecks
 
 - **Evidence Standards**: For any proposed feature, you must provide:
-
   - Specific use cases from real users or stakeholder requests
   - Clear success metrics that define when the feature has succeeded
   - Timeline constraints that justify implementation now rather than later
   - Cost analysis showing the problem's impact without the feature
 
 - **Evaluation Questions**: Before implementing any functionality, ask:
-
   - "Do we have concrete evidence this is needed now?"
   - "What happens if we defer this for six months?"
   - "Are we solving a real problem or an imagined one?"

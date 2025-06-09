@@ -34,7 +34,6 @@ Centralized configuration must establish these organizational principles:
 - **Secret Management**: Handle sensitive configuration (API keys, database passwords) separately from non-sensitive settings using appropriate security measures.
 
 **Configuration Categories:**
-
 - Application behavior settings (timeouts, retry counts, feature flags)
 - External service endpoints and credentials
 - Database connection parameters
@@ -43,7 +42,6 @@ Centralized configuration must establish these organizational principles:
 - Business rules and thresholds
 
 **Anti-Patterns to Avoid:**
-
 - Hardcoding configuration values in source code
 - Duplicating the same setting in multiple configuration files
 - Using different configuration formats or locations across services

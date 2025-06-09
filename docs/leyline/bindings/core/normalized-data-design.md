@@ -32,14 +32,12 @@ Normalized data design must follow these structural principles:
 - **Maintain Referential Integrity**: Implement constraints and validation that ensure references between data entities remain valid and consistent.
 
 **Normalization Levels:**
-
 - **First Normal Form (1NF)**: Eliminate repeating groups and ensure atomic values
 - **Second Normal Form (2NF)**: Eliminate partial dependencies on composite keys
 - **Third Normal Form (3NF)**: Eliminate transitive dependencies between non-key attributes
 - **Higher Normal Forms**: Apply Boyce-Codd Normal Form (BCNF) and beyond for complex scenarios
 
 **Controlled Denormalization:**
-
 - Performance optimization based on measured bottlenecks
 - Read-heavy scenarios where query performance is critical
 - Derived values that are expensive to calculate
@@ -380,15 +378,15 @@ interface OrderWithDuplicatedData {
   };
   items: Array<{
     productId: string;
-    productName: string; // Duplicated from products
+    productName: string;      // Duplicated from products
     productDescription: string; // Duplicated from products
-    category: string; // Duplicated from products
+    category: string;         // Duplicated from products
     unitPrice: number;
     quantity: number;
     totalPrice: number;
   }>;
   shippingAddress: {
-    street: string; // Potentially duplicated customer address
+    street: string;           // Potentially duplicated customer address
     city: string;
     state: string;
     zipCode: string;
@@ -437,8 +435,8 @@ interface Category {
 
 interface Order {
   id: string;
-  customerId: string; // Reference to customer
-  billingAddressId: string; // Reference to address
+  customerId: string;        // Reference to customer
+  billingAddressId: string;  // Reference to address
   shippingAddressId: string; // Reference to address
   orderDate: Date;
   status: 'pending' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled';
@@ -447,8 +445,8 @@ interface Order {
 
 interface OrderItem {
   id: string;
-  orderId: string; // Reference to order
-  productId: string; // Reference to product
+  orderId: string;      // Reference to order
+  productId: string;    // Reference to product
   quantity: number;
   unitPriceAtOrder: number; // Price at time of order (may differ from current price)
   lineTotal: number;
@@ -462,7 +460,7 @@ class NormalizedDataManager {
     private products: Map<string, Product>,
     private categories: Map<string, Category>,
     private orders: Map<string, Order>,
-    private orderItems: Map<string, OrderItem[]>,
+    private orderItems: Map<string, OrderItem[]>
   ) {}
 
   // Denormalize data for presentation when needed
@@ -475,14 +473,14 @@ class NormalizedDataManager {
     const shippingAddress = this.addresses.get(order.shippingAddressId);
     const items = this.orderItems.get(orderId) || [];
 
-    const itemsWithDetails = items.map((item) => {
+    const itemsWithDetails = items.map(item => {
       const product = this.products.get(item.productId);
       const category = product ? this.categories.get(product.categoryId) : null;
 
       return {
         ...item,
         product: product || null,
-        category: category || null,
+        category: category || null
       };
     });
 
@@ -491,7 +489,7 @@ class NormalizedDataManager {
       customer: customer || null,
       billingAddress: billingAddress || null,
       shippingAddress: shippingAddress || null,
-      items: itemsWithDetails,
+      items: itemsWithDetails
     };
   }
 
@@ -503,7 +501,7 @@ class NormalizedDataManager {
     this.customers.set(customerId, {
       ...customer,
       ...updates,
-      updatedAt: new Date(),
+      updatedAt: new Date()
     });
     // All orders automatically reference updated customer info
   }
@@ -516,7 +514,7 @@ class NormalizedDataManager {
     this.products.set(productId, {
       ...product,
       ...updates,
-      updatedAt: new Date(),
+      updatedAt: new Date()
     });
     // All order items automatically reference updated product info
   }
@@ -527,12 +525,10 @@ interface OrderDetails {
   customer: Customer | null;
   billingAddress: Address | null;
   shippingAddress: Address | null;
-  items: Array<
-    OrderItem & {
-      product: Product | null;
-      category: Category | null;
-    }
-  >;
+  items: Array<OrderItem & {
+    product: Product | null;
+    category: Category | null;
+  }>;
 }
 ```
 

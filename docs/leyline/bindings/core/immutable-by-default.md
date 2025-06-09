@@ -4,7 +4,6 @@ enforced_by: linters & code review
 id: immutable-by-default
 last_modified: '2025-05-14'
 ---
-
 # Binding: Treat All Data as Unchangeable by Default
 
 Never modify data after it's created. When you need to update state, create entirely new
@@ -86,7 +85,7 @@ Here are concrete strategies for implementing immutability across your codebase:
 
      ```typescript
      // Mark variables as constant to prevent reassignment
-     const user = { name: 'Alice', email: 'alice@example.com' };
+     const user = { name: "Alice", email: "alice@example.com" };
 
      // Use readonly for properties and array types
      interface User {
@@ -136,13 +135,13 @@ Here are concrete strategies for implementing immutability across your codebase:
 
      ```typescript
      // Update user properties by creating a new object
-     const updatedUser = { ...user, name: 'Bob' };
+     const updatedUser = { ...user, name: "Bob" };
 
      // Add item to array by creating a new array
      const newItems = [...items, newItem];
 
      // Remove item from array by creating a new array
-     const filteredItems = items.filter((item) => item.id !== itemToRemove.id);
+     const filteredItems = items.filter(item => item.id !== itemToRemove.id);
      ```
 
    - Builder pattern for complex objects:
