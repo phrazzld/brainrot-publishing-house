@@ -34,7 +34,6 @@ Flexible architecture must implement these design principles:
 - **Configuration-Driven Behavior**: Externalize as much behavior as possible to configuration, allowing changes without code deployment.
 
 **Architectural Patterns:**
-
 - Plugin/Extension architectures for adding new functionality
 - Adapter patterns for integrating with external systems
 - Chain of responsibility for configurable processing pipelines
@@ -42,7 +41,6 @@ Flexible architecture must implement these design principles:
 - Factory patterns for flexible object creation
 
 **Design Considerations:**
-
 - Minimize assumptions about future requirements
 - Prefer composition over inheritance for flexibility
 - Design APIs that can be extended without breaking existing clients
@@ -143,7 +141,7 @@ class EmailNotificationPlugin extends NotificationPlugin {
     await this.emailService.send({
       to: notification.recipient,
       subject: notification.subject,
-      body: notification.content,
+      body: notification.content
     });
   }
 }
@@ -160,7 +158,7 @@ class SMSNotificationPlugin extends NotificationPlugin {
   async sendNotification(notification: OrderNotification): Promise<void> {
     await this.smsService.send({
       to: notification.recipient,
-      message: notification.content,
+      message: notification.content
     });
   }
 }
@@ -175,9 +173,9 @@ class NotificationManager {
 
   async sendNotifications(notification: OrderNotification, enabledTypes: string[]): Promise<void> {
     const promises = enabledTypes
-      .map((type) => this.plugins.get(type))
-      .filter((plugin) => plugin !== undefined)
-      .map((plugin) => plugin!.sendNotification(notification));
+      .map(type => this.plugins.get(type))
+      .filter(plugin => plugin !== undefined)
+      .map(plugin => plugin!.sendNotification(notification));
 
     await Promise.all(promises);
   }
@@ -190,7 +188,7 @@ class FlexibleOrderProcessor {
     private inventoryService: InventoryService,
     private notificationManager: NotificationManager,
     private analyticsService: AnalyticsService,
-    private config: OrderProcessingConfig,
+    private config: OrderProcessingConfig
   ) {}
 
   async processOrder(order: Order): Promise<OrderResult> {
@@ -198,7 +196,7 @@ class FlexibleOrderProcessor {
       // Payment processing - implementation can be swapped
       const paymentResult = await this.paymentProcessor.processPayment(
         order.amount,
-        order.paymentMethod,
+        order.paymentMethod
       );
 
       if (!paymentResult.success) {
@@ -212,7 +210,7 @@ class FlexibleOrderProcessor {
       const notification = this.createOrderNotification(order);
       await this.notificationManager.sendNotifications(
         notification,
-        this.config.enabledNotificationTypes,
+        this.config.enabledNotificationTypes
       );
 
       // Analytics - implementation can be swapped
@@ -220,7 +218,7 @@ class FlexibleOrderProcessor {
         await this.analyticsService.trackEvent({
           type: 'order_completed',
           orderId: order.id,
-          amount: order.amount,
+          amount: order.amount
         });
       }
 
@@ -235,7 +233,7 @@ class FlexibleOrderProcessor {
     return {
       recipient: order.customerEmail,
       subject: 'Order Confirmation',
-      content: `Your order ${order.id} has been confirmed.`,
+      content: `Your order ${order.id} has been confirmed.`
     };
   }
 }
@@ -253,12 +251,12 @@ class OrderProcessorFactory {
     const notificationManager = new NotificationManager();
     if (config.enableEmailNotifications) {
       notificationManager.registerPlugin(
-        new EmailNotificationPlugin(new EmailService(config.emailConfig)),
+        new EmailNotificationPlugin(new EmailService(config.emailConfig))
       );
     }
     if (config.enableSMSNotifications) {
       notificationManager.registerPlugin(
-        new SMSNotificationPlugin(new SMSService(config.smsConfig)),
+        new SMSNotificationPlugin(new SMSService(config.smsConfig))
       );
     }
 
@@ -270,7 +268,7 @@ class OrderProcessorFactory {
       inventoryService,
       notificationManager,
       analyticsService,
-      config.orderProcessing,
+      config.orderProcessing
     );
   }
 

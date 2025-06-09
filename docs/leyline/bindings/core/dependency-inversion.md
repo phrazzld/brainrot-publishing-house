@@ -4,7 +4,6 @@ enforced_by: code review & architecture analysis
 id: dependency-inversion
 last_modified: '2025-05-14'
 ---
-
 # Binding: Design Against Abstractions, Not Implementations
 
 High-level modules containing your business logic should never depend on low-level
@@ -112,7 +111,7 @@ To effectively implement dependency inversion in your projects:
 
    ```typescript
    // Infrastructure layer
-   import { User, UserRepository } from '../domain/user';
+   import { UserRepository, User } from '../domain/user';
 
    export class MongoUserRepository implements UserRepository {
      constructor(private mongoClient: MongoClient) {}
