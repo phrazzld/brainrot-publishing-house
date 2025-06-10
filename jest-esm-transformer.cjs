@@ -38,8 +38,7 @@ module.exports = babelJest.createTransformer({
     [
       'babel-plugin-transform-import-meta',
       {
-        module: 'node:path',
-        // Additional configuration for node: prefixed modules
+        module: 'CommonJS',
       },
     ],
   ],

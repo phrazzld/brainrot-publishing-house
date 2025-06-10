@@ -1,0 +1,73 @@
+version: 2
+updates:
+  # Enable version updates for npm
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'daily'
+      time: '06:00'
+      timezone: 'UTC'
+    open-pull-requests-limit: 10
+
+    # Security updates
+    security-updates:
+      enabled: true
+
+    # Update configuration
+    allow:
+      - dependency-type: 'direct'
+      - dependency-type: 'indirect'
+
+    # Automatically merge security updates
+    auto-merge:
+      enabled: true
+      update-types:
+        - 'security'
+
+    # Review configuration
+    reviewers:
+      - 'phrazzld'
+
+    # Commit message configuration
+    commit-message:
+      prefix: 'security'
+      prefix-development: 'dev-deps'
+      include: 'scope'
+
+    # Labels to add to pull requests
+    labels:
+      - 'dependencies'
+      - 'automated'
+
+    # Target branch for pull requests
+    target-branch: 'master'
+
+    # Ignore specific updates
+    ignore:
+      # Ignore major version updates for stable dependencies
+      - dependency-name: 'react'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'react-dom'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'next'
+        update-types: ['version-update:semver-major']
+
+  # Enable security updates for GitHub Actions
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '06:00'
+      timezone: 'UTC'
+
+    commit-message:
+      prefix: 'ci'
+      include: 'scope'
+
+    labels:
+      - 'github-actions'
+      - 'automated'
+
+    reviewers:
+      - 'phrazzld'

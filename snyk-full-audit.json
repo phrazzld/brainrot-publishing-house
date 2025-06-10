@@ -1,0 +1,5 @@
+{
+  "ok": false,
+  "error": "Dependency @img/sharp-darwin-x64@0.34.1 was not found in package-lock.json. Your package.json and package-lock.json are probably out of sync. Please run \"npm install\" and try again.",
+  "path": "/Users/phaedrus/Development/brainrot-publishing-house"
+}

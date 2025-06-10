@@ -1,0 +1,171 @@
+# Snyk (https://snyk.io) policy file
+# Version: v1.0.0
+# 
+# Security policy configuration for brainrot-publishing-house
+# This file defines vulnerability handling rules and thresholds
+
+version: v1.0.0
+language: javascript
+
+# Vulnerability ignore rules
+ignore:
+  # Example: Temporarily ignore a specific vulnerability
+  # SNYK-JS-EXAMPLE-123456:
+  #   - '*':
+  #       reason: 'No upgrade path available, implementing workaround'
+  #       expires: '2024-12-31T23:59:59.999Z'
+  #       created: '2024-01-15T10:00:00.000Z'
+
+# Patch rules - automatically apply available patches
+patch: {}
+
+# Configuration for different severity levels
+# Note: This is documentation - actual thresholds are configured in CLI commands
+
+# Critical Severity (CVSS 9.0-10.0):
+# - FAIL: Always fail CI/CD pipeline
+# - ACTION: Immediate fix required
+# - TIMELINE: Fix within 24 hours
+
+# High Severity (CVSS 7.0-8.9):
+# - FAIL: Fail CI/CD pipeline
+# - ACTION: Fix required before merge
+# - TIMELINE: Fix within 7 days
+
+# Medium Severity (CVSS 4.0-6.9):
+# - WARN: Allow deployment but create issue
+# - ACTION: Fix in next sprint
+# - TIMELINE: Fix within 30 days
+
+# Low Severity (CVSS 0.1-3.9):
+# - ALLOW: Log but don't block
+# - ACTION: Fix when convenient
+# - TIMELINE: Fix within 90 days
+
+# Organization settings
+# org: brainrot-publishing-house
+
+# Exclusions - paths to exclude from scanning
+exclude:
+  # Development and build artifacts
+  - '**/node_modules/**'
+  - '**/dist/**'
+  - '**/build/**'
+  - '**/.next/**'
+  - '**/coverage/**'
+  - '**/public/**'
+  
+  # Test files (scan dependencies but not test code vulnerabilities)
+  - '**/__tests__/**'
+  - '**/*.test.js'
+  - '**/*.test.ts'
+  - '**/*.spec.js'
+  - '**/*.spec.ts'
+  
+  # Documentation and configuration
+  - '**/docs/**'
+  - '**/*.md'
+  - '**/.*ignore'
+
+# Trusted packages - packages that are exempt from certain checks
+# Use with extreme caution
+trusted: []
+
+# Custom rules for specific vulnerability types
+rules:
+  # Prototype pollution vulnerabilities
+  prototype-pollution:
+    severity: high
+    action: fail
+    reason: 'High risk of code injection attacks'
+  
+  # Remote code execution vulnerabilities  
+  remote-code-execution:
+    severity: critical
+    action: fail
+    reason: 'Critical security risk'
+  
+  # SQL injection vulnerabilities
+  sql-injection:
+    severity: high
+    action: fail
+    reason: 'Data breach risk'
+  
+  # Cross-site scripting (XSS)
+  xss:
+    severity: high
+    action: fail
+    reason: 'User data compromise risk'
+
+# Notification settings
+notifications:
+  # Enable email notifications for high severity
+  email: true
+  
+  # Enable Slack notifications (requires webhook configuration)
+  slack: false
+  
+  # Enable GitHub issue creation
+  github-issues: true
+
+# Monitoring settings
+monitor:
+  # Monitor all dependency changes
+  dependencies: true
+  
+  # Monitor container images (if applicable)
+  containers: false
+  
+  # Monitor infrastructure as code (if applicable)
+  iac: false
+
+# Update policies
+updates:
+  # Automatically create PRs for patch updates
+  auto-patch: true
+  
+  # Automatically create PRs for minor updates that fix vulnerabilities
+  auto-minor: true
+  
+  # Require manual approval for major updates
+  auto-major: false
+  
+  # Maximum number of auto-update PRs per week
+  max-prs-per-week: 5
+
+# Compliance requirements
+compliance:
+  # Require upgrade path for all high+ severity vulnerabilities
+  require-upgrade-path: true
+  
+  # Require patch availability for all critical vulnerabilities
+  require-patch-available: false
+  
+  # Allow temporary ignores with expiry dates
+  allow-ignore-with-expiry: true
+  
+  # Maximum ignore duration (in days)
+  max-ignore-duration: 90
+  
+  # Require approval for all ignores
+  require-ignore-approval: true
+
+# CI/CD integration settings
+ci:
+  # Fail builds on high+ severity vulnerabilities
+  fail-on-high: true
+  
+  # Fail builds on medium+ severity vulnerabilities (disabled by default)
+  fail-on-medium: false
+  
+  # Create issues for medium severity vulnerabilities
+  issue-on-medium: true
+  
+  # Maximum build time for security scans (in minutes)
+  max-build-time: 10
+  
+  # Enable caching to improve scan performance
+  enable-cache: true
+  
+  # Cache duration (in hours)
+  cache-duration: 24

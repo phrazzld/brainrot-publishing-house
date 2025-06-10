@@ -11,7 +11,16 @@
     "prettier"
   ],
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint", "react", "react-hooks", "jsx-a11y", "import", "prettier"],
+  "plugins": [
+    "@typescript-eslint",
+    "react",
+    "react-hooks",
+    "jsx-a11y",
+    "import",
+    "prettier",
+    "security",
+    "security-node"
+  ],
   "overrides": [
     {
       "files": [
@@ -95,7 +104,22 @@
     "max-nested-callbacks": ["warn", 3],
     "max-params": ["warn", 4],
     "complexity": ["warn", 10],
-    "prettier/prettier": ["error", {}, { "usePrettierrc": true }]
+    "prettier/prettier": ["error", {}, { "usePrettierrc": true }],
+    "security/detect-object-injection": "warn",
+    "security/detect-eval-with-expression": "error",
+    "security/detect-non-literal-regexp": "warn",
+    "security/detect-unsafe-regex": "error",
+    "security/detect-buffer-noassert": "error",
+    "security/detect-child-process": "warn",
+    "security/detect-disable-mustache-escape": "error",
+    "security/detect-no-csrf-before-method-override": "error",
+    "security/detect-non-literal-fs-filename": "warn",
+    "security/detect-pseudoRandomBytes": "error",
+    "security/detect-new-buffer": "warn",
+    "security-node/detect-crlf": "error",
+    "security-node/detect-insecure-randomness": "error",
+    "security-node/detect-child-process": "warn",
+    "security-node/detect-eval-with-expr": "warn"
   },
   "settings": {
     "react": {
