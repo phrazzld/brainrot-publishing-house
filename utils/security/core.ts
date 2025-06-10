@@ -49,7 +49,8 @@ export function sanitizeString(input: string): string {
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
 
 export function checkRateLimit(request: NextRequest, limit = 100): boolean {
-  const ip = request.ip || request.headers.get('x-forwarded-for') || 'unknown';
+  const ip =
+    request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
   const now = Date.now();
   const windowMs = 15 * 60 * 1000; // 15 minutes
 

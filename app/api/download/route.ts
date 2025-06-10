@@ -31,7 +31,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const url = new URL(request.url);
     const params = validateDownloadParams(url.searchParams);
 
-    log.info('Download request validated', params);
+    log.info({ message: 'Download request validated', params });
 
     // For now, return a simple response
     // In a real implementation, this would proxy to the asset storage
@@ -41,7 +41,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    log.error('Download request failed', { error: errorMessage });
+    log.error({ message: 'Download request failed', error: errorMessage });
     return new NextResponse('Bad Request', { status: 400 });
   }
 }
