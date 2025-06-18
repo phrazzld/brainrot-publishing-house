@@ -1,5 +1,9 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# deployment backups (runtime artifacts)
+.deployment-backups/
+deployment-rollback.log
+
 # dependencies
 /node_modules
 /.pnp
@@ -102,3 +106,9 @@ glance.md
 
 # coverage directory (if not already ignored)
 coverage/
+# Build artifacts and reports
+*.tsbuildinfo
+next-env.d.ts
+*-audit-results.json
+*-rollback.log
+DEPENDENCY_AUDIT_REPORT.md
