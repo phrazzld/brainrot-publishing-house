@@ -2,8 +2,8 @@
  * Type safety test for mock utilities
  * This test ensures our mock factories create properly typed objects
  */
-import { createMockAssetPathService, createMockLogger } from './mocks/factories.js';
-import { createBinaryResponse, createJsonResponse } from './network/index.js';
+import { createMockAssetPathService, createMockLogger } from './mocks/factories';
+import { createBinaryResponse, createJsonResponse } from './network/index';
 
 describe('Mock Type Safety', () => {
   describe('createMockLogger', () => {

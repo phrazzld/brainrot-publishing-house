@@ -1,7 +1,7 @@
 /**
  * Fixtures for asset-related test data
  */
-import { AssetType } from '@/types/assets.js';
+import { AssetType } from '@/types/assets';
 
 /**
  * Asset data structure

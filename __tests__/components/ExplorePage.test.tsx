@@ -3,8 +3,8 @@ import React from 'react';
 import '@testing-library/jest-dom';
 import { screen } from '@testing-library/react';
 
-import ExplorePage from '../../app/explore/page.js';
-import { render } from '../utils/test-utils.js';
+import ExplorePage from '../../app/explore/page';
+import { render } from '../utils/test-utils';
 
 // Don't mock, use real translations
 

@@ -3,12 +3,12 @@ import {
   clearBlobUrlCache,
   fetchTextWithFallback,
   getAssetUrlWithFallback,
-} from '../../utils/getBlobUrl.js';
-import { blobPathService } from '../../utils/services/BlobPathService.js';
-import { blobService } from '../../utils/services/BlobService.js';
+} from '../../utils/getBlobUrl';
+import { blobPathService } from '../../utils/services/BlobPathService';
+import { blobService } from '../../utils/services/BlobService';
 
 // Mock the services
-jest.mock('../../utils/services/BlobService.js', () => ({
+jest.mock('../../utils/services/BlobService', () => ({
   blobService: {
     getUrlForPath: jest.fn((path) => `https://blob-storage.example.com/${path}`),
     fetchText: jest.fn(),
@@ -16,7 +16,7 @@ jest.mock('../../utils/services/BlobService.js', () => ({
   },
 }));
 
-jest.mock('../../utils/services/BlobPathService.js', () => ({
+jest.mock('../../utils/services/BlobPathService', () => ({
   blobPathService: {
     convertLegacyPath: jest.fn((path) => path.replace(/^\/assets\//, 'books/').replace(/^\//, '')),
   },

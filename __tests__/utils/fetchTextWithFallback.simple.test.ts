@@ -1,13 +1,13 @@
 /**
  * Simple test for fetchTextWithFallback using ES modules with explicit .js extensions
  */
-import { fetchTextWithFallback } from '../../utils/getBlobUrl.js';
-import { blobPathService } from '../../utils/services/BlobPathService.js';
-import { blobService } from '../../utils/services/BlobService.js';
-import { createTextResponse as _createTextResponse } from '../__testutils__/fixtures/index.js';
+import { fetchTextWithFallback } from '../../utils/getBlobUrl';
+import { blobPathService } from '../../utils/services/BlobPathService';
+import { blobService } from '../../utils/services/BlobService';
+import { createTextResponse as _createTextResponse } from '../__testutils__/fixtures/index';
 
 // Mock the BlobService
-jest.mock('../../utils/services/BlobService.js', () => ({
+jest.mock('../../utils/services/BlobService', () => ({
   blobService: {
     getUrlForPath: jest.fn(),
     fetchText: jest.fn(),
@@ -15,14 +15,14 @@ jest.mock('../../utils/services/BlobService.js', () => ({
 }));
 
 // Mock the BlobPathService
-jest.mock('../../utils/services/BlobPathService.js', () => ({
+jest.mock('../../utils/services/BlobPathService', () => ({
   blobPathService: {
     convertLegacyPath: jest.fn(),
   },
 }));
 
 // Mock the logger
-jest.mock('../../utils/logger.js', () => ({
+jest.mock('../../utils/logger', () => ({
   logger: {
     child: jest.fn(() => ({
       info: jest.fn(),

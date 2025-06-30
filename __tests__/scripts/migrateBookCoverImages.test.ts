@@ -1,6 +1,6 @@
 // Import with proper typing - using underscore to indicate unused type imports
-import type { BlobPathService as _BlobPathService } from '../../utils/services/BlobPathService.js';
-import type { BlobService as _IBlobService } from '../../utils/services/BlobService.js';
+import type { BlobPathService as _BlobPathService } from '../../utils/services/BlobPathService';
+import type { BlobService as _IBlobService } from '../../utils/services/BlobService';
 
 // Use CommonJS require for compatibility with Jest
 // Explicitly type the requires to avoid TS errors
@@ -30,7 +30,7 @@ class MockBlobService {
 }
 
 // Mock the BlobService module
-jest.mock('../../utils/services/BlobService.js', () => {
+jest.mock('../../utils/services/BlobService', () => {
   return {
     BlobService: jest.fn().mockImplementation(() => new MockBlobService()),
     blobService: new MockBlobService(),

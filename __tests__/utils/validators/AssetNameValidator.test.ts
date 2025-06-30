@@ -1,5 +1,5 @@
-import { AssetType } from '@/types/assets.js';
-import { AssetNameValidator } from '@/utils/validators/AssetNameValidator.js';
+import { AssetType } from '@/types/assets';
+import { AssetNameValidator } from '@/utils/validators/AssetNameValidator';
 
 describe('AssetNameValidator', () => {
   let validator: AssetNameValidator;

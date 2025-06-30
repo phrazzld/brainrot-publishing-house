@@ -1,12 +1,12 @@
-import { MockResponse } from '../../__mocks__/MockResponse.js';
-import { fetchTextWithFallback } from '../../utils/getBlobUrl.js';
-import { blobPathService } from '../../utils/services/BlobPathService.js';
-import { blobService } from '../../utils/services/BlobService.js';
+import { MockResponse } from '../../__mocks__/MockResponse';
+import { fetchTextWithFallback } from '../../utils/getBlobUrl';
+import { blobPathService } from '../../utils/services/BlobPathService';
+import { blobService } from '../../utils/services/BlobService';
 
 // Mock the required services
-jest.mock('../../utils/services/BlobService.js');
-jest.mock('../../utils/services/BlobPathService.js');
-jest.mock('../../utils/logger.js', () => ({
+jest.mock('../../utils/services/BlobService');
+jest.mock('../../utils/services/BlobPathService');
+jest.mock('../../utils/logger', () => ({
   logger: {
     child: jest.fn(() => ({
       info: jest.fn(),

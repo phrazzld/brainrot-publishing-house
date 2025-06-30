@@ -4,14 +4,14 @@
  */
 import { expect } from '@jest/globals';
 
-import { AssetType } from '@/types/assets.js';
+import { AssetType } from '@/types/assets';
 
 import {
   expectFetchCalledWith,
   expectLoggedWithContext,
   expectPathStructure,
   expectValidAssetUrl,
-} from '../assertions/index.js';
+} from '../assertions/index';
 import {
   BookBuilder,
   createAudioAssetFixture,
@@ -19,10 +19,10 @@ import {
   createSuccessFetch,
   createTextAssetFixture,
   createTextResponse,
-} from '../fixtures/index.js';
-import { createMockLogger, createMockVercelBlobAssetService } from '../mocks/factories.js';
-import { MockLogger } from '../mocks/interfaces.js';
-import { MockVercelBlobAssetService } from '../mocks/interfaces.js';
+} from '../fixtures/index';
+import { createMockLogger, createMockVercelBlobAssetService } from '../mocks/factories';
+import { MockLogger } from '../mocks/interfaces';
+import { MockVercelBlobAssetService } from '../mocks/interfaces';
 
 // Example component that we want to test
 class AssetManager {

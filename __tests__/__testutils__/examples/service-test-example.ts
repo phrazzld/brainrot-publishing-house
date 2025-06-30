@@ -4,19 +4,19 @@
  */
 import { jest } from '@jest/globals';
 
-import { AssetType } from '../../../types/assets.js';
-import { AssetPathService } from '../../../utils/services/AssetPathService.js';
-import { VercelBlobAssetService } from '../../../utils/services/VercelBlobAssetService.js';
+import { AssetType } from '../../../types/assets';
+import { AssetPathService } from '../../../utils/services/AssetPathService';
+import { VercelBlobAssetService } from '../../../utils/services/VercelBlobAssetService';
 // Import assertion utilities
 import {
   expectFetchCalledWith,
   expectLoggedWithContext,
   expectPathStructure,
-} from '../assertions/index.js';
+} from '../assertions/index';
 // Import mock factories
-import { createMockAssetPathService, createMockLogger } from '../mocks/factories.js';
+import { createMockAssetPathService, createMockLogger } from '../mocks/factories';
 // Import network utilities
-import { createBinaryResponse, createJsonResponse } from '../network/index.js';
+import { createBinaryResponse, createJsonResponse } from '../network/index';
 
 describe('VercelBlobAssetService Example Test', () => {
   // Set up mocks using the factory functions

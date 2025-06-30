@@ -5,7 +5,7 @@
 import { jest } from '@jest/globals';
 import { HeadBlobResult, ListBlobResultBlob, PutBlobResult } from '@vercel/blob';
 
-import { Logger } from '../../../utils/logger.js';
+import { Logger } from '../../../utils/logger';
 import {
   MockAssetPathService,
   MockBlobPathService,
@@ -15,7 +15,7 @@ import {
   MockResponse,
   MockVercelBlob,
   MockVercelBlobAssetService,
-} from './interfaces.js';
+} from './interfaces';
 
 // Type for log data - matches the one in logger.ts
 type LogData = Record<string, unknown>;

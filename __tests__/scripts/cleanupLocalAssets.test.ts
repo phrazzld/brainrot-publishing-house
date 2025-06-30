@@ -11,13 +11,13 @@ const utils = require('../../utils.js');
 
 // Use jest.requireActual to import our mock instead of the actual module
 // This avoids ESM-related issues with import.meta
-const cleanupLocalAssets = jest.requireActual('../../__mocks__/cleanupLocalAssets.js');
+const cleanupLocalAssets = jest.requireActual('../../__mocks__/cleanupLocalAssets');
 
 // Mock modules
 jest.mock('fs');
 jest.mock('path');
-jest.mock('../../utils.js');
-jest.mock('../../translations.js', () => [
+jest.mock('../../utils');
+jest.mock('../../translations', () => [
   {
     slug: 'test-book',
     title: 'Test Book',

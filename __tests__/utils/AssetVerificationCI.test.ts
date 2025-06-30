@@ -10,10 +10,10 @@ import {
   MOCK_BLOB_BASE_URL,
   TEST_BOOKS,
   TEXT_ASSETS,
-} from '../../__mocks__/assetFixtures.js';
-import { AssetType } from '../../types/assets.js';
-import { assetPathService } from '../../utils/services/AssetPathService.js';
-import { BlobService } from '../../utils/services/BlobService.js';
+} from '../../__mocks__/assetFixtures';
+import { AssetType } from '../../types/assets';
+import { assetPathService } from '../../utils/services/AssetPathService';
+import { BlobService } from '../../utils/services/BlobService';
 
 // Mock the Vercel Blob module
 jest.mock('@vercel/blob', () => ({

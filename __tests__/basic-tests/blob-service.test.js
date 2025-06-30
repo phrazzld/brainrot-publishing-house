@@ -1,3 +1,6 @@
+// Import the BlobService
+import { BlobService } from '../../utils/services/BlobService';
+
 /**
  * Basic tests for BlobService - using JS instead of TS to avoid ESM issues
  */
@@ -45,9 +48,6 @@ global.Blob = class Blob {
     this.type = options.type || '';
   }
 };
-
-// Import the BlobService
-const { BlobService } = require('../../utils/services/BlobService.js');
 
 describe('BlobService', () => {
   let blobService;

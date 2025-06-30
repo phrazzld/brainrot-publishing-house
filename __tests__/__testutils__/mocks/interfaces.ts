@@ -5,10 +5,10 @@
  */
 import { jest } from '@jest/globals';
 
-import { Logger } from '../../../utils/logger.js';
-import { BlobPathService } from '../../../utils/services/BlobPathService.js';
-import { BlobService } from '../../../utils/services/BlobService.js';
-import { VercelBlobAssetService } from '../../../utils/services/VercelBlobAssetService.js';
+import { Logger } from '../../../utils/logger';
+import { BlobPathService } from '../../../utils/services/BlobPathService';
+import { BlobService } from '../../../utils/services/BlobService';
+import { VercelBlobAssetService } from '../../../utils/services/VercelBlobAssetService';
 
 /**
  * Type-safe mock for the Logger service

@@ -7,11 +7,11 @@ import '@testing-library/jest-dom';
 
 // Import the component after setting up mocks
 import ReadingRoom from '../../app/reading-room/[slug]/page';
-import { fetchTextWithFallback } from '../../utils/getBlobUrl.js';
-import { act, render, screen, waitFor } from '../utils/test-utils.js';
+import { fetchTextWithFallback } from '../../utils/getBlobUrl';
+import { act, render, screen, waitFor } from '../utils/test-utils';
 
 // Mock the utils module
-jest.mock('../../utils/getBlobUrl.js', () => ({
+jest.mock('../../utils/getBlobUrl', () => ({
   fetchTextWithFallback: jest.fn(),
 }));
 
@@ -23,7 +23,7 @@ jest.mock('next/navigation', () => ({
 }));
 
 // Mock translations
-jest.mock('../../translations.js', () => [
+jest.mock('../../translations', () => [
   {
     slug: 'test-book',
     title: 'Test Book',
@@ -61,7 +61,7 @@ const mockSearchParams = {
 };
 
 // Mock WaveSurfer
-jest.mock('wavesurfer.js', () => ({
+jest.mock('wavesurfer', () => ({
   __esModule: true,
   default: {
     create: jest.fn().mockReturnValue({

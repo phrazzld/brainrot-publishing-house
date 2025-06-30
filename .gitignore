@@ -102,3 +102,8 @@ glance.md
 
 # coverage directory (if not already ignored)
 coverage/
+
+/docs/leyline
+
+# security audit results
+*-audit-results.json

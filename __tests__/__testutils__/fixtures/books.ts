@@ -1,7 +1,7 @@
 /**
  * Fixtures for book-related test data
  */
-import type { Book as _Book, Chapter as _Chapter } from '../../../translations/types.js';
+import type { Book as _Book, Chapter as _Chapter } from '../../../translations/types';
 
 /**
  * Creates a Chapter fixture with type-safe overrides

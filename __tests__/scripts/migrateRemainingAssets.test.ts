@@ -48,7 +48,7 @@ const assetExists = (path: string): Promise<boolean> => {
   return Promise.resolve(true);
 };
 
-jest.mock('../../utils/getBlobUrl.js', () => ({
+jest.mock('../../utils/getBlobUrl', () => ({
   assetExistsInBlobStorage: jest.fn().mockImplementation(assetExists),
   blobPathService: {
     convertLegacyPath: jest.fn((path: string) => `converted/${path}`),
@@ -64,7 +64,7 @@ interface _UploadResult {
 }
 
 // Mock BlobService
-jest.mock('../../utils/services/BlobService.js', () => ({
+jest.mock('../../utils/services/BlobService', () => ({
   blobService: {
     uploadFile: jest.fn().mockImplementation(() =>
       Promise.resolve({
@@ -92,7 +92,7 @@ jest.mock('../../utils/services/BlobService.js', () => ({
   },
 }));
 
-jest.mock('../../utils/services/BlobPathService.js', () => ({
+jest.mock('../../utils/services/BlobPathService', () => ({
   blobPathService: {
     convertLegacyPath: jest.fn((filePath: string) => `converted/${filePath}`),
   },
@@ -124,7 +124,7 @@ const mockBooks = [
   },
 ];
 
-jest.mock('../../translations.js', () => ({
+jest.mock('../../translations', () => ({
   __esModule: true,
   default: mockBooks,
 }));
@@ -228,7 +228,7 @@ describe('migrateRemainingAssets', () => {
 
     try {
       // Require the module after mocking
-      const importedModule = require('../../scripts/migrateRemainingAssets.js');
+      const importedModule = require('../../scripts/migrateRemainingAssets');
 
       // Extract the default export if it exists
       if (importedModule && importedModule.default) {
@@ -252,7 +252,7 @@ describe('migrateRemainingAssets', () => {
 
   it('should identify missing assets correctly', async () => {
     // Import the mocked module
-    const getBlobUrlModule = require('../../utils/getBlobUrl.js');
+    const getBlobUrlModule = require('../../utils/getBlobUrl');
     const assetExistsInBlobStorage = getBlobUrlModule.assetExistsInBlobStorage;
 
     // Setup mock implementation specific to this test
@@ -266,7 +266,7 @@ describe('migrateRemainingAssets', () => {
 
   it('should handle different asset types appropriately', async () => {
     // Import the mocked BlobService
-    const blobServiceModule = require('../../utils/services/BlobService.js');
+    const blobServiceModule = require('../../utils/services/BlobService');
     const { blobService } = blobServiceModule;
 
     // Test that the mocked upload methods were called
@@ -276,7 +276,7 @@ describe('migrateRemainingAssets', () => {
 
   it('should handle retry logic for failed uploads', async () => {
     // Import the mocked BlobService
-    const blobServiceModule = require('../../utils/services/BlobService.js');
+    const blobServiceModule = require('../../utils/services/BlobService');
     const { blobService } = blobServiceModule;
 
     // Reset the mock and specify a rejection for the first call

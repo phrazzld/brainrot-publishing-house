@@ -8,7 +8,7 @@ import type {
   AudiobookConfig,
   BookMigrationResult,
   MigrationOptions,
-} from '../../scripts/migrateFullAudiobooks.js';
+} from '../../scripts/migrateFullAudiobooks';
 
 // Define types for exec callback
 type ExecCallback = (error: Error | null, result: { stdout: string; stderr: string }) => void;
@@ -24,7 +24,7 @@ const mockLogger = {
 
 // Mock dependencies before imports
 jest.mock('@vercel/blob');
-jest.mock('../../utils/logger.js', () => ({
+jest.mock('../../utils/logger', () => ({
   createRequestLogger: jest.fn(() => mockLogger),
   default: mockLogger,
 }));
@@ -45,7 +45,7 @@ const mockAssetService = {
   uploadAsset: jest.fn(),
 };
 
-jest.mock('../../utils/services/VercelBlobAssetService.js', () => ({
+jest.mock('../../utils/services/VercelBlobAssetService', () => ({
   VercelBlobAssetService: jest.fn(() => mockAssetService),
   vercelBlobAssetService: mockAssetService, // Mock the singleton too
 }));

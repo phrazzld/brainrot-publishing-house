@@ -1,6 +1,6 @@
 // Use TypeScript imports to ensure proper typing
-import { AssetType } from '../../types/assets.js';
-import { AssetPathService } from '../../utils/services/AssetPathService.js';
+import { AssetType } from '../../types/assets';
+import { AssetPathService } from '../../utils/services/AssetPathService';
 
 // Mock modules that are used in the script
 jest.mock('@vercel/blob', () => ({
@@ -10,7 +10,7 @@ jest.mock('@vercel/blob', () => ({
   head: jest.fn(),
 }));
 
-jest.mock('../../utils/logger.js', () => ({
+jest.mock('../../utils/logger', () => ({
   createLogger: jest.fn().mockReturnValue({
     info: jest.fn(),
     warn: jest.fn(),

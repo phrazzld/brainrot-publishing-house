@@ -22,17 +22,13 @@ module.exports = {
 
   // File transformations
   transform: {
-    // Use custom babel transformer for React components (TSX files)
-    '^.+\\.tsx$': '<rootDir>/jest-babel-transformer.cjs',
-    // Use custom ESM transformer for script files in scripts/ directory and utils/paths.ts
-    '(scripts/.*|utils/paths)\\.ts$': '<rootDir>/jest-esm-transformer.cjs',
-    // Use ts-jest for all other TypeScript files
-    '^.+\\.ts$': [
+    // Use ts-jest for all TypeScript files with ESM support
+    '^.+\\.(ts|tsx)$': [
       'ts-jest',
       {
         tsconfig: 'tsconfig.json',
         useESM: true,
-        extensionsToTreatAsEsm: ['.ts'],
+        extensionsToTreatAsEsm: ['.ts', '.tsx'],
       },
     ],
     // Use babel-jest for JavaScript files

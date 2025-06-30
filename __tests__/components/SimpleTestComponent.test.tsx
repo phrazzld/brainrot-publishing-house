@@ -3,8 +3,8 @@ import React from 'react';
 import '@testing-library/jest-dom';
 import { fireEvent, screen } from '@testing-library/react';
 
-import SimpleTestComponent from '../../components/SimpleTestComponent.js';
-import { render } from '../utils/test-utils.js';
+import SimpleTestComponent from '../../components/SimpleTestComponent';
+import { render } from '../utils/test-utils';
 
 describe('SimpleTestComponent', () => {
   // Basic rendering test

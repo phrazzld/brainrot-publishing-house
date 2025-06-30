@@ -2,8 +2,8 @@ import * as nextNavigation from 'next/navigation';
 
 import { act, renderHook } from '@testing-library/react';
 
-import { useChapterNavigation } from '@/hooks/useChapterNavigation.js';
-import { Translation } from '@/utils/types.js';
+import { useChapterNavigation } from '@/hooks/useChapterNavigation';
+import { Translation } from '@/utils/types';
 
 // Type for mocked module
 type MockedNavigation = typeof nextNavigation & {

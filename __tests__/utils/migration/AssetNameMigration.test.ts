@@ -1,5 +1,5 @@
-import { AssetType } from '@/types/assets.js';
-import { AssetNameMigration } from '@/utils/migration/AssetNameMigration.js';
+import { AssetType } from '@/types/assets';
+import { AssetNameMigration } from '@/utils/migration/AssetNameMigration';
 
 describe('AssetNameMigration', () => {
   let migration: AssetNameMigration;
