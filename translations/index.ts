@@ -8,6 +8,7 @@ import divineComedyInferno from './books/divine-comedy-inferno.js';
 import divineComedyParadiso from './books/divine-comedy-paradiso.js';
 import divineComedyPurgatorio from './books/divine-comedy-purgatorio.js';
 import gilgamesh from './books/gilgamesh.js';
+import greatGatsby from './books/great-gatsby.js';
 import hamlet from './books/hamlet.js';
 import huckleberryFinn from './books/huckleberry-finn.js';
 import meditations from './books/meditations.js';
@@ -43,6 +44,7 @@ const translations = [
   theOdyssey,
   theAeneid,
   hamlet,
+  greatGatsby,
   declarationOfIndependence,
 
   // Coming soon books

@@ -17,6 +17,14 @@ this nextjs app is a total vibe: a reading + audio platform that merges sweet wa
 
 ## documentation
 
+### translation system
+
+- [Translation System](docs/translation-system/): comprehensive translation methodology and project documentation
+  - [Guidelines](docs/translation-system/methodology/guidelines.md): 974-line maximalist gremlin mode methodology
+  - [Great Gatsby Project](docs/translation-system/projects/great-gatsby/): complete project documentation including character voices and specifications
+
+### technical documentation
+
 - [BLOB_STORAGE.md](docs/BLOB_STORAGE.md): details about Blob storage configuration
 - [BLOB_PATH_STRUCTURE.md](docs/BLOB_PATH_STRUCTURE.md): path structure for assets in Blob storage
 - [ASSET_CLEANUP.md](docs/ASSET_CLEANUP.md): guide for cleaning up local assets after migration

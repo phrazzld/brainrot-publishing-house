@@ -65,21 +65,8 @@ translate classic texts into zoomer brainrot english dialect with an unapologeti
 
 ### end adaptation rules
 
-### source material metadata
-
-**book**:
-**author**:
-**scope**:
-**notes**:
-
-### end source material metadata
-
-### source material contents
-
-### end source material contents
-
 ### task
 
-now: write a totally over-the-top comedic yet faithful zoomer brainrot translation of the above source material. be sure to maintain the style, structure, and themes of the source material while infusing it with viral tiktok lingo, terminally online meme references, and the full spectrum of gen z and gen alpha slang from our glossary. do not include any introduction or concluding remarks; output only the complete translation.
+now: write a totally over-the-top comedic yet faithful zoomer brainrot translation of the great gatsby. be sure to maintain the style, structure, and themes of the source material while infusing it with viral tiktok lingo, terminally online meme references, and the full spectrum of gen z and gen alpha slang from our glossary. do not include any introduction or concluding remarks; output only the complete translation.
 
 ### end task
