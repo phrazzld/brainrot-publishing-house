@@ -9,7 +9,10 @@ const greatGatsby: Translation = {
   title: 'the great gatsby',
   shortDescription:
     'no cap the wildest green light ohio rizz story, old sport gets absolutely cooked by capitalism. west egg vs east egg beef goes brazy, gatsby throwing ragers for a baddie who chose the bag.',
-  coverImage: getAssetUrl('/assets/great-gatsby/images/cover.png', USE_BLOB_STORAGE),
+  coverImage: getAssetUrl(
+    '/assets/great-gatsby/images/brainrot-the-great-gatsby-01.png',
+    USE_BLOB_STORAGE,
+  ),
   status: 'available',
   chapters: [
     {
