@@ -8,9 +8,9 @@ npm run prettier:check
 echo "2. Running ESLint..."
 npm run lint
 
-# 3. Security audit (same as CI)
-echo "3. Running security audit..."
-npm run security:audit
+# 3. Security audit (same as CI) - DISABLED FOR DEPRECATED REPO
+echo "3. Skipping security audit (repository deprecated)..."
+# npm run security:audit
 
 # 4. Test Next.js build (the same as CI does)
 echo "4. Testing Next.js build..."
