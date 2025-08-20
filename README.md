@@ -1,5 +1,11 @@
 # brainrot publishing house
 
+> ⚠️ **DEPRECATED**: This repository has been archived. The project has moved to a monorepo structure at **https://github.com/phrazzld/brainrot**. See [DEPRECATED.md](./DEPRECATED.md) for migration details.
+
+---
+
+## Original README
+
 this nextjs app is a total vibe: a reading + audio platform that merges sweet waveforms, text highlighting, chapter/timestamp sharing, and a spool of dope expansions on the horizon. behold:
 
 ## features
